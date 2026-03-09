@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoFlow Studio — AI & Automation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;700&display=swap');
+:root{--pink:#e040fb;--cyan:#00e5ff;--green:#76ff03;--bg:#04050d;--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(4,5,13,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700}
+.logo span{color:var(--pink)}
+nav a{color:rgba(255,255,255,0.6);text-decoration:none;margin-left:30px;transition:color .2s}
+nav a:hover{color:var(--cyan)}
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+.badge{display:inline-block;background:rgba(224,64,251,0.15);border:1px solid rgba(224,64,251,0.4);color:var(--pink);padding:6px 18px;border-radius:20px;font-size:.85rem;font-weight:600;margin-bottom:30px;letter-spacing:1px}
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:700;line-height:1.1;margin-bottom:24px}
+.glow-pink{color:var(--pink);text-shadow:0 0 40px rgba(224,64,251,.6)}
+.glow-cyan{color:var(--cyan);text-shadow:0 0 40px rgba(0,229,255,.6)}
+.subtitle{font-size:1.2rem;color:rgba(255,255,255,.5);max-width:600px;line-height:1.7;margin-bottom:40px}
+.cta-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.btn-primary{background:linear-gradient(135deg,var(--pink),#9c27b0);color:#fff;border:none;padding:16px 36px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;box-shadow:0 0 30px rgba(224,64,251,.4);transition:transform .2s,box-shadow .2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(224,64,251,.6)}
+.btn-secondary{background:transparent;color:#fff;border:1px solid var(--border);padding:16px 36px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;transition:border-color .2s,background .2s}
+.btn-secondary:hover{border-color:var(--cyan);background:rgba(0,229,255,.05)}
+.stats{position:relative;z-index:1;display:flex;justify-content:center;gap:60px;flex-wrap:wrap;padding:60px 40px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat{text-align:center}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:700;background:linear-gradient(135deg,var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{color:rgba(255,255,255,.4);font-size:.9rem;margin-top:4px}
+.section{position:relative;z-index:1;padding:100px 40px;max-width:1200px;margin:0 auto}
+.section-label{color:var(--cyan);font-size:.85rem;font-weight:600;letter-spacing:2px;margin-bottom:16px}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;margin-bottom:60px}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;transition:border-color .3s,transform .3s,box-shadow .3s;cursor:default}
+.service-card:hover{border-color:var(--pink);transform:translateY(-4px);box-shadow:0 20px 60px rgba(224,64,251,.15)}
+.service-icon{font-size:2.5rem;margin-bottom:20px}
+.service-card h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;margin-bottom:12px}
+.service-card p{color:rgba(255,255,255,.5);line-height:1.7;font-size:.95rem}
+.service-price{margin-top:20px;display:inline-block;color:var(--green);font-weight:700;font-size:1.1rem}
+.demo-section{position:relative;z-index:1;background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:100px 40px}
+.demo-inner{max-width:1200px;margin:0 auto}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+@media(max-width:768px){.demo-grid{grid-template-columns:1fr}}
+.demo-text h2{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;margin-bottom:20px}
+.demo-text p{color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:24px}
+.feature-list{list-style:none}
+.feature-list li{padding:10px 0;color:rgba(255,255,255,.7);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.feature-list li::before{content:'✦';color:var(--pink)}
+.demo-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px}
+.demo-box-title{font-size:.8rem;color:rgba(255,255,255,.3);margin-bottom:20px;letter-spacing:1px}
+#chat{max-height:300px;overflow-y:auto}
+.chat-bubble{background:rgba(224,64,251,.12);border:1px solid rgba(224,64,251,.2);border-radius:12px;padding:14px 18px;margin-bottom:12px;font-size:.9rem;color:rgba(255,255,255,.8)}
+.chat-bubble.user{background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.2);text-align:right}
+.chat-bubble .sender{font-size:.75rem;color:rgba(255,255,255,.3);margin-bottom:6px}
+.typing-input{display:flex;gap:10px;margin-top:20px}
+.typing-input input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+.typing-input input:focus{border-color:var(--pink)}
+.typing-input button{background:linear-gradient(135deg,var(--pink),#9c27b0);border:none;border-radius:10px;padding:12px 20px;color:#fff;font-weight:600;cursor:pointer}
+.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px}
+.process-step{text-align:center;padding:30px 20px}
+.step-num{width:60px;height:60px;border-radius:50%;border:2px solid var(--pink);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--pink);margin:0 auto 20px}
+.process-step h3{margin-bottom:10px;font-size:1.1rem}
+.process-step p{color:rgba(255,255,255,.4);font-size:.9rem;line-height:1.6}
+footer{position:relative;z-index:1;text-align:center;padding:60px 40px;border-top:1px solid var(--border);color:rgba(255,255,255,.3);font-size:.9rem}
+footer a{color:var(--pink);text-decoration:none}
+.glow-orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:.15}
+.orb1{width:600px;height:600px;background:var(--pink);top:-200px;left:-200px}
+.orb2{width:500px;height:500px;background:var(--cyan);bottom:-100px;right:-100px}
+</style>
+</head>
+<body>
+<script>
+(function(){
+  const KEY='autoflow_auth', PWD='clawy2025';
+  if(sessionStorage.getItem(KEY)==='ok') return;
+  document.addEventListener('DOMContentLoaded',function(){
+    document.body.style.display='none';
+  });
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:#04050d;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif';
+  overlay.innerHTML=`
+    <div style="text-align:center;max-width:380px;padding:40px">
+      <div style="font-size:2rem;margin-bottom:8px">🦀</div>
+      <div style="font-family:Space Grotesk,sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:8px">AutoFlow<span style="color:#e040fb"> Studio</span></div>
+      <div style="color:rgba(255,255,255,.4);margin-bottom:32px;font-size:.9rem">Private portfolio — enter password</div>
+      <input id="gateInput" type="password" placeholder="Password" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 18px;color:#fff;font-size:1rem;outline:none;margin-bottom:14px;text-align:center">
+      <button id="gateBtn" style="width:100%;background:linear-gradient(135deg,#e040fb,#9c27b0);border:none;border-radius:12px;padding:14px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer">Enter →</button>
+      <div id="gateErr" style="color:#ff5252;margin-top:12px;font-size:.85rem;min-height:20px"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  function tryLogin(){
+    const val=document.getElementById('gateInput').value;
+    if(val===PWD){sessionStorage.setItem(KEY,'ok');overlay.remove();document.body.style.display=''}
+    else{document.getElementById('gateErr').textContent='Wrong password';document.getElementById('gateInput').value='';document.getElementById('gateInput').focus()}
+  }
+  document.getElementById('gateBtn').addEventListener('click',tryLogin);
+  document.addEventListener('keydown',function(e){if(e.key==='Enter')tryLogin()});
+  document.body.style.display='none';
+  setTimeout(()=>{document.body.style.display='';},0);
+})();
+</script>
+
+<div class="glow-orb orb1"></div>
+<div class="glow-orb orb2"></div>
+<canvas id="stars"></canvas>
+<nav>
+  <div class="logo">Auto<span>Flow</span> Studio</div>
+  <div>
+    <a href="#services">Services</a>
+    <a href="#demo">Demo</a>
+    <a href="#process">Process</a>
+    <a href="https://fiverr.com" target="_blank">Hire Me →</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="badge">🤖 AI & Automation Specialist</div>
+  <h1>I automate your<br><span class="glow-pink">business workflows</span><br>with <span class="glow-cyan">AI</span></h1>
+  <p class="subtitle">Stop wasting hours on repetitive tasks. I build custom automations, AI agents and smart workflows that run 24/7 — while you focus on what actually matters.</p>
+  <div class="cta-row">
+    <a href="https://fiverr.com" class="btn-primary">🚀 Hire me on Fiverr</a>
+    <a href="#demo" class="btn-secondary">See live demo ↓</a>
+  </div>
+</section>
+<div class="stats">
+  <div class="stat"><div class="stat-num">48h</div><div class="stat-label">Average delivery</div></div>
+  <div class="stat"><div class="stat-num">100+</div><div class="stat-label">App integrations</div></div>
+  <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Automations run</div></div>
+  <div class="stat"><div class="stat-num">$49</div><div class="stat-label">Starting from</div></div>
+</div>
+<section class="section" id="services">
+  <div class="section-label">WHAT I BUILD</div>
+  <h2 class="section-title">Services & Pricing</h2>
+  <div class="services-grid">
+    <div class="service-card"><div class="service-icon">⚡</div><h3>Workflow Automation</h3><p>Connect your apps and eliminate manual work. n8n, Make, Zapier — I build it, you profit.</p><span class="service-price">from $49</span></div>
+    <div class="service-card"><div class="service-icon">🤖</div><h3>AI Agents</h3><p>Custom AI assistants trained on your data. Handles emails, support tickets, lead qualification — automatically.</p><span class="service-price">from $149</span></div>
+    <div class="service-card"><div class="service-icon">💬</div><h3>Website Chatbot</h3><p>GPT-4 powered chatbot embedded on your site. Answers questions, books appointments, captures leads 24/7.</p><span class="service-price">from $99</span></div>
+    <div class="service-card"><div class="service-icon">📧</div><h3>Email Automation</h3><p>Smart email sequences, auto-replies, CRM sync. Never miss a lead again.</p><span class="service-price">from $79</span></div>
+    <div class="service-card"><div class="service-icon">📊</div><h3>Data Pipelines</h3><p>Scrape, transform, sync data between systems. Google Sheets, Airtable, databases — always up to date.</p><span class="service-price">from $99</span></div>
+    <div class="service-card"><div class="service-icon">🏠</div><h3>Smart Home & IoT</h3><p>Home Assistant automations, device integrations, custom dashboards. Your home, fully automated.</p><span class="service-price">from $69</span></div>
+  </div>
+</section>
+<div class="demo-section" id="demo">
+  <div class="demo-inner">
+    <div class="demo-grid">
+      <div class="demo-text">
+        <div class="section-label">LIVE DEMO</div>
+        <h2>Talk to an AI Agent</h2>
+        <p>This is a live example of an AI customer service agent. Ask it anything — it answers, qualifies leads, and can book appointments automatically.</p>
+        <ul class="feature-list">
+          <li>Trained on your business data</li>
+          <li>Answers in any language</li>
+          <li>Captures leads & books appointments</li>
+          <li>Integrates with your CRM</li>
+          <li>Works 24/7, zero maintenance</li>
+        </ul>
+      </div>
+      <div class="demo-box">
+        <div class="demo-box-title">LIVE AI AGENT DEMO — try it!</div>
+        <div id="chat">
+          <div class="chat-bubble"><div class="sender">🤖 AI Agent</div>Hey! I'm an AI assistant built by AutoFlow Studio. Ask me about pricing, timelines, or what I can automate for your business!</div>
+        </div>
+        <div class="typing-input">
+          <input type="text" id="userInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <button onclick="sendMsg()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="section" id="process">
+  <div class="section-label">HOW IT WORKS</div>
+  <h2 class="section-title">From idea to running automation</h2>
+  <div class="process-grid">
+    <div class="process-step"><div class="step-num">1</div><h3>Tell me your problem</h3><p>Describe what's taking too long. No tech knowledge needed.</p></div>
+    <div class="process-step"><div class="step-num">2</div><h3>I design the solution</h3><p>Free consultation. I map out exactly what I'll build.</p></div>
+    <div class="process-step"><div class="step-num">3</div><h3>I build & test it</h3><p>Delivered in 48-72h. Fully tested and documented.</p></div>
+    <div class="process-step"><div class="step-num">4</div><h3>You sit back & profit</h3><p>Runs 24/7. I provide support so you're never stuck.</p></div>
+  </div>
+</section>
+<footer>
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:16px;">Auto<span style="color:var(--pink)">Flow</span> Studio</div>
+  <p>AI & Automation specialist — available on <a href="https://fiverr.com">Fiverr</a></p>
+  <p style="margin-top:8px;font-size:.8rem;">Built with ❤️ and a lot of automation</p>
+</footer>
+<script>
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;drawStars()}
+function drawStars(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=0;i<120;i++){const x=Math.random()*canvas.width,y=Math.random()*canvas.height,r=Math.random()*2.5+.5,c=['#e040fb','#00e5ff','#76ff03','#ffffff'][Math.floor(Math.random()*4)];ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=c;ctx.shadowBlur=15;ctx.shadowColor=c;ctx.fill()}}
+resize();window.addEventListener('resize',resize);
+const R={default:"Great question! For most business automations I can deliver within 48 hours. What's your specific use case?",price:"Pricing starts at $49 for simple workflows, $149-499 for AI agents. Free consultation — just message me on Fiverr!",time:"Most automations delivered in 48-72h. Complex AI systems up to 5 days.",email:"Email automation is a specialty! I connect Gmail/Outlook to your CRM, auto-replies, sequences and more.",chatbot:"I build GPT-4 chatbots embedded on your site — FAQ, lead capture, booking, support.",n8n:"Yes! n8n is my main tool — powerful, self-hostable, free. I set it up and build any workflow.",hello:"Hey! 👋 I'm a demo AI agent. Ask me about pricing, timelines, or what I can build for you!"};
+function getReply(m){m=m.toLowerCase();if(m.includes('price')||m.includes('cost')||m.includes('much'))return R.price;if(m.includes('time')||m.includes('long')||m.includes('fast'))return R.time;if(m.includes('email')||m.includes('mail'))return R.email;if(m.includes('chat')||m.includes('bot'))return R.chatbot;if(m.includes('n8n')||m.includes('make')||m.includes('zapier'))return R.n8n;if(m.includes('hello')||m.includes('hi')||m.includes('hey'))return R.hello;return R.default}
+function sendMsg(){const inp=document.getElementById('userInput'),msg=inp.value.trim();if(!msg)return;inp.value='';const chat=document.getElementById('chat');const ub=document.createElement('div');ub.className='chat-bubble user';ub.innerHTML='<div class="sender">You</div>'+msg;chat.appendChild(ub);const t=document.createElement('div');t.className='chat-bubble';t.innerHTML='<div class="sender">🤖 AI Agent</div><em style="opacity:.4">typing...</em>';chat.appendChild(t);chat.scrollTop=chat.scrollHeight;setTimeout(()=>{t.innerHTML='<div class="sender">🤖 AI Agent</div>'+getReply(msg);chat.scrollTop=chat.scrollHeight},900)}
+</script>
+</body>
+</html>
