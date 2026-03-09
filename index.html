@@ -3,196 +3,905 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoFlow Studio — AI & Automation</title>
+<title>AutoFlow Studio — AI Automation & Agents</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;700&display=swap');
-:root{--pink:#e040fb;--cyan:#00e5ff;--green:#76ff03;--bg:#04050d;--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
-#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(4,5,13,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.logo{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700}
-.logo span{color:var(--pink)}
-nav a{color:rgba(255,255,255,0.6);text-decoration:none;margin-left:30px;transition:color .2s}
-nav a:hover{color:var(--cyan)}
-.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
-.badge{display:inline-block;background:rgba(224,64,251,0.15);border:1px solid rgba(224,64,251,0.4);color:var(--pink);padding:6px 18px;border-radius:20px;font-size:.85rem;font-weight:600;margin-bottom:30px;letter-spacing:1px}
-h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:700;line-height:1.1;margin-bottom:24px}
-.glow-pink{color:var(--pink);text-shadow:0 0 40px rgba(224,64,251,.6)}
-.glow-cyan{color:var(--cyan);text-shadow:0 0 40px rgba(0,229,255,.6)}
-.subtitle{font-size:1.2rem;color:rgba(255,255,255,.5);max-width:600px;line-height:1.7;margin-bottom:40px}
-.cta-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-.btn-primary{background:linear-gradient(135deg,var(--pink),#9c27b0);color:#fff;border:none;padding:16px 36px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;box-shadow:0 0 30px rgba(224,64,251,.4);transition:transform .2s,box-shadow .2s}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(224,64,251,.6)}
-.btn-secondary{background:transparent;color:#fff;border:1px solid var(--border);padding:16px 36px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;transition:border-color .2s,background .2s}
-.btn-secondary:hover{border-color:var(--cyan);background:rgba(0,229,255,.05)}
-.stats{position:relative;z-index:1;display:flex;justify-content:center;gap:60px;flex-wrap:wrap;padding:60px 40px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stat{text-align:center}
-.stat-num{font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:700;background:linear-gradient(135deg,var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-label{color:rgba(255,255,255,.4);font-size:.9rem;margin-top:4px}
-.section{position:relative;z-index:1;padding:100px 40px;max-width:1200px;margin:0 auto}
-.section-label{color:var(--cyan);font-size:.85rem;font-weight:600;letter-spacing:2px;margin-bottom:16px}
-.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;margin-bottom:60px}
-.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-.service-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;transition:border-color .3s,transform .3s,box-shadow .3s;cursor:default}
-.service-card:hover{border-color:var(--pink);transform:translateY(-4px);box-shadow:0 20px 60px rgba(224,64,251,.15)}
-.service-icon{font-size:2.5rem;margin-bottom:20px}
-.service-card h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;margin-bottom:12px}
-.service-card p{color:rgba(255,255,255,.5);line-height:1.7;font-size:.95rem}
-.service-price{margin-top:20px;display:inline-block;color:var(--green);font-weight:700;font-size:1.1rem}
-.demo-section{position:relative;z-index:1;background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:100px 40px}
-.demo-inner{max-width:1200px;margin:0 auto}
-.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-@media(max-width:768px){.demo-grid{grid-template-columns:1fr}}
-.demo-text h2{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;margin-bottom:20px}
-.demo-text p{color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:24px}
-.feature-list{list-style:none}
-.feature-list li{padding:10px 0;color:rgba(255,255,255,.7);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.feature-list li::before{content:'✦';color:var(--pink)}
-.demo-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px}
-.demo-box-title{font-size:.8rem;color:rgba(255,255,255,.3);margin-bottom:20px;letter-spacing:1px}
-#chat{max-height:300px;overflow-y:auto}
-.chat-bubble{background:rgba(224,64,251,.12);border:1px solid rgba(224,64,251,.2);border-radius:12px;padding:14px 18px;margin-bottom:12px;font-size:.9rem;color:rgba(255,255,255,.8)}
-.chat-bubble.user{background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.2);text-align:right}
-.chat-bubble .sender{font-size:.75rem;color:rgba(255,255,255,.3);margin-bottom:6px}
-.typing-input{display:flex;gap:10px;margin-top:20px}
-.typing-input input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
-.typing-input input:focus{border-color:var(--pink)}
-.typing-input button{background:linear-gradient(135deg,var(--pink),#9c27b0);border:none;border-radius:10px;padding:12px 20px;color:#fff;font-weight:600;cursor:pointer}
-.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px}
-.process-step{text-align:center;padding:30px 20px}
-.step-num{width:60px;height:60px;border-radius:50%;border:2px solid var(--pink);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--pink);margin:0 auto 20px}
-.process-step h3{margin-bottom:10px;font-size:1.1rem}
-.process-step p{color:rgba(255,255,255,.4);font-size:.9rem;line-height:1.6}
-footer{position:relative;z-index:1;text-align:center;padding:60px 40px;border-top:1px solid var(--border);color:rgba(255,255,255,.3);font-size:.9rem}
-footer a{color:var(--pink);text-decoration:none}
-.glow-orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:.15}
-.orb1{width:600px;height:600px;background:var(--pink);top:-200px;left:-200px}
-.orb2{width:500px;height:500px;background:var(--cyan);bottom:-100px;right:-100px}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --pink: #e040fb;
+  --cyan: #00e5ff;
+  --green: #76ff03;
+  --orange: #ff6d00;
+  --bg: #030508;
+  --card: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.07);
+  --text-dim: rgba(255,255,255,0.45);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* 3D CANVAS */
+#bg-canvas {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 18px 5%;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(3,5,8,0.7);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  transition: background .3s;
+}
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem; font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.logo em { color: var(--pink); font-style: normal; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: .9rem; font-weight: 500;
+  transition: color .2s;
+}
+.nav-links a:hover { color: #fff; }
+.nav-cta {
+  background: var(--pink);
+  color: #fff !important;
+  padding: 9px 22px; border-radius: 8px;
+  font-weight: 600 !important;
+  transition: opacity .2s !important;
+}
+.nav-cta:hover { opacity: .85 !important; color: #fff !important; }
+
+/* HERO */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 5% 80px;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(224,64,251,0.1);
+  border: 1px solid rgba(224,64,251,0.25);
+  color: var(--pink);
+  padding: 6px 16px; border-radius: 100px;
+  font-size: .8rem; font-weight: 600; letter-spacing: .5px;
+  margin-bottom: 32px;
+  animation: fadeUp .6s ease both;
+}
+.hero-eyebrow::before { content: '●'; font-size: .5rem; animation: pulse 2s infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.8rem, 6.5vw, 6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+  animation: fadeUp .6s .1s ease both;
+}
+.grad-text {
+  background: linear-gradient(135deg, var(--pink) 0%, #a855f7 50%, var(--cyan) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  color: var(--text-dim);
+  max-width: 580px; line-height: 1.75;
+  margin-bottom: 44px;
+  animation: fadeUp .6s .2s ease both;
+}
+.hero-btns {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp .6s .3s ease both;
+}
+.btn {
+  padding: 15px 32px; border-radius: 10px;
+  font-size: .95rem; font-weight: 600;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  transition: transform .2s, box-shadow .2s, opacity .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--pink), #7c3aed);
+  color: #fff;
+  box-shadow: 0 0 40px rgba(224,64,251,0.3);
+}
+.btn-primary:hover { box-shadow: 0 0 60px rgba(224,64,251,0.5); }
+.btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.25); }
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute; bottom: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--text-dim); font-size: .75rem;
+  animation: fadeIn 1s .8s ease both;
+}
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, transparent, var(--pink));
+  animation: scrollLine 1.5s ease-in-out infinite;
+}
+@keyframes scrollLine { 0%{height:0;opacity:0} 50%{height:50px;opacity:1} 100%{height:50px;opacity:0} }
+
+/* LOGOS / TRUST */
+.trust-bar {
+  position: relative; z-index: 1;
+  padding: 32px 5%;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  flex-wrap: wrap;
+  color: var(--text-dim); font-size: .85rem;
+}
+.trust-logos {
+  display: flex; align-items: center; gap: 28px; flex-wrap: wrap; justify-content: center;
+}
+.trust-logo {
+  color: rgba(255,255,255,0.25);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: .95rem;
+  letter-spacing: .5px;
+  transition: color .2s;
+}
+.trust-logo:hover { color: rgba(255,255,255,0.6); }
+
+/* SECTIONS */
+section {
+  position: relative; z-index: 1;
+  padding: 120px 5%;
+  max-width: 1200px; margin: 0 auto;
+}
+.section-tag {
+  display: inline-block;
+  color: var(--cyan); font-size: .75rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800; letter-spacing: -1px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.section-sub {
+  color: var(--text-dim); font-size: 1.05rem;
+  max-width: 520px; line-height: 1.7;
+  margin-bottom: 64px;
+}
+
+/* WORKFLOW VIZ */
+.workflow-viz {
+  display: flex; align-items: center; gap: 0;
+  flex-wrap: wrap; justify-content: center;
+  margin-bottom: 80px;
+}
+.wf-node {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 22px;
+  text-align: center; min-width: 130px;
+  transition: border-color .3s, box-shadow .3s, transform .3s;
+  cursor: default;
+}
+.wf-node:hover {
+  border-color: var(--pink);
+  box-shadow: 0 0 30px rgba(224,64,251,0.2);
+  transform: translateY(-3px);
+}
+.wf-node .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.wf-node .label { font-size: .8rem; font-weight: 600; color: rgba(255,255,255,.7); }
+.wf-arrow {
+  color: var(--pink); font-size: 1.2rem; padding: 0 8px;
+  opacity: .6;
+}
+
+/* SERVICES GRID */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+.service-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px; padding: 32px;
+  transition: border-color .3s, transform .3s, box-shadow .3s;
+  cursor: default;
+  position: relative; overflow: hidden;
+}
+.service-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at top left, rgba(224,64,251,0.06), transparent 60%);
+  opacity: 0; transition: opacity .3s;
+}
+.service-card:hover::before { opacity: 1; }
+.service-card:hover {
+  border-color: rgba(224,64,251,0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+}
+.service-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: rgba(224,64,251,0.12);
+  border: 1px solid rgba(224,64,251,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 20px;
+}
+.service-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem; font-weight: 700;
+  margin-bottom: 10px;
+}
+.service-card p { color: var(--text-dim); font-size: .9rem; line-height: 1.7; margin-bottom: 20px; }
+.service-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  padding: 4px 10px; border-radius: 100px;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.5);
+  font-size: .73rem; font-weight: 500;
+}
+.service-price {
+  position: absolute; top: 28px; right: 28px;
+  color: var(--green); font-weight: 700; font-size: .9rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* DEMO SECTION */
+.demo-wrap {
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center;
+}
+@media(max-width:800px){ .demo-wrap { grid-template-columns: 1fr; } }
+.demo-features { list-style: none; }
+.demo-features li {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+  font-size: .95rem; color: rgba(255,255,255,0.75);
+}
+.demo-features li:last-child { border-bottom: none; }
+.feat-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(0,229,255,0.1);
+  border: 1px solid rgba(0,229,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; flex-shrink: 0; margin-top: 1px;
+}
+
+/* CHAT UI */
+.chat-ui {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+}
+.chat-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.02);
+}
+.chat-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink), #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.chat-info .name { font-weight: 600; font-size: .9rem; }
+.chat-info .status { font-size: .75rem; color: var(--green); display: flex; align-items: center; gap: 4px; }
+.chat-info .status::before { content: '●'; font-size: .5rem; }
+.chat-msgs {
+  padding: 20px; min-height: 280px; max-height: 320px;
+  overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+}
+.msg {
+  max-width: 85%; padding: 12px 16px; border-radius: 14px;
+  font-size: .88rem; line-height: 1.6; animation: msgIn .3s ease;
+}
+@keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.msg.bot {
+  background: rgba(224,64,251,0.1);
+  border: 1px solid rgba(224,64,251,0.15);
+  align-self: flex-start; border-bottom-left-radius: 4px;
+}
+.msg.user {
+  background: rgba(0,229,255,0.08);
+  border: 1px solid rgba(0,229,255,0.15);
+  align-self: flex-end; border-bottom-right-radius: 4px;
+  text-align: right;
+}
+.chat-input {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 10px;
+  background: rgba(255,255,255,0.01);
+}
+.chat-input input {
+  flex: 1; background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 16px; color: #fff; font-size: .88rem;
+  outline: none; font-family: 'Inter', sans-serif;
+  transition: border-color .2s;
+}
+.chat-input input:focus { border-color: var(--pink); }
+.chat-input button {
+  background: linear-gradient(135deg, var(--pink), #7c3aed);
+  border: none; border-radius: 10px; padding: 11px 18px;
+  color: #fff; font-weight: 600; cursor: pointer; font-size: .88rem;
+  transition: opacity .2s;
+}
+.chat-input button:hover { opacity: .8; }
+
+/* STATS */
+.stats-row {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center; gap: 0; flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.015);
+}
+.stat-item {
+  flex: 1; min-width: 180px;
+  padding: 48px 32px; text-align: center;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--pink), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.stat-label { color: var(--text-dim); font-size: .85rem; margin-top: 8px; }
+
+/* PROCESS */
+.process-steps {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px;
+  background: var(--border);
+  border-radius: 20px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.process-step {
+  background: var(--bg);
+  padding: 36px 28px;
+  position: relative;
+}
+.step-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem; font-weight: 800;
+  color: rgba(255,255,255,.04);
+  position: absolute; top: 16px; right: 20px;
+  line-height: 1;
+}
+.step-icon {
+  font-size: 1.5rem; margin-bottom: 16px;
+}
+.process-step h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem; font-weight: 700; margin-bottom: 10px;
+}
+.process-step p { color: var(--text-dim); font-size: .85rem; line-height: 1.65; }
+
+/* PRICING */
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+}
+.price-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px;
+  position: relative; transition: border-color .3s, box-shadow .3s;
+}
+.price-card.featured {
+  border-color: var(--pink);
+  box-shadow: 0 0 60px rgba(224,64,251,0.15);
+}
+.price-badge {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--pink), #7c3aed);
+  color: #fff; padding: 4px 16px; border-radius: 100px;
+  font-size: .75rem; font-weight: 700; white-space: nowrap;
+}
+.price-tier { color: var(--text-dim); font-size: .85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.price-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.8rem; font-weight: 800; margin-bottom: 4px;
+}
+.price-amount span { font-size: 1rem; font-weight: 500; color: var(--text-dim); }
+.price-desc { color: var(--text-dim); font-size: .85rem; margin-bottom: 28px; }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.price-features li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: .88rem; color: rgba(255,255,255,.75);
+}
+.price-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+.price-btn {
+  display: block; width: 100%; text-align: center;
+  padding: 13px; border-radius: 10px;
+  text-decoration: none; font-weight: 600; font-size: .9rem;
+  transition: opacity .2s, transform .2s;
+}
+.price-btn:hover { opacity: .85; transform: translateY(-1px); }
+.price-btn.primary { background: linear-gradient(135deg, var(--pink), #7c3aed); color: #fff; }
+.price-btn.ghost { border: 1px solid var(--border); color: #fff; }
+
+/* CTA BANNER */
+.cta-banner {
+  position: relative; z-index: 1;
+  margin: 0 5% 100px;
+  background: linear-gradient(135deg, rgba(224,64,251,0.15), rgba(124,58,237,0.15), rgba(0,229,255,0.08));
+  border: 1px solid rgba(224,64,251,0.2);
+  border-radius: 24px; padding: 64px;
+  text-align: center;
+  overflow: hidden;
+}
+.cta-banner::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center top, rgba(224,64,251,0.15), transparent 60%);
+}
+.cta-banner h2 { position: relative; margin-bottom: 16px; }
+.cta-banner p { position: relative; color: var(--text-dim); font-size: 1.05rem; max-width: 500px; margin: 0 auto 36px; }
+.cta-banner .hero-btns { position: relative; }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 48px 5%;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+}
+.footer-logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 800; }
+.footer-logo em { color: var(--pink); font-style: normal; }
+footer p { color: var(--text-dim); font-size: .85rem; }
+
+/* REVEAL ANIMATION */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
-<script>
-(function(){
-  const KEY='autoflow_auth', PWD='clawy2025';
-  if(sessionStorage.getItem(KEY)==='ok') return;
-  document.addEventListener('DOMContentLoaded',function(){
-    document.body.style.display='none';
-  });
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:#04050d;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif';
-  overlay.innerHTML=`
-    <div style="text-align:center;max-width:380px;padding:40px">
-      <div style="font-size:2rem;margin-bottom:8px">🦀</div>
-      <div style="font-family:Space Grotesk,sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:8px">AutoFlow<span style="color:#e040fb"> Studio</span></div>
-      <div style="color:rgba(255,255,255,.4);margin-bottom:32px;font-size:.9rem">Private portfolio — enter password</div>
-      <input id="gateInput" type="password" placeholder="Password" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 18px;color:#fff;font-size:1rem;outline:none;margin-bottom:14px;text-align:center">
-      <button id="gateBtn" style="width:100%;background:linear-gradient(135deg,#e040fb,#9c27b0);border:none;border-radius:12px;padding:14px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer">Enter →</button>
-      <div id="gateErr" style="color:#ff5252;margin-top:12px;font-size:.85rem;min-height:20px"></div>
-    </div>`;
-  document.body.appendChild(overlay);
-  function tryLogin(){
-    const val=document.getElementById('gateInput').value;
-    if(val===PWD){sessionStorage.setItem(KEY,'ok');overlay.remove();document.body.style.display=''}
-    else{document.getElementById('gateErr').textContent='Wrong password';document.getElementById('gateInput').value='';document.getElementById('gateInput').focus()}
-  }
-  document.getElementById('gateBtn').addEventListener('click',tryLogin);
-  document.addEventListener('keydown',function(e){if(e.key==='Enter')tryLogin()});
-  document.body.style.display='none';
-  setTimeout(()=>{document.body.style.display='';},0);
-})();
-</script>
 
-<div class="glow-orb orb1"></div>
-<div class="glow-orb orb2"></div>
-<canvas id="stars"></canvas>
+<canvas id="bg-canvas"></canvas>
+
 <nav>
-  <div class="logo">Auto<span>Flow</span> Studio</div>
-  <div>
+  <div class="logo">Auto<em>Flow</em> Studio</div>
+  <div class="nav-links">
     <a href="#services">Services</a>
     <a href="#demo">Demo</a>
-    <a href="#process">Process</a>
-    <a href="https://fiverr.com" target="_blank">Hire Me →</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://www.fiverr.com" target="_blank" class="nav-cta">Hire Me →</a>
   </div>
 </nav>
+
+<!-- HERO -->
 <section class="hero">
-  <div class="badge">🤖 AI & Automation Specialist</div>
-  <h1>I automate your<br><span class="glow-pink">business workflows</span><br>with <span class="glow-cyan">AI</span></h1>
-  <p class="subtitle">Stop wasting hours on repetitive tasks. I build custom automations, AI agents and smart workflows that run 24/7 — while you focus on what actually matters.</p>
-  <div class="cta-row">
-    <a href="https://fiverr.com" class="btn-primary">🚀 Hire me on Fiverr</a>
-    <a href="#demo" class="btn-secondary">See live demo ↓</a>
+  <div class="hero-eyebrow">AI & Automation Specialist · Available Now</div>
+  <h1>I build AI agents<br>that work <span class="grad-text">while you sleep</span></h1>
+  <p>Custom workflow automation, AI agents, and chatbots for businesses that want to stop wasting time on repetitive tasks.</p>
+  <div class="hero-btns">
+    <a href="https://www.fiverr.com" target="_blank" class="btn btn-primary">🚀 Hire me on Fiverr</a>
+    <a href="#demo" class="btn btn-ghost">See live demo ↓</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
   </div>
 </section>
-<div class="stats">
-  <div class="stat"><div class="stat-num">48h</div><div class="stat-label">Average delivery</div></div>
-  <div class="stat"><div class="stat-num">100+</div><div class="stat-label">App integrations</div></div>
-  <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Automations run</div></div>
-  <div class="stat"><div class="stat-num">$49</div><div class="stat-label">Starting from</div></div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <span>Works with</span>
+  <div class="trust-logos">
+    <span class="trust-logo">n8n</span>
+    <span class="trust-logo">Make</span>
+    <span class="trust-logo">OpenAI</span>
+    <span class="trust-logo">Claude</span>
+    <span class="trust-logo">Zapier</span>
+    <span class="trust-logo">HubSpot</span>
+    <span class="trust-logo">Shopify</span>
+    <span class="trust-logo">Notion</span>
+    <span class="trust-logo">Slack</span>
+    <span class="trust-logo">Airtable</span>
+  </div>
 </div>
-<section class="section" id="services">
-  <div class="section-label">WHAT I BUILD</div>
-  <h2 class="section-title">Services & Pricing</h2>
-  <div class="services-grid">
-    <div class="service-card"><div class="service-icon">⚡</div><h3>Workflow Automation</h3><p>Connect your apps and eliminate manual work. n8n, Make, Zapier — I build it, you profit.</p><span class="service-price">from $49</span></div>
-    <div class="service-card"><div class="service-icon">🤖</div><h3>AI Agents</h3><p>Custom AI assistants trained on your data. Handles emails, support tickets, lead qualification — automatically.</p><span class="service-price">from $149</span></div>
-    <div class="service-card"><div class="service-icon">💬</div><h3>Website Chatbot</h3><p>GPT-4 powered chatbot embedded on your site. Answers questions, books appointments, captures leads 24/7.</p><span class="service-price">from $99</span></div>
-    <div class="service-card"><div class="service-icon">📧</div><h3>Email Automation</h3><p>Smart email sequences, auto-replies, CRM sync. Never miss a lead again.</p><span class="service-price">from $79</span></div>
-    <div class="service-card"><div class="service-icon">📊</div><h3>Data Pipelines</h3><p>Scrape, transform, sync data between systems. Google Sheets, Airtable, databases — always up to date.</p><span class="service-price">from $99</span></div>
-    <div class="service-card"><div class="service-icon">🏠</div><h3>Smart Home & IoT</h3><p>Home Assistant automations, device integrations, custom dashboards. Your home, fully automated.</p><span class="service-price">from $69</span></div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-item reveal"><div class="stat-num" data-target="48">0</div><div class="stat-label">Hour avg. delivery</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-target="100">0</div><div class="stat-label">App integrations</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-target="24">0</div><div class="stat-label">7 uptime guaranteed</div></div>
+  <div class="stat-item reveal"><div class="stat-num" data-target="49">0</div><div class="stat-label">Starting from $</div></div>
+</div>
+
+<!-- HOW IT CONNECTS -->
+<section id="services">
+  <div class="section-tag">HOW IT WORKS</div>
+  <h2>Connect anything.<br>Automate everything.</h2>
+  <p class="section-sub">I build pipelines that connect your tools and let AI handle the boring work — automatically, 24/7.</p>
+
+  <div class="workflow-viz reveal">
+    <div class="wf-node"><div class="icon">📧</div><div class="label">Email / CRM</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-node"><div class="icon">🤖</div><div class="label">AI Agent</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-node"><div class="icon">⚡</div><div class="label">Automation</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-node"><div class="icon">📊</div><div class="label">Dashboard</div></div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-node"><div class="icon">✅</div><div class="label">Done!</div></div>
   </div>
-</section>
-<div class="demo-section" id="demo">
-  <div class="demo-inner">
-    <div class="demo-grid">
-      <div class="demo-text">
-        <div class="section-label">LIVE DEMO</div>
-        <h2>Talk to an AI Agent</h2>
-        <p>This is a live example of an AI customer service agent. Ask it anything — it answers, qualifies leads, and can book appointments automatically.</p>
-        <ul class="feature-list">
-          <li>Trained on your business data</li>
-          <li>Answers in any language</li>
-          <li>Captures leads & books appointments</li>
-          <li>Integrates with your CRM</li>
-          <li>Works 24/7, zero maintenance</li>
-        </ul>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-price">from $49</span>
+      <div class="service-icon">⚡</div>
+      <h3>Workflow Automation</h3>
+      <p>Connect your apps, eliminate manual steps. n8n and Make workflows built, tested, and documented — ready to run.</p>
+      <div class="service-tags">
+        <span class="tag">n8n</span><span class="tag">Make</span><span class="tag">Zapier</span><span class="tag">APIs</span><span class="tag">Webhooks</span>
       </div>
-      <div class="demo-box">
-        <div class="demo-box-title">LIVE AI AGENT DEMO — try it!</div>
-        <div id="chat">
-          <div class="chat-bubble"><div class="sender">🤖 AI Agent</div>Hey! I'm an AI assistant built by AutoFlow Studio. Ask me about pricing, timelines, or what I can automate for your business!</div>
-        </div>
-        <div class="typing-input">
-          <input type="text" id="userInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendMsg()">
-          <button onclick="sendMsg()">Send</button>
-        </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-price">from $149</span>
+      <div class="service-icon" style="background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.2)">🤖</div>
+      <h3>AI Agents</h3>
+      <p>Autonomous AI that handles emails, qualifies leads, answers support tickets and processes data — without human input.</p>
+      <div class="service-tags">
+        <span class="tag">GPT-4</span><span class="tag">Claude</span><span class="tag">LangChain</span><span class="tag">RAG</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-price">from $99</span>
+      <div class="service-icon" style="background:rgba(118,255,3,0.1);border-color:rgba(118,255,3,0.2)">💬</div>
+      <h3>Website Chatbot</h3>
+      <p>GPT-4 powered chatbot trained on your business data. Embedded on your site — answers questions, books calls, captures leads.</p>
+      <div class="service-tags">
+        <span class="tag">GPT-4o</span><span class="tag">Embed</span><span class="tag">CRM sync</span><span class="tag">Multilingual</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-price">from $79</span>
+      <div class="service-icon" style="background:rgba(255,109,0,0.1);border-color:rgba(255,109,0,0.2)">📧</div>
+      <h3>Email Automation</h3>
+      <p>Smart sequences, AI-powered replies, CRM sync. Every lead gets the right message at the right time — automatically.</p>
+      <div class="service-tags">
+        <span class="tag">Gmail</span><span class="tag">Outlook</span><span class="tag">HubSpot</span><span class="tag">Sequences</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-price">from $99</span>
+      <div class="service-icon" style="background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.3)">📊</div>
+      <h3>Data Pipelines</h3>
+      <p>Scrape, transform, enrich and sync data across your stack. Google Sheets, Airtable, databases — always in sync.</p>
+      <div class="service-tags">
+        <span class="tag">Scraping</span><span class="tag">Sheets</span><span class="tag">Airtable</span><span class="tag">SQL</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-price">from $69</span>
+      <div class="service-icon" style="background:rgba(0,229,255,0.08);border-color:rgba(0,229,255,0.15)">🏠</div>
+      <h3>Smart Home & IoT</h3>
+      <p>Home Assistant dashboards, device integrations, voice control, custom automations. Your environment, fully automated.</p>
+      <div class="service-tags">
+        <span class="tag">Home Assistant</span><span class="tag">IoT</span><span class="tag">Dashboards</span>
       </div>
     </div>
   </div>
-</div>
-<section class="section" id="process">
-  <div class="section-label">HOW IT WORKS</div>
-  <h2 class="section-title">From idea to running automation</h2>
-  <div class="process-grid">
-    <div class="process-step"><div class="step-num">1</div><h3>Tell me your problem</h3><p>Describe what's taking too long. No tech knowledge needed.</p></div>
-    <div class="process-step"><div class="step-num">2</div><h3>I design the solution</h3><p>Free consultation. I map out exactly what I'll build.</p></div>
-    <div class="process-step"><div class="step-num">3</div><h3>I build & test it</h3><p>Delivered in 48-72h. Fully tested and documented.</p></div>
-    <div class="process-step"><div class="step-num">4</div><h3>You sit back & profit</h3><p>Runs 24/7. I provide support so you're never stuck.</p></div>
+</section>
+
+<!-- DEMO -->
+<section id="demo" style="padding-top:0">
+  <div class="demo-wrap">
+    <div>
+      <div class="section-tag">LIVE DEMO</div>
+      <h2>Talk to a real<br>AI agent</h2>
+      <p class="section-sub" style="margin-bottom:32px">This is a working example — the same tech I build for clients. Ask it anything.</p>
+      <ul class="demo-features">
+        <li><div class="feat-icon">🧠</div>Trained on your specific business data</li>
+        <li><div class="feat-icon">🌍</div>Responds in any language automatically</li>
+        <li><div class="feat-icon">📋</div>Captures leads and sends to your CRM</li>
+        <li><div class="feat-icon">📅</div>Books appointments via Calendly integration</li>
+        <li><div class="feat-icon">🔁</div>Hands off to human agent when needed</li>
+      </ul>
+    </div>
+    <div class="chat-ui reveal">
+      <div class="chat-header">
+        <div class="chat-avatar">🤖</div>
+        <div class="chat-info">
+          <div class="name">AutoFlow AI Assistant</div>
+          <div class="status">Online · Powered by GPT-4</div>
+        </div>
+      </div>
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg bot">Hey! 👋 I'm a demo AI agent built by AutoFlow Studio. Ask me about pricing, timelines, or what I can automate for your business!</div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')chat()">
+        <button onclick="chat()">Send</button>
+      </div>
+    </div>
   </div>
 </section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-tag">PROCESS</div>
+  <h2>From idea to live<br>in 48 hours</h2>
+  <p class="section-sub">No lengthy back-and-forth. You describe the problem, I build the solution.</p>
+  <div class="process-steps reveal">
+    <div class="process-step">
+      <span class="step-number">01</span>
+      <div class="step-icon">💬</div>
+      <h3>Tell me your problem</h3>
+      <p>No tech jargon needed. Describe what's taking too long or what you wish ran automatically.</p>
+    </div>
+    <div class="process-step">
+      <span class="step-number">02</span>
+      <div class="step-icon">🗺️</div>
+      <h3>Free consultation</h3>
+      <p>I map out the exact solution and give you a clear plan — no cost, no obligation.</p>
+    </div>
+    <div class="process-step">
+      <span class="step-number">03</span>
+      <div class="step-icon">⚙️</div>
+      <h3>I build & test</h3>
+      <p>Clean, documented automation delivered in 48-72h. Tested until it works perfectly.</p>
+    </div>
+    <div class="process-step">
+      <span class="step-number">04</span>
+      <div class="step-icon">🚀</div>
+      <h3>You profit</h3>
+      <p>Your automation runs 24/7. I provide handover docs and support so you're never stuck.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-tag">PRICING</div>
+  <h2>Simple, transparent<br>pricing</h2>
+  <p class="section-sub">No hidden fees. Pick a package or message me for a custom quote.</p>
+  <div class="pricing-grid reveal">
+    <div class="price-card">
+      <div class="price-tier">Starter</div>
+      <div class="price-amount">$49<span> / project</span></div>
+      <div class="price-desc">Simple automation, 1-2 apps</div>
+      <ul class="price-features">
+        <li>1 workflow (up to 5 steps)</li>
+        <li>2 app integrations</li>
+        <li>3 day delivery</li>
+        <li>2 revisions</li>
+        <li>Basic documentation</li>
+      </ul>
+      <a href="https://www.fiverr.com" target="_blank" class="price-btn ghost">Get Started</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge">Most Popular</div>
+      <div class="price-tier">Professional</div>
+      <div class="price-amount">$149<span> / project</span></div>
+      <div class="price-desc">Complex workflow or AI integration</div>
+      <ul class="price-features">
+        <li>1 complex workflow (unlimited steps)</li>
+        <li>Up to 5 app integrations</li>
+        <li>Error handling & monitoring</li>
+        <li>3 day delivery</li>
+        <li>Unlimited revisions</li>
+        <li>Full documentation + video walkthrough</li>
+        <li>14 days support</li>
+      </ul>
+      <a href="https://www.fiverr.com" target="_blank" class="price-btn primary">Hire Me Now</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Enterprise</div>
+      <div class="price-amount">$349<span>+</span></div>
+      <div class="price-desc">Full automation system or AI agent</div>
+      <ul class="price-features">
+        <li>Complete automation system</li>
+        <li>AI agent with custom training</li>
+        <li>Unlimited integrations</li>
+        <li>5-7 day delivery</li>
+        <li>Priority support (30 days)</li>
+        <li>Monthly maintenance option</li>
+      </ul>
+      <a href="https://www.fiverr.com" target="_blank" class="price-btn ghost">Let's Talk</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-banner reveal">
+  <h2>Ready to automate<br>your business?</h2>
+  <p>Message me on Fiverr — free consultation, no obligation. Most projects start within 24 hours.</p>
+  <div class="hero-btns">
+    <a href="https://www.fiverr.com" target="_blank" class="btn btn-primary">🚀 Message me on Fiverr</a>
+    <a href="#demo" class="btn btn-ghost">Try the demo first</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-  <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:16px;">Auto<span style="color:var(--pink)">Flow</span> Studio</div>
-  <p>AI & Automation specialist — available on <a href="https://fiverr.com">Fiverr</a></p>
-  <p style="margin-top:8px;font-size:.8rem;">Built with ❤️ and a lot of automation</p>
+  <div class="footer-logo">Auto<em>Flow</em> Studio</div>
+  <p>AI & Automation Specialist · Available on Fiverr</p>
+  <p style="color:rgba(255,255,255,.2);font-size:.75rem">Built with AI. Powered by automation. ⚡</p>
 </footer>
+
 <script>
-const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');
-function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;drawStars()}
-function drawStars(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=0;i<120;i++){const x=Math.random()*canvas.width,y=Math.random()*canvas.height,r=Math.random()*2.5+.5,c=['#e040fb','#00e5ff','#76ff03','#ffffff'][Math.floor(Math.random()*4)];ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=c;ctx.shadowBlur=15;ctx.shadowColor=c;ctx.fill()}}
-resize();window.addEventListener('resize',resize);
-const R={default:"Great question! For most business automations I can deliver within 48 hours. What's your specific use case?",price:"Pricing starts at $49 for simple workflows, $149-499 for AI agents. Free consultation — just message me on Fiverr!",time:"Most automations delivered in 48-72h. Complex AI systems up to 5 days.",email:"Email automation is a specialty! I connect Gmail/Outlook to your CRM, auto-replies, sequences and more.",chatbot:"I build GPT-4 chatbots embedded on your site — FAQ, lead capture, booking, support.",n8n:"Yes! n8n is my main tool — powerful, self-hostable, free. I set it up and build any workflow.",hello:"Hey! 👋 I'm a demo AI agent. Ask me about pricing, timelines, or what I can build for you!"};
-function getReply(m){m=m.toLowerCase();if(m.includes('price')||m.includes('cost')||m.includes('much'))return R.price;if(m.includes('time')||m.includes('long')||m.includes('fast'))return R.time;if(m.includes('email')||m.includes('mail'))return R.email;if(m.includes('chat')||m.includes('bot'))return R.chatbot;if(m.includes('n8n')||m.includes('make')||m.includes('zapier'))return R.n8n;if(m.includes('hello')||m.includes('hi')||m.includes('hey'))return R.hello;return R.default}
-function sendMsg(){const inp=document.getElementById('userInput'),msg=inp.value.trim();if(!msg)return;inp.value='';const chat=document.getElementById('chat');const ub=document.createElement('div');ub.className='chat-bubble user';ub.innerHTML='<div class="sender">You</div>'+msg;chat.appendChild(ub);const t=document.createElement('div');t.className='chat-bubble';t.innerHTML='<div class="sender">🤖 AI Agent</div><em style="opacity:.4">typing...</em>';chat.appendChild(t);chat.scrollTop=chat.scrollHeight;setTimeout(()=>{t.innerHTML='<div class="sender">🤖 AI Agent</div>'+getReply(msg);chat.scrollTop=chat.scrollHeight},900)}
+// 3D BACKGROUND - Floating particles network
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.z = 30;
+
+// Create particles
+const geo = new THREE.BufferGeometry();
+const count = 200;
+const positions = new Float32Array(count * 3);
+const colors = new Float32Array(count * 3);
+const colorOptions = [
+  [0.88, 0.25, 0.98], // pink
+  [0, 0.9, 1],         // cyan
+  [0.46, 1, 0.01],     // green
+];
+for(let i=0;i<count;i++){
+  positions[i*3] = (Math.random()-0.5)*80;
+  positions[i*3+1] = (Math.random()-0.5)*80;
+  positions[i*3+2] = (Math.random()-0.5)*40;
+  const c = colorOptions[Math.floor(Math.random()*colorOptions.length)];
+  colors[i*3]=c[0]; colors[i*3+1]=c[1]; colors[i*3+2]=c[2];
+}
+geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+geo.setAttribute('color', new THREE.BufferAttribute(colors,3));
+
+const mat = new THREE.PointsMaterial({
+  size: 0.25, vertexColors: true, transparent: true, opacity: 0.7,
+  sizeAttenuation: true
+});
+const points = new THREE.Points(geo, mat);
+scene.add(points);
+
+// Lines between close particles
+const lineMat = new THREE.LineBasicMaterial({color:0xe040fb, transparent:true, opacity:0.06});
+const lineGeo = new THREE.BufferGeometry();
+const linePos = [];
+for(let i=0;i<count;i++){
+  for(let j=i+1;j<count;j++){
+    const dx=positions[i*3]-positions[j*3];
+    const dy=positions[i*3+1]-positions[j*3+1];
+    const dz=positions[i*3+2]-positions[j*3+2];
+    const dist=Math.sqrt(dx*dx+dy*dy+dz*dz);
+    if(dist<14){
+      linePos.push(positions[i*3],positions[i*3+1],positions[i*3+2]);
+      linePos.push(positions[j*3],positions[j*3+1],positions[j*3+2]);
+    }
+  }
+}
+lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePos),3));
+scene.add(new THREE.LineSegments(lineGeo, lineMat));
+
+let mouseX=0, mouseY=0;
+document.addEventListener('mousemove', e=>{
+  mouseX=(e.clientX/window.innerWidth-.5)*2;
+  mouseY=(e.clientY/window.innerHeight-.5)*2;
+});
+
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+function animate(){
+  requestAnimationFrame(animate);
+  points.rotation.y += 0.0005;
+  points.rotation.x += 0.0002;
+  camera.position.x += (mouseX*5 - camera.position.x) * 0.03;
+  camera.position.y += (-mouseY*5 - camera.position.y) * 0.03;
+  camera.lookAt(scene.position);
+  renderer.render(scene, camera);
+}
+animate();
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// COUNTER ANIMATION
+const counters = document.querySelectorAll('.stat-num[data-target]');
+const counterObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && !e.target.dataset.animated){
+      e.target.dataset.animated=1;
+      const target=+e.target.dataset.target;
+      let current=0;
+      const inc=target/60;
+      const t=setInterval(()=>{
+        current=Math.min(current+inc,target);
+        e.target.textContent=Math.floor(current)+(target===24?'/':'')+(target===49?'+':'');
+        if(current>=target)clearInterval(t);
+      },16);
+    }
+  });
+},{threshold:0.5});
+counters.forEach(c=>counterObs.observe(c));
+
+// CHATBOT
+const replies = {
+  price:   "Pricing starts at $49 for simple workflows, up to $349+ for full AI systems. I also offer custom quotes — just message me on Fiverr!",
+  time:    "Most projects delivered in 48-72 hours. Complex AI agents may take up to 5 days. I'll give you an exact timeline upfront.",
+  email:   "Absolutely! I specialize in email automation — Gmail, Outlook, auto-replies, sequences, CRM sync. What's your current setup?",
+  chatbot: "I build GPT-4o powered chatbots that can be embedded on any website. They handle FAQs, book calls, capture leads, and sync to your CRM.",
+  n8n:     "n8n is my go-to tool — open source, self-hostable, powerful. I can also use Make, Zapier, or pure Python depending on your needs.",
+  agent:   "AI agents are autonomous bots that take actions — reading emails, making decisions, updating CRMs, sending messages. All without human input.",
+  hi:      "Hey there! 👋 I'm a demo AI agent. Ask me about pricing, what I can automate, or how long it takes. I'll give you a real answer!",
+  default: "Great question! The short answer is: yes, it's probably automatable. Send me a message on Fiverr and I'll give you a free assessment within a few hours."
+};
+
+function getReply(msg){
+  const m=msg.toLowerCase();
+  if(/price|cost|how much|fee/.test(m)) return replies.price;
+  if(/time|long|fast|quick|deliver/.test(m)) return replies.time;
+  if(/email|mail|outlook|gmail/.test(m)) return replies.email;
+  if(/chatbot|chat bot|chat/.test(m)) return replies.chatbot;
+  if(/n8n|make|zapier|integromat/.test(m)) return replies.n8n;
+  if(/agent|autonomous|autonom/.test(m)) return replies.agent;
+  if(/hi|hello|hey|yo/.test(m)) return replies.hi;
+  return replies.default;
+}
+
+function chat(){
+  const input=document.getElementById('chatInput');
+  const msgs=document.getElementById('chatMsgs');
+  const msg=input.value.trim();
+  if(!msg)return;
+  input.value='';
+
+  const um=document.createElement('div');
+  um.className='msg user'; um.textContent=msg;
+  msgs.appendChild(um); msgs.scrollTop=msgs.scrollHeight;
+
+  const tm=document.createElement('div');
+  tm.className='msg bot';
+  tm.innerHTML='<em style="opacity:.4">typing…</em>';
+  msgs.appendChild(tm); msgs.scrollTop=msgs.scrollHeight;
+
+  setTimeout(()=>{
+    tm.textContent=getReply(msg);
+    msgs.scrollTop=msgs.scrollHeight;
+  }, 700+Math.random()*400);
+}
 </script>
 </body>
 </html>
