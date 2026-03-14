@@ -477,6 +477,27 @@ footer p{font-size:.78rem;color:var(--text3);}
 .review-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;font-weight:700;color:#fff;flex-shrink:0;}
 .review-name{font-size:.83rem;font-weight:600;}
 .review-loc{font-size:.72rem;color:var(--text3);}
+
+/* ━━━━ PORTFOLIO ━━━━ */
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+@media(max-width:860px){.portfolio-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.portfolio-grid{grid-template-columns:1fr;}}
+.portfolio-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .3s;}
+.portfolio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.portfolio-preview{height:180px;overflow:hidden;}
+.portfolio-info{padding:16px;}
+.portfolio-title{font-size:.85rem;font-weight:600;margin-bottom:8px;}
+.portfolio-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.portfolio-tags span{font-size:.68rem;padding:3px 9px;border-radius:6px;background:var(--bg2);color:var(--text2);border:1px solid var(--border);}
+
+/* ━━━━ HERO DEVICE MOCKUP ━━━━ */
+.hero-device{display:flex;justify-content:center;align-items:flex-end;gap:-30px;position:relative;height:220px;}
+.hd-phone{width:110px;height:200px;background:var(--bg3);border:2px solid var(--border2);border-radius:22px;position:relative;z-index:2;box-shadow:var(--shadow-lg);overflow:visible;flex-shrink:0;}
+.hd-notch{width:28px;height:6px;background:var(--bg3);border-radius:0 0 5px 5px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:3;}
+.hd-screen{position:absolute;inset:8px;border-radius:15px;background:var(--bg);overflow:hidden;border:1px solid var(--border);}
+.hd-tablet{width:200px;height:155px;background:var(--bg3);border:2px solid var(--border2);border-radius:14px;position:absolute;right:calc(50% - 190px);bottom:0;z-index:1;box-shadow:var(--shadow-md);overflow:hidden;}
+.hd-tablet-screen{position:absolute;inset:6px;border-radius:9px;background:var(--bg);overflow:hidden;border:1px solid var(--border);}
+@media(max-width:780px){.hero-device{display:none;}}
 </style>
 </head>
 <body>
@@ -604,6 +625,47 @@ footer p{font-size:.78rem;color:var(--text3);}
         <a href="#smarthome-demo" class="btn btn-outline">▶ Try live demo</a>
       </div>
     </div>
+      <div class="hero-device rv rv-d1" style="margin-top:48px">
+        <div class="hd-phone">
+          <div class="hd-notch"></div>
+          <div class="hd-screen">
+            <div style="padding:10px;height:100%;display:flex;flex-direction:column;gap:6px;overflow:hidden">
+              <div style="font-size:.58rem;font-weight:700;color:var(--text2)">Good evening 👋</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+                <div style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:7px;padding:7px"><div style="font-size:.5rem;color:rgba(245,166,35,.8)">LIVING</div><div style="font-size:.8rem">💡 On</div></div>
+                <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px"><div style="font-size:.5rem;color:var(--text3)">KITCHEN</div><div style="font-size:.8rem">💡 Off</div></div>
+              </div>
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px;display:flex;gap:6px;align-items:center">
+                <div style="width:22px;height:22px;border-radius:5px;background:linear-gradient(135deg,#e040fb,#7c3aed);display:grid;place-items:center;font-size:.65rem">🎵</div>
+                <div style="font-size:.58rem;font-weight:600;color:var(--text)">Blinding Lights</div>
+                <div style="margin-left:auto;color:var(--accent);font-size:.65rem">⏸</div>
+              </div>
+              <div style="display:flex;gap:3px;margin-top:auto">
+                <div style="flex:1;background:var(--accent);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;font-weight:700;color:#fff">☀️</div>
+                <div style="flex:1;background:var(--bg2);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;color:var(--text3)">🌅</div>
+                <div style="flex:1;background:var(--bg2);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;color:var(--text3)">🎬</div>
+                <div style="flex:1;background:var(--bg2);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;color:var(--text3)">🌙</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Tablet behind -->
+        <div class="hd-tablet">
+          <div class="hd-tablet-screen">
+            <div style="height:100%;background:var(--bg2);display:flex;flex-direction:column;overflow:hidden">
+              <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;gap:6px;font-size:.52rem;font-weight:700;color:var(--text3)">🏠 DASHBOARD</div>
+              <div style="padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1">
+                <div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🛋️</div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🍳</div>
+                <div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🏢</div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🛏️</div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🚿</div>
+                <div style="background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🌿</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </section>
 
   <!-- FEATURES -->
@@ -1193,6 +1255,104 @@ footer p{font-size:.78rem;color:var(--text3);}
         <div class="review-stars">★★★★★</div>
         <p class="review-text">"Ordered the Premium package. The color-changing lights on the floor plan are just brilliant. My guests always ask how I built it. Fast delivery and great communication."</p>
         <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#e040fb,#aa00ff)">L</div><div><div class="review-name">Laura M.</div><div class="review-loc">🇳🇱 Netherlands · Premium package</div></div></div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+
+  <!-- ══════════ PORTFOLIO / GALLERY ══════════ -->
+  <section class="section" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">Portfolio</div>
+      <h2>Recent projects</h2>
+      <p class="section-sub">Every dashboard is custom-built for the client. Here are a few recent deliveries.</p>
+    </div>
+    <div class="portfolio-grid rv">
+      <!-- Project 1 -->
+      <div class="portfolio-card">
+        <div class="portfolio-preview" style="background:linear-gradient(135deg,#0a0a14 0%,#12182a 100%)">
+          <div style="display:grid;grid-template-columns:140px 1fr;height:100%;gap:0">
+            <div style="border-right:1px solid rgba(255,255,255,.07);padding:12px 0">
+              <div style="font-size:.5rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:0 10px 8px">Views</div>
+              <div style="background:rgba(0,229,255,.08);color:#00e5ff;padding:6px 10px;font-size:.62rem;font-weight:600;display:flex;gap:6px;align-items:center">🏠 Overview</div>
+              <div style="color:rgba(255,255,255,.3);padding:6px 10px;font-size:.62rem;display:flex;gap:6px;align-items:center">💡 Lights</div>
+              <div style="color:rgba(255,255,255,.3);padding:6px 10px;font-size:.62rem;display:flex;gap:6px;align-items:center">🎵 Media</div>
+              <div style="color:rgba(255,255,255,.3);padding:6px 10px;font-size:.62rem;display:flex;gap:6px;align-items:center">🌡️ Sensors</div>
+            </div>
+            <div style="padding:12px">
+              <div style="font-size:.7rem;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:8px">Good evening 👋</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px">
+                <div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:6px;padding:7px"><div style="font-size:.55rem;color:rgba(245,166,35,.8)">TEMP</div><div style="font-size:.85rem;font-weight:700;color:#f5a623">22°</div></div>
+                <div style="background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);border-radius:6px;padding:7px"><div style="font-size:.55rem;color:rgba(48,209,88,.7)">POWER</div><div style="font-size:.85rem;font-weight:700;color:#30d158">1.8kW</div></div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">
+                <div style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:5px;padding:6px;text-align:center"><div style="font-size:.75rem">🛋️</div><div style="font-size:.48rem;color:rgba(255,255,255,.5);margin-top:2px">ON</div></div>
+                <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:5px;padding:6px;text-align:center"><div style="font-size:.75rem">🍳</div><div style="font-size:.48rem;color:rgba(255,255,255,.3);margin-top:2px">OFF</div></div>
+                <div style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:5px;padding:6px;text-align:center"><div style="font-size:.75rem">🏢</div><div style="font-size:.48rem;color:rgba(255,255,255,.5);margin-top:2px">ON</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-info">
+          <div class="portfolio-title">3-Bedroom Apartment · Neon Dark Theme</div>
+          <div class="portfolio-tags"><span>Standard</span><span>Dark mode</span><span>6 rooms</span></div>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="portfolio-card">
+        <div class="portfolio-preview" style="background:linear-gradient(135deg,#f8f6f0 0%,#eeece6 100%)">
+          <div style="padding:14px;height:100%;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+              <span style="font-size:.65rem;font-weight:700;color:#1d1d1f">MY HOME</span>
+              <span style="font-size:.58rem;background:#0071e3;color:#fff;padding:2px 7px;border-radius:980px;font-weight:600">Armed ✓</span>
+            </div>
+            <!-- Floor plan mini -->
+            <div style="flex:1;background:#e8e4de;border-radius:8px;padding:6px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:3px">
+              <div style="background:rgba(245,166,35,.25);border:1px solid rgba(245,166,35,.5);border-radius:3px;display:grid;place-items:center;font-size:.48rem;color:rgba(160,100,0,.8);font-weight:700">Living</div>
+              <div style="background:rgba(200,190,180,.4);border:1px solid rgba(180,170,160,.5);border-radius:3px;display:grid;place-items:center;font-size:.48rem;color:rgba(100,80,60,.6)">Kitchen</div>
+              <div style="background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);border-radius:3px;display:grid;place-items:center;font-size:.48rem;color:rgba(160,100,0,.8);font-weight:700">Office</div>
+              <div style="background:rgba(200,190,180,.3);border:1px solid rgba(180,170,160,.4);border-radius:3px;display:grid;place-items:center;font-size:.48rem;color:rgba(100,80,60,.5)">Bed</div>
+              <div style="background:rgba(200,190,180,.3);border:1px solid rgba(180,170,160,.4);border-radius:3px;display:grid;place-items:center;font-size:.48rem;color:rgba(100,80,60,.5)">Bath</div>
+              <div style="background:rgba(48,209,88,.15);border:1px solid rgba(48,209,88,.35);border-radius:3px;display:grid;place-items:center;font-size:.48rem;color:rgba(20,120,50,.8);font-weight:700">Garden</div>
+            </div>
+            <div style="display:flex;gap:4px">
+              <div style="flex:1;background:#0071e3;border-radius:5px;padding:4px;text-align:center;font-size:.55rem;font-weight:700;color:#fff">☀️ Normal</div>
+              <div style="flex:1;background:rgba(0,0,0,.06);border-radius:5px;padding:4px;text-align:center;font-size:.55rem;color:rgba(0,0,0,.4)">🌅 Relax</div>
+              <div style="flex:1;background:rgba(0,0,0,.06);border-radius:5px;padding:4px;text-align:center;font-size:.55rem;color:rgba(0,0,0,.4)">🌙 Night</div>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-info">
+          <div class="portfolio-title">Family Home · Premium Floor Plan</div>
+          <div class="portfolio-tags"><span>Premium</span><span>Light mode</span><span>Floor plan</span><span>5 scenes</span></div>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="portfolio-card">
+        <div class="portfolio-preview" style="background:linear-gradient(160deg,#0d1520 0%,#0a1a0a 100%)">
+          <div style="padding:12px;height:100%;display:flex;flex-direction:column;gap:7px">
+            <div style="font-size:.65rem;font-weight:700;color:rgba(255,255,255,.7)">Media & Automation</div>
+            <div style="background:rgba(224,64,251,.08);border:1px solid rgba(224,64,251,.2);border-radius:8px;padding:9px;display:flex;gap:8px;align-items:center">
+              <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#e040fb,#7c3aed);display:grid;place-items:center;font-size:.9rem;flex-shrink:0">🎵</div>
+              <div><div style="font-size:.65rem;font-weight:600;color:rgba(255,255,255,.8)">Starboy</div><div style="font-size:.55rem;color:rgba(255,255,255,.35)">The Weeknd · Living Room</div></div>
+              <div style="margin-left:auto;font-size:.75rem;color:#e040fb">⏸</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+              <div style="background:rgba(0,229,255,.07);border:1px solid rgba(0,229,255,.18);border-radius:7px;padding:8px"><div style="font-size:.52rem;color:rgba(0,229,255,.6);margin-bottom:3px">MOTION</div><div style="font-size:.7rem;font-weight:600;color:rgba(0,229,255,.9)">Hallway ●</div></div>
+              <div style="background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.18);border-radius:7px;padding:8px"><div style="font-size:.52rem;color:rgba(48,209,88,.6);margin-bottom:3px">DOOR</div><div style="font-size:.7rem;font-weight:600;color:rgba(48,209,88,.9)">Closed ✓</div></div>
+              <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.18);border-radius:7px;padding:8px"><div style="font-size:.52rem;color:rgba(245,166,35,.6);margin-bottom:3px">TEMP</div><div style="font-size:.7rem;font-weight:600;color:rgba(245,166,35,.9)">21.5°C</div></div>
+              <div style="background:rgba(41,151,255,.07);border:1px solid rgba(41,151,255,.18);border-radius:7px;padding:8px"><div style="font-size:.52rem;color:rgba(41,151,255,.6);margin-bottom:3px">CO₂</div><div style="font-size:.7rem;font-weight:600;color:rgba(41,151,255,.9)">680ppm</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-info">
+          <div class="portfolio-title">Smart Apartment · Sensors & Media</div>
+          <div class="portfolio-tags"><span>Standard</span><span>Media hub</span><span>Sensors</span></div>
+        </div>
       </div>
     </div>
   </div>
