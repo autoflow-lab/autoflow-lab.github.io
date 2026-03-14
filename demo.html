@@ -435,6 +435,48 @@ footer p{font-size:.78rem;color:var(--text3);}
   .scene-pill{padding:4px 10px;font-size:.72rem;}
   h1{font-size:2.1rem;}
 }
+
+/* ━━━━ TIER CARDS ━━━━ */
+.tiers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+@media(max-width:860px){.tiers-grid{grid-template-columns:1fr;max-width:400px;margin-inline:auto;}}
+.tier-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:14px;transition:all .35s;}
+.tier-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+.tier-featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+[data-theme="dark"] .tier-featured{border-color:var(--neon-c);box-shadow:0 0 0 1px var(--neon-c),0 0 32px rgba(0,229,255,.06);}
+.tier-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:980px;font-size:.68rem;font-weight:700;letter-spacing:.5px;width:fit-content;}
+.tier-price{font-size:1.8rem;font-weight:700;letter-spacing:-.02em;}
+.tier-price span{font-size:.85rem;font-weight:400;color:var(--text2);}
+.tier-preview{border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);}
+.tier-mock{background:var(--bg2);min-height:120px;}
+.tier-list{list-style:none;display:flex;flex-direction:column;gap:7px;flex:1;}
+.tier-list li{font-size:.82rem;color:var(--text2);display:flex;gap:7px;align-items:center;}
+.tier-list li::before{content:'✓';color:var(--green-c);font-weight:700;flex-shrink:0;}
+.tier-btn{padding:11px;border-radius:10px;font-size:.85rem;font-weight:600;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;text-align:center;}
+.tier-btn:hover{background:var(--bg2);color:var(--text);}
+.tier-btn-fill{background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="dark"] .tier-btn-fill{background:var(--neon-c);border-color:var(--neon-c);color:#000;}
+.tier-btn-fill:hover{opacity:.85;background:var(--accent);}
+
+/* ━━━━ STATS ROW ━━━━ */
+.stats-row{display:flex;align-items:center;justify-content:center;gap:0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:40px;}
+@media(max-width:600px){.stats-row{flex-wrap:wrap;gap:16px;}.stat-div{display:none;}}
+.stat-item{text-align:center;flex:1;}
+.stat-num{font-size:2rem;font-weight:700;letter-spacing:-.03em;color:var(--accent);}
+[data-theme="dark"] .stat-num{background:linear-gradient(135deg,var(--neon-c),var(--neon-p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-lbl{font-size:.75rem;color:var(--text2);margin-top:3px;font-weight:500;}
+.stat-div{width:1px;height:40px;background:var(--border);flex-shrink:0;}
+
+/* ━━━━ REVIEWS ━━━━ */
+.reviews-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media(max-width:680px){.reviews-grid{grid-template-columns:1fr;}}
+.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s;}
+.review-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.review-stars{color:#f5a623;font-size:.95rem;letter-spacing:1px;margin-bottom:12px;}
+.review-text{font-size:.85rem;color:var(--text2);line-height:1.7;margin-bottom:16px;font-style:italic;}
+.review-author{display:flex;align-items:center;gap:10px;}
+.review-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;font-weight:700;color:#fff;flex-shrink:0;}
+.review-name{font-size:.83rem;font-weight:600;}
+.review-loc{font-size:.72rem;color:var(--text3);}
 </style>
 </head>
 <body>
@@ -613,243 +655,369 @@ footer p{font-size:.78rem;color:var(--text3);}
                 <input type="range" min="20" max="100" value="80" id="cp-bright" oninput="applyRoomBrightness(this.value)">
               </div>
             </div>
-            <!-- DETAILED FLOOR PLAN SVG -->
+            <!-- DETAILED FLOOR PLAN SVG v2 — textured floors, room glow -->
 <svg id="fp" viewBox="0 0 540 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;display:block;cursor:pointer">
-  <defs>
-    <filter id="glow-w"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="glow-soft"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <!-- Room light fill patterns (animated) -->
-    <radialGradient id="rg-living" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#f5a623" stop-opacity=".18"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rg-kitchen" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rg-office" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#f5a623" stop-opacity=".18"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rg-bedroom" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rg-bathroom" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rg-garden" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#30d158" stop-opacity=".2"/><stop offset="100%" stop-color="#30d158" stop-opacity="0"/></radialGradient>
-  </defs>
+<defs>
+  <!-- ── FLOOR TEXTURES ── -->
+  <pattern id="wood" width="44" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
+    <rect width="44" height="8" fill="#c4956a"/>
+    <rect width="44" height=".6" fill="#b07a50" opacity=".55"/>
+    <rect y="2.5" width="44" height=".4" fill="#d4a878" opacity=".4"/>
+    <rect y="4.5" width="44" height=".5" fill="#b07a50" opacity=".45"/>
+    <rect y="6.5" width="44" height=".4" fill="#d4a878" opacity=".3"/>
+    <rect x="22" width=".7" height="8" fill="#9a6040" opacity=".35"/>
+    <rect x="0" y="0" width=".5" height="8" fill="#9a6040" opacity=".2"/>
+  </pattern>
+  <pattern id="wood2" width="44" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(90)">
+    <rect width="44" height="8" fill="#b88050"/>
+    <rect width="44" height=".6" fill="#9a6840" opacity=".55"/>
+    <rect y="3" width="44" height=".4" fill="#c89060" opacity=".4"/>
+    <rect y="6" width="44" height=".5" fill="#9a6840" opacity=".45"/>
+    <rect x="22" width=".7" height="8" fill="#8a5030" opacity=".3"/>
+  </pattern>
+  <pattern id="tile-k" width="16" height="16" patternUnits="userSpaceOnUse">
+    <rect width="16" height="16" fill="#e8e4de"/>
+    <rect width="7.8" height="7.8" fill="#f0ede8" rx=".5"/>
+    <rect x="8.2" y="8.2" width="7.8" height="7.8" fill="#f0ede8" rx=".5"/>
+    <rect width="16" height="16" fill="none" stroke="#d4cec8" stroke-width=".5"/>
+  </pattern>
+  <pattern id="tile-b" width="12" height="12" patternUnits="userSpaceOnUse">
+    <rect width="12" height="12" fill="#dce8ee"/>
+    <rect width="5.6" height="5.6" fill="#e8f2f8" rx=".3"/>
+    <rect x="6.4" y="6.4" width="5.6" height="5.6" fill="#e8f2f8" rx=".3"/>
+    <rect width="12" height="12" fill="none" stroke="#c4d8e4" stroke-width=".6"/>
+  </pattern>
+  <pattern id="carpet" width="8" height="8" patternUnits="userSpaceOnUse">
+    <rect width="8" height="8" fill="#b8aac8"/>
+    <line x1="0" y1="0" x2="8" y2="8" stroke="#a89ab8" stroke-width=".4" opacity=".5"/>
+    <line x1="8" y1="0" x2="0" y2="8" stroke="#a89ab8" stroke-width=".4" opacity=".4"/>
+    <circle cx="4" cy="4" r=".8" fill="#c8bcd8" opacity=".4"/>
+  </pattern>
+  <pattern id="grass" width="12" height="12" patternUnits="userSpaceOnUse">
+    <rect width="12" height="12" fill="#7ab864"/>
+    <ellipse cx="3" cy="10" rx="1.5" ry="4" fill="#68a850" opacity=".7"/>
+    <ellipse cx="9" cy="10" rx="1.5" ry="4" fill="#5a9840" opacity=".7"/>
+    <ellipse cx="6" cy="10" rx="1.2" ry="3" fill="#82c870" opacity=".5"/>
+  </pattern>
 
-  <!-- Floor background -->
-  <rect width="540" height="340" fill="#f0ede8"/>
+  <!-- ── ROOM LIGHT OVERLAYS (whole-room radial fill) ── -->
+  <radialGradient id="rl-living" cx="50%" cy="45%" r="65%">
+    <stop id="rls-living-1" offset="0%" stop-color="#f5a623" stop-opacity=".45"/>
+    <stop id="rls-living-2" offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="rl-kitchen" cx="50%" cy="40%" r="65%">
+    <stop id="rls-kitchen-1" offset="0%" stop-color="#ffffff" stop-opacity=".0"/>
+    <stop id="rls-kitchen-2" offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="rl-office" cx="55%" cy="30%" r="65%">
+    <stop id="rls-office-1" offset="0%" stop-color="#f5a623" stop-opacity=".45"/>
+    <stop id="rls-office-2" offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="rl-bedroom" cx="50%" cy="50%" r="65%">
+    <stop id="rls-bedroom-1" offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+    <stop id="rls-bedroom-2" offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="rl-bathroom" cx="50%" cy="50%" r="65%">
+    <stop id="rls-bathroom-1" offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+    <stop id="rls-bathroom-2" offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="rl-garden" cx="50%" cy="50%" r="65%">
+    <stop id="rls-garden-1" offset="0%" stop-color="#30d158" stop-opacity=".35"/>
+    <stop id="rls-garden-2" offset="100%" stop-color="#30d158" stop-opacity="0"/>
+  </radialGradient>
 
-  <!-- ══ LIVING ROOM ══ x:10 y:10 w:200 h:170 -->
-  <g id="room-living" onclick="fpClick('living',event)" oncontextmenu="fpLongPress('living',event)" ontouchstart="fpTouchStart('living',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-    <rect x="10" y="10" width="200" height="170" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
-    <rect id="light-living" x="10" y="10" width="200" height="170" rx="6" fill="url(#rg-living)" style="pointer-events:none;transition:opacity .5s" opacity="1"/>
-    <!-- Sofa (L-shape) -->
-    <rect x="22" y="90" width="90" height="28" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="22" y="90" width="15" height="40" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="97" y="90" width="15" height="40" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="22" y="130" width="90" height="15" rx="4" fill="#a09080" stroke="#90806e" stroke-width="1"/>
-    <rect x="25" y="95" width="20" height="18" rx="3" fill="#c8b8a8"/>
-    <rect x="50" y="95" width="20" height="18" rx="3" fill="#c8b8a8"/>
-    <rect x="75" y="95" width="17" height="18" rx="3" fill="#c8b8a8"/>
-    <!-- Coffee table -->
-    <rect x="32" y="155" width="55" height="20" rx="4" fill="#d4c8b8" stroke="#b8a898" stroke-width="1"/>
-    <!-- TV wall -->
-    <rect x="148" y="18" width="56" height="28" rx="3" fill="#2a2a35" stroke="#1a1a25" stroke-width="1"/>
-    <rect x="153" y="22" width="46" height="20" rx="2" fill="#1a2a3a" opacity=".8"/>
-    <rect x="170" y="46" width="12" height="4" rx="2" fill="#3a3a45"/>
-    <!-- Plant corner -->
-    <circle cx="185" cy="155" r="10" fill="#5a8a5a" opacity=".7"/>
-    <circle cx="183" cy="158" r="7" fill="#4a7a4a" opacity=".8"/>
-    <rect x="183" y="162" width="4" height="8" rx="2" fill="#7a5a3a"/>
-    <!-- Room label -->
-    <text x="70" y="72" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Living Room</text>
-    <!-- Light bulbs -->
-    <circle id="b-living-1" cx="60" cy="45" r="5" fill="#f5a623" filter="url(#glow-w)" style="transition:all .4s"/>
-    <circle id="b-living-2" cx="120" cy="45" r="5" fill="#f5a623" filter="url(#glow-w)" style="transition:all .4s"/>
-    <circle id="b-living-3" cx="180" cy="45" r="5" fill="#f5a623" filter="url(#glow-soft)" style="transition:all .4s"/>
+  <!-- Shadows -->
+  <filter id="furn-shadow" x="-10%" y="-10%" width="120%" height="130%">
+    <feDropShadow dx="1.5" dy="2" stdDeviation="2" flood-color="#6a4a2a" flood-opacity=".25"/>
+  </filter>
+  <filter id="room-glow" x="-5%" y="-5%" width="110%" height="110%">
+    <feGaussianBlur stdDeviation="4" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+
+<!-- ── OUTER SHELL ── -->
+<rect width="540" height="340" fill="#2a2420" rx="12"/>
+<rect x="2" y="2" width="536" height="336" fill="#3a3228" rx="11"/>
+
+<!-- ── WALL STRUCTURE ── -->
+<!-- Outer walls -->
+<rect x="8" y="8" width="524" height="324" fill="#d4cec8" rx="6"/>
+
+<!-- Interior dividers -->
+<rect x="210" y="8" width="10" height="176" fill="#c0b8b0"/>
+<rect x="366" y="8" width="10" height="176" fill="#c0b8b0"/>
+<rect x="8" y="184" width="524" height="8" fill="#c0b8b0"/>
+<rect x="176" y="192" width="8" height="140" fill="#c0b8b0"/>
+<rect x="296" y="192" width="8" height="140" fill="#c0b8b0"/>
+
+<!-- ── LIVING ROOM — x:8 y:8 w:202 h:176 ── -->
+<g id="room-living" onclick="fpClick('living',event)" oncontextmenu="fpLongPress('living',event)" ontouchstart="fpTouchStart('living',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+  <!-- Floor texture -->
+  <rect x="8" y="8" width="202" height="176" fill="url(#wood)"/>
+  <!-- Light overlay (whole room) -->
+  <rect id="light-living" x="8" y="8" width="202" height="176" fill="url(#rl-living)" style="transition:opacity .6s ease;pointer-events:none" opacity="1"/>
+  <!-- Ceiling light dot indicator -->
+  <circle id="b-living-1" cx="65" cy="42" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
+  <circle id="b-living-2" cx="109" cy="42" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
+  <circle id="b-living-3" cx="153" cy="42" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
+  <!-- Light fixture rings -->
+  <circle cx="65" cy="42" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-l1" style="transition:all .5s"/>
+  <circle cx="109" cy="42" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-l2" style="transition:all .5s"/>
+  <circle cx="153" cy="42" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-l3" style="transition:all .5s"/>
+  <!-- L-shaped sofa -->
+  <g filter="url(#furn-shadow)">
+    <rect x="20" y="105" width="95" height="32" rx="6" fill="#8a7a6a"/>
+    <rect x="20" y="105" width="14" height="46" rx="5" fill="#8a7a6a"/>
+    <rect x="101" y="105" width="14" height="46" rx="5" fill="#8a7a6a"/>
+    <rect x="20" y="137" width="95" height="14" rx="4" fill="#7a6a5a"/>
+    <!-- Cushions -->
+    <rect x="22" y="108" width="22" height="22" rx="4" fill="#a09080"/>
+    <rect x="48" y="108" width="22" height="22" rx="4" fill="#a09080"/>
+    <rect x="74" y="108" width="22" height="22" rx="4" fill="#a09080"/>
+    <!-- Side cushion -->
+    <rect x="24" y="140" width="18" height="16" rx="3" fill="#a09080"/>
   </g>
+  <!-- Coffee table -->
+  <rect x="32" y="158" width="56" height="22" rx="5" fill="#c4a870" filter="url(#furn-shadow)"/>
+  <rect x="35" y="161" width="50" height="16" rx="3" fill="#d4b880"/>
+  <!-- TV unit on wall -->
+  <rect x="145" y="16" width="58" height="20" rx="3" fill="#1a1a20" filter="url(#furn-shadow)"/>
+  <rect x="148" y="19" width="52" height="14" rx="2" fill="#0a1a2a"/>
+  <!-- TV glow in dark mode -->
+  <rect x="174" y="44" width="8" height="3" rx="1" fill="#3a3a40"/>
+  <!-- Floor lamp -->
+  <circle cx="188" cy="148" r="8" fill="#e8d898" filter="url(#room-glow)" opacity=".6" style="transition:all .5s" id="b-living-lamp"/>
+  <rect x="186" y="148" width="3" height="22" rx="1" fill="#9a9080"/>
+  <!-- Plant -->
+  <circle cx="190" cy="172" r="10" fill="#3a7a3a" opacity=".8"/>
+  <circle cx="186" cy="168" r="7" fill="#2a6a2a" opacity=".9"/>
+  <rect x="186" y="175" width="6" height="8" rx="2" fill="#7a5030"/>
+  <circle cx="189" cy="174" r="4" fill="#5a8a3a" opacity=".7"/>
+  <!-- Room label -->
+  <text x="85" y="90" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(60,40,20,.7)">Living Room</text>
+</g>
 
-  <!-- ══ KITCHEN ══ x:220 y:10 w:140 h:130 -->
-  <g id="room-kitchen" onclick="fpClick('kitchen',event)" oncontextmenu="fpLongPress('kitchen',event)" ontouchstart="fpTouchStart('kitchen',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-    <rect x="220" y="10" width="140" height="130" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
-    <rect id="light-kitchen" x="220" y="10" width="140" height="130" rx="6" fill="url(#rg-kitchen)" style="pointer-events:none;transition:opacity .5s" opacity="0"/>
-    <!-- Counter along top -->
-    <rect x="224" y="14" width="130" height="22" rx="3" fill="#c8c0b0" stroke="#b0a898" stroke-width="1"/>
-    <!-- Sink -->
-    <rect x="230" y="17" width="24" height="16" rx="3" fill="#9ab8c8" stroke="#88a0b0" stroke-width="1"/>
-    <rect x="235" y="20" width="14" height="10" rx="2" fill="#7aa0b0" opacity=".6"/>
-    <circle cx="242" cy="26" r="2" fill="#d0d8e0"/>
-    <!-- Stove -->
-    <rect x="262" y="17" width="30" height="16" rx="2" fill="#4a4845" stroke="#3a3835" stroke-width="1"/>
-    <circle cx="270" cy="25" r="4" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
-    <circle cx="284" cy="25" r="4" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
-    <!-- Counter right side -->
-    <rect x="346" y="14" width="10" height="122" rx="3" fill="#c8c0b0" stroke="#b0a898" stroke-width="1"/>
-    <!-- Kitchen island -->
-    <rect x="245" y="75" width="80" height="35" rx="4" fill="#d4ccc0" stroke="#b8b0a4" stroke-width="1"/>
-    <rect x="255" y="80" width="24" height="20" rx="2" fill="#c4bcb0"/>
-    <rect x="285" y="80" width="24" height="20" rx="2" fill="#c4bcb0"/>
-    <!-- Chairs at island -->
-    <rect x="250" y="112" width="16" height="16" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="270" y="112" width="16" height="16" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="290" y="112" width="16" height="16" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <!-- Label -->
-    <text x="286" y="65" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Kitchen</text>
-    <!-- Lights -->
-    <circle id="b-kitchen-1" cx="256" cy="45" r="5" fill="#c8c0b0" style="transition:all .4s"/>
-    <circle id="b-kitchen-2" cx="316" cy="45" r="5" fill="#c8c0b0" style="transition:all .4s"/>
-  </g>
+<!-- ── KITCHEN — x:220 y:8 w:146 h:176 ── -->
+<g id="room-kitchen" onclick="fpClick('kitchen',event)" oncontextmenu="fpLongPress('kitchen',event)" ontouchstart="fpTouchStart('kitchen',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+  <rect x="220" y="8" width="146" height="176" fill="url(#tile-k)"/>
+  <rect id="light-kitchen" x="220" y="8" width="146" height="176" fill="url(#rl-kitchen)" style="transition:opacity .6s ease;pointer-events:none" opacity="0"/>
+  <!-- Ceiling lights -->
+  <circle id="b-kitchen-1" cx="262" cy="40" r="5" fill="#c8c4be" style="transition:all .5s"/>
+  <circle id="b-kitchen-2" cx="316" cy="40" r="5" fill="#c8c4be" style="transition:all .5s"/>
+  <circle cx="262" cy="40" r="8" fill="none" stroke="#c8c4be" stroke-width="1" opacity=".3" id="br-k1" style="transition:all .5s"/>
+  <circle cx="316" cy="40" r="8" fill="none" stroke="#c8c4be" stroke-width="1" opacity=".3" id="br-k2" style="transition:all .5s"/>
+  <!-- Counter top wall -->
+  <rect x="224" y="12" width="138" height="26" rx="3" fill="#d8d0c4" filter="url(#furn-shadow)"/>
+  <rect x="226" y="14" width="134" height="22" rx="2" fill="#e4dcd0"/>
+  <!-- Sink -->
+  <rect x="230" y="17" width="26" height="16" rx="3" fill="#9ab8c8"/>
+  <rect x="232" y="19" width="22" height="12" rx="2" fill="#7aa0b8"/>
+  <circle cx="243" cy="31" r="2.5" fill="#d8e8f0"/>
+  <!-- Stove -->
+  <rect x="264" y="16" width="34" height="18" rx="2" fill="#3a3835"/>
+  <circle cx="275" cy="25" r="5" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
+  <circle cx="290" cy="25" r="5" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
+  <!-- Right side cabinet -->
+  <rect x="350" y="12" width="12" height="138" rx="3" fill="#d8d0c4" filter="url(#furn-shadow)"/>
+  <!-- Kitchen island -->
+  <rect x="244" y="80" width="88" height="42" rx="5" fill="#c4bab0" filter="url(#furn-shadow)"/>
+  <rect x="247" y="83" width="82" height="36" rx="4" fill="#d4cac0"/>
+  <!-- Bar stools -->
+  <circle cx="262" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
+  <circle cx="282" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
+  <circle cx="302" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
+  <circle cx="322" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
+  <!-- Fridge -->
+  <rect x="224" y="48" width="26" height="40" rx="3" fill="#e0dcd6" filter="url(#furn-shadow)"/>
+  <rect x="226" y="50" width="22" height="18" rx="2" fill="#d4d0ca"/>
+  <rect x="226" y="70" width="22" height="16" rx="2" fill="#d4d0ca"/>
+  <rect x="235" y="56" width="6" height="2" rx="1" fill="#b0a898"/>
+  <!-- Label -->
+  <text x="290" y="70" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(80,60,40,.7)">Kitchen</text>
+</g>
 
-  <!-- ══ OFFICE ══ x:374 y:10 w:156 h:170 -->
-  <g id="room-office" onclick="fpClick('office',event)" oncontextmenu="fpLongPress('office',event)" ontouchstart="fpTouchStart('office',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-    <rect x="374" y="10" width="156" height="170" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
-    <rect id="light-office" x="374" y="10" width="156" height="170" rx="6" fill="url(#rg-office)" style="pointer-events:none;transition:opacity .5s" opacity="1"/>
-    <!-- Desk -->
-    <rect x="382" y="45" width="120" height="55" rx="4" fill="#c8b898" stroke="#b0a080" stroke-width="1"/>
-    <!-- Monitor -->
-    <rect x="408" y="22" width="58" height="36" rx="3" fill="#2a2a35" stroke="#1a1a25" stroke-width="1"/>
-    <rect x="412" y="26" width="50" height="28" rx="2" fill="#1a3a5a" opacity=".9"/>
-    <rect x="432" y="58" width="10" height="6" rx="2" fill="#3a3a45"/>
-    <!-- Keyboard -->
-    <rect x="412" y="65" width="58" height="16" rx="3" fill="#3a3835" stroke="#2a2825" stroke-width="1"/>
-    <!-- Mouse -->
-    <rect x="476" y="65" width="14" height="18" rx="6" fill="#484440" stroke="#2a2825" stroke-width="1"/>
-    <!-- Chair -->
-    <circle cx="452" cy="125" r="20" fill="#9090a0" stroke="#7a7a8a" stroke-width="1" opacity=".8"/>
-    <circle cx="452" cy="122" r="14" fill="#a0a0b0" stroke="#8a8a9a" stroke-width="1"/>
-    <!-- Bookshelf -->
-    <rect x="382" y="110" width="30" height="62" rx="3" fill="#c8a870" stroke="#b09050" stroke-width="1"/>
-    <rect x="385" y="115" width="24" height="8" rx="1" fill="#7a5a3a"/>
-    <rect x="385" y="125" width="24" height="8" rx="1" fill="#8a6a4a"/>
-    <rect x="385" y="135" width="24" height="8" rx="1" fill="#6a4a2a"/>
-    <rect x="385" y="145" width="24" height="8" rx="1" fill="#9a7a5a"/>
-    <rect x="385" y="155" width="24" height="8" rx="1" fill="#7a5a3a"/>
-    <!-- Label -->
-    <text x="452" y="170" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Office</text>
-    <!-- Lights -->
-    <circle id="b-office-1" cx="414" cy="22" r="5" fill="#f5a623" filter="url(#glow-w)" style="transition:all .4s"/>
-    <circle id="b-office-2" cx="490" cy="22" r="5" fill="#f5a623" filter="url(#glow-soft)" style="transition:all .4s"/>
-  </g>
+<!-- ── OFFICE — x:376 y:8 w:156 h:176 ── -->
+<g id="room-office" onclick="fpClick('office',event)" oncontextmenu="fpLongPress('office',event)" ontouchstart="fpTouchStart('office',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+  <rect x="376" y="8" width="156" height="176" fill="url(#wood2)"/>
+  <rect id="light-office" x="376" y="8" width="156" height="176" fill="url(#rl-office)" style="transition:opacity .6s ease;pointer-events:none" opacity="1"/>
+  <circle id="b-office-1" cx="420" cy="35" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
+  <circle id="b-office-2" cx="494" cy="35" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
+  <circle cx="420" cy="35" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-o1" style="transition:all .5s"/>
+  <circle cx="494" cy="35" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-o2" style="transition:all .5s"/>
+  <!-- L-desk -->
+  <rect x="388" y="52" width="118" height="52" rx="4" fill="#b89860" filter="url(#furn-shadow)"/>
+  <rect x="388" y="104" width="42" height="30" rx="3" fill="#b89860" filter="url(#furn-shadow)"/>
+  <!-- Monitor -->
+  <rect x="416" y="24" width="64" height="38" rx="3" fill="#1a1a22" filter="url(#furn-shadow)"/>
+  <rect x="419" y="27" width="58" height="30" rx="2" fill="#0a2040"/>
+  <!-- Monitor glow in dark mode hint -->
+  <rect x="444" y="62" width="14" height="5" rx="2" fill="#2a2a30"/>
+  <!-- Keyboard -->
+  <rect x="418" y="70" width="60" height="18" rx="3" fill="#2a2822"/>
+  <!-- Mouse -->
+  <rect x="484" y="70" width="14" height="18" rx="6" fill="#3a3830"/>
+  <!-- Chair (office) -->
+  <circle cx="456" cy="140" r="22" fill="#7a7a8a" filter="url(#furn-shadow)" opacity=".9"/>
+  <circle cx="456" cy="137" r="15" fill="#909098"/>
+  <!-- Armrests hint -->
+  <rect x="433" y="136" width="8" height="14" rx="3" fill="#7a7a8a"/>
+  <rect x="471" y="136" width="8" height="14" rx="3" fill="#7a7a8a"/>
+  <!-- Bookshelf -->
+  <rect x="380" y="116" width="32" height="60" rx="3" fill="#c89860" filter="url(#furn-shadow)"/>
+  <rect x="383" y="119" width="26" height="8" rx="1" fill="#8a5a2a"/>
+  <rect x="383" y="129" width="26" height="8" rx="1" fill="#a07040"/>
+  <rect x="383" y="139" width="26" height="8" rx="1" fill="#6a4a1a"/>
+  <rect x="383" y="149" width="26" height="8" rx="1" fill="#b08050"/>
+  <rect x="383" y="159" width="26" height="8" rx="1" fill="#7a5030"/>
+  <!-- Label -->
+  <text x="456" y="175" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(60,40,20,.7)">Office</text>
+</g>
 
-  <!-- Walls / corridors -->
-  <rect x="210" y="10" width="10" height="170" fill="#d4cec8" rx="2"/>
-  <rect x="364" y="10" width="10" height="170" fill="#d4cec8" rx="2"/>
-  <rect x="10" y="180" width="520" height="10" fill="#d4cec8" rx="2"/>
+<!-- ── BEDROOM — x:8 y:192 w:168 h:140 ── -->
+<g id="room-bedroom" onclick="fpClick('bedroom',event)" oncontextmenu="fpLongPress('bedroom',event)" ontouchstart="fpTouchStart('bedroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+  <rect x="8" y="192" width="168" height="140" fill="url(#carpet)"/>
+  <rect id="light-bedroom" x="8" y="192" width="168" height="140" fill="url(#rl-bedroom)" style="transition:opacity .6s ease;pointer-events:none" opacity="0"/>
+  <circle id="b-bedroom-1" cx="80" cy="210" r="5" fill="#b8b0c8" style="transition:all .5s"/>
+  <circle cx="80" cy="210" r="8" fill="none" stroke="#b8b0c8" stroke-width="1" opacity=".3" id="br-bd1" style="transition:all .5s"/>
+  <!-- Bed frame -->
+  <rect x="22" y="215" width="100" height="72" rx="6" fill="#c8a888" filter="url(#furn-shadow)"/>
+  <!-- Headboard -->
+  <rect x="22" y="213" width="100" height="20" rx="6" fill="#9a7050"/>
+  <rect x="25" y="216" width="94" height="14" rx="4" fill="#b08060"/>
+  <!-- Mattress -->
+  <rect x="24" y="233" width="96" height="54" rx="4" fill="#e8e0d8"/>
+  <!-- Pillows -->
+  <rect x="30" y="238" width="35" height="22" rx="6" fill="#f4f0ea" stroke="#e0d8d0" stroke-width="1"/>
+  <rect x="76" y="238" width="35" height="22" rx="6" fill="#f4f0ea" stroke="#e0d8d0" stroke-width="1"/>
+  <!-- Duvet -->
+  <rect x="24" y="264" width="96" height="23" rx="4" fill="#8ab0d0"/>
+  <line x1="24" y1="276" x2="120" y2="276" stroke="#78a0c0" stroke-width="1"/>
+  <!-- Nightstands -->
+  <rect x="130" y="220" width="26" height="32" rx="3" fill="#c4a880" filter="url(#furn-shadow)"/>
+  <rect x="133" y="235" width="20" height="3" rx="1" fill="#a08060"/>
+  <circle cx="143" cy="240" r="3" fill="#b09070"/>
+  <rect x="16" y="220" width="4" height="28" rx="2" fill="#c4a880"/>
+  <!-- Wardrobe -->
+  <rect x="132" y="260" width="40" height="66" rx="3" fill="#c0a880" filter="url(#furn-shadow)"/>
+  <line x1="152" y1="260" x2="152" y2="326" stroke="#a89068" stroke-width="1.5"/>
+  <circle cx="148" cy="294" r="3" fill="#90786a"/>
+  <circle cx="156" cy="294" r="3" fill="#90786a"/>
+  <!-- Rug -->
+  <ellipse cx="78" cy="305" rx="48" ry="18" fill="#a898c0" stroke="#9888b0" stroke-width="1" opacity=".55"/>
+  <!-- Label -->
+  <text x="70" y="205" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(40,30,50,.7)">Bedroom</text>
+</g>
 
-  <!-- Door: Living - Corridor -->
-  <rect x="130" y="178" width="40" height="3" rx="1" fill="#a09080"/>
-  <path d="M130,178 Q150,160 170,178" fill="none" stroke="#a09080" stroke-width="1" stroke-dasharray="3,2"/>
-  <!-- Door: Kitchen - Corridor -->
-  <rect x="250" y="178" width="36" height="3" rx="1" fill="#a09080"/>
-  <path d="M250,178 Q268,162 286,178" fill="none" stroke="#a09080" stroke-width="1" stroke-dasharray="3,2"/>
-  <!-- Door: Living - Kitchen -->
-  <rect x="208" y="90" width="4" height="35" rx="1" fill="#f0ede8"/>
-  <path d="M212,90 Q228,107 212,125" fill="none" stroke="#a09080" stroke-width="1" stroke-dasharray="3,2"/>
+<!-- ── BATHROOM — x:184 y:192 w:112 h:140 ── -->
+<g id="room-bathroom" onclick="fpClick('bathroom',event)" oncontextmenu="fpLongPress('bathroom',event)" ontouchstart="fpTouchStart('bathroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+  <rect x="184" y="192" width="112" height="140" fill="url(#tile-b)"/>
+  <rect id="light-bathroom" x="184" y="192" width="112" height="140" fill="url(#rl-bathroom)" style="transition:opacity .6s ease;pointer-events:none" opacity="0"/>
+  <circle id="b-bathroom-1" cx="218" cy="206" r="4" fill="#c4cece" style="transition:all .5s"/>
+  <circle id="b-bathroom-2" cx="268" cy="206" r="4" fill="#c4cece" style="transition:all .5s"/>
+  <circle cx="218" cy="206" r="7" fill="none" stroke="#c4cece" stroke-width="1" opacity=".3" id="br-ba1" style="transition:all .5s"/>
+  <circle cx="268" cy="206" r="7" fill="none" stroke="#c4cece" stroke-width="1" opacity=".3" id="br-ba2" style="transition:all .5s"/>
+  <!-- Bathtub -->
+  <rect x="192" y="216" width="64" height="44" rx="14" fill="#d4e8f0" filter="url(#furn-shadow)"/>
+  <rect x="196" y="220" width="56" height="36" rx="12" fill="#bcd8ec"/>
+  <rect x="200" y="224" width="48" height="28" rx="10" fill="#a8cce0" opacity=".7"/>
+  <!-- Tap -->
+  <rect x="236" y="213" width="4" height="10" rx="2" fill="#c8d8e0"/>
+  <rect x="232" y="213" width="12" height="3" rx="1.5" fill="#c8d8e0"/>
+  <!-- Toilet -->
+  <rect x="266" y="216" width="24" height="36" rx="10" fill="#f0f0ee" filter="url(#furn-shadow)"/>
+  <rect x="264" y="213" width="28" height="10" rx="4" fill="#e8e8e4" filter="url(#furn-shadow)"/>
+  <ellipse cx="278" cy="234" rx="9" ry="11" fill="#dcd8d4" opacity=".5"/>
+  <!-- Sink -->
+  <rect x="192" y="272" width="32" height="26" rx="5" fill="#d4e8f0" filter="url(#furn-shadow)"/>
+  <ellipse cx="208" cy="285" rx="11" ry="8" fill="#b8d4e8"/>
+  <circle cx="208" cy="280" r="2.5" fill="#c4d8e8"/>
+  <!-- Towel rail -->
+  <rect x="226" y="300" width="62" height="5" rx="2.5" fill="#b8c8c8" filter="url(#furn-shadow)"/>
+  <rect x="226" y="305" width="8" height="12" rx="2" fill="#a8b8b8"/>
+  <rect x="280" y="305" width="8" height="12" rx="2" fill="#a8b8b8"/>
+  <!-- Shower hint -->
+  <rect x="264" y="260" width="28" height="28" rx="4" fill="#c8d8e4" opacity=".5"/>
+  <line x1="272" y1="264" x2="264" y2="272" stroke="#a8c8d8" stroke-width=".8"/>
+  <line x1="280" y1="264" x2="272" y2="272" stroke="#a8c8d8" stroke-width=".8"/>
+  <!-- Label -->
+  <text x="240" y="204" text-anchor="middle" font-size="9" font-family="Inter,sans-serif" font-weight="700" fill="rgba(40,60,70,.7)">Bathroom</text>
+</g>
 
-  <!-- ══ BEDROOM ══ x:10 y:190 w:165 h:140 -->
-  <g id="room-bedroom" onclick="fpClick('bedroom',event)" oncontextmenu="fpLongPress('bedroom',event)" ontouchstart="fpTouchStart('bedroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-    <rect x="10" y="190" width="165" height="140" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
-    <rect id="light-bedroom" x="10" y="190" width="165" height="140" rx="6" fill="url(#rg-bedroom)" style="pointer-events:none;transition:opacity .5s" opacity="0"/>
-    <!-- Double bed -->
-    <rect x="28" y="210" width="95" height="65" rx="5" fill="#c8b8a8" stroke="#b0a090" stroke-width="1"/>
-    <!-- Headboard -->
-    <rect x="28" y="208" width="95" height="18" rx="5" fill="#a08070" stroke="#907060" stroke-width="1"/>
-    <!-- Pillows -->
-    <rect x="34" y="215" width="32" height="18" rx="5" fill="#e8ddd0" stroke="#d0c5b8" stroke-width="1"/>
-    <rect x="80" y="215" width="32" height="18" rx="5" fill="#e8ddd0" stroke="#d0c5b8" stroke-width="1"/>
-    <!-- Blanket -->
-    <rect x="28" y="238" width="95" height="37" rx="4" fill="#b8c8d8" stroke="#a0b0c0" stroke-width="1"/>
-    <line x1="28" y1="252" x2="123" y2="252" stroke="#a0b0c0" stroke-width="1"/>
-    <!-- Nightstands -->
-    <rect x="128" y="215" width="24" height="30" rx="3" fill="#c8b0a0" stroke="#b09890" stroke-width="1"/>
-    <circle cx="140" cy="235" r="3" fill="#a89080"/>
-    <rect x="18" y="215" width="6" height="30" rx="2" fill="#c8b0a0"/>
-    <!-- Wardrobe -->
-    <rect x="130" y="258" width="38" height="66" rx="3" fill="#c0b0a0" stroke="#a89888" stroke-width="1"/>
-    <line x1="149" y1="258" x2="149" y2="324" stroke="#b0a090" stroke-width="1"/>
-    <circle cx="145" cy="291" r="2.5" fill="#908070"/>
-    <circle cx="153" cy="291" r="2.5" fill="#908070"/>
-    <!-- Rug -->
-    <ellipse cx="75" cy="295" rx="45" ry="18" fill="#c8b8d8" stroke="#b0a0c0" stroke-width="1" opacity=".6"/>
-    <!-- Label -->
-    <text x="75" y="205" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Bedroom</text>
-    <!-- Light -->
-    <circle id="b-bedroom-1" cx="75" cy="198" r="5" fill="#c8c0b0" style="transition:all .4s"/>
-  </g>
+<!-- ── GARDEN / TERRACE — x:304 y:192 w:228 h:140 ── -->
+<g id="room-garden" onclick="fpClick('garden',event)" oncontextmenu="fpLongPress('garden',event)" ontouchstart="fpTouchStart('garden',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+  <rect x="304" y="192" width="228" height="140" rx="5" fill="url(#grass)"/>
+  <rect id="light-garden" x="304" y="192" width="228" height="140" rx="5" fill="url(#rl-garden)" style="transition:opacity .6s ease;pointer-events:none" opacity="1"/>
+  <!-- Garden path -->
+  <rect x="392" y="184" width="34" height="148" rx="4" fill="#c8b898" opacity=".7"/>
+  <!-- Terrace patio area (stone) -->
+  <rect x="316" y="200" width="140" height="90" rx="6" fill="#c8c0b0" opacity=".6"/>
+  <!-- Outdoor table -->
+  <circle cx="386" cy="252" r="26" fill="#c4b89a" filter="url(#furn-shadow)"/>
+  <circle cx="386" cy="252" r="17" fill="#d4c8a8"/>
+  <!-- Chairs -->
+  <rect x="374" y="218" width="24" height="18" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
+  <rect x="374" y="270" width="24" height="18" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
+  <rect x="342" y="240" width="18" height="24" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
+  <rect x="412" y="240" width="18" height="24" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
+  <!-- Umbrella -->
+  <ellipse cx="386" cy="232" rx="34" ry="9" fill="#e06030" opacity=".75"/>
+  <ellipse cx="386" cy="228" rx="32" ry="7" fill="#d05020" opacity=".4"/>
+  <line x1="386" y1="228" x2="386" y2="252" stroke="#8a5028" stroke-width="2.5"/>
+  <!-- Garden bushes -->
+  <circle cx="320" cy="210" r="14" fill="#4a9040" opacity=".85"/>
+  <circle cx="330" cy="218" r="10" fill="#3a8030" opacity=".9"/>
+  <circle cx="315" cy="222" r="9" fill="#5aa050" opacity=".75"/>
+  <circle cx="510" cy="210" r="14" fill="#4a9040" opacity=".85"/>
+  <circle cx="500" cy="218" r="10" fill="#3a8030" opacity=".9"/>
+  <circle cx="514" cy="222" r="9" fill="#5aa050" opacity=".75"/>
+  <circle cx="318" cy="312" r="12" fill="#4a9040" opacity=".85"/>
+  <circle cx="510" cy="312" r="12" fill="#4a9040" opacity=".85"/>
+  <!-- Flower beds -->
+  <ellipse cx="464" cy="210" rx="28" ry="12" fill="#5a9040" opacity=".6"/>
+  <circle cx="455" cy="208" r="4" fill="#e04060" opacity=".8"/>
+  <circle cx="465" cy="206" r="3.5" fill="#f06040" opacity=".8"/>
+  <circle cx="474" cy="209" r="4" fill="#e070a0" opacity=".8"/>
+  <!-- Garden lights (poles) -->
+  <rect x="342" y="278" width="3" height="22" rx="1.5" fill="#7a6a5a"/>
+  <circle id="b-garden-1" cx="343" cy="277" r="6" fill="#30d158" filter="url(#room-glow)" style="transition:all .5s"/>
+  <circle cx="343" cy="277" r="9" fill="none" stroke="#30d158" stroke-width="1" opacity=".4" id="br-g1" style="transition:all .5s"/>
+  <rect x="494" y="278" width="3" height="22" rx="1.5" fill="#7a6a5a"/>
+  <circle id="b-garden-2" cx="495" cy="277" r="6" fill="#30d158" filter="url(#room-glow)" style="transition:all .5s"/>
+  <circle cx="495" cy="277" r="9" fill="none" stroke="#30d158" stroke-width="1" opacity=".4" id="br-g2" style="transition:all .5s"/>
+  <!-- Label -->
+  <text x="418" y="204" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(20,50,20,.75)">Garden / Terrace 🌿</text>
+</g>
 
-  <!-- ══ BATHROOM ══ x:185 y:190 w:110 h:140 -->
-  <g id="room-bathroom" onclick="fpClick('bathroom',event)" oncontextmenu="fpLongPress('bathroom',event)" ontouchstart="fpTouchStart('bathroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-    <rect x="185" y="190" width="110" height="140" rx="6" fill="#e4eaee" stroke="#c0cad0" stroke-width="1.5"/>
-    <rect id="light-bathroom" x="185" y="190" width="110" height="140" rx="6" fill="url(#rg-bathroom)" style="pointer-events:none;transition:opacity .5s" opacity="0"/>
-    <!-- Bathtub -->
-    <rect x="193" y="210" width="60" height="38" rx="12" fill="#d8e8f0" stroke="#b8c8d8" stroke-width="1.5"/>
-    <rect x="197" y="214" width="52" height="30" rx="10" fill="#c8d8e8" stroke="#b0c0d0" stroke-width="1" opacity=".8"/>
-    <!-- Tap -->
-    <rect x="237" y="208" width="3" height="8" rx="1" fill="#c8d0d8"/>
-    <!-- Toilet -->
-    <rect x="264" y="210" width="26" height="32" rx="8" fill="#f0f0f0" stroke="#d8d8d8" stroke-width="1.5"/>
-    <rect x="262" y="207" width="30" height="10" rx="4" fill="#e8e8e8" stroke="#d0d0d0" stroke-width="1"/>
-    <!-- Sink / vanity -->
-    <rect x="193" y="262" width="30" height="22" rx="5" fill="#d8e8f0" stroke="#b8c8d8" stroke-width="1.5"/>
-    <ellipse cx="208" cy="273" rx="10" ry="7" fill="#c8d8e8" stroke="#b0c0d0" stroke-width="1" opacity=".8"/>
-    <circle cx="208" cy="270" r="2" fill="#b8c8d8"/>
-    <!-- Towel rail -->
-    <rect x="228" y="295" width="56" height="5" rx="2" fill="#b8b0a8" stroke="#a8a09a" stroke-width="1"/>
-    <!-- Tiles accent -->
-    <rect x="185" y="190" width="110" height="5" rx="2" fill="#b0c0ca" opacity=".4"/>
-    <!-- Label -->
-    <text x="240" y="205" text-anchor="middle" font-size="9" font-family="Inter,sans-serif" font-weight="600" fill="#5a6a70" opacity=".8">Bathroom</text>
-    <!-- Lights -->
-    <circle id="b-bathroom-1" cx="220" cy="198" r="4" fill="#c8c0b0" style="transition:all .4s"/>
-    <circle id="b-bathroom-2" cx="270" cy="198" r="4" fill="#c8c0b0" style="transition:all .4s"/>
-  </g>
+<!-- Doors (arcs) -->
+<path d="M146,184 Q165,165 184,184" fill="none" stroke="#9a9080" stroke-width="1.5" stroke-dasharray="4,2" opacity=".7"/>
+<rect x="146" y="182" width="38" height="4" rx="2" fill="#a09080"/>
+<path d="M246,184 Q264,167 282,184" fill="none" stroke="#9a9080" stroke-width="1.5" stroke-dasharray="4,2" opacity=".7"/>
+<rect x="246" y="182" width="36" height="4" rx="2" fill="#a09080"/>
+<path d="M210,95 Q226,112 210,129" fill="none" stroke="#9a9080" stroke-width="1.2" stroke-dasharray="3,2" opacity=".6"/>
+<rect x="206" y="95" width="6" height="34" rx="2" fill="#e8e4de"/>
+<path d="M176,234 Q192,252 176,270" fill="none" stroke="#9a9080" stroke-width="1.2" stroke-dasharray="3,2" opacity=".6"/>
+<rect x="174" y="234" width="6" height="36" rx="2" fill="#c8c0b8"/>
+<!-- Garden door -->
+<rect x="392" y="184" width="34" height="10" rx="2" fill="#c8b898" opacity=".8"/>
 
-  <!-- ══ GARDEN / TERRACE ══ x:305 y:190 w:225 h:140 -->
-  <g id="room-garden" onclick="fpClick('garden',event)" oncontextmenu="fpLongPress('garden',event)" ontouchstart="fpTouchStart('garden',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-    <rect x="305" y="190" width="225" height="140" rx="6" fill="#d8e4d0" stroke="#a8c0a0" stroke-width="1.5" stroke-dasharray="6,3"/>
-    <rect id="light-garden" x="305" y="190" width="225" height="140" rx="6" fill="url(#rg-garden)" style="pointer-events:none;transition:opacity .5s" opacity="1"/>
-    <!-- Terrace table + chairs -->
-    <circle cx="418" cy="248" r="22" fill="#d0c8b8" stroke="#b8b0a0" stroke-width="1.5"/>
-    <circle cx="418" cy="248" r="14" fill="#c8c0b0" stroke="#b0a898" stroke-width="1"/>
-    <!-- Chairs around table -->
-    <rect x="408" y="215" width="20" height="16" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="408" y="268" width="20" height="16" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="375" y="239" width="16" height="20" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <rect x="447" y="239" width="16" height="20" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
-    <!-- Umbrella pole -->
-    <line x1="418" y1="225" x2="418" y2="248" stroke="#8a6a4a" stroke-width="2"/>
-    <ellipse cx="418" cy="225" rx="28" ry="8" fill="#e87040" opacity=".7" stroke="#d06030" stroke-width="1"/>
-    <!-- Plants / bushes -->
-    <circle cx="320" cy="210" r="12" fill="#5a9a5a" opacity=".8"/>
-    <circle cx="328" cy="216" r="9" fill="#4a8a4a" opacity=".9"/>
-    <circle cx="315" cy="220" r="8" fill="#3a7a3a" opacity=".7"/>
-    <circle cx="505" cy="210" r="12" fill="#5a9a5a" opacity=".8"/>
-    <circle cx="496" cy="218" r="9" fill="#4a8a4a" opacity=".9"/>
-    <circle cx="510" cy="220" r="8" fill="#3a7a3a" opacity=".7"/>
-    <circle cx="320" cy="312" r="10" fill="#5a9a5a" opacity=".8"/>
-    <circle cx="510" cy="312" r="10" fill="#5a9a5a" opacity=".8"/>
-    <!-- Garden lights (poles) -->
-    <rect x="339" y="274" width="3" height="18" rx="1" fill="#7a6a5a"/>
-    <circle id="b-garden-1" cx="340" cy="272" r="5" fill="#30d158" filter="url(#glow-soft)" style="transition:all .4s"/>
-    <rect x="492" y="274" width="3" height="18" rx="1" fill="#7a6a5a"/>
-    <circle id="b-garden-2" cx="493" cy="272" r="5" fill="#30d158" filter="url(#glow-soft)" style="transition:all .4s"/>
-    <!-- Label -->
-    <text x="418" y="202" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#4a6a4a" opacity=".8">Garden / Terrace 🌿</text>
-  </g>
-
-  <!-- Interior walls -->
-  <rect x="175" y="190" width="10" height="140" fill="#d4cec8" rx="2"/>
-  <rect x="295" y="190" width="10" height="140" fill="#d4cec8" rx="2"/>
-  <!-- Door: bedroom-bathroom -->
-  <rect x="173" y="230" width="4" height="30" rx="1" fill="#f0ede8"/>
-  <!-- Compass rose -->
-  <g transform="translate(500,310)" opacity=".35">
-    <circle r="14" fill="none" stroke="#9a9080" stroke-width="1"/>
-    <text y="-6" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" font-weight="700" fill="#7a6a60">N</text>
-    <text y="14" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" fill="#9a9080">S</text>
-    <text x="12" y="4" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" fill="#9a9080">E</text>
-    <text x="-12" y="4" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" fill="#9a9080">W</text>
-    <line y1="-9" y2="9" stroke="#7a6a60" stroke-width="1.5"/>
-    <line x1="-9" x2="9" stroke="#9a9080" stroke-width="1"/>
-  </g>
-  <!-- Scale bar -->
-  <g transform="translate(22,328)" opacity=".45">
-    <line x1="0" y1="0" x2="40" y2="0" stroke="#9a9080" stroke-width="1.5"/>
-    <line x1="0" y1="-3" x2="0" y2="3" stroke="#9a9080" stroke-width="1.5"/>
-    <line x1="40" y1="-3" x2="40" y2="3" stroke="#9a9080" stroke-width="1.5"/>
-    <text x="20" y="-5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">5m</text>
-  </g>
+<!-- Compass rose -->
+<g transform="translate(520,320)" opacity=".4">
+  <circle r="13" fill="rgba(255,255,255,.1)" stroke="#a09080" stroke-width=".8"/>
+  <text y="-5" text-anchor="middle" font-size="7.5" font-family="Inter,sans-serif" font-weight="800" fill="#7a6a5a">N</text>
+  <text y="13" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">S</text>
+  <text x="11" y="3.5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">E</text>
+  <text x="-11" y="3.5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">W</text>
+  <polygon points="0,-8 2,0 0,3 -2,0" fill="#7a6a5a"/>
+  <polygon points="0,8 2,0 0,-3 -2,0" fill="#9a9080"/>
+</g>
+<!-- Scale -->
+<g transform="translate(20,326)" opacity=".5">
+  <line x1="0" y1="0" x2="42" y2="0" stroke="#9a9080" stroke-width="1.5"/>
+  <line y1="-3" y2="3" stroke="#9a9080" stroke-width="1.5"/>
+  <line x1="42" y1="-3" x2="42" y2="3" stroke="#9a9080" stroke-width="1.5"/>
+  <text x="21" y="-5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">5m</text>
+</g>
 </svg>
           </div><!-- fp-container -->
         </div>
@@ -870,6 +1038,161 @@ footer p{font-size:.78rem;color:var(--text3);}
           <div class="card-title">Room Status</div>
           <div class="room-list" id="room-list"></div>
         </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- ══════════ TIER SHOWCASE ══════════ -->
+  <section class="section" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">Dashboard Tiers</div>
+      <h2>From simple to stunning</h2>
+      <p class="section-sub">Every project starts with a conversation. You pick the complexity — I build it pixel-perfect.</p>
+    </div>
+    <div class="tiers-grid rv">
+      <!-- BASIC -->
+      <div class="tier-card">
+        <div class="tier-badge" style="background:rgba(0,113,227,.1);color:var(--accent)">Basic</div>
+        <div class="tier-price">$49 <span>/ project</span></div>
+        <div class="tier-preview">
+          <div class="tier-mock" style="padding:14px">
+            <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:10px">Overview</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+              <div style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:10px"><div style="font-size:.6rem;color:var(--text3)">Living</div><div style="font-size:.85rem;font-weight:700">💡 On</div></div>
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:.6rem;color:var(--text3)">Kitchen</div><div style="font-size:.85rem;font-weight:700">💡 Off</div></div>
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:.6rem;color:var(--text3)">Bedroom</div><div style="font-size:.85rem;font-weight:700">💡 Off</div></div>
+              <div style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:10px"><div style="font-size:.6rem;color:var(--text3)">Office</div><div style="font-size:.85rem;font-weight:700">💡 On</div></div>
+            </div>
+            <div style="display:flex;gap:5px">
+              <div style="flex:1;padding:6px;background:var(--accent);border-radius:6px;text-align:center;font-size:.62rem;font-weight:700;color:#fff">☀️ Day</div>
+              <div style="flex:1;padding:6px;background:var(--bg2);border-radius:6px;text-align:center;font-size:.62rem;font-weight:700;color:var(--text2)">🌙 Night</div>
+            </div>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li>Room toggle cards</li>
+          <li>2 scenes (Day / Night)</li>
+          <li>Clean, mobile-ready layout</li>
+          <li>YAML documentation</li>
+        </ul>
+        <button onclick="openOrder()" class="tier-btn">Order Basic →</button>
+      </div>
+
+      <!-- STANDARD -->
+      <div class="tier-card tier-featured">
+        <div class="tier-badge" style="background:rgba(0,113,227,.15);color:var(--accent);border:1px solid rgba(0,113,227,.3)">Most Popular</div>
+        <div class="tier-price">$99 <span>/ project</span></div>
+        <div class="tier-preview">
+          <div class="tier-mock" style="padding:0;overflow:hidden">
+            <div style="background:var(--surface);padding:8px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.62rem;font-weight:700;color:var(--text3)">MY HOME</span>
+              <span style="font-size:.62rem;color:var(--text3)">21° · ⛅</span>
+            </div>
+            <div style="padding:10px">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px">
+                <div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:7px;padding:7px;text-align:center"><div style="font-size:.9rem">🛋️</div><div style="font-size:.55rem;font-weight:600;color:var(--text2)">Living</div></div>
+                <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px;text-align:center"><div style="font-size:.9rem">🍳</div><div style="font-size:.55rem;font-weight:600;color:var(--text3)">Kitchen</div></div>
+                <div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:7px;padding:7px;text-align:center"><div style="font-size:.9rem">🏢</div><div style="font-size:.55rem;font-weight:600;color:var(--text2)">Office</div></div>
+              </div>
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px;display:flex;gap:8px;align-items:center">
+                <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#e040fb,#7c3aed);display:grid;place-items:center;font-size:.8rem">🎵</div>
+                <div><div style="font-size:.65rem;font-weight:600">Blinding Lights</div><div style="font-size:.55rem;color:var(--text3)">Now playing</div></div>
+                <div style="margin-left:auto;font-size:.65rem;font-weight:700;color:var(--accent)">⏸</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li>Everything in Basic</li>
+          <li>Full dashboard with sidebar</li>
+          <li>4 smart scenes</li>
+          <li>Media & weather widget</li>
+          <li>Sensor cards</li>
+          <li>Video walkthrough</li>
+        </ul>
+        <button onclick="openOrder()" class="tier-btn tier-btn-fill">Order Standard →</button>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="tier-card">
+        <div class="tier-badge" style="background:linear-gradient(135deg,rgba(224,64,251,.15),rgba(0,229,255,.15));color:var(--neon-p,#e040fb)">Premium</div>
+        <div class="tier-price">$149 <span>/ project</span></div>
+        <div class="tier-preview">
+          <div class="tier-mock" style="padding:0;overflow:hidden;background:#1a1208">
+            <div style="padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between">
+              <span style="font-size:.62rem;font-weight:700;color:rgba(255,255,255,.4)">FLOOR PLAN</span>
+              <span style="font-size:.62rem;color:rgba(255,255,255,.3)">6 rooms</span>
+            </div>
+            <div style="padding:8px">
+              <!-- Mini floor plan mockup -->
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;height:90px">
+                <div style="background:rgba(245,166,35,.25);border:1px solid rgba(245,166,35,.5);border-radius:4px;display:grid;place-items:center;font-size:.6rem;color:rgba(255,200,100,.8);font-weight:600;text-shadow:0 0 8px #f5a623">Living</div>
+                <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:4px;display:grid;place-items:center;font-size:.6rem;color:rgba(255,255,255,.4)">Kitchen</div>
+                <div style="background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);border-radius:4px;display:grid;place-items:center;font-size:.6rem;color:rgba(255,200,100,.8);font-weight:600;text-shadow:0 0 8px #f5a623">Office</div>
+                <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:4px;display:grid;place-items:center;font-size:.6rem;color:rgba(255,255,255,.35)">Bed</div>
+                <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:4px;display:grid;place-items:center;font-size:.6rem;color:rgba(255,255,255,.35)">Bath</div>
+                <div style="background:rgba(48,209,88,.2);border:1px solid rgba(48,209,88,.4);border-radius:4px;display:grid;place-items:center;font-size:.6rem;color:rgba(100,255,140,.8);font-weight:600;text-shadow:0 0 8px #30d158">Garden</div>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:4px">
+                <div style="flex:1;background:rgba(245,166,35,.2);border-radius:4px;padding:4px;text-align:center;font-size:.55rem;font-weight:700;color:rgba(255,200,100,.8)">🌅 Relax</div>
+                <div style="flex:1;background:rgba(0,229,255,.1);border-radius:4px;padding:4px;text-align:center;font-size:.55rem;color:rgba(0,229,255,.6)">🎬 Movie</div>
+                <div style="flex:1;background:rgba(255,255,255,.05);border-radius:4px;padding:4px;text-align:center;font-size:.55rem;color:rgba(255,255,255,.3)">🌙 Sleep</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="tier-list">
+          <li>Everything in Standard</li>
+          <li>Interactive floor plan</li>
+          <li>Per-room color control</li>
+          <li>Custom theme / brand colors</li>
+          <li>Garden / outdoor view</li>
+          <li>30-day support</li>
+        </ul>
+        <button onclick="openOrder()" class="tier-btn">Order Premium →</button>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- ══════════ SOCIAL PROOF ══════════ -->
+  <section class="section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">Reviews</div>
+      <h2>Clients love it</h2>
+    </div>
+    <div class="stats-row rv">
+      <div class="stat-item"><div class="stat-num">47</div><div class="stat-lbl">Happy clients</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">98%</div><div class="stat-lbl">5-star reviews</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">2.3d</div><div class="stat-lbl">Avg. delivery</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">On-time</div></div>
+    </div>
+    <div class="reviews-grid rv">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Absolutely stunning dashboard. My wife uses it every day and she's not technical at all. Exactly what I asked for — and delivered in under 48 hours."</p>
+        <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#2997ff,#0a5acc)">M</div><div><div class="review-name">Michael R.</div><div class="review-loc">🇩🇪 Germany · Smart Home enthusiast</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The floor plan feature is incredible. I can see exactly which lights are on at a glance. Clean code, well documented. Will order again for the second floor."</p>
+        <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#30d158,#28a846)">S</div><div><div class="review-name">Sarah K.</div><div class="review-loc">🇨🇭 Switzerland · HA since 2021</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Was skeptical but the result blew me away. My 10-room house now has a dashboard that looks like it's from Apple. Scenes work perfectly. 10/10."</p>
+        <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00)">T</div><div><div class="review-name">Thomas B.</div><div class="review-loc">🇦🇹 Austria · 10-room home</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Ordered the Premium package. The color-changing lights on the floor plan are just brilliant. My guests always ask how I built it. Fast delivery and great communication."</p>
+        <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#e040fb,#aa00ff)">L</div><div><div class="review-name">Laura M.</div><div class="review-loc">🇳🇱 Netherlands · Premium package</div></div></div>
       </div>
     </div>
   </div>
@@ -1178,23 +1501,38 @@ function applyRoom(k){
   const r=rooms[k];const on=r.on;
   const c=getRoomColor(k).color;
 
-  // Bulbs
+  // Ceiling bulb dots
   r.bulbIds.forEach(id=>{
     const b=document.getElementById(id);if(!b)return;
-    if(on){b.setAttribute('fill',c);b.setAttribute('filter','url(#glow-w)');}
-    else{b.setAttribute('fill','#c8c0b0');b.removeAttribute('filter');}
+    if(on){b.setAttribute('fill',c);b.setAttribute('filter','url(#room-glow)');}
+    else{b.setAttribute('fill','#b0a898');b.removeAttribute('filter');}
+    // Also update ring indicators
+    const ring=document.getElementById('b'+id.substring(1).replace(/b-/,'r-').replace(id.substring(1),'r'+id.substring(1).slice(1)));
   });
 
-  // Room glow
-  const light=document.getElementById(r.lightId);
-  if(light)light.setAttribute('opacity',on?'1':'0');
+  // Light rings (visual only)
+  document.querySelectorAll(`[id^="br-${k}"]`).forEach(ring=>{
+    ring.setAttribute('stroke', on ? c : '#b0a898');
+    ring.setAttribute('opacity', on ? '0.5' : '0.15');
+  });
 
-  // Update gradient color
+  // Lamp extras for living room
+  if(k==='living'){
+    const lamp=document.getElementById('b-living-lamp');
+    if(lamp){lamp.setAttribute('fill',on?c:'#c8c0b0');lamp.setAttribute('opacity',on?'0.7':'0.2');}
+  }
+
+  // WHOLE ROOM GLOW via gradient update
   const grad=document.getElementById(r.gradId);
   if(grad){
-    const stop=grad.querySelector('stop');
-    if(stop){stop.setAttribute('stop-color',on?c:'#ffffff');stop.setAttribute('stop-opacity',on?'0.18':'0');}
+    const stops=grad.querySelectorAll('stop');
+    if(stops[0]){stops[0].setAttribute('stop-color',c);stops[0].setAttribute('stop-opacity',on?'0.45':'0');}
+    if(stops[1]){stops[1].setAttribute('stop-color',c);stops[1].setAttribute('stop-opacity','0');}
   }
+
+  // Light overlay rect
+  const light=document.getElementById(r.lightId);
+  if(light)light.setAttribute('opacity',on?'1':'0');
 
   // Dashboard cards
   document.querySelectorAll(`.room-card[data-r="${k}"]`).forEach(card=>card.classList.toggle('on',on));
