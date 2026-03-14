@@ -1,295 +1,541 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoFlow Lab — Custom Home Assistant Dashboards</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>AutoFlow Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── RESET & TOKENS ── */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOKENS — light default, dark overrides
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 :root {
-  --bg:#07080f; --surface:#0d0f1a; --card:#111320;
-  --border:rgba(255,255,255,.07); --border-hi:rgba(255,255,255,.13);
-  --text:#eef0ff; --muted:rgba(238,240,255,.4); --muted2:rgba(238,240,255,.6);
-  --pink:#e040fb; --cyan:#00e5ff; --green:#69ff47;
-  --warm:#ffb347; --orange:#ff9d42; --yellow:#ffd166;
-  --purple:#7c3aed;
-  --r:20px;
+  --bg:       #ffffff;
+  --bg2:      #f5f5f7;
+  --bg3:      #ebebed;
+  --surface:  #ffffff;
+  --card:     #ffffff;
+  --border:   rgba(0,0,0,.08);
+  --border2:  rgba(0,0,0,.14);
+  --text:     #1d1d1f;
+  --text2:    #6e6e73;
+  --text3:    rgba(29,29,31,.45);
+  --accent:   #0071e3;
+  --accent-r: #0077ed;
+  --warm:     #f5a623;
+  --green-c:  #30d158;
+  --red-c:    #ff3b30;
+
+  /* neon (used in dark for glow effects) */
+  --neon-p: #e040fb;
+  --neon-c: #00e5ff;
+  --neon-g: #69ff47;
+
+  --radius:    18px;
+  --radius-sm: 12px;
+  --shadow: 0 2px 12px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.05);
+  --shadow-md: 0 8px 32px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg: 0 24px 80px rgba(0,0,0,.12);
+
+  --t: .35s cubic-bezier(.4,0,.2,1);
 }
-html { scroll-behavior:smooth; font-size:16px; }
-body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+[data-theme="dark"] {
+  --bg:       #000000;
+  --bg2:      #0a0a0a;
+  --bg3:      #141414;
+  --surface:  #111111;
+  --card:     #1a1a1a;
+  --border:   rgba(255,255,255,.07);
+  --border2:  rgba(255,255,255,.14);
+  --text:     #f5f5f7;
+  --text2:    rgba(245,245,247,.55);
+  --text3:    rgba(245,245,247,.3);
+  --accent:   #2997ff;
+  --accent-r: #0a84ff;
+  --shadow: 0 2px 12px rgba(0,0,0,.4);
+  --shadow-md: 0 8px 32px rgba(0,0,0,.5);
+  --shadow-lg: 0 24px 80px rgba(0,0,0,.6);
+}
 
-/* ── SCROLL REVEAL ── */
-.reveal { opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
-.reveal.in { opacity:1; transform:none; }
-.reveal-d1 { transition-delay:.1s; } .reveal-d2 { transition-delay:.2s; } .reveal-d3 { transition-delay:.3s; } .reveal-d4 { transition-delay:.4s; }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ RESET */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 17px;
+  line-height: 1.47059;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--t), color var(--t);
+  overflow-x: hidden;
+}
 
-/* ── NAV ── */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ NAV */
 .nav {
-  position:fixed; inset-inline:0; top:0; z-index:100;
-  height:58px; padding:0 6%;
-  display:flex; align-items:center; justify-content:space-between;
-  background:rgba(7,8,15,.8); backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
-  transition:background .3s;
+  position: fixed; inset-inline: 0; top: 0; z-index: 200;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%;
+  background: rgba(255,255,255,.82);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t), border-color var(--t);
 }
-.nav-logo { font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:1rem; text-decoration:none; color:var(--text); letter-spacing:-.2px; }
-.nav-logo em { color:var(--cyan); font-style:normal; }
-.nav-links { display:flex; gap:24px; align-items:center; }
-.nav-links a { font-size:.82rem; color:var(--muted); text-decoration:none; transition:color .2s; }
-.nav-links a:hover { color:var(--text); }
-.nav-cta { background:var(--pink); color:#fff!important; padding:8px 20px; border-radius:980px; font-weight:600!important; transition:opacity .2s!important; }
-.nav-cta:hover { opacity:.85!important; }
+[data-theme="dark"] .nav {
+  background: rgba(0,0,0,.82);
+}
+.nav-logo {
+  font-size: .9rem; font-weight: 700; letter-spacing: -.3px;
+  color: var(--text); text-decoration: none;
+}
+.nav-logo em { color: var(--accent); font-style: normal; }
+.nav-center {
+  display: flex; align-items: center;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 980px;
+  padding: 3px;
+  gap: 2px;
+}
+.nav-tab {
+  padding: 5px 16px; border-radius: 980px; font-size: .8rem; font-weight: 600;
+  cursor: pointer; transition: all .25s; border: none;
+  background: transparent; color: var(--text2); font-family: inherit;
+}
+.nav-tab.active {
+  background: var(--card); color: var(--text);
+  box-shadow: 0 1px 4px rgba(0,0,0,.12), 0 0 0 1px var(--border);
+}
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.theme-toggle {
+  width: 36px; height: 22px; border-radius: 11px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  cursor: pointer; position: relative; transition: background var(--t);
+  flex-shrink: 0;
+}
+.theme-toggle::after {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--text); top: 2px; left: 2px;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), background var(--t);
+  font-size: .6rem; display: flex; align-items: center; justify-content: center;
+}
+[data-theme="dark"] .theme-toggle::after { transform: translateX(14px); }
+.nav-cta {
+  padding: 7px 18px; border-radius: 980px;
+  background: var(--accent); color: #fff;
+  font-size: .8rem; font-weight: 600; text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-cta:hover { opacity: .85; }
 
-/* ── HERO ── */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ HERO */
 .hero {
-  min-height:100svh; display:grid; place-items:center; text-align:center;
-  padding:100px 6% 60px; position:relative; overflow:hidden;
+  min-height: 100svh; display: grid; place-items: center;
+  text-align: center; padding: 100px 6% 60px; position: relative; overflow: hidden;
 }
-.hero-glow {
-  position:absolute; width:900px; height:900px; border-radius:50%; pointer-events:none;
-  background:radial-gradient(circle, rgba(0,229,255,.14) 0%, rgba(224,64,251,.1) 40%, transparent 70%);
-  top:50%; left:50%; transform:translate(-50%,-50%); filter:blur(50px);
-  animation:hglow 9s ease-in-out infinite;
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
 }
-@keyframes hglow { 0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)} 50%{opacity:1;transform:translate(-50%,-52%) scale(1.07)} }
-.hero-badge {
-  display:inline-flex; align-items:center; gap:8px;
-  background:rgba(0,229,255,.07); border:1px solid rgba(0,229,255,.18);
-  color:var(--cyan); padding:5px 16px; border-radius:980px;
-  font-size:.75rem; font-weight:600; letter-spacing:.5px; margin-bottom:32px;
-  opacity:0; transform:translateY(12px); transition:all .7s .1s ease;
+/* Light: soft gradient orbs */
+.orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: .35;
+  transition: opacity var(--t);
 }
-.hero-badge.in { opacity:1; transform:none; }
-.hero-badge::before { content:'✦'; opacity:.6; }
-h1.hero-h {
-  font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(3rem,8vw,6.5rem); font-weight:800;
-  line-height:1.02; letter-spacing:-3px; margin-bottom:24px;
-  opacity:0; transition:opacity .8s .2s, transform .8s .2s;
-  transform:translateY(16px);
-}
-h1.hero-h.in { opacity:1; transform:none; }
-h1.hero-h em { color:var(--cyan); font-style:normal; position:relative; }
-h1.hero-h em::after {
-  content:''; position:absolute; inset-inline:0; bottom:-4px; height:3px;
-  background:linear-gradient(90deg,var(--cyan),var(--pink));
-  border-radius:2px; transform:scaleX(0); transform-origin:left;
-  transition:transform .8s .8s cubic-bezier(.16,1,.3,1);
-}
-h1.hero-h.in em::after { transform:scaleX(1); }
-.hero-sub { font-size:clamp(1rem,1.8vw,1.2rem); color:var(--muted); line-height:1.8; max-width:520px; margin:0 auto 40px; opacity:0; transition:opacity .7s .35s; }
-.hero-sub.in { opacity:1; }
-.hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; opacity:0; transition:opacity .7s .45s; }
-.hero-btns.in { opacity:1; }
-.btn { display:inline-flex; align-items:center; gap:8px; padding:14px 28px; border-radius:980px; font-size:.9rem; font-weight:600; text-decoration:none; transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, opacity .2s; cursor:pointer; border:none; font-family:inherit; }
-.btn:hover { transform:scale(1.04); }
-.btn-p { background:linear-gradient(135deg,var(--pink),var(--purple)); color:#fff; box-shadow:0 0 40px rgba(224,64,251,.28); }
-.btn-p:hover { box-shadow:0 0 60px rgba(224,64,251,.45); }
-.btn-g { background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--text); }
-.btn-g:hover { background:rgba(255,255,255,.1); border-color:var(--border-hi); }
+.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #2997ff, transparent 70%); top: -10%; left: -10%; }
+.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, #30d158, transparent 70%); bottom: 0; right: -5%; }
+/* Dark: neon orbs */
+[data-theme="dark"] .orb1 { background: radial-gradient(circle, rgba(224,64,251,.6), transparent 70%); opacity: .2; }
+[data-theme="dark"] .orb2 { background: radial-gradient(circle, rgba(0,229,255,.6), transparent 70%); opacity: .15; }
 
-/* ── SECTIONS ── */
-section { padding:100px 6%; }
-.container { max-width:1100px; margin:0 auto; }
-.s-label { font-size:.7rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
-.s-label::before { content:''; width:20px; height:1px; background:var(--cyan); }
-.s-h { font-family:'Space Grotesk',sans-serif; font-size:clamp(1.8rem,4vw,3rem); font-weight:800; letter-spacing:-1.5px; line-height:1.1; margin-bottom:14px; }
-.s-p { color:var(--muted); font-size:.95rem; line-height:1.8; max-width:500px; }
-
-/* ── FEATURES ── */
-.features { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-.features-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2px; margin-top:60px; background:var(--border); border-radius:var(--r); overflow:hidden; border:1px solid var(--border); }
-@media(max-width:700px){ .features-grid { grid-template-columns:1fr; } }
-.feat { background:var(--surface); padding:40px; transition:background .25s; }
-.feat:hover { background:rgba(255,255,255,.025); }
-.feat-icon { font-size:2rem; margin-bottom:18px; }
-.feat h3 { font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:10px; }
-.feat p { color:var(--muted); font-size:.88rem; line-height:1.75; }
-
-/* ── DEMO ── */
-.demo-wrap { display:grid; grid-template-columns:1fr 300px; gap:40px; align-items:start; margin-top:60px; }
-@media(max-width:900px){ .demo-wrap { grid-template-columns:1fr; } }
-
-/* Device Frame */
-.device-frame {
-  background:#0a0b14; border:2px solid rgba(255,255,255,.1);
-  border-radius:24px; overflow:hidden;
-  box-shadow:0 40px 120px rgba(0,0,0,.7), 0 0 0 1px rgba(0,229,255,.05);
-  transition:box-shadow .4s;
+.hero-inner { position: relative; max-width: 780px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--accent); font-size: .78rem; font-weight: 600;
+  letter-spacing: .5px; margin-bottom: 22px;
+  opacity: 0; transform: translateY(10px);
+  animation: up .6s .1s ease forwards;
 }
-.device-frame:hover { box-shadow:0 40px 120px rgba(0,0,0,.7), 0 0 0 1px rgba(0,229,255,.15), 0 0 60px rgba(0,229,255,.08); }
-.device-topbar {
-  padding:12px 18px; border-bottom:1px solid rgba(255,255,255,.06);
-  display:flex; align-items:center; justify-content:space-between;
-  background:rgba(255,255,255,.02);
+.eyebrow::before { content: '✦'; opacity: .7; }
+h1 {
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
+  margin-bottom: 22px;
+  opacity: 0; transform: translateY(14px);
+  animation: up .7s .2s ease forwards;
 }
-.device-title { font-size:.72rem; font-weight:700; letter-spacing:2px; color:var(--muted); }
-.device-dots { display:flex; gap:5px; }
-.device-dots span { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.12); }
-.device-dots span:first-child { background:var(--green); box-shadow:0 0 6px var(--green); animation:blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+h1 em { font-style: normal; color: var(--accent); }
+[data-theme="dark"] h1 em {
+  background: linear-gradient(135deg, var(--neon-c), var(--neon-p));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub {
+  font-size: 1.1rem; color: var(--text2); line-height: 1.7;
+  max-width: 500px; margin: 0 auto 36px;
+  opacity: 0; animation: up .7s .3s ease forwards;
+}
+.hero-actions {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  opacity: 0; animation: up .7s .4s ease forwards;
+}
+@keyframes up { to { opacity:1; transform:none; } }
 
-/* Scene buttons inside demo */
-.demo-scenes { padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); display:flex; gap:8px; flex-wrap:wrap; }
-.demo-scene-btn {
-  padding:7px 14px; border-radius:10px; font-size:.76rem; font-weight:600;
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
-  color:var(--muted); cursor:pointer; transition:all .2s;
-  font-family:inherit;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 13px 26px; border-radius: 980px; font-size: .9rem; font-weight: 600;
+  text-decoration: none; transition: opacity .2s, transform .2s;
+  cursor: pointer; border: none; font-family: inherit;
 }
-.demo-scene-btn:hover { color:var(--text); border-color:var(--border-hi); }
-.demo-scene-btn.active { background:rgba(0,229,255,.1); border-color:rgba(0,229,255,.3); color:var(--cyan); }
+.btn:hover { opacity: .85; transform: scale(1.02); }
+.btn-fill { background: var(--accent); color: #fff; }
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border2);
+}
+.btn-outline:hover { background: var(--bg2); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SECTION */
+.section { padding: 96px 6%; }
+.section-sm { padding: 72px 6%; }
+.wrap { max-width: 1080px; margin: 0 auto; }
+.label {
+  font-size: .72rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+}
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
+  letter-spacing: -.03em; line-height: 1.1; margin-bottom: 14px;
+}
+.section-sub {
+  font-size: 1rem; color: var(--text2); line-height: 1.7;
+  max-width: 480px; margin-bottom: 56px;
+}
+.centered { text-align: center; }
+.centered .section-sub { margin-inline: auto; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ REVEAL */
+.rv { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+.rv.in { opacity: 1; transform: none; }
+.rv-d1 { transition-delay: .08s; } .rv-d2 { transition-delay: .16s; } .rv-d3 { transition-delay: .24s; } .rv-d4 { transition-delay: .32s; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FEATURE GRID */
+.feat-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+@media(max-width:640px){ .feat-grid { grid-template-columns: 1fr; } }
+.feat {
+  background: var(--surface); padding: 40px 36px;
+  transition: background var(--t);
+}
+.feat:hover { background: var(--bg2); }
+.feat-ico { font-size: 1.8rem; margin-bottom: 16px; }
+.feat h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -.02em; }
+.feat p { font-size: .9rem; color: var(--text2); line-height: 1.65; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ DEMO DEVICE */
+.demo-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.demo-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 60px; align-items: start; }
+@media(max-width:900px){ .demo-layout { grid-template-columns: 1fr; } }
+
+.device {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 22px; overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  transition: background var(--t), border-color var(--t), box-shadow var(--t);
+}
+.device-bar {
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface);
+}
+.device-title { font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); }
+.device-dots { display: flex; gap: 5px; }
+.device-dots span { width: 8px; height: 8px; border-radius: 50%; }
+.device-dots span:nth-child(1) { background: var(--red-c); }
+.device-dots span:nth-child(2) { background: var(--warm); }
+.device-dots span:nth-child(3) { background: var(--green-c); }
+
+/* Scene pills inside device */
+.scene-row { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap; background: var(--surface); }
+.scene-pill {
+  padding: 5px 14px; border-radius: 980px; font-size: .75rem; font-weight: 600;
+  background: var(--bg2); border: 1px solid var(--border); color: var(--text2);
+  cursor: pointer; transition: all .2s; font-family: inherit;
+}
+.scene-pill:hover { border-color: var(--border2); color: var(--text); }
+.scene-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 
 /* Floor plan */
-.fp-outer { padding:18px; position:relative; }
-.fp-hint { font-size:.72rem; color:var(--muted); text-align:center; margin-bottom:12px; }
-#fp { width:100%; border-radius:14px; background:#080910; display:block; }
-.fp-room { cursor:pointer; transition:opacity .3s; }
-.fp-room:hover { opacity:.85; }
-.fp-label { pointer-events:none; font-family:'Inter',sans-serif; }
-.fp-bulb { transition:all .4s; cursor:pointer; }
+.fp-wrap { padding: 16px; }
+.fp-hint { font-size: .73rem; color: var(--text3); text-align: center; margin-bottom: 10px; }
+#fp { width: 100%; border-radius: 14px; display: block; }
 
-/* Room status panel in sidebar */
-.demo-sidebar { display:flex; flex-direction:column; gap:16px; }
-.sidebar-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px; }
-.sidebar-card h4 { font-size:.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
-.scene-btns-v { display:flex; flex-direction:column; gap:8px; }
-.scene-v-btn {
-  display:flex; align-items:center; gap:12px; padding:12px 14px;
-  border-radius:12px; border:1px solid var(--border);
-  background:transparent; cursor:pointer; font-family:inherit;
-  transition:all .2s; text-align:left; width:100%;
+/* Sidebar */
+.demo-side { display: flex; flex-direction: column; gap: 16px; }
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+  box-shadow: var(--shadow);
+  transition: background var(--t), border-color var(--t);
 }
-.scene-v-btn:hover { background:rgba(255,255,255,.04); border-color:var(--border-hi); }
-.scene-v-btn.active { background:rgba(0,229,255,.07); border-color:rgba(0,229,255,.25); }
-.svb-icon { font-size:1.1rem; flex-shrink:0; }
-.svb-text .svb-name { font-size:.85rem; font-weight:600; color:var(--text); }
-.svb-text .svb-desc { font-size:.72rem; color:var(--muted); margin-top:1px; }
+.card-title {
+  font-size: .72rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
+}
+.scene-list { display: flex; flex-direction: column; gap: 6px; }
+.scene-row-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-radius: var(--radius-sm);
+  background: var(--bg2); border: 1px solid transparent;
+  cursor: pointer; transition: all .2s; font-family: inherit; width: 100%; text-align: left;
+}
+.scene-row-btn:hover { border-color: var(--border2); background: var(--bg3); }
+.scene-row-btn.on { background: rgba(0,113,227,.08); border-color: rgba(0,113,227,.25); }
+[data-theme="dark"] .scene-row-btn.on { background: rgba(0,229,255,.06); border-color: rgba(0,229,255,.2); }
+.srb-ico { font-size: 1rem; flex-shrink: 0; }
+.srb-name { font-size: .85rem; font-weight: 600; color: var(--text); }
+.srb-desc { font-size: .72rem; color: var(--text2); }
 
 /* Room list */
-.room-list { display:flex; flex-direction:column; gap:6px; }
-.room-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; transition:background .2s; cursor:pointer; }
-.room-row:hover { background:rgba(255,255,255,.04); }
-.rr-icon { font-size:1rem; width:28px; text-align:center; }
-.rr-name { font-size:.83rem; font-weight:500; flex:1; }
-.rr-state { font-size:.72rem; }
-.rr-toggle { width:32px; height:18px; border-radius:9px; flex-shrink:0; position:relative; cursor:pointer; transition:background .3s; }
-.rr-toggle::after { content:''; position:absolute; width:12px; height:12px; border-radius:50%; background:#fff; top:3px; left:3px; transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
-.rr-toggle.on { background:var(--warm); }
-.rr-toggle.on::after { transform:translateX(14px); }
-.rr-toggle.off { background:rgba(255,255,255,.1); }
+.room-list { display: flex; flex-direction: column; gap: 4px; }
+.room-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background .15s;
+}
+.room-row:hover { background: var(--bg2); }
+.rr-ico { font-size: .95rem; width: 24px; text-align: center; }
+.rr-name { font-size: .83rem; font-weight: 500; flex: 1; color: var(--text); }
+.rr-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bg3); transition: background .3s, box-shadow .3s; }
+.rr-dot.on { background: var(--warm); }
+[data-theme="dark"] .rr-dot.on { background: var(--warm); box-shadow: 0 0 6px var(--warm); }
+.rr-sw { width: 30px; height: 18px; border-radius: 9px; position: relative; cursor: pointer; transition: background .3s; background: var(--bg3); border: 1px solid var(--border2); }
+.rr-sw::after { content: ''; position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+.rr-sw.on { background: var(--green-c); border-color: var(--green-c); }
+[data-theme="dark"] .rr-sw.on { background: var(--warm); border-color: var(--warm); }
+.rr-sw.on::after { transform: translateX(12px); }
 
-/* ── PROCESS ── */
-.process { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-.steps { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin-top:60px; background:var(--border); border-radius:var(--r); overflow:hidden; border:1px solid var(--border); }
-@media(max-width:700px){ .steps { grid-template-columns:1fr 1fr; } }
-.step { background:var(--surface); padding:36px 28px; position:relative; }
-.step-n { font-family:'Space Grotesk',sans-serif; font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:18px; }
-.step-ico { font-size:1.6rem; margin-bottom:14px; }
-.step h3 { font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:700; margin-bottom:10px; }
-.step p { color:var(--muted); font-size:.83rem; line-height:1.7; }
-.step-ghost { position:absolute; bottom:14px; right:18px; font-family:'Space Grotesk',sans-serif; font-size:4rem; font-weight:800; color:rgba(255,255,255,.025); line-height:1; pointer-events:none; }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FULL DASH */
+.dash-section { background: var(--bg); }
+.dash-frame {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  display: grid; grid-template-columns: 200px 1fr 240px;
+  min-height: 560px;
+}
+@media(max-width:1000px){ .dash-frame { grid-template-columns: 1fr; } .d-left,.d-right { display:none; } }
 
-/* ── ABOUT / STATS ── */
-.about-layout { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
-@media(max-width:800px){ .about-layout { grid-template-columns:1fr; } }
-.about-badges { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
-.badge { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); padding:6px 14px; border-radius:8px; font-size:.78rem; font-weight:500; color:var(--muted2); transition:all .2s; }
-.badge:hover { color:var(--text); border-color:var(--border-hi); }
-.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.stat-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px 20px; text-align:center; }
-.stat-num { font-family:'Space Grotesk',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:6px; background:linear-gradient(135deg,var(--cyan),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.stat-lbl { font-size:.78rem; color:var(--muted); line-height:1.5; }
+.d-left { background: var(--surface); border-right: 1px solid var(--border); padding: 16px 0; transition: background var(--t); }
+.d-nav-lbl { font-size: .62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); padding: 0 12px 6px; }
+.d-nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--radius-sm); margin: 1px 8px; cursor: pointer; font-size: .83rem; font-weight: 500; color: var(--text2); transition: all .2s; }
+.d-nav-item:hover { background: var(--bg2); color: var(--text); }
+.d-nav-item.on { background: rgba(0,113,227,.1); color: var(--accent); }
+[data-theme="dark"] .d-nav-item.on { background: rgba(0,229,255,.08); color: var(--neon-c); }
+.d-nav-ico { font-size: .9rem; width: 20px; text-align: center; }
 
-/* ── CTA ── */
-.cta-section { padding:80px 6%; }
-.cta-box { max-width:780px; margin:0 auto; text-align:center; padding:72px 6%; border-radius:24px; background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(224,64,251,.08)); border:1px solid rgba(0,229,255,.18); position:relative; overflow:hidden; }
-.cta-box::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% -20%,rgba(0,229,255,.15),transparent 60%); pointer-events:none; }
-.cta-box h2 { position:relative; font-family:'Space Grotesk',sans-serif; font-size:clamp(1.8rem,4vw,3rem); font-weight:800; letter-spacing:-1.5px; margin-bottom:16px; }
-.cta-box p { position:relative; color:var(--muted); font-size:.95rem; max-width:440px; margin:0 auto 36px; line-height:1.75; }
-.cta-btns { position:relative; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-
-/* ── FOOTER ── */
-footer { border-top:1px solid var(--border); padding:32px 6%; text-align:center; color:var(--muted); font-size:.8rem; }
-
-/* ── TOAST ── */
-.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(60px); background:rgba(13,15,26,.95); border:1px solid rgba(255,255,255,.1); backdrop-filter:blur(20px); border-radius:12px; padding:11px 20px; font-size:.83rem; display:flex; align-items:center; gap:10px; z-index:999; transition:transform .4s cubic-bezier(.34,1.56,.64,1); white-space:nowrap; }
-.toast.show { transform:translateX(-50%) translateY(0); }
-
-/* ── LIVE DASHBOARD ── */
-.live-dash { padding:100px 6%; background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-.dash-layout { display:grid; grid-template-columns:220px 1fr 260px; gap:0; border:1px solid var(--border); border-radius:20px; overflow:hidden; min-height:640px; margin-top:60px; }
-@media(max-width:1000px){ .dash-layout { grid-template-columns:1fr; } .dash-left,.dash-right { display:none; } }
-
-/* Left nav */
-.dash-left { background:var(--card); border-right:1px solid var(--border); padding:18px 0; }
-.dash-nav-section { padding:0 12px; margin-bottom:24px; }
-.dash-nav-lbl { font-size:.62rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); padding:0 6px; margin-bottom:6px; }
-.dash-nav-item { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px; cursor:pointer; font-size:.82rem; font-weight:500; color:var(--muted); margin-bottom:1px; transition:all .2s; }
-.dash-nav-item:hover { background:rgba(255,255,255,.05); color:var(--text); }
-.dash-nav-item.on { background:rgba(0,229,255,.1); color:var(--cyan); }
-.dash-nav-icon { width:20px; text-align:center; font-size:.95rem; }
-
-/* Main dash area */
-.dash-main { padding:24px; overflow-y:auto; }
-.dash-page { display:none; }
-.dash-page.on { display:block; }
-.dash-greeting { margin-bottom:20px; }
-.dash-greeting h2 { font-family:'Space Grotesk',sans-serif; font-size:1.35rem; font-weight:700; }
-.dash-greeting p { font-size:.8rem; color:var(--muted); margin-top:3px; }
+.d-main { padding: 20px; overflow: hidden; background: var(--bg); transition: background var(--t); }
+.d-page { display: none; }
+.d-page.on { display: block; }
+.d-greet h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: 4px; }
+.d-greet p { font-size: .8rem; color: var(--text2); margin-bottom: 18px; }
 
 /* Quick stats */
-.quick-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
-@media(max-width:800px){ .quick-stats { grid-template-columns:repeat(2,1fr); } }
-.qs { background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:12px; padding:14px; }
-.qs-lbl { font-size:.68rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
-.qs-val { font-family:'Space Grotesk',sans-serif; font-size:1.5rem; font-weight:800; line-height:1; }
-.qs-sub { font-size:.68rem; color:var(--muted); margin-top:4px; }
+.qs-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
+@media(max-width:800px){ .qs-row { grid-template-columns: repeat(2,1fr); } }
+.qs { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px; transition: background var(--t); }
+.qs-l { font-size: .65rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 5px; }
+.qs-v { font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; }
+.qs-s { font-size: .68rem; color: var(--text2); margin-top: 3px; }
 
-/* Scenes quick row */
-.scene-quick { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
-.sq-btn { padding:8px 16px; border-radius:10px; font-size:.78rem; font-weight:600; background:rgba(255,255,255,.05); border:1px solid var(--border); color:var(--muted); cursor:pointer; font-family:inherit; transition:all .2s; }
-.sq-btn:hover { color:var(--text); border-color:var(--border-hi); }
-.sq-btn.on { background:rgba(0,229,255,.1); border-color:rgba(0,229,255,.3); color:var(--cyan); }
+/* Scene quick */
+.sq-row { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
+.sq-btn { padding: 7px 14px; border-radius: 980px; font-size: .76rem; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--text2); cursor: pointer; font-family: inherit; transition: all .2s; }
+.sq-btn:hover { border-color: var(--border2); color: var(--text); }
+.sq-btn.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-/* Rooms grid in dashboard */
-.dash-rooms { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-@media(max-width:700px){ .dash-rooms { grid-template-columns:repeat(2,1fr); } }
-.dr-card { background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:14px; padding:16px; cursor:pointer; position:relative; overflow:hidden; transition:all .3s cubic-bezier(.34,1.56,.64,1); }
-.dr-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 20% 20%,rgba(255,180,70,.12),transparent 60%); opacity:0; transition:opacity .4s; }
-.dr-card.on { border-color:rgba(255,180,70,.35); }
-.dr-card.on::before { opacity:1; }
-.dr-card:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,.4); }
-.dr-card:active { transform:scale(.97); }
-.dr-icon { font-size:1.3rem; margin-bottom:10px; }
-.dr-name { font-size:.82rem; font-weight:700; margin-bottom:3px; }
-.dr-info { font-size:.7rem; color:var(--muted); }
-.dr-toggle-wrap { display:flex; align-items:center; justify-content:flex-end; margin-top:10px; }
-.dr-sw { width:32px; height:18px; border-radius:9px; position:relative; flex-shrink:0; transition:background .3s; }
-.dr-sw::after { content:''; position:absolute; width:12px; height:12px; border-radius:50%; background:#fff; top:3px; left:3px; transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
-.dr-card.on .dr-sw { background:var(--warm); }
-.dr-card.on .dr-sw::after { transform:translateX(14px); }
-.dr-card:not(.on) .dr-sw { background:rgba(255,255,255,.1); }
+/* Room cards in dash */
+.rooms-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+@media(max-width:700px){ .rooms-grid { grid-template-columns: repeat(2,1fr); } }
+.room-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px; cursor: pointer;
+  transition: all .25s cubic-bezier(.34,1.56,.64,1); position: relative; overflow: hidden;
+}
+.room-card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .35s; pointer-events: none; }
+.room-card.on { border-color: rgba(245,166,35,.35); }
+.room-card.on::before { background: radial-gradient(circle at 20% 20%, rgba(245,166,35,.1), transparent 60%); opacity: 1; }
+[data-theme="dark"] .room-card.on { border-color: rgba(255,180,70,.3); }
+[data-theme="dark"] .room-card.on::before { background: radial-gradient(circle at 20% 20%, rgba(255,180,70,.08), transparent 60%); }
+.room-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.rc-ico { font-size: 1.2rem; margin-bottom: 8px; }
+.rc-name { font-size: .8rem; font-weight: 700; margin-bottom: 3px; }
+.rc-info { font-size: .7rem; color: var(--text2); }
+.rc-sw-wrap { display: flex; justify-content: flex-end; margin-top: 10px; }
+.rc-sw { width: 30px; height: 18px; border-radius: 9px; position: relative; transition: background .3s; background: var(--bg2); border: 1px solid var(--border2); }
+.rc-sw::after { content: ''; position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+.room-card.on .rc-sw { background: var(--green-c); border-color: var(--green-c); }
+[data-theme="dark"] .room-card.on .rc-sw { background: var(--warm); border-color: var(--warm); }
+.room-card.on .rc-sw::after { transform: translateX(12px); }
 
-/* Right sidebar in dashboard */
-.dash-right { background:var(--card); border-left:1px solid var(--border); padding:18px; overflow-y:auto; }
-.dash-widget { margin-bottom:16px; }
-.dw-title { font-size:.68rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
-.weather-big { font-family:'Space Grotesk',sans-serif; font-size:2.4rem; font-weight:800; }
-.weather-row { display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
-.wri { font-size:.72rem; color:var(--muted); text-align:center; }
-.wri strong { display:block; color:var(--text); font-size:.8rem; margin-bottom:2px; }
-.fc-row { display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
-.fc-d { text-align:center; font-size:.7rem; color:var(--muted); }
-.fc-d span { font-size:1.1rem; display:block; margin:3px 0; }
-.fc-d strong { color:var(--text); }
-.activity { display:flex; flex-direction:column; gap:7px; }
-.act-item { display:flex; gap:8px; font-size:.76rem; align-items:flex-start; }
-.act-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:4px; }
-.act-txt { color:var(--muted2); line-height:1.5; flex:1; }
-.act-t { color:var(--muted); white-space:nowrap; }
+.d-right { background: var(--surface); border-left: 1px solid var(--border); padding: 16px; overflow-y: auto; transition: background var(--t); }
+.dw { margin-bottom: 20px; }
+.dw-t { font-size: .68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
+.weather-num { font-size: 2.5rem; font-weight: 700; letter-spacing: -.03em; }
+.weather-desc { font-size: .8rem; color: var(--text2); margin-top: 2px; }
+.ww-row { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.wwi { font-size: .72rem; color: var(--text2); text-align: center; }
+.wwi strong { display: block; color: var(--text); font-size: .8rem; margin-bottom: 2px; }
+.fc-row { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.fc-d { text-align: center; font-size: .7rem; color: var(--text2); }
+.fc-d span { font-size: 1.05rem; display: block; margin: 3px 0; }
+.fc-d strong { color: var(--text); }
+
+.log { display: flex; flex-direction: column; gap: 8px; }
+.log-item { display: flex; gap: 8px; align-items: flex-start; font-size: .76rem; }
+.log-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.log-txt { color: var(--text2); flex: 1; line-height: 1.5; }
+.log-t { color: var(--text3); white-space: nowrap; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ GARDEN TEASER */
+.garden-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.garden-frame {
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-lg); position: relative;
+  background: #0d1a10; min-height: 280px;
+  display: flex; align-items: flex-end;
+}
+.garden-scene { width: 100%; position: relative; }
+.garden-bg {
+  width: 100%; display: block; min-height: 260px;
+  background: linear-gradient(to bottom, #0a1a12 0%, #1a3320 40%, #0d1a10 100%);
+  position: relative; overflow: hidden;
+}
+.garden-sky { position: absolute; inset: 0; transition: background 1.5s ease; }
+.garden-trees {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 70%;
+}
+.garden-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.5), transparent 60%); }
+.garden-lights-wrap { position: absolute; bottom: 30px; left: 0; right: 0; display: flex; justify-content: space-around; padding: 0 10%; }
+.garden-light {
+  width: 16px; height: 16px; border-radius: 50%; cursor: pointer;
+  transition: all .6s ease; box-shadow: 0 0 0 0 transparent;
+}
+.garden-controls {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.8), transparent);
+  padding: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.color-swatch {
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: transform .2s, border-color .2s;
+}
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.active { border-color: #fff; }
+.gc-label { font-size: .78rem; font-weight: 600; color: rgba(255,255,255,.7); margin-right: 4px; }
+.gc-brightness { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.gc-brightness label { font-size: .75rem; color: rgba(255,255,255,.6); }
+.gc-brightness input { width: 80px; accent-color: var(--warm); cursor: pointer; }
+.coming-soon-badge { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.15); color: rgba(255,255,255,.8); padding: 5px 12px; border-radius: 980px; font-size: .72rem; font-weight: 600; letter-spacing: .5px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PROCESS */
+.process-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-top: 56px; }
+@media(max-width:640px){ .process-grid { grid-template-columns: 1fr 1fr; } }
+.proc-step { background: var(--surface); padding: 36px 28px; position: relative; transition: background var(--t); }
+.proc-n { font-size: .65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 18px; }
+.proc-ico { font-size: 1.5rem; margin-bottom: 14px; }
+.proc-step h3 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -.01em; }
+.proc-step p { font-size: .83rem; color: var(--text2); line-height: 1.65; }
+.proc-ghost { position: absolute; bottom: 12px; right: 16px; font-size: 3.5rem; font-weight: 800; color: var(--text); opacity: .04; line-height: 1; pointer-events: none; font-variant-numeric: tabular-nums; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ AI TAB — SERVICES */
+.services-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-top: 56px; }
+.svc-item { background: var(--surface); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; transition: background var(--t); cursor: default; }
+.svc-item:hover { background: var(--bg2); }
+.svc-l { flex: 1; }
+.svc-name { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; margin-bottom: 6px; }
+.svc-desc { font-size: .85rem; color: var(--text2); line-height: 1.6; max-width: 540px; }
+.svc-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+.svc-tag { font-size: .7rem; font-weight: 500; padding: 3px 10px; border-radius: 6px; background: var(--bg2); color: var(--text2); border: 1px solid var(--border); }
+.svc-price { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; color: var(--accent); white-space: nowrap; text-align: right; }
+.svc-from { font-size: .68rem; color: var(--text3); font-weight: 500; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PRICING */
+.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 56px; }
+@media(max-width:700px){ .pricing-grid { grid-template-columns: 1fr; } }
+.price-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; position: relative; transition: all .3s; }
+.price-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.price-card.featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+[data-theme="dark"] .price-card.featured { border-color: var(--neon-c); box-shadow: 0 0 0 1px var(--neon-c), 0 0 40px rgba(0,229,255,.08); }
+.featured-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 3px 14px; border-radius: 980px; font-size: .7rem; font-weight: 700; white-space: nowrap; }
+[data-theme="dark"] .featured-badge { background: var(--neon-c); color: #000; }
+.pc-tier { font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
+.pc-price { font-size: 2.8rem; font-weight: 700; letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
+.pc-price small { font-size: .9rem; font-weight: 500; color: var(--text2); }
+.pc-desc { font-size: .83rem; color: var(--text2); margin-bottom: 24px; }
+.pc-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 28px; }
+.pc-list li { font-size: .83rem; color: var(--text2); display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+.pc-list li::before { content: '✓'; color: var(--green-c); font-weight: 700; flex-shrink: 0; }
+.pc-btn { display: block; width: 100%; text-align: center; padding: 11px; border-radius: 10px; font-size: .85rem; font-weight: 600; text-decoration: none; transition: all .2s; }
+.pc-btn.solid { background: var(--accent); color: #fff; }
+[data-theme="dark"] .pc-btn.solid { background: var(--neon-c); color: #000; }
+.pc-btn.ghost { border: 1px solid var(--border2); color: var(--text2); }
+.pc-btn.ghost:hover { background: var(--bg2); color: var(--text); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ CTA */
+.cta-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 72px 6%; text-align: center; position: relative; overflow: hidden; }
+.cta-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% -20%, rgba(0,113,227,.06), transparent 60%); pointer-events: none; }
+[data-theme="dark"] .cta-box::before { background: radial-gradient(ellipse at 50% -20%, rgba(0,229,255,.08), transparent 60%); }
+.cta-box h2 { position: relative; margin-bottom: 14px; }
+.cta-box p { position: relative; font-size: .95rem; color: var(--text2); max-width: 440px; margin: 0 auto 32px; line-height: 1.7; }
+.cta-btns { position: relative; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FAQ */
+.faq-list { max-width: 640px; margin: 48px auto 0; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 0; cursor: pointer; font-size: .9rem; font-weight: 500;
+  color: var(--text); gap: 16px; transition: color .2s; user-select: none;
+}
+.faq-q:hover { color: var(--accent); }
+.faq-ico { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border2); display: grid; place-items: center; font-size: .7rem; flex-shrink: 0; transition: all .3s; color: var(--text2); }
+.faq-item.open .faq-ico { transform: rotate(45deg); background: var(--accent); border-color: var(--accent); color: #fff; }
+[data-theme="dark"] .faq-item.open .faq-ico { background: var(--neon-c); border-color: var(--neon-c); color: #000; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .3s; font-size: .88rem; color: var(--text2); line-height: 1.75; padding: 0; }
+.faq-item.open .faq-a { max-height: 160px; padding-bottom: 18px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FOOTER */
+footer { border-top: 1px solid var(--border); padding: 32px 6%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-logo { font-size: .9rem; font-weight: 700; }
+.footer-logo em { color: var(--accent); font-style: normal; }
+footer p { font-size: .78rem; color: var(--text3); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ TOAST */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--surface); border: 1px solid var(--border2); backdrop-filter: blur(20px); border-radius: 12px; padding: 10px 18px; font-size: .83rem; display: flex; align-items: center; gap: 8px; z-index: 999; transition: transform .4s cubic-bezier(.34,1.56,.64,1); white-space: nowrap; box-shadow: var(--shadow-md); color: var(--text); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ MEDIA */
+.media-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px; display: flex; gap: 14px; align-items: center; margin-bottom: 10px; transition: background var(--t); }
+.media-art { width: 50px; height: 50px; border-radius: 10px; display: grid; place-items: center; font-size: 1.5rem; flex-shrink: 0; }
+.media-title { font-size: .88rem; font-weight: 600; margin-bottom: 3px; }
+.media-sub { font-size: .75rem; color: var(--text2); }
+.media-btns { display: flex; gap: 7px; margin-top: 10px; align-items: center; }
+.mc { width: 28px; height: 28px; border-radius: 50%; background: var(--bg2); border: 1px solid var(--border); display: grid; place-items: center; cursor: pointer; font-size: .7rem; color: var(--text); transition: all .2s; }
+.mc:hover { background: var(--bg3); }
+.mc.play { background: var(--accent); border-color: var(--accent); color: #fff; width: 32px; height: 32px; }
+[data-theme="dark"] .mc.play { background: var(--neon-p); border-color: var(--neon-p); box-shadow: 0 0 12px rgba(224,64,251,.3); }
+.prog-bar { height: 3px; background: var(--bg2); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+[data-theme="dark"] .prog-fill { background: var(--neon-p); }
+
+/* Dark mode special glow effects */
+[data-theme="dark"] .room-card.on { box-shadow: 0 0 20px rgba(255,180,70,.08); }
+[data-theme="dark"] .device { box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 40px 100px rgba(0,0,0,.8); }
 </style>
 </head>
 <body>
@@ -297,501 +543,642 @@ footer { border-top:1px solid var(--border); padding:32px 6%; text-align:center;
 <!-- NAV -->
 <nav class="nav">
   <a href="#" class="nav-logo">autoflow<em>-lab</em></a>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#demo">Demo</a>
-    <a href="#dashboard">Try It Live</a>
+  <div class="nav-center">
+    <button class="nav-tab active" onclick="switchTab('smarthome',this)">🏠 Smart Home</button>
+    <button class="nav-tab" onclick="switchTab('ai',this)">⚡ AI & Automation</button>
+  </div>
+  <div class="nav-right">
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode"></div>
     <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="nav-cta">Order on Fiverr</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-glow"></div>
-  <div class="hero-badge">✦ Handcrafted for Home Assistant</div>
-  <h1 class="hero-h">Custom Dashboards,<br>Designed for <em>Humans.</em></h1>
-  <p class="hero-sub">Beautiful, intuitive Home Assistant dashboards tailored to your home, your devices — and everyone who lives there.</p>
-  <div class="hero-btns">
-    <a href="#demo" class="btn btn-p">▶ Try Live Demo</a>
-    <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-g">Order on Fiverr</a>
-  </div>
-</section>
+<!-- ════════════════════════════════════════════════
+     SMART HOME TAB
+════════════════════════════════════════════════ -->
+<div class="page active" id="page-smarthome">
 
-<!-- FEATURES -->
-<section id="features" class="features">
-<div class="container">
-  <div class="reveal">
-    <div class="s-label">What you get</div>
-    <h2 class="s-h">Everything a great dashboard needs</h2>
-    <p class="s-p" style="margin-bottom:0">From a single tablet to a whole-home panel setup — built with precision, custom cards, and your family in mind.</p>
-  </div>
-  <div class="features-grid" style="margin-top:56px">
-    <div class="feat reveal reveal-d1"><div class="feat-icon">🗺️</div><h3>Interactive Floor Plan</h3><p>See your whole home at a glance. Click any room to toggle lights, adjust brightness, and trigger scenes — on a visual floor plan that mirrors your actual layout.</p></div>
-    <div class="feat reveal reveal-d2"><div class="feat-icon">✦</div><h3>Clean, Modern Lovelace Design</h3><p>Pixel-perfect card layouts, custom themes, card-mod styling, and careful typography. Your dashboard looks like an Apple product, not a config file.</p></div>
-    <div class="feat reveal reveal-d3"><div class="feat-icon">🎬</div><h3>Smart Scenes & Automations</h3><p>One-tap scenes for Relax, Movie Night, Work, and Goodnight. Automations included for your most-used flows, fully documented in clean YAML.</p></div>
-    <div class="feat reveal reveal-d4"><div class="feat-icon">📱</div><h3>All Screens, All Devices</h3><p>Designed for 10" wall panels, phones, tablets, and desktop. Large tap targets, responsive grids, and readable text at any distance.</p></div>
-  </div>
-</div>
-</section>
-
-<!-- DEMO — Floor Plan -->
-<section id="demo" style="padding:100px 6%">
-<div class="container">
-  <div class="reveal">
-    <div class="s-label">Interactive</div>
-    <h2 class="s-h">Try the live demo</h2>
-    <p class="s-p">Click any room on the floor plan to toggle lights. Use the scene buttons to transform the whole home in one tap.</p>
-  </div>
-  <div class="demo-wrap">
-    <!-- Device frame with floor plan -->
-    <div class="device-frame reveal reveal-d1">
-      <div class="device-topbar">
-        <div class="device-title">MY HOME · DASHBOARD</div>
-        <div class="device-dots"><span></span><span></span><span></span></div>
-      </div>
-      <div class="demo-scenes">
-        <button class="demo-scene-btn" data-scene="relax" onclick="setScene('relax',this)">🌅 Relax</button>
-        <button class="demo-scene-btn on" data-scene="normal" onclick="setScene('normal',this)">☀️ Normal</button>
-        <button class="demo-scene-btn" data-scene="movie" onclick="setScene('movie',this)">🎬 Movie</button>
-        <button class="demo-scene-btn" data-scene="alloff" onclick="setScene('alloff',this)">🌙 Night</button>
-      </div>
-      <div class="fp-outer">
-        <div class="fp-hint">← Tap any room to toggle lights →</div>
-        <svg id="fp" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <filter id="gw"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="gg"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          </defs>
-          <!-- House bg -->
-          <rect width="520" height="340" fill="#080910" rx="10"/>
-          <!-- Living Room -->
-          <rect id="r-living" class="fp-room" x="10" y="10" width="200" height="160" rx="6" fill="rgba(255,180,70,.18)" stroke="#ffb347" stroke-width="1.5" onclick="fpToggle('living')"/>
-          <text x="110" y="82" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="11" font-family="Inter" font-weight="600" class="fp-label">Living Room</text>
-          <circle id="b-living1" class="fp-bulb" cx="75" cy="105" r="7" fill="#ffb347" filter="url(#gw)" onclick="fpToggle('living')"/>
-          <circle id="b-living2" class="fp-bulb" cx="145" cy="105" r="7" fill="#ffb347" filter="url(#gw)" onclick="fpToggle('living')"/>
-          <!-- Kitchen -->
-          <rect id="r-kitchen" class="fp-room" x="220" y="10" width="150" height="130" rx="6" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" onclick="fpToggle('kitchen')"/>
-          <text x="295" y="68" text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="11" font-family="Inter" font-weight="600" class="fp-label">Kitchen</text>
-          <circle id="b-kitchen1" class="fp-bulb" cx="270" cy="90" r="7" fill="rgba(255,255,255,.15)" onclick="fpToggle('kitchen')"/>
-          <circle id="b-kitchen2" class="fp-bulb" cx="320" cy="90" r="7" fill="rgba(255,255,255,.15)" onclick="fpToggle('kitchen')"/>
-          <!-- Office -->
-          <rect id="r-office" x="380" y="10" width="130" height="160" rx="6" fill="rgba(255,180,70,.18)" stroke="#ffb347" stroke-width="1.5" class="fp-room" onclick="fpToggle('office')"/>
-          <text x="445" y="85" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="11" font-family="Inter" font-weight="600" class="fp-label">Office</text>
-          <circle id="b-office1" class="fp-bulb" cx="420" cy="110" r="7" fill="#ffb347" filter="url(#gw)" onclick="fpToggle('office')"/>
-          <circle id="b-office2" class="fp-bulb" cx="465" cy="110" r="7" fill="#ffb347" filter="url(#gw)" onclick="fpToggle('office')"/>
-          <!-- Bedroom -->
-          <rect id="r-bedroom" class="fp-room" x="10" y="180" width="150" height="150" rx="6" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" onclick="fpToggle('bedroom')"/>
-          <text x="85" y="258" text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="11" font-family="Inter" font-weight="600" class="fp-label">Bedroom</text>
-          <circle id="b-bedroom1" class="fp-bulb" cx="85" cy="285" r="7" fill="rgba(255,255,255,.15)" onclick="fpToggle('bedroom')"/>
-          <!-- Bathroom -->
-          <rect id="r-bathroom" class="fp-room" x="170" y="150" width="110" height="100" rx="6" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" onclick="fpToggle('bathroom')"/>
-          <text x="225" y="203" text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="10" font-family="Inter" font-weight="600" class="fp-label">Bathroom</text>
-          <circle id="b-bathroom1" class="fp-bulb" cx="225" cy="225" r="6" fill="rgba(255,255,255,.15)" onclick="fpToggle('bathroom')"/>
-          <!-- Hallway -->
-          <rect x="170" y="260" width="110" height="70" rx="6" fill="rgba(255,255,255,.01)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-          <text x="225" y="299" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="9" font-family="Inter">Hallway</text>
-          <!-- Garden -->
-          <rect id="r-garden" class="fp-room" x="290" y="150" width="220" height="180" rx="6" fill="rgba(105,255,71,.1)" stroke="rgba(105,255,71,.3)" stroke-width="1.5" onclick="fpToggle('garden')"/>
-          <text x="400" y="240" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="11" font-family="Inter" font-weight="600" class="fp-label">Garden 🌿</text>
-          <circle id="b-garden1" class="fp-bulb" cx="360" cy="270" r="7" fill="#69ff47" filter="url(#gg)" onclick="fpToggle('garden')"/>
-        </svg>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <div class="hero-inner">
+      <div class="eyebrow">Handcrafted for Home Assistant</div>
+      <h1>Your home, <em>beautifully</em><br>in control.</h1>
+      <p class="hero-sub">Custom Lovelace dashboards that look stunning, feel intuitive, and work perfectly — for everyone in the house.</p>
+      <div class="hero-actions">
+        <a href="#smarthome-demo" class="btn btn-fill">▶ Try interactive demo</a>
+        <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-outline">Order on Fiverr</a>
       </div>
     </div>
+  </section>
 
-    <!-- Sidebar -->
-    <div class="demo-sidebar">
-      <div class="sidebar-card reveal reveal-d2">
-        <h4>Scenes</h4>
-        <div class="scene-btns-v">
-          <button class="scene-v-btn" onclick="setScene('relax',this)"><div class="svb-icon">🌅</div><div class="svb-text"><div class="svb-name">Relax</div><div class="svb-desc">Warm, dim lights</div></div></button>
-          <button class="scene-v-btn on" onclick="setScene('normal',this)"><div class="svb-icon">☀️</div><div class="svb-text"><div class="svb-name">Normal</div><div class="svb-desc">Bright & comfortable</div></div></button>
-          <button class="scene-v-btn" onclick="setScene('movie',this)"><div class="svb-icon">🎬</div><div class="svb-text"><div class="svb-name">Movie Night</div><div class="svb-desc">Cinematic mood</div></div></button>
-          <button class="scene-v-btn" onclick="setScene('alloff',this)"><div class="svb-icon">🌙</div><div class="svb-text"><div class="svb-name">All Off</div><div class="svb-desc">Goodnight</div></div></button>
+  <!-- FEATURES -->
+  <section class="section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">What you get</div>
+      <h2>Everything a great dashboard needs</h2>
+      <p class="section-sub">Built with precision, custom cards, and your whole family in mind.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat rv rv-d1"><div class="feat-ico">🗺️</div><h3>Interactive Floor Plan</h3><p>See your home at a glance. Tap any room to toggle lights, adjust scenes — on a visual map that mirrors your actual layout.</p></div>
+      <div class="feat rv rv-d2"><div class="feat-ico">✦</div><h3>Pixel-perfect Lovelace Design</h3><p>Custom themes, card-mod styling, careful typography. Your dashboard looks like an Apple product, not a config file.</p></div>
+      <div class="feat rv rv-d3"><div class="feat-ico">🎬</div><h3>Smart Scenes & Automations</h3><p>One-tap scenes for Relax, Movie Night, Work, Goodnight. Automations included, fully documented in clean YAML.</p></div>
+      <div class="feat rv rv-d4"><div class="feat-ico">📱</div><h3>All Screens Supported</h3><p>Wall panels, tablets, iPhones, desktop. Large tap targets, responsive grids, readable at any distance.</p></div>
+    </div>
+  </div>
+  </section>
+
+  <!-- FLOOR PLAN DEMO -->
+  <section class="section demo-section" id="smarthome-demo">
+  <div class="wrap">
+    <div class="rv">
+      <div class="label">Interactive</div>
+      <h2>Try the live demo</h2>
+      <p class="section-sub">Tap any room on the floor plan to toggle lights. Use the scenes to change your whole home in one tap.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="device rv rv-d1">
+        <div class="device-bar">
+          <div class="device-title">MY HOME · DASHBOARD</div>
+          <div class="device-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="scene-row">
+          <button class="scene-pill" onclick="setScene('relax',this)">🌅 Relax</button>
+          <button class="scene-pill on" onclick="setScene('normal',this)">☀️ Normal</button>
+          <button class="scene-pill" onclick="setScene('movie',this)">🎬 Movie</button>
+          <button class="scene-pill" onclick="setScene('alloff',this)">🌙 Night</button>
+        </div>
+        <div class="fp-wrap">
+          <div class="fp-hint">Tap a room to toggle lights</div>
+          <svg id="fp" viewBox="0 0 520 330" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="fw"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="fg"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <rect width="520" height="330" rx="12" fill="var(--bg3)"/>
+            <!-- Grid lines -->
+            <line x1="220" y1="10" x2="220" y2="320" stroke="var(--border)" stroke-width="1"/>
+            <line x1="380" y1="10" x2="380" y2="175" stroke="var(--border)" stroke-width="1"/>
+            <line x1="10" y1="180" x2="510" y2="180" stroke="var(--border)" stroke-width="1"/>
+            <line x1="170" y1="180" x2="170" y2="320" stroke="var(--border)" stroke-width="1"/>
+            <line x1="290" y1="180" x2="290" y2="320" stroke="var(--border)" stroke-width="1"/>
+            <!-- Rooms -->
+            <rect id="r-living" x="12" y="12" width="196" height="156" rx="8" fill="rgba(245,166,35,.12)" stroke="#f5a623" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('living')"/>
+            <text x="110" y="78" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text)" opacity=".75" style="pointer-events:none">Living Room</text>
+            <circle id="b-l1" cx="75" cy="105" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('living')"/>
+            <circle id="b-l2" cx="145" cy="105" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('living')"/>
+
+            <rect id="r-kitchen" x="224" y="12" width="144" height="120" rx="8" fill="var(--border)" stroke="var(--border2)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('kitchen')"/>
+            <text x="296" y="65" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text2)" style="pointer-events:none">Kitchen</text>
+            <circle id="b-k1" cx="268" cy="90" r="7" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('kitchen')"/>
+            <circle id="b-k2" cx="324" cy="90" r="7" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('kitchen')"/>
+
+            <rect id="r-office" x="384" y="12" width="124" height="156" rx="8" fill="rgba(245,166,35,.12)" stroke="#f5a623" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('office')"/>
+            <text x="446" y="80" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text)" opacity=".75" style="pointer-events:none">Office</text>
+            <circle id="b-o1" cx="420" cy="108" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('office')"/>
+            <circle id="b-o2" cx="470" cy="108" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('office')"/>
+
+            <rect id="r-bedroom" x="12" y="184" width="146" height="134" rx="8" fill="var(--border)" stroke="var(--border2)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bedroom')"/>
+            <text x="85" y="252" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text2)" style="pointer-events:none">Bedroom</text>
+            <circle id="b-bd1" cx="85" cy="280" r="7" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bedroom')"/>
+
+            <rect id="r-bathroom" x="174" y="184" width="104" height="134" rx="8" fill="var(--border)" stroke="var(--border2)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bathroom')"/>
+            <text x="226" y="252" text-anchor="middle" font-size="10" font-family="Inter" font-weight="600" fill="var(--text2)" style="pointer-events:none">Bathroom</text>
+            <circle id="b-ba1" cx="226" cy="278" r="6" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bathroom')"/>
+
+            <rect id="r-garden" x="294" y="184" width="214" height="134" rx="8" fill="rgba(48,209,88,.08)" stroke="rgba(48,209,88,.35)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('garden')"/>
+            <text x="401" y="248" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text)" opacity=".75" style="pointer-events:none">Garden 🌿</text>
+            <circle id="b-g1" cx="350" cy="276" r="7" fill="#30d158" filter="url(#fg)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('garden')"/>
+            <circle id="b-g2" cx="450" cy="276" r="7" fill="#30d158" filter="url(#fg)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('garden')"/>
+          </svg>
         </div>
       </div>
-      <div class="sidebar-card reveal reveal-d3">
-        <h4>Room Status</h4>
-        <div class="room-list" id="room-list">
-          <!-- Populated by JS -->
+
+      <!-- Sidebar -->
+      <div class="demo-side rv rv-d2">
+        <div class="card">
+          <div class="card-title">Scenes</div>
+          <div class="scene-list">
+            <button class="scene-row-btn" onclick="setScene('relax',this)"><div class="srb-ico">🌅</div><div><div class="srb-name">Relax</div><div class="srb-desc">Warm, dim lights</div></div></button>
+            <button class="scene-row-btn on" onclick="setScene('normal',this)"><div class="srb-ico">☀️</div><div><div class="srb-name">Normal</div><div class="srb-desc">Bright &amp; comfortable</div></div></button>
+            <button class="scene-row-btn" onclick="setScene('movie',this)"><div class="srb-ico">🎬</div><div><div class="srb-name">Movie Night</div><div class="srb-desc">Cinematic mood</div></div></button>
+            <button class="scene-row-btn" onclick="setScene('alloff',this)"><div class="srb-ico">🌙</div><div><div class="srb-name">All Off</div><div class="srb-desc">Goodnight</div></div></button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Room Status</div>
+          <div class="room-list" id="room-list"></div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</section>
+  </section>
 
-<!-- LIVE FULL DASHBOARD -->
-<section class="live-dash" id="dashboard">
-<div class="container">
-  <div class="reveal">
-    <div class="s-label">Full Dashboard</div>
-    <h2 class="s-h">The complete experience</h2>
-    <p class="s-p">A fully interactive dashboard with rooms, media, sensors and weather — exactly like what I build for your home.</p>
-  </div>
-  <div class="dash-layout reveal">
-    <!-- Left nav -->
-    <div class="dash-left">
-      <div class="dash-nav-section">
-        <div class="dash-nav-lbl">Views</div>
-        <div class="dash-nav-item on" onclick="dShowPage('home',this)"><div class="dash-nav-icon">🏠</div>Overview</div>
-        <div class="dash-nav-item" onclick="dShowPage('lights',this)"><div class="dash-nav-icon">💡</div>Lights</div>
-        <div class="dash-nav-item" onclick="dShowPage('media',this)"><div class="dash-nav-icon">🎵</div>Media</div>
-        <div class="dash-nav-item" onclick="dShowPage('sensors',this)"><div class="dash-nav-icon">🌡️</div>Sensors</div>
-      </div>
-      <div class="dash-nav-section">
-        <div class="dash-nav-lbl">Rooms</div>
-        <div class="dash-nav-item" onclick="fpToggle('living');toast('💡','Living Room toggled')"><div class="dash-nav-icon">🛋️</div>Living</div>
-        <div class="dash-nav-item" onclick="fpToggle('kitchen');toast('💡','Kitchen toggled')"><div class="dash-nav-icon">🍳</div>Kitchen</div>
-        <div class="dash-nav-item" onclick="fpToggle('bedroom');toast('💡','Bedroom toggled')"><div class="dash-nav-icon">🛏️</div>Bedroom</div>
-        <div class="dash-nav-item" onclick="fpToggle('office');toast('💡','Office toggled')"><div class="dash-nav-icon">🏢</div>Office</div>
-      </div>
+  <!-- FULL DASHBOARD -->
+  <section class="section dash-section">
+  <div class="wrap">
+    <div class="rv">
+      <div class="label">Full Dashboard</div>
+      <h2>The complete experience</h2>
+      <p class="section-sub">A fully interactive dashboard with rooms, media, sensors and weather — exactly what I build for your home.</p>
     </div>
-
-    <!-- Main -->
-    <div class="dash-main">
-      <!-- HOME -->
-      <div class="dash-page on" id="dp-home">
-        <div class="dash-greeting"><h2 id="d-greeting">Good afternoon 👋</h2><p id="d-date">Loading...</p></div>
-        <div class="quick-stats">
-          <div class="qs"><div class="qs-lbl">Temp</div><div class="qs-val" style="color:var(--orange)">21°</div><div class="qs-sub">Average indoor</div></div>
-          <div class="qs"><div class="qs-lbl">Lights</div><div class="qs-val" style="color:var(--yellow)" id="d-lights">4</div><div class="qs-sub">of 8 active</div></div>
-          <div class="qs"><div class="qs-lbl">Energy</div><div class="qs-val" style="color:var(--green)">2.4<span style="font-size:1rem">kW</span></div><div class="qs-sub">Current</div></div>
-          <div class="qs"><div class="qs-lbl">Security</div><div class="qs-val" style="color:var(--cyan);font-size:1rem">Armed</div><div class="qs-sub">All clear</div></div>
-        </div>
-        <div class="scene-quick">
-          <button class="sq-btn" onclick="setScene('relax',this)">🌅 Relax</button>
-          <button class="sq-btn on" onclick="setScene('normal',this)">☀️ Normal</button>
-          <button class="sq-btn" onclick="setScene('movie',this)">🎬 Movie</button>
-          <button class="sq-btn" onclick="setScene('alloff',this)">🌙 Night</button>
-        </div>
-        <div class="dash-rooms" id="dash-rooms">
-          <div class="dr-card on" data-room="living" onclick="drToggle(this)"><div class="dr-icon">🛋️</div><div class="dr-name">Living Room</div><div class="dr-info">3 lights · TV active</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card" data-room="kitchen" onclick="drToggle(this)"><div class="dr-icon">🍳</div><div class="dr-name">Kitchen</div><div class="dr-info">2 lights</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card on" data-room="office" onclick="drToggle(this)"><div class="dr-icon">🏢</div><div class="dr-name">Office</div><div class="dr-info">2 lights · Active</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card" data-room="bedroom" onclick="drToggle(this)"><div class="dr-icon">🛏️</div><div class="dr-name">Bedroom</div><div class="dr-info">1 light</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card" data-room="bathroom" onclick="drToggle(this)"><div class="dr-icon">🚿</div><div class="dr-name">Bathroom</div><div class="dr-info">2 lights</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card on" data-room="garden" onclick="drToggle(this)"><div class="dr-icon">🌿</div><div class="dr-name">Garden</div><div class="dr-info">Outdoor lights</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-        </div>
+    <div class="dash-frame rv">
+      <div class="d-left">
+        <div class="d-nav-lbl" style="padding-top:8px">Views</div>
+        <div class="d-nav-item on" onclick="dPage('home',this)"><div class="d-nav-ico">🏠</div>Overview</div>
+        <div class="d-nav-item" onclick="dPage('lights',this)"><div class="d-nav-ico">💡</div>Lights</div>
+        <div class="d-nav-item" onclick="dPage('media',this)"><div class="d-nav-ico">🎵</div>Media</div>
+        <div class="d-nav-item" onclick="dPage('sensors',this)"><div class="d-nav-ico">🌡️</div>Sensors</div>
+        <div style="margin-top:24px"></div>
+        <div class="d-nav-lbl">Rooms</div>
+        <div class="d-nav-item" onclick="fpToggle('living');showToast('💡','Living Room toggled')"><div class="d-nav-ico">🛋️</div>Living</div>
+        <div class="d-nav-item" onclick="fpToggle('kitchen');showToast('💡','Kitchen toggled')"><div class="d-nav-ico">🍳</div>Kitchen</div>
+        <div class="d-nav-item" onclick="fpToggle('office');showToast('💡','Office toggled')"><div class="d-nav-ico">🏢</div>Office</div>
+        <div class="d-nav-item" onclick="fpToggle('bedroom');showToast('💡','Bedroom toggled')"><div class="d-nav-ico">🛏️</div>Bedroom</div>
       </div>
-
-      <!-- LIGHTS -->
-      <div class="dash-page" id="dp-lights">
-        <div class="dash-greeting"><h2>Lights 💡</h2><p>Tap any light to toggle · Drag to adjust brightness</p></div>
-        <div class="dash-rooms">
-          <div class="dr-card on" onclick="drToggle(this)" data-room="l1"><div class="dr-icon">💡</div><div class="dr-name">Ceiling — Living</div><div class="dr-info">On · Warm · 80%</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card on" onclick="drToggle(this)" data-room="l2"><div class="dr-icon">🌈</div><div class="dr-name">LED Strip — TV</div><div class="dr-info">On · Pink · 60%</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card" onclick="drToggle(this)" data-room="l3"><div class="dr-icon">💡</div><div class="dr-name">Ceiling — Kitchen</div><div class="dr-info">Off</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card on" onclick="drToggle(this)" data-room="l4"><div class="dr-icon">🖥️</div><div class="dr-name">Desk Lamp — Office</div><div class="dr-info">On · Cool · 100%</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card" onclick="drToggle(this)" data-room="l5"><div class="dr-icon">💡</div><div class="dr-name">Bedside — Bedroom</div><div class="dr-info">Off</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
-          <div class="dr-card on" onclick="drToggle(this)" data-room="l6"><div class="dr-icon">🌿</div><div class="dr-name">Outdoor — Garden</div><div class="dr-info">On · Warm · 70%</div><div class="dr-toggle-wrap"><div class="dr-sw"></div></div></div>
+      <div class="d-main">
+        <!-- HOME -->
+        <div class="d-page on" id="dp-home">
+          <div class="d-greet"><h3 id="d-greet">Good afternoon 👋</h3><p id="d-date-txt">Loading...</p></div>
+          <div class="qs-row">
+            <div class="qs"><div class="qs-l">Temp</div><div class="qs-v" style="color:var(--warm)">21°</div><div class="qs-s">Avg. indoor</div></div>
+            <div class="qs"><div class="qs-l">Lights</div><div class="qs-v" id="qs-lights">4</div><div class="qs-s">of 8 on</div></div>
+            <div class="qs"><div class="qs-l">Power</div><div class="qs-v" style="color:var(--green-c)">2.4<span style="font-size:.9rem">kW</span></div><div class="qs-s">Current</div></div>
+            <div class="qs"><div class="qs-l">Security</div><div class="qs-v" style="color:var(--accent);font-size:.95rem">Armed</div><div class="qs-s">All clear</div></div>
+          </div>
+          <div class="sq-row">
+            <button class="sq-btn" onclick="setScene('relax',this)">🌅 Relax</button>
+            <button class="sq-btn on" onclick="setScene('normal',this)">☀️ Normal</button>
+            <button class="sq-btn" onclick="setScene('movie',this)">🎬 Movie</button>
+            <button class="sq-btn" onclick="setScene('alloff',this)">🌙 Night</button>
+          </div>
+          <div class="rooms-grid" id="dash-rooms">
+            <div class="room-card on" data-r="living" onclick="drToggle(this)"><div class="rc-ico">🛋️</div><div class="rc-name">Living Room</div><div class="rc-info">3 lights · TV active</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card" data-r="kitchen" onclick="drToggle(this)"><div class="rc-ico">🍳</div><div class="rc-name">Kitchen</div><div class="rc-info">2 lights</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" data-r="office" onclick="drToggle(this)"><div class="rc-ico">🏢</div><div class="rc-name">Office</div><div class="rc-info">2 lights · Active</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card" data-r="bedroom" onclick="drToggle(this)"><div class="rc-ico">🛏️</div><div class="rc-name">Bedroom</div><div class="rc-info">1 light</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card" data-r="bathroom" onclick="drToggle(this)"><div class="rc-ico">🚿</div><div class="rc-name">Bathroom</div><div class="rc-info">2 lights</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" data-r="garden" onclick="drToggle(this)"><div class="rc-ico">🌿</div><div class="rc-name">Garden</div><div class="rc-info">Outdoor lights</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+          </div>
         </div>
-      </div>
-
-      <!-- MEDIA -->
-      <div class="dash-page" id="dp-media">
-        <div class="dash-greeting"><h2>Media 🎵</h2><p>All speakers and displays</p></div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:center">
-            <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--purple));display:grid;place-items:center;font-size:1.6rem;flex-shrink:0;animation:spin 8s linear infinite" id="disc">🎵</div>
+        <!-- LIGHTS -->
+        <div class="d-page" id="dp-lights">
+          <div class="d-greet"><h3>Lights 💡</h3><p>Tap to toggle any light</p></div>
+          <div class="rooms-grid">
+            <div class="room-card on" onclick="this.classList.toggle('on');showToast('💡','Ceiling light toggled')"><div class="rc-ico">💡</div><div class="rc-name">Ceiling — Living</div><div class="rc-info">Warm · 80%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" onclick="this.classList.toggle('on');showToast('🌈','LED strip toggled')"><div class="rc-ico">🌈</div><div class="rc-name">LED Strip — TV</div><div class="rc-info">Pink · 60%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card" onclick="this.classList.toggle('on');showToast('💡','Kitchen light toggled')"><div class="rc-ico">💡</div><div class="rc-name">Ceiling — Kitchen</div><div class="rc-info">Off</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" onclick="this.classList.toggle('on');showToast('💡','Desk lamp toggled')"><div class="rc-ico">🖥️</div><div class="rc-name">Desk Lamp — Office</div><div class="rc-info">Cool · 100%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card" onclick="this.classList.toggle('on');showToast('💡','Bedside toggled')"><div class="rc-ico">💡</div><div class="rc-name">Bedside — Bedroom</div><div class="rc-info">Off</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" onclick="this.classList.toggle('on');showToast('🌿','Garden light toggled')"><div class="rc-ico">🌿</div><div class="rc-name">Outdoor — Garden</div><div class="rc-info">Warm · 70%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+          </div>
+        </div>
+        <!-- MEDIA -->
+        <div class="d-page" id="dp-media">
+          <div class="d-greet"><h3>Media 🎵</h3><p>All speakers and displays</p></div>
+          <div class="media-card">
+            <div class="media-art" style="background:linear-gradient(135deg,#e040fb,#7c3aed)" id="disc">🎵</div>
             <div style="flex:1;min-width:0">
-              <div style="font-size:.88rem;font-weight:600;margin-bottom:3px" id="song-name">Blinding Lights</div>
-              <div style="font-size:.75rem;color:var(--muted)">The Weeknd · Living Room</div>
-              <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
-                <button onclick="prevSong()" style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--border);cursor:pointer;font-size:.7rem;color:var(--text);font-family:inherit">⏮</button>
-                <button id="playbtn" onclick="togglePlay()" style="width:34px;height:34px;border-radius:50%;background:var(--pink);border:none;cursor:pointer;font-size:.75rem;color:#fff;box-shadow:0 0 14px rgba(224,64,251,.4)">⏸</button>
-                <button onclick="nextSong()" style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--border);cursor:pointer;font-size:.7rem;color:var(--text);font-family:inherit">⏭</button>
+              <div class="media-title" id="song-name">Blinding Lights</div>
+              <div class="media-sub">The Weeknd · Living Room</div>
+              <div class="media-btns">
+                <div class="mc" onclick="prevSong()">⏮</div>
+                <div class="mc play" id="playbtn" onclick="togglePlay()">⏸</div>
+                <div class="mc" onclick="nextSong()">⏭</div>
               </div>
-              <div style="height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:10px;overflow:hidden"><div id="prog" style="height:100%;background:var(--pink);width:35%;border-radius:2px;transition:width .5s linear"></div></div>
+              <div class="prog-bar"><div class="prog-fill" id="prog" style="width:35%"></div></div>
             </div>
           </div>
-          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:center">
-            <div style="width:52px;height:52px;border-radius:12px;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.2);display:grid;place-items:center;font-size:1.4rem;flex-shrink:0">📻</div>
+          <div class="media-card">
+            <div class="media-art" style="background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2)">📻</div>
             <div style="flex:1">
-              <div style="font-size:.88rem;font-weight:600;margin-bottom:3px">Radio Swiss Pop</div>
-              <div style="font-size:.75rem;color:var(--muted)">Live Stream · Office Speaker</div>
-              <button onclick="toast('📻','Radio started in Office')" style="margin-top:10px;padding:7px 16px;border-radius:10px;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.2);color:var(--cyan);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit">▶ Play</button>
+              <div class="media-title">Radio Swiss Pop</div>
+              <div class="media-sub">Live · Office Speaker</div>
+              <button onclick="showToast('📻','Radio started')" style="margin-top:10px;padding:7px 16px;border-radius:10px;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2);color:var(--accent);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit">▶ Play</button>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- SENSORS -->
-      <div class="dash-page" id="dp-sensors">
-        <div class="dash-greeting"><h2>Sensors 🌡️</h2><p>Live readings from all rooms</p></div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;gap:12px"><span style="font-size:1.1rem">🌡️</span><div><div style="font-size:.83rem;font-weight:500">Temperature</div><div style="font-size:.7rem;color:var(--muted)">Living Room</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:70px;height:3px;background:rgba(255,255,255,.08);border-radius:2px"><div style="width:65%;height:100%;background:var(--orange);border-radius:2px"></div></div><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--orange)">22.1°C</span></div></div>
-          <div style="display:flex;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;gap:12px"><span style="font-size:1.1rem">💧</span><div><div style="font-size:.83rem;font-weight:500">Humidity</div><div style="font-size:.7rem;color:var(--muted)">Bathroom</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:70px;height:3px;background:rgba(255,255,255,.08);border-radius:2px"><div style="width:68%;height:100%;background:var(--cyan);border-radius:2px"></div></div><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--cyan)">68%</span></div></div>
-          <div style="display:flex;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;gap:12px"><span style="font-size:1.1rem">⚡</span><div><div style="font-size:.83rem;font-weight:500">Power Usage</div><div style="font-size:.7rem;color:var(--muted)">Whole Home</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:70px;height:3px;background:rgba(255,255,255,.08);border-radius:2px"><div style="width:42%;height:100%;background:var(--green);border-radius:2px"></div></div><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--green)">2.4 kW</span></div></div>
-          <div style="display:flex;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;gap:12px"><span style="font-size:1.1rem">🌬️</span><div><div style="font-size:.83rem;font-weight:500">CO₂</div><div style="font-size:.7rem;color:var(--muted)">Office</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:70px;height:3px;background:rgba(255,255,255,.08);border-radius:2px"><div style="width:35%;height:100%;background:var(--green);border-radius:2px"></div></div><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--green)">680 ppm</span></div></div>
-          <div style="display:flex;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;gap:12px"><span style="font-size:1.1rem">🔒</span><div><div style="font-size:.83rem;font-weight:500">Door Sensor</div><div style="font-size:.7rem;color:var(--muted)">Front Door</div></div><div style="margin-left:auto"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--green)">Closed ✓</span></div></div>
+        <!-- SENSORS -->
+        <div class="d-page" id="dp-sensors">
+          <div class="d-greet"><h3>Sensors 🌡️</h3><p>Live readings from all rooms</p></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">🌡️</span><div><div style="font-size:.83rem;font-weight:500">Temperature</div><div style="font-size:.7rem;color:var(--text2)">Living Room</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:65%;height:100%;background:var(--warm);border-radius:2px"></div></div><span style="font-weight:700;color:var(--warm);font-size:.9rem">22.1°C</span></div></div>
+            <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">💧</span><div><div style="font-size:.83rem;font-weight:500">Humidity</div><div style="font-size:.7rem;color:var(--text2)">Bathroom</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:68%;height:100%;background:var(--accent);border-radius:2px"></div></div><span style="font-weight:700;color:var(--accent);font-size:.9rem">68%</span></div></div>
+            <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">⚡</span><div><div style="font-size:.83rem;font-weight:500">Power Usage</div><div style="font-size:.7rem;color:var(--text2)">Whole Home</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:42%;height:100%;background:var(--green-c);border-radius:2px"></div></div><span style="font-weight:700;color:var(--green-c);font-size:.9rem">2.4 kW</span></div></div>
+            <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">🌬️</span><div><div style="font-size:.83rem;font-weight:500">CO₂</div><div style="font-size:.7rem;color:var(--text2)">Office</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:35%;height:100%;background:var(--green-c);border-radius:2px"></div></div><span style="font-weight:700;color:var(--green-c);font-size:.9rem">680 ppm</span></div></div>
+            <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">🔒</span><div><div style="font-size:.83rem;font-weight:500">Front Door</div><div style="font-size:.7rem;color:var(--text2)">Security sensor</div></div><div style="margin-left:auto"><span style="font-weight:700;color:var(--green-c);font-size:.9rem">Closed ✓</span></div></div>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Right sidebar -->
-    <div class="dash-right">
-      <div class="dash-widget">
-        <div class="dw-title">Weather · Egg SZ</div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><div class="weather-big">11°</div><div style="font-size:.78rem;color:var(--muted);margin-top:4px">Partly cloudy</div></div>
-          <div style="font-size:2.8rem">⛅</div>
+      <div class="d-right">
+        <div class="dw">
+          <div class="dw-t">Weather · Egg SZ</div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div><div class="weather-num">11°</div><div class="weather-desc">Partly cloudy</div></div>
+            <div style="font-size:2.6rem">⛅</div>
+          </div>
+          <div class="ww-row">
+            <div class="wwi"><strong>💨 14</strong>km/h</div>
+            <div class="wwi"><strong>💧 62</strong>% hum</div>
+            <div class="wwi"><strong>👁 10</strong>km</div>
+          </div>
+          <div class="fc-row">
+            <div class="fc-d">Mon<span>🌧️</span><strong>9°</strong></div>
+            <div class="fc-d">Tue<span>⛅</span><strong>13°</strong></div>
+            <div class="fc-d">Wed<span>☀️</span><strong>16°</strong></div>
+            <div class="fc-d">Thu<span>☀️</span><strong>18°</strong></div>
+            <div class="fc-d">Fri<span>🌥️</span><strong>14°</strong></div>
+          </div>
         </div>
-        <div class="weather-row">
-          <div class="wri"><strong>💨 14</strong>km/h</div>
-          <div class="wri"><strong>💧 62</strong>% hum</div>
-          <div class="wri"><strong>👁 10</strong>km vis</div>
-        </div>
-        <div class="fc-row">
-          <div class="fc-d">Mon<span>🌧️</span><strong>9°</strong></div>
-          <div class="fc-d">Tue<span>⛅</span><strong>13°</strong></div>
-          <div class="fc-d">Wed<span>☀️</span><strong>16°</strong></div>
-          <div class="fc-d">Thu<span>☀️</span><strong>18°</strong></div>
-          <div class="fc-d">Fri<span>🌥️</span><strong>14°</strong></div>
-        </div>
-      </div>
-      <div class="dash-widget">
-        <div class="dw-title">Recent Activity</div>
-        <div class="activity" id="d-activity">
-          <div class="act-item"><div class="act-dot" style="background:#e040fb"></div><div class="act-txt">Motion — Hallway</div><div class="act-t">2m</div></div>
-          <div class="act-item"><div class="act-dot" style="background:#ffb347"></div><div class="act-txt">Office lights on</div><div class="act-t">8m</div></div>
-          <div class="act-item"><div class="act-dot" style="background:#00e5ff"></div><div class="act-txt">Thermostat 21°C</div><div class="act-t">14m</div></div>
-          <div class="act-item"><div class="act-dot" style="background:#69ff47"></div><div class="act-txt">Front door closed</div><div class="act-t">32m</div></div>
-          <div class="act-item"><div class="act-dot" style="background:#ffd166"></div><div class="act-txt">TV turned on</div><div class="act-t">1h</div></div>
+        <div class="dw">
+          <div class="dw-t">Recent Activity</div>
+          <div class="log" id="d-log">
+            <div class="log-item"><div class="log-dot" style="background:var(--neon-p,#e040fb)"></div><div class="log-txt">Motion — Hallway</div><div class="log-t">2m</div></div>
+            <div class="log-item"><div class="log-dot" style="background:var(--warm)"></div><div class="log-txt">Office lights on</div><div class="log-t">8m</div></div>
+            <div class="log-item"><div class="log-dot" style="background:var(--accent)"></div><div class="log-txt">Thermostat 21°C</div><div class="log-t">14m</div></div>
+            <div class="log-item"><div class="log-dot" style="background:var(--green-c)"></div><div class="log-txt">Front door closed</div><div class="log-t">32m</div></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</section>
+  </section>
 
-<!-- PROCESS -->
-<section id="process" class="process">
-<div class="container">
-  <div class="reveal" style="text-align:center;margin-bottom:60px">
-    <div class="s-label" style="justify-content:center">The Process</div>
-    <h2 class="s-h">How we build your dashboard</h2>
-    <p class="s-p" style="margin:0 auto">A collaborative three-step process — from first conversation to final handoff, fully documented.</p>
-  </div>
-  <div class="steps">
-    <div class="step reveal reveal-d1"><div class="step-n">Step 01</div><div class="step-ico">🏠</div><h3>Discover your home</h3><p>Short intake: which devices, how many rooms, who uses it, what matters most.</p><div class="step-ghost">01</div></div>
-    <div class="step reveal reveal-d2"><div class="step-n">Step 02</div><div class="step-ico">🎨</div><h3>Design layout & theme</h3><p>I sketch the structure, choose a color theme, and propose a card layout. You review before any code is written.</p><div class="step-ghost">02</div></div>
-    <div class="step reveal reveal-d3"><div class="step-n">Step 03</div><div class="step-ico">⚡</div><h3>Build & implement</h3><p>YAML built, custom cards installed (layout-card, button-card, card-mod), every section documented.</p><div class="step-ghost">03</div></div>
-    <div class="step reveal reveal-d4"><div class="step-n">Step 04</div><div class="step-ico">🔧</div><h3>Refine & hand off</h3><p>One revision round included. You receive full YAML and documentation to maintain it yourself.</p><div class="step-ghost">04</div></div>
-  </div>
-</div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-<div class="container">
-  <div class="about-layout">
-    <div class="reveal">
-      <div class="s-label">About autoflow-lab</div>
-      <h2 class="s-h">Built by a Home Assistant power user.</h2>
-      <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-bottom:16px">I've been running Home Assistant for years — integrating dozens of devices, building custom Lovelace dashboards, and refining them until they feel intuitive for everyone in the house, not just me.</p>
-      <p style="color:var(--muted);font-size:.92rem;line-height:1.8">Every dashboard I build prioritizes <strong style="color:var(--text)">clarity for the whole family</strong>, clean YAML you can maintain, and a look that belongs on the wall — not in a developer's config directory.</p>
-      <div class="about-badges" style="margin-top:24px">
-        <span class="badge">🏠 Home Assistant</span>
-        <span class="badge">⚡ Lovelace</span>
-        <span class="badge">🎨 card-mod</span>
-        <span class="badge">📐 layout-card</span>
-        <span class="badge">🃏 button-card</span>
-        <span class="badge">🌈 Custom themes</span>
-        <span class="badge">📱 Wall panels</span>
-        <span class="badge">🖥️ Kiosk mode</span>
+  <!-- GARDEN TEASER -->
+  <section class="section garden-section">
+  <div class="wrap">
+    <div class="rv">
+      <div class="label">Coming Soon</div>
+      <h2>Garden & outdoor lighting</h2>
+      <p class="section-sub">Interactive outdoor view with realistic lighting simulation. Change colors, brightness, and scenes in real-time.</p>
+    </div>
+    <div class="garden-frame rv">
+      <div class="coming-soon-badge">Preview</div>
+      <div class="garden-scene">
+        <svg width="100%" viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" id="garden-svg" style="display:block">
+          <defs>
+            <radialGradient id="sky-g" cx="50%" cy="0%" r="100%">
+              <stop id="sky-s1" offset="0%" stop-color="#0a1a30"/>
+              <stop id="sky-s2" offset="100%" stop-color="#050c14"/>
+            </radialGradient>
+            <radialGradient id="gl1" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f5a623" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gl2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f5a623" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gl3" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f5a623" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- Sky -->
+          <rect width="900" height="360" fill="url(#sky-g)"/>
+          <!-- Stars -->
+          <circle cx="80" cy="40" r="1.2" fill="white" opacity=".5"/><circle cx="200" cy="20" r=".8" fill="white" opacity=".4"/><circle cx="350" cy="35" r="1" fill="white" opacity=".6"/><circle cx="500" cy="15" r="1.2" fill="white" opacity=".4"/><circle cx="650" cy="45" r=".8" fill="white" opacity=".5"/><circle cx="780" cy="25" r="1" fill="white" opacity=".4"/><circle cx="850" cy="50" r="1.2" fill="white" opacity=".6"/><circle cx="130" cy="70" r=".8" fill="white" opacity=".3"/><circle cx="420" cy="60" r=".9" fill="white" opacity=".4"/>
+          <!-- Ground -->
+          <rect y="260" width="900" height="100" fill="#0d1a0d"/>
+          <!-- Trees silhouettes -->
+          <ellipse cx="120" cy="220" rx="55" ry="90" fill="#0a150a"/>
+          <rect x="112" y="290" width="16" height="70" fill="#080f08"/>
+          <ellipse cx="280" cy="240" rx="40" ry="70" fill="#0a150a"/>
+          <rect x="274" y="300" width="12" height="60" fill="#080f08"/>
+          <ellipse cx="650" cy="225" rx="50" ry="85" fill="#0a150a"/>
+          <rect x="643" y="295" width="14" height="65" fill="#080f08"/>
+          <ellipse cx="800" cy="235" rx="45" ry="75" fill="#0a150a"/>
+          <rect x="793" y="300" width="13" height="60" fill="#080f08"/>
+          <!-- House -->
+          <polygon points="380,160 520,160 520,290 380,290" fill="#0d1208"/>
+          <polygon points="365,165 535,165 450,110" fill="#0a0f06"/>
+          <rect x="420" y="230" width="30" height="60" fill="#060a04"/>
+          <rect x="390" y="190" width="30" height="25" fill="#1a2a10"/>
+          <rect x="490" y="190" width="30" height="25" fill="#1a2a10"/>
+          <!-- Garden lights -->
+          <!-- Pole 1 -->
+          <rect x="219" y="260" width="3" height="60" fill="#1a1a1a"/>
+          <ellipse cx="220" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
+          <ellipse id="glow1" cx="220" cy="258" rx="60" ry="40" fill="url(#gl1)" opacity=".8"/>
+          <circle id="lamp1" cx="220" cy="258" r="5" fill="#f5a623"/>
+          <!-- Pole 2 -->
+          <rect x="449" y="260" width="3" height="60" fill="#1a1a1a"/>
+          <ellipse cx="450" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
+          <ellipse id="glow2" cx="450" cy="258" rx="60" ry="40" fill="url(#gl2)" opacity=".8"/>
+          <circle id="lamp2" cx="450" cy="258" r="5" fill="#f5a623"/>
+          <!-- Pole 3 -->
+          <rect x="679" y="260" width="3" height="60" fill="#1a1a1a"/>
+          <ellipse cx="680" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
+          <ellipse id="glow3" cx="680" cy="258" rx="60" ry="40" fill="url(#gl3)" opacity=".8"/>
+          <circle id="lamp3" cx="680" cy="258" r="5" fill="#f5a623"/>
+          <!-- Path -->
+          <polygon points="400,360 500,360 520,290 380,290" fill="#141e10" opacity=".6"/>
+        </svg>
+        <!-- Controls -->
+        <div class="garden-controls">
+          <span class="gc-label">Color:</span>
+          <div class="color-swatch active" style="background:#f5a623" data-color="#f5a623" onclick="setGardenColor(this,'warm')"></div>
+          <div class="color-swatch" style="background:#ffffff" data-color="#ffffff" onclick="setGardenColor(this,'white')"></div>
+          <div class="color-swatch" style="background:#00e5ff" data-color="#00e5ff" onclick="setGardenColor(this,'cyan')"></div>
+          <div class="color-swatch" style="background:#e040fb" data-color="#e040fb" onclick="setGardenColor(this,'pink')"></div>
+          <div class="color-swatch" style="background:#69ff47" data-color="#69ff47" onclick="setGardenColor(this,'green')"></div>
+          <div class="color-swatch" style="background:#ff3b30" data-color="#ff3b30" onclick="setGardenColor(this,'red')"></div>
+          <div class="gc-brightness">
+            <label>Brightness</label>
+            <input type="range" min="10" max="100" value="80" oninput="setGardenBrightness(this.value)">
+          </div>
+        </div>
       </div>
     </div>
-    <div class="stats-grid reveal reveal-d1">
-      <div class="stat-box"><div class="stat-num">100%</div><div class="stat-lbl">Custom — no templates</div></div>
-      <div class="stat-box"><div class="stat-num">48h</div><div class="stat-lbl">Average delivery</div></div>
-      <div class="stat-box"><div class="stat-num">✓</div><div class="stat-lbl">Family-friendly UI</div></div>
-      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-lbl">Revisions until perfect</div></div>
+  </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section" style="background:var(--bg2);border-top:1px solid var(--border)">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">The Process</div>
+      <h2>How we build your dashboard</h2>
+      <p class="section-sub">A collaborative process from first conversation to final handoff — documented, tested, and yours to keep.</p>
+    </div>
+    <div class="process-grid">
+      <div class="proc-step rv rv-d1"><div class="proc-n">Step 01</div><div class="proc-ico">🏠</div><h3>Discover your home</h3><p>Which devices, how many rooms, who uses it, what matters most.</p><div class="proc-ghost">1</div></div>
+      <div class="proc-step rv rv-d2"><div class="proc-n">Step 02</div><div class="proc-ico">🎨</div><h3>Design layout & theme</h3><p>I sketch the structure and color theme. You review before any code is written.</p><div class="proc-ghost">2</div></div>
+      <div class="proc-step rv rv-d3"><div class="proc-n">Step 03</div><div class="proc-ico">⚡</div><h3>Build & implement</h3><p>YAML built, custom cards installed, every section documented and clean.</p><div class="proc-ghost">3</div></div>
+      <div class="proc-step rv rv-d4"><div class="proc-n">Step 04</div><div class="proc-ico">🔧</div><h3>Refine & hand off</h3><p>One revision round included. Full YAML + docs to maintain it yourself.</p><div class="proc-ghost">4</div></div>
     </div>
   </div>
-</div>
-</section>
+  </section>
 
-<!-- CTA -->
-<div class="cta-section">
-<div class="cta-box reveal">
-  <h2>Ready for a dashboard<br>that actually delights you?</h2>
-  <p>Custom Home Assistant dashboard, designed around your home and the people who live there.</p>
-  <div class="cta-btns">
-    <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-p">Order on Fiverr</a>
-    <a href="mailto:hello@autoflow-lab.com" class="btn btn-g">✉ Send a message</a>
+  <!-- CTA -->
+  <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready for a dashboard<br>that delights you?</h2><p>Custom Home Assistant dashboards from $49. Delivered in 48 hours.</p><div class="cta-btns"><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-fill">Order on Fiverr →</a><a href="#smarthome-demo" class="btn btn-outline">Try demo first</a></div></div></div></section>
+
+  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>Custom Home Assistant Dashboards · autoflow-lab on Fiverr</p><p>© 2026 autoflow-lab</p></footer>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     AI & AUTOMATION TAB
+════════════════════════════════════════════════ -->
+<div class="page" id="page-ai">
+
+  <section class="hero">
+    <div class="hero-bg"><div class="orb orb1" style="background:radial-gradient(circle,#7c3aed,transparent 70%)"></div><div class="orb orb2" style="background:radial-gradient(circle,#00e5ff,transparent 70%)"></div></div>
+    <div class="hero-inner">
+      <div class="eyebrow">AI & Workflow Automation</div>
+      <h1>Stop doing the same<br>task <em>twice.</em></h1>
+      <p class="hero-sub">Custom workflow automations, AI agents, and chatbots that run 24/7 — so your team can focus on what actually matters.</p>
+      <div class="hero-actions">
+        <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-fill">View on Fiverr</a>
+        <a href="#ai-services" class="btn btn-outline">See services ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ai-services" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <div class="rv">
+      <div class="label">Services</div>
+      <h2>What I build for you</h2>
+      <p class="section-sub">From simple app connections to full AI agents — tested, documented, and ready to run.</p>
+    </div>
+    <div class="services-list">
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">⚡ Workflow Automation</div><div class="svc-desc">Connect your apps and eliminate manual steps. n8n or Make workflows built, tested and delivered in 48h with full documentation.</div><div class="svc-tags"><span class="svc-tag">n8n</span><span class="svc-tag">Make</span><span class="svc-tag">Zapier</span><span class="svc-tag">APIs</span><span class="svc-tag">Webhooks</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$49</div></div></div>
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">🤖 AI Agents</div><div class="svc-desc">Autonomous AI trained on your business data. Handles emails, qualifies leads, updates your CRM — without human input.</div><div class="svc-tags"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Claude</span><span class="svc-tag">LangChain</span><span class="svc-tag">RAG</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$149</div></div></div>
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">💬 Website Chatbot</div><div class="svc-desc">GPT-4o chatbot embedded on your site in 2 lines of code. Answers questions, captures leads, books appointments — in any language, 24/7.</div><div class="svc-tags"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Multilingual</span><span class="svc-tag">Lead capture</span><span class="svc-tag">CRM sync</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$99</div></div></div>
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">📧 Email Automation</div><div class="svc-desc">Smart sequences, AI-powered auto-replies, CRM sync. Every lead gets the right message at the right time.</div><div class="svc-tags"><span class="svc-tag">Gmail</span><span class="svc-tag">Outlook</span><span class="svc-tag">HubSpot</span><span class="svc-tag">Sequences</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$79</div></div></div>
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">📊 Data Pipelines</div><div class="svc-desc">Scrape, transform, enrich and sync data. Google Sheets, Airtable, databases — always in sync, always clean.</div><div class="svc-tags"><span class="svc-tag">Scraping</span><span class="svc-tag">Sheets</span><span class="svc-tag">Airtable</span><span class="svc-tag">SQL</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$99</div></div></div>
+    </div>
   </div>
-</div>
-</div>
+  </section>
 
-<footer>
-  <p>© 2026 <strong>autoflow-lab</strong> · Custom Home Assistant Dashboards · Built with care for smart homes.</p>
-</footer>
+  <section class="section" id="ai-pricing">
+  <div class="wrap centered">
+    <div class="rv"><div class="label">Pricing</div><h2>Simple, transparent pricing</h2><p class="section-sub">No hidden fees. Pick a plan or message me for a custom quote.</p></div>
+    <div class="pricing-grid rv">
+      <div class="price-card"><div class="pc-tier">Starter</div><div class="pc-price">$49<small>/project</small></div><div class="pc-desc">Simple automation, 1–2 apps</div><ul class="pc-list"><li>1 workflow (up to 5 steps)</li><li>2 app integrations</li><li>3 day delivery</li><li>2 revisions</li><li>Documentation included</li></ul><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="pc-btn ghost">Get Started</a></div>
+      <div class="price-card featured"><div class="featured-badge">Most Popular</div><div class="pc-tier">Professional</div><div class="pc-price">$149<small>/project</small></div><div class="pc-desc">Complex workflow or AI integration</div><ul class="pc-list"><li>1 complex workflow (unlimited steps)</li><li>Up to 5 app integrations</li><li>Error handling + monitoring</li><li>3 day delivery</li><li>Unlimited revisions</li><li>Video walkthrough + full docs</li><li>14 days support</li></ul><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="pc-btn solid">Hire Me Now</a></div>
+      <div class="price-card"><div class="pc-tier">Enterprise</div><div class="pc-price">$349<small>+</small></div><div class="pc-desc">Full system or custom AI agent</div><ul class="pc-list"><li>Complete automation system</li><li>AI agent with custom training</li><li>Unlimited integrations</li><li>5–7 day delivery</li><li>Priority 30-day support</li><li>Monthly maintenance available</li></ul><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="pc-btn ghost">Let's Talk</a></div>
+    </div>
+    <div class="faq-list rv" style="text-align:left">
+      <div class="faq-item"><div class="faq-q">Do I need technical knowledge?<div class="faq-ico">+</div></div><div class="faq-a">Not at all. You describe what you want in plain language — I handle all the technical implementation.</div></div>
+      <div class="faq-item"><div class="faq-q">What if my app isn't listed?<div class="faq-ico">+</div></div><div class="faq-a">If it has an API or webhook, I can almost certainly integrate it. Message me to confirm — free.</div></div>
+      <div class="faq-item"><div class="faq-q">What if it breaks after delivery?<div class="faq-ico">+</div></div><div class="faq-a">All packages include a support period. I also provide full documentation so you understand exactly how it works.</div></div>
+      <div class="faq-item"><div class="faq-q">How fast can you start?<div class="faq-ico">+</div></div><div class="faq-a">Usually within 24 hours of agreeing on scope. Free consultation first, no payment needed until we agree.</div></div>
+    </div>
+  </div>
+  </section>
+
+  <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready to automate<br>your business?</h2><p>Free consultation, no commitment. Most projects start within 24 hours.</p><div class="cta-btns"><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-fill">Message me on Fiverr →</a><button onclick="switchTab('smarthome',document.querySelector('.nav-tab'))" class="btn btn-outline">← Smart Home services</button></div></div></div></section>
+
+  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>AI & Automation Specialist · Available on Fiverr</p><p>© 2026 autoflow-lab</p></footer>
+</div>
 
 <!-- TOAST -->
-<div class="toast" id="toast-el"><span id="toast-ico">💡</span><span id="toast-txt"></span></div>
-
-<style>
-@keyframes spin { to { transform:rotate(360deg); } }
-</style>
+<div class="toast" id="toast"><span id="t-ico">💡</span> <span id="t-txt"></span></div>
 
 <script>
-// ── CLOCK & GREETING ──
+// ── THEME ──
+const html = document.documentElement;
+function toggleTheme(){
+  html.dataset.theme = html.dataset.theme==='dark'?'light':'dark';
+  localStorage.setItem('theme', html.dataset.theme);
+}
+(function(){const t=localStorage.getItem('theme');if(t)html.dataset.theme=t;})();
+
+// ── TABS ──
+function switchTab(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Re-trigger reveals
+  document.querySelectorAll('.rv').forEach(el=>el.classList.remove('in'));
+  setTimeout(()=>{document.querySelectorAll('#page-'+id+' .rv').forEach(el=>{if(inView(el))el.classList.add('in')});},50);
+}
+
+// ── SCROLL REVEAL ──
+function inView(el){const r=el.getBoundingClientRect();return r.top<window.innerHeight*.92;}
+function checkReveals(){document.querySelectorAll('.rv:not(.in)').forEach(el=>{if(inView(el))el.classList.add('in');});}
+window.addEventListener('scroll',checkReveals,{passive:true});
+setTimeout(checkReveals,100);
+
+// ── CLOCK ──
 function tick(){
-  const now=new Date(), h=now.getHours();
-  document.getElementById('d-greeting').textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+' 👋';
+  const h=new Date().getHours();
+  const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  const e=document.getElementById('d-greet');if(e)e.textContent=g+' 👋';
+  const now=new Date();
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  document.getElementById('d-date').textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+  const d=document.getElementById('d-date-txt');
+  if(d)d.textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
 }
 tick();
 
-// ── SCROLL REVEAL ──
-const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-// Hero immediate
-setTimeout(()=>{document.querySelectorAll('.hero-badge,.hero-h,.hero-sub,.hero-btns').forEach(el=>el.classList.add('in'))},100);
-
 // ── TOAST ──
 let tt;
-function toast(ico,txt){
+function showToast(ico,txt){
   clearTimeout(tt);
-  document.getElementById('toast-ico').textContent=ico;
-  document.getElementById('toast-txt').textContent=txt;
-  const el=document.getElementById('toast-el');
-  el.classList.add('show');
-  tt=setTimeout(()=>el.classList.remove('show'),2600);
+  document.getElementById('t-ico').textContent=ico;
+  document.getElementById('t-txt').textContent=txt;
+  const el=document.getElementById('toast');el.classList.add('show');
+  tt=setTimeout(()=>el.classList.remove('show'),2400);
 }
 
 // ── ROOM STATE ──
 const rooms={
-  living:{on:true,icon:'🛋️',name:'Living Room',bulbs:['b-living1','b-living2'],rect:'r-living'},
-  kitchen:{on:false,icon:'🍳',name:'Kitchen',bulbs:['b-kitchen1','b-kitchen2'],rect:'r-kitchen'},
-  office:{on:true,icon:'🏢',name:'Office',bulbs:['b-office1','b-office2'],rect:'r-office'},
-  bedroom:{on:false,icon:'🛏️',name:'Bedroom',bulbs:['b-bedroom1'],rect:'r-bedroom'},
-  bathroom:{on:false,icon:'🚿',name:'Bathroom',bulbs:['b-bathroom1'],rect:'r-bathroom'},
-  garden:{on:true,icon:'🌿',name:'Garden',bulbs:['b-garden1'],rect:'r-garden'},
+  living:{on:true,icon:'🛋️',name:'Living Room',rect:'r-living',bulbs:[['b-l1','#f5a623'],['b-l2','#f5a623']]},
+  kitchen:{on:false,icon:'🍳',name:'Kitchen',rect:'r-kitchen',bulbs:[['b-k1','#f5a623'],['b-k2','#f5a623']]},
+  office:{on:true,icon:'🏢',name:'Office',rect:'r-office',bulbs:[['b-o1','#f5a623'],['b-o2','#f5a623']]},
+  bedroom:{on:false,icon:'🛏️',name:'Bedroom',rect:'r-bedroom',bulbs:[['b-bd1','#f5a623']]},
+  bathroom:{on:false,icon:'🚿',name:'Bathroom',rect:'r-bathroom',bulbs:[['b-ba1','#f5a623']]},
+  garden:{on:true,icon:'🌿',name:'Garden',rect:'r-garden',bulbs:[['b-g1','#30d158'],['b-g2','#30d158']]},
 };
-const WARM='#ffb347', GREEN='#69ff47';
 
-function applyRoomState(key){
-  const r=rooms[key]; const on=r.on;
-  // Floor plan SVG
+function applyRoom(k){
+  const r=rooms[k]; const on=r.on;
   const rect=document.getElementById(r.rect);
   if(rect){
     if(on){
-      const c=key==='garden'?'rgba(105,255,71,.12)':'rgba(255,180,70,.18)';
-      const s=key==='garden'?'rgba(105,255,71,.35)':'#ffb347';
-      rect.setAttribute('fill',c); rect.setAttribute('stroke',s);
+      const oc=k==='garden'?'rgba(48,209,88,.1)':'rgba(245,166,35,.12)';
+      const sc=k==='garden'?'rgba(48,209,88,.35)':'#f5a623';
+      rect.setAttribute('fill',oc);rect.setAttribute('stroke',sc);
     } else {
-      rect.setAttribute('fill','rgba(255,255,255,.02)'); rect.setAttribute('stroke','rgba(255,255,255,.12)');
+      rect.setAttribute('fill','var(--border)');rect.setAttribute('stroke','var(--border2)');
     }
   }
-  r.bulbs.forEach(id=>{
-    const b=document.getElementById(id); if(!b)return;
-    if(on){
-      const c=key==='garden'?GREEN:WARM;
-      b.setAttribute('fill',c); b.setAttribute('filter',key==='garden'?'url(#gg)':'url(#gw)');
-    } else {
-      b.setAttribute('fill','rgba(255,255,255,.15)'); b.removeAttribute('filter');
-    }
+  r.bulbs.forEach(([id,c])=>{
+    const b=document.getElementById(id);if(!b)return;
+    if(on){b.setAttribute('fill',c);b.setAttribute('filter',k==='garden'?'url(#fg)':'url(#fw)');}
+    else{b.setAttribute('fill','var(--border2)');b.removeAttribute('filter');}
   });
   // Dashboard room cards
-  const dc=document.querySelector(`.dr-card[data-room="${key}"]`);
-  if(dc){ dc.classList.toggle('on',on); }
-  // Room list in sidebar
-  const rl=document.getElementById('room-list');
-  if(rl){ buildRoomList(); }
+  document.querySelectorAll(`.room-card[data-r="${k}"]`).forEach(c=>c.classList.toggle('on',on));
   // Light count
-  updateLightCount();
+  const cnt=Object.values(rooms).filter(r=>r.on).length;
+  const qe=document.getElementById('qs-lights');if(qe)qe.textContent=cnt;
+  buildRoomList();
+  addLog(on?'💡':'🌑',r.name+(on?' on':' off'));
 }
 
-function fpToggle(key){
-  rooms[key].on=!rooms[key].on;
-  applyRoomState(key);
-  toast(rooms[key].on?'💡':'🌑',rooms[key].name+' '+(rooms[key].on?'on':'off'));
-  addActivity(rooms[key].on?'💡':'🌑', rooms[key].name+(rooms[key].on?' on':' off'));
+function fpToggle(k){
+  rooms[k].on=!rooms[k].on;
+  applyRoom(k);
+  showToast(rooms[k].on?'💡':'🌑',rooms[k].name+' '+(rooms[k].on?'on':'off'));
 }
-
 function drToggle(card){
-  const key=card.dataset.room;
-  if(!rooms[key]){card.classList.toggle('on');toast('💡','Light toggled');return;}
-  rooms[key].on=!rooms[key].on;
-  applyRoomState(key);
-  toast(rooms[key].on?'💡':'🌑',rooms[key].name+' '+(rooms[key].on?'on':'off'));
-}
-
-function updateLightCount(){
-  const c=Object.values(rooms).filter(r=>r.on).length;
-  const el=document.getElementById('d-lights');
-  if(el) el.textContent=c;
+  const k=card.dataset.r; if(!k||!rooms[k])return;
+  rooms[k].on=!rooms[k].on; applyRoom(k);
+  showToast(rooms[k].on?'💡':'🌑',rooms[k].name+' '+(rooms[k].on?'on':'off'));
 }
 
 // ── ROOM LIST ──
 function buildRoomList(){
-  const rl=document.getElementById('room-list'); if(!rl)return;
+  const rl=document.getElementById('room-list');if(!rl)return;
   rl.innerHTML='';
-  Object.entries(rooms).forEach(([key,r])=>{
-    const div=document.createElement('div'); div.className='room-row';
-    div.innerHTML=`<div class="rr-icon">${r.icon}</div><div class="rr-name">${r.name}</div><div class="rr-state" style="color:${r.on?'var(--warm)':'var(--muted)'}">${r.on?'On':'Off'}</div><div class="rr-toggle ${r.on?'on':'off'}" onclick="event.stopPropagation();fpToggle('${key}')"></div>`;
-    div.onclick=()=>fpToggle(key);
-    rl.appendChild(div);
+  Object.entries(rooms).forEach(([k,r])=>{
+    const d=document.createElement('div');d.className='room-row';
+    d.innerHTML=`<div class="rr-ico">${r.icon}</div><div class="rr-name">${r.name}</div><div class="rr-dot ${r.on?'on':''}"></div><div class="rr-sw ${r.on?'on':'off'}" onclick="event.stopPropagation();fpToggle('${k}')"></div>`;
+    d.onclick=()=>fpToggle(k);
+    rl.appendChild(d);
   });
 }
 buildRoomList();
 
 // ── SCENES ──
 const SCENES={
-  relax:{on:['living','bedroom'],msg:'Relax — warm dim lights 🌅'},
-  normal:{on:['living','office','garden'],msg:'Normal mode ☀️'},
-  movie:{on:['living'],msg:'Movie Night — cinematic mood 🎬'},
-  alloff:{on:[],msg:'All lights off — Goodnight 🌙'},
+  relax:{on:['living','bedroom']},
+  normal:{on:['living','office','garden']},
+  movie:{on:['living']},
+  alloff:{on:[]},
 };
-function setScene(key,el){
+function setScene(key, el){
   const cfg=SCENES[key];
-  document.querySelectorAll('.demo-scene-btn,.scene-v-btn,.sq-btn').forEach(b=>b.classList.remove('active','on'));
-  if(el){el.classList.add('active'); el.classList.add('on');}
-  Object.keys(rooms).forEach(k=>{rooms[k].on=cfg.on.includes(k);applyRoomState(k);});
+  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b=>b.classList.remove('on','active'));
+  if(el){el.classList.add('on');}
+  Object.keys(rooms).forEach(k=>{rooms[k].on=cfg.on.includes(k);applyRoom(k);});
   buildRoomList();
-  toast('🎭',cfg.msg);
-  addActivity('🎭','Scene: '+key);
+  const labels={relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 All lights off'};
+  showToast('🎭',labels[key]);
+  addLog('🎭','Scene: '+key);
 }
 
 // ── DASHBOARD NAV ──
-function dShowPage(id,el){
-  document.querySelectorAll('.dash-page').forEach(p=>p.classList.remove('on'));
+function dPage(id,el){
+  document.querySelectorAll('.d-page').forEach(p=>p.classList.remove('on'));
   document.getElementById('dp-'+id).classList.add('on');
-  document.querySelectorAll('.dash-nav-item').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.d-nav-item').forEach(n=>n.classList.remove('on'));
   if(el)el.classList.add('on');
 }
 
 // ── ACTIVITY LOG ──
-const COLORS={'💡':'#ffb347','🌑':'rgba(255,255,255,.2)','🎭':'#69ff47','📻':'#00e5ff','🎵':'#e040fb','⏸':'#e040fb','⏭':'#00e5ff'};
-function addActivity(ico,txt){
-  const log=document.getElementById('d-activity'); if(!log)return;
-  const div=document.createElement('div'); div.className='act-item';
-  const col=COLORS[ico]||'rgba(255,255,255,.3)';
-  div.innerHTML=`<div class="act-dot" style="background:${col}"></div><div class="act-txt">${txt}</div><div class="act-t">now</div>`;
-  log.insertBefore(div,log.firstChild);
-  if(log.children.length>6)log.removeChild(log.lastChild);
+function addLog(ico,txt){
+  const log=document.getElementById('d-log');if(!log)return;
+  const d=document.createElement('div');d.className='log-item';
+  const cols={'💡':'var(--warm)','🌑':'var(--text3)','🎭':'var(--green-c)','🎵':'var(--neon-p,#e040fb)'};
+  d.innerHTML=`<div class="log-dot" style="background:${cols[ico]||'var(--accent)'}"></div><div class="log-txt">${txt}</div><div class="log-t">now</div>`;
+  log.insertBefore(d,log.firstChild);
+  if(log.children.length>5)log.removeChild(log.lastChild);
 }
 
 // ── MEDIA ──
 const SONGS=['Blinding Lights','Starboy','Save Your Tears','Die For You','In Your Eyes'];
-let songIdx=0, isPlaying=true, progW=35, progTimer;
-function startProg(){progTimer=setInterval(()=>{progW=progW>=100?0:progW+.05;document.getElementById('prog').style.width=progW+'%';},300);}
-function stopProg(){clearInterval(progTimer);}
-startProg();
+let sIdx=0, playing=true, pw=35, pt;
+function startPt(){pt=setInterval(()=>{pw=pw>=100?0:pw+.05;const p=document.getElementById('prog');if(p)p.style.width=pw+'%';},300);}
+startPt();
 function togglePlay(){
-  isPlaying=!isPlaying;
-  const btn=document.getElementById('playbtn'); const disc=document.getElementById('disc');
-  if(isPlaying){btn.textContent='⏸';btn.style.background='var(--pink)';disc.style.animation='spin 8s linear infinite';startProg();toast('🎵','Playing');}
-  else{btn.textContent='▶';btn.style.background='rgba(255,255,255,.06)';disc.style.animation='none';stopProg();toast('⏸','Paused');}
+  playing=!playing;
+  const b=document.getElementById('playbtn'); const d=document.getElementById('disc');
+  if(playing){if(b){b.textContent='⏸';}if(d)d.style.animation='spin 8s linear infinite';startPt();showToast('🎵','Playing');}
+  else{if(b){b.textContent='▶';}if(d)d.style.animation='none';clearInterval(pt);showToast('⏸','Paused');}
 }
-function nextSong(){songIdx=(songIdx+1)%SONGS.length;document.getElementById('song-name').textContent=SONGS[songIdx];toast('⏭',SONGS[songIdx]);addActivity('⏭',SONGS[songIdx]);}
-function prevSong(){songIdx=(songIdx-1+SONGS.length)%SONGS.length;document.getElementById('song-name').textContent=SONGS[songIdx];toast('⏮',SONGS[songIdx]);}
+function nextSong(){sIdx=(sIdx+1)%SONGS.length;const n=document.getElementById('song-name');if(n)n.textContent=SONGS[sIdx];showToast('⏭',SONGS[sIdx]);}
+function prevSong(){sIdx=(sIdx-1+SONGS.length)%SONGS.length;const n=document.getElementById('song-name');if(n)n.textContent=SONGS[sIdx];showToast('⏮',SONGS[sIdx]);}
+
+// ── GARDEN LIGHTING ──
+let gardenColor='#f5a623', gardenBrightness=80;
+function setGardenColor(el, preset){
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  gardenColor=el.dataset.color;
+  applyGardenLights();
+  showToast('🌿','Garden color changed');
+}
+function setGardenBrightness(val){
+  gardenBrightness=val;
+  applyGardenLights();
+}
+function applyGardenLights(){
+  const a=gardenBrightness/100;
+  ['lamp1','lamp2','lamp3'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.setAttribute('fill',gardenColor);
+  });
+  ['glow1','glow2','glow3'].forEach((id,i)=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.setAttribute('opacity', a*.85);
+    // Update gradient color
+    const g=document.getElementById('gl'+(i+1));
+    if(g){const s=g.querySelector('stop');if(s){s.setAttribute('stop-color',gardenColor);s.setAttribute('stop-opacity',a);}}
+  });
+  // Update sky/mood slightly
+  const sky=document.getElementById('sky-s1');
+  if(sky&&gardenColor==='#00e5ff')sky.setAttribute('stop-color','#0a1a30');
+  if(sky&&gardenColor==='#e040fb')sky.setAttribute('stop-color','#1a0a2a');
+  if(sky&&gardenColor==='#69ff47')sky.setAttribute('stop-color','#0a1a0a');
+  if(sky&&(gardenColor==='#f5a623'||gardenColor==='#ffffff'))sky.setAttribute('stop-color','#0a1a30');
+}
+
+// ── FAQ ──
+document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
+
+// ── DISK SPIN STYLE ──
+const style=document.createElement('style');style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(style);
+document.getElementById('disc').style.animation='spin 8s linear infinite';
 
 // ── INIT ──
-Object.keys(rooms).forEach(applyRoomState);
+Object.keys(rooms).forEach(applyRoom);
 </script>
 </body>
 </html>
