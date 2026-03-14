@@ -515,34 +515,86 @@ document.querySelectorAll('.fq').forEach(q=>q.addEventListener('click',()=>q.par
 function toggleChat(){document.getElementById('chat-win').classList.toggle('open')}
 
 // REAL AI CHATBOT
-const OPENROUTER_KEY='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';
-const SYSTEM=`You are the AI assistant for AutoFlow Studio, a freelance automation and AI agency. Be helpful, professional, and friendly. Always respond in the SAME language the user writes in (if they write German, reply German; French → French; English → English). Keep replies concise (2-4 sentences max). Our services: Workflow Automation from $49, AI Agents from $149, Website Chatbots from $99, Email Automation from $79, Data Pipelines from $99, Smart Home/IoT from $69. Delivery: 48-72 hours. For inquiries, direct users to Fiverr. Never make up information you don't know.`;
-let history=[{role:'system',content:SYSTEM}];
 
-async function sendMsg(){
+
+
+
+function sendMsg(){
   const inp=document.getElementById('ci');
   const msgs=document.getElementById('chat-msgs');
   const txt=inp.value.trim();
   if(!txt)return;
   inp.value='';
   const um=document.createElement('div');um.className='msg u';um.textContent=txt;msgs.appendChild(um);
-  const tm=document.createElement('div');tm.className='msg b typing';tm.textContent='…';msgs.appendChild(tm);
-  msgs.scrollTop=msgs.scrollHeight;
-  history.push({role:'user',content:txt});
-  try{
-    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+OPENROUTER_KEY,'HTTP-Referer':'https://autoflow-lab.github.io','X-Title':'AutoFlow Studio'},
-      body:JSON.stringify({model:'google/gemini-2.0-flash-exp:free',messages:history,max_tokens:200,temperature:.7})
-    });
-    const d=await res.json();
-    const reply=d.choices?.[0]?.message?.content||'Sorry, I had a connection issue. Please try again!';
-    history.push({role:'assistant',content:reply});
-    tm.textContent=reply;tm.classList.remove('typing');
-  }catch(e){
-    tm.textContent='Connection error — please try again in a moment!';tm.classList.remove('typing');
-  }
-  msgs.scrollTop=msgs.scrollHeight;
+  const tm=document.createElement('div');tm.className='msg b';
+  tm.textContent='…';msgs.appendChild(tm);msgs.scrollTop=msgs.scrollHeight;
+  setTimeout(()=>{tm.textContent=getReply(txt);msgs.scrollTop=msgs.scrollHeight},600+Math.random()*400);
+}
+
+function detectLang(t){
+  t=t.toLowerCase();
+  if(/ich|wie|was|kann|haben|bin|der|die|das|preis|kosten|schnell/.test(t))return'de';
+  if(/je|quoi|prix|combien|comment|pouvez/.test(t))return'fr';
+  return'en';
+}
+
+function getReply(msg){
+  const m=msg.toLowerCase();
+  const lang=detectLang(msg);
+
+  const R={
+    greeting:{
+      en:"Hey! 👋 I'm the AutoFlow assistant. Ask me anything about our services, pricing, or what we can automate for you!",
+      de:"Hey! 👋 Ich bin der AutoFlow Assistent. Frag mich alles über unsere Services, Preise oder was wir für dich automatisieren können!",
+      fr:"Hey! 👋 Je suis l'assistant AutoFlow. Demandez-moi tout sur nos services, tarifs ou ce qu'on peut automatiser pour vous!"
+    },
+    price:{
+      en:"Our pricing starts at $49 for simple workflow automations, $99 for AI chatbots, $149 for AI agents, and up to $349+ for full automation systems. All include documentation and revisions. Want a custom quote?",
+      de:"Unsere Preise starten bei $49 für einfache Automationen, $99 für AI Chatbots, $149 für AI Agents, und $349+ für komplette Systeme. Alles inklusive Dokumentation. Möchtest du ein individuelles Angebot?",
+      fr:"Nos tarifs commencent à 49$ pour des automatisations simples, 99$ pour des chatbots IA, 149$ pour des agents IA, et 349$+ pour des systèmes complets. Vous voulez un devis personnalisé?"
+    },
+    time:{
+      en:"Most projects are delivered in 48-72 hours. Complex AI systems may take up to 5 days. You'll always get an exact timeline before we start — no surprises.",
+      de:"Die meisten Projekte liefere ich in 48-72 Stunden. Komplexe KI-Systeme können bis zu 5 Tage dauern. Du bekommst immer einen genauen Zeitplan vorab.",
+      fr:"La plupart des projets sont livrés en 48-72h. Les systèmes IA complexes peuvent prendre jusqu'à 5 jours. Vous aurez toujours un délai précis avant de commencer."
+    },
+    automation:{
+      en:"I build automations with n8n, Make, or Zapier that connect your apps and run 24/7. Examples: Lead capture → CRM → email, new orders → Slack notifications, data sync between Google Sheets and Airtable. What's your use case?",
+      de:"Ich baue Automationen mit n8n, Make oder Zapier die deine Apps verbinden und 24/7 laufen. Zum Beispiel: Lead-Erfassung → CRM → E-Mail, neue Bestellungen → Slack, Datensync zwischen Tools. Was ist dein Anwendungsfall?",
+      fr:"Je crée des automatisations avec n8n, Make ou Zapier qui connectent vos applications 24h/24. Exemples: capture de leads → CRM → email, nouvelles commandes → Slack. Quel est votre cas d'usage?"
+    },
+    chatbot:{
+      en:"I build GPT-4o powered chatbots that embed on any website in 2 lines of code. They answer questions in any language, capture leads, book appointments, and sync with your CRM — all 24/7.",
+      de:"Ich baue GPT-4o Chatbots die sich mit 2 Zeilen Code in jede Website einbetten lassen. Sie antworten in jeder Sprache, erfassen Leads, buchen Termine und synchronisieren mit deinem CRM — alles 24/7.",
+      fr:"Je crée des chatbots GPT-4o qui s'intègrent sur n'importe quel site en 2 lignes de code. Ils répondent dans n'importe quelle langue, capturent des leads et synchronisent avec votre CRM."
+    },
+    agent:{
+      en:"AI agents are autonomous bots that work independently — reading emails, making decisions, updating your CRM, sending messages, all without human input. They're the next level beyond simple automation.",
+      de:"KI-Agents sind autonome Bots die selbstständig arbeiten — E-Mails lesen, Entscheidungen treffen, CRM aktualisieren, Nachrichten senden, alles ohne menschliches Eingreifen. Das nächste Level über einfache Automation.",
+      fr:"Les agents IA sont des bots autonomes qui travaillent indépendamment — lire des emails, prendre des décisions, mettre à jour votre CRM, envoyer des messages, sans intervention humaine."
+    },
+    start:{
+      en:"Easy! Just send me a message on Fiverr describing what you want to automate. I'll get back to you within a few hours with a plan and exact price. No commitment needed — the consultation is free.",
+      de:"Ganz einfach! Schick mir eine Nachricht auf Fiverr und beschreibe was du automatisieren möchtest. Ich melde mich innerhalb weniger Stunden mit einem Plan und Preis. Keine Verpflichtung — die Beratung ist kostenlos.",
+      fr:"Simple! Envoyez-moi un message sur Fiverr en décrivant ce que vous voulez automatiser. Je vous réponds en quelques heures avec un plan et un prix. Pas d'engagement — la consultation est gratuite."
+    },
+    default:{
+      en:"Great question! That's very likely something I can automate or build for you. Send me a message on Fiverr with the details and I'll give you a free assessment within a few hours.",
+      de:"Gute Frage! Das ist sehr wahrscheinlich etwas das ich für dich automatisieren oder bauen kann. Schick mir eine Nachricht auf Fiverr mit den Details und ich gebe dir innerhalb weniger Stunden eine kostenlose Einschätzung.",
+      fr:"Bonne question! C'est très probablement quelque chose que je peux automatiser pour vous. Envoyez-moi un message sur Fiverr avec les détails et je vous donnerai une évaluation gratuite."
+    }
+  };
+
+  const pick=(k)=>R[k][lang]||R[k]['en'];
+
+  if(/^(hi|hey|hello|hallo|salut|bonjour|yo|guten|grüezi|ciao)/.test(m))return pick('greeting');
+  if(/price|cost|how much|preis|kosten|wie viel|tarif|combien/.test(m))return pick('price');
+  if(/time|long|fast|quick|days|zeit|lange|schnell|délai|jours/.test(m))return pick('time');
+  if(/chatbot|chat bot/.test(m))return pick('chatbot');
+  if(/agent|autonom/.test(m))return pick('agent');
+  if(/automat|workflow|n8n|make|zapier|connect|verknüpf/.test(m))return pick('automation');
+  if(/start|begin|order|contact|hire|anfang|bestell|fiverr|kontakt/.test(m))return pick('start');
+  return pick('default');
 }
 </script>
 </body>
