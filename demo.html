@@ -361,6 +361,80 @@ footer{border-top:1px solid var(--border);padding:32px 6%;display:flex;justify-c
 .footer-logo{font-size:.9rem;font-weight:700;}
 .footer-logo em{color:var(--accent);font-style:normal;}
 footer p{font-size:.78rem;color:var(--text3);}
+
+/* ━━━━ MOBILE NAV ━━━━ */
+.nav-mob-menu{display:none;flex-direction:column;gap:0;position:fixed;inset-inline:0;top:52px;background:var(--bg);border-bottom:1px solid var(--border);z-index:199;padding:12px 0;}
+.nav-mob-menu.open{display:flex;}
+.nav-mob-item{padding:14px 6%;font-size:.9rem;font-weight:500;color:var(--text2);cursor:pointer;transition:background .15s;border:none;background:transparent;font-family:inherit;text-align:left;width:100%;text-decoration:none;display:block;}
+.nav-mob-item:hover,.nav-mob-item:active{background:var(--bg2);color:var(--text);}
+.nav-mob-item.accent{color:var(--accent);font-weight:700;}
+.nav-mob-sep{height:1px;background:var(--border);margin:6px 0;}
+.nav-hamburger{display:none;width:36px;height:36px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0;}
+.nav-hamburger span{width:16px;height:1.5px;background:var(--text);border-radius:2px;transition:all .3s;}
+
+/* ━━━━ MOBILE BREAKPOINTS ━━━━ */
+@media(max-width:780px){
+  .nav-center{display:none;}
+  .nav-contact{display:none;}
+  .nav-hamburger{display:flex;}
+  .nav-cta{padding:7px 14px;font-size:.77rem;}
+
+  h1{font-size:clamp(2.2rem,9vw,3.2rem);}
+  h2{font-size:clamp(1.6rem,6vw,2.2rem);}
+  .hero{padding:90px 5% 50px;}
+  .hero-sub{font-size:.95rem;}
+  .btn{padding:11px 20px;font-size:.85rem;}
+  .hero-actions{flex-direction:column;align-items:center;}
+  .hero-actions .btn{width:100%;max-width:320px;justify-content:center;}
+
+  .section{padding:64px 5%;}
+  .section-sm{padding:48px 5%;}
+
+  .feat-grid{grid-template-columns:1fr;}
+  .feat{padding:28px 24px;}
+
+  .demo-layout{grid-template-columns:1fr;gap:24px;}
+  .device{border-radius:16px;}
+  .fp-wrap{padding:10px;}
+
+  .qs-row{grid-template-columns:repeat(2,1fr);}
+  .rooms-grid{grid-template-columns:repeat(2,1fr);}
+
+  .process-grid{grid-template-columns:1fr 1fr;}
+  .proc-step{padding:24px 20px;}
+
+  .services-list{border-radius:var(--radius-sm);}
+  .svc-item{flex-direction:column;gap:10px;padding:20px;}
+  .svc-price{text-align:left;}
+
+  .pricing-grid{grid-template-columns:1fr;}
+
+  .cta-box{padding:48px 5%;}
+  .cta-btns{flex-direction:column;align-items:center;}
+  .cta-btns .btn{width:100%;max-width:320px;justify-content:center;}
+
+  .modal{border-radius:20px 20px 0 0;max-height:92svh;position:fixed;bottom:0;left:0;right:0;max-width:100%;}
+  .modal-overlay{align-items:flex-end;padding:0;}
+  .modal-body{padding:20px;}
+  .modal-head{padding:20px 20px 14px;}
+
+  footer{flex-direction:column;text-align:center;padding:24px 5%;gap:6px;}
+
+  .demo-side{display:none;}
+  .garden-controls{gap:7px;padding:14px;}
+  .gc-brightness{display:none;}
+}
+
+@media(max-width:480px){
+  .qs-row{grid-template-columns:1fr 1fr;}
+  .rooms-grid{grid-template-columns:1fr 1fr;}
+  .check-grid{grid-template-columns:1fr;}
+  .sq-row{gap:5px;}
+  .sq-btn{padding:7px 10px;font-size:.72rem;}
+  .scene-row-top{gap:4px;padding:8px 10px;}
+  .scene-pill{padding:4px 10px;font-size:.72rem;}
+  h1{font-size:2.1rem;}
+}
 </style>
 </head>
 <body>
@@ -376,8 +450,19 @@ footer p{font-size:.78rem;color:var(--text3);}
     <div class="theme-toggle" onclick="toggleTheme()" title="Light / Dark"></div>
     <button class="nav-contact" onclick="openContact()">✉ Contact</button>
     <button class="nav-cta" onclick="openOrder()">Order →</button>
+    <div class="nav-hamburger" onclick="toggleMobMenu()" id="hamburger"><span></span><span></span><span></span></div>
   </div>
 </nav>
+<!-- Mobile menu -->
+<div class="nav-mob-menu" id="mob-menu">
+  <button class="nav-mob-item" onclick="switchTab('smarthome',null);closeMobMenu()">🏠 Smart Home</button>
+  <button class="nav-mob-item" onclick="switchTab('ai',null);closeMobMenu()">⚡ AI & Automation</button>
+  <div class="nav-mob-sep"></div>
+  <button class="nav-mob-item accent" onclick="openOrder();closeMobMenu()">📋 Get a Quote →</button>
+  <button class="nav-mob-item" onclick="openContact();closeMobMenu()">✉ Contact Me</button>
+  <div class="nav-mob-sep"></div>
+  <a class="nav-mob-item" href="https://www.fiverr.com/autoflow-lab" target="_blank" onclick="closeMobMenu()">↗ Fiverr Profile</a>
+</div>
 
 <!-- ══════════════ ORDER MODAL ══════════════ -->
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeOrder()">
@@ -990,6 +1075,28 @@ footer p{font-size:.78rem;color:var(--text3);}
 <div class="toast" id="toast"><span id="t-ico">💡</span> <span id="t-txt"></span></div>
 
 <script>
+// ═══════════════════════════════════════ MOBILE NAV
+function toggleMobMenu(){
+  const m=document.getElementById('mob-menu');
+  const h=document.getElementById('hamburger');
+  m.classList.toggle('open');
+  // Animate hamburger → X
+  const lines=h.querySelectorAll('span');
+  if(m.classList.contains('open')){
+    lines[0].style.cssText='transform:rotate(45deg) translate(4px,4px)';
+    lines[1].style.cssText='opacity:0';
+    lines[2].style.cssText='transform:rotate(-45deg) translate(4px,-4px)';
+  } else {
+    lines.forEach(l=>l.style.cssText='');
+  }
+}
+function closeMobMenu(){
+  const m=document.getElementById('mob-menu');
+  const h=document.getElementById('hamburger');
+  m.classList.remove('open');
+  h&&h.querySelectorAll('span').forEach(l=>l.style.cssText='');
+}
+
 // ═══════════════════════════════════════ THEME
 const html=document.documentElement;
 function toggleTheme(){html.dataset.theme=html.dataset.theme==='dark'?'light':'dark';localStorage.setItem('theme',html.dataset.theme);}
@@ -1275,7 +1382,7 @@ function applyGarden(){
 document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
 
 // ═══════════════════════════════════════ ORDER MODAL
-const CONTACT_EMAIL='hello@autoflow-lab.com'; // ← Change to your real email
+const CONTACT_EMAIL='info@autoflow-lab.com'; // ← Replace with your real email
 
 function openOrder(){document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';calcPrice();}
 function closeOrder(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
