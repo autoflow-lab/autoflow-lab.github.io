@@ -3,562 +3,469 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoFlow Lab</title>
+<title>AutoFlow Lab — Smart Home & AI Automation</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   TOKENS — light default, dark overrides
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━━ TOKENS ━━━━ */
 :root {
-  --bg:       #ffffff;
-  --bg2:      #f5f5f7;
-  --bg3:      #ebebed;
-  --surface:  #ffffff;
-  --card:     #ffffff;
-  --border:   rgba(0,0,0,.08);
-  --border2:  rgba(0,0,0,.14);
-  --text:     #1d1d1f;
-  --text2:    #6e6e73;
-  --text3:    rgba(29,29,31,.45);
-  --accent:   #0071e3;
-  --accent-r: #0077ed;
-  --warm:     #f5a623;
-  --green-c:  #30d158;
-  --red-c:    #ff3b30;
+  --bg:#fff;--bg2:#f5f5f7;--bg3:#ebebed;--surface:#fff;--card:#fff;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.14);
+  --text:#1d1d1f;--text2:#6e6e73;--text3:rgba(29,29,31,.45);
+  --accent:#0071e3;--warm:#f5a623;--green-c:#30d158;--red-c:#ff3b30;
+  --neon-p:#e040fb;--neon-c:#00e5ff;--neon-g:#69ff47;
+  --radius:18px;--radius-sm:12px;
+  --shadow:0 2px 12px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.05);
+  --shadow-md:0 8px 32px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg:0 24px 80px rgba(0,0,0,.12);
+  --t:.35s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"]{
+  --bg:#000;--bg2:#0a0a0a;--bg3:#141414;--surface:#111;--card:#1a1a1a;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#f5f5f7;--text2:rgba(245,245,247,.55);--text3:rgba(245,245,247,.3);
+  --accent:#2997ff;--shadow:0 2px 12px rgba(0,0,0,.4);
+  --shadow-md:0 8px 32px rgba(0,0,0,.5);--shadow-lg:0 24px 80px rgba(0,0,0,.6);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:17px;line-height:1.47;-webkit-font-smoothing:antialiased;transition:background var(--t),color var(--t);overflow-x:hidden;}
 
-  /* neon (used in dark for glow effects) */
-  --neon-p: #e040fb;
-  --neon-c: #00e5ff;
-  --neon-g: #69ff47;
+/* ━━━━ NAV ━━━━ */
+.nav{position:fixed;inset-inline:0;top:0;z-index:200;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border);transition:background var(--t),border-color var(--t);}
+[data-theme="dark"] .nav{background:rgba(0,0,0,.82);}
+.nav-logo{font-size:.9rem;font-weight:700;letter-spacing:-.3px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:6px;transition:opacity .2s;}
+.nav-logo:hover{opacity:.7;}
+.nav-logo em{color:var(--accent);font-style:normal;}
+.nav-center{display:flex;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:980px;padding:3px;gap:2px;}
+.nav-tab{padding:5px 16px;border-radius:980px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .25s;border:none;background:transparent;color:var(--text2);font-family:inherit;}
+.nav-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.12),0 0 0 1px var(--border);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.theme-toggle{width:36px;height:22px;border-radius:11px;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;position:relative;transition:background var(--t);flex-shrink:0;}
+.theme-toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:var(--text);top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1),background var(--t);}
+[data-theme="dark"] .theme-toggle::after{transform:translateX(14px);}
+.nav-contact{padding:7px 14px;border-radius:980px;background:transparent;color:var(--text2);font-size:.8rem;font-weight:600;text-decoration:none;border:1px solid var(--border2);transition:all .2s;cursor:pointer;font-family:inherit;}
+.nav-contact:hover{background:var(--bg2);color:var(--text);}
+.nav-cta{padding:7px 18px;border-radius:980px;background:var(--accent);color:#fff;font-size:.8rem;font-weight:600;text-decoration:none;transition:opacity .2s;}
+.nav-cta:hover{opacity:.85;}
 
-  --radius:    18px;
-  --radius-sm: 12px;
-  --shadow: 0 2px 12px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.05);
-  --shadow-md: 0 8px 32px rgba(0,0,0,.1), 0 2px 8px rgba(0,0,0,.06);
-  --shadow-lg: 0 24px 80px rgba(0,0,0,.12);
+/* ━━━━ PAGES ━━━━ */
+.page{display:none;}
+.page.active{display:block;}
 
-  --t: .35s cubic-bezier(.4,0,.2,1);
-}
-[data-theme="dark"] {
-  --bg:       #000000;
-  --bg2:      #0a0a0a;
-  --bg3:      #141414;
-  --surface:  #111111;
-  --card:     #1a1a1a;
-  --border:   rgba(255,255,255,.07);
-  --border2:  rgba(255,255,255,.14);
-  --text:     #f5f5f7;
-  --text2:    rgba(245,245,247,.55);
-  --text3:    rgba(245,245,247,.3);
-  --accent:   #2997ff;
-  --accent-r: #0a84ff;
-  --shadow: 0 2px 12px rgba(0,0,0,.4);
-  --shadow-md: 0 8px 32px rgba(0,0,0,.5);
-  --shadow-lg: 0 24px 80px rgba(0,0,0,.6);
-}
+/* ━━━━ HERO ━━━━ */
+.hero{min-height:100svh;display:grid;place-items:center;text-align:center;padding:100px 6% 60px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;transition:opacity var(--t);}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,#2997ff,transparent 70%);top:-10%;left:-10%;}
+.orb2{width:500px;height:500px;background:radial-gradient(circle,#30d158,transparent 70%);bottom:0;right:-5%;}
+[data-theme="dark"] .orb1{background:radial-gradient(circle,rgba(224,64,251,.6),transparent 70%);opacity:.2;}
+[data-theme="dark"] .orb2{background:radial-gradient(circle,rgba(0,229,255,.6),transparent 70%);opacity:.15;}
+.hero-inner{position:relative;max-width:780px;}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:.78rem;font-weight:600;letter-spacing:.5px;margin-bottom:22px;opacity:0;transform:translateY(10px);animation:up .6s .1s ease forwards;}
+.eyebrow::before{content:'✦';opacity:.7;}
+h1{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:22px;opacity:0;transform:translateY(14px);animation:up .7s .2s ease forwards;}
+h1 em{font-style:normal;color:var(--accent);}
+[data-theme="dark"] h1 em{background:linear-gradient(135deg,var(--neon-c),var(--neon-p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:1.1rem;color:var(--text2);line-height:1.7;max-width:500px;margin:0 auto 36px;opacity:0;animation:up .7s .3s ease forwards;}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;opacity:0;animation:up .7s .4s ease forwards;}
+@keyframes up{to{opacity:1;transform:none;}}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ RESET */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 17px;
-  line-height: 1.47059;
-  -webkit-font-smoothing: antialiased;
-  transition: background var(--t), color var(--t);
-  overflow-x: hidden;
-}
+/* ━━━━ BUTTONS ━━━━ */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:13px 26px;border-radius:980px;font-size:.9rem;font-weight:600;text-decoration:none;transition:opacity .2s,transform .2s;cursor:pointer;border:none;font-family:inherit;}
+.btn:hover{opacity:.85;transform:scale(1.02);}
+.btn-fill{background:var(--accent);color:#fff;}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.btn-outline:hover{background:var(--bg2);}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ NAV */
-.nav {
-  position: fixed; inset-inline: 0; top: 0; z-index: 200;
-  height: 52px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 5%;
-  background: rgba(255,255,255,.82);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid var(--border);
-  transition: background var(--t), border-color var(--t);
-}
-[data-theme="dark"] .nav {
-  background: rgba(0,0,0,.82);
-}
-.nav-logo {
-  font-size: .9rem; font-weight: 700; letter-spacing: -.3px;
-  color: var(--text); text-decoration: none;
-}
-.nav-logo em { color: var(--accent); font-style: normal; }
-.nav-center {
-  display: flex; align-items: center;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 980px;
-  padding: 3px;
-  gap: 2px;
-}
-.nav-tab {
-  padding: 5px 16px; border-radius: 980px; font-size: .8rem; font-weight: 600;
-  cursor: pointer; transition: all .25s; border: none;
-  background: transparent; color: var(--text2); font-family: inherit;
-}
-.nav-tab.active {
-  background: var(--card); color: var(--text);
-  box-shadow: 0 1px 4px rgba(0,0,0,.12), 0 0 0 1px var(--border);
-}
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.theme-toggle {
-  width: 36px; height: 22px; border-radius: 11px;
-  background: var(--bg3); border: 1px solid var(--border2);
-  cursor: pointer; position: relative; transition: background var(--t);
-  flex-shrink: 0;
-}
-.theme-toggle::after {
-  content: ''; position: absolute;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--text); top: 2px; left: 2px;
-  transition: transform .3s cubic-bezier(.34,1.56,.64,1), background var(--t);
-  font-size: .6rem; display: flex; align-items: center; justify-content: center;
-}
-[data-theme="dark"] .theme-toggle::after { transform: translateX(14px); }
-.nav-cta {
-  padding: 7px 18px; border-radius: 980px;
-  background: var(--accent); color: #fff;
-  font-size: .8rem; font-weight: 600; text-decoration: none;
-  transition: opacity .2s;
-}
-.nav-cta:hover { opacity: .85; }
+/* ━━━━ SECTIONS ━━━━ */
+.section{padding:96px 6%;}
+.wrap{max-width:1080px;margin:0 auto;}
+.label{font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+h2{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px;}
+.section-sub{font-size:1rem;color:var(--text2);line-height:1.7;max-width:480px;margin-bottom:56px;}
+.centered{text-align:center;}
+.centered .section-sub{margin-inline:auto;}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.rv.in{opacity:1;transform:none;}
+.rv-d1{transition-delay:.08s;}.rv-d2{transition-delay:.16s;}.rv-d3{transition-delay:.24s;}.rv-d4{transition-delay:.32s;}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PAGES */
-.page { display: none; }
-.page.active { display: block; }
+/* ━━━━ FEAT GRID ━━━━ */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);}
+@media(max-width:640px){.feat-grid{grid-template-columns:1fr;}}
+.feat{background:var(--surface);padding:40px 36px;transition:background var(--t);}
+.feat:hover{background:var(--bg2);}
+.feat-ico{font-size:1.8rem;margin-bottom:16px;}
+.feat h3{font-size:1.05rem;font-weight:600;margin-bottom:10px;letter-spacing:-.02em;}
+.feat p{font-size:.9rem;color:var(--text2);line-height:1.65;}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ HERO */
-.hero {
-  min-height: 100svh; display: grid; place-items: center;
-  text-align: center; padding: 100px 6% 60px; position: relative; overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-}
-/* Light: soft gradient orbs */
-.orb {
-  position: absolute; border-radius: 50%; filter: blur(80px); opacity: .35;
-  transition: opacity var(--t);
-}
-.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #2997ff, transparent 70%); top: -10%; left: -10%; }
-.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, #30d158, transparent 70%); bottom: 0; right: -5%; }
-/* Dark: neon orbs */
-[data-theme="dark"] .orb1 { background: radial-gradient(circle, rgba(224,64,251,.6), transparent 70%); opacity: .2; }
-[data-theme="dark"] .orb2 { background: radial-gradient(circle, rgba(0,229,255,.6), transparent 70%); opacity: .15; }
+/* ━━━━ DEMO DEVICE ━━━━ */
+.demo-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.demo-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:start;}
+@media(max-width:900px){.demo-layout{grid-template-columns:1fr;}}
+.device{background:var(--bg3);border:1px solid var(--border2);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);transition:background var(--t),border-color var(--t),box-shadow var(--t);}
+[data-theme="dark"] .device{box-shadow:0 0 0 1px rgba(255,255,255,.04),0 40px 100px rgba(0,0,0,.8);}
+.device-bar{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);}
+.device-title{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);}
+.device-dots{display:flex;gap:5px;}
+.device-dots span{width:8px;height:8px;border-radius:50%;}
+.device-dots span:nth-child(1){background:var(--red-c);}
+.device-dots span:nth-child(2){background:var(--warm);}
+.device-dots span:nth-child(3){background:var(--green-c);}
+.scene-row-top{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;background:var(--surface);}
+.scene-pill{padding:5px 14px;border-radius:980px;font-size:.75rem;font-weight:600;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .2s;font-family:inherit;}
+.scene-pill.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.fp-wrap{padding:14px;}
+.fp-hint{font-size:.72rem;color:var(--text3);text-align:center;margin-bottom:8px;}
 
-.hero-inner { position: relative; max-width: 780px; }
-.eyebrow {
-  display: inline-flex; align-items: center; gap: 6px;
-  color: var(--accent); font-size: .78rem; font-weight: 600;
-  letter-spacing: .5px; margin-bottom: 22px;
-  opacity: 0; transform: translateY(10px);
-  animation: up .6s .1s ease forwards;
-}
-.eyebrow::before { content: '✦'; opacity: .7; }
-h1 {
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
-  font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
-  margin-bottom: 22px;
-  opacity: 0; transform: translateY(14px);
-  animation: up .7s .2s ease forwards;
-}
-h1 em { font-style: normal; color: var(--accent); }
-[data-theme="dark"] h1 em {
-  background: linear-gradient(135deg, var(--neon-c), var(--neon-p));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.hero-sub {
-  font-size: 1.1rem; color: var(--text2); line-height: 1.7;
-  max-width: 500px; margin: 0 auto 36px;
-  opacity: 0; animation: up .7s .3s ease forwards;
-}
-.hero-actions {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  opacity: 0; animation: up .7s .4s ease forwards;
-}
-@keyframes up { to { opacity:1; transform:none; } }
+/* ━━━━ COLOR PICKER POPOVER ━━━━ */
+.color-popover{position:absolute;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow-md);z-index:100;display:none;flex-direction:column;gap:8px;min-width:160px;}
+.color-popover.show{display:flex;}
+.cp-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);}
+.cp-swatches{display:flex;gap:7px;flex-wrap:wrap;}
+.cp-sw{width:24px;height:24px;border-radius:50%;cursor:pointer;transition:transform .2s,box-shadow .2s;border:2px solid transparent;}
+.cp-sw:hover{transform:scale(1.2);}
+.cp-sw.active{border-color:var(--text);box-shadow:0 0 0 1px var(--text);}
+.cp-brightness{display:flex;align-items:center;gap:6px;margin-top:2px;}
+.cp-brightness label{font-size:.68rem;color:var(--text2);}
+.cp-brightness input{flex:1;accent-color:var(--accent);cursor:pointer;}
+.fp-container{position:relative;}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ BUTTONS */
-.btn {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 13px 26px; border-radius: 980px; font-size: .9rem; font-weight: 600;
-  text-decoration: none; transition: opacity .2s, transform .2s;
-  cursor: pointer; border: none; font-family: inherit;
-}
-.btn:hover { opacity: .85; transform: scale(1.02); }
-.btn-fill { background: var(--accent); color: #fff; }
-.btn-outline {
-  background: transparent; color: var(--text);
-  border: 1px solid var(--border2);
-}
-.btn-outline:hover { background: var(--bg2); }
+/* ━━━━ SIDEBAR CARDS ━━━━ */
+.demo-side{display:flex;flex-direction:column;gap:16px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:background var(--t),border-color var(--t);}
+.card-title{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;}
+.scene-list{display:flex;flex-direction:column;gap:6px;}
+.scene-row-btn{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--radius-sm);background:var(--bg2);border:1px solid transparent;cursor:pointer;transition:all .2s;font-family:inherit;width:100%;text-align:left;}
+.scene-row-btn:hover{border-color:var(--border2);background:var(--bg3);}
+.scene-row-btn.on{background:rgba(0,113,227,.08);border-color:rgba(0,113,227,.25);}
+[data-theme="dark"] .scene-row-btn.on{background:rgba(0,229,255,.06);border-color:rgba(0,229,255,.2);}
+.srb-ico{font-size:1rem;flex-shrink:0;}
+.srb-name{font-size:.85rem;font-weight:600;color:var(--text);}
+.srb-desc{font-size:.72rem;color:var(--text2);}
+.room-list{display:flex;flex-direction:column;gap:4px;}
+.room-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s;}
+.room-row:hover{background:var(--bg2);}
+.rr-ico{font-size:.95rem;width:24px;text-align:center;}
+.rr-name{font-size:.83rem;font-weight:500;flex:1;color:var(--text);}
+.rr-sw{width:30px;height:18px;border-radius:9px;position:relative;cursor:pointer;transition:background .3s;background:var(--bg3);border:1px solid var(--border2);}
+.rr-sw::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.rr-sw.on{background:var(--green-c);border-color:var(--green-c);}
+[data-theme="dark"] .rr-sw.on{background:var(--warm);border-color:var(--warm);}
+.rr-sw.on::after{transform:translateX(12px);}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SECTION */
-.section { padding: 96px 6%; }
-.section-sm { padding: 72px 6%; }
-.wrap { max-width: 1080px; margin: 0 auto; }
-.label {
-  font-size: .72rem; font-weight: 700; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
-}
-h2 {
-  font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
-  letter-spacing: -.03em; line-height: 1.1; margin-bottom: 14px;
-}
-.section-sub {
-  font-size: 1rem; color: var(--text2); line-height: 1.7;
-  max-width: 480px; margin-bottom: 56px;
-}
-.centered { text-align: center; }
-.centered .section-sub { margin-inline: auto; }
+/* ━━━━ FULL DASH ━━━━ */
+.dash-section{background:var(--bg);}
+.dash-frame{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);display:grid;grid-template-columns:200px 1fr 240px;min-height:560px;}
+@media(max-width:1000px){.dash-frame{grid-template-columns:1fr;}.d-left,.d-right{display:none;}}
+.d-left{background:var(--surface);border-right:1px solid var(--border);padding:16px 0;transition:background var(--t);}
+.d-nav-lbl{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:0 12px 6px;}
+.d-nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);margin:1px 8px;cursor:pointer;font-size:.83rem;font-weight:500;color:var(--text2);transition:all .2s;}
+.d-nav-item:hover{background:var(--bg2);color:var(--text);}
+.d-nav-item.on{background:rgba(0,113,227,.1);color:var(--accent);}
+[data-theme="dark"] .d-nav-item.on{background:rgba(0,229,255,.08);color:var(--neon-c);}
+.d-nav-ico{font-size:.9rem;width:20px;text-align:center;}
+.d-main{padding:20px;overflow:hidden;background:var(--bg);transition:background var(--t);}
+.d-page{display:none;}
+.d-page.on{display:block;}
+.d-greet h3{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;}
+.d-greet p{font-size:.8rem;color:var(--text2);margin-bottom:18px;}
+.qs-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+@media(max-width:800px){.qs-row{grid-template-columns:repeat(2,1fr);}}
+.qs{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px;transition:background var(--t);}
+.qs-l{font-size:.65rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+.qs-v{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;}
+.qs-s{font-size:.68rem;color:var(--text2);margin-top:3px;}
+.sq-row{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;}
+.sq-btn{padding:7px 14px;border-radius:980px;font-size:.76rem;font-weight:600;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;}
+.sq-btn:hover{border-color:var(--border2);color:var(--text);}
+.sq-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+@media(max-width:700px){.rooms-grid{grid-template-columns:repeat(2,1fr);}}
+.room-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;}
+.room-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;pointer-events:none;}
+.room-card.on{border-color:rgba(245,166,35,.35);}
+.room-card.on::before{background:radial-gradient(circle at 20% 20%,rgba(245,166,35,.1),transparent 60%);opacity:1;}
+[data-theme="dark"] .room-card.on{border-color:rgba(255,180,70,.3);box-shadow:0 0 20px rgba(255,180,70,.08);}
+.room-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.rc-ico{font-size:1.2rem;margin-bottom:8px;}
+.rc-name{font-size:.8rem;font-weight:700;margin-bottom:3px;}
+.rc-info{font-size:.7rem;color:var(--text2);}
+.rc-sw-wrap{display:flex;justify-content:flex-end;margin-top:10px;}
+.rc-sw{width:30px;height:18px;border-radius:9px;position:relative;transition:background .3s;background:var(--bg2);border:1px solid var(--border2);}
+.rc-sw::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.room-card.on .rc-sw{background:var(--green-c);border-color:var(--green-c);}
+[data-theme="dark"] .room-card.on .rc-sw{background:var(--warm);border-color:var(--warm);}
+.room-card.on .rc-sw::after{transform:translateX(12px);}
+.d-right{background:var(--surface);border-left:1px solid var(--border);padding:16px;overflow-y:auto;transition:background var(--t);}
+.dw{margin-bottom:20px;}
+.dw-t{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.weather-num{font-size:2.5rem;font-weight:700;letter-spacing:-.03em;}
+.weather-desc{font-size:.8rem;color:var(--text2);margin-top:2px;}
+.ww-row{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.wwi{font-size:.72rem;color:var(--text2);text-align:center;}
+.wwi strong{display:block;color:var(--text);font-size:.8rem;margin-bottom:2px;}
+.fc-row{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.fc-d{text-align:center;font-size:.7rem;color:var(--text2);}
+.fc-d span{font-size:1.05rem;display:block;margin:3px 0;}
+.fc-d strong{color:var(--text);}
+.log{display:flex;flex-direction:column;gap:8px;}
+.log-item{display:flex;gap:8px;align-items:flex-start;font-size:.76rem;}
+.log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.log-txt{color:var(--text2);flex:1;line-height:1.5;}
+.log-t{color:var(--text3);white-space:nowrap;}
+.media-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;display:flex;gap:14px;align-items:center;margin-bottom:10px;transition:background var(--t);}
+.media-art{width:50px;height:50px;border-radius:10px;display:grid;place-items:center;font-size:1.5rem;flex-shrink:0;}
+.media-title{font-size:.88rem;font-weight:600;margin-bottom:3px;}
+.media-sub{font-size:.75rem;color:var(--text2);}
+.media-btns{display:flex;gap:7px;margin-top:10px;align-items:center;}
+.mc{width:28px;height:28px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;font-size:.7rem;color:var(--text);transition:all .2s;}
+.mc:hover{background:var(--bg3);}
+.mc.play{background:var(--accent);border-color:var(--accent);color:#fff;width:32px;height:32px;}
+[data-theme="dark"] .mc.play{background:var(--neon-p);border-color:var(--neon-p);box-shadow:0 0 12px rgba(224,64,251,.3);}
+.prog-bar{height:3px;background:var(--bg2);border-radius:2px;margin-top:10px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;}
+[data-theme="dark"] .prog-fill{background:var(--neon-p);}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ REVEAL */
-.rv { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
-.rv.in { opacity: 1; transform: none; }
-.rv-d1 { transition-delay: .08s; } .rv-d2 { transition-delay: .16s; } .rv-d3 { transition-delay: .24s; } .rv-d4 { transition-delay: .32s; }
+/* ━━━━ GARDEN ━━━━ */
+.garden-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.garden-frame{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);position:relative;background:#0d1a10;min-height:280px;display:flex;align-items:flex-end;}
+.coming-soon-badge{position:absolute;top:16px;right:16px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);padding:5px 12px;border-radius:980px;font-size:.72rem;font-weight:600;letter-spacing:.5px;}
+.garden-scene{width:100%;position:relative;}
+.garden-controls{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);padding:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.color-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .2s,border-color .2s;}
+.color-swatch:hover{transform:scale(1.18);}
+.color-swatch.active{border-color:#fff;}
+.gc-label{font-size:.76rem;font-weight:600;color:rgba(255,255,255,.65);margin-right:2px;}
+.gc-brightness{display:flex;align-items:center;gap:7px;margin-left:auto;}
+.gc-brightness label{font-size:.73rem;color:rgba(255,255,255,.6);}
+.gc-brightness input{width:75px;accent-color:var(--warm);cursor:pointer;}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FEATURE GRID */
-.feat-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
-@media(max-width:640px){ .feat-grid { grid-template-columns: 1fr; } }
-.feat {
-  background: var(--surface); padding: 40px 36px;
-  transition: background var(--t);
-}
-.feat:hover { background: var(--bg2); }
-.feat-ico { font-size: 1.8rem; margin-bottom: 16px; }
-.feat h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -.02em; }
-.feat p { font-size: .9rem; color: var(--text2); line-height: 1.65; }
+/* ━━━━ PROCESS ━━━━ */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin-top:56px;}
+@media(max-width:640px){.process-grid{grid-template-columns:1fr 1fr;}}
+.proc-step{background:var(--surface);padding:36px 28px;position:relative;transition:background var(--t);}
+.proc-n{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:18px;}
+.proc-ico{font-size:1.5rem;margin-bottom:14px;}
+.proc-step h3{font-size:.95rem;font-weight:700;margin-bottom:8px;letter-spacing:-.01em;}
+.proc-step p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.proc-ghost{position:absolute;bottom:12px;right:16px;font-size:3.5rem;font-weight:800;color:var(--text);opacity:.04;line-height:1;pointer-events:none;}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ DEMO DEVICE */
-.demo-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.demo-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 60px; align-items: start; }
-@media(max-width:900px){ .demo-layout { grid-template-columns: 1fr; } }
+/* ━━━━ AI SERVICES ━━━━ */
+.services-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin-top:56px;}
+.svc-item{background:var(--surface);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;transition:background var(--t);}
+.svc-item:hover{background:var(--bg2);}
+.svc-l{flex:1;}
+.svc-name{font-size:1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;}
+.svc-desc{font-size:.85rem;color:var(--text2);line-height:1.6;max-width:540px;}
+.svc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+.svc-tag{font-size:.7rem;font-weight:500;padding:3px 10px;border-radius:6px;background:var(--bg2);color:var(--text2);border:1px solid var(--border);}
+.svc-price{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:var(--accent);white-space:nowrap;text-align:right;}
+.svc-from{font-size:.68rem;color:var(--text3);font-weight:500;}
 
-.device {
-  background: var(--bg3); border: 1px solid var(--border2);
-  border-radius: 22px; overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  transition: background var(--t), border-color var(--t), box-shadow var(--t);
-}
-.device-bar {
-  padding: 11px 16px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--surface);
-}
-.device-title { font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); }
-.device-dots { display: flex; gap: 5px; }
-.device-dots span { width: 8px; height: 8px; border-radius: 50%; }
-.device-dots span:nth-child(1) { background: var(--red-c); }
-.device-dots span:nth-child(2) { background: var(--warm); }
-.device-dots span:nth-child(3) { background: var(--green-c); }
+/* ━━━━ PRICING ━━━━ */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;}
+@media(max-width:700px){.pricing-grid{grid-template-columns:1fr;}}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;position:relative;transition:all .3s;}
+.price-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);}
+.price-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow);}
+[data-theme="dark"] .price-card.featured{border-color:var(--neon-c);box-shadow:0 0 0 1px var(--neon-c),0 0 40px rgba(0,229,255,.08);}
+.featured-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:3px 14px;border-radius:980px;font-size:.7rem;font-weight:700;white-space:nowrap;}
+[data-theme="dark"] .featured-badge{background:var(--neon-c);color:#000;}
+.pc-tier{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.pc-price{font-size:2.8rem;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:4px;}
+.pc-price small{font-size:.9rem;font-weight:500;color:var(--text2);}
+.pc-desc{font-size:.83rem;color:var(--text2);margin-bottom:24px;}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:28px;}
+.pc-list li{font-size:.83rem;color:var(--text2);display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
+.pc-list li::before{content:'✓';color:var(--green-c);font-weight:700;flex-shrink:0;}
+.pc-btn{display:block;width:100%;text-align:center;padding:11px;border-radius:10px;font-size:.85rem;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:inherit;}
+.pc-btn.solid{background:var(--accent);color:#fff;}
+[data-theme="dark"] .pc-btn.solid{background:var(--neon-c);color:#000;}
+.pc-btn.ghost{border:1px solid var(--border2);color:var(--text2);background:transparent;}
+.pc-btn.ghost:hover{background:var(--bg2);color:var(--text);}
 
-/* Scene pills inside device */
-.scene-row { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap; background: var(--surface); }
-.scene-pill {
-  padding: 5px 14px; border-radius: 980px; font-size: .75rem; font-weight: 600;
-  background: var(--bg2); border: 1px solid var(--border); color: var(--text2);
-  cursor: pointer; transition: all .2s; font-family: inherit;
-}
-.scene-pill:hover { border-color: var(--border2); color: var(--text); }
-.scene-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+/* ━━━━ FAQ ━━━━ */
+.faq-list{max-width:640px;margin:48px auto 0;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 0;cursor:pointer;font-size:.9rem;font-weight:500;color:var(--text);gap:16px;transition:color .2s;user-select:none;}
+.faq-q:hover{color:var(--accent);}
+.faq-ico{width:24px;height:24px;border-radius:50%;border:1px solid var(--border2);display:grid;place-items:center;font-size:.7rem;flex-shrink:0;transition:all .3s;color:var(--text2);}
+.faq-item.open .faq-ico{transform:rotate(45deg);background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="dark"] .faq-item.open .faq-ico{background:var(--neon-c);border-color:var(--neon-c);color:#000;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s;font-size:.88rem;color:var(--text2);line-height:1.75;padding:0;}
+.faq-item.open .faq-a{max-height:160px;padding-bottom:18px;}
 
-/* Floor plan */
-.fp-wrap { padding: 16px; }
-.fp-hint { font-size: .73rem; color: var(--text3); text-align: center; margin-bottom: 10px; }
-#fp { width: 100%; border-radius: 14px; display: block; }
+/* ━━━━ CTA BOX ━━━━ */
+.cta-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:72px 6%;text-align:center;position:relative;overflow:hidden;}
+.cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(0,113,227,.06),transparent 60%);pointer-events:none;}
+[data-theme="dark"] .cta-box::before{background:radial-gradient(ellipse at 50% -20%,rgba(0,229,255,.08),transparent 60%);}
+.cta-box h2{position:relative;margin-bottom:14px;}
+.cta-box p{position:relative;font-size:.95rem;color:var(--text2);max-width:440px;margin:0 auto 32px;line-height:1.7;}
+.cta-btns{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
-/* Sidebar */
-.demo-side { display: flex; flex-direction: column; gap: 16px; }
-.card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px;
-  box-shadow: var(--shadow);
-  transition: background var(--t), border-color var(--t);
-}
-.card-title {
-  font-size: .72rem; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
-}
-.scene-list { display: flex; flex-direction: column; gap: 6px; }
-.scene-row-btn {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 14px; border-radius: var(--radius-sm);
-  background: var(--bg2); border: 1px solid transparent;
-  cursor: pointer; transition: all .2s; font-family: inherit; width: 100%; text-align: left;
-}
-.scene-row-btn:hover { border-color: var(--border2); background: var(--bg3); }
-.scene-row-btn.on { background: rgba(0,113,227,.08); border-color: rgba(0,113,227,.25); }
-[data-theme="dark"] .scene-row-btn.on { background: rgba(0,229,255,.06); border-color: rgba(0,229,255,.2); }
-.srb-ico { font-size: 1rem; flex-shrink: 0; }
-.srb-name { font-size: .85rem; font-weight: 600; color: var(--text); }
-.srb-desc { font-size: .72rem; color: var(--text2); }
+/* ━━━━ TOAST ━━━━ */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--surface);border:1px solid var(--border2);backdrop-filter:blur(20px);border-radius:12px;padding:10px 18px;font-size:.83rem;display:flex;align-items:center;gap:8px;z-index:999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:var(--shadow-md);color:var(--text);}
+.toast.show{transform:translateX(-50%) translateY(0);}
 
-/* Room list */
-.room-list { display: flex; flex-direction: column; gap: 4px; }
-.room-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px; border-radius: var(--radius-sm);
-  cursor: pointer; transition: background .15s;
-}
-.room-row:hover { background: var(--bg2); }
-.rr-ico { font-size: .95rem; width: 24px; text-align: center; }
-.rr-name { font-size: .83rem; font-weight: 500; flex: 1; color: var(--text); }
-.rr-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bg3); transition: background .3s, box-shadow .3s; }
-.rr-dot.on { background: var(--warm); }
-[data-theme="dark"] .rr-dot.on { background: var(--warm); box-shadow: 0 0 6px var(--warm); }
-.rr-sw { width: 30px; height: 18px; border-radius: 9px; position: relative; cursor: pointer; transition: background .3s; background: var(--bg3); border: 1px solid var(--border2); }
-.rr-sw::after { content: ''; position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
-.rr-sw.on { background: var(--green-c); border-color: var(--green-c); }
-[data-theme="dark"] .rr-sw.on { background: var(--warm); border-color: var(--warm); }
-.rr-sw.on::after { transform: translateX(12px); }
+/* ━━━━ ORDER MODAL ━━━━ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:300;display:none;place-items:center;padding:20px;}
+.modal-overlay.open{display:grid;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:24px;width:100%;max-width:680px;max-height:90svh;overflow-y:auto;box-shadow:var(--shadow-lg);position:relative;}
+.modal-head{padding:28px 28px 0;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;background:var(--card);padding-bottom:16px;border-bottom:1px solid var(--border);z-index:2;}
+.modal-head h3{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;}
+.modal-head p{font-size:.82rem;color:var(--text2);margin-top:3px;}
+.modal-close{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);cursor:pointer;font-size:1rem;display:grid;place-items:center;transition:background .2s;flex-shrink:0;color:var(--text);}
+.modal-close:hover{background:var(--bg3);}
+.modal-body{padding:24px 28px;}
+.form-section{margin-bottom:28px;}
+.form-section-title{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+.form-row.single{grid-template-columns:1fr;}
+.form-field{display:flex;flex-direction:column;gap:5px;}
+.form-field label{font-size:.78rem;font-weight:600;color:var(--text2);}
+.form-field input,.form-field select,.form-field textarea{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-size:.88rem;color:var(--text);font-family:inherit;transition:border-color .2s,background .2s;outline:none;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--accent);background:var(--surface);}
+.form-field select{cursor:pointer;}
+.form-field textarea{resize:vertical;min-height:80px;}
+.check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+@media(max-width:420px){.check-grid{grid-template-columns:1fr;}}
+.check-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s;user-select:none;}
+.check-item:hover{border-color:var(--border2);}
+.check-item.checked{background:rgba(0,113,227,.08);border-color:rgba(0,113,227,.3);}
+[data-theme="dark"] .check-item.checked{background:rgba(0,229,255,.06);border-color:rgba(0,229,255,.2);}
+.check-item input{display:none;}
+.check-box{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);display:grid;place-items:center;flex-shrink:0;transition:all .2s;font-size:.6rem;color:transparent;background:transparent;}
+.check-item.checked .check-box{background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="dark"] .check-item.checked .check-box{background:var(--neon-c);border-color:var(--neon-c);color:#000;}
+.check-label{font-size:.8rem;font-weight:500;color:var(--text);}
+.check-plus{font-size:.7rem;color:var(--accent);font-weight:700;margin-left:auto;}
+/* Estimate box */
+.estimate-box{background:rgba(0,113,227,.06);border:1px solid rgba(0,113,227,.2);border-radius:14px;padding:18px;margin-bottom:24px;}
+[data-theme="dark"] .estimate-box{background:rgba(0,229,255,.05);border-color:rgba(0,229,255,.15);}
+.est-label{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.est-price-row{display:flex;justify-content:space-between;align-items:center;}
+.est-price{font-size:2rem;font-weight:700;letter-spacing:-.02em;color:var(--text);}
+.est-note{font-size:.72rem;color:var(--text2);margin-top:5px;line-height:1.5;}
+.est-breakdown{margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,113,227,.12);display:flex;flex-direction:column;gap:4px;}
+[data-theme="dark"] .est-breakdown{border-top-color:rgba(0,229,255,.08);}
+.est-line{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text2);}
+.est-line strong{color:var(--text);}
+.submit-btn{width:100%;padding:14px;border-radius:12px;background:var(--accent);color:#fff;font-size:.95rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:opacity .2s,transform .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+[data-theme="dark"] .submit-btn{background:var(--neon-c);color:#000;}
+.submit-btn:hover{opacity:.88;transform:scale(1.01);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.form-note{font-size:.73rem;color:var(--text3);text-align:center;margin-top:10px;line-height:1.6;}
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FULL DASH */
-.dash-section { background: var(--bg); }
-.dash-frame {
-  border: 1px solid var(--border); border-radius: var(--radius);
-  overflow: hidden; box-shadow: var(--shadow-lg);
-  display: grid; grid-template-columns: 200px 1fr 240px;
-  min-height: 560px;
-}
-@media(max-width:1000px){ .dash-frame { grid-template-columns: 1fr; } .d-left,.d-right { display:none; } }
-
-.d-left { background: var(--surface); border-right: 1px solid var(--border); padding: 16px 0; transition: background var(--t); }
-.d-nav-lbl { font-size: .62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); padding: 0 12px 6px; }
-.d-nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--radius-sm); margin: 1px 8px; cursor: pointer; font-size: .83rem; font-weight: 500; color: var(--text2); transition: all .2s; }
-.d-nav-item:hover { background: var(--bg2); color: var(--text); }
-.d-nav-item.on { background: rgba(0,113,227,.1); color: var(--accent); }
-[data-theme="dark"] .d-nav-item.on { background: rgba(0,229,255,.08); color: var(--neon-c); }
-.d-nav-ico { font-size: .9rem; width: 20px; text-align: center; }
-
-.d-main { padding: 20px; overflow: hidden; background: var(--bg); transition: background var(--t); }
-.d-page { display: none; }
-.d-page.on { display: block; }
-.d-greet h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: 4px; }
-.d-greet p { font-size: .8rem; color: var(--text2); margin-bottom: 18px; }
-
-/* Quick stats */
-.qs-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
-@media(max-width:800px){ .qs-row { grid-template-columns: repeat(2,1fr); } }
-.qs { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px; transition: background var(--t); }
-.qs-l { font-size: .65rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 5px; }
-.qs-v { font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; }
-.qs-s { font-size: .68rem; color: var(--text2); margin-top: 3px; }
-
-/* Scene quick */
-.sq-row { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
-.sq-btn { padding: 7px 14px; border-radius: 980px; font-size: .76rem; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--text2); cursor: pointer; font-family: inherit; transition: all .2s; }
-.sq-btn:hover { border-color: var(--border2); color: var(--text); }
-.sq-btn.on { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-/* Room cards in dash */
-.rooms-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-@media(max-width:700px){ .rooms-grid { grid-template-columns: repeat(2,1fr); } }
-.room-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 14px; cursor: pointer;
-  transition: all .25s cubic-bezier(.34,1.56,.64,1); position: relative; overflow: hidden;
-}
-.room-card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .35s; pointer-events: none; }
-.room-card.on { border-color: rgba(245,166,35,.35); }
-.room-card.on::before { background: radial-gradient(circle at 20% 20%, rgba(245,166,35,.1), transparent 60%); opacity: 1; }
-[data-theme="dark"] .room-card.on { border-color: rgba(255,180,70,.3); }
-[data-theme="dark"] .room-card.on::before { background: radial-gradient(circle at 20% 20%, rgba(255,180,70,.08), transparent 60%); }
-.room-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.rc-ico { font-size: 1.2rem; margin-bottom: 8px; }
-.rc-name { font-size: .8rem; font-weight: 700; margin-bottom: 3px; }
-.rc-info { font-size: .7rem; color: var(--text2); }
-.rc-sw-wrap { display: flex; justify-content: flex-end; margin-top: 10px; }
-.rc-sw { width: 30px; height: 18px; border-radius: 9px; position: relative; transition: background .3s; background: var(--bg2); border: 1px solid var(--border2); }
-.rc-sw::after { content: ''; position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
-.room-card.on .rc-sw { background: var(--green-c); border-color: var(--green-c); }
-[data-theme="dark"] .room-card.on .rc-sw { background: var(--warm); border-color: var(--warm); }
-.room-card.on .rc-sw::after { transform: translateX(12px); }
-
-.d-right { background: var(--surface); border-left: 1px solid var(--border); padding: 16px; overflow-y: auto; transition: background var(--t); }
-.dw { margin-bottom: 20px; }
-.dw-t { font-size: .68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
-.weather-num { font-size: 2.5rem; font-weight: 700; letter-spacing: -.03em; }
-.weather-desc { font-size: .8rem; color: var(--text2); margin-top: 2px; }
-.ww-row { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-.wwi { font-size: .72rem; color: var(--text2); text-align: center; }
-.wwi strong { display: block; color: var(--text); font-size: .8rem; margin-bottom: 2px; }
-.fc-row { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-.fc-d { text-align: center; font-size: .7rem; color: var(--text2); }
-.fc-d span { font-size: 1.05rem; display: block; margin: 3px 0; }
-.fc-d strong { color: var(--text); }
-
-.log { display: flex; flex-direction: column; gap: 8px; }
-.log-item { display: flex; gap: 8px; align-items: flex-start; font-size: .76rem; }
-.log-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-.log-txt { color: var(--text2); flex: 1; line-height: 1.5; }
-.log-t { color: var(--text3); white-space: nowrap; }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ GARDEN TEASER */
-.garden-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.garden-frame {
-  border-radius: var(--radius); overflow: hidden;
-  box-shadow: var(--shadow-lg); position: relative;
-  background: #0d1a10; min-height: 280px;
-  display: flex; align-items: flex-end;
-}
-.garden-scene { width: 100%; position: relative; }
-.garden-bg {
-  width: 100%; display: block; min-height: 260px;
-  background: linear-gradient(to bottom, #0a1a12 0%, #1a3320 40%, #0d1a10 100%);
-  position: relative; overflow: hidden;
-}
-.garden-sky { position: absolute; inset: 0; transition: background 1.5s ease; }
-.garden-trees {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 70%;
-}
-.garden-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.5), transparent 60%); }
-.garden-lights-wrap { position: absolute; bottom: 30px; left: 0; right: 0; display: flex; justify-content: space-around; padding: 0 10%; }
-.garden-light {
-  width: 16px; height: 16px; border-radius: 50%; cursor: pointer;
-  transition: all .6s ease; box-shadow: 0 0 0 0 transparent;
-}
-.garden-controls {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,.8), transparent);
-  padding: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-}
-.color-swatch {
-  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
-  border: 2px solid transparent; transition: transform .2s, border-color .2s;
-}
-.color-swatch:hover { transform: scale(1.15); }
-.color-swatch.active { border-color: #fff; }
-.gc-label { font-size: .78rem; font-weight: 600; color: rgba(255,255,255,.7); margin-right: 4px; }
-.gc-brightness { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-.gc-brightness label { font-size: .75rem; color: rgba(255,255,255,.6); }
-.gc-brightness input { width: 80px; accent-color: var(--warm); cursor: pointer; }
-.coming-soon-badge { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.15); color: rgba(255,255,255,.8); padding: 5px 12px; border-radius: 980px; font-size: .72rem; font-weight: 600; letter-spacing: .5px; }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PROCESS */
-.process-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-top: 56px; }
-@media(max-width:640px){ .process-grid { grid-template-columns: 1fr 1fr; } }
-.proc-step { background: var(--surface); padding: 36px 28px; position: relative; transition: background var(--t); }
-.proc-n { font-size: .65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 18px; }
-.proc-ico { font-size: 1.5rem; margin-bottom: 14px; }
-.proc-step h3 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -.01em; }
-.proc-step p { font-size: .83rem; color: var(--text2); line-height: 1.65; }
-.proc-ghost { position: absolute; bottom: 12px; right: 16px; font-size: 3.5rem; font-weight: 800; color: var(--text); opacity: .04; line-height: 1; pointer-events: none; font-variant-numeric: tabular-nums; }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ AI TAB — SERVICES */
-.services-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-top: 56px; }
-.svc-item { background: var(--surface); padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; transition: background var(--t); cursor: default; }
-.svc-item:hover { background: var(--bg2); }
-.svc-l { flex: 1; }
-.svc-name { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; margin-bottom: 6px; }
-.svc-desc { font-size: .85rem; color: var(--text2); line-height: 1.6; max-width: 540px; }
-.svc-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
-.svc-tag { font-size: .7rem; font-weight: 500; padding: 3px 10px; border-radius: 6px; background: var(--bg2); color: var(--text2); border: 1px solid var(--border); }
-.svc-price { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; color: var(--accent); white-space: nowrap; text-align: right; }
-.svc-from { font-size: .68rem; color: var(--text3); font-weight: 500; }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PRICING */
-.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 56px; }
-@media(max-width:700px){ .pricing-grid { grid-template-columns: 1fr; } }
-.price-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; position: relative; transition: all .3s; }
-.price-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-.price-card.featured { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
-[data-theme="dark"] .price-card.featured { border-color: var(--neon-c); box-shadow: 0 0 0 1px var(--neon-c), 0 0 40px rgba(0,229,255,.08); }
-.featured-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 3px 14px; border-radius: 980px; font-size: .7rem; font-weight: 700; white-space: nowrap; }
-[data-theme="dark"] .featured-badge { background: var(--neon-c); color: #000; }
-.pc-tier { font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
-.pc-price { font-size: 2.8rem; font-weight: 700; letter-spacing: -.03em; line-height: 1; margin-bottom: 4px; }
-.pc-price small { font-size: .9rem; font-weight: 500; color: var(--text2); }
-.pc-desc { font-size: .83rem; color: var(--text2); margin-bottom: 24px; }
-.pc-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 28px; }
-.pc-list li { font-size: .83rem; color: var(--text2); display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
-.pc-list li::before { content: '✓'; color: var(--green-c); font-weight: 700; flex-shrink: 0; }
-.pc-btn { display: block; width: 100%; text-align: center; padding: 11px; border-radius: 10px; font-size: .85rem; font-weight: 600; text-decoration: none; transition: all .2s; }
-.pc-btn.solid { background: var(--accent); color: #fff; }
-[data-theme="dark"] .pc-btn.solid { background: var(--neon-c); color: #000; }
-.pc-btn.ghost { border: 1px solid var(--border2); color: var(--text2); }
-.pc-btn.ghost:hover { background: var(--bg2); color: var(--text); }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ CTA */
-.cta-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 72px 6%; text-align: center; position: relative; overflow: hidden; }
-.cta-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% -20%, rgba(0,113,227,.06), transparent 60%); pointer-events: none; }
-[data-theme="dark"] .cta-box::before { background: radial-gradient(ellipse at 50% -20%, rgba(0,229,255,.08), transparent 60%); }
-.cta-box h2 { position: relative; margin-bottom: 14px; }
-.cta-box p { position: relative; font-size: .95rem; color: var(--text2); max-width: 440px; margin: 0 auto 32px; line-height: 1.7; }
-.cta-btns { position: relative; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FAQ */
-.faq-list { max-width: 640px; margin: 48px auto 0; }
-.faq-item { border-bottom: 1px solid var(--border); }
-.faq-q {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 18px 0; cursor: pointer; font-size: .9rem; font-weight: 500;
-  color: var(--text); gap: 16px; transition: color .2s; user-select: none;
-}
-.faq-q:hover { color: var(--accent); }
-.faq-ico { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border2); display: grid; place-items: center; font-size: .7rem; flex-shrink: 0; transition: all .3s; color: var(--text2); }
-.faq-item.open .faq-ico { transform: rotate(45deg); background: var(--accent); border-color: var(--accent); color: #fff; }
-[data-theme="dark"] .faq-item.open .faq-ico { background: var(--neon-c); border-color: var(--neon-c); color: #000; }
-.faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .3s; font-size: .88rem; color: var(--text2); line-height: 1.75; padding: 0; }
-.faq-item.open .faq-a { max-height: 160px; padding-bottom: 18px; }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ FOOTER */
-footer { border-top: 1px solid var(--border); padding: 32px 6%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-.footer-logo { font-size: .9rem; font-weight: 700; }
-.footer-logo em { color: var(--accent); font-style: normal; }
-footer p { font-size: .78rem; color: var(--text3); }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ TOAST */
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--surface); border: 1px solid var(--border2); backdrop-filter: blur(20px); border-radius: 12px; padding: 10px 18px; font-size: .83rem; display: flex; align-items: center; gap: 8px; z-index: 999; transition: transform .4s cubic-bezier(.34,1.56,.64,1); white-space: nowrap; box-shadow: var(--shadow-md); color: var(--text); }
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ MEDIA */
-.media-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px; display: flex; gap: 14px; align-items: center; margin-bottom: 10px; transition: background var(--t); }
-.media-art { width: 50px; height: 50px; border-radius: 10px; display: grid; place-items: center; font-size: 1.5rem; flex-shrink: 0; }
-.media-title { font-size: .88rem; font-weight: 600; margin-bottom: 3px; }
-.media-sub { font-size: .75rem; color: var(--text2); }
-.media-btns { display: flex; gap: 7px; margin-top: 10px; align-items: center; }
-.mc { width: 28px; height: 28px; border-radius: 50%; background: var(--bg2); border: 1px solid var(--border); display: grid; place-items: center; cursor: pointer; font-size: .7rem; color: var(--text); transition: all .2s; }
-.mc:hover { background: var(--bg3); }
-.mc.play { background: var(--accent); border-color: var(--accent); color: #fff; width: 32px; height: 32px; }
-[data-theme="dark"] .mc.play { background: var(--neon-p); border-color: var(--neon-p); box-shadow: 0 0 12px rgba(224,64,251,.3); }
-.prog-bar { height: 3px; background: var(--bg2); border-radius: 2px; margin-top: 10px; overflow: hidden; }
-.prog-fill { height: 100%; background: var(--accent); border-radius: 2px; }
-[data-theme="dark"] .prog-fill { background: var(--neon-p); }
-
-/* Dark mode special glow effects */
-[data-theme="dark"] .room-card.on { box-shadow: 0 0 20px rgba(255,180,70,.08); }
-[data-theme="dark"] .device { box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 40px 100px rgba(0,0,0,.8); }
+footer{border-top:1px solid var(--border);padding:32px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-logo{font-size:.9rem;font-weight:700;}
+.footer-logo em{color:var(--accent);font-style:normal;}
+footer p{font-size:.78rem;color:var(--text3);}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ══════════════ NAV ══════════════ -->
 <nav class="nav">
-  <a href="#" class="nav-logo">autoflow<em>-lab</em></a>
+  <a href="#" class="nav-logo" onclick="goHome(event)">🏠 autoflow<em>-lab</em></a>
   <div class="nav-center">
     <button class="nav-tab active" onclick="switchTab('smarthome',this)">🏠 Smart Home</button>
     <button class="nav-tab" onclick="switchTab('ai',this)">⚡ AI & Automation</button>
   </div>
   <div class="nav-right">
-    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode"></div>
-    <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="nav-cta">Order on Fiverr</a>
+    <div class="theme-toggle" onclick="toggleTheme()" title="Light / Dark"></div>
+    <button class="nav-contact" onclick="openContact()">✉ Contact</button>
+    <button class="nav-cta" onclick="openOrder()">Order →</button>
   </div>
 </nav>
 
-<!-- ════════════════════════════════════════════════
-     SMART HOME TAB
-════════════════════════════════════════════════ -->
+<!-- ══════════════ ORDER MODAL ══════════════ -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeOrder()">
+<div class="modal">
+  <div class="modal-head">
+    <div>
+      <h3>Get a Quote 💬</h3>
+      <p>Configure your project — get an instant estimate. No commitment.</p>
+    </div>
+    <button class="modal-close" onclick="closeOrder()">✕</button>
+  </div>
+  <div class="modal-body">
+    <!-- Service -->
+    <div class="form-section">
+      <div class="form-section-title">Service</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>What do you need?</label>
+          <select id="q-service" onchange="calcPrice()">
+            <option value="sh-basic">🏠 Smart Home — Basic Dashboard ($49)</option>
+            <option value="sh-full" selected>🏠 Smart Home — Full Dashboard ($99)</option>
+            <option value="sh-premium">🏠 Smart Home — Premium + Floor Plan ($149)</option>
+            <option value="ai-workflow">⚡ AI — Workflow Automation (from $49)</option>
+            <option value="ai-agent">🤖 AI — Chatbot / AI Agent (from $99)</option>
+            <option value="ai-enterprise">🚀 AI — Enterprise System (from $349)</option>
+          </select>
+        </div>
+        <div class="form-field" id="q-rooms-wrap">
+          <label>How many rooms?</label>
+          <select id="q-rooms" onchange="calcPrice()">
+            <option value="1">1–2 rooms</option>
+            <option value="2" selected>3–4 rooms</option>
+            <option value="3">5–6 rooms</option>
+            <option value="4">7+ rooms</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="form-section" id="sh-features">
+      <div class="form-section-title">Smart Home Features (add-ons)</div>
+      <div class="check-grid">
+        <label class="check-item" onclick="toggleCheck(this,20)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🗺️ Interactive Floor Plan</span><span class="check-plus">+$20</span></label>
+        <label class="check-item" onclick="toggleCheck(this,15)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🎬 Scenes & Automations</span><span class="check-plus">+$15</span></label>
+        <label class="check-item" onclick="toggleCheck(this,10)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🎵 Media Controls</span><span class="check-plus">+$10</span></label>
+        <label class="check-item" onclick="toggleCheck(this,10)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🌡️ Sensor Dashboard</span><span class="check-plus">+$10</span></label>
+        <label class="check-item" onclick="toggleCheck(this,15)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🌿 Garden / Outdoor View</span><span class="check-plus">+$15</span></label>
+        <label class="check-item" onclick="toggleCheck(this,10)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🌤️ Weather Widget</span><span class="check-plus">+$10</span></label>
+        <label class="check-item" onclick="toggleCheck(this,0)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">📱 Mobile Optimised</span><span class="check-plus">free</span></label>
+        <label class="check-item" onclick="toggleCheck(this,25)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🎨 Custom Theme/Brand Colors</span><span class="check-plus">+$25</span></label>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="form-section">
+      <div class="form-section-title">Your Contact Details</div>
+      <div class="form-row">
+        <div class="form-field"><label>Name *</label><input type="text" id="q-name" placeholder="Your name"></div>
+        <div class="form-field"><label>Email *</label><input type="email" id="q-email" placeholder="you@example.com"></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-field"><label>Anything else?</label><textarea id="q-notes" placeholder="e.g. existing devices, special requests, HA version..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- Estimate -->
+    <div class="estimate-box">
+      <div class="est-label">Estimated Price (non-binding)</div>
+      <div class="est-price-row">
+        <div class="est-price" id="est-total">$99</div>
+        <div style="font-size:.75rem;color:var(--text2);text-align:right">Typical delivery<br><strong style="color:var(--text)">2–4 days</strong></div>
+      </div>
+      <div class="est-note">This is an indicative estimate. Final price confirmed after a free consultation.</div>
+      <div class="est-breakdown" id="est-breakdown"></div>
+    </div>
+
+    <button class="submit-btn" onclick="submitQuote()">
+      <span id="submit-ico">📩</span> Send Quote Request
+    </button>
+    <p class="form-note">You'll receive a confirmation email within 24h. No payment required now. By submitting you agree to be contacted about your project.</p>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ SMART HOME PAGE ══════════════ -->
 <div class="page active" id="page-smarthome">
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
     <div class="hero-inner">
@@ -566,8 +473,8 @@ footer p { font-size: .78rem; color: var(--text3); }
       <h1>Your home, <em>beautifully</em><br>in control.</h1>
       <p class="hero-sub">Custom Lovelace dashboards that look stunning, feel intuitive, and work perfectly — for everyone in the house.</p>
       <div class="hero-actions">
-        <a href="#smarthome-demo" class="btn btn-fill">▶ Try interactive demo</a>
-        <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-outline">Order on Fiverr</a>
+        <button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button>
+        <a href="#smarthome-demo" class="btn btn-outline">▶ Try live demo</a>
       </div>
     </div>
   </section>
@@ -581,9 +488,9 @@ footer p { font-size: .78rem; color: var(--text3); }
       <p class="section-sub">Built with precision, custom cards, and your whole family in mind.</p>
     </div>
     <div class="feat-grid">
-      <div class="feat rv rv-d1"><div class="feat-ico">🗺️</div><h3>Interactive Floor Plan</h3><p>See your home at a glance. Tap any room to toggle lights, adjust scenes — on a visual map that mirrors your actual layout.</p></div>
+      <div class="feat rv rv-d1"><div class="feat-ico">🗺️</div><h3>Interactive Floor Plan</h3><p>See your home at a glance. Tap any room to toggle lights or choose a color — on a visual map that mirrors your actual layout.</p></div>
       <div class="feat rv rv-d2"><div class="feat-ico">✦</div><h3>Pixel-perfect Lovelace Design</h3><p>Custom themes, card-mod styling, careful typography. Your dashboard looks like an Apple product, not a config file.</p></div>
-      <div class="feat rv rv-d3"><div class="feat-ico">🎬</div><h3>Smart Scenes & Automations</h3><p>One-tap scenes for Relax, Movie Night, Work, Goodnight. Automations included, fully documented in clean YAML.</p></div>
+      <div class="feat rv rv-d3"><div class="feat-ico">🎬</div><h3>Smart Scenes & Automations</h3><p>One-tap scenes for Relax, Movie Night, Work, Goodnight. Automations included, clean YAML docs.</p></div>
       <div class="feat rv rv-d4"><div class="feat-ico">📱</div><h3>All Screens Supported</h3><p>Wall panels, tablets, iPhones, desktop. Large tap targets, responsive grids, readable at any distance.</p></div>
     </div>
   </div>
@@ -593,9 +500,9 @@ footer p { font-size: .78rem; color: var(--text3); }
   <section class="section demo-section" id="smarthome-demo">
   <div class="wrap">
     <div class="rv">
-      <div class="label">Interactive</div>
-      <h2>Try the live demo</h2>
-      <p class="section-sub">Tap any room on the floor plan to toggle lights. Use the scenes to change your whole home in one tap.</p>
+      <div class="label">Interactive Demo</div>
+      <h2>Try it yourself</h2>
+      <p class="section-sub">Click any room to toggle lights. Long-press (or right-click) to choose a light color.</p>
     </div>
     <div class="demo-layout">
       <div class="device rv rv-d1">
@@ -603,55 +510,263 @@ footer p { font-size: .78rem; color: var(--text3); }
           <div class="device-title">MY HOME · DASHBOARD</div>
           <div class="device-dots"><span></span><span></span><span></span></div>
         </div>
-        <div class="scene-row">
+        <div class="scene-row-top">
           <button class="scene-pill" onclick="setScene('relax',this)">🌅 Relax</button>
           <button class="scene-pill on" onclick="setScene('normal',this)">☀️ Normal</button>
           <button class="scene-pill" onclick="setScene('movie',this)">🎬 Movie</button>
           <button class="scene-pill" onclick="setScene('alloff',this)">🌙 Night</button>
         </div>
         <div class="fp-wrap">
-          <div class="fp-hint">Tap a room to toggle lights</div>
-          <svg id="fp" viewBox="0 0 520 330" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <filter id="fw"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <filter id="fg"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            </defs>
-            <rect width="520" height="330" rx="12" fill="var(--bg3)"/>
-            <!-- Grid lines -->
-            <line x1="220" y1="10" x2="220" y2="320" stroke="var(--border)" stroke-width="1"/>
-            <line x1="380" y1="10" x2="380" y2="175" stroke="var(--border)" stroke-width="1"/>
-            <line x1="10" y1="180" x2="510" y2="180" stroke="var(--border)" stroke-width="1"/>
-            <line x1="170" y1="180" x2="170" y2="320" stroke="var(--border)" stroke-width="1"/>
-            <line x1="290" y1="180" x2="290" y2="320" stroke="var(--border)" stroke-width="1"/>
-            <!-- Rooms -->
-            <rect id="r-living" x="12" y="12" width="196" height="156" rx="8" fill="rgba(245,166,35,.12)" stroke="#f5a623" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('living')"/>
-            <text x="110" y="78" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text)" opacity=".75" style="pointer-events:none">Living Room</text>
-            <circle id="b-l1" cx="75" cy="105" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('living')"/>
-            <circle id="b-l2" cx="145" cy="105" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('living')"/>
+          <div class="fp-hint">Click: toggle · Long-press: choose color</div>
+          <div class="fp-container" id="fp-container">
+            <!-- Color Picker Popover -->
+            <div class="color-popover" id="color-popover">
+              <div class="cp-title" id="cp-room-label">Room Color</div>
+              <div class="cp-swatches" id="cp-swatches"></div>
+              <div class="cp-brightness">
+                <label>Bright</label>
+                <input type="range" min="20" max="100" value="80" id="cp-bright" oninput="applyRoomBrightness(this.value)">
+              </div>
+            </div>
+            <!-- DETAILED FLOOR PLAN SVG -->
+<svg id="fp" viewBox="0 0 540 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;display:block;cursor:pointer">
+  <defs>
+    <filter id="glow-w"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow-soft"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <!-- Room light fill patterns (animated) -->
+    <radialGradient id="rg-living" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#f5a623" stop-opacity=".18"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rg-kitchen" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rg-office" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#f5a623" stop-opacity=".18"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rg-bedroom" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rg-bathroom" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rg-garden" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#30d158" stop-opacity=".2"/><stop offset="100%" stop-color="#30d158" stop-opacity="0"/></radialGradient>
+  </defs>
 
-            <rect id="r-kitchen" x="224" y="12" width="144" height="120" rx="8" fill="var(--border)" stroke="var(--border2)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('kitchen')"/>
-            <text x="296" y="65" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text2)" style="pointer-events:none">Kitchen</text>
-            <circle id="b-k1" cx="268" cy="90" r="7" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('kitchen')"/>
-            <circle id="b-k2" cx="324" cy="90" r="7" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('kitchen')"/>
+  <!-- Floor background -->
+  <rect width="540" height="340" fill="#f0ede8"/>
 
-            <rect id="r-office" x="384" y="12" width="124" height="156" rx="8" fill="rgba(245,166,35,.12)" stroke="#f5a623" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('office')"/>
-            <text x="446" y="80" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text)" opacity=".75" style="pointer-events:none">Office</text>
-            <circle id="b-o1" cx="420" cy="108" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('office')"/>
-            <circle id="b-o2" cx="470" cy="108" r="7" fill="#f5a623" filter="url(#fw)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('office')"/>
+  <!-- ══ LIVING ROOM ══ x:10 y:10 w:200 h:170 -->
+  <g id="room-living" onclick="fpClick('living',event)" oncontextmenu="fpLongPress('living',event)" ontouchstart="fpTouchStart('living',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+    <rect x="10" y="10" width="200" height="170" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
+    <rect id="light-living" x="10" y="10" width="200" height="170" rx="6" fill="url(#rg-living)" style="pointer-events:none;transition:opacity .5s" opacity="1"/>
+    <!-- Sofa (L-shape) -->
+    <rect x="22" y="90" width="90" height="28" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="22" y="90" width="15" height="40" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="97" y="90" width="15" height="40" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="22" y="130" width="90" height="15" rx="4" fill="#a09080" stroke="#90806e" stroke-width="1"/>
+    <rect x="25" y="95" width="20" height="18" rx="3" fill="#c8b8a8"/>
+    <rect x="50" y="95" width="20" height="18" rx="3" fill="#c8b8a8"/>
+    <rect x="75" y="95" width="17" height="18" rx="3" fill="#c8b8a8"/>
+    <!-- Coffee table -->
+    <rect x="32" y="155" width="55" height="20" rx="4" fill="#d4c8b8" stroke="#b8a898" stroke-width="1"/>
+    <!-- TV wall -->
+    <rect x="148" y="18" width="56" height="28" rx="3" fill="#2a2a35" stroke="#1a1a25" stroke-width="1"/>
+    <rect x="153" y="22" width="46" height="20" rx="2" fill="#1a2a3a" opacity=".8"/>
+    <rect x="170" y="46" width="12" height="4" rx="2" fill="#3a3a45"/>
+    <!-- Plant corner -->
+    <circle cx="185" cy="155" r="10" fill="#5a8a5a" opacity=".7"/>
+    <circle cx="183" cy="158" r="7" fill="#4a7a4a" opacity=".8"/>
+    <rect x="183" y="162" width="4" height="8" rx="2" fill="#7a5a3a"/>
+    <!-- Room label -->
+    <text x="70" y="72" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Living Room</text>
+    <!-- Light bulbs -->
+    <circle id="b-living-1" cx="60" cy="45" r="5" fill="#f5a623" filter="url(#glow-w)" style="transition:all .4s"/>
+    <circle id="b-living-2" cx="120" cy="45" r="5" fill="#f5a623" filter="url(#glow-w)" style="transition:all .4s"/>
+    <circle id="b-living-3" cx="180" cy="45" r="5" fill="#f5a623" filter="url(#glow-soft)" style="transition:all .4s"/>
+  </g>
 
-            <rect id="r-bedroom" x="12" y="184" width="146" height="134" rx="8" fill="var(--border)" stroke="var(--border2)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bedroom')"/>
-            <text x="85" y="252" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text2)" style="pointer-events:none">Bedroom</text>
-            <circle id="b-bd1" cx="85" cy="280" r="7" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bedroom')"/>
+  <!-- ══ KITCHEN ══ x:220 y:10 w:140 h:130 -->
+  <g id="room-kitchen" onclick="fpClick('kitchen',event)" oncontextmenu="fpLongPress('kitchen',event)" ontouchstart="fpTouchStart('kitchen',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+    <rect x="220" y="10" width="140" height="130" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
+    <rect id="light-kitchen" x="220" y="10" width="140" height="130" rx="6" fill="url(#rg-kitchen)" style="pointer-events:none;transition:opacity .5s" opacity="0"/>
+    <!-- Counter along top -->
+    <rect x="224" y="14" width="130" height="22" rx="3" fill="#c8c0b0" stroke="#b0a898" stroke-width="1"/>
+    <!-- Sink -->
+    <rect x="230" y="17" width="24" height="16" rx="3" fill="#9ab8c8" stroke="#88a0b0" stroke-width="1"/>
+    <rect x="235" y="20" width="14" height="10" rx="2" fill="#7aa0b0" opacity=".6"/>
+    <circle cx="242" cy="26" r="2" fill="#d0d8e0"/>
+    <!-- Stove -->
+    <rect x="262" y="17" width="30" height="16" rx="2" fill="#4a4845" stroke="#3a3835" stroke-width="1"/>
+    <circle cx="270" cy="25" r="4" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
+    <circle cx="284" cy="25" r="4" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
+    <!-- Counter right side -->
+    <rect x="346" y="14" width="10" height="122" rx="3" fill="#c8c0b0" stroke="#b0a898" stroke-width="1"/>
+    <!-- Kitchen island -->
+    <rect x="245" y="75" width="80" height="35" rx="4" fill="#d4ccc0" stroke="#b8b0a4" stroke-width="1"/>
+    <rect x="255" y="80" width="24" height="20" rx="2" fill="#c4bcb0"/>
+    <rect x="285" y="80" width="24" height="20" rx="2" fill="#c4bcb0"/>
+    <!-- Chairs at island -->
+    <rect x="250" y="112" width="16" height="16" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="270" y="112" width="16" height="16" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="290" y="112" width="16" height="16" rx="4" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <!-- Label -->
+    <text x="286" y="65" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Kitchen</text>
+    <!-- Lights -->
+    <circle id="b-kitchen-1" cx="256" cy="45" r="5" fill="#c8c0b0" style="transition:all .4s"/>
+    <circle id="b-kitchen-2" cx="316" cy="45" r="5" fill="#c8c0b0" style="transition:all .4s"/>
+  </g>
 
-            <rect id="r-bathroom" x="174" y="184" width="104" height="134" rx="8" fill="var(--border)" stroke="var(--border2)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bathroom')"/>
-            <text x="226" y="252" text-anchor="middle" font-size="10" font-family="Inter" font-weight="600" fill="var(--text2)" style="pointer-events:none">Bathroom</text>
-            <circle id="b-ba1" cx="226" cy="278" r="6" fill="var(--border2)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('bathroom')"/>
+  <!-- ══ OFFICE ══ x:374 y:10 w:156 h:170 -->
+  <g id="room-office" onclick="fpClick('office',event)" oncontextmenu="fpLongPress('office',event)" ontouchstart="fpTouchStart('office',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+    <rect x="374" y="10" width="156" height="170" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
+    <rect id="light-office" x="374" y="10" width="156" height="170" rx="6" fill="url(#rg-office)" style="pointer-events:none;transition:opacity .5s" opacity="1"/>
+    <!-- Desk -->
+    <rect x="382" y="45" width="120" height="55" rx="4" fill="#c8b898" stroke="#b0a080" stroke-width="1"/>
+    <!-- Monitor -->
+    <rect x="408" y="22" width="58" height="36" rx="3" fill="#2a2a35" stroke="#1a1a25" stroke-width="1"/>
+    <rect x="412" y="26" width="50" height="28" rx="2" fill="#1a3a5a" opacity=".9"/>
+    <rect x="432" y="58" width="10" height="6" rx="2" fill="#3a3a45"/>
+    <!-- Keyboard -->
+    <rect x="412" y="65" width="58" height="16" rx="3" fill="#3a3835" stroke="#2a2825" stroke-width="1"/>
+    <!-- Mouse -->
+    <rect x="476" y="65" width="14" height="18" rx="6" fill="#484440" stroke="#2a2825" stroke-width="1"/>
+    <!-- Chair -->
+    <circle cx="452" cy="125" r="20" fill="#9090a0" stroke="#7a7a8a" stroke-width="1" opacity=".8"/>
+    <circle cx="452" cy="122" r="14" fill="#a0a0b0" stroke="#8a8a9a" stroke-width="1"/>
+    <!-- Bookshelf -->
+    <rect x="382" y="110" width="30" height="62" rx="3" fill="#c8a870" stroke="#b09050" stroke-width="1"/>
+    <rect x="385" y="115" width="24" height="8" rx="1" fill="#7a5a3a"/>
+    <rect x="385" y="125" width="24" height="8" rx="1" fill="#8a6a4a"/>
+    <rect x="385" y="135" width="24" height="8" rx="1" fill="#6a4a2a"/>
+    <rect x="385" y="145" width="24" height="8" rx="1" fill="#9a7a5a"/>
+    <rect x="385" y="155" width="24" height="8" rx="1" fill="#7a5a3a"/>
+    <!-- Label -->
+    <text x="452" y="170" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Office</text>
+    <!-- Lights -->
+    <circle id="b-office-1" cx="414" cy="22" r="5" fill="#f5a623" filter="url(#glow-w)" style="transition:all .4s"/>
+    <circle id="b-office-2" cx="490" cy="22" r="5" fill="#f5a623" filter="url(#glow-soft)" style="transition:all .4s"/>
+  </g>
 
-            <rect id="r-garden" x="294" y="184" width="214" height="134" rx="8" fill="rgba(48,209,88,.08)" stroke="rgba(48,209,88,.35)" stroke-width="1.5" style="cursor:pointer;transition:all .4s" onclick="fpToggle('garden')"/>
-            <text x="401" y="248" text-anchor="middle" font-size="11" font-family="Inter" font-weight="600" fill="var(--text)" opacity=".75" style="pointer-events:none">Garden 🌿</text>
-            <circle id="b-g1" cx="350" cy="276" r="7" fill="#30d158" filter="url(#fg)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('garden')"/>
-            <circle id="b-g2" cx="450" cy="276" r="7" fill="#30d158" filter="url(#fg)" style="cursor:pointer;transition:all .4s" onclick="fpToggle('garden')"/>
-          </svg>
+  <!-- Walls / corridors -->
+  <rect x="210" y="10" width="10" height="170" fill="#d4cec8" rx="2"/>
+  <rect x="364" y="10" width="10" height="170" fill="#d4cec8" rx="2"/>
+  <rect x="10" y="180" width="520" height="10" fill="#d4cec8" rx="2"/>
+
+  <!-- Door: Living - Corridor -->
+  <rect x="130" y="178" width="40" height="3" rx="1" fill="#a09080"/>
+  <path d="M130,178 Q150,160 170,178" fill="none" stroke="#a09080" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- Door: Kitchen - Corridor -->
+  <rect x="250" y="178" width="36" height="3" rx="1" fill="#a09080"/>
+  <path d="M250,178 Q268,162 286,178" fill="none" stroke="#a09080" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- Door: Living - Kitchen -->
+  <rect x="208" y="90" width="4" height="35" rx="1" fill="#f0ede8"/>
+  <path d="M212,90 Q228,107 212,125" fill="none" stroke="#a09080" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ══ BEDROOM ══ x:10 y:190 w:165 h:140 -->
+  <g id="room-bedroom" onclick="fpClick('bedroom',event)" oncontextmenu="fpLongPress('bedroom',event)" ontouchstart="fpTouchStart('bedroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+    <rect x="10" y="190" width="165" height="140" rx="6" fill="#e8e4dc" stroke="#c8c0b0" stroke-width="1.5"/>
+    <rect id="light-bedroom" x="10" y="190" width="165" height="140" rx="6" fill="url(#rg-bedroom)" style="pointer-events:none;transition:opacity .5s" opacity="0"/>
+    <!-- Double bed -->
+    <rect x="28" y="210" width="95" height="65" rx="5" fill="#c8b8a8" stroke="#b0a090" stroke-width="1"/>
+    <!-- Headboard -->
+    <rect x="28" y="208" width="95" height="18" rx="5" fill="#a08070" stroke="#907060" stroke-width="1"/>
+    <!-- Pillows -->
+    <rect x="34" y="215" width="32" height="18" rx="5" fill="#e8ddd0" stroke="#d0c5b8" stroke-width="1"/>
+    <rect x="80" y="215" width="32" height="18" rx="5" fill="#e8ddd0" stroke="#d0c5b8" stroke-width="1"/>
+    <!-- Blanket -->
+    <rect x="28" y="238" width="95" height="37" rx="4" fill="#b8c8d8" stroke="#a0b0c0" stroke-width="1"/>
+    <line x1="28" y1="252" x2="123" y2="252" stroke="#a0b0c0" stroke-width="1"/>
+    <!-- Nightstands -->
+    <rect x="128" y="215" width="24" height="30" rx="3" fill="#c8b0a0" stroke="#b09890" stroke-width="1"/>
+    <circle cx="140" cy="235" r="3" fill="#a89080"/>
+    <rect x="18" y="215" width="6" height="30" rx="2" fill="#c8b0a0"/>
+    <!-- Wardrobe -->
+    <rect x="130" y="258" width="38" height="66" rx="3" fill="#c0b0a0" stroke="#a89888" stroke-width="1"/>
+    <line x1="149" y1="258" x2="149" y2="324" stroke="#b0a090" stroke-width="1"/>
+    <circle cx="145" cy="291" r="2.5" fill="#908070"/>
+    <circle cx="153" cy="291" r="2.5" fill="#908070"/>
+    <!-- Rug -->
+    <ellipse cx="75" cy="295" rx="45" ry="18" fill="#c8b8d8" stroke="#b0a0c0" stroke-width="1" opacity=".6"/>
+    <!-- Label -->
+    <text x="75" y="205" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#6a5a4a" opacity=".8">Bedroom</text>
+    <!-- Light -->
+    <circle id="b-bedroom-1" cx="75" cy="198" r="5" fill="#c8c0b0" style="transition:all .4s"/>
+  </g>
+
+  <!-- ══ BATHROOM ══ x:185 y:190 w:110 h:140 -->
+  <g id="room-bathroom" onclick="fpClick('bathroom',event)" oncontextmenu="fpLongPress('bathroom',event)" ontouchstart="fpTouchStart('bathroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+    <rect x="185" y="190" width="110" height="140" rx="6" fill="#e4eaee" stroke="#c0cad0" stroke-width="1.5"/>
+    <rect id="light-bathroom" x="185" y="190" width="110" height="140" rx="6" fill="url(#rg-bathroom)" style="pointer-events:none;transition:opacity .5s" opacity="0"/>
+    <!-- Bathtub -->
+    <rect x="193" y="210" width="60" height="38" rx="12" fill="#d8e8f0" stroke="#b8c8d8" stroke-width="1.5"/>
+    <rect x="197" y="214" width="52" height="30" rx="10" fill="#c8d8e8" stroke="#b0c0d0" stroke-width="1" opacity=".8"/>
+    <!-- Tap -->
+    <rect x="237" y="208" width="3" height="8" rx="1" fill="#c8d0d8"/>
+    <!-- Toilet -->
+    <rect x="264" y="210" width="26" height="32" rx="8" fill="#f0f0f0" stroke="#d8d8d8" stroke-width="1.5"/>
+    <rect x="262" y="207" width="30" height="10" rx="4" fill="#e8e8e8" stroke="#d0d0d0" stroke-width="1"/>
+    <!-- Sink / vanity -->
+    <rect x="193" y="262" width="30" height="22" rx="5" fill="#d8e8f0" stroke="#b8c8d8" stroke-width="1.5"/>
+    <ellipse cx="208" cy="273" rx="10" ry="7" fill="#c8d8e8" stroke="#b0c0d0" stroke-width="1" opacity=".8"/>
+    <circle cx="208" cy="270" r="2" fill="#b8c8d8"/>
+    <!-- Towel rail -->
+    <rect x="228" y="295" width="56" height="5" rx="2" fill="#b8b0a8" stroke="#a8a09a" stroke-width="1"/>
+    <!-- Tiles accent -->
+    <rect x="185" y="190" width="110" height="5" rx="2" fill="#b0c0ca" opacity=".4"/>
+    <!-- Label -->
+    <text x="240" y="205" text-anchor="middle" font-size="9" font-family="Inter,sans-serif" font-weight="600" fill="#5a6a70" opacity=".8">Bathroom</text>
+    <!-- Lights -->
+    <circle id="b-bathroom-1" cx="220" cy="198" r="4" fill="#c8c0b0" style="transition:all .4s"/>
+    <circle id="b-bathroom-2" cx="270" cy="198" r="4" fill="#c8c0b0" style="transition:all .4s"/>
+  </g>
+
+  <!-- ══ GARDEN / TERRACE ══ x:305 y:190 w:225 h:140 -->
+  <g id="room-garden" onclick="fpClick('garden',event)" oncontextmenu="fpLongPress('garden',event)" ontouchstart="fpTouchStart('garden',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
+    <rect x="305" y="190" width="225" height="140" rx="6" fill="#d8e4d0" stroke="#a8c0a0" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <rect id="light-garden" x="305" y="190" width="225" height="140" rx="6" fill="url(#rg-garden)" style="pointer-events:none;transition:opacity .5s" opacity="1"/>
+    <!-- Terrace table + chairs -->
+    <circle cx="418" cy="248" r="22" fill="#d0c8b8" stroke="#b8b0a0" stroke-width="1.5"/>
+    <circle cx="418" cy="248" r="14" fill="#c8c0b0" stroke="#b0a898" stroke-width="1"/>
+    <!-- Chairs around table -->
+    <rect x="408" y="215" width="20" height="16" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="408" y="268" width="20" height="16" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="375" y="239" width="16" height="20" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <rect x="447" y="239" width="16" height="20" rx="5" fill="#b8a898" stroke="#a09080" stroke-width="1"/>
+    <!-- Umbrella pole -->
+    <line x1="418" y1="225" x2="418" y2="248" stroke="#8a6a4a" stroke-width="2"/>
+    <ellipse cx="418" cy="225" rx="28" ry="8" fill="#e87040" opacity=".7" stroke="#d06030" stroke-width="1"/>
+    <!-- Plants / bushes -->
+    <circle cx="320" cy="210" r="12" fill="#5a9a5a" opacity=".8"/>
+    <circle cx="328" cy="216" r="9" fill="#4a8a4a" opacity=".9"/>
+    <circle cx="315" cy="220" r="8" fill="#3a7a3a" opacity=".7"/>
+    <circle cx="505" cy="210" r="12" fill="#5a9a5a" opacity=".8"/>
+    <circle cx="496" cy="218" r="9" fill="#4a8a4a" opacity=".9"/>
+    <circle cx="510" cy="220" r="8" fill="#3a7a3a" opacity=".7"/>
+    <circle cx="320" cy="312" r="10" fill="#5a9a5a" opacity=".8"/>
+    <circle cx="510" cy="312" r="10" fill="#5a9a5a" opacity=".8"/>
+    <!-- Garden lights (poles) -->
+    <rect x="339" y="274" width="3" height="18" rx="1" fill="#7a6a5a"/>
+    <circle id="b-garden-1" cx="340" cy="272" r="5" fill="#30d158" filter="url(#glow-soft)" style="transition:all .4s"/>
+    <rect x="492" y="274" width="3" height="18" rx="1" fill="#7a6a5a"/>
+    <circle id="b-garden-2" cx="493" cy="272" r="5" fill="#30d158" filter="url(#glow-soft)" style="transition:all .4s"/>
+    <!-- Label -->
+    <text x="418" y="202" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#4a6a4a" opacity=".8">Garden / Terrace 🌿</text>
+  </g>
+
+  <!-- Interior walls -->
+  <rect x="175" y="190" width="10" height="140" fill="#d4cec8" rx="2"/>
+  <rect x="295" y="190" width="10" height="140" fill="#d4cec8" rx="2"/>
+  <!-- Door: bedroom-bathroom -->
+  <rect x="173" y="230" width="4" height="30" rx="1" fill="#f0ede8"/>
+  <!-- Compass rose -->
+  <g transform="translate(500,310)" opacity=".35">
+    <circle r="14" fill="none" stroke="#9a9080" stroke-width="1"/>
+    <text y="-6" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" font-weight="700" fill="#7a6a60">N</text>
+    <text y="14" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" fill="#9a9080">S</text>
+    <text x="12" y="4" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" fill="#9a9080">E</text>
+    <text x="-12" y="4" text-anchor="middle" font-size="8" font-family="Inter,sans-serif" fill="#9a9080">W</text>
+    <line y1="-9" y2="9" stroke="#7a6a60" stroke-width="1.5"/>
+    <line x1="-9" x2="9" stroke="#9a9080" stroke-width="1"/>
+  </g>
+  <!-- Scale bar -->
+  <g transform="translate(22,328)" opacity=".45">
+    <line x1="0" y1="0" x2="40" y2="0" stroke="#9a9080" stroke-width="1.5"/>
+    <line x1="0" y1="-3" x2="0" y2="3" stroke="#9a9080" stroke-width="1.5"/>
+    <line x1="40" y1="-3" x2="40" y2="3" stroke="#9a9080" stroke-width="1.5"/>
+    <text x="20" y="-5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">5m</text>
+  </g>
+</svg>
+          </div><!-- fp-container -->
         </div>
       </div>
 
@@ -662,7 +777,7 @@ footer p { font-size: .78rem; color: var(--text3); }
           <div class="scene-list">
             <button class="scene-row-btn" onclick="setScene('relax',this)"><div class="srb-ico">🌅</div><div><div class="srb-name">Relax</div><div class="srb-desc">Warm, dim lights</div></div></button>
             <button class="scene-row-btn on" onclick="setScene('normal',this)"><div class="srb-ico">☀️</div><div><div class="srb-name">Normal</div><div class="srb-desc">Bright &amp; comfortable</div></div></button>
-            <button class="scene-row-btn" onclick="setScene('movie',this)"><div class="srb-ico">🎬</div><div><div class="srb-name">Movie Night</div><div class="srb-desc">Cinematic mood</div></div></button>
+            <button class="scene-row-btn" onclick="setScene('movie',this)"><div class="srb-ico">🎬</div><div><div class="srb-name">Movie Night</div><div class="srb-desc">Living room only</div></div></button>
             <button class="scene-row-btn" onclick="setScene('alloff',this)"><div class="srb-ico">🌙</div><div><div class="srb-name">All Off</div><div class="srb-desc">Goodnight</div></div></button>
           </div>
         </div>
@@ -678,11 +793,7 @@ footer p { font-size: .78rem; color: var(--text3); }
   <!-- FULL DASHBOARD -->
   <section class="section dash-section">
   <div class="wrap">
-    <div class="rv">
-      <div class="label">Full Dashboard</div>
-      <h2>The complete experience</h2>
-      <p class="section-sub">A fully interactive dashboard with rooms, media, sensors and weather — exactly what I build for your home.</p>
-    </div>
+    <div class="rv"><div class="label">Full Dashboard</div><h2>The complete experience</h2><p class="section-sub">Rooms, media, sensors and weather — exactly what I deliver for your home.</p></div>
     <div class="dash-frame rv">
       <div class="d-left">
         <div class="d-nav-lbl" style="padding-top:8px">Views</div>
@@ -692,17 +803,16 @@ footer p { font-size: .78rem; color: var(--text3); }
         <div class="d-nav-item" onclick="dPage('sensors',this)"><div class="d-nav-ico">🌡️</div>Sensors</div>
         <div style="margin-top:24px"></div>
         <div class="d-nav-lbl">Rooms</div>
-        <div class="d-nav-item" onclick="fpToggle('living');showToast('💡','Living Room toggled')"><div class="d-nav-ico">🛋️</div>Living</div>
-        <div class="d-nav-item" onclick="fpToggle('kitchen');showToast('💡','Kitchen toggled')"><div class="d-nav-ico">🍳</div>Kitchen</div>
-        <div class="d-nav-item" onclick="fpToggle('office');showToast('💡','Office toggled')"><div class="d-nav-ico">🏢</div>Office</div>
-        <div class="d-nav-item" onclick="fpToggle('bedroom');showToast('💡','Bedroom toggled')"><div class="d-nav-ico">🛏️</div>Bedroom</div>
+        <div class="d-nav-item" onclick="fpClick('living');showToast('💡','Living Room toggled')"><div class="d-nav-ico">🛋️</div>Living</div>
+        <div class="d-nav-item" onclick="fpClick('kitchen');showToast('💡','Kitchen toggled')"><div class="d-nav-ico">🍳</div>Kitchen</div>
+        <div class="d-nav-item" onclick="fpClick('office');showToast('💡','Office toggled')"><div class="d-nav-ico">🏢</div>Office</div>
+        <div class="d-nav-item" onclick="fpClick('bedroom');showToast('💡','Bedroom toggled')"><div class="d-nav-ico">🛏️</div>Bedroom</div>
       </div>
       <div class="d-main">
-        <!-- HOME -->
         <div class="d-page on" id="dp-home">
           <div class="d-greet"><h3 id="d-greet">Good afternoon 👋</h3><p id="d-date-txt">Loading...</p></div>
           <div class="qs-row">
-            <div class="qs"><div class="qs-l">Temp</div><div class="qs-v" style="color:var(--warm)">21°</div><div class="qs-s">Avg. indoor</div></div>
+            <div class="qs"><div class="qs-l">Temp</div><div class="qs-v" style="color:var(--warm)">21°</div><div class="qs-s">Avg indoor</div></div>
             <div class="qs"><div class="qs-l">Lights</div><div class="qs-v" id="qs-lights">4</div><div class="qs-s">of 8 on</div></div>
             <div class="qs"><div class="qs-l">Power</div><div class="qs-v" style="color:var(--green-c)">2.4<span style="font-size:.9rem">kW</span></div><div class="qs-s">Current</div></div>
             <div class="qs"><div class="qs-l">Security</div><div class="qs-v" style="color:var(--accent);font-size:.95rem">Armed</div><div class="qs-s">All clear</div></div>
@@ -714,7 +824,7 @@ footer p { font-size: .78rem; color: var(--text3); }
             <button class="sq-btn" onclick="setScene('alloff',this)">🌙 Night</button>
           </div>
           <div class="rooms-grid" id="dash-rooms">
-            <div class="room-card on" data-r="living" onclick="drToggle(this)"><div class="rc-ico">🛋️</div><div class="rc-name">Living Room</div><div class="rc-info">3 lights · TV active</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" data-r="living" onclick="drToggle(this)"><div class="rc-ico">🛋️</div><div class="rc-name">Living Room</div><div class="rc-info">3 lights · TV on</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
             <div class="room-card" data-r="kitchen" onclick="drToggle(this)"><div class="rc-ico">🍳</div><div class="rc-name">Kitchen</div><div class="rc-info">2 lights</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
             <div class="room-card on" data-r="office" onclick="drToggle(this)"><div class="rc-ico">🏢</div><div class="rc-name">Office</div><div class="rc-info">2 lights · Active</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
             <div class="room-card" data-r="bedroom" onclick="drToggle(this)"><div class="rc-ico">🛏️</div><div class="rc-name">Bedroom</div><div class="rc-info">1 light</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
@@ -722,19 +832,17 @@ footer p { font-size: .78rem; color: var(--text3); }
             <div class="room-card on" data-r="garden" onclick="drToggle(this)"><div class="rc-ico">🌿</div><div class="rc-name">Garden</div><div class="rc-info">Outdoor lights</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
           </div>
         </div>
-        <!-- LIGHTS -->
         <div class="d-page" id="dp-lights">
           <div class="d-greet"><h3>Lights 💡</h3><p>Tap to toggle any light</p></div>
           <div class="rooms-grid">
-            <div class="room-card on" onclick="this.classList.toggle('on');showToast('💡','Ceiling light toggled')"><div class="rc-ico">💡</div><div class="rc-name">Ceiling — Living</div><div class="rc-info">Warm · 80%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" onclick="this.classList.toggle('on');showToast('💡','Ceiling toggled')"><div class="rc-ico">💡</div><div class="rc-name">Ceiling — Living</div><div class="rc-info">Warm · 80%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
             <div class="room-card on" onclick="this.classList.toggle('on');showToast('🌈','LED strip toggled')"><div class="rc-ico">🌈</div><div class="rc-name">LED Strip — TV</div><div class="rc-info">Pink · 60%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
-            <div class="room-card" onclick="this.classList.toggle('on');showToast('💡','Kitchen light toggled')"><div class="rc-ico">💡</div><div class="rc-name">Ceiling — Kitchen</div><div class="rc-info">Off</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
-            <div class="room-card on" onclick="this.classList.toggle('on');showToast('💡','Desk lamp toggled')"><div class="rc-ico">🖥️</div><div class="rc-name">Desk Lamp — Office</div><div class="rc-info">Cool · 100%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card" onclick="this.classList.toggle('on');showToast('💡','Kitchen toggled')"><div class="rc-ico">💡</div><div class="rc-name">Ceiling — Kitchen</div><div class="rc-info">Off</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
+            <div class="room-card on" onclick="this.classList.toggle('on');showToast('🖥️','Desk lamp toggled')"><div class="rc-ico">🖥️</div><div class="rc-name">Desk Lamp — Office</div><div class="rc-info">Cool · 100%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
             <div class="room-card" onclick="this.classList.toggle('on');showToast('💡','Bedside toggled')"><div class="rc-ico">💡</div><div class="rc-name">Bedside — Bedroom</div><div class="rc-info">Off</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
             <div class="room-card on" onclick="this.classList.toggle('on');showToast('🌿','Garden light toggled')"><div class="rc-ico">🌿</div><div class="rc-name">Outdoor — Garden</div><div class="rc-info">Warm · 70%</div><div class="rc-sw-wrap"><div class="rc-sw"></div></div></div>
           </div>
         </div>
-        <!-- MEDIA -->
         <div class="d-page" id="dp-media">
           <div class="d-greet"><h3>Media 🎵</h3><p>All speakers and displays</p></div>
           <div class="media-card">
@@ -742,64 +850,28 @@ footer p { font-size: .78rem; color: var(--text3); }
             <div style="flex:1;min-width:0">
               <div class="media-title" id="song-name">Blinding Lights</div>
               <div class="media-sub">The Weeknd · Living Room</div>
-              <div class="media-btns">
-                <div class="mc" onclick="prevSong()">⏮</div>
-                <div class="mc play" id="playbtn" onclick="togglePlay()">⏸</div>
-                <div class="mc" onclick="nextSong()">⏭</div>
-              </div>
+              <div class="media-btns"><div class="mc" onclick="prevSong()">⏮</div><div class="mc play" id="playbtn" onclick="togglePlay()">⏸</div><div class="mc" onclick="nextSong()">⏭</div></div>
               <div class="prog-bar"><div class="prog-fill" id="prog" style="width:35%"></div></div>
             </div>
           </div>
           <div class="media-card">
             <div class="media-art" style="background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2)">📻</div>
-            <div style="flex:1">
-              <div class="media-title">Radio Swiss Pop</div>
-              <div class="media-sub">Live · Office Speaker</div>
-              <button onclick="showToast('📻','Radio started')" style="margin-top:10px;padding:7px 16px;border-radius:10px;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2);color:var(--accent);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit">▶ Play</button>
-            </div>
+            <div style="flex:1"><div class="media-title">Radio Swiss Pop</div><div class="media-sub">Live · Office Speaker</div><button onclick="showToast('📻','Radio started')" style="margin-top:10px;padding:7px 16px;border-radius:10px;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2);color:var(--accent);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit">▶ Play</button></div>
           </div>
         </div>
-        <!-- SENSORS -->
         <div class="d-page" id="dp-sensors">
           <div class="d-greet"><h3>Sensors 🌡️</h3><p>Live readings from all rooms</p></div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">🌡️</span><div><div style="font-size:.83rem;font-weight:500">Temperature</div><div style="font-size:.7rem;color:var(--text2)">Living Room</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:65%;height:100%;background:var(--warm);border-radius:2px"></div></div><span style="font-weight:700;color:var(--warm);font-size:.9rem">22.1°C</span></div></div>
             <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">💧</span><div><div style="font-size:.83rem;font-weight:500">Humidity</div><div style="font-size:.7rem;color:var(--text2)">Bathroom</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:68%;height:100%;background:var(--accent);border-radius:2px"></div></div><span style="font-weight:700;color:var(--accent);font-size:.9rem">68%</span></div></div>
             <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">⚡</span><div><div style="font-size:.83rem;font-weight:500">Power Usage</div><div style="font-size:.7rem;color:var(--text2)">Whole Home</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:42%;height:100%;background:var(--green-c);border-radius:2px"></div></div><span style="font-weight:700;color:var(--green-c);font-size:.9rem">2.4 kW</span></div></div>
-            <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">🌬️</span><div><div style="font-size:.83rem;font-weight:500">CO₂</div><div style="font-size:.7rem;color:var(--text2)">Office</div></div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><div style="width:60px;height:3px;background:var(--bg2);border-radius:2px"><div style="width:35%;height:100%;background:var(--green-c);border-radius:2px"></div></div><span style="font-weight:700;color:var(--green-c);font-size:.9rem">680 ppm</span></div></div>
             <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;gap:12px"><span style="font-size:1.1rem">🔒</span><div><div style="font-size:.83rem;font-weight:500">Front Door</div><div style="font-size:.7rem;color:var(--text2)">Security sensor</div></div><div style="margin-left:auto"><span style="font-weight:700;color:var(--green-c);font-size:.9rem">Closed ✓</span></div></div>
           </div>
         </div>
       </div>
       <div class="d-right">
-        <div class="dw">
-          <div class="dw-t">Weather · Egg SZ</div>
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div><div class="weather-num">11°</div><div class="weather-desc">Partly cloudy</div></div>
-            <div style="font-size:2.6rem">⛅</div>
-          </div>
-          <div class="ww-row">
-            <div class="wwi"><strong>💨 14</strong>km/h</div>
-            <div class="wwi"><strong>💧 62</strong>% hum</div>
-            <div class="wwi"><strong>👁 10</strong>km</div>
-          </div>
-          <div class="fc-row">
-            <div class="fc-d">Mon<span>🌧️</span><strong>9°</strong></div>
-            <div class="fc-d">Tue<span>⛅</span><strong>13°</strong></div>
-            <div class="fc-d">Wed<span>☀️</span><strong>16°</strong></div>
-            <div class="fc-d">Thu<span>☀️</span><strong>18°</strong></div>
-            <div class="fc-d">Fri<span>🌥️</span><strong>14°</strong></div>
-          </div>
-        </div>
-        <div class="dw">
-          <div class="dw-t">Recent Activity</div>
-          <div class="log" id="d-log">
-            <div class="log-item"><div class="log-dot" style="background:var(--neon-p,#e040fb)"></div><div class="log-txt">Motion — Hallway</div><div class="log-t">2m</div></div>
-            <div class="log-item"><div class="log-dot" style="background:var(--warm)"></div><div class="log-txt">Office lights on</div><div class="log-t">8m</div></div>
-            <div class="log-item"><div class="log-dot" style="background:var(--accent)"></div><div class="log-txt">Thermostat 21°C</div><div class="log-t">14m</div></div>
-            <div class="log-item"><div class="log-dot" style="background:var(--green-c)"></div><div class="log-txt">Front door closed</div><div class="log-t">32m</div></div>
-          </div>
-        </div>
+        <div class="dw"><div class="dw-t">Weather · Egg SZ</div><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="weather-num">11°</div><div class="weather-desc">Partly cloudy</div></div><div style="font-size:2.6rem">⛅</div></div><div class="ww-row"><div class="wwi"><strong>💨 14</strong>km/h</div><div class="wwi"><strong>💧 62</strong>% hum</div><div class="wwi"><strong>👁 10</strong>km</div></div><div class="fc-row"><div class="fc-d">Mon<span>🌧️</span><strong>9°</strong></div><div class="fc-d">Tue<span>⛅</span><strong>13°</strong></div><div class="fc-d">Wed<span>☀️</span><strong>16°</strong></div><div class="fc-d">Thu<span>☀️</span><strong>18°</strong></div><div class="fc-d">Fri<span>🌥️</span><strong>14°</strong></div></div></div>
+        <div class="dw"><div class="dw-t">Recent Activity</div><div class="log" id="d-log"><div class="log-item"><div class="log-dot" style="background:var(--neon-p,#e040fb)"></div><div class="log-txt">Motion — Hallway</div><div class="log-t">2m</div></div><div class="log-item"><div class="log-dot" style="background:var(--warm)"></div><div class="log-txt">Office lights on</div><div class="log-t">8m</div></div><div class="log-item"><div class="log-dot" style="background:var(--accent)"></div><div class="log-txt">Thermostat 21°C</div><div class="log-t">14m</div></div><div class="log-item"><div class="log-dot" style="background:var(--green-c)"></div><div class="log-txt">Front door closed</div><div class="log-t">32m</div></div></div></div>
       </div>
     </div>
   </div>
@@ -808,86 +880,41 @@ footer p { font-size: .78rem; color: var(--text3); }
   <!-- GARDEN TEASER -->
   <section class="section garden-section">
   <div class="wrap">
-    <div class="rv">
-      <div class="label">Coming Soon</div>
-      <h2>Garden & outdoor lighting</h2>
-      <p class="section-sub">Interactive outdoor view with realistic lighting simulation. Change colors, brightness, and scenes in real-time.</p>
-    </div>
+    <div class="rv"><div class="label">Coming Soon</div><h2>Garden & outdoor lighting</h2><p class="section-sub">Interactive outdoor view. Change colors, brightness, and scenes in real-time.</p></div>
     <div class="garden-frame rv">
       <div class="coming-soon-badge">Preview</div>
       <div class="garden-scene">
-        <svg width="100%" viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" id="garden-svg" style="display:block">
+        <svg width="100%" viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" style="display:block">
           <defs>
-            <radialGradient id="sky-g" cx="50%" cy="0%" r="100%">
-              <stop id="sky-s1" offset="0%" stop-color="#0a1a30"/>
-              <stop id="sky-s2" offset="100%" stop-color="#050c14"/>
-            </radialGradient>
-            <radialGradient id="gl1" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#f5a623" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="gl2" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#f5a623" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="gl3" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#f5a623" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
-            </radialGradient>
+            <radialGradient id="gl1" cx="50%" cy="50%" r="50%"><stop id="gl1s" offset="0%" stop-color="#f5a623" stop-opacity=".9"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
+            <radialGradient id="gl2" cx="50%" cy="50%" r="50%"><stop id="gl2s" offset="0%" stop-color="#f5a623" stop-opacity=".9"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
+            <radialGradient id="gl3" cx="50%" cy="50%" r="50%"><stop id="gl3s" offset="0%" stop-color="#f5a623" stop-opacity=".9"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
           </defs>
-          <!-- Sky -->
-          <rect width="900" height="360" fill="url(#sky-g)"/>
-          <!-- Stars -->
-          <circle cx="80" cy="40" r="1.2" fill="white" opacity=".5"/><circle cx="200" cy="20" r=".8" fill="white" opacity=".4"/><circle cx="350" cy="35" r="1" fill="white" opacity=".6"/><circle cx="500" cy="15" r="1.2" fill="white" opacity=".4"/><circle cx="650" cy="45" r=".8" fill="white" opacity=".5"/><circle cx="780" cy="25" r="1" fill="white" opacity=".4"/><circle cx="850" cy="50" r="1.2" fill="white" opacity=".6"/><circle cx="130" cy="70" r=".8" fill="white" opacity=".3"/><circle cx="420" cy="60" r=".9" fill="white" opacity=".4"/>
-          <!-- Ground -->
+          <rect width="900" height="360" fill="#050c14"/>
+          <circle cx="80" cy="40" r="1.2" fill="white" opacity=".5"/><circle cx="200" cy="20" r=".8" fill="white" opacity=".4"/><circle cx="350" cy="35" r="1" fill="white" opacity=".6"/><circle cx="500" cy="15" r="1.2" fill="white" opacity=".4"/><circle cx="650" cy="45" r=".8" fill="white" opacity=".5"/><circle cx="780" cy="25" r="1" fill="white" opacity=".4"/><circle cx="130" cy="70" r=".8" fill="white" opacity=".3"/>
           <rect y="260" width="900" height="100" fill="#0d1a0d"/>
-          <!-- Trees silhouettes -->
-          <ellipse cx="120" cy="220" rx="55" ry="90" fill="#0a150a"/>
-          <rect x="112" y="290" width="16" height="70" fill="#080f08"/>
-          <ellipse cx="280" cy="240" rx="40" ry="70" fill="#0a150a"/>
-          <rect x="274" y="300" width="12" height="60" fill="#080f08"/>
-          <ellipse cx="650" cy="225" rx="50" ry="85" fill="#0a150a"/>
-          <rect x="643" y="295" width="14" height="65" fill="#080f08"/>
-          <ellipse cx="800" cy="235" rx="45" ry="75" fill="#0a150a"/>
-          <rect x="793" y="300" width="13" height="60" fill="#080f08"/>
-          <!-- House -->
-          <polygon points="380,160 520,160 520,290 380,290" fill="#0d1208"/>
-          <polygon points="365,165 535,165 450,110" fill="#0a0f06"/>
-          <rect x="420" y="230" width="30" height="60" fill="#060a04"/>
-          <rect x="390" y="190" width="30" height="25" fill="#1a2a10"/>
-          <rect x="490" y="190" width="30" height="25" fill="#1a2a10"/>
-          <!-- Garden lights -->
-          <!-- Pole 1 -->
-          <rect x="219" y="260" width="3" height="60" fill="#1a1a1a"/>
-          <ellipse cx="220" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
-          <ellipse id="glow1" cx="220" cy="258" rx="60" ry="40" fill="url(#gl1)" opacity=".8"/>
-          <circle id="lamp1" cx="220" cy="258" r="5" fill="#f5a623"/>
-          <!-- Pole 2 -->
-          <rect x="449" y="260" width="3" height="60" fill="#1a1a1a"/>
-          <ellipse cx="450" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
-          <ellipse id="glow2" cx="450" cy="258" rx="60" ry="40" fill="url(#gl2)" opacity=".8"/>
-          <circle id="lamp2" cx="450" cy="258" r="5" fill="#f5a623"/>
-          <!-- Pole 3 -->
-          <rect x="679" y="260" width="3" height="60" fill="#1a1a1a"/>
-          <ellipse cx="680" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
-          <ellipse id="glow3" cx="680" cy="258" rx="60" ry="40" fill="url(#gl3)" opacity=".8"/>
-          <circle id="lamp3" cx="680" cy="258" r="5" fill="#f5a623"/>
-          <!-- Path -->
+          <ellipse cx="120" cy="220" rx="55" ry="90" fill="#0a150a"/><rect x="112" y="290" width="16" height="70" fill="#080f08"/>
+          <ellipse cx="280" cy="240" rx="40" ry="70" fill="#0a150a"/><rect x="274" y="300" width="12" height="60" fill="#080f08"/>
+          <ellipse cx="650" cy="225" rx="50" ry="85" fill="#0a150a"/><rect x="643" y="295" width="14" height="65" fill="#080f08"/>
+          <ellipse cx="800" cy="235" rx="45" ry="75" fill="#0a150a"/><rect x="793" y="300" width="13" height="60" fill="#080f08"/>
+          <polygon points="380,160 520,160 520,290 380,290" fill="#0d1208"/><polygon points="365,165 535,165 450,110" fill="#0a0f06"/><rect x="420" y="230" width="30" height="60" fill="#060a04"/><rect x="390" y="190" width="30" height="25" fill="#1a2a10"/><rect x="490" y="190" width="30" height="25" fill="#1a2a10"/>
+          <rect x="219" y="260" width="3" height="60" fill="#1a1a1a"/><ellipse cx="220" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
+          <ellipse id="gg1" cx="220" cy="258" rx="60" ry="40" fill="url(#gl1)" opacity=".8"/><circle id="gl1c" cx="220" cy="258" r="5" fill="#f5a623"/>
+          <rect x="449" y="260" width="3" height="60" fill="#1a1a1a"/><ellipse cx="450" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
+          <ellipse id="gg2" cx="450" cy="258" rx="60" ry="40" fill="url(#gl2)" opacity=".8"/><circle id="gl2c" cx="450" cy="258" r="5" fill="#f5a623"/>
+          <rect x="679" y="260" width="3" height="60" fill="#1a1a1a"/><ellipse cx="680" cy="258" rx="12" ry="5" fill="none" stroke="#333" stroke-width="1.5"/>
+          <ellipse id="gg3" cx="680" cy="258" rx="60" ry="40" fill="url(#gl3)" opacity=".8"/><circle id="gl3c" cx="680" cy="258" r="5" fill="#f5a623"/>
           <polygon points="400,360 500,360 520,290 380,290" fill="#141e10" opacity=".6"/>
         </svg>
-        <!-- Controls -->
         <div class="garden-controls">
           <span class="gc-label">Color:</span>
-          <div class="color-swatch active" style="background:#f5a623" data-color="#f5a623" onclick="setGardenColor(this,'warm')"></div>
-          <div class="color-swatch" style="background:#ffffff" data-color="#ffffff" onclick="setGardenColor(this,'white')"></div>
-          <div class="color-swatch" style="background:#00e5ff" data-color="#00e5ff" onclick="setGardenColor(this,'cyan')"></div>
-          <div class="color-swatch" style="background:#e040fb" data-color="#e040fb" onclick="setGardenColor(this,'pink')"></div>
-          <div class="color-swatch" style="background:#69ff47" data-color="#69ff47" onclick="setGardenColor(this,'green')"></div>
-          <div class="color-swatch" style="background:#ff3b30" data-color="#ff3b30" onclick="setGardenColor(this,'red')"></div>
-          <div class="gc-brightness">
-            <label>Brightness</label>
-            <input type="range" min="10" max="100" value="80" oninput="setGardenBrightness(this.value)">
-          </div>
+          <div class="color-swatch active" style="background:#f5a623" data-color="#f5a623" onclick="setGardenColor(this)"></div>
+          <div class="color-swatch" style="background:#ffffff" data-color="#ffffff" onclick="setGardenColor(this)"></div>
+          <div class="color-swatch" style="background:#00e5ff" data-color="#00e5ff" onclick="setGardenColor(this)"></div>
+          <div class="color-swatch" style="background:#e040fb" data-color="#e040fb" onclick="setGardenColor(this)"></div>
+          <div class="color-swatch" style="background:#69ff47" data-color="#69ff47" onclick="setGardenColor(this)"></div>
+          <div class="color-swatch" style="background:#ff3b30" data-color="#ff3b30" onclick="setGardenColor(this)"></div>
+          <div class="gc-brightness"><label>Brightness</label><input type="range" min="10" max="100" value="80" oninput="setGardenBrightness(this.value)"></div>
         </div>
       </div>
     </div>
@@ -897,55 +924,40 @@ footer p { font-size: .78rem; color: var(--text3); }
   <!-- PROCESS -->
   <section class="section" style="background:var(--bg2);border-top:1px solid var(--border)">
   <div class="wrap">
-    <div class="rv centered">
-      <div class="label">The Process</div>
-      <h2>How we build your dashboard</h2>
-      <p class="section-sub">A collaborative process from first conversation to final handoff — documented, tested, and yours to keep.</p>
-    </div>
+    <div class="rv centered"><div class="label">The Process</div><h2>How we build your dashboard</h2><p class="section-sub">Collaborative, documented, and ready in 2–4 days.</p></div>
     <div class="process-grid">
-      <div class="proc-step rv rv-d1"><div class="proc-n">Step 01</div><div class="proc-ico">🏠</div><h3>Discover your home</h3><p>Which devices, how many rooms, who uses it, what matters most.</p><div class="proc-ghost">1</div></div>
-      <div class="proc-step rv rv-d2"><div class="proc-n">Step 02</div><div class="proc-ico">🎨</div><h3>Design layout & theme</h3><p>I sketch the structure and color theme. You review before any code is written.</p><div class="proc-ghost">2</div></div>
-      <div class="proc-step rv rv-d3"><div class="proc-n">Step 03</div><div class="proc-ico">⚡</div><h3>Build & implement</h3><p>YAML built, custom cards installed, every section documented and clean.</p><div class="proc-ghost">3</div></div>
-      <div class="proc-step rv rv-d4"><div class="proc-n">Step 04</div><div class="proc-ico">🔧</div><h3>Refine & hand off</h3><p>One revision round included. Full YAML + docs to maintain it yourself.</p><div class="proc-ghost">4</div></div>
+      <div class="proc-step rv rv-d1"><div class="proc-n">Step 01</div><div class="proc-ico">🏠</div><h3>Discover your home</h3><p>Devices, rooms, who uses it, what matters most.</p><div class="proc-ghost">1</div></div>
+      <div class="proc-step rv rv-d2"><div class="proc-n">Step 02</div><div class="proc-ico">🎨</div><h3>Design &amp; layout</h3><p>I sketch structure and theme. You approve before any code.</p><div class="proc-ghost">2</div></div>
+      <div class="proc-step rv rv-d3"><div class="proc-n">Step 03</div><div class="proc-ico">⚡</div><h3>Build &amp; implement</h3><p>Clean YAML, custom cards, every section documented.</p><div class="proc-ghost">3</div></div>
+      <div class="proc-step rv rv-d4"><div class="proc-n">Step 04</div><div class="proc-ico">🔧</div><h3>Refine &amp; hand off</h3><p>One revision round. Full YAML + video walkthrough.</p><div class="proc-ghost">4</div></div>
     </div>
   </div>
   </section>
 
-  <!-- CTA -->
-  <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready for a dashboard<br>that delights you?</h2><p>Custom Home Assistant dashboards from $49. Delivered in 48 hours.</p><div class="cta-btns"><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-fill">Order on Fiverr →</a><a href="#smarthome-demo" class="btn btn-outline">Try demo first</a></div></div></div></section>
+  <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready for a dashboard<br>that delights you?</h2><p>Custom Home Assistant dashboards from $49. Delivered in 2–4 days.</p><div class="cta-btns"><button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-outline">Fiverr Profile</a></div></div></div></section>
 
-  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>Custom Home Assistant Dashboards · autoflow-lab on Fiverr</p><p>© 2026 autoflow-lab</p></footer>
+  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>Custom Home Assistant Dashboards · Fiverr</p><p>© 2026 autoflow-lab</p></footer>
 </div>
 
-<!-- ════════════════════════════════════════════════
-     AI & AUTOMATION TAB
-════════════════════════════════════════════════ -->
+<!-- ══════════════ AI PAGE ══════════════ -->
 <div class="page" id="page-ai">
-
   <section class="hero">
     <div class="hero-bg"><div class="orb orb1" style="background:radial-gradient(circle,#7c3aed,transparent 70%)"></div><div class="orb orb2" style="background:radial-gradient(circle,#00e5ff,transparent 70%)"></div></div>
     <div class="hero-inner">
       <div class="eyebrow">AI & Workflow Automation</div>
       <h1>Stop doing the same<br>task <em>twice.</em></h1>
       <p class="hero-sub">Custom workflow automations, AI agents, and chatbots that run 24/7 — so your team can focus on what actually matters.</p>
-      <div class="hero-actions">
-        <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-fill">View on Fiverr</a>
-        <a href="#ai-services" class="btn btn-outline">See services ↓</a>
-      </div>
+      <div class="hero-actions"><button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button><a href="#ai-services" class="btn btn-outline">See services ↓</a></div>
     </div>
   </section>
 
   <section class="section" id="ai-services" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="wrap">
-    <div class="rv">
-      <div class="label">Services</div>
-      <h2>What I build for you</h2>
-      <p class="section-sub">From simple app connections to full AI agents — tested, documented, and ready to run.</p>
-    </div>
+    <div class="rv"><div class="label">Services</div><h2>What I build for you</h2><p class="section-sub">From simple app connections to full AI agents — tested, documented, and ready to run.</p></div>
     <div class="services-list">
-      <div class="svc-item"><div class="svc-l"><div class="svc-name">⚡ Workflow Automation</div><div class="svc-desc">Connect your apps and eliminate manual steps. n8n or Make workflows built, tested and delivered in 48h with full documentation.</div><div class="svc-tags"><span class="svc-tag">n8n</span><span class="svc-tag">Make</span><span class="svc-tag">Zapier</span><span class="svc-tag">APIs</span><span class="svc-tag">Webhooks</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$49</div></div></div>
-      <div class="svc-item"><div class="svc-l"><div class="svc-name">🤖 AI Agents</div><div class="svc-desc">Autonomous AI trained on your business data. Handles emails, qualifies leads, updates your CRM — without human input.</div><div class="svc-tags"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Claude</span><span class="svc-tag">LangChain</span><span class="svc-tag">RAG</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$149</div></div></div>
-      <div class="svc-item"><div class="svc-l"><div class="svc-name">💬 Website Chatbot</div><div class="svc-desc">GPT-4o chatbot embedded on your site in 2 lines of code. Answers questions, captures leads, books appointments — in any language, 24/7.</div><div class="svc-tags"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Multilingual</span><span class="svc-tag">Lead capture</span><span class="svc-tag">CRM sync</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$99</div></div></div>
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">⚡ Workflow Automation</div><div class="svc-desc">Connect your apps and eliminate manual steps. n8n or Make workflows built, tested and delivered with full documentation.</div><div class="svc-tags"><span class="svc-tag">n8n</span><span class="svc-tag">Make</span><span class="svc-tag">Zapier</span><span class="svc-tag">APIs</span><span class="svc-tag">Webhooks</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$49</div></div></div>
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">🤖 AI Agents</div><div class="svc-desc">Autonomous AI trained on your business data. Handles emails, qualifies leads, updates your CRM without human input.</div><div class="svc-tags"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Claude</span><span class="svc-tag">LangChain</span><span class="svc-tag">RAG</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$149</div></div></div>
+      <div class="svc-item"><div class="svc-l"><div class="svc-name">💬 Website Chatbot</div><div class="svc-desc">GPT-4o chatbot embedded on your site in 2 lines of code. Answers questions, captures leads, books appointments — 24/7.</div><div class="svc-tags"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Multilingual</span><span class="svc-tag">Lead capture</span><span class="svc-tag">CRM sync</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$99</div></div></div>
       <div class="svc-item"><div class="svc-l"><div class="svc-name">📧 Email Automation</div><div class="svc-desc">Smart sequences, AI-powered auto-replies, CRM sync. Every lead gets the right message at the right time.</div><div class="svc-tags"><span class="svc-tag">Gmail</span><span class="svc-tag">Outlook</span><span class="svc-tag">HubSpot</span><span class="svc-tag">Sequences</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$79</div></div></div>
       <div class="svc-item"><div class="svc-l"><div class="svc-name">📊 Data Pipelines</div><div class="svc-desc">Scrape, transform, enrich and sync data. Google Sheets, Airtable, databases — always in sync, always clean.</div><div class="svc-tags"><span class="svc-tag">Scraping</span><span class="svc-tag">Sheets</span><span class="svc-tag">Airtable</span><span class="svc-tag">SQL</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$99</div></div></div>
     </div>
@@ -956,9 +968,9 @@ footer p { font-size: .78rem; color: var(--text3); }
   <div class="wrap centered">
     <div class="rv"><div class="label">Pricing</div><h2>Simple, transparent pricing</h2><p class="section-sub">No hidden fees. Pick a plan or message me for a custom quote.</p></div>
     <div class="pricing-grid rv">
-      <div class="price-card"><div class="pc-tier">Starter</div><div class="pc-price">$49<small>/project</small></div><div class="pc-desc">Simple automation, 1–2 apps</div><ul class="pc-list"><li>1 workflow (up to 5 steps)</li><li>2 app integrations</li><li>3 day delivery</li><li>2 revisions</li><li>Documentation included</li></ul><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="pc-btn ghost">Get Started</a></div>
-      <div class="price-card featured"><div class="featured-badge">Most Popular</div><div class="pc-tier">Professional</div><div class="pc-price">$149<small>/project</small></div><div class="pc-desc">Complex workflow or AI integration</div><ul class="pc-list"><li>1 complex workflow (unlimited steps)</li><li>Up to 5 app integrations</li><li>Error handling + monitoring</li><li>3 day delivery</li><li>Unlimited revisions</li><li>Video walkthrough + full docs</li><li>14 days support</li></ul><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="pc-btn solid">Hire Me Now</a></div>
-      <div class="price-card"><div class="pc-tier">Enterprise</div><div class="pc-price">$349<small>+</small></div><div class="pc-desc">Full system or custom AI agent</div><ul class="pc-list"><li>Complete automation system</li><li>AI agent with custom training</li><li>Unlimited integrations</li><li>5–7 day delivery</li><li>Priority 30-day support</li><li>Monthly maintenance available</li></ul><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="pc-btn ghost">Let's Talk</a></div>
+      <div class="price-card"><div class="pc-tier">Starter</div><div class="pc-price">$49<small>/project</small></div><div class="pc-desc">Simple automation, 1–2 apps</div><ul class="pc-list"><li>1 workflow (up to 5 steps)</li><li>2 app integrations</li><li>3 day delivery</li><li>2 revisions</li><li>Documentation included</li></ul><button onclick="openOrder()" class="pc-btn ghost">Get Started</button></div>
+      <div class="price-card featured"><div class="featured-badge">Most Popular</div><div class="pc-tier">Professional</div><div class="pc-price">$149<small>/project</small></div><div class="pc-desc">Complex workflow or AI integration</div><ul class="pc-list"><li>1 complex workflow (unlimited steps)</li><li>Up to 5 app integrations</li><li>Error handling + monitoring</li><li>3 day delivery</li><li>Unlimited revisions</li><li>Video walkthrough + full docs</li><li>14 days support</li></ul><button onclick="openOrder()" class="pc-btn solid">Hire Me Now</button></div>
+      <div class="price-card"><div class="pc-tier">Enterprise</div><div class="pc-price">$349<small>+</small></div><div class="pc-desc">Full system or custom AI agent</div><ul class="pc-list"><li>Complete automation system</li><li>AI agent with custom training</li><li>Unlimited integrations</li><li>5–7 day delivery</li><li>Priority 30-day support</li><li>Monthly maintenance available</li></ul><button onclick="openOrder()" class="pc-btn ghost">Let's Talk</button></div>
     </div>
     <div class="faq-list rv" style="text-align:left">
       <div class="faq-item"><div class="faq-q">Do I need technical knowledge?<div class="faq-ico">+</div></div><div class="faq-a">Not at all. You describe what you want in plain language — I handle all the technical implementation.</div></div>
@@ -969,42 +981,42 @@ footer p { font-size: .78rem; color: var(--text3); }
   </div>
   </section>
 
-  <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready to automate<br>your business?</h2><p>Free consultation, no commitment. Most projects start within 24 hours.</p><div class="cta-btns"><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-fill">Message me on Fiverr →</a><button onclick="switchTab('smarthome',document.querySelector('.nav-tab'))" class="btn btn-outline">← Smart Home services</button></div></div></div></section>
+  <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready to automate<br>your business?</h2><p>Free consultation, no commitment. Most projects start within 24 hours.</p><div class="cta-btns"><button onclick="openOrder()" class="btn btn-fill">Get a Free Quote →</button><button onclick="switchTab('smarthome',document.querySelector('.nav-tab'))" class="btn btn-outline">← Smart Home</button></div></div></div></section>
 
-  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>AI & Automation Specialist · Available on Fiverr</p><p>© 2026 autoflow-lab</p></footer>
+  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>AI & Automation Specialist · Fiverr</p><p>© 2026 autoflow-lab</p></footer>
 </div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"><span id="t-ico">💡</span> <span id="t-txt"></span></div>
 
 <script>
-// ── THEME ──
-const html = document.documentElement;
-function toggleTheme(){
-  html.dataset.theme = html.dataset.theme==='dark'?'light':'dark';
-  localStorage.setItem('theme', html.dataset.theme);
-}
+// ═══════════════════════════════════════ THEME
+const html=document.documentElement;
+function toggleTheme(){html.dataset.theme=html.dataset.theme==='dark'?'light':'dark';localStorage.setItem('theme',html.dataset.theme);}
 (function(){const t=localStorage.getItem('theme');if(t)html.dataset.theme=t;})();
 
-// ── TABS ──
-function switchTab(id, el){
+// ═══════════════════════════════════════ TABS
+function switchTab(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
-  // Re-trigger reveals
-  document.querySelectorAll('.rv').forEach(el=>el.classList.remove('in'));
-  setTimeout(()=>{document.querySelectorAll('#page-'+id+' .rv').forEach(el=>{if(inView(el))el.classList.add('in')});},50);
+  setTimeout(()=>{document.querySelectorAll('#page-'+id+' .rv').forEach(e=>{if(inView(e))e.classList.add('in');});},50);
 }
 
-// ── SCROLL REVEAL ──
+function goHome(e){
+  e.preventDefault();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════ SCROLL REVEAL
 function inView(el){const r=el.getBoundingClientRect();return r.top<window.innerHeight*.92;}
 function checkReveals(){document.querySelectorAll('.rv:not(.in)').forEach(el=>{if(inView(el))el.classList.add('in');});}
 window.addEventListener('scroll',checkReveals,{passive:true});
-setTimeout(checkReveals,100);
+setTimeout(checkReveals,120);
 
-// ── CLOCK ──
+// ═══════════════════════════════════════ CLOCK
 function tick(){
   const h=new Date().getHours();
   const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
@@ -1017,7 +1029,7 @@ function tick(){
 }
 tick();
 
-// ── TOAST ──
+// ═══════════════════════════════════════ TOAST
 let tt;
 function showToast(ico,txt){
   clearTimeout(tt);
@@ -1027,85 +1039,183 @@ function showToast(ico,txt){
   tt=setTimeout(()=>el.classList.remove('show'),2400);
 }
 
-// ── ROOM STATE ──
-const rooms={
-  living:{on:true,icon:'🛋️',name:'Living Room',rect:'r-living',bulbs:[['b-l1','#f5a623'],['b-l2','#f5a623']]},
-  kitchen:{on:false,icon:'🍳',name:'Kitchen',rect:'r-kitchen',bulbs:[['b-k1','#f5a623'],['b-k2','#f5a623']]},
-  office:{on:true,icon:'🏢',name:'Office',rect:'r-office',bulbs:[['b-o1','#f5a623'],['b-o2','#f5a623']]},
-  bedroom:{on:false,icon:'🛏️',name:'Bedroom',rect:'r-bedroom',bulbs:[['b-bd1','#f5a623']]},
-  bathroom:{on:false,icon:'🚿',name:'Bathroom',rect:'r-bathroom',bulbs:[['b-ba1','#f5a623']]},
-  garden:{on:true,icon:'🌿',name:'Garden',rect:'r-garden',bulbs:[['b-g1','#30d158'],['b-g2','#30d158']]},
+// ═══════════════════════════════════════ ROOM STATE
+const LIGHT_COLORS={
+  warm:{color:'#f5a623',label:'Warm White'},
+  cool:{color:'#cce8ff',label:'Cool White'},
+  cyan:{color:'#00e5ff',label:'Cyan'},
+  pink:{color:'#e040fb',label:'Pink'},
+  green:{color:'#69ff47',label:'Green'},
+  red:{color:'#ff3b30',label:'Red'},
+  white:{color:'#ffffff',label:'White'},
 };
 
+const rooms={
+  living:{on:true,color:'warm',icon:'🛋️',name:'Living Room',
+    bulbIds:['b-living-1','b-living-2','b-living-3'],gradId:'rg-living',lightId:'light-living'},
+  kitchen:{on:false,color:'cool',icon:'🍳',name:'Kitchen',
+    bulbIds:['b-kitchen-1','b-kitchen-2'],gradId:'rg-kitchen',lightId:'light-kitchen'},
+  office:{on:true,color:'warm',icon:'🏢',name:'Office',
+    bulbIds:['b-office-1','b-office-2'],gradId:'rg-office',lightId:'light-office'},
+  bedroom:{on:false,color:'warm',icon:'🛏️',name:'Bedroom',
+    bulbIds:['b-bedroom-1'],gradId:'rg-bedroom',lightId:'light-bedroom'},
+  bathroom:{on:false,color:'cool',icon:'🚿',name:'Bathroom',
+    bulbIds:['b-bathroom-1','b-bathroom-2'],gradId:'rg-bathroom',lightId:'light-bathroom'},
+  garden:{on:true,color:'green',icon:'🌿',name:'Garden',
+    bulbIds:['b-garden-1','b-garden-2'],gradId:'rg-garden',lightId:'light-garden'},
+};
+
+function getRoomColor(k){return LIGHT_COLORS[rooms[k].color]||LIGHT_COLORS.warm;}
+
 function applyRoom(k){
-  const r=rooms[k]; const on=r.on;
-  const rect=document.getElementById(r.rect);
-  if(rect){
-    if(on){
-      const oc=k==='garden'?'rgba(48,209,88,.1)':'rgba(245,166,35,.12)';
-      const sc=k==='garden'?'rgba(48,209,88,.35)':'#f5a623';
-      rect.setAttribute('fill',oc);rect.setAttribute('stroke',sc);
-    } else {
-      rect.setAttribute('fill','var(--border)');rect.setAttribute('stroke','var(--border2)');
-    }
-  }
-  r.bulbs.forEach(([id,c])=>{
+  const r=rooms[k];const on=r.on;
+  const c=getRoomColor(k).color;
+
+  // Bulbs
+  r.bulbIds.forEach(id=>{
     const b=document.getElementById(id);if(!b)return;
-    if(on){b.setAttribute('fill',c);b.setAttribute('filter',k==='garden'?'url(#fg)':'url(#fw)');}
-    else{b.setAttribute('fill','var(--border2)');b.removeAttribute('filter');}
+    if(on){b.setAttribute('fill',c);b.setAttribute('filter','url(#glow-w)');}
+    else{b.setAttribute('fill','#c8c0b0');b.removeAttribute('filter');}
   });
-  // Dashboard room cards
-  document.querySelectorAll(`.room-card[data-r="${k}"]`).forEach(c=>c.classList.toggle('on',on));
+
+  // Room glow
+  const light=document.getElementById(r.lightId);
+  if(light)light.setAttribute('opacity',on?'1':'0');
+
+  // Update gradient color
+  const grad=document.getElementById(r.gradId);
+  if(grad){
+    const stop=grad.querySelector('stop');
+    if(stop){stop.setAttribute('stop-color',on?c:'#ffffff');stop.setAttribute('stop-opacity',on?'0.18':'0');}
+  }
+
+  // Dashboard cards
+  document.querySelectorAll(`.room-card[data-r="${k}"]`).forEach(card=>card.classList.toggle('on',on));
+
   // Light count
   const cnt=Object.values(rooms).filter(r=>r.on).length;
   const qe=document.getElementById('qs-lights');if(qe)qe.textContent=cnt;
+
   buildRoomList();
-  addLog(on?'💡':'🌑',r.name+(on?' on':' off'));
 }
 
-function fpToggle(k){
+// ═══════════════════════════════════════ FLOOR PLAN CLICK / COLOR PICKER
+let cpRoom=null;
+let longPressTimer=null;
+
+function fpClick(k,e){
+  if(e)e.preventDefault();
   rooms[k].on=!rooms[k].on;
   applyRoom(k);
   showToast(rooms[k].on?'💡':'🌑',rooms[k].name+' '+(rooms[k].on?'on':'off'));
-}
-function drToggle(card){
-  const k=card.dataset.r; if(!k||!rooms[k])return;
-  rooms[k].on=!rooms[k].on; applyRoom(k);
-  showToast(rooms[k].on?'💡':'🌑',rooms[k].name+' '+(rooms[k].on?'on':'off'));
+  addLog(rooms[k].on?'💡':'🌑',rooms[k].name+' '+(rooms[k].on?'on':'off'));
+  closeColorPicker();
 }
 
-// ── ROOM LIST ──
+function fpLongPress(k,e){
+  e.preventDefault();
+  openColorPicker(k,e);
+}
+
+function fpTouchStart(k,e){
+  longPressTimer=setTimeout(()=>{
+    openColorPicker(k,e.touches[0]);
+  },600);
+}
+function fpTouchEnd(e){
+  clearTimeout(longPressTimer);
+}
+
+function openColorPicker(k,e){
+  cpRoom=k;
+  const pop=document.getElementById('color-popover');
+  const container=document.getElementById('fp-container');
+  if(!pop||!container)return;
+
+  // Position relative to container
+  const cr=container.getBoundingClientRect();
+  let x=(e.clientX||e.pageX)-cr.left;
+  let y=(e.clientY||e.pageY)-cr.top;
+  x=Math.min(x,cr.width-175);y=Math.min(y,cr.height-140);
+  pop.style.left=Math.max(0,x)+'px';
+  pop.style.top=Math.max(0,y)+'px';
+
+  // Label
+  document.getElementById('cp-room-label').textContent=rooms[k].icon+' '+rooms[k].name;
+
+  // Swatches
+  const sw=document.getElementById('cp-swatches');sw.innerHTML='';
+  Object.entries(LIGHT_COLORS).forEach(([ck,cv])=>{
+    const d=document.createElement('div');
+    d.className='cp-sw'+(rooms[k].color===ck?' active':'');
+    d.style.background=cv.color;
+    d.title=cv.label;
+    d.onclick=()=>{
+      rooms[k].color=ck;
+      if(!rooms[k].on){rooms[k].on=true;}
+      applyRoom(k);
+      document.querySelectorAll('.cp-sw').forEach(s=>s.classList.remove('active'));
+      d.classList.add('active');
+      showToast('🎨',rooms[k].name+' → '+cv.label);
+    };
+    sw.appendChild(d);
+  });
+
+  pop.classList.add('show');
+}
+
+function closeColorPicker(){
+  const pop=document.getElementById('color-popover');
+  if(pop)pop.classList.remove('show');
+  cpRoom=null;
+}
+
+function applyRoomBrightness(val){
+  // Visual only — adjusts glow opacity
+  if(!cpRoom)return;
+  const r=rooms[cpRoom];
+  const light=document.getElementById(r.lightId);
+  if(light)light.setAttribute('opacity',(val/100)*1.2);
+}
+
+document.addEventListener('click',function(e){
+  const pop=document.getElementById('color-popover');
+  if(pop&&pop.classList.contains('show')&&!pop.contains(e.target)&&!e.target.closest('[id^="room-"]')){
+    closeColorPicker();
+  }
+});
+
+// ═══════════════════════════════════════ ROOM LIST (SIDEBAR)
 function buildRoomList(){
   const rl=document.getElementById('room-list');if(!rl)return;
   rl.innerHTML='';
   Object.entries(rooms).forEach(([k,r])=>{
     const d=document.createElement('div');d.className='room-row';
-    d.innerHTML=`<div class="rr-ico">${r.icon}</div><div class="rr-name">${r.name}</div><div class="rr-dot ${r.on?'on':''}"></div><div class="rr-sw ${r.on?'on':'off'}" onclick="event.stopPropagation();fpToggle('${k}')"></div>`;
-    d.onclick=()=>fpToggle(k);
+    const c=getRoomColor(k).color;
+    d.innerHTML=`
+      <div class="rr-ico">${r.icon}</div>
+      <div class="rr-name">${r.name}</div>
+      <div style="width:8px;height:8px;border-radius:50%;background:${r.on?c:'var(--bg3)'};transition:all .4s;${r.on?'box-shadow:0 0 5px '+c:''}"></div>
+      <div class="rr-sw ${r.on?'on':''}" onclick="event.stopPropagation();fpClick('${k}')"></div>`;
+    d.onclick=()=>fpClick(k);
     rl.appendChild(d);
   });
 }
 buildRoomList();
 
-// ── SCENES ──
-const SCENES={
-  relax:{on:['living','bedroom']},
-  normal:{on:['living','office','garden']},
-  movie:{on:['living']},
-  alloff:{on:[]},
-};
-function setScene(key, el){
+// ═══════════════════════════════════════ SCENES
+const SCENES={relax:{on:['living','bedroom']},normal:{on:['living','office','garden']},movie:{on:['living']},alloff:{on:[]}};
+function setScene(key){
+  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll(`.scene-pill[onclick*="${key}"],.scene-row-btn[onclick*="${key}"],.sq-btn[onclick*="${key}"]`).forEach(b=>b.classList.add('on'));
   const cfg=SCENES[key];
-  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b=>b.classList.remove('on','active'));
-  if(el){el.classList.add('on');}
   Object.keys(rooms).forEach(k=>{rooms[k].on=cfg.on.includes(k);applyRoom(k);});
   buildRoomList();
-  const labels={relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 All lights off'};
-  showToast('🎭',labels[key]);
-  addLog('🎭','Scene: '+key);
+  const labels={relax:'🌅 Relax mode',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 All lights off'};
+  showToast('🎭',labels[key]);addLog('🎭','Scene: '+key);
 }
 
-// ── DASHBOARD NAV ──
+// ═══════════════════════════════════════ DASHBOARD NAV
 function dPage(id,el){
   document.querySelectorAll('.d-page').forEach(p=>p.classList.remove('on'));
   document.getElementById('dp-'+id).classList.add('on');
@@ -1113,71 +1223,156 @@ function dPage(id,el){
   if(el)el.classList.add('on');
 }
 
-// ── ACTIVITY LOG ──
+function drToggle(card){
+  const k=card.dataset.r;if(!k||!rooms[k])return;
+  rooms[k].on=!rooms[k].on;applyRoom(k);
+  showToast(rooms[k].on?'💡':'🌑',rooms[k].name+' '+(rooms[k].on?'on':'off'));
+}
+
+// ═══════════════════════════════════════ LOG
 function addLog(ico,txt){
   const log=document.getElementById('d-log');if(!log)return;
   const d=document.createElement('div');d.className='log-item';
   const cols={'💡':'var(--warm)','🌑':'var(--text3)','🎭':'var(--green-c)','🎵':'var(--neon-p,#e040fb)'};
   d.innerHTML=`<div class="log-dot" style="background:${cols[ico]||'var(--accent)'}"></div><div class="log-txt">${txt}</div><div class="log-t">now</div>`;
-  log.insertBefore(d,log.firstChild);
-  if(log.children.length>5)log.removeChild(log.lastChild);
+  log.insertBefore(d,log.firstChild);if(log.children.length>5)log.removeChild(log.lastChild);
 }
 
-// ── MEDIA ──
+// ═══════════════════════════════════════ MEDIA
 const SONGS=['Blinding Lights','Starboy','Save Your Tears','Die For You','In Your Eyes'];
-let sIdx=0, playing=true, pw=35, pt;
+let sIdx=0,playing=true,pw=35,pt;
 function startPt(){pt=setInterval(()=>{pw=pw>=100?0:pw+.05;const p=document.getElementById('prog');if(p)p.style.width=pw+'%';},300);}
 startPt();
 function togglePlay(){
   playing=!playing;
-  const b=document.getElementById('playbtn'); const d=document.getElementById('disc');
-  if(playing){if(b){b.textContent='⏸';}if(d)d.style.animation='spin 8s linear infinite';startPt();showToast('🎵','Playing');}
-  else{if(b){b.textContent='▶';}if(d)d.style.animation='none';clearInterval(pt);showToast('⏸','Paused');}
+  const b=document.getElementById('playbtn');const d=document.getElementById('disc');
+  if(playing){b&&(b.textContent='⏸');d&&(d.style.animation='spin 8s linear infinite');startPt();showToast('🎵','Playing');}
+  else{b&&(b.textContent='▶');d&&(d.style.animation='none');clearInterval(pt);showToast('⏸','Paused');}
 }
 function nextSong(){sIdx=(sIdx+1)%SONGS.length;const n=document.getElementById('song-name');if(n)n.textContent=SONGS[sIdx];showToast('⏭',SONGS[sIdx]);}
 function prevSong(){sIdx=(sIdx-1+SONGS.length)%SONGS.length;const n=document.getElementById('song-name');if(n)n.textContent=SONGS[sIdx];showToast('⏮',SONGS[sIdx]);}
 
-// ── GARDEN LIGHTING ──
-let gardenColor='#f5a623', gardenBrightness=80;
-function setGardenColor(el, preset){
+// ═══════════════════════════════════════ GARDEN
+let gardenColor='#f5a623',gardenBright=80;
+function setGardenColor(el){
   document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));
-  el.classList.add('active');
-  gardenColor=el.dataset.color;
-  applyGardenLights();
+  el.classList.add('active');gardenColor=el.dataset.color;applyGarden();
   showToast('🌿','Garden color changed');
 }
-function setGardenBrightness(val){
-  gardenBrightness=val;
-  applyGardenLights();
-}
-function applyGardenLights(){
-  const a=gardenBrightness/100;
-  ['lamp1','lamp2','lamp3'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.setAttribute('fill',gardenColor);
+function setGardenBrightness(v){gardenBright=v;applyGarden();}
+function applyGarden(){
+  const a=gardenBright/100;
+  ['gl1c','gl2c','gl3c'].forEach(id=>{const e=document.getElementById(id);if(e)e.setAttribute('fill',gardenColor);});
+  ['gg1','gg2','gg3'].forEach((id,i)=>{
+    const e=document.getElementById(id);if(!e)return;
+    e.setAttribute('opacity',a*.85);
+    const g=document.getElementById('gl'+(i+1));if(!g)return;
+    const s=g.querySelector('stop');if(s){s.setAttribute('stop-color',gardenColor);s.setAttribute('stop-opacity',a);}
   });
-  ['glow1','glow2','glow3'].forEach((id,i)=>{
-    const el=document.getElementById(id);if(!el)return;
-    el.setAttribute('opacity', a*.85);
-    // Update gradient color
-    const g=document.getElementById('gl'+(i+1));
-    if(g){const s=g.querySelector('stop');if(s){s.setAttribute('stop-color',gardenColor);s.setAttribute('stop-opacity',a);}}
-  });
-  // Update sky/mood slightly
-  const sky=document.getElementById('sky-s1');
-  if(sky&&gardenColor==='#00e5ff')sky.setAttribute('stop-color','#0a1a30');
-  if(sky&&gardenColor==='#e040fb')sky.setAttribute('stop-color','#1a0a2a');
-  if(sky&&gardenColor==='#69ff47')sky.setAttribute('stop-color','#0a1a0a');
-  if(sky&&(gardenColor==='#f5a623'||gardenColor==='#ffffff'))sky.setAttribute('stop-color','#0a1a30');
 }
 
-// ── FAQ ──
+// ═══════════════════════════════════════ FAQ
 document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
 
-// ── DISK SPIN STYLE ──
-const style=document.createElement('style');style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(style);
-document.getElementById('disc').style.animation='spin 8s linear infinite';
+// ═══════════════════════════════════════ ORDER MODAL
+const CONTACT_EMAIL='hello@autoflow-lab.com'; // ← Change to your real email
 
-// ── INIT ──
+function openOrder(){document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';calcPrice();}
+function closeOrder(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOrder();});
+
+const BASE_PRICES={'sh-basic':49,'sh-full':99,'sh-premium':149,'ai-workflow':49,'ai-agent':99,'ai-enterprise':349};
+const ROOM_MULTIPLIER=[0,0,20,50,80];
+let checkExtras=0;
+let checkBreakdown=[];
+
+function toggleCheck(el,price){
+  el.classList.toggle('checked');
+  const cb=el.querySelector('.check-box');if(cb)cb.textContent=el.classList.contains('checked')?'✓':'';
+  calcPrice();
+}
+
+function calcPrice(){
+  const svc=document.getElementById('q-service').value;
+  const base=BASE_PRICES[svc]||49;
+  const roomIdx=parseInt(document.getElementById('q-rooms').value)||0;
+  const roomAdd=svc.startsWith('sh')?ROOM_MULTIPLIER[roomIdx]||0:0;
+
+  // Show/hide rooms & features for smart home
+  const shF=document.getElementById('sh-features');
+  const rW=document.getElementById('q-rooms-wrap');
+  if(shF)shF.style.display=svc.startsWith('sh')?'':'none';
+  if(rW)rW.style.display=svc.startsWith('sh')?'':'none';
+
+  let addons=0;const bd=[];
+  bd.push({l:'Base — '+document.getElementById('q-service').selectedOptions[0]?.text.replace(/ \(\$\d+\)/,''),v:base});
+  if(roomAdd>0)bd.push({l:'Extra rooms',v:roomAdd});
+
+  document.querySelectorAll('.check-item.checked').forEach(item=>{
+    const ps=item.querySelector('.check-plus');
+    if(ps){const m=ps.textContent.match(/\$(\d+)/);if(m){const add=parseInt(m[1]);addons+=add;bd.push({l:item.querySelector('.check-label')?.textContent||'',v:add});}}
+  });
+
+  const total=base+roomAdd+addons;
+  document.getElementById('est-total').textContent='$'+total;
+
+  const bEl=document.getElementById('est-breakdown');
+  if(bEl){bEl.innerHTML=bd.map(x=>`<div class="est-line"><span>${x.l}</span><strong>$${x.v}</strong></div>`).join('');}
+}
+
+function openContact(){
+  window.location.href='mailto:'+CONTACT_EMAIL+'?subject=Smart Home Dashboard Inquiry&body=Hi,%0A%0AI found your portfolio and would love to discuss a project.%0A%0APlease tell me more about your services.%0A%0AThanks!';
+}
+
+function submitQuote(){
+  const name=document.getElementById('q-name').value.trim();
+  const email=document.getElementById('q-email').value.trim();
+  if(!name||!email){showToast('⚠️','Please enter name and email');return;}
+  if(!email.includes('@')){showToast('⚠️','Invalid email address');return;}
+
+  const svc=document.getElementById('q-service').selectedOptions[0]?.text||'';
+  const rooms_v=document.getElementById('q-rooms').selectedOptions[0]?.text||'';
+  const notes=document.getElementById('q-notes').value.trim();
+  const price=document.getElementById('est-total').textContent;
+
+  const features=[];
+  document.querySelectorAll('.check-item.checked').forEach(item=>{
+    const lbl=item.querySelector('.check-label');if(lbl)features.push(lbl.textContent.trim());
+  });
+
+  const body=`New quote request from autoflow-lab.com
+
+Name: ${name}
+Email: ${email}
+
+Service: ${svc}
+Rooms: ${rooms_v}
+Features: ${features.length?features.join(', '):'None selected'}
+Extra notes: ${notes||'—'}
+
+Estimated price: ${price}
+
+---
+Sent via autoflow-lab.com configurator`;
+
+  const subject=encodeURIComponent(`Quote Request — ${name}`);
+  const bodyEnc=encodeURIComponent(body);
+
+  window.location.href=`mailto:${CONTACT_EMAIL}?subject=${subject}&body=${bodyEnc}`;
+
+  // Confirmation
+  const btn=document.querySelector('.submit-btn');
+  if(btn){btn.innerHTML='✅ Email client opened!';btn.disabled=true;}
+  showToast('📩','Opening email client...');
+  setTimeout(()=>{
+    if(btn){btn.innerHTML='<span>📩</span> Send Quote Request';btn.disabled=false;}
+    closeOrder();
+  },3000);
+}
+
+// ═══════════════════════════════════════ INIT
+const s=document.createElement('style');s.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(s);
+const disc=document.getElementById('disc');if(disc)disc.style.animation='spin 8s linear infinite';
 Object.keys(rooms).forEach(applyRoom);
 </script>
 </body>
