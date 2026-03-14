@@ -498,6 +498,18 @@ footer p{font-size:.78rem;color:var(--text3);}
 .hd-tablet{width:200px;height:155px;background:var(--bg3);border:2px solid var(--border2);border-radius:14px;position:absolute;right:calc(50% - 190px);bottom:0;z-index:1;box-shadow:var(--shadow-md);overflow:hidden;}
 .hd-tablet-screen{position:absolute;inset:6px;border-radius:9px;background:var(--bg);overflow:hidden;border:1px solid var(--border);}
 @media(max-width:780px){.hero-device{display:none;}}
+
+/* ━━━━ BEFORE / AFTER ━━━━ */
+.ba-container{margin-top:48px;}
+.ba-slider-wrap{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);height:260px;box-shadow:var(--shadow-lg);user-select:none;}
+.ba-before{position:absolute;inset:0;background:#f5f5f7;z-index:1;}
+.ba-after{position:absolute;inset:0;background:#07080f;z-index:2;clip-path:inset(0 50% 0 0);transition:clip-path 0s;}
+.ba-label{position:absolute;top:10px;font-size:.68rem;font-weight:700;letter-spacing:.5px;padding:4px 10px;border-radius:5px;z-index:5;pointer-events:none;}
+.ba-label-before{left:10px;background:rgba(29,29,31,.12);color:#1d1d1f;}
+.ba-label-after{right:10px;background:rgba(255,255,255,.12);color:#f5f5f7;}
+.ba-handle{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;cursor:ew-resize;width:40px;}
+.ba-handle-line{flex:1;width:2px;background:rgba(255,255,255,.8);}
+.ba-handle-btn{width:36px;height:28px;background:white;border-radius:8px;display:grid;place-items:center;font-size:.65rem;color:#1d1d1f;box-shadow:0 2px 8px rgba(0,0,0,.3);flex-shrink:0;font-weight:700;}
 </style>
 </head>
 <body>
@@ -1099,6 +1111,79 @@ footer p{font-size:.78rem;color:var(--text3);}
         <div class="card">
           <div class="card-title">Room Status</div>
           <div class="room-list" id="room-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+
+  <!-- ══════════ BEFORE / AFTER ══════════ -->
+  <section class="section ba-section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">The Difference</div>
+      <h2>Before & After</h2>
+      <p class="section-sub">Default Home Assistant vs a custom dashboard — same data, completely different experience.</p>
+    </div>
+    <div class="ba-container rv">
+      <div class="ba-slider-wrap">
+        <div class="ba-before">
+          <!-- "Default HA" mock -->
+          <div class="ba-label ba-label-before">Before — Default HA</div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:6px;height:100%;overflow:hidden">
+            <div style="font-size:.62rem;color:#6e6e73;font-weight:600;margin-bottom:2px">Home</div>
+            <!-- Generic HA-style cards -->
+            <div style="background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.7rem;color:#333">light.living_room</span>
+              <div style="width:34px;height:18px;border-radius:9px;background:#e0e0e0;position:relative"><div style="width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.7rem;color:#333">light.kitchen</span>
+              <div style="width:34px;height:18px;border-radius:9px;background:#03a9f4;position:relative"><div style="width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.7rem;color:#333">sensor.temperature</span>
+              <span style="font-size:.7rem;color:#333;font-weight:600">21.5 °C</span>
+            </div>
+            <div style="background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.7rem;color:#333">media_player.living_room</span>
+              <span style="font-size:.65rem;color:#666">idle</span>
+            </div>
+            <div style="background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.7rem;color:#333">binary_sensor.door</span>
+              <span style="font-size:.65rem;color:green">off</span>
+            </div>
+          </div>
+        </div>
+        <div class="ba-after">
+          <!-- Custom dashboard mock -->
+          <div class="ba-label ba-label-after">After — Custom Dashboard</div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:6px;height:100%;overflow:hidden;background:#07080f">
+            <div style="font-size:.62rem;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:2px">Good evening 👋 &nbsp;·&nbsp; 21.5° · ⛅</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:2px">
+              <div style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.35);border-radius:8px;padding:8px;text-align:center"><div style="font-size:.85rem">🛋️</div><div style="font-size:.5rem;color:rgba(245,166,35,.9);font-weight:700;margin-top:2px">ON</div></div>
+              <div style="background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);border-radius:8px;padding:8px;text-align:center"><div style="font-size:.85rem">🍳</div><div style="font-size:.5rem;color:rgba(0,229,255,.7);font-weight:700;margin-top:2px">ON</div></div>
+              <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px;text-align:center"><div style="font-size:.85rem">🛏️</div><div style="font-size:.5rem;color:rgba(255,255,255,.3);margin-top:2px">off</div></div>
+            </div>
+            <div style="background:rgba(224,64,251,.08);border:1px solid rgba(224,64,251,.2);border-radius:8px;padding:8px;display:flex;gap:6px;align-items:center">
+              <div style="width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#e040fb,#7c3aed);display:grid;place-items:center;font-size:.7rem">🎵</div>
+              <div><div style="font-size:.6rem;color:rgba(255,255,255,.8);font-weight:600">Blinding Lights</div><div style="font-size:.52rem;color:rgba(255,255,255,.35)">Now playing</div></div>
+              <div style="margin-left:auto;font-size:.7rem;color:#e040fb">⏸</div>
+            </div>
+            <div style="display:flex;gap:4px">
+              <div style="flex:1;background:rgba(41,151,255,.15);border:1px solid rgba(41,151,255,.3);border-radius:6px;padding:5px;text-align:center;font-size:.52rem;font-weight:700;color:#2997ff">☀️ Day</div>
+              <div style="flex:1;background:rgba(255,255,255,.04);border-radius:6px;padding:5px;text-align:center;font-size:.52rem;color:rgba(255,255,255,.3)">🌅</div>
+              <div style="flex:1;background:rgba(255,255,255,.04);border-radius:6px;padding:5px;text-align:center;font-size:.52rem;color:rgba(255,255,255,.3)">🎬</div>
+              <div style="flex:1;background:rgba(255,255,255,.04);border-radius:6px;padding:5px;text-align:center;font-size:.52rem;color:rgba(255,255,255,.3)">🌙</div>
+            </div>
+          </div>
+        </div>
+        <!-- Slider handle -->
+        <div class="ba-handle" id="ba-handle">
+          <div class="ba-handle-line"></div>
+          <div class="ba-handle-btn">◀ ▶</div>
+          <div class="ba-handle-line"></div>
         </div>
       </div>
     </div>
@@ -1979,6 +2064,30 @@ Sent via autoflow-lab.com configurator`;
 const s=document.createElement('style');s.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(s);
 const disc=document.getElementById('disc');if(disc)disc.style.animation='spin 8s linear infinite';
 Object.keys(rooms).forEach(applyRoom);
+
+// ─── BEFORE/AFTER SLIDER ───
+(function(){
+  const wrap=document.querySelector('.ba-slider-wrap');
+  if(!wrap)return;
+  const after=document.querySelector('.ba-after');
+  const handle=document.getElementById('ba-handle');
+  let dragging=false;
+  function setPos(x){
+    const r=wrap.getBoundingClientRect();
+    let pct=((x-r.left)/r.width*100);
+    pct=Math.max(5,Math.min(95,pct));
+    after.style.clipPath=`inset(0 ${100-pct}% 0 0)`;
+    handle.style.left=pct+'%';
+  }
+  handle.addEventListener('mousedown',e=>{dragging=true;e.preventDefault();});
+  handle.addEventListener('touchstart',e=>{dragging=true;});
+  window.addEventListener('mousemove',e=>{if(dragging)setPos(e.clientX);});
+  window.addEventListener('touchmove',e=>{if(dragging&&e.touches[0])setPos(e.touches[0].clientX);});
+  window.addEventListener('mouseup',()=>dragging=false);
+  window.addEventListener('touchend',()=>dragging=false);
+  wrap.addEventListener('click',e=>{if(!dragging)setPos(e.clientX);});
+})();
+
 </script>
 </body>
 </html>
