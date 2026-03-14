@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Dashboard Demo — AutoFlow Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07080f;
+  --surface: #0e1019;
+  --card: #13151f;
+  --border: rgba(255,255,255,0.06);
+  --border-lit: rgba(255,255,255,0.12);
+  --text: #f0f2ff;
+  --muted: rgba(240,242,255,0.38);
+  --pink: #e040fb;
+  --cyan: #00e5ff;
+  --green: #69ff47;
+  --orange: #ff9d42;
+  --yellow: #ffd166;
+  --warm: #ffb347;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .95rem; font-weight: 700; letter-spacing: -.3px;
+}
+.topbar-logo span { color: var(--pink); }
+.topbar-center {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 6px 14px;
+  font-size: .8rem; color: var(--muted);
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+.topbar-time { font-size: .85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cta-bar {
+  background: linear-gradient(135deg, rgba(224,64,251,.15), rgba(0,229,255,.08));
+  border-bottom: 1px solid rgba(224,64,251,.2);
+  padding: 10px 24px;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  flex-wrap: wrap;
+  font-size: .82rem;
+}
+.cta-bar strong { color: var(--pink); }
+.cta-btn {
+  background: var(--pink); color: #fff;
+  padding: 6px 18px; border-radius: 980px;
+  font-size: .78rem; font-weight: 700;
+  text-decoration: none; white-space: nowrap;
+  transition: opacity .2s, transform .2s;
+}
+.cta-btn:hover { opacity: .85; transform: scale(1.03); }
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 280px;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  min-height: calc(100vh - 56px - 41px);
+}
+@media(max-width: 1100px) { .layout { grid-template-columns: 1fr 1fr; } .right-col { display:none; } }
+@media(max-width: 700px) { .layout { grid-template-columns: 1fr; } .left-col { display:none; } }
+
+/* ── LEFT NAV ── */
+.left-col {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+}
+.nav-section { padding: 0 16px; margin-bottom: 28px; }
+.nav-label {
+  font-size: .65rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted);
+  padding: 0 8px; margin-bottom: 8px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 10px;
+  cursor: pointer; transition: background .2s, color .2s;
+  font-size: .84rem; font-weight: 500; color: var(--muted);
+  margin-bottom: 2px;
+}
+.nav-item:hover { background: rgba(255,255,255,.05); color: var(--text); }
+.nav-item.active { background: rgba(224,64,251,.12); color: var(--pink); }
+.nav-icon { font-size: 1rem; width: 22px; text-align: center; }
+.nav-badge {
+  margin-left: auto; background: var(--pink);
+  color: #fff; font-size: .65rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 980px;
+}
+
+/* ── MAIN CONTENT ── */
+.main-col {
+  padding: 24px;
+  overflow-y: auto;
+  background: var(--bg);
+}
+.page { display: none; }
+.page.active { display: block; }
+
+/* Greeting */
+.greeting { margin-bottom: 24px; }
+.greeting h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;
+}
+.greeting p { font-size: .85rem; color: var(--muted); }
+
+/* Scene row */
+.scene-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+.scene-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 12px;
+  background: var(--card); border: 1px solid var(--border);
+  cursor: pointer; transition: all .25s cubic-bezier(.34,1.56,.64,1);
+  font-size: .82rem; font-weight: 600; color: rgba(255,255,255,.7);
+  user-select: none;
+}
+.scene-btn:hover { transform: translateY(-2px); border-color: var(--border-lit); color: #fff; }
+.scene-btn.active { background: rgba(224,64,251,.15); border-color: rgba(224,64,251,.4); color: var(--pink); }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+@media(max-width:900px) { .stats-row { grid-template-columns: repeat(2,1fr); } }
+.stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px;
+  transition: border-color .3s;
+}
+.stat-card:hover { border-color: var(--border-lit); }
+.stat-label { font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
+.stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-sub { font-size: .72rem; color: var(--muted); }
+.stat-trend { font-size: .72rem; margin-top: 6px; }
+.up { color: var(--green); } .dn { color: #ff5252; }
+
+/* Rooms grid */
+.rooms-label { font-size: .72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.rooms-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+@media(max-width:900px) { .rooms-grid { grid-template-columns: repeat(2,1fr); } }
+
+.room-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 18px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: border-color .3s, box-shadow .3s, transform .25s cubic-bezier(.34,1.56,.64,1);
+  user-select: none;
+}
+.room-card::before {
+  content: ''; position: absolute; inset: 0;
+  border-radius: 16px;
+  opacity: 0; transition: opacity .4s;
+  pointer-events: none;
+}
+.room-card.on { border-color: rgba(255,180,70,.35); }
+.room-card.on::before { background: radial-gradient(circle at 30% 30%, rgba(255,180,70,.12), transparent 70%); opacity: 1; }
+.room-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,.4); }
+.room-card:active { transform: scale(.97); }
+
+.room-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.room-name { font-size: .88rem; font-weight: 700; margin-bottom: 4px; }
+.room-info { font-size: .75rem; color: var(--muted); }
+.room-lights {
+  position: absolute; top: 14px; right: 14px;
+  display: flex; gap: 4px;
+}
+.light-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  transition: all .4s;
+}
+.light-dot.on {
+  background: var(--warm);
+  box-shadow: 0 0 8px var(--warm);
+}
+.room-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 14px;
+}
+.toggle-switch {
+  width: 38px; height: 22px; border-radius: 11px;
+  background: rgba(255,255,255,.1);
+  position: relative; transition: background .3s;
+  flex-shrink: 0;
+}
+.toggle-switch::after {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; top: 3px; left: 3px;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), background .3s;
+}
+.room-card.on .toggle-switch { background: var(--warm); }
+.room-card.on .toggle-switch::after { transform: translateX(16px); }
+.room-temp { font-size: .75rem; color: var(--muted); }
+
+/* Floor plan */
+.floorplan-wrap {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px; margin-bottom: 24px;
+}
+.floorplan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.floorplan-title { font-size: .85rem; font-weight: 700; }
+.floorplan-sub { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+.fp-legend { display: flex; gap: 12px; font-size: .72rem; color: var(--muted); }
+.fp-legend-item { display: flex; align-items: center; gap: 5px; }
+.fp-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.floorplan {
+  position: relative; width: 100%; padding-bottom: 55%;
+  background: #0a0b14;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.04);
+}
+.floorplan svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+
+/* Media */
+.media-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px;
+  display: flex; gap: 16px; align-items: center; margin-bottom: 12px;
+  transition: border-color .3s;
+}
+.media-card:hover { border-color: var(--border-lit); }
+.media-art {
+  width: 56px; height: 56px; border-radius: 10px;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  animation: spin 8s linear infinite;
+  animation-play-state: paused;
+}
+.media-art.playing { animation-play-state: running; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.media-info { flex: 1; min-width: 0; }
+.media-title { font-size: .88rem; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.media-sub { font-size: .75rem; color: var(--muted); }
+.media-controls { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+.mc-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.06); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: .75rem;
+  transition: all .2s;
+}
+.mc-btn:hover { background: rgba(255,255,255,.12); }
+.mc-btn.play {
+  width: 36px; height: 36px;
+  background: var(--pink); border-color: var(--pink);
+  box-shadow: 0 0 16px rgba(224,64,251,.4);
+}
+.progress-bar {
+  height: 3px; background: rgba(255,255,255,.08); border-radius: 2px;
+  margin-top: 10px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--pink);
+  width: 0%; transition: width .5s linear;
+  border-radius: 2px;
+}
+.vol-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.vol-icon { font-size: .8rem; color: var(--muted); }
+.vol-slider {
+  flex: 1; height: 3px; background: rgba(255,255,255,.08);
+  border-radius: 2px; position: relative; cursor: pointer;
+}
+.vol-fill { height: 100%; background: rgba(255,255,255,.35); border-radius: 2px; width: 65%; transition: width .2s; }
+
+/* Right col */
+.right-col {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+}
+.widget {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px; margin-bottom: 14px;
+}
+.widget-title { font-size: .72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+
+/* Weather */
+.weather-main { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.weather-temp { font-family: 'Space Grotesk', sans-serif; font-size: 2.8rem; font-weight: 800; }
+.weather-icon { font-size: 3rem; }
+.weather-desc { font-size: .8rem; color: var(--muted); margin-bottom: 12px; }
+.weather-row { display: flex; justify-content: space-between; }
+.weather-item { text-align: center; font-size: .72rem; color: var(--muted); }
+.weather-item strong { display: block; color: var(--text); font-size: .8rem; margin-bottom: 2px; }
+.forecast { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.fc-day { text-align: center; font-size: .7rem; color: var(--muted); }
+.fc-day .fc-icon { font-size: 1.1rem; margin: 4px 0; }
+.fc-day strong { color: var(--text); }
+
+/* Energy donut */
+.donut-wrap { display: flex; align-items: center; gap: 16px; }
+.donut-svg { flex-shrink: 0; }
+.donut-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.dl-item { display: flex; align-items: center; gap: 8px; font-size: .76rem; }
+.dl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dl-val { margin-left: auto; font-weight: 600; }
+
+/* Log */
+.log-list { display: flex; flex-direction: column; gap: 8px; }
+.log-item { display: flex; align-items: flex-start; gap: 10px; font-size: .77rem; }
+.log-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.log-text { color: rgba(255,255,255,.7); line-height: 1.5; }
+.log-time { color: var(--muted); margin-left: auto; white-space: nowrap; padding-top: 1px; }
+
+/* Notification toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: rgba(20,18,36,.95); border: 1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(20px); border-radius: 12px; padding: 12px 20px;
+  font-size: .83rem; display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  z-index: 999; transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast-icon { font-size: 1rem; }
+
+/* Lights page */
+.lights-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.light-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px; cursor: pointer;
+  transition: all .3s;
+}
+.light-card.on { border-color: rgba(255,180,70,.4); background: rgba(255,180,70,.05); }
+.light-icon { font-size: 1.6rem; margin-bottom: 10px; transition: filter .4s; }
+.light-card.on .light-icon { filter: drop-shadow(0 0 8px var(--warm)); }
+.light-name { font-size: .85rem; font-weight: 600; margin-bottom: 4px; }
+.light-state { font-size: .75rem; color: var(--muted); }
+.brightness-wrap { margin-top: 12px; display: none; }
+.light-card.on .brightness-wrap { display: block; }
+.brightness-label { font-size: .7rem; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.brightness-slider {
+  width: 100%; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,.08);
+  appearance: none; outline: none; cursor: pointer;
+}
+.brightness-slider::-webkit-slider-thumb {
+  appearance: none; width: 14px; height: 14px;
+  border-radius: 50%; background: var(--warm);
+  box-shadow: 0 0 6px var(--warm);
+}
+
+/* Sensors page */
+.sensors-list { display: flex; flex-direction: column; gap: 10px; }
+.sensor-item {
+  display: flex; align-items: center;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; gap: 14px;
+}
+.sensor-icon { font-size: 1.2rem; width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sensor-name { font-size: .85rem; font-weight: 500; }
+.sensor-room { font-size: .72rem; color: var(--muted); }
+.sensor-val { margin-left: auto; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+.sensor-bar-wrap { width: 80px; height: 4px; background: rgba(255,255,255,.08); border-radius: 2px; margin-left: 12px; }
+.sensor-bar { height: 100%; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">Auto<span>Flow</span> Studio</div>
+  <div class="topbar-center">
+    <div class="live-dot"></div>
+    Interactive Demo Dashboard
+  </div>
+  <div class="topbar-time" id="clock">--:--</div>
+</div>
+
+<!-- CTA BAR -->
+<div class="cta-bar">
+  <span>✨ This is a <strong>live interactive demo</strong> — click anything! I build dashboards like this for your real home.</span>
+  <a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="cta-btn">Get yours on Fiverr →</a>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT NAV -->
+  <div class="left-col">
+    <div class="nav-section">
+      <div class="nav-label">Main</div>
+      <div class="nav-item active" onclick="showPage('home',this)"><div class="nav-icon">🏠</div> Overview</div>
+      <div class="nav-item" onclick="showPage('lights',this)"><div class="nav-icon">💡</div> Lights</div>
+      <div class="nav-item" onclick="showPage('media',this)"><div class="nav-icon">🎵</div> Media</div>
+      <div class="nav-item" onclick="showPage('sensors',this)"><div class="nav-icon">🌡️</div> Sensors</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Areas</div>
+      <div class="nav-item" onclick="showPage('home',this);"><div class="nav-icon">🛋️</div> Living Room</div>
+      <div class="nav-item" onclick="showPage('home',this);"><div class="nav-icon">🍳</div> Kitchen</div>
+      <div class="nav-item" onclick="showPage('home',this);"><div class="nav-icon">🛏️</div> Bedroom</div>
+      <div class="nav-item" onclick="showPage('home',this);"><div class="nav-icon">🏢</div> Office</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Automations</div>
+      <div class="nav-item" onclick="triggerAutomation('motion')"><div class="nav-icon">🚶</div> Motion Active <div class="nav-badge">ON</div></div>
+      <div class="nav-item" onclick="triggerAutomation('sunset')"><div class="nav-icon">🌅</div> Sunset Scene</div>
+      <div class="nav-item" onclick="triggerAutomation('away')"><div class="nav-icon">🔒</div> Away Mode</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-col">
+
+    <!-- HOME PAGE -->
+    <div class="page active" id="page-home">
+      <div class="greeting">
+        <h1 id="greeting-text">Good afternoon, Janis 👋</h1>
+        <p>Your home is comfortable · <span id="date-text"></span></p>
+      </div>
+
+      <!-- Scenes -->
+      <div class="scene-row">
+        <div class="scene-btn" onclick="setScene('morning',this)">🌅 Good Morning</div>
+        <div class="scene-btn active" onclick="setScene('normal',this)">☀️ Normal</div>
+        <div class="scene-btn" onclick="setScene('movie',this)">🎬 Movie Night</div>
+        <div class="scene-btn" onclick="setScene('evening',this)">🌙 Evening</div>
+        <div class="scene-btn" onclick="setScene('away',this)">🔒 Away</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Temperature</div>
+          <div class="stat-val" style="color:#ff9d42" id="stat-temp">21.4°</div>
+          <div class="stat-sub">Average indoor</div>
+          <div class="stat-trend up">↑ 0.3° in last hour</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Lights On</div>
+          <div class="stat-val" style="color:#ffd166" id="stat-lights">4</div>
+          <div class="stat-sub">of 12 lights</div>
+          <div class="stat-trend"><span style="color:var(--muted)">3 auto-controlled</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Energy Today</div>
+          <div class="stat-val" style="color:#69ff47">2.4<span style="font-size:1rem">kW</span></div>
+          <div class="stat-sub">Current usage</div>
+          <div class="stat-trend dn">↑ 12% vs. yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Security</div>
+          <div class="stat-val" style="color:#00e5ff;font-size:1.1rem" id="stat-security">Armed</div>
+          <div class="stat-sub">All sensors OK</div>
+          <div class="stat-trend up">✓ No motion</div>
+        </div>
+      </div>
+
+      <!-- Rooms -->
+      <div class="rooms-label">Rooms</div>
+      <div class="rooms-grid" id="rooms-grid">
+        <div class="room-card on" data-room="living" onclick="toggleRoom(this)">
+          <div class="room-lights">
+            <div class="light-dot on"></div>
+            <div class="light-dot on"></div>
+            <div class="light-dot"></div>
+          </div>
+          <div class="room-icon">🛋️</div>
+          <div class="room-name">Living Room</div>
+          <div class="room-info">3 devices · TV active</div>
+          <div class="room-toggle">
+            <div class="room-temp">22.1°C · 48% hum</div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>
+        <div class="room-card" data-room="kitchen" onclick="toggleRoom(this)">
+          <div class="room-lights">
+            <div class="light-dot"></div>
+            <div class="light-dot"></div>
+          </div>
+          <div class="room-icon">🍳</div>
+          <div class="room-name">Kitchen</div>
+          <div class="room-info">2 devices</div>
+          <div class="room-toggle">
+            <div class="room-temp">21.8°C · 52% hum</div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>
+        <div class="room-card on" data-room="office" onclick="toggleRoom(this)">
+          <div class="room-lights">
+            <div class="light-dot on"></div>
+            <div class="light-dot on"></div>
+          </div>
+          <div class="room-icon">🏢</div>
+          <div class="room-name">Office</div>
+          <div class="room-info">4 devices · Working</div>
+          <div class="room-toggle">
+            <div class="room-temp">20.5°C · 44% hum</div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>
+        <div class="room-card" data-room="bedroom" onclick="toggleRoom(this)">
+          <div class="room-lights">
+            <div class="light-dot"></div>
+          </div>
+          <div class="room-icon">🛏️</div>
+          <div class="room-name">Bedroom</div>
+          <div class="room-info">2 devices · Quiet</div>
+          <div class="room-toggle">
+            <div class="room-temp">19.8°C · 51% hum</div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>
+        <div class="room-card" data-room="bathroom" onclick="toggleRoom(this)">
+          <div class="room-lights">
+            <div class="light-dot"></div>
+            <div class="light-dot"></div>
+          </div>
+          <div class="room-icon">🚿</div>
+          <div class="room-name">Bathroom</div>
+          <div class="room-info">2 devices</div>
+          <div class="room-toggle">
+            <div class="room-temp">22.3°C · 68% hum</div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>
+        <div class="room-card on" data-room="garden" onclick="toggleRoom(this)">
+          <div class="room-lights">
+            <div class="light-dot on"></div>
+          </div>
+          <div class="room-icon">🌿</div>
+          <div class="room-name">Garden</div>
+          <div class="room-info">Outdoor lights on</div>
+          <div class="room-toggle">
+            <div class="room-temp">11.2°C outside</div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floor plan -->
+      <div class="floorplan-wrap">
+        <div class="floorplan-header">
+          <div>
+            <div class="floorplan-title">Floor Plan</div>
+            <div class="floorplan-sub">Click rooms to toggle lights</div>
+          </div>
+          <div class="fp-legend">
+            <div class="fp-legend-item"><div class="fp-dot" style="background:#ffb347;box-shadow:0 0 6px #ffb347"></div> On</div>
+            <div class="fp-legend-item"><div class="fp-dot" style="background:rgba(255,255,255,.2)"></div> Off</div>
+          </div>
+        </div>
+        <div class="floorplan">
+          <svg viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg" id="floorplan-svg">
+            <!-- House outline -->
+            <rect x="20" y="20" width="760" height="400" rx="8" fill="#0a0c18" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+            <!-- Rooms -->
+            <!-- Living Room -->
+            <rect id="fp-living" x="30" y="30" width="300" height="200" rx="4" fill="rgba(255,180,70,.15)" stroke="#ffb347" stroke-width="1.5" class="fp-room on" onclick="toggleRoomByName('living')" style="cursor:pointer;transition:fill .4s"/>
+            <text x="180" y="120" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="14" font-family="Inter" font-weight="600">Living Room</text>
+            <circle id="fp-light-living1" cx="120" cy="145" r="8" fill="#ffb347" opacity=".9" filter="url(#glow)"/>
+            <circle id="fp-light-living2" cx="240" cy="145" r="8" fill="#ffb347" opacity=".9" filter="url(#glow)"/>
+            <!-- Kitchen -->
+            <rect id="fp-kitchen" x="340" y="30" width="220" height="180" rx="4" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" class="fp-room" onclick="toggleRoomByName('kitchen')" style="cursor:pointer;transition:fill .4s"/>
+            <text x="450" y="115" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="14" font-family="Inter" font-weight="600">Kitchen</text>
+            <circle id="fp-light-kitchen1" cx="420" cy="140" r="8" fill="rgba(255,255,255,.12)" opacity=".5"/>
+            <circle id="fp-light-kitchen2" cx="480" cy="140" r="8" fill="rgba(255,255,255,.12)" opacity=".5"/>
+            <!-- Office -->
+            <rect id="fp-office" x="570" y="30" width="200" height="200" rx="4" fill="rgba(255,180,70,.15)" stroke="#ffb347" stroke-width="1.5" class="fp-room on" onclick="toggleRoomByName('office')" style="cursor:pointer;transition:fill .4s"/>
+            <text x="670" y="120" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="14" font-family="Inter" font-weight="600">Office</text>
+            <circle id="fp-light-office1" cx="630" cy="145" r="8" fill="#ffb347" opacity=".9" filter="url(#glow)"/>
+            <circle id="fp-light-office2" cx="710" cy="145" r="8" fill="#ffb347" opacity=".9" filter="url(#glow)"/>
+            <!-- Bedroom -->
+            <rect id="fp-bedroom" x="30" y="240" width="220" height="170" rx="4" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" class="fp-room" onclick="toggleRoomByName('bedroom')" style="cursor:pointer;transition:fill .4s"/>
+            <text x="140" y="325" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="14" font-family="Inter" font-weight="600">Bedroom</text>
+            <circle id="fp-light-bedroom1" cx="140" cy="350" r="8" fill="rgba(255,255,255,.12)" opacity=".5"/>
+            <!-- Bathroom -->
+            <rect id="fp-bathroom" x="260" y="240" width="160" height="170" rx="4" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" class="fp-room" onclick="toggleRoomByName('bathroom')" style="cursor:pointer;transition:fill .4s"/>
+            <text x="340" y="325" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="13" font-family="Inter" font-weight="600">Bathroom</text>
+            <circle id="fp-light-bathroom1" cx="340" cy="350" r="8" fill="rgba(255,255,255,.12)" opacity=".5"/>
+            <!-- Hallway -->
+            <rect x="430" y="220" width="340" height="90" rx="4" fill="rgba(255,255,255,.015)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+            <text x="600" y="270" text-anchor="middle" fill="rgba(255,255,255,.25)" font-size="12" font-family="Inter">Hallway</text>
+            <!-- Garden -->
+            <rect id="fp-garden" x="430" y="320" width="340" height="90" rx="4" fill="rgba(105,255,71,.1)" stroke="rgba(105,255,71,.3)" stroke-width="1.5" class="fp-room on" onclick="toggleRoomByName('garden')" style="cursor:pointer;transition:fill .4s"/>
+            <text x="600" y="370" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="14" font-family="Inter" font-weight="600">Garden 🌿</text>
+            <circle id="fp-light-garden1" cx="530" cy="355" r="8" fill="#69ff47" opacity=".8" filter="url(#glow-g)"/>
+            <!-- Filters -->
+            <defs>
+              <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="glow-g" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIGHTS PAGE -->
+    <div class="page" id="page-lights">
+      <div class="greeting"><h1>Lights 💡</h1><p>Control all lights in your home</p></div>
+      <div class="lights-grid" id="lights-grid">
+        <div class="light-card on" data-light="ceiling1" onclick="toggleLight(this)">
+          <div class="light-icon">💡</div>
+          <div class="light-name">Ceiling — Living Room</div>
+          <div class="light-state">On · Warm white · 80%</div>
+          <div class="brightness-wrap">
+            <div class="brightness-label"><span>Brightness</span><span id="bv1">80%</span></div>
+            <input type="range" class="brightness-slider" min="1" max="100" value="80" oninput="document.getElementById('bv1').textContent=this.value+'%'" onclick="event.stopPropagation()">
+          </div>
+        </div>
+        <div class="light-card on" data-light="led1" onclick="toggleLight(this)">
+          <div class="light-icon">🌈</div>
+          <div class="light-name">LED Strip — TV</div>
+          <div class="light-state">On · Pink · 60%</div>
+          <div class="brightness-wrap">
+            <div class="brightness-label"><span>Brightness</span><span id="bv2">60%</span></div>
+            <input type="range" class="brightness-slider" min="1" max="100" value="60" oninput="document.getElementById('bv2').textContent=this.value+'%'" onclick="event.stopPropagation()">
+          </div>
+        </div>
+        <div class="light-card" data-light="kitchen1" onclick="toggleLight(this)">
+          <div class="light-icon">💡</div>
+          <div class="light-name">Ceiling — Kitchen</div>
+          <div class="light-state">Off</div>
+          <div class="brightness-wrap">
+            <div class="brightness-label"><span>Brightness</span><span id="bv3">100%</span></div>
+            <input type="range" class="brightness-slider" min="1" max="100" value="100" oninput="document.getElementById('bv3').textContent=this.value+'%'" onclick="event.stopPropagation()">
+          </div>
+        </div>
+        <div class="light-card on" data-light="office1" onclick="toggleLight(this)">
+          <div class="light-icon">🖥️</div>
+          <div class="light-name">Desk Lamp — Office</div>
+          <div class="light-state">On · Cool white · 100%</div>
+          <div class="brightness-wrap">
+            <div class="brightness-label"><span>Brightness</span><span id="bv4">100%</span></div>
+            <input type="range" class="brightness-slider" min="1" max="100" value="100" oninput="document.getElementById('bv4').textContent=this.value+'%'" onclick="event.stopPropagation()">
+          </div>
+        </div>
+        <div class="light-card" data-light="bed1" onclick="toggleLight(this)">
+          <div class="light-icon">💡</div>
+          <div class="light-name">Bedside — Bedroom</div>
+          <div class="light-state">Off</div>
+          <div class="brightness-wrap">
+            <div class="brightness-label"><span>Brightness</span><span id="bv5">30%</span></div>
+            <input type="range" class="brightness-slider" min="1" max="100" value="30" oninput="document.getElementById('bv5').textContent=this.value+'%'" onclick="event.stopPropagation()">
+          </div>
+        </div>
+        <div class="light-card on" data-light="garden1" onclick="toggleLight(this)">
+          <div class="light-icon">🌿</div>
+          <div class="light-name">Outdoor — Garden</div>
+          <div class="light-state">On · Warm · 70%</div>
+          <div class="brightness-wrap">
+            <div class="brightness-label"><span>Brightness</span><span id="bv6">70%</span></div>
+            <input type="range" class="brightness-slider" min="1" max="100" value="70" oninput="document.getElementById('bv6').textContent=this.value+'%'" onclick="event.stopPropagation()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIA PAGE -->
+    <div class="page" id="page-media">
+      <div class="greeting"><h1>Media 🎵</h1><p>Control all speakers and TVs</p></div>
+      <div id="media-list">
+        <div class="media-card" id="mc-wohnzimmer">
+          <div class="media-art playing" id="art-wz">🎵</div>
+          <div style="flex:1;min-width:0">
+            <div class="media-title" id="song-wz">Blinding Lights</div>
+            <div class="media-sub">The Weeknd · Living Room Speaker</div>
+            <div class="media-controls">
+              <div class="mc-btn" onclick="prevSong('wz')">⏮</div>
+              <div class="mc-btn play" id="playbtn-wz" onclick="togglePlay('wz')">⏸</div>
+              <div class="mc-btn" onclick="nextSong('wz')">⏭</div>
+              <div style="flex:1"></div>
+              <div class="mc-btn" onclick="">🔀</div>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="prog-wz" style="width:38%"></div></div>
+            <div class="vol-row">
+              <div class="vol-icon">🔈</div>
+              <div class="vol-slider" onclick="setVolume(event,this,'wz')"><div class="vol-fill" id="vol-wz"></div></div>
+              <div class="vol-icon">🔊</div>
+            </div>
+          </div>
+        </div>
+        <div class="media-card" id="mc-office">
+          <div class="media-art" id="art-of">📻</div>
+          <div style="flex:1;min-width:0">
+            <div class="media-title">Radio Swiss Pop</div>
+            <div class="media-sub">Live Stream · Office</div>
+            <div class="media-controls">
+              <div class="mc-btn play" id="playbtn-of" onclick="togglePlay('of')" style="background:rgba(255,255,255,.06);border-color:var(--border);box-shadow:none">▶</div>
+              <div style="flex:1"></div>
+              <div class="mc-btn">🔇</div>
+            </div>
+            <div class="vol-row">
+              <div class="vol-icon">🔈</div>
+              <div class="vol-slider" onclick="setVolume(event,this,'of')"><div class="vol-fill" id="vol-of" style="width:40%"></div></div>
+              <div class="vol-icon">🔊</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENSORS PAGE -->
+    <div class="page" id="page-sensors">
+      <div class="greeting"><h1>Sensors 🌡️</h1><p>Live readings from all rooms</p></div>
+      <div class="sensors-list">
+        <div class="sensor-item"><div class="sensor-icon">🌡️</div><div><div class="sensor-name">Temperature</div><div class="sensor-room">Living Room</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:65%;background:var(--orange)"></div></div><div class="sensor-val" style="color:var(--orange)">22.1°C</div></div>
+        <div class="sensor-item"><div class="sensor-icon">💧</div><div><div class="sensor-name">Humidity</div><div class="sensor-room">Living Room</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:48%;background:var(--cyan)"></div></div><div class="sensor-val" style="color:var(--cyan)">48%</div></div>
+        <div class="sensor-item"><div class="sensor-icon">🌡️</div><div><div class="sensor-name">Temperature</div><div class="sensor-room">Kitchen</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:62%;background:var(--orange)"></div></div><div class="sensor-val" style="color:var(--orange)">21.8°C</div></div>
+        <div class="sensor-item"><div class="sensor-icon">💧</div><div><div class="sensor-name">Humidity</div><div class="sensor-room">Bathroom</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:68%;background:var(--cyan)"></div></div><div class="sensor-val" style="color:var(--cyan)">68%</div></div>
+        <div class="sensor-item"><div class="sensor-icon">⚡</div><div><div class="sensor-name">Power Usage</div><div class="sensor-room">Whole Home</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:42%;background:var(--green)"></div></div><div class="sensor-val" style="color:var(--green)">2.4 kW</div></div>
+        <div class="sensor-item"><div class="sensor-icon">🌬️</div><div><div class="sensor-name">CO₂</div><div class="sensor-room">Office</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:35%;background:var(--green)"></div></div><div class="sensor-val" style="color:var(--green)">680 ppm</div></div>
+        <div class="sensor-item"><div class="sensor-icon">☀️</div><div><div class="sensor-name">Luminance</div><div class="sensor-room">Living Room</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:28%;background:var(--yellow)"></div></div><div class="sensor-val" style="color:var(--yellow)">340 lx</div></div>
+        <div class="sensor-item"><div class="sensor-icon">🔊</div><div><div class="sensor-name">Noise Level</div><div class="sensor-room">Living Room</div></div><div class="sensor-bar-wrap"><div class="sensor-bar" style="width:22%;background:var(--muted))"></div></div><div class="sensor-val">38 dB</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COL -->
+  <div class="right-col">
+    <div class="widget">
+      <div class="widget-title">Weather <span style="font-weight:400;color:var(--muted);font-size:.7rem">Egg, Switzerland</span></div>
+      <div class="weather-main">
+        <div><div class="weather-temp">11°</div><div class="weather-desc">Partly cloudy · Feels like 8°</div></div>
+        <div class="weather-icon">⛅</div>
+      </div>
+      <div class="weather-row">
+        <div class="weather-item"><strong>💨 14</strong>km/h wind</div>
+        <div class="weather-item"><strong>💧 62</strong>% humid</div>
+        <div class="weather-item"><strong>👁️ 10</strong>km vis</div>
+      </div>
+      <div class="forecast">
+        <div class="fc-day"><div>Mon</div><div class="fc-icon">🌧️</div><strong>9°</strong></div>
+        <div class="fc-day"><div>Tue</div><div class="fc-icon">⛅</div><strong>13°</strong></div>
+        <div class="fc-day"><div>Wed</div><div class="fc-icon">☀️</div><strong>16°</strong></div>
+        <div class="fc-day"><div>Thu</div><div class="fc-icon">☀️</div><strong>18°</strong></div>
+        <div class="fc-day"><div>Fri</div><div class="fc-icon">🌥️</div><strong>14°</strong></div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <div class="widget-title">Energy Today</div>
+      <div class="donut-wrap">
+        <svg class="donut-svg" width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="35" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="10"/>
+          <circle cx="45" cy="45" r="35" fill="none" stroke="#e040fb" stroke-width="10" stroke-dasharray="88 132" stroke-dashoffset="22" stroke-linecap="round"/>
+          <circle cx="45" cy="45" r="35" fill="none" stroke="#00e5ff" stroke-width="10" stroke-dasharray="55 165" stroke-dashoffset="-66" stroke-linecap="round"/>
+          <circle cx="45" cy="45" r="35" fill="none" stroke="#69ff47" stroke-width="10" stroke-dasharray="30 190" stroke-dashoffset="-121" stroke-linecap="round"/>
+          <text x="45" y="49" text-anchor="middle" fill="white" font-size="11" font-family="Space Grotesk" font-weight="700">8.2</text>
+          <text x="45" y="61" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7">kWh</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="dl-item"><div class="dl-dot" style="background:#e040fb"></div>Heating<div class="dl-val">3.8</div></div>
+          <div class="dl-item"><div class="dl-dot" style="background:#00e5ff"></div>Appliances<div class="dl-val">2.6</div></div>
+          <div class="dl-item"><div class="dl-dot" style="background:#69ff47"></div>Lights<div class="dl-val">1.8</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <div class="widget-title">Recent Activity</div>
+      <div class="log-list" id="activity-log">
+        <div class="log-item"><div class="log-dot" style="background:#e040fb"></div><div class="log-text">Motion detected — Hallway</div><div class="log-time">2m ago</div></div>
+        <div class="log-item"><div class="log-dot" style="background:#ffb347"></div><div class="log-text">Office lights turned on</div><div class="log-time">8m ago</div></div>
+        <div class="log-item"><div class="log-dot" style="background:#00e5ff"></div><div class="log-text">Thermostat set to 21°C</div><div class="log-time">14m ago</div></div>
+        <div class="log-item"><div class="log-dot" style="background:#69ff47"></div><div class="log-text">Door unlocked — Front</div><div class="log-time">32m ago</div></div>
+        <div class="log-item"><div class="log-dot" style="background:#ffd166"></div><div class="log-text">TV turned on</div><div class="log-time">1h ago</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toast-icon">💡</div>
+  <div id="toast-text">Lights turned on</div>
+</div>
+
+<script>
+// ── CLOCK ──
+function tick(){
+  const now=new Date();
+  document.getElementById('clock').textContent=now.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});
+  const h=now.getHours();
+  const greet=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('greeting-text').textContent=greet+', Janis 👋';
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('date-text').textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+}
+tick(); setInterval(tick,1000);
+
+// ── TOAST ──
+let toastTimer;
+function toast(icon,text){
+  clearTimeout(toastTimer);
+  document.getElementById('toast-icon').textContent=icon;
+  document.getElementById('toast-text').textContent=text;
+  const el=document.getElementById('toast');
+  el.classList.add('show');
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+// ── PAGES ──
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+}
+
+// ── ROOMS ──
+let lightCount=4;
+function updateLightStat(){document.getElementById('stat-lights').textContent=lightCount;}
+function toggleRoom(card){
+  const on=card.classList.toggle('on');
+  const name=card.querySelector('.room-name').textContent;
+  card.querySelectorAll('.light-dot').forEach((d,i)=>{
+    if(on)d.classList.add('on'); else d.classList.remove('on');
+  });
+  lightCount+=on?1:-1; updateLightStat();
+  toast(on?'💡':'🌑', name+' lights '+(on?'turned on':'turned off'));
+  updateFPRoom(card.dataset.room, on);
+  addLog(on?'💡':'🌑', name+(on?' lights on':' lights off'));
+}
+function toggleRoomByName(name){
+  const card=document.querySelector(`.room-card[data-room="${name}"]`);
+  if(card) toggleRoom(card);
+}
+function updateFPRoom(name,on){
+  const rect=document.getElementById('fp-'+name);
+  if(!rect)return;
+  if(on){rect.setAttribute('fill','rgba(255,180,70,.15)');rect.setAttribute('stroke','#ffb347');}
+  else{rect.setAttribute('fill','rgba(255,255,255,.02)');rect.setAttribute('stroke','rgba(255,255,255,.12)');}
+  // Update light dots in floorplan
+  const lights=document.querySelectorAll(`[id^="fp-light-${name}"]`);
+  lights.forEach(l=>{
+    if(on){l.setAttribute('fill','#ffb347');l.setAttribute('filter','url(#glow)');}
+    else{l.setAttribute('fill','rgba(255,255,255,.12)');l.removeAttribute('filter');}
+  });
+}
+
+// ── LIGHTS ──
+function toggleLight(card){
+  const on=card.classList.toggle('on');
+  const name=card.querySelector('.light-name').textContent;
+  card.querySelector('.light-state').textContent=on?'On · 80%':'Off';
+  toast(on?'💡':'🌑',name+(on?' on':' off'));
+  addLog(on?'💡':'🌑',name+(on?' turned on':' turned off'));
+}
+
+// ── MEDIA ──
+const songs=['Blinding Lights','Starboy','Save Your Tears','Die For You','In Your Eyes'];
+let songIdx=0, playing={wz:true,of:false}, progIntervals={};
+function togglePlay(id){
+  playing[id]=!playing[id];
+  const btn=document.getElementById('playbtn-'+id);
+  const art=document.getElementById('art-'+id);
+  if(playing[id]){
+    btn.textContent='⏸'; btn.style.background='var(--pink)'; btn.style.borderColor='var(--pink)'; btn.style.boxShadow='0 0 16px rgba(224,64,251,.4)';
+    if(art)art.classList.add('playing');
+    startProgress(id); toast('🎵','Playing');
+  } else {
+    btn.textContent='▶'; btn.style.background='rgba(255,255,255,.06)'; btn.style.borderColor='var(--border)'; btn.style.boxShadow='none';
+    if(art)art.classList.remove('playing');
+    clearInterval(progIntervals[id]); toast('⏸','Paused');
+  }
+}
+function startProgress(id){
+  const bar=document.getElementById('prog-'+id);
+  if(!bar)return;
+  let w=parseFloat(bar.style.width)||0;
+  clearInterval(progIntervals[id]);
+  progIntervals[id]=setInterval(()=>{w+=.05;if(w>100){w=0;nextSong(id);}bar.style.width=w+'%';},300);
+}
+function nextSong(id){songIdx=(songIdx+1)%songs.length;document.getElementById('song-'+id).textContent=songs[songIdx];toast('⏭',songs[songIdx]);}
+function prevSong(id){songIdx=(songIdx-1+songs.length)%songs.length;document.getElementById('song-'+id).textContent=songs[songIdx];toast('⏮',songs[songIdx]);}
+function setVolume(e,el,id){
+  const rect=el.getBoundingClientRect();
+  const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+  document.getElementById('vol-'+id).style.width=(pct*100)+'%';
+}
+startProgress('wz');
+
+// ── SCENES ──
+function setScene(scene,el){
+  document.querySelectorAll('.scene-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const scenes={
+    morning:{on:['living','kitchen','office'],msg:'Good morning! Lights on 🌅'},
+    normal:{on:['living','office','garden'],msg:'Normal mode activated ☀️'},
+    movie:{on:['living'],msg:'Movie night! Dimming lights 🎬'},
+    evening:{on:['living','bedroom','garden'],msg:'Evening scene activated 🌙'},
+    away:{on:[],msg:'Away mode — all lights off 🔒'}
+  };
+  const cfg=scenes[scene];
+  document.querySelectorAll('.room-card').forEach(c=>{
+    const name=c.dataset.room;
+    const shouldBeOn=cfg.on.includes(name);
+    const isOn=c.classList.contains('on');
+    if(shouldBeOn!==isOn){c.classList.toggle('on',shouldBeOn);updateFPRoom(name,shouldBeOn);}
+    c.querySelectorAll('.light-dot').forEach(d=>d.classList.toggle('on',shouldBeOn));
+  });
+  lightCount=cfg.on.length; updateLightStat();
+  toast('🎭',cfg.msg);
+  addLog('🎭','Scene: '+el.textContent.trim());
+  if(scene==='away'){document.getElementById('stat-security').textContent='Armed';document.getElementById('stat-security').style.color='var(--green)';}
+}
+
+// ── AUTOMATIONS ──
+function triggerAutomation(type){
+  if(type==='motion'){toast('🚶','Motion automation triggered — Hall lights on');addLog('🚶','Motion detected — automation ran');}
+  if(type==='sunset'){setScene('evening',{classList:{add:()=>{},remove:()=>{}}});toast('🌅','Sunset scene running...');addLog('🌅','Sunset automation triggered');}
+  if(type==='away'){setScene('away',document.querySelector('.scene-btn:last-child'));toast('🔒','Away mode activated');addLog('🔒','Away mode — all secured');}
+}
+
+// ── ACTIVITY LOG ──
+function addLog(icon,text){
+  const log=document.getElementById('activity-log');
+  const colors={'💡':'#ffb347','🌑':'rgba(255,255,255,.3)','🎵':'#e040fb','⏸':'#e040fb','⏭':'#00e5ff','⏮':'#00e5ff','🎭':'#69ff47','🚶':'#ff9d42','🌅':'#ffd166','🔒':'#00e5ff'};
+  const col=colors[icon]||'rgba(255,255,255,.3)';
+  const div=document.createElement('div');div.className='log-item';
+  div.innerHTML=`<div class="log-dot" style="background:${col}"></div><div class="log-text">${text}</div><div class="log-time">just now</div>`;
+  log.insertBefore(div,log.firstChild);
+  if(log.children.length>8)log.removeChild(log.lastChild);
+}
+</script>
+</body>
+</html>
