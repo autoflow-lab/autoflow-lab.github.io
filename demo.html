@@ -55,8 +55,8 @@ html[data-mode="kino"]{
 html[data-mode="kino"] body{background:var(--bg)}
 html[data-mode="kino"] .nav{background:rgba(10,0,20,.9)!important;border-color:rgba(180,80,255,.2)!important}
 html[data-mode="kino"] .hero{background:radial-gradient(ellipse 80% 60% at 60% 30%,rgba(160,40,255,.18),transparent 65%),radial-gradient(ellipse 60% 50% at 30% 70%,rgba(224,64,251,.1),transparent 65%),var(--bg)!important}
-html[data-mode="kino"] .dc{border-color:rgba(160,40,255,.2)!important}
-html[data-mode="kino"] .dc:hover{box-shadow:0 16px 48px rgba(160,40,255,.2)!important}
+html[data-mode="kino"] .dash-card{border-color:rgba(160,40,255,.2)!important}
+html[data-mode="kino"] .dash-card:hover{box-shadow:0 16px 48px rgba(160,40,255,.2)!important}
 html[data-mode="kino"] .btn-p,.html[data-mode="kino"] .btn-main,.html[data-mode="kino"] .btn-tier,.html[data-mode="kino"] .fab{background:linear-gradient(135deg,#7020cc,#e040fb)!important}
 html[data-mode="kino"] .logo em{background:linear-gradient(135deg,#c060ff,#e040fb)!important;-webkit-background-clip:text;background-clip:text}
 html[data-mode="kino"] .mode-banner{background:linear-gradient(135deg,rgba(112,20,180,.9),rgba(200,40,220,.8));color:#fff}
@@ -709,9 +709,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
       </div>
 
       <!-- ENERGY -->
-      <div class="dc reveal d2">
-        <div class="dc-tag" id="card-energy-tag">⚡ Energie</div>
-        <div class="dc-ttl" id="card-energy-ttl">Verbrauchsübersicht</div>
+      <div class="dash-card reveal reveal-delay-2">
+        <div class="dash-card-tag" id="card-energy-tag">⚡ Energie</div>
+        <div class="dash-card-title" id="card-energy-ttl">Verbrauchsübersicht</div>
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
           <div>
             <div id="en-num" style="font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--green)">2.4 kWh</div>
@@ -739,9 +739,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
       </div>
 
       <!-- SECURITY -->
-      <div class="dc reveal" id="sec-card">
-        <div class="dc-tag" id="card-sec-tag">🔒 Sicherheit</div>
-        <div class="dc-ttl" id="card-sec-ttl">Kameras &amp; Alarm</div>
+      <div class="dash-card reveal reveal-delay-3" id="sec-card">
+        <div class="dash-card-tag" id="card-sec-tag">🔒 Sicherheit</div>
+        <div class="dash-card-title" id="card-sec-ttl">Kameras &amp; Alarm</div>
         <div class="sec-cam-view" id="main-cam" onclick="switchCam()">
           <span id="cam-icon">📷</span>
           <span class="sec-cam-live">LIVE</span>
