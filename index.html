@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Professionelle Home Assistant Dashboards & KI-Automation ab €49. Interaktive Grundrisse, 48h Lieferung.">
+<meta property="og:title" content="autoflow-lab — Smart Home & KI Automation">
+<meta property="og:description" content="Professionelle Home Assistant Dashboards ab €49. Interaktiver 3D-Grundriss, Live-Wetter, 48h Lieferung.">
+<meta property="og:url" content="https://autoflow-lab.github.io/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0071e3">
+<link rel="canonical" href="https://autoflow-lab.github.io/">
 <title>autoflow-lab — Smart Home & KI Automation</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -636,6 +643,37 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
       </div>
 
     </div><!-- dash-grid -->
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="padding:72px 24px;background:linear-gradient(135deg,rgba(0,113,227,.03),rgba(175,82,222,.02)),var(--bg)">
+    <div style="max-width:1100px;margin:0 auto;text-align:center">
+      <h2 class="sec-ttl reveal" id="hiw-ttl">So funktioniert es</h2>
+      <p class="sec-sub reveal" id="hiw-sub" style="max-width:520px;margin:0 auto 48px">In 3 einfachen Schritten zu deinem perfekten Smart Home Dashboard.</p>
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative">
+        <!-- Connector line -->
+        <div style="position:absolute;top:40px;left:calc(16.67% + 20px);right:calc(16.67% + 20px);height:2px;background:linear-gradient(90deg,var(--accent),#af52de);opacity:.3;z-index:0" class="hiw-line"></div>
+        @media(max-width:640px){.hiw-line{display:none}}
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#34aadc);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
+          <div style="font-size:.65rem;font-weight:800;color:var(--accent);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw1-step">Schritt 1</div>
+          <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw1-ttl">Briefing</div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw1-desc">Du beschreibst dein Projekt via Fiverr-Chat. Geräte, Wünsche, Stil — ich frage alles was ich brauche.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7050ff,#e040fb);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(112,80,255,.35)">⚡</div>
+          <div style="font-size:.65rem;font-weight:800;color:#9060ff;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw2-step">Schritt 2</div>
+          <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw2-ttl">Umsetzung</div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw2-desc">Ich baue dein Dashboard in 24–72h. Du bekommst Updates und kannst Revisionen anfragen.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--green),#30d068);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(52,199,89,.35)">🚀</div>
+          <div style="font-size:.65rem;font-weight:800;color:var(--green);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw3-step">Schritt 3</div>
+          <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw3-ttl">Launch</div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw3-desc">Du bekommst fertige Dateien + Video-Erklärung + Docs. Importieren, fertig. Los geht's!</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- FLOOR PLAN -->
@@ -1476,6 +1514,60 @@ setTimeout(()=>{
   // Fix price display: show €49
   setTimeout(()=>{const e=$('s-price');if(e)e.textContent='€49'},700);
 },400);
+// ── LIVE CLOCK ──
+function updateClock(){
+  const now=new Date();
+  const t=$('clock-time');const d=$('clock-date');const dy=$('clock-day');
+  if(t)t.textContent=now.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  if(d){const opts={weekday:'long',year:'numeric',month:'long',day:'numeric'};d.textContent=now.toLocaleDateString(lang==='de'?'de-DE':'en-GB',opts)}
+}
+setInterval(updateClock,1000);updateClock();
+
+// ── EXTEND applyLang for new elements ──
+const _origApplyLang=applyLang;
+applyLang=function(){
+  _origApplyLang();
+  // Clock labels
+  const slbl=$('sunrise-lbl'),sulbl=$('sunset-lbl');
+  if(slbl)slbl.textContent=lang==='de'?'Sonnenaufgang':'Sunrise';
+  if(sulbl)sulbl.textContent=lang==='de'?'Sonnenuntergang':'Sunset';
+  // HIW
+  setText('hiw-ttl',lang==='de'?'So funktioniert es':'How it works');
+  setText('hiw-sub',lang==='de'?'In 3 einfachen Schritten zu deinem perfekten Smart Home Dashboard.':'3 simple steps to your perfect Smart Home dashboard.');
+  setText('hiw1-step',lang==='de'?'Schritt 1':'Step 1');setText('hiw1-ttl',lang==='de'?'Briefing':'Briefing');
+  setText('hiw1-desc',lang==='de'?'Du beschreibst dein Projekt via Fiverr-Chat. Geräte, Wünsche, Stil — ich frage alles was ich brauche.':'You describe your project via Fiverr chat. Devices, wishes, style — I ask everything I need.');
+  setText('hiw2-step',lang==='de'?'Schritt 2':'Step 2');setText('hiw2-ttl',lang==='de'?'Umsetzung':'Development');
+  setText('hiw2-desc',lang==='de'?'Ich baue dein Dashboard in 24–72h. Du bekommst Updates und kannst Revisionen anfragen.':'I build your dashboard in 24–72h. You get updates and can request revisions.');
+  setText('hiw3-step',lang==='de'?'Schritt 3':'Step 3');setText('hiw3-ttl',lang==='de'?'Launch':'Launch');
+  setText('hiw3-desc',lang==='de'?'Du bekommst fertige Dateien + Video-Erklärung + Docs. Importieren, fertig.':'You receive finished files + video explanation + docs. Import, done. Let's go!');
+  // Card clock
+  setText('card-clock-tag',lang==='de'?'🕐 Zeit & Datum':'🕐 Time & Date');
+  setText('card-clock-ttl',lang==='de'?'Lokale Uhrzeit':'Local Time');
+  updateClock();
+};
+
+// ── SUNRISE/SUNSET from weather data ──
+function setSunTimes(lat,lon){
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=sunrise,sunset&timezone=auto&forecast_days=1`)
+    .then(r=>r.json()).then(d=>{
+      if(d.daily?.sunrise?.[0]){
+        const sr=new Date(d.daily.sunrise[0]),ss=new Date(d.daily.sunset[0]);
+        const fmt=dt=>dt.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+        const el1=$('sunrise-time'),el2=$('sunset-time');
+        if(el1)el1.textContent=fmt(sr);if(el2)el2.textContent=fmt(ss);
+      }
+    }).catch(()=>{});
+}
+// Call setSunTimes after geolocation succeeds (patch loadWeather)
+const _ow=loadWeather;
+// After weather loads, set sun times
+const _origGetPos=navigator.geolocation?.getCurrentPosition?.bind(navigator.geolocation);
+if(_origGetPos){
+  navigator.geolocation.getCurrentPosition=function(success,...rest){
+    _origGetPos(pos=>{success(pos);setSunTimes(pos.coords.latitude,pos.coords.longitude)},...rest);
+  }
+}
+
 </script>
 </body>
 </html>
