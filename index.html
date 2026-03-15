@@ -693,16 +693,16 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
         <div class="dash-card-tag" data-i="cardLights">💡 Beleuchtung</div>
         <div class="dash-card-title" data-i="cardLightsTitle">Lichtsteuerung</div>
         <div class="light-grid" id="mini-lights">
-          <div class="lm-item on" onclick="toggleMiniLight(this,'living')"><div class="li">💡</div><div class="ln" data-i="rl-living">Wohnzimmer</div></div>
-          <div class="lm-item" onclick="toggleMiniLight(this,'bed1')"><div class="li">💡</div><div class="ln" data-i="rl-bed1">Schlafzimmer</div></div>
-          <div class="lm-item on" onclick="toggleMiniLight(this,'living')"><div class="li">💡</div><div class="ln" data-i="rl-kitchen">Küche</div></div>
-          <div class="lm-item" onclick="toggleMiniLight(this,'bath')"><div class="li">💡</div><div class="ln" data-i="rl-bath">Bad</div></div>
-          <div class="lm-item on" onclick="toggleMiniLight(this,'office')"><div class="li">💡</div><div class="ln" data-i="rl-office">Büro</div></div>
-          <div class="lm-item" onclick="toggleMiniLight(this,'bed2')"><div class="li">💡</div><div class="ln" data-i="rl-hall">Flur</div></div>
+          <div class="lm-item on" onclick="miniToggle(this,'living')"><div class="li">💡</div><div class="ln" data-i="rl-living">Wohnzimmer</div></div>
+          <div class="lm-item" onclick="miniToggle(this,'bed1')"><div class="li">💡</div><div class="ln" data-i="rl-bed1">Schlafzimmer</div></div>
+          <div class="lm-item on" onclick="miniToggle(this,'kitchen')"><div class="li">💡</div><div class="ln" data-i="rl-kitchen">Küche</div></div>
+          <div class="lm-item" onclick="miniToggle(this,'bath')"><div class="li">💡</div><div class="ln" data-i="rl-bath">Bad</div></div>
+          <div class="lm-item on" onclick="miniToggle(this,'office')"><div class="li">💡</div><div class="ln" data-i="rl-office">Büro</div></div>
+          <div class="lm-item" onclick="miniToggle(this,'bed2')"><div class="li">💡</div><div class="ln" data-i="rl-hall">Flur</div></div>
         </div>
         <div class="bright-row">
           <span>🌙</span>
-          <input type="range" min="0" max="100" value="75" oninput="updateBright(this.value)">
+          <input type="range" min="0" max="100" value="75" oninput="updateBright(this.value)" id="bright-slider">
           <span>☀️</span>
           <span id="bright-val" style="font-size:.75rem;font-weight:600;min-width:30px">75%</span>
         </div>
@@ -1342,8 +1342,54 @@ function adjThermo(d){thermoVal=Math.max(10,Math.min(30,thermoVal+d));$('t-num')
 function setMode(m){document.querySelectorAll('.c-mode').forEach(b=>b.classList.remove('on'));$('cm-'+m)?.classList.add('on');toast({heat:'🔥 Heizmodus',cool:'❄️ Kühlmodus',off:'⏸ Aus'}[m])}
 
 // ── MINI LIGHTS ──
-function miniToggle(el,rid){el.classList.toggle('on');const on=el.classList.contains('on');if(rooms[rid]){rooms[rid].on=on;applyRoom(rid)}toast((on?'💡':'🌑')+' '+(rooms[rid]?.name||rid))}
-function updateBright(v){$('bright-val').textContent=v+'%'}
+// Per-room wattage (approximate W)
+const ROOM_WATTS={bed1:40,bed2:30,living:60,dining:35,bath:20,office:45,kitchen:55};
+let kitchenOn=true; // kitchen tracked separately (not in rooms obj)
+function miniToggle(el,rid){
+  el.classList.toggle('on');const on=el.classList.contains('on');
+  if(rid==='kitchen'){kitchenOn=on}
+  else if(rooms[rid]){rooms[rid].on=on;applyRoom(rid)}
+  const name={living:'Wohnzimmer',bed1:'Schlafzimmer',bed2:'Kinderzimmer',bath:'Bad',office:'Büro',kitchen:'Küche'}[rid]||rid;
+  toast((on?'💡':'🌑')+' '+name);
+  updateEnergyFromLights();
+}
+function updateBright(v){$('bright-val').textContent=v+'%';updateEnergyFromLights(v)}
+
+// ── LIVE ENERGY from lights ──
+let brightPct=75;
+function updateEnergyFromLights(bPct){
+  if(bPct!==undefined)brightPct=parseInt(bPct);
+  const br=brightPct/100;
+  // Count active rooms
+  let w=0;
+  Object.entries(ROOM_WATTS).forEach(([rid,watts])=>{
+    if(rid==='kitchen'){if(kitchenOn)w+=watts*br}
+    else if(rooms[rid]?.on)w+=watts*br;
+  });
+  const kwh=+(w*10/1000).toFixed(2); // simulate 10h equivalent
+  const solar=+(kwh*0.72).toFixed(1);
+  const grid=+(Math.max(0,kwh-solar)).toFixed(1);
+  // Animate number
+  const el=$('en-num');
+  if(el){
+    el.style.transition='color .4s';
+    if(kwh<1.5){el.style.color='var(--green)'}
+    else if(kwh<3){el.style.color='var(--warm)'}
+    else{el.style.color='var(--red)'}
+    el.textContent=kwh+' kWh';
+  }
+  const sub=$('en-sub');
+  if(sub){
+    const rooms_on=Object.entries(rooms).filter(([r,v])=>v?.on).length+(kitchenOn?1:0);
+    sub.textContent=(lang==='de'?rooms_on+' Räume aktiv · Solar ☀️':rooms_on+' rooms active · Solar ☀️');
+  }
+  const sl=$('solar-lbl');const gl=$('grid-lbl');
+  if(sl)sl.textContent='☀️ Solar: '+solar+' kWh';
+  if(gl)gl.textContent='🔌 Netz: '+grid+' kWh';
+  // Update today's bar
+  EN_DATA[3].val=Math.round(30+kwh*8);EN_DATA[3].solar=solar;EN_DATA[3].grid=grid;
+  if(selBar===3)buildEnergyBars();updateEnergyFromLights();
+}
 
 // ── ENERGY BARS ──
 // ── ENERGY WIDGET (interactive) ──
@@ -1478,6 +1524,16 @@ function applyRoom(rid){
 function roomClick(rid,e){if(e){e.preventDefault();e.stopPropagation()}rooms[rid].on=!rooms[rid].on;applyRoom(rid);if(rooms[rid].on)rooms[rid].lamps.forEach(animRing);toast((rooms[rid].on?'💡':'🌑')+' '+rooms[rid].name);closeCp()}
 function roomCm(rid,e){e.preventDefault();openCp(rid,e)}
 function lampClick(lid,e){if(e){e.preventDefault();e.stopPropagation()}const rid=LAMP_ROOMS[lid];if(rid)roomClick(rid,e)}
+
+// ── SYNC: floor plan → mini lights + energy ──
+function syncMiniFromRooms(){
+  const map={living:'living',bed1:'bed1',bed2:'bed2',bath:'bath',office:'office',dining:'dining'};
+  document.querySelectorAll('.lm-item').forEach(el=>{
+    const rid=el.getAttribute('onclick')?.match(/'([^']+)'\)/)?.[1];
+    if(rid&&rooms[rid]!==undefined){el.classList.toggle('on',!!rooms[rid]?.on)}
+  });
+  updateEnergyFromLights();
+}
 function animRing(lid){
   const svg=document.querySelector('#fp-outer svg:last-of-type');const lb=document.getElementById('lb-'+lid);if(!svg||!lb)return;
   const cx=lb.getAttribute('cx'),cy=lb.getAttribute('cy');const col=(COLORS[rooms[LAMP_ROOMS[lid]]?.color]||COLORS.warm).dot;
@@ -1538,6 +1594,7 @@ function setScene(k){
   // Music: kino → play something cinematic feel
   if(k==='movie'){const eq=document.getElementById('music-eq');if(eq)eq.classList.add('on')}
   toast({relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Kino Modus',alloff:'🌙 Alles aus'}[k]);
+  setTimeout(()=>{syncMiniFromRooms()},Object.keys(cfg).length*55+100);
 }
 function buildRoomList(){
   const el=document.getElementById('room-list');if(!el)return;el.innerHTML='';
