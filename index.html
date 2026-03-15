@@ -45,6 +45,87 @@ img{max-width:100%;display:block}
 button{font-family:inherit;cursor:pointer}
 
 /* ═══════════════════════════════════════════
+   GLOBAL SITE MODES — Kino / Relax / Security / Normal
+═══════════════════════════════════════════ */
+/* KINO MODE */
+html[data-mode="kino"]{
+  --accent:#c060ff;--green:#a040ff;--warm:#e040fb;
+  --glow:rgba(180,80,255,.4);
+}
+html[data-mode="kino"] body{background:var(--bg)}
+html[data-mode="kino"] .nav{background:rgba(10,0,20,.9)!important;border-color:rgba(180,80,255,.2)!important}
+html[data-mode="kino"] .hero{background:radial-gradient(ellipse 80% 60% at 60% 30%,rgba(160,40,255,.18),transparent 65%),radial-gradient(ellipse 60% 50% at 30% 70%,rgba(224,64,251,.1),transparent 65%),var(--bg)!important}
+html[data-mode="kino"] .dc{border-color:rgba(160,40,255,.2)!important}
+html[data-mode="kino"] .dc:hover{box-shadow:0 16px 48px rgba(160,40,255,.2)!important}
+html[data-mode="kino"] .btn-p,.html[data-mode="kino"] .btn-main,.html[data-mode="kino"] .btn-tier,.html[data-mode="kino"] .fab{background:linear-gradient(135deg,#7020cc,#e040fb)!important}
+html[data-mode="kino"] .logo em{background:linear-gradient(135deg,#c060ff,#e040fb)!important;-webkit-background-clip:text;background-clip:text}
+html[data-mode="kino"] .mode-banner{background:linear-gradient(135deg,rgba(112,20,180,.9),rgba(200,40,220,.8));color:#fff}
+html[data-mode="kino"] .fp-outer{box-shadow:0 0 60px rgba(160,40,255,.35)!important}
+
+/* RELAX MODE */
+html[data-mode="relax"]{--accent:#ff9f0a;--green:#ff8c00;--glow:rgba(255,159,10,.3)}
+html[data-mode="relax"] .nav{background:rgba(255,250,240,.88)!important;border-color:rgba(255,159,10,.2)!important}
+[data-theme="dark"][data-mode="relax"] .nav{background:rgba(20,12,0,.88)!important}
+html[data-mode="relax"] .hero{background:radial-gradient(ellipse 80% 60% at 60% 30%,rgba(255,159,10,.12),transparent 65%),radial-gradient(ellipse 60% 50% at 30% 70%,rgba(255,200,50,.07),transparent 65%),var(--bg)!important}
+html[data-mode="relax"] .btn-p,.html[data-mode="relax"] .btn-main,.html[data-mode="relax"] .btn-tier,.html[data-mode="relax"] .fab{background:linear-gradient(135deg,#ff9f0a,#ff6b00)!important}
+html[data-mode="relax"] .logo em{background:linear-gradient(135deg,#ff9f0a,#ff6b00)!important;-webkit-background-clip:text;background-clip:text}
+html[data-mode="relax"] .mode-banner{background:linear-gradient(135deg,rgba(200,100,0,.9),rgba(255,159,10,.85));color:#fff}
+
+/* SECURITY MODE */
+html[data-mode="security"]{--accent:#ff3b30;--green:#ff3b30;--glow:rgba(255,59,48,.4)}
+html[data-mode="security"] .nav{border-color:rgba(255,59,48,.3)!important;animation:secNavPulse 2s ease-in-out infinite}
+html[data-mode="security"] .logo em{background:linear-gradient(135deg,#ff3b30,#ff8080)!important;-webkit-background-clip:text;background-clip:text}
+html[data-mode="security"] .btn-p,.html[data-mode="security"] .fab{background:linear-gradient(135deg,#cc0000,#ff3b30)!important}
+html[data-mode="security"] .mode-banner{background:linear-gradient(135deg,rgba(180,0,0,.92),rgba(255,59,48,.85));color:#fff}
+html[data-mode="security"] #sec-card{box-shadow:0 0 0 2px rgba(255,59,48,.5),0 0 40px rgba(255,59,48,.2)!important;animation:secBorder 1.5s ease-in-out infinite}
+@keyframes secBorder{0%,100%{box-shadow:0 0 0 2px rgba(255,59,48,.5),0 0 30px rgba(255,59,48,.15)}50%{box-shadow:0 0 0 3px rgba(255,59,48,.9),0 0 60px rgba(255,59,48,.35)}}
+@keyframes secNavPulse{0%,100%{border-bottom-color:rgba(255,59,48,.3)}50%{border-bottom-color:rgba(255,59,48,.8)}}
+
+/* MODE BANNER */
+.mode-banner{position:fixed;top:var(--nav);left:0;right:0;z-index:150;text-align:center;padding:9px 16px;font-size:.8rem;font-weight:700;display:none;transition:all .4s;letter-spacing:.5px;backdrop-filter:blur(12px)}
+.mode-banner.show{display:block;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* INTERACTIVE ENERGY */
+.en-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.en-bar-wrap:hover .en-bar{opacity:.7;transform:scaleY(1.05)}
+.en-bar-wrap.sel .en-bar{opacity:1!important;outline:2px solid var(--accent);border-radius:4px 4px 0 0}
+.en-bar-label{font-size:.6rem;color:var(--text3);font-weight:600;transition:color .2s}
+.en-bar-wrap.sel .en-bar-label{color:var(--accent)}
+.en-detail{background:var(--bg2);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.75rem;display:none;animation:fadeUp .25s ease;border:1px solid var(--border)}
+.en-detail.show{display:block}
+.en-source-row{display:flex;gap:6px;margin-top:8px}
+.en-source{flex:1;padding:6px;border-radius:8px;border:1.5px solid transparent;text-align:center;cursor:pointer;font-size:.68rem;font-weight:600;transition:all .2s}
+.en-source.solar.on{background:rgba(255,159,10,.15);border-color:rgba(255,159,10,.5);color:var(--warm)}
+.en-source.grid.on{background:rgba(0,113,227,.12);border-color:rgba(0,113,227,.3);color:var(--accent)}
+.en-source:not(.on){opacity:.4}
+
+/* SECURITY CARD */
+#sec-card{cursor:default}
+.sec-cam-view{background:linear-gradient(135deg,#0d0d1e,#0a2040);border-radius:12px;height:96px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin-bottom:10px;position:relative;overflow:hidden;cursor:pointer;transition:all .3s}
+.sec-cam-view:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(0,150,255,.2)}
+.sec-cam-view::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:rgba(0,200,255,.4);animation:scanLine 2.5s linear infinite}
+.sec-cam-live{position:absolute;top:7px;right:9px;background:var(--red);color:#fff;font-size:.58rem;font-weight:800;padding:3px 7px;border-radius:7px;letter-spacing:.5px;animation:pulse 2s infinite}
+.cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px}
+.cam-mini{background:var(--bg3);border-radius:8px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;transition:all .2s;border:1.5px solid transparent}
+.cam-mini:hover{background:var(--bg2);border-color:var(--border2);transform:scale(1.04)}
+.cam-mini.active{border-color:var(--accent);background:rgba(0,113,227,.08)}
+.sec-footer{display:flex;align-items:center;justify-content:space-between}
+.sec-status-dot{width:8px;height:8px;border-radius:50%;animation:pulse 2.2s infinite;flex-shrink:0}
+.sec-status-dot.ok{background:var(--green)}
+.sec-status-dot.alert{background:var(--red)}
+.sec-status-txt{font-size:.79rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.sec-arm-btn{padding:5px 12px;border-radius:10px;border:none;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .2s}
+.sec-arm-btn.armed{background:rgba(255,59,48,.15);color:var(--red);border:1.5px solid rgba(255,59,48,.3)}
+.sec-arm-btn.armed:hover{background:rgba(255,59,48,.25)}
+.sec-arm-btn.disarmed{background:rgba(52,199,89,.12);color:var(--green);border:1.5px solid rgba(52,199,89,.25)}
+.sec-arm-btn.disarmed:hover{background:rgba(52,199,89,.22)}
+.sec-alert-banner{background:linear-gradient(135deg,rgba(255,59,48,.15),rgba(255,59,48,.08));border:1px solid rgba(255,59,48,.3);border-radius:8px;padding:8px 12px;font-size:.74rem;color:var(--red);font-weight:600;display:none;margin-top:8px;animation:pulse 2s infinite}
+.sec-alert-banner.show{display:block}
+@keyframes scanLine{0%{top:-2px}100%{top:102%}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ═══════════════════════════════════════════
    ANIMATIONS
 ═══════════════════════════════════════════ */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
@@ -449,7 +530,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
     <button class="nav-tab" id="tab-ai" onclick="switchTab('ai',this)" data-i="navAI">⚡ KI & Automation</button>
   </div>
   <div class="nav-right">
-    <button class="btn-nav ghost" onclick="window.open('mailto:clawy.studio@gmail.com')" data-i="navContact">Kontakt</button>
+    <button class="btn-nav ghost" onclick="openFiverr()" data-i="navContact" style="display:none">Kontakt</button>
     <button class="btn-nav" onclick="openFiverr()" data-i="navOrder">Bestellen →</button>
     <button class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
     <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
@@ -460,7 +541,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
   <button class="mob-btn" onclick="switchTab('smarthome',document.getElementById('tab-sh'));closeMob()" data-i="navSH">🏠 Smart Home</button>
   <button class="mob-btn" onclick="switchTab('ai',document.getElementById('tab-ai'));closeMob()" data-i="navAI">⚡ KI & Automation</button>
   <button class="mob-btn" onclick="openFiverr()">🛒 Auf Fiverr bestellen</button>
-  <button class="mob-btn" onclick="window.open('mailto:clawy.studio@gmail.com')">✉ Kontakt</button>
+  <button class="mob-btn" onclick="openFiverr()">🛒 Fiverr öffnen</button>
 </div>
 
 <!-- ═══════════════════════ SMART HOME PAGE ═══════════════════════ -->
@@ -628,18 +709,58 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
       </div>
 
       <!-- ENERGY -->
-      <div class="dash-card reveal reveal-delay-2">
-        <div class="dash-card-tag" data-i="cardEnergy">⚡ Energie</div>
-        <div class="dash-card-title" data-i="cardEnergyTitle">Verbrauchsübersicht</div>
-        <div class="energy-header">
-          <div class="energy-num" id="en-num">2.4 kWh</div>
-          <div class="energy-trend" id="en-trend">↓ −12%</div>
+      <div class="dc reveal d2">
+        <div class="dc-tag" id="card-energy-tag">⚡ Energie</div>
+        <div class="dc-ttl" id="card-energy-ttl">Verbrauchsübersicht</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+          <div>
+            <div id="en-num" style="font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--green)">2.4 kWh</div>
+            <div id="en-sub" style="font-size:.7rem;color:var(--text3)">Heute · Solar aktiv ☀️</div>
+          </div>
+          <div style="background:rgba(52,199,89,.1);color:var(--green);font-size:.7rem;font-weight:700;padding:4px 9px;border-radius:9px;border:1px solid rgba(52,199,89,.25)">↓ −12%</div>
         </div>
-        <div class="energy-bars" id="energy-bars"></div>
-        <div class="energy-row">
-          <span>☀️ <span class="e-solar" data-i="solar">Solar: 1.8 kWh</span></span>
-          <span>🔌 <span class="e-grid" data-i="grid">Netz: 0.6 kWh</span></span>
+        <div id="energy-bars" style="display:flex;gap:4px;align-items:flex-end;height:56px;margin-bottom:4px"></div>
+        <div id="en-detail" class="en-detail">
+          <div style="font-weight:700;font-size:.78rem;margin-bottom:6px" id="en-detail-ttl">Mittwoch · 12:00</div>
+          <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text2)">
+            <span>☀️ Solar: <strong style="color:var(--warm)" id="en-d-solar">1.8 kWh</strong></span>
+            <span>🔌 Netz: <strong id="en-d-grid">0.6 kWh</strong></span>
+          </div>
+          <div class="en-source-row">
+            <div class="en-source solar on" id="en-src-solar" onclick="toggleEnSource('solar')">☀️ Solar</div>
+            <div class="en-source grid on" id="en-src-grid" onclick="toggleEnSource('grid')">🔌 Netz</div>
+            <div class="en-source" id="en-src-bat" onclick="toggleEnSource('bat')" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid transparent;text-align:center;cursor:pointer;font-size:.68rem;font-weight:600;transition:all .2s;opacity:.4">🔋 Akku</div>
+          </div>
         </div>
+        <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text2);margin-top:6px">
+          <span id="solar-lbl">☀️ Solar: 1.8 kWh</span>
+          <span id="grid-lbl">🔌 Netz: 0.6 kWh</span>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <div class="dc reveal" id="sec-card">
+        <div class="dc-tag" id="card-sec-tag">🔒 Sicherheit</div>
+        <div class="dc-ttl" id="card-sec-ttl">Kameras &amp; Alarm</div>
+        <div class="sec-cam-view" id="main-cam" onclick="switchCam()">
+          <span id="cam-icon">📷</span>
+          <span class="sec-cam-live">LIVE</span>
+          <div style="position:absolute;bottom:8px;left:10px;font-size:.6rem;color:rgba(255,255,255,.6);font-weight:700" id="cam-label">Eingang</div>
+        </div>
+        <div class="cam-grid">
+          <div class="cam-mini active" id="cam0" onclick="selectCam(0)" title="Eingang">🚪</div>
+          <div class="cam-mini" id="cam1" onclick="selectCam(1)" title="Garten">🌿</div>
+          <div class="cam-mini" id="cam2" onclick="selectCam(2)" title="Garage">🚗</div>
+          <div class="cam-mini" id="cam3" onclick="selectCam(3)" title="Klingel">🔔</div>
+        </div>
+        <div class="sec-footer">
+          <div class="sec-status-txt">
+            <div class="sec-status-dot ok" id="sec-dot"></div>
+            <span id="sec-status-txt">System gesichert</span>
+          </div>
+          <button class="sec-arm-btn disarmed" id="sec-arm-btn" onclick="toggleAlarm()">🛡 Scharf</button>
+        </div>
+        <div class="sec-alert-banner" id="sec-alert">⚠️ <span id="sec-alert-txt">Bewegung erkannt — Eingang</span></div>
       </div>
 
     </div><!-- dash-grid -->
@@ -1025,7 +1146,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
     <p class="hero-sub" data-i="aiSub">Lokale KI-Modelle, N8N Workflows, Chatbots und smarte Automationen — alles ohne Cloud-Abhängigkeit.</p>
     <div class="hero-actions">
       <button class="btn-p" onclick="openFiverr()" style="background:linear-gradient(135deg,#7050ff,#e040fb)" data-i="aiCta">🤖 KI-Projekt starten</button>
-      <button class="btn-s" onclick="window.open('mailto:clawy.studio@gmail.com')" data-i="aiContact">✉ Kostenlos anfragen</button>
+      <button class="btn-s" onclick="openFiverr()" data-i="aiCta2">🛒 Auf Fiverr bestellen</button>
     </div>
   </div>
 
@@ -1064,12 +1185,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 <footer>
   <div class="ft-links">
     <a href="https://www.fiverr.com/autoflow-lab" target="_blank">🛒 Fiverr</a>
-    <a href="mailto:clawy.studio@gmail.com">✉ Kontakt</a>
+    <a href="https://www.fiverr.com/autoflow-lab" target="_blank">💬 Fiverr Chat</a>
     <a href="#" onclick="switchTab('smarthome',document.getElementById('tab-sh'));return false">🏠 Smart Home</a>
     <a href="#" onclick="switchTab('ai',document.getElementById('tab-ai'));return false">⚡ KI Automation</a>
   </div>
   <div class="ft-copy">© 2025 autoflow-lab · Smart Home & KI Automation</div>
 </footer>
+
+<!-- GLOBAL MODE BANNER -->
+<div class="mode-banner" id="mode-banner">🎬 KINO MODUS</div>
 
 <button class="fab" onclick="openFiverr()">🛒<span class="fab-txt"> Jetzt bestellen</span></button>
 <div class="toast" id="toast"></div>
@@ -1222,7 +1346,85 @@ function miniToggle(el,rid){el.classList.toggle('on');const on=el.classList.cont
 function updateBright(v){$('bright-val').textContent=v+'%'}
 
 // ── ENERGY BARS ──
-function buildEnergyBars(){const c=$('en-bars');if(!c)return;[35,52,68,90,72,48,30].forEach((v,i)=>{const d=document.createElement('div');d.className='e-bar'+(i===3?' hi':' lo');d.style.height=v+'%';c.appendChild(d)})}
+// ── ENERGY WIDGET (interactive) ──
+const EN_DATA=[
+  {label:'Mo',val:35,solar:1.2,grid:0.8},{label:'Di',val:52,solar:1.8,grid:0.9},
+  {label:'Mi',val:68,solar:2.4,grid:0.6},{label:'Do',val:90,solar:3.2,grid:0.4},
+  {label:'Fr',val:72,solar:2.6,grid:0.7},{label:'Sa',val:48,solar:1.5,grid:1.1},
+  {label:'So',val:30,solar:0.8,grid:1.4}
+];
+let selBar=3;
+function buildEnergyBars(){
+  const c=$('energy-bars');if(!c)return;c.innerHTML='';
+  EN_DATA.forEach((d,i)=>{
+    const wrap=document.createElement('div');wrap.className='en-bar-wrap'+(i===selBar?' sel':'');
+    wrap.innerHTML=`<div class="en-bar ${i===selBar?'hi':'lo'}" style="height:${d.val}%;transition:height .5s ease,opacity .2s"></div><div class="en-bar-label">${d.label}</div>`;
+    wrap.onclick=()=>selectBar(i);
+    c.appendChild(wrap);
+  });
+  showBarDetail(selBar);
+}
+function selectBar(i){
+  selBar=i;buildEnergyBars();
+}
+function showBarDetail(i){
+  const d=EN_DATA[i];const det=$('en-detail');if(!det)return;
+  det.classList.add('show');
+  const t=$('en-detail-ttl');if(t)t.textContent=(lang==='de'?['Mo','Di','Mi','Do','Fr','Sa','So']:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])[i]+' · '+Math.round(d.val*0.027*10)/10+' kWh';
+  const ds=$('en-d-solar');if(ds)ds.textContent=d.solar+' kWh';
+  const dg=$('en-d-grid');if(dg)dg.textContent=d.grid+' kWh';
+}
+function toggleEnSource(src){
+  const el=$('en-src-'+src);if(!el)return;
+  el.classList.toggle('on');
+  const isOn=el.classList.contains('on');
+  toast((isOn?'✅':'❌')+' '+(src==='solar'?'Solar':'Netz')+' '+(isOn?(lang==='de'?'aktiviert':'enabled'):(lang==='de'?'deaktiviert':'disabled')));
+}
+
+// ── SECURITY WIDGET ──
+const cams=[{icon:'📷',label:'Eingang'},{icon:'🌿',label:'Garten'},{icon:'🚗',label:'Garage'},{icon:'🔔',label:'Klingel'}];
+let curCam=0,alarmArmed=false,motionTimer=null;
+function selectCam(idx){
+  curCam=idx;
+  document.querySelectorAll('.cam-mini').forEach((el,i)=>el.classList.toggle('active',i===idx));
+  const ic=$('cam-icon');const lb=$('cam-label');
+  if(ic)ic.textContent=cams[idx].icon;if(lb)lb.textContent=cams[idx].label;
+}
+function switchCam(){selectCam((curCam+1)%cams.length);toast('📷 '+cams[curCam].label)}
+function toggleAlarm(){
+  alarmArmed=!alarmArmed;
+  const btn=$('sec-arm-btn'),dot=$('sec-dot'),txt=$('sec-status-txt'),html=document.documentElement;
+  if(alarmArmed){
+    btn.className='sec-arm-btn armed';btn.textContent='🚨 Deaktivieren';
+    dot.className='sec-status-dot alert';
+    if(txt)txt.innerHTML='<div class="sec-status-dot alert" id="sec-dot"></div>'+(lang==='de'?'System scharf':'System armed');
+    // Trigger site security mode
+    html.dataset.mode='security';
+    const banner=$('mode-banner');
+    if(banner){banner.textContent=lang==='de'?'🚨 ALARM AKTIV — System gesichert':'🚨 ALARM ACTIVE — System armed';banner.classList.add('show')}
+    // Random motion detection after 3s
+    clearTimeout(motionTimer);
+    motionTimer=setTimeout(()=>{
+      if(alarmArmed){
+        const alert=$('sec-alert');const alertTxt=$('sec-alert-txt');
+        if(alertTxt)alertTxt.textContent=lang==='de'?'Bewegung erkannt — '+cams[curCam].label:'Motion detected — '+cams[curCam].label;
+        if(alert)alert.classList.add('show');
+        toast('🚨 '+(lang==='de'?'Bewegung erkannt!':'Motion detected!'));
+        setTimeout(()=>{if(alert)alert.classList.remove('show')},5000);
+      }
+    },3000);
+    toast(lang==='de'?'🚨 Alarm aktiviert':'🚨 Alarm activated');
+  } else {
+    btn.className='sec-arm-btn disarmed';btn.textContent='🛡 '+(lang==='de'?'Scharf':'Arm');
+    dot.className='sec-status-dot ok';
+    if(txt)txt.innerHTML='<div class="sec-status-dot ok" id="sec-dot"></div>'+(lang==='de'?'System gesichert':'System secured');
+    html.dataset.mode='';
+    const banner=$('mode-banner');if(banner)banner.classList.remove('show');
+    const alert=$('sec-alert');if(alert)alert.classList.remove('show');
+    clearTimeout(motionTimer);
+    toast(lang==='de'?'✅ Alarm deaktiviert':'✅ Alarm deactivated');
+  }
+}
 
 // ── FLOOR PLAN ──
 const COLORS={
@@ -1307,14 +1509,35 @@ function setScene(k){
   document.querySelectorAll('.sp').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll(`.sp[onclick*="${k}"]`).forEach(b=>b.classList.add('on'));
   const C={
-    relax: {bed1:{on:true,color:'warm'},bed2:{on:true,color:'amber'},living:{on:false},dining:{on:true,color:'warm'},bath:{on:false},office:{on:false}},
+    relax: {bed1:{on:true,color:'warm'},bed2:{on:true,color:'amber'},living:{on:true,color:'warm'},dining:{on:true,color:'warm'},bath:{on:false},office:{on:false}},
     normal:{bed1:{on:true,color:'cool'},bed2:{on:true,color:'cool'},living:{on:true,color:'white'},dining:{on:true,color:'warm'},bath:{on:true,color:'white'},office:{on:true,color:'cool'}},
     movie: {bed1:{on:true,color:'purple'},bed2:{on:false},living:{on:false},dining:{on:false},bath:{on:false},office:{on:false}},
     alloff:{bed1:{on:false},bed2:{on:false},living:{on:false},dining:{on:false},bath:{on:false},office:{on:false}},
   };
   const cfg=C[k];if(!cfg)return;
   let i=0;Object.entries(cfg).forEach(([rid,v])=>{setTimeout(()=>{Object.assign(rooms[rid],v);applyRoom(rid)},i++*55)});
-  toast({relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Movie',alloff:'🌙 Alles aus'}[k]);
+
+  // ── GLOBAL SITE MODE ──
+  const html=document.documentElement;
+  const banner=document.getElementById('mode-banner');
+  const modeMap={relax:'relax',movie:'kino',normal:'',alloff:''};
+  const mode=modeMap[k]||'';
+  html.dataset.mode=mode;
+
+  const msgs={
+    relax: lang==='de'?'🌅 Relax Modus — Warme Beleuchtung aktiv':'🌅 Relax Mode — Warm lighting active',
+    movie: lang==='de'?'🎬 Kino Modus — Cinematic Experience':'🎬 Cinema Mode — Cinematic Experience',
+    normal: lang==='de'?'☀️ Normal Modus':'☀️ Normal Mode',
+    alloff: lang==='de'?'🌙 Alles aus — Gute Nacht':'🌙 All off — Good night',
+  };
+  if(banner){
+    banner.textContent=msgs[k]||'';
+    if(mode){banner.classList.add('show');clearTimeout(banner._t);if(k!=='movie'&&k!=='relax')banner._t=setTimeout(()=>banner.classList.remove('show'),3000)}
+    else{clearTimeout(banner._t);setTimeout(()=>banner.classList.remove('show'),1500)}
+  }
+  // Music: kino → play something cinematic feel
+  if(k==='movie'){const eq=document.getElementById('music-eq');if(eq)eq.classList.add('on')}
+  toast({relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Kino Modus',alloff:'🌙 Alles aus'}[k]);
 }
 function buildRoomList(){
   const el=document.getElementById('room-list');if(!el)return;el.innerHTML='';
@@ -1494,6 +1717,21 @@ function applyLang(){
   setText('wf-ttl',t.wfTtl);setText('wf1',t.wf1);setText('wf2',t.wf2);setText('wf3',t.wf3);setText('wf4',t.wf4);
   setText('ai-cta-h2',t.aiCtaH2);setText('ai-cta-p',t.aiCtaP);setText('ai-cta3',t.aiCta3);
   setText('tab-sh',t.navSH);setText('tab-ai',t.navAI);
+  // Security + Energy
+  const armBtn=$('sec-arm-btn');
+  if(armBtn&&!alarmArmed)armBtn.textContent='🛡 '+(lang==='de'?'Scharf':'Arm');
+  const secTxt=$('sec-status-txt');
+  if(secTxt&&!alarmArmed)secTxt.innerHTML='<div class="sec-status-dot ok" id="sec-dot"></div>'+(lang==='de'?'System gesichert':'System secured');
+  const cardSecTag=$('card-sec-tag');if(cardSecTag)cardSecTag.textContent=lang==='de'?'🔒 Sicherheit':'🔒 Security';
+  const cardSecTtl=$('card-sec-ttl');if(cardSecTtl)cardSecTtl.textContent=lang==='de'?'Kameras & Alarm':'Cameras & Alarm';
+  const cardEnTag=$('card-energy-tag');if(cardEnTag)cardEnTag.textContent=lang==='de'?'⚡ Energie':'⚡ Energy';
+  const cardEnTtl=$('card-energy-ttl');if(cardEnTtl)cardEnTtl.textContent=lang==='de'?'Verbrauchsübersicht':'Usage Overview';
+  const enSub=$('en-sub');if(enSub)enSub.textContent=lang==='de'?'Heute · Solar aktiv ☀️':'Today · Solar active ☀️';
+  // Banner text if active
+  const mode=document.documentElement.dataset.mode;
+  const banner=$('mode-banner');
+  if(banner&&banner.classList.contains('show')&&mode==='kino')banner.textContent=lang==='de'?'🎬 Kino Modus — Cinematic Experience':'🎬 Cinema Mode — Cinematic Experience';
+  if(banner&&banner.classList.contains('show')&&mode==='relax')banner.textContent=lang==='de'?'🌅 Relax Modus — Warme Beleuchtung':'🌅 Relax Mode — Warm Lighting';
   // Room names
   Object.entries(t.roomNames).forEach(([rid,n])=>{if(rooms[rid])rooms[rid].name=n});
   buildRoomList();
