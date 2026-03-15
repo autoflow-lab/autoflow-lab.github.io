@@ -69,12 +69,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,Bl
 [data-theme="dark"] .orb1{background:radial-gradient(circle,rgba(224,64,251,.6),transparent 70%);opacity:.2;}
 [data-theme="dark"] .orb2{background:radial-gradient(circle,rgba(0,229,255,.6),transparent 70%);opacity:.15;}
 .hero-inner{position:relative;max-width:780px;}
-.eyebrow{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:.78rem;font-weight:600;letter-spacing:.5px;margin-bottom:22px;opacity:0;transform:translateY(10px);animation:up .6s .1s ease forwards;}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:.78rem;font-weight:600;letter-spacing:.5px;margin-bottom:22px;transform:translateY(10px);animation:up .6s .1s ease forwards;}
 .eyebrow::before{content:'✦';opacity:.7;}
-h1{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:22px;opacity:0;transform:translateY(14px);animation:up .7s .2s ease forwards;}
+h1{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:22px;animation:up .7s .2s ease both;}
 h1 em{font-style:normal;color:var(--accent);}
 [data-theme="dark"] h1 em{background:linear-gradient(135deg,var(--neon-c),var(--neon-p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{font-size:1.1rem;color:var(--text2);line-height:1.7;max-width:500px;margin:0 auto 36px;opacity:0;animation:up .7s .3s ease forwards;}
+.hero-sub{font-size:1.1rem;color:var(--text2);line-height:1.7;max-width:500px;margin:0 auto 36px;animation:up .7s .3s ease both;}
 .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;opacity:0;animation:up .7s .4s ease forwards;}
 @keyframes up{to{opacity:1;transform:none;}}
 
@@ -926,7 +926,7 @@ h2{position:relative;}
 /* ── Photo FP v15 ── */
 .photo-fp {
   position: relative; border-radius: 14px; overflow: hidden;
-  background: #1a1510;
+  background: #2a2018; min-height: 280px;
   box-shadow: 0 12px 60px rgba(0,0,0,.25), 0 2px 8px rgba(0,0,0,.15);
   user-select: none;
 }
@@ -1050,6 +1050,16 @@ h2{position:relative;}
 #fp-container { touch-action: pan-x pan-y; }
 #fp-lights { touch-action: none; }
 .lamp-hitzone { touch-action: manipulation; }
+
+
+/* Animation fallback - ensure visibility after 2s even without JS */
+@keyframes visibilityFallback {
+  from { opacity: 0; }
+  to   { opacity: 1; transform: none; }
+}
+.rv { animation: visibilityFallback 0.5s 2.5s ease forwards; }
+h1 { color: var(--text); }
+.hero-inner > * { color: var(--text); }
 
 </style>
 </head>
@@ -1280,7 +1290,7 @@ h2{position:relative;}
   </div>
 
   <!-- Base no-lights image -->
-  <img id="fp-base" src="https://autoflow-lab.github.io/fp_off.png" alt="Smart Home Floor Plan"
+  <img id="fp-base" src="https://autoflow-lab.github.io/fp_off.png" loading="eager" decoding="async" alt="Smart Home Floor Plan"
        style="width:100%;display:block;border-radius:12px;user-select:none;-webkit-user-drag:none;pointer-events:none">
 
   <!-- SVG overlay: room clips + lamp fixtures -->
