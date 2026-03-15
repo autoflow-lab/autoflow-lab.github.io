@@ -854,6 +854,45 @@ h2{position:relative;}
 [data-theme="dark"] .fab:hover{box-shadow:0 8px 32px rgba(0,229,255,.4);}
 @media(max-width:780px){.fab-txt{display:none;}.fab{padding:14px;border-radius:50%;}}
 
+
+/* ━━━━ PHOTO FLOOR PLAN ━━━━ */
+.photo-fp{
+  position:relative;border-radius:14px;overflow:hidden;
+  box-shadow:0 8px 48px rgba(0,0,0,.2),0 2px 8px rgba(0,0,0,.1);
+  background:#111;
+  cursor:default;
+}
+[data-theme="dark"] .photo-fp{box-shadow:0 8px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05);}
+.photo-fp:hover #fp-labels{opacity:1;}
+.lamp-fix .lamp-bulb{transition:fill .4s ease,filter .4s ease,r .3s ease;}
+.lamp-fix .lamp-ring{transition:stroke .4s ease,opacity .4s ease,r .3s ease;}
+.lamp-fix .lamp-shadow{opacity:.5;}
+.lamp-fix:hover .lamp-shadow{opacity:.7;}
+.lamp-fix:hover .lamp-bulb{r:9;}
+.lamp-fix:hover .lamp-hitzone{fill:rgba(255,255,255,.05);}
+[id^="pool-"]{transition:opacity .6s ease;}
+/* Lamp ON animation */
+@keyframes lampPop{0%{r:4;opacity:.5}50%{r:11;opacity:.9}100%{r:7;opacity:1}}
+@keyframes ringPulse{0%{r:11;opacity:.5;stroke-width:2}100%{r:22;opacity:0;stroke-width:.5}}
+
+/* ── Lamp list sidebar ── */
+.lamp-list{display:flex;flex-direction:column;gap:0;}
+.lamp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s;}
+.lamp-row:hover{background:var(--bg2);}
+.lamp-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background .4s,box-shadow .4s;}
+.lamp-dot.on{box-shadow:0 0 6px currentColor;}
+.lamp-name{font-size:.78rem;font-weight:500;flex:1;color:var(--text);}
+.lamp-zone{font-size:.65rem;color:var(--text3);}
+.lamp-sw{width:28px;height:17px;border-radius:8.5px;position:relative;cursor:pointer;transition:background .3s;background:var(--bg3);border:1px solid var(--border2);flex-shrink:0;}
+.lamp-sw::after{content:'';position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.lamp-sw.on{background:var(--green-c);border-color:var(--green-c);}
+[data-theme="dark"] .lamp-sw.on{background:var(--warm);border-color:var(--warm);}
+.lamp-sw.on::after{transform:translateX(11px);}
+
+/* Scene row override */
+.demo-layout{grid-template-columns:1.5fr 1fr;}
+@media(max-width:900px){.demo-layout{grid-template-columns:1fr;}}
+
 </style>
 </head>
 <body>
@@ -1065,382 +1104,248 @@ h2{position:relative;}
           <button class="scene-pill" onclick="setScene('alloff',this)">🌙 Night</button>
         </div>
         <div class="fp-wrap">
-          <div class="fp-hint">Click: toggle · Long-press: choose color</div>
-          <div class="fp-container" id="fp-container">
-            <!-- Color Picker Popover -->
-            <div class="color-popover" id="color-popover">
-              <div class="cp-title" id="cp-room-label">Room Color</div>
-              <div class="cp-swatches" id="cp-swatches"></div>
-              <div class="cp-brightness">
-                <label>Bright</label>
-                <input type="range" min="20" max="100" value="80" id="cp-bright" oninput="applyRoomBrightness(this.value)">
-              </div>
-            </div>
-            <!-- DETAILED FLOOR PLAN SVG v2 — textured floors, room glow -->
-<svg id="fp" viewBox="0 0 540 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;display:block;cursor:pointer">
-<defs>
-  <!-- ── FLOOR TEXTURES ── -->
-  <pattern id="wood" width="44" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
-    <rect width="44" height="8" fill="#c4956a"/>
-    <rect width="44" height=".6" fill="#b07a50" opacity=".55"/>
-    <rect y="2.5" width="44" height=".4" fill="#d4a878" opacity=".4"/>
-    <rect y="4.5" width="44" height=".5" fill="#b07a50" opacity=".45"/>
-    <rect y="6.5" width="44" height=".4" fill="#d4a878" opacity=".3"/>
-    <rect x="22" width=".7" height="8" fill="#9a6040" opacity=".35"/>
-    <rect x="0" y="0" width=".5" height="8" fill="#9a6040" opacity=".2"/>
-  </pattern>
-  <pattern id="wood2" width="44" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(90)">
-    <rect width="44" height="8" fill="#b88050"/>
-    <rect width="44" height=".6" fill="#9a6840" opacity=".55"/>
-    <rect y="3" width="44" height=".4" fill="#c89060" opacity=".4"/>
-    <rect y="6" width="44" height=".5" fill="#9a6840" opacity=".45"/>
-    <rect x="22" width=".7" height="8" fill="#8a5030" opacity=".3"/>
-  </pattern>
-  <pattern id="tile-k" width="16" height="16" patternUnits="userSpaceOnUse">
-    <rect width="16" height="16" fill="#e8e4de"/>
-    <rect width="7.8" height="7.8" fill="#f0ede8" rx=".5"/>
-    <rect x="8.2" y="8.2" width="7.8" height="7.8" fill="#f0ede8" rx=".5"/>
-    <rect width="16" height="16" fill="none" stroke="#d4cec8" stroke-width=".5"/>
-  </pattern>
-  <pattern id="tile-b" width="12" height="12" patternUnits="userSpaceOnUse">
-    <rect width="12" height="12" fill="#dce8ee"/>
-    <rect width="5.6" height="5.6" fill="#e8f2f8" rx=".3"/>
-    <rect x="6.4" y="6.4" width="5.6" height="5.6" fill="#e8f2f8" rx=".3"/>
-    <rect width="12" height="12" fill="none" stroke="#c4d8e4" stroke-width=".6"/>
-  </pattern>
-  <pattern id="carpet" width="8" height="8" patternUnits="userSpaceOnUse">
-    <rect width="8" height="8" fill="#b8aac8"/>
-    <line x1="0" y1="0" x2="8" y2="8" stroke="#a89ab8" stroke-width=".4" opacity=".5"/>
-    <line x1="8" y1="0" x2="0" y2="8" stroke="#a89ab8" stroke-width=".4" opacity=".4"/>
-    <circle cx="4" cy="4" r=".8" fill="#c8bcd8" opacity=".4"/>
-  </pattern>
-  <pattern id="grass" width="12" height="12" patternUnits="userSpaceOnUse">
-    <rect width="12" height="12" fill="#7ab864"/>
-    <ellipse cx="3" cy="10" rx="1.5" ry="4" fill="#68a850" opacity=".7"/>
-    <ellipse cx="9" cy="10" rx="1.5" ry="4" fill="#5a9840" opacity=".7"/>
-    <ellipse cx="6" cy="10" rx="1.2" ry="3" fill="#82c870" opacity=".5"/>
-  </pattern>
+          <div class="fp-hint">Click lamp to toggle · Right-click to pick color</div>
+            <!-- PHOTO FLOOR PLAN + LIGHT OVERLAY -->
+<div class="photo-fp" id="fp-container">
+  <!-- Color picker popover -->
+  <div class="color-popover" id="color-popover">
+    <div class="cp-title" id="cp-room-label">Lamp</div>
+    <div class="cp-swatches" id="cp-swatches"></div>
+    <div class="cp-brightness">
+      <label>Bright</label>
+      <input type="range" min="10" max="100" value="80" id="cp-bright" oninput="applyLampBrightness(this.value)">
+    </div>
+    <button onclick="closeColorPicker()" style="margin-top:6px;width:100%;padding:5px;border-radius:7px;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);font-size:.7rem;cursor:pointer;font-family:inherit">Close</button>
+  </div>
 
-  <!-- ── ROOM LIGHT OVERLAYS (whole-room radial fill) ── -->
-  <radialGradient id="rl-living" cx="50%" cy="45%" r="65%">
-    <stop id="rls-living-1" offset="0%" stop-color="#f5a623" stop-opacity=".45"/>
-    <stop id="rls-living-2" offset="100%" stop-color="#f5a623" stop-opacity="0"/>
-  </radialGradient>
-  <radialGradient id="rl-kitchen" cx="50%" cy="40%" r="65%">
-    <stop id="rls-kitchen-1" offset="0%" stop-color="#ffffff" stop-opacity=".0"/>
-    <stop id="rls-kitchen-2" offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-  </radialGradient>
-  <radialGradient id="rl-office" cx="55%" cy="30%" r="65%">
-    <stop id="rls-office-1" offset="0%" stop-color="#f5a623" stop-opacity=".45"/>
-    <stop id="rls-office-2" offset="100%" stop-color="#f5a623" stop-opacity="0"/>
-  </radialGradient>
-  <radialGradient id="rl-bedroom" cx="50%" cy="50%" r="65%">
-    <stop id="rls-bedroom-1" offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-    <stop id="rls-bedroom-2" offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-  </radialGradient>
-  <radialGradient id="rl-bathroom" cx="50%" cy="50%" r="65%">
-    <stop id="rls-bathroom-1" offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-    <stop id="rls-bathroom-2" offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-  </radialGradient>
-  <radialGradient id="rl-garden" cx="50%" cy="50%" r="65%">
-    <stop id="rls-garden-1" offset="0%" stop-color="#30d158" stop-opacity=".35"/>
-    <stop id="rls-garden-2" offset="100%" stop-color="#30d158" stop-opacity="0"/>
-  </radialGradient>
+  <!-- Base floor plan image -->
+  <img src="https://autoflow-lab.github.io/floorplan.jpg"
+       id="fp-img" alt="Floor Plan"
+       style="width:100%;display:block;border-radius:12px;position:relative;z-index:1;user-select:none;-webkit-user-drag:none">
 
-  <!-- Shadows -->
-  <filter id="furn-shadow" x="-10%" y="-10%" width="120%" height="130%">
-    <feDropShadow dx="1.5" dy="2" stdDeviation="2" flood-color="#6a4a2a" flood-opacity=".25"/>
-  </filter>
-  <filter id="room-glow" x="-5%" y="-5%" width="110%" height="110%">
-    <feGaussianBlur stdDeviation="4" result="b"/>
-    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-</defs>
+  <!-- SVG light overlay — same aspect ratio as image (588:393 = 3:2) -->
+  <svg id="fp-lights" viewBox="0 0 588 393"
+       xmlns="http://www.w3.org/2000/svg"
+       style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;border-radius:12px">
+    <defs>
+      <!-- Lamp gradients — each lamp gets its own, color updated via JS -->
+      <!-- Living room lamps -->
+      <radialGradient id="lg-L1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#f5a623" stop-opacity="0.75"/>
+        <stop offset="55%" stop-color="#f5a623" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#f5a623" stop-opacity="0.75"/>
+        <stop offset="55%" stop-color="#f5a623" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L3" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#f5a623" stop-opacity="0.75"/>
+        <stop offset="55%" stop-color="#f5a623" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <!-- Kitchen lamps -->
+      <radialGradient id="lg-K1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-K2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <!-- Bedroom lamps -->
+      <radialGradient id="lg-B1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-B2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <!-- Bathroom lamp -->
+      <radialGradient id="lg-BA1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <!-- Hallway lamp -->
+      <radialGradient id="lg-H1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <!-- Outdoor/deck lamps -->
+      <radialGradient id="lg-O1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#30d158" stop-opacity="0.6"/>
+        <stop offset="60%" stop-color="#30d158" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#30d158" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-O2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#30d158" stop-opacity="0.6"/>
+        <stop offset="60%" stop-color="#30d158" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#30d158" stop-opacity="0"/>
+      </radialGradient>
 
-<!-- ── OUTER SHELL ── -->
-<rect width="540" height="340" fill="#2a2420" rx="12"/>
-<rect x="2" y="2" width="536" height="336" fill="#3a3228" rx="11"/>
+      <!-- Bloom filter for realistic glow -->
+      <filter id="bloom" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softglow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
 
-<!-- ── WALL STRUCTURE ── -->
-<!-- Outer walls -->
-<rect x="8" y="8" width="524" height="324" fill="#d4cec8" rx="6"/>
+    <!-- ══ LIGHT POOLS (ellipses, clipped to rooms) ══ -->
+    <!-- Living room — 3 lamps: L1, L2, L3 -->
+    <ellipse id="pool-L1" cx="145" cy="105" rx="80" ry="65" fill="url(#lg-L1)" filter="url(#bloom)" opacity="1"/>
+    <ellipse id="pool-L2" cx="200" cy="75"  rx="70" ry="55" fill="url(#lg-L2)" filter="url(#bloom)" opacity="1"/>
+    <ellipse id="pool-L3" cx="130" cy="145" rx="65" ry="50" fill="url(#lg-L3)" filter="url(#bloom)" opacity="1"/>
+    <!-- Kitchen — 2 lamps: K1, K2 -->
+    <ellipse id="pool-K1" cx="390" cy="80" rx="68" ry="52" fill="url(#lg-K1)" filter="url(#bloom)" opacity="0"/>
+    <ellipse id="pool-K2" cx="450" cy="95" rx="60" ry="48" fill="url(#lg-K2)" filter="url(#bloom)" opacity="0"/>
+    <!-- Bedroom — 2 lamps: B1, B2 -->
+    <ellipse id="pool-B1" cx="490" cy="130" rx="58" ry="48" fill="url(#lg-B1)" filter="url(#bloom)" opacity="0"/>
+    <ellipse id="pool-B2" cx="530" cy="105" rx="48" ry="40" fill="url(#lg-B2)" filter="url(#bloom)" opacity="0"/>
+    <!-- Bathroom — 1 lamp: BA1 -->
+    <ellipse id="pool-BA1" cx="305" cy="270" rx="52" ry="44" fill="url(#lg-BA1)" filter="url(#bloom)" opacity="0"/>
+    <!-- Hallway — 1 lamp: H1 -->
+    <ellipse id="pool-H1" cx="110" cy="295" rx="56" ry="46" fill="url(#lg-H1)" filter="url(#bloom)" opacity="0"/>
+    <!-- Outdoor deck — 2 lamps: O1, O2 -->
+    <ellipse id="pool-O1" cx="180" cy="32"  rx="55" ry="26" fill="url(#lg-O1)" filter="url(#bloom)" opacity="1"/>
+    <ellipse id="pool-O2" cx="320" cy="28"  rx="55" ry="26" fill="url(#lg-O2)" filter="url(#bloom)" opacity="1"/>
 
-<!-- Interior dividers -->
-<rect x="210" y="8" width="10" height="176" fill="#c0b8b0"/>
-<rect x="366" y="8" width="10" height="176" fill="#c0b8b0"/>
-<rect x="8" y="184" width="524" height="8" fill="#c0b8b0"/>
-<rect x="176" y="192" width="8" height="140" fill="#c0b8b0"/>
-<rect x="296" y="192" width="8" height="140" fill="#c0b8b0"/>
+    <!-- ══ LAMP FIXTURES (clickable, on top) ══ -->
+    <!-- Living room lamps — pointer-events on -->
+    <g style="pointer-events:all">
+      <!-- L1 -->
+      <g id="lamp-L1" class="lamp-fix" data-lamp="L1"
+         onclick="lampClick('L1',event)" oncontextmenu="lampLongPress('L1',event)"
+         ontouchstart="lampTouchStart('L1',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="145" cy="105" r="10" fill="rgba(0,0,0,.35)" class="lamp-shadow"/>
+        <circle id="lc-L1" cx="145" cy="105" r="7" fill="#f5a623" filter="url(#softglow)" class="lamp-bulb"/>
+        <circle cx="145" cy="105" r="11" fill="none" stroke="#f5a623" stroke-width="1.5" opacity=".45" class="lamp-ring" id="lr-L1"/>
+        <circle cx="145" cy="105" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- L2 -->
+      <g id="lamp-L2" class="lamp-fix" data-lamp="L2"
+         onclick="lampClick('L2',event)" oncontextmenu="lampLongPress('L2',event)"
+         ontouchstart="lampTouchStart('L2',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="200" cy="75" r="10" fill="rgba(0,0,0,.35)" class="lamp-shadow"/>
+        <circle id="lc-L2" cx="200" cy="75" r="7" fill="#f5a623" filter="url(#softglow)" class="lamp-bulb"/>
+        <circle cx="200" cy="75" r="11" fill="none" stroke="#f5a623" stroke-width="1.5" opacity=".45" class="lamp-ring" id="lr-L2"/>
+        <circle cx="200" cy="75" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- L3 (floor lamp) -->
+      <g id="lamp-L3" class="lamp-fix" data-lamp="L3"
+         onclick="lampClick('L3',event)" oncontextmenu="lampLongPress('L3',event)"
+         ontouchstart="lampTouchStart('L3',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="130" cy="145" r="10" fill="rgba(0,0,0,.35)" class="lamp-shadow"/>
+        <circle id="lc-L3" cx="130" cy="145" r="6" fill="#f5a623" filter="url(#softglow)" class="lamp-bulb"/>
+        <circle cx="130" cy="145" r="10" fill="none" stroke="#f5a623" stroke-width="1.5" opacity=".4" class="lamp-ring" id="lr-L3"/>
+        <circle cx="130" cy="145" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- K1 Kitchen -->
+      <g id="lamp-K1" class="lamp-fix" data-lamp="K1"
+         onclick="lampClick('K1',event)" oncontextmenu="lampLongPress('K1',event)"
+         ontouchstart="lampTouchStart('K1',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="390" cy="80" r="10" fill="rgba(0,0,0,.4)" class="lamp-shadow"/>
+        <circle id="lc-K1" cx="390" cy="80" r="6" fill="#9a9a9a" class="lamp-bulb"/>
+        <circle cx="390" cy="80" r="10" fill="none" stroke="#9a9a9a" stroke-width="1.5" opacity=".25" class="lamp-ring" id="lr-K1"/>
+        <circle cx="390" cy="80" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- K2 Kitchen -->
+      <g id="lamp-K2" class="lamp-fix" data-lamp="K2"
+         onclick="lampClick('K2',event)" oncontextmenu="lampLongPress('K2',event)"
+         ontouchstart="lampTouchStart('K2',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="450" cy="95" r="10" fill="rgba(0,0,0,.4)" class="lamp-shadow"/>
+        <circle id="lc-K2" cx="450" cy="95" r="6" fill="#9a9a9a" class="lamp-bulb"/>
+        <circle cx="450" cy="95" r="10" fill="none" stroke="#9a9a9a" stroke-width="1.5" opacity=".25" class="lamp-ring" id="lr-K2"/>
+        <circle cx="450" cy="95" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- B1 Bedroom -->
+      <g id="lamp-B1" class="lamp-fix" data-lamp="B1"
+         onclick="lampClick('B1',event)" oncontextmenu="lampLongPress('B1',event)"
+         ontouchstart="lampTouchStart('B1',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="490" cy="130" r="10" fill="rgba(0,0,0,.4)" class="lamp-shadow"/>
+        <circle id="lc-B1" cx="490" cy="130" r="6" fill="#9a9a9a" class="lamp-bulb"/>
+        <circle cx="490" cy="130" r="10" fill="none" stroke="#9a9a9a" stroke-width="1.5" opacity=".25" class="lamp-ring" id="lr-B1"/>
+        <circle cx="490" cy="130" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- B2 Bedroom lamp 2 -->
+      <g id="lamp-B2" class="lamp-fix" data-lamp="B2"
+         onclick="lampClick('B2',event)" oncontextmenu="lampLongPress('B2',event)"
+         ontouchstart="lampTouchStart('B2',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="530" cy="105" r="10" fill="rgba(0,0,0,.4)" class="lamp-shadow"/>
+        <circle id="lc-B2" cx="530" cy="105" r="6" fill="#9a9a9a" class="lamp-bulb"/>
+        <circle cx="530" cy="105" r="10" fill="none" stroke="#9a9a9a" stroke-width="1.5" opacity=".25" class="lamp-ring" id="lr-B2"/>
+        <circle cx="530" cy="105" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- BA1 Bathroom -->
+      <g id="lamp-BA1" class="lamp-fix" data-lamp="BA1"
+         onclick="lampClick('BA1',event)" oncontextmenu="lampLongPress('BA1',event)"
+         ontouchstart="lampTouchStart('BA1',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="305" cy="270" r="10" fill="rgba(0,0,0,.4)" class="lamp-shadow"/>
+        <circle id="lc-BA1" cx="305" cy="270" r="6" fill="#9a9a9a" class="lamp-bulb"/>
+        <circle cx="305" cy="270" r="10" fill="none" stroke="#9a9a9a" stroke-width="1.5" opacity=".25" class="lamp-ring" id="lr-BA1"/>
+        <circle cx="305" cy="270" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- H1 Hallway -->
+      <g id="lamp-H1" class="lamp-fix" data-lamp="H1"
+         onclick="lampClick('H1',event)" oncontextmenu="lampLongPress('H1',event)"
+         ontouchstart="lampTouchStart('H1',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="110" cy="295" r="10" fill="rgba(0,0,0,.4)" class="lamp-shadow"/>
+        <circle id="lc-H1" cx="110" cy="295" r="6" fill="#9a9a9a" class="lamp-bulb"/>
+        <circle cx="110" cy="295" r="10" fill="none" stroke="#9a9a9a" stroke-width="1.5" opacity=".25" class="lamp-ring" id="lr-H1"/>
+        <circle cx="110" cy="295" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- O1 Outdoor -->
+      <g id="lamp-O1" class="lamp-fix" data-lamp="O1"
+         onclick="lampClick('O1',event)" oncontextmenu="lampLongPress('O1',event)"
+         ontouchstart="lampTouchStart('O1',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="180" cy="32" r="9" fill="rgba(0,0,0,.35)" class="lamp-shadow"/>
+        <circle id="lc-O1" cx="180" cy="32" r="6" fill="#30d158" filter="url(#softglow)" class="lamp-bulb"/>
+        <circle cx="180" cy="32" r="10" fill="none" stroke="#30d158" stroke-width="1.5" opacity=".5" class="lamp-ring" id="lr-O1"/>
+        <circle cx="180" cy="32" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+      <!-- O2 Outdoor -->
+      <g id="lamp-O2" class="lamp-fix" data-lamp="O2"
+         onclick="lampClick('O2',event)" oncontextmenu="lampLongPress('O2',event)"
+         ontouchstart="lampTouchStart('O2',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <circle cx="320" cy="28" r="9" fill="rgba(0,0,0,.35)" class="lamp-shadow"/>
+        <circle id="lc-O2" cx="320" cy="28" r="6" fill="#30d158" filter="url(#softglow)" class="lamp-bulb"/>
+        <circle cx="320" cy="28" r="10" fill="none" stroke="#30d158" stroke-width="1.5" opacity=".5" class="lamp-ring" id="lr-O2"/>
+        <circle cx="320" cy="28" r="16" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+    </g>
 
-<!-- ── LIVING ROOM — x:8 y:8 w:202 h:176 ── -->
-<g id="room-living" onclick="fpClick('living',event)" oncontextmenu="fpLongPress('living',event)" ontouchstart="fpTouchStart('living',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-  <!-- Floor texture -->
-  <rect x="8" y="8" width="202" height="176" fill="url(#wood)"/>
-  <!-- Light overlay (whole room) -->
-  <rect id="light-living" x="8" y="8" width="202" height="176" fill="url(#rl-living)" style="transition:opacity .6s ease;pointer-events:none" opacity="1"/>
-  <!-- Ceiling light dot indicator -->
-  <circle id="b-living-1" cx="65" cy="42" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
-  <circle id="b-living-2" cx="109" cy="42" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
-  <circle id="b-living-3" cx="153" cy="42" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
-  <!-- Light fixture rings -->
-  <circle cx="65" cy="42" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-l1" style="transition:all .5s"/>
-  <circle cx="109" cy="42" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-l2" style="transition:all .5s"/>
-  <circle cx="153" cy="42" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-l3" style="transition:all .5s"/>
-  <!-- L-shaped sofa -->
-  <g filter="url(#furn-shadow)">
-    <rect x="20" y="105" width="95" height="32" rx="6" fill="#8a7a6a"/>
-    <rect x="20" y="105" width="14" height="46" rx="5" fill="#8a7a6a"/>
-    <rect x="101" y="105" width="14" height="46" rx="5" fill="#8a7a6a"/>
-    <rect x="20" y="137" width="95" height="14" rx="4" fill="#7a6a5a"/>
-    <!-- Cushions -->
-    <rect x="22" y="108" width="22" height="22" rx="4" fill="#a09080"/>
-    <rect x="48" y="108" width="22" height="22" rx="4" fill="#a09080"/>
-    <rect x="74" y="108" width="22" height="22" rx="4" fill="#a09080"/>
-    <!-- Side cushion -->
-    <rect x="24" y="140" width="18" height="16" rx="3" fill="#a09080"/>
-  </g>
-  <!-- Coffee table -->
-  <rect x="32" y="158" width="56" height="22" rx="5" fill="#c4a870" filter="url(#furn-shadow)"/>
-  <rect x="35" y="161" width="50" height="16" rx="3" fill="#d4b880"/>
-  <!-- TV unit on wall -->
-  <rect x="145" y="16" width="58" height="20" rx="3" fill="#1a1a20" filter="url(#furn-shadow)"/>
-  <rect x="148" y="19" width="52" height="14" rx="2" fill="#0a1a2a"/>
-  <!-- TV glow in dark mode -->
-  <rect x="174" y="44" width="8" height="3" rx="1" fill="#3a3a40"/>
-  <!-- Floor lamp -->
-  <circle cx="188" cy="148" r="8" fill="#e8d898" filter="url(#room-glow)" opacity=".6" style="transition:all .5s" id="b-living-lamp"/>
-  <rect x="186" y="148" width="3" height="22" rx="1" fill="#9a9080"/>
-  <!-- Plant -->
-  <circle cx="190" cy="172" r="10" fill="#3a7a3a" opacity=".8"/>
-  <circle cx="186" cy="168" r="7" fill="#2a6a2a" opacity=".9"/>
-  <rect x="186" y="175" width="6" height="8" rx="2" fill="#7a5030"/>
-  <circle cx="189" cy="174" r="4" fill="#5a8a3a" opacity=".7"/>
-  <!-- Room label -->
-  <text x="85" y="90" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(60,40,20,.7)">Living Room</text>
-</g>
-
-<!-- ── KITCHEN — x:220 y:8 w:146 h:176 ── -->
-<g id="room-kitchen" onclick="fpClick('kitchen',event)" oncontextmenu="fpLongPress('kitchen',event)" ontouchstart="fpTouchStart('kitchen',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-  <rect x="220" y="8" width="146" height="176" fill="url(#tile-k)"/>
-  <rect id="light-kitchen" x="220" y="8" width="146" height="176" fill="url(#rl-kitchen)" style="transition:opacity .6s ease;pointer-events:none" opacity="0"/>
-  <!-- Ceiling lights -->
-  <circle id="b-kitchen-1" cx="262" cy="40" r="5" fill="#c8c4be" style="transition:all .5s"/>
-  <circle id="b-kitchen-2" cx="316" cy="40" r="5" fill="#c8c4be" style="transition:all .5s"/>
-  <circle cx="262" cy="40" r="8" fill="none" stroke="#c8c4be" stroke-width="1" opacity=".3" id="br-k1" style="transition:all .5s"/>
-  <circle cx="316" cy="40" r="8" fill="none" stroke="#c8c4be" stroke-width="1" opacity=".3" id="br-k2" style="transition:all .5s"/>
-  <!-- Counter top wall -->
-  <rect x="224" y="12" width="138" height="26" rx="3" fill="#d8d0c4" filter="url(#furn-shadow)"/>
-  <rect x="226" y="14" width="134" height="22" rx="2" fill="#e4dcd0"/>
-  <!-- Sink -->
-  <rect x="230" y="17" width="26" height="16" rx="3" fill="#9ab8c8"/>
-  <rect x="232" y="19" width="22" height="12" rx="2" fill="#7aa0b8"/>
-  <circle cx="243" cy="31" r="2.5" fill="#d8e8f0"/>
-  <!-- Stove -->
-  <rect x="264" y="16" width="34" height="18" rx="2" fill="#3a3835"/>
-  <circle cx="275" cy="25" r="5" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
-  <circle cx="290" cy="25" r="5" fill="#2a2825" stroke="#5a5855" stroke-width="1"/>
-  <!-- Right side cabinet -->
-  <rect x="350" y="12" width="12" height="138" rx="3" fill="#d8d0c4" filter="url(#furn-shadow)"/>
-  <!-- Kitchen island -->
-  <rect x="244" y="80" width="88" height="42" rx="5" fill="#c4bab0" filter="url(#furn-shadow)"/>
-  <rect x="247" y="83" width="82" height="36" rx="4" fill="#d4cac0"/>
-  <!-- Bar stools -->
-  <circle cx="262" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
-  <circle cx="282" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
-  <circle cx="302" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
-  <circle cx="322" cy="130" r="9" fill="#9a8878" filter="url(#furn-shadow)"/>
-  <!-- Fridge -->
-  <rect x="224" y="48" width="26" height="40" rx="3" fill="#e0dcd6" filter="url(#furn-shadow)"/>
-  <rect x="226" y="50" width="22" height="18" rx="2" fill="#d4d0ca"/>
-  <rect x="226" y="70" width="22" height="16" rx="2" fill="#d4d0ca"/>
-  <rect x="235" y="56" width="6" height="2" rx="1" fill="#b0a898"/>
-  <!-- Label -->
-  <text x="290" y="70" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(80,60,40,.7)">Kitchen</text>
-</g>
-
-<!-- ── OFFICE — x:376 y:8 w:156 h:176 ── -->
-<g id="room-office" onclick="fpClick('office',event)" oncontextmenu="fpLongPress('office',event)" ontouchstart="fpTouchStart('office',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-  <rect x="376" y="8" width="156" height="176" fill="url(#wood2)"/>
-  <rect id="light-office" x="376" y="8" width="156" height="176" fill="url(#rl-office)" style="transition:opacity .6s ease;pointer-events:none" opacity="1"/>
-  <circle id="b-office-1" cx="420" cy="35" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
-  <circle id="b-office-2" cx="494" cy="35" r="6" fill="#f5a623" filter="url(#room-glow)" style="transition:all .5s"/>
-  <circle cx="420" cy="35" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-o1" style="transition:all .5s"/>
-  <circle cx="494" cy="35" r="9" fill="none" stroke="#f5a623" stroke-width="1" opacity=".5" id="br-o2" style="transition:all .5s"/>
-  <!-- L-desk -->
-  <rect x="388" y="52" width="118" height="52" rx="4" fill="#b89860" filter="url(#furn-shadow)"/>
-  <rect x="388" y="104" width="42" height="30" rx="3" fill="#b89860" filter="url(#furn-shadow)"/>
-  <!-- Monitor -->
-  <rect x="416" y="24" width="64" height="38" rx="3" fill="#1a1a22" filter="url(#furn-shadow)"/>
-  <rect x="419" y="27" width="58" height="30" rx="2" fill="#0a2040"/>
-  <!-- Monitor glow in dark mode hint -->
-  <rect x="444" y="62" width="14" height="5" rx="2" fill="#2a2a30"/>
-  <!-- Keyboard -->
-  <rect x="418" y="70" width="60" height="18" rx="3" fill="#2a2822"/>
-  <!-- Mouse -->
-  <rect x="484" y="70" width="14" height="18" rx="6" fill="#3a3830"/>
-  <!-- Chair (office) -->
-  <circle cx="456" cy="140" r="22" fill="#7a7a8a" filter="url(#furn-shadow)" opacity=".9"/>
-  <circle cx="456" cy="137" r="15" fill="#909098"/>
-  <!-- Armrests hint -->
-  <rect x="433" y="136" width="8" height="14" rx="3" fill="#7a7a8a"/>
-  <rect x="471" y="136" width="8" height="14" rx="3" fill="#7a7a8a"/>
-  <!-- Bookshelf -->
-  <rect x="380" y="116" width="32" height="60" rx="3" fill="#c89860" filter="url(#furn-shadow)"/>
-  <rect x="383" y="119" width="26" height="8" rx="1" fill="#8a5a2a"/>
-  <rect x="383" y="129" width="26" height="8" rx="1" fill="#a07040"/>
-  <rect x="383" y="139" width="26" height="8" rx="1" fill="#6a4a1a"/>
-  <rect x="383" y="149" width="26" height="8" rx="1" fill="#b08050"/>
-  <rect x="383" y="159" width="26" height="8" rx="1" fill="#7a5030"/>
-  <!-- Label -->
-  <text x="456" y="175" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(60,40,20,.7)">Office</text>
-</g>
-
-<!-- ── BEDROOM — x:8 y:192 w:168 h:140 ── -->
-<g id="room-bedroom" onclick="fpClick('bedroom',event)" oncontextmenu="fpLongPress('bedroom',event)" ontouchstart="fpTouchStart('bedroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-  <rect x="8" y="192" width="168" height="140" fill="url(#carpet)"/>
-  <rect id="light-bedroom" x="8" y="192" width="168" height="140" fill="url(#rl-bedroom)" style="transition:opacity .6s ease;pointer-events:none" opacity="0"/>
-  <circle id="b-bedroom-1" cx="80" cy="210" r="5" fill="#b8b0c8" style="transition:all .5s"/>
-  <circle cx="80" cy="210" r="8" fill="none" stroke="#b8b0c8" stroke-width="1" opacity=".3" id="br-bd1" style="transition:all .5s"/>
-  <!-- Bed frame -->
-  <rect x="22" y="215" width="100" height="72" rx="6" fill="#c8a888" filter="url(#furn-shadow)"/>
-  <!-- Headboard -->
-  <rect x="22" y="213" width="100" height="20" rx="6" fill="#9a7050"/>
-  <rect x="25" y="216" width="94" height="14" rx="4" fill="#b08060"/>
-  <!-- Mattress -->
-  <rect x="24" y="233" width="96" height="54" rx="4" fill="#e8e0d8"/>
-  <!-- Pillows -->
-  <rect x="30" y="238" width="35" height="22" rx="6" fill="#f4f0ea" stroke="#e0d8d0" stroke-width="1"/>
-  <rect x="76" y="238" width="35" height="22" rx="6" fill="#f4f0ea" stroke="#e0d8d0" stroke-width="1"/>
-  <!-- Duvet -->
-  <rect x="24" y="264" width="96" height="23" rx="4" fill="#8ab0d0"/>
-  <line x1="24" y1="276" x2="120" y2="276" stroke="#78a0c0" stroke-width="1"/>
-  <!-- Nightstands -->
-  <rect x="130" y="220" width="26" height="32" rx="3" fill="#c4a880" filter="url(#furn-shadow)"/>
-  <rect x="133" y="235" width="20" height="3" rx="1" fill="#a08060"/>
-  <circle cx="143" cy="240" r="3" fill="#b09070"/>
-  <rect x="16" y="220" width="4" height="28" rx="2" fill="#c4a880"/>
-  <!-- Wardrobe -->
-  <rect x="132" y="260" width="40" height="66" rx="3" fill="#c0a880" filter="url(#furn-shadow)"/>
-  <line x1="152" y1="260" x2="152" y2="326" stroke="#a89068" stroke-width="1.5"/>
-  <circle cx="148" cy="294" r="3" fill="#90786a"/>
-  <circle cx="156" cy="294" r="3" fill="#90786a"/>
-  <!-- Rug -->
-  <ellipse cx="78" cy="305" rx="48" ry="18" fill="#a898c0" stroke="#9888b0" stroke-width="1" opacity=".55"/>
-  <!-- Label -->
-  <text x="70" y="205" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(40,30,50,.7)">Bedroom</text>
-</g>
-
-<!-- ── BATHROOM — x:184 y:192 w:112 h:140 ── -->
-<g id="room-bathroom" onclick="fpClick('bathroom',event)" oncontextmenu="fpLongPress('bathroom',event)" ontouchstart="fpTouchStart('bathroom',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-  <rect x="184" y="192" width="112" height="140" fill="url(#tile-b)"/>
-  <rect id="light-bathroom" x="184" y="192" width="112" height="140" fill="url(#rl-bathroom)" style="transition:opacity .6s ease;pointer-events:none" opacity="0"/>
-  <circle id="b-bathroom-1" cx="218" cy="206" r="4" fill="#c4cece" style="transition:all .5s"/>
-  <circle id="b-bathroom-2" cx="268" cy="206" r="4" fill="#c4cece" style="transition:all .5s"/>
-  <circle cx="218" cy="206" r="7" fill="none" stroke="#c4cece" stroke-width="1" opacity=".3" id="br-ba1" style="transition:all .5s"/>
-  <circle cx="268" cy="206" r="7" fill="none" stroke="#c4cece" stroke-width="1" opacity=".3" id="br-ba2" style="transition:all .5s"/>
-  <!-- Bathtub -->
-  <rect x="192" y="216" width="64" height="44" rx="14" fill="#d4e8f0" filter="url(#furn-shadow)"/>
-  <rect x="196" y="220" width="56" height="36" rx="12" fill="#bcd8ec"/>
-  <rect x="200" y="224" width="48" height="28" rx="10" fill="#a8cce0" opacity=".7"/>
-  <!-- Tap -->
-  <rect x="236" y="213" width="4" height="10" rx="2" fill="#c8d8e0"/>
-  <rect x="232" y="213" width="12" height="3" rx="1.5" fill="#c8d8e0"/>
-  <!-- Toilet -->
-  <rect x="266" y="216" width="24" height="36" rx="10" fill="#f0f0ee" filter="url(#furn-shadow)"/>
-  <rect x="264" y="213" width="28" height="10" rx="4" fill="#e8e8e4" filter="url(#furn-shadow)"/>
-  <ellipse cx="278" cy="234" rx="9" ry="11" fill="#dcd8d4" opacity=".5"/>
-  <!-- Sink -->
-  <rect x="192" y="272" width="32" height="26" rx="5" fill="#d4e8f0" filter="url(#furn-shadow)"/>
-  <ellipse cx="208" cy="285" rx="11" ry="8" fill="#b8d4e8"/>
-  <circle cx="208" cy="280" r="2.5" fill="#c4d8e8"/>
-  <!-- Towel rail -->
-  <rect x="226" y="300" width="62" height="5" rx="2.5" fill="#b8c8c8" filter="url(#furn-shadow)"/>
-  <rect x="226" y="305" width="8" height="12" rx="2" fill="#a8b8b8"/>
-  <rect x="280" y="305" width="8" height="12" rx="2" fill="#a8b8b8"/>
-  <!-- Shower hint -->
-  <rect x="264" y="260" width="28" height="28" rx="4" fill="#c8d8e4" opacity=".5"/>
-  <line x1="272" y1="264" x2="264" y2="272" stroke="#a8c8d8" stroke-width=".8"/>
-  <line x1="280" y1="264" x2="272" y2="272" stroke="#a8c8d8" stroke-width=".8"/>
-  <!-- Label -->
-  <text x="240" y="204" text-anchor="middle" font-size="9" font-family="Inter,sans-serif" font-weight="700" fill="rgba(40,60,70,.7)">Bathroom</text>
-</g>
-
-<!-- ── GARDEN / TERRACE — x:304 y:192 w:228 h:140 ── -->
-<g id="room-garden" onclick="fpClick('garden',event)" oncontextmenu="fpLongPress('garden',event)" ontouchstart="fpTouchStart('garden',event)" ontouchend="fpTouchEnd(event)" style="cursor:pointer">
-  <rect x="304" y="192" width="228" height="140" rx="5" fill="url(#grass)"/>
-  <rect id="light-garden" x="304" y="192" width="228" height="140" rx="5" fill="url(#rl-garden)" style="transition:opacity .6s ease;pointer-events:none" opacity="1"/>
-  <!-- Garden path -->
-  <rect x="392" y="184" width="34" height="148" rx="4" fill="#c8b898" opacity=".7"/>
-  <!-- Terrace patio area (stone) -->
-  <rect x="316" y="200" width="140" height="90" rx="6" fill="#c8c0b0" opacity=".6"/>
-  <!-- Outdoor table -->
-  <circle cx="386" cy="252" r="26" fill="#c4b89a" filter="url(#furn-shadow)"/>
-  <circle cx="386" cy="252" r="17" fill="#d4c8a8"/>
-  <!-- Chairs -->
-  <rect x="374" y="218" width="24" height="18" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
-  <rect x="374" y="270" width="24" height="18" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
-  <rect x="342" y="240" width="18" height="24" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
-  <rect x="412" y="240" width="18" height="24" rx="5" fill="#a89878" filter="url(#furn-shadow)"/>
-  <!-- Umbrella -->
-  <ellipse cx="386" cy="232" rx="34" ry="9" fill="#e06030" opacity=".75"/>
-  <ellipse cx="386" cy="228" rx="32" ry="7" fill="#d05020" opacity=".4"/>
-  <line x1="386" y1="228" x2="386" y2="252" stroke="#8a5028" stroke-width="2.5"/>
-  <!-- Garden bushes -->
-  <circle cx="320" cy="210" r="14" fill="#4a9040" opacity=".85"/>
-  <circle cx="330" cy="218" r="10" fill="#3a8030" opacity=".9"/>
-  <circle cx="315" cy="222" r="9" fill="#5aa050" opacity=".75"/>
-  <circle cx="510" cy="210" r="14" fill="#4a9040" opacity=".85"/>
-  <circle cx="500" cy="218" r="10" fill="#3a8030" opacity=".9"/>
-  <circle cx="514" cy="222" r="9" fill="#5aa050" opacity=".75"/>
-  <circle cx="318" cy="312" r="12" fill="#4a9040" opacity=".85"/>
-  <circle cx="510" cy="312" r="12" fill="#4a9040" opacity=".85"/>
-  <!-- Flower beds -->
-  <ellipse cx="464" cy="210" rx="28" ry="12" fill="#5a9040" opacity=".6"/>
-  <circle cx="455" cy="208" r="4" fill="#e04060" opacity=".8"/>
-  <circle cx="465" cy="206" r="3.5" fill="#f06040" opacity=".8"/>
-  <circle cx="474" cy="209" r="4" fill="#e070a0" opacity=".8"/>
-  <!-- Garden lights (poles) -->
-  <rect x="342" y="278" width="3" height="22" rx="1.5" fill="#7a6a5a"/>
-  <circle id="b-garden-1" cx="343" cy="277" r="6" fill="#30d158" filter="url(#room-glow)" style="transition:all .5s"/>
-  <circle cx="343" cy="277" r="9" fill="none" stroke="#30d158" stroke-width="1" opacity=".4" id="br-g1" style="transition:all .5s"/>
-  <rect x="494" y="278" width="3" height="22" rx="1.5" fill="#7a6a5a"/>
-  <circle id="b-garden-2" cx="495" cy="277" r="6" fill="#30d158" filter="url(#room-glow)" style="transition:all .5s"/>
-  <circle cx="495" cy="277" r="9" fill="none" stroke="#30d158" stroke-width="1" opacity=".4" id="br-g2" style="transition:all .5s"/>
-  <!-- Label -->
-  <text x="418" y="204" text-anchor="middle" font-size="10" font-family="Inter,sans-serif" font-weight="700" fill="rgba(20,50,20,.75)">Garden / Terrace 🌿</text>
-</g>
-
-<!-- Doors (arcs) -->
-<path d="M146,184 Q165,165 184,184" fill="none" stroke="#9a9080" stroke-width="1.5" stroke-dasharray="4,2" opacity=".7"/>
-<rect x="146" y="182" width="38" height="4" rx="2" fill="#a09080"/>
-<path d="M246,184 Q264,167 282,184" fill="none" stroke="#9a9080" stroke-width="1.5" stroke-dasharray="4,2" opacity=".7"/>
-<rect x="246" y="182" width="36" height="4" rx="2" fill="#a09080"/>
-<path d="M210,95 Q226,112 210,129" fill="none" stroke="#9a9080" stroke-width="1.2" stroke-dasharray="3,2" opacity=".6"/>
-<rect x="206" y="95" width="6" height="34" rx="2" fill="#e8e4de"/>
-<path d="M176,234 Q192,252 176,270" fill="none" stroke="#9a9080" stroke-width="1.2" stroke-dasharray="3,2" opacity=".6"/>
-<rect x="174" y="234" width="6" height="36" rx="2" fill="#c8c0b8"/>
-<!-- Garden door -->
-<rect x="392" y="184" width="34" height="10" rx="2" fill="#c8b898" opacity=".8"/>
-
-<!-- Compass rose -->
-<g transform="translate(520,320)" opacity=".4">
-  <circle r="13" fill="rgba(255,255,255,.1)" stroke="#a09080" stroke-width=".8"/>
-  <text y="-5" text-anchor="middle" font-size="7.5" font-family="Inter,sans-serif" font-weight="800" fill="#7a6a5a">N</text>
-  <text y="13" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">S</text>
-  <text x="11" y="3.5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">E</text>
-  <text x="-11" y="3.5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">W</text>
-  <polygon points="0,-8 2,0 0,3 -2,0" fill="#7a6a5a"/>
-  <polygon points="0,8 2,0 0,-3 -2,0" fill="#9a9080"/>
-</g>
-<!-- Scale -->
-<g transform="translate(20,326)" opacity=".5">
-  <line x1="0" y1="0" x2="42" y2="0" stroke="#9a9080" stroke-width="1.5"/>
-  <line y1="-3" y2="3" stroke="#9a9080" stroke-width="1.5"/>
-  <line x1="42" y1="-3" x2="42" y2="3" stroke="#9a9080" stroke-width="1.5"/>
-  <text x="21" y="-5" text-anchor="middle" font-size="7" font-family="Inter,sans-serif" fill="#9a9080">5m</text>
-</g>
-</svg>
-          </div><!-- fp-container -->
+    <!-- Lamp labels (appear on hover via CSS) -->
+    <g id="fp-labels" style="pointer-events:none;opacity:0;transition:opacity .2s">
+      <text x="145" y="92" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.8)" font-weight="600">L1</text>
+      <text x="200" y="62" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.8)" font-weight="600">L2</text>
+      <text x="130" y="132" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.8)" font-weight="600">L3</text>
+      <text x="390" y="67" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.7)" font-weight="600">K1</text>
+      <text x="450" y="82" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.7)" font-weight="600">K2</text>
+      <text x="490" y="117" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.7)" font-weight="600">B1</text>
+      <text x="530" y="92" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.7)" font-weight="600">B2</text>
+      <text x="305" y="257" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.7)" font-weight="600">BA1</text>
+      <text x="110" y="282" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.7)" font-weight="600">H1</text>
+      <text x="180" y="19" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.8)" font-weight="600">O1</text>
+      <text x="320" y="15" text-anchor="middle" font-size="7" font-family="Inter" fill="rgba(255,255,255,.8)" font-weight="600">O2</text>
+    </g>
+  </svg>
+</div>
         </div>
       </div>
 
@@ -2847,6 +2752,281 @@ window.toggleTheme = function(){
 })();
 
 console.log('🏠 autoflow-lab dashboard v8 — animations loaded');
+
+
+// ══════════════════════════════════════════════
+//  INDIVIDUAL LAMP CONTROL SYSTEM
+// ══════════════════════════════════════════════
+
+const LAMP_COLORS = {
+  warm:  {color:'#f5a623', label:'Warm White', op:.75},
+  cool:  {color:'#cce8ff', label:'Cool White', op:.65},
+  white: {color:'#ffffff', label:'Pure White', op:.6},
+  cyan:  {color:'#00e5ff', label:'Cyan',        op:.7},
+  pink:  {color:'#e040fb', label:'Pink',         op:.7},
+  green: {color:'#69ff47', label:'Green',        op:.65},
+  red:   {color:'#ff3b30', label:'Red',          op:.65},
+  blue:  {color:'#2997ff', label:'Blue',         op:.7},
+};
+
+// Lamp definitions: id → {on, color, label, zone}
+const lamps = {
+  L1:  {on:true,  color:'warm',  label:'Ceiling 1', zone:'Living Room'},
+  L2:  {on:true,  color:'warm',  label:'Ceiling 2', zone:'Living Room'},
+  L3:  {on:true,  color:'warm',  label:'Floor Lamp', zone:'Living Room'},
+  K1:  {on:false, color:'cool',  label:'Ceiling 1', zone:'Kitchen'},
+  K2:  {on:false, color:'cool',  label:'Counter',   zone:'Kitchen'},
+  B1:  {on:false, color:'warm',  label:'Ceiling',   zone:'Bedroom'},
+  B2:  {on:false, color:'warm',  label:'Bedside',   zone:'Bedroom'},
+  BA1: {on:false, color:'white', label:'Ceiling',   zone:'Bathroom'},
+  H1:  {on:false, color:'cool',  label:'Hallway',   zone:'Hallway'},
+  O1:  {on:true,  color:'green', label:'Deck Left', zone:'Outdoor'},
+  O2:  {on:true,  color:'green', label:'Deck Right',zone:'Outdoor'},
+};
+
+function getLampColor(id){return LAMP_COLORS[lamps[id]?.color]||LAMP_COLORS.warm;}
+
+function applyLamp(id){
+  const l = lamps[id]; if(!l) return;
+  const on = l.on;
+  const lc = getLampColor(id);
+  const col = lc.color;
+  const op  = lc.op;
+
+  // Bulb element
+  const bulb = document.getElementById('lc-'+id);
+  if(bulb){
+    bulb.setAttribute('fill', on ? col : '#7a7a7a');
+    bulb.setAttribute('filter', on ? 'url(#softglow)' : 'none');
+    bulb.setAttribute('r', on ? '7' : '5');
+  }
+  // Ring
+  const ring = document.getElementById('lr-'+id);
+  if(ring){
+    ring.setAttribute('stroke', on ? col : '#5a5a5a');
+    ring.setAttribute('opacity', on ? '0.55' : '0.18');
+  }
+  // Pool gradient — update color
+  const grad = document.getElementById('lg-'+id);
+  if(grad){
+    const stops = grad.querySelectorAll('stop');
+    if(stops[0]){stops[0].setAttribute('stop-color', col); stops[0].setAttribute('stop-opacity', on ? String(op) : '0');}
+    if(stops[1]){stops[1].setAttribute('stop-color', col); stops[1].setAttribute('stop-opacity', on ? String(op*.28) : '0');}
+    if(stops[2]){stops[2].setAttribute('stop-color', col); stops[2].setAttribute('stop-opacity', '0');}
+  }
+  // Pool opacity
+  const pool = document.getElementById('pool-'+id);
+  if(pool) pool.setAttribute('opacity', on ? '1' : '0');
+
+  buildLampList();
+  updateLampCounts();
+}
+
+function lampClick(id, e){
+  if(e) e.preventDefault();
+  lamps[id].on = !lamps[id].on;
+  applyLamp(id);
+  // Spread ring animation
+  if(lamps[id].on) animateLampOn(id);
+  showToast(lamps[id].on ? '💡' : '🌑', lamps[id].zone + ' — ' + lamps[id].label + ' ' + (lamps[id].on?'on':'off'));
+  closeColorPicker();
+}
+
+function lampLongPress(id, e){
+  e.preventDefault();
+  openLampColorPicker(id, e);
+}
+
+let lpTimer = null;
+function lampTouchStart(id, e){
+  lpTimer = setTimeout(()=>openLampColorPicker(id, e.touches[0]), 600);
+}
+function lampTouchEnd(e){ clearTimeout(lpTimer); }
+
+function animateLampOn(id){
+  const svg = document.getElementById('fp-lights');
+  const bulb = document.getElementById('lc-'+id);
+  if(!svg||!bulb) return;
+  const cx = bulb.getAttribute('cx'); const cy = bulb.getAttribute('cy');
+  const col = getLampColor(id).color;
+  const pulse = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  pulse.setAttribute('cx',cx); pulse.setAttribute('cy',cy);
+  pulse.setAttribute('r','4'); pulse.setAttribute('fill','none');
+  pulse.setAttribute('stroke',col); pulse.setAttribute('stroke-width','2');
+  pulse.style.animation = 'ringPulse .7s ease-out forwards';
+  svg.appendChild(pulse);
+  setTimeout(()=>pulse.remove(), 750);
+}
+
+// ── Lamp Color Picker ──
+let cpLamp = null;
+function openLampColorPicker(id, e){
+  cpLamp = id;
+  const pop = document.getElementById('color-popover');
+  const container = document.getElementById('fp-container');
+  if(!pop||!container) return;
+  const cr = container.getBoundingClientRect();
+  let x = ((e.clientX||0) - cr.left);
+  let y = ((e.clientY||0) - cr.top);
+  x = Math.min(x, cr.width-185); y = Math.min(y, cr.height-160);
+  pop.style.left = Math.max(5,x)+'px';
+  pop.style.top  = Math.max(5,y)+'px';
+  pop.style.transform = 'none';
+  document.getElementById('cp-room-label').textContent = '💡 '+ lamps[id].label + ' · ' + lamps[id].zone;
+  const sw = document.getElementById('cp-swatches');
+  sw.innerHTML = '';
+  Object.entries(LAMP_COLORS).forEach(([k,v])=>{
+    const d = document.createElement('div');
+    d.className='cp-sw'+(lamps[id].color===k?' active':'');
+    d.style.background = v.color;
+    d.style.border = v.color==='#ffffff' ? '1px solid #ccc' : '';
+    d.title = v.label;
+    d.onclick = ()=>{
+      lamps[id].color = k;
+      lamps[id].on = true;
+      applyLamp(id);
+      animateLampOn(id);
+      document.querySelectorAll('.cp-sw').forEach(s=>s.classList.remove('active'));
+      d.classList.add('active');
+      showToast('🎨', lamps[id].label+' → '+v.label);
+    };
+    sw.appendChild(d);
+  });
+  const bright = document.getElementById('cp-bright');
+  if(bright) bright.value = 80;
+  pop.classList.add('show');
+}
+
+function closeColorPicker(){
+  const p=document.getElementById('color-popover');
+  if(p)p.classList.remove('show');
+  cpLamp=null;
+}
+
+function applyLampBrightness(val){
+  if(!cpLamp) return;
+  const l = lamps[cpLamp]; const col = getLampColor(cpLamp).color;
+  const op = (val/100) * LAMP_COLORS[l.color].op;
+  const grad = document.getElementById('lg-'+cpLamp);
+  if(grad){ const s=grad.querySelectorAll('stop'); if(s[0])s[0].setAttribute('stop-opacity',String(op)); if(s[1])s[1].setAttribute('stop-opacity',String(op*.3)); }
+}
+
+// ── Lamp list panel ──
+function buildLampList(){
+  const el = document.getElementById('room-list');
+  if(!el) return;
+  el.innerHTML = '';
+  const zones = {};
+  Object.entries(lamps).forEach(([id,l])=>{
+    if(!zones[l.zone]) zones[l.zone]=[];
+    zones[l.zone].push({id,...l});
+  });
+  Object.entries(zones).forEach(([zone,ls])=>{
+    // Zone header
+    const hdr = document.createElement('div');
+    hdr.style.cssText='font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:6px 10px 3px;';
+    hdr.textContent = zone;
+    el.appendChild(hdr);
+    ls.forEach(l=>{
+      const c = getLampColor(l.id).color;
+      const d = document.createElement('div');
+      d.className = 'lamp-row';
+      d.innerHTML = `
+        <div class="lamp-dot ${l.on?'on':''}" style="background:${l.on?c:'#6a6a6a'};${l.on?'box-shadow:0 0 6px '+c:''}"></div>
+        <div class="lamp-name">${l.label}</div>
+        <div class="lamp-sw ${l.on?'on':''}" onclick="event.stopPropagation();lamps['${l.id}'].on=!lamps['${l.id}'].on;applyLamp('${l.id}');if(lamps['${l.id}'].on)animateLampOn('${l.id}')"></div>
+      `;
+      d.onclick = ()=>{ lamps[l.id].on=!lamps[l.id].on; applyLamp(l.id); if(lamps[l.id].on)animateLampOn(l.id); };
+      d.oncontextmenu = e=>{ e.preventDefault(); openLampColorPicker(l.id,e); };
+      el.appendChild(d);
+    });
+  });
+}
+
+function updateLampCounts(){
+  const onCount = Object.values(lamps).filter(l=>l.on).length;
+  const qe = document.getElementById('qs-lights');
+  if(qe) qe.textContent = onCount;
+}
+
+// ── Scene presets now control lamps ──
+const LAMP_SCENES = {
+  relax:  {L1:'warm',L2:'warm',L3:'warm',K1:null,K2:null,B1:null,B2:null,BA1:null,H1:null,O1:'warm',O2:'warm'},
+  normal: {L1:'warm',L2:'cool',L3:'warm',K1:'cool',K2:'cool',B1:null,B2:null,BA1:null,H1:'cool',O1:'green',O2:'green'},
+  movie:  {L1:'pink',L2:null, L3:'red', K1:null,K2:null,B1:null,B2:null,BA1:null,H1:null,O1:null,O2:null},
+  alloff: {L1:null,L2:null,L3:null,K1:null,K2:null,B1:null,B2:null,BA1:null,H1:null,O1:null,O2:null},
+};
+
+// Override setScene for lamp system
+window.setScene = function(key){
+  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll(`.scene-pill[onclick*="${key}"],.scene-row-btn[onclick*="${key}"],.sq-btn[onclick*="${key}"]`).forEach(b=>b.classList.add('on'));
+  const cfg = LAMP_SCENES[key];
+  let i = 0;
+  Object.keys(lamps).forEach(id=>{
+    setTimeout(()=>{
+      if(cfg[id] !== undefined){
+        lamps[id].on = cfg[id] !== null;
+        if(cfg[id]) lamps[id].color = cfg[id];
+        applyLamp(id);
+        if(lamps[id].on) animateLampOn(id);
+      }
+    }, i++ * 60);
+  });
+  const labels={relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 All off'};
+  showToast('🎭',labels[key]);
+  setAmbient(key);
+};
+
+// ── Room-level toggle from dashboard ──
+const LAMP_ZONES = {
+  living:   ['L1','L2','L3'],
+  kitchen:  ['K1','K2'],
+  bedroom:  ['B1','B2'],
+  bathroom: ['BA1'],
+  hallway:  ['H1'],
+  garden:   ['O1','O2'],
+};
+
+// Patch drToggle for lamp system
+window.drToggle = function(card){
+  const zone = card.dataset.r;
+  const lampIds = LAMP_ZONES[zone]||[];
+  const anyOn = lampIds.some(id=>lamps[id]?.on);
+  lampIds.forEach((id,i)=>{
+    setTimeout(()=>{
+      if(lamps[id]){ lamps[id].on=!anyOn; applyLamp(id); if(lamps[id].on)animateLampOn(id); }
+    }, i*60);
+  });
+  card.classList.toggle('on',!anyOn);
+  showToast(!anyOn?'💡':'🌑', zone+' '+((!anyOn)?'on':'off'));
+};
+
+// ── Also patch rooms object for qs-lights ──
+const _rooms_compat = {
+  living:{on:true},kitchen:{on:false},bedroom:{on:false},
+  bathroom:{on:false},hallway:{on:false},garden:{on:true},
+  office:{on:false},
+};
+Object.keys(_rooms_compat).forEach(zone=>{
+  Object.defineProperty(_rooms_compat[zone],'on',{
+    get(){ const ids=LAMP_ZONES[zone]||[]; return ids.some(id=>lamps[id]?.on); },
+    set(v){ (LAMP_ZONES[zone]||[]).forEach(id=>{if(lamps[id]){lamps[id].on=v;applyLamp(id);}}); }
+  });
+});
+
+// ── Init ──
+document.addEventListener('click', e=>{
+  const pop=document.getElementById('color-popover');
+  if(pop&&pop.classList.contains('show')&&!pop.contains(e.target)&&!e.target.closest('.lamp-fix'))closeColorPicker();
+});
+
+// Initialize all lamps
+Object.keys(lamps).forEach(applyLamp);
+buildLampList();
+updateLampCounts();
+
+console.log('💡 Lamp system: '+Object.keys(lamps).length+' individual lamps ready');
 
 </script>
 
