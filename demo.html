@@ -1031,35 +1031,55 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
                 <radialGradient id="rg-dining" cx="50%" cy="50%" r="65%"><stop id="rg-dining-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/><stop id="rg-dining-1" offset="60%" stop-color="#f0a020" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="rg-bed2" cx="50%" cy="50%" r="65%"><stop id="rg-bed2-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/><stop id="rg-bed2-1" offset="60%" stop-color="#f0a020" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="rg-office" cx="50%" cy="50%" r="65%"><stop id="rg-office-0" offset="0%" stop-color="#c8e8ff" stop-opacity="0"/><stop id="rg-office-1" offset="60%" stop-color="#4088cc" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-                <!-- Room glow gradients — centered, userSpaceOnUse -->
-                <radialGradient id="rg-glow-bed1" cx="845" cy="213" r="68" gradientUnits="userSpaceOnUse">
-                  <stop id="rgg-bed1-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
-                  <stop id="rgg-bed1-1" offset="55%" stop-color="#f0a020" stop-opacity="0"/>
+                                <!-- Per-lamp glow gradients — tight, no overflow -->
+                <radialGradient id="lg-glow-L1" cx="840" cy="178" r="42" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L1-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L1-m" stop-color="#ffe8a0" stop-opacity="0"/>
                   <stop offset="100%" stop-opacity="0"/>
                 </radialGradient>
-                <radialGradient id="rg-glow-bath" cx="1072" cy="290" r="48" gradientUnits="userSpaceOnUse">
-                  <stop id="rgg-bath-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
-                  <stop id="rgg-bath-1" offset="55%" stop-color="#f0a020" stop-opacity="0"/>
+                <radialGradient id="lg-glow-L2" cx="800" cy="222" r="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L2-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L2-m" stop-color="#ffe8a0" stop-opacity="0"/>
                   <stop offset="100%" stop-opacity="0"/>
                 </radialGradient>
-                <radialGradient id="rg-glow-living" cx="720" cy="318" r="82" gradientUnits="userSpaceOnUse">
-                  <stop id="rgg-living-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
-                  <stop id="rgg-living-1" offset="55%" stop-color="#f0a020" stop-opacity="0"/>
+                <radialGradient id="lg-glow-L3" cx="895" cy="240" r="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L3-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L3-m" stop-color="#ffe8a0" stop-opacity="0"/>
                   <stop offset="100%" stop-opacity="0"/>
                 </radialGradient>
-                <radialGradient id="rg-glow-dining" cx="900" cy="478" r="52" gradientUnits="userSpaceOnUse">
-                  <stop id="rgg-dining-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
-                  <stop id="rgg-dining-1" offset="55%" stop-color="#f0a020" stop-opacity="0"/>
+                <radialGradient id="lg-glow-L4" cx="380" cy="393" r="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L4-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L4-m" stop-color="#ffe8a0" stop-opacity="0"/>
                   <stop offset="100%" stop-opacity="0"/>
                 </radialGradient>
-                <radialGradient id="rg-glow-bed2" cx="342" cy="378" r="65" gradientUnits="userSpaceOnUse">
-                  <stop id="rgg-bed2-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
-                  <stop id="rgg-bed2-1" offset="55%" stop-color="#f0a020" stop-opacity="0"/>
+                <radialGradient id="lg-glow-L5" cx="302" cy="360" r="28" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L5-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L5-m" stop-color="#ffe8a0" stop-opacity="0"/>
                   <stop offset="100%" stop-opacity="0"/>
                 </radialGradient>
-                <radialGradient id="rg-glow-office" cx="578" cy="520" r="44" gradientUnits="userSpaceOnUse">
-                  <stop id="rgg-office-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
-                  <stop id="rgg-office-1" offset="55%" stop-color="#f0a020" stop-opacity="0"/>
+                <radialGradient id="lg-glow-L6" cx="678" cy="285" r="48" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L6-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L6-m" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="lg-glow-L7" cx="760" cy="348" r="42" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L7-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L7-m" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="lg-glow-L8" cx="580" cy="520" r="36" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L8-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L8-m" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="lg-glow-L9" cx="1072" cy="268" r="36" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L9-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L9-m" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="lg-glow-L11" cx="900" cy="478" r="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   id="lgg-L11-0" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop offset="45%"  id="lgg-L11-m" stop-color="#ffe8a0" stop-opacity="0"/>
                   <stop offset="100%" stop-opacity="0"/>
                 </radialGradient>
                 <!-- Legacy lamp-dot gradients for dot colors -->
@@ -1089,25 +1109,36 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
               <polygon id="rp-dining" points="812,422 1080,492 1080,608 812,548"                  fill="url(#rg-dining)" opacity="0" style="transition:opacity .55s ease"/>
               <polygon id="rp-bed2"   points="225,328 482,388 482,528 225,468"                    fill="url(#rg-bed2)"   opacity="0" style="transition:opacity .55s ease"/>
               <polygon id="rp-office" points="482,452 658,498 658,608 482,562"                    fill="url(#rg-office)" opacity="0" style="transition:opacity .55s ease"/>
-              <!-- Room glow circles — centered, clipped to room, guaranteed no bleed -->
+                            <!-- Per-lamp glow circles — clipped to room -->
               <g clip-path="url(#clip-bed1)">
-                <circle id="lp-bed1" cx="845" cy="213" r="68" fill="url(#rg-glow-bed1)" opacity="0" style="transition:opacity .5s ease"/>
-              </g>
-              <g clip-path="url(#clip-bath)">
-                <circle id="lp-bath" cx="1072" cy="290" r="48" fill="url(#rg-glow-bath)" opacity="0" style="transition:opacity .5s ease"/>
-              </g>
-              <g clip-path="url(#clip-living)">
-                <circle id="lp-living" cx="720" cy="318" r="82" fill="url(#rg-glow-living)" opacity="0" style="transition:opacity .5s ease"/>
-              </g>
-              <g clip-path="url(#clip-dining)">
-                <circle id="lp-dining" cx="900" cy="478" r="52" fill="url(#rg-glow-dining)" opacity="0" style="transition:opacity .5s ease"/>
+                <circle id="lp-L1" cx="840" cy="178" r="42" fill="url(#lg-glow-L1)" opacity="0" style="transition:opacity .45s ease"/>
+                <circle id="lp-L2" cx="800" cy="222" r="32" fill="url(#lg-glow-L2)" opacity="0" style="transition:opacity .45s ease"/>
+                <circle id="lp-L3" cx="895" cy="240" r="32" fill="url(#lg-glow-L3)" opacity="0" style="transition:opacity .45s ease"/>
               </g>
               <g clip-path="url(#clip-bed2)">
-                <circle id="lp-bed2" cx="342" cy="378" r="65" fill="url(#rg-glow-bed2)" opacity="0" style="transition:opacity .5s ease"/>
+                <circle id="lp-L4" cx="380" cy="393" r="40" fill="url(#lg-glow-L4)" opacity="0" style="transition:opacity .45s ease"/>
+                <circle id="lp-L5" cx="302" cy="360" r="28" fill="url(#lg-glow-L5)" opacity="0" style="transition:opacity .45s ease"/>
+              </g>
+              <g clip-path="url(#clip-living)">
+                <circle id="lp-L6" cx="678" cy="285" r="48" fill="url(#lg-glow-L6)" opacity="0" style="transition:opacity .45s ease"/>
+                <circle id="lp-L7" cx="760" cy="348" r="42" fill="url(#lg-glow-L7)" opacity="0" style="transition:opacity .45s ease"/>
               </g>
               <g clip-path="url(#clip-office)">
-                <circle id="lp-office" cx="578" cy="520" r="44" fill="url(#rg-glow-office)" opacity="0" style="transition:opacity .5s ease"/>
+                <circle id="lp-L8" cx="580" cy="520" r="36" fill="url(#lg-glow-L8)" opacity="0" style="transition:opacity .45s ease"/>
               </g>
+              <g clip-path="url(#clip-bath)">
+                <circle id="lp-L9" cx="1072" cy="268" r="36" fill="url(#lg-glow-L9)" opacity="0" style="transition:opacity .45s ease"/>
+              </g>
+              <g clip-path="url(#clip-dining)">
+                <circle id="lp-L11" cx="900" cy="478" r="40" fill="url(#lg-glow-L11)" opacity="0" style="transition:opacity .45s ease"/>
+              </g>
+              <!-- Legacy room IDs for JS -->
+              <circle id="lp-bed1" r="0" opacity="0"/>
+              <circle id="lp-bath" r="0" opacity="0"/>
+              <circle id="lp-living" r="0" opacity="0"/>
+              <circle id="lp-dining" r="0" opacity="0"/>
+              <circle id="lp-bed2" r="0" opacity="0"/>
+              <circle id="lp-office" r="0" opacity="0"/>
               <!-- Legacy lp-L* anchors for JS compat -->
               <circle id="lp-L1" r="0" opacity="0"/>
               <circle id="lp-L2" r="0" opacity="0"/>
