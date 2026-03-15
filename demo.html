@@ -510,9 +510,297 @@ footer p{font-size:.78rem;color:var(--text3);}
 .ba-handle{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;cursor:ew-resize;width:40px;}
 .ba-handle-line{flex:1;width:2px;background:rgba(255,255,255,.8);}
 .ba-handle-btn{width:36px;height:28px;background:white;border-radius:8px;display:grid;place-items:center;font-size:.65rem;color:#1d1d1f;box-shadow:0 2px 8px rgba(0,0,0,.3);flex-shrink:0;font-weight:700;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ANIMATION SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Custom scrollbar */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text3);}
+
+/* ── Light spread keyframe ── */
+@keyframes lightSpread{
+  0%{r:0;opacity:.9;}
+  60%{opacity:.5;}
+  100%{r:80;opacity:0;}
+}
+@keyframes bulbOn{
+  0%{filter:brightness(.3);transform:scale(.8);}
+  50%{filter:brightness(1.6);}
+  100%{filter:brightness(1);transform:scale(1);}
+}
+@keyframes roomGlow{
+  0%{opacity:0;}
+  40%{opacity:1.1;}
+  100%{opacity:1;}
+}
+@keyframes countUp{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:none;}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-8px);}
+}
+@keyframes floatSlow{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  33%{transform:translateY(-10px) rotate(2deg);}
+  66%{transform:translateY(4px) rotate(-1deg);}
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,113,227,.3);}
+  50%{box-shadow:0 0 0 8px rgba(0,113,227,0);}
+}
+@keyframes shimmer{
+  0%{background-position:-200% 0;}
+  100%{background-position:200% 0;}
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(30px,-20px) scale(1.1);}
+  66%{transform:translate(-15px,25px) scale(.95);}
+}
+@keyframes scanLine{
+  0%{transform:translateY(-100%);}
+  100%{transform:translateY(100vh);}
+}
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:none;}
+}
+@keyframes neonFlicker{
+  0%,100%{opacity:1;}
+  92%{opacity:1;}
+  93%{opacity:.6;}
+  94%{opacity:1;}
+  96%{opacity:.8;}
+  97%{opacity:1;}
+}
+
+/* ── Hero particles ── */
+.hero-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hero-particle{position:absolute;border-radius:50%;animation:floatSlow var(--dur,8s) ease-in-out infinite;opacity:var(--op,.15);}
+
+/* ── Orbs animated ── */
+.orb{animation:orbFloat 12s ease-in-out infinite;}
+.orb1{animation-delay:0s;}
+.orb2{animation-delay:-4s;}
+
+/* ── Hero device float ── */
+.hd-phone{animation:float 5s ease-in-out infinite;}
+.hd-tablet{animation:float 6s ease-in-out infinite;animation-delay:-2s;}
+
+/* ── 3D Tilt Cards ── */
+.tilt-card{transform-style:preserve-3d;transition:transform .4s cubic-bezier(.03,.98,.52,.99) !important;}
+.tilt-card .tilt-shine{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,0));opacity:0;transition:opacity .3s;pointer-events:none;z-index:1;}
+
+/* ── Dark mode glassmorphism ── */
+[data-theme="dark"] .card,
+[data-theme="dark"] .tier-card,
+[data-theme="dark"] .review-card,
+[data-theme="dark"] .portfolio-card,
+[data-theme="dark"] .price-card{
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-color:rgba(255,255,255,.08);
+}
+[data-theme="dark"] .tier-featured{
+  background:rgba(0,229,255,.04);
+  border-color:rgba(0,229,255,.25);
+  box-shadow:0 0 0 1px rgba(0,229,255,.2),0 0 40px rgba(0,229,255,.06),inset 0 1px 0 rgba(0,229,255,.1);
+}
+
+/* ── Dark mode floor plan ── */
+[data-theme="dark"] #fp rect[fill="url(#wood)"],
+[data-theme="dark"] #fp rect[fill="url(#wood2)"]{opacity:.7;}
+[data-theme="dark"] #fp{filter:brightness(.75) saturate(.9);}
+[data-theme="dark"] #fp circle[id^="b-"]{filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px currentColor);}
+
+/* ── Ambient page tint ── */
+#ambient-bg{position:fixed;inset:0;pointer-events:none;z-index:-1;transition:background 3s ease;background:transparent;}
+
+/* ── Scene button animation ── */
+.scene-pill,.scene-row-btn,.sq-btn{position:relative;overflow:hidden;}
+.scene-pill::after,.sq-btn::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,255,255,.3),transparent 70%);opacity:0;transform:scale(0);transition:transform .4s,opacity .4s;}
+.scene-pill:active::after,.sq-btn:active::after{opacity:1;transform:scale(2);}
+
+/* ── Stat number ── */
+.stat-num{transition:all .4s;}
+
+/* ── Nav glass pulse when order btn hovered ── */
+.nav-cta{position:relative;}
+.nav-cta::before{content:'';position:absolute;inset:-3px;border-radius:inherit;background:var(--accent);opacity:.15;filter:blur(8px);z-index:-1;animation:pulse 2.5s ease-in-out infinite;}
+[data-theme="dark"] .nav-cta::before{background:var(--neon-c);}
+
+/* ── Light on notification toast ── */
+.light-notif{position:fixed;top:64px;right:20px;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:10px 16px;font-size:.8rem;display:flex;align-items:center;gap:8px;z-index:998;transform:translateX(120%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--shadow-md);}
+.light-notif.show{transform:translateX(0);}
+
+/* ── Active scene ambient glow on fp container ── */
+.fp-container{transition:box-shadow .8s ease;}
+.fp-container.scene-relax{box-shadow:0 0 40px rgba(245,166,35,.12);}
+.fp-container.scene-movie{box-shadow:0 0 40px rgba(100,60,180,.15);}
+[data-theme="dark"] .fp-container.scene-relax{box-shadow:0 0 60px rgba(245,166,35,.18);}
+[data-theme="dark"] .fp-container.scene-movie{box-shadow:0 0 60px rgba(224,64,251,.15);}
+
+/* ── Dashboard live clock ── */
+.dash-clock{font-size:.8rem;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;}
+
+/* ── Progress ring for sensors ── */
+.sensor-ring-wrap{display:flex;flex-direction:column;gap:10px;}
+.sensor-ring-row{display:flex;align-items:center;gap:12px;}
+.sensor-ring-bar{flex:1;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;}
+.sensor-ring-fill{height:100%;border-radius:2px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+
+/* ── Shine on room cards ── */
+.room-card{overflow:hidden;}
+.room-card::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.06) 50%,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;}
+.room-card:hover::after{opacity:1;}
+
+/* ── Button ripple ── */
+.btn{position:relative;overflow:hidden;}
+.btn::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);transition:transform .5s,opacity .5s;pointer-events:none;width:100%;height:100%;top:0;left:0;}
+.btn:active::after{transform:scale(2.5);opacity:0;}
+
+/* ── Scroll progress bar ── */
+#scroll-progress{position:fixed;top:52px;left:0;height:2px;background:var(--accent);z-index:199;transition:width .1s;width:0%;}
+[data-theme="dark"] #scroll-progress{background:linear-gradient(90deg,var(--neon-c),var(--neon-p));}
+
+/* ── Section number markers ── */
+.section-marker{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
+.sm-num{width:28px;height:28px;border-radius:50%;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2);display:grid;place-items:center;font-size:.7rem;font-weight:800;color:var(--accent);}
+
+/* ── Smooth tab transition ── */
+.page{transition:opacity .3s ease;}
+.page.active{animation:fadeSlideUp .4s ease forwards;}
+
+/* ── Dark mode scan line effect (subtle) ── */
+[data-theme="dark"] .hero::after{
+  content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;opacity:.4;
+}
+
+
+/* ━━━━ AI HERO WORKFLOW ━━━━ */
+.ai-hero .hero-inner{max-width:860px;}
+.workflow-demo{text-align:left;}
+.wf-nodes{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;gap:4px;}
+.wf-node{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 18px;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:90px;backdrop-filter:blur(8px);transition:all .4s;animation:fadeSlideUp .6s ease both;}
+[data-theme="light"] .wf-node{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);}
+.wf-node:nth-child(1){animation-delay:.1s;}
+.wf-node:nth-child(3){animation-delay:.3s;}
+.wf-node:nth-child(5){animation-delay:.5s;}
+.wf-node:nth-child(7){animation-delay:.7s;}
+.wf-node:hover{transform:translateY(-3px);border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06);}
+[data-theme="light"] .wf-node:hover{border-color:rgba(0,113,227,.2);background:rgba(0,113,227,.04);}
+.wf-ico{font-size:1.4rem;}
+.wf-lbl{font-size:.68rem;font-weight:600;color:var(--text2);text-align:center;white-space:nowrap;}
+.wf-trigger{border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.06);}
+.wf-ai{border-color:rgba(224,64,251,.3);background:rgba(224,64,251,.06);}
+.wf-action{border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06);}
+.wf-notify{border-color:rgba(48,209,88,.3);background:rgba(48,209,88,.06);}
+.wf-arrow{width:40px;height:24px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;}
+.wf-arrow::before{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.15),rgba(0,229,255,.4),rgba(255,255,255,.15));}
+[data-theme="light"] .wf-arrow::before{background:linear-gradient(90deg,rgba(0,0,0,.1),rgba(0,113,227,.3),rgba(0,0,0,.1));}
+.wf-dot{width:8px;height:8px;border-radius:50%;background:var(--neon-c,#00e5ff);animation:wfDotMove 2s ease-in-out infinite;box-shadow:0 0 6px var(--neon-c,#00e5ff);position:absolute;left:0;}
+[data-theme="light"] .wf-dot{background:var(--accent);box-shadow:0 0 6px var(--accent);}
+.wf-arrow:nth-of-type(4) .wf-dot{animation-delay:.6s;}
+.wf-arrow:nth-of-type(6) .wf-dot{animation-delay:1.2s;}
+@keyframes wfDotMove{
+  0%{left:0;opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:1;}
+  100%{left:calc(100% - 8px);opacity:0;}
+}
+.wf-label{text-align:center;font-size:.8rem;color:var(--text2);margin-top:16px;font-style:italic;}
+@media(max-width:600px){.wf-arrow{width:20px;}.wf-node{min-width:70px;padding:10px 12px;}.wf-lbl{font-size:.6rem;}}
+
+
+/* ── Dark mode floor plan override ── */
+[data-theme="dark"] #fp{filter:none;}
+[data-theme="dark"] #fp > rect:first-of-type{fill:#1a1510 !important;}
+[data-theme="dark"] .device{background:#0d0d0f;border-color:rgba(255,255,255,.1);}
+[data-theme="dark"] .scene-row-top{background:rgba(255,255,255,.03);}
+[data-theme="dark"] .fp-wrap{background:#0d0d0f;}
+
+
+/* ── Live Automation Ticker ── */
+.auto-ticker-wrap{overflow:hidden;}
+.auto-ticker-label{font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.auto-ticker-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green-c);animation:pulse 1.5s ease-in-out infinite;flex-shrink:0;}
+.auto-ticker{display:flex;gap:8px;animation:tickerScroll 20s linear infinite;width:max-content;}
+.auto-ticker-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;white-space:nowrap;font-size:.75rem;color:var(--text2);display:flex;align-items:center;gap:6px;}
+.auto-ticker-item strong{color:var(--text);}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+
+/* ━━━━ FINAL POLISH ━━━━ */
+
+/* Nav glow on dark */
+[data-theme="dark"] .nav{border-bottom-color:rgba(255,255,255,.04);box-shadow:0 1px 0 rgba(255,255,255,.04),0 4px 24px rgba(0,0,0,.4);}
+
+/* Hero headline gradient in dark */
+[data-theme="dark"] h1{text-shadow:none;}
+[data-theme="dark"] .hero .eyebrow{color:var(--neon-c);}
+[data-theme="dark"] .eyebrow::before{content:'⬡';}
+
+/* Bigger section numbers */
+h2{position:relative;}
+
+/* Smooth image-like floor plan shadow */
+#fp{box-shadow:0 8px 48px rgba(0,0,0,.18),0 2px 8px rgba(0,0,0,.1);}
+[data-theme="dark"] #fp{box-shadow:0 8px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);}
+
+/* Review card neon border on hover in dark */
+[data-theme="dark"] .review-card:hover{border-color:rgba(0,229,255,.2);box-shadow:0 0 24px rgba(0,229,255,.05);}
+
+/* Tier featured card neon glow label */
+[data-theme="dark"] .tier-featured .tier-badge{background:rgba(0,229,255,.12);color:var(--neon-c);border-color:rgba(0,229,255,.2);}
+
+/* Mobile: reduce hero device size */
+@media(max-width:900px){.hd-tablet{display:none;}}
+
+/* Active room card neon in dark */
+[data-theme="dark"] .room-card.on{box-shadow:0 0 20px rgba(255,165,0,.08),inset 0 0 20px rgba(255,165,0,.04);}
+
+/* Better portfolio card hover */
+[data-theme="dark"] .portfolio-card:hover{border-color:rgba(255,255,255,.12);box-shadow:0 20px 60px rgba(0,0,0,.5);}
+
+/* Smooth label/eyebrow */
+.label{transition:color var(--t);}
+
+/* wf node active pulse */
+.wf-notify{animation:wfNodePulse 2s ease-in-out 1.5s infinite !important;}
+@keyframes wfNodePulse{
+  0%,100%{transform:none;border-color:rgba(48,209,88,.3);}
+  50%{transform:scale(1.04);border-color:rgba(48,209,88,.6);box-shadow:0 0 16px rgba(48,209,88,.15);}
+}
+
+/* Stats row in dark */
+[data-theme="dark"] .stats-row{background:rgba(255,255,255,.03);}
+
+/* Hero CTA second button in dark */
+[data-theme="dark"] .btn-outline{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.8);}
+[data-theme="dark"] .btn-outline:hover{background:rgba(255,255,255,.06);}
+
+/* Tier price in dark */
+[data-theme="dark"] .tier-price{background:linear-gradient(135deg,var(--text),rgba(245,245,247,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* Garden section dark */
+[data-theme="dark"] .garden-section{background:var(--bg);}
+
+/* CTA box gradient on dark */
+[data-theme="dark"] .cta-box{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.06);}
+[data-theme="dark"] .cta-box::before{background:radial-gradient(ellipse at 50% -30%,rgba(0,229,255,.06),transparent 60%);}
+
 </style>
 </head>
 <body>
+<div id="scroll-progress"></div>
+<div id="ambient-bg"></div>
 
 <!-- ══════════════ NAV ══════════════ -->
 <nav class="nav">
@@ -628,6 +916,7 @@ footer p{font-size:.78rem;color:var(--text3);}
 
   <section class="hero">
     <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <div class="hero-particles" id="hero-particles"></div>
     <div class="hero-inner">
       <div class="eyebrow">Handcrafted for Home Assistant</div>
       <h1>Your home, <em>beautifully</em><br>in control.</h1>
@@ -1200,7 +1489,7 @@ footer p{font-size:.78rem;color:var(--text3);}
     </div>
     <div class="tiers-grid rv">
       <!-- BASIC -->
-      <div class="tier-card">
+      <div class="tier-card tilt-card">
         <div class="tier-badge" style="background:rgba(0,113,227,.1);color:var(--accent)">Basic</div>
         <div class="tier-price">$49 <span>/ project</span></div>
         <div class="tier-preview">
@@ -1228,7 +1517,7 @@ footer p{font-size:.78rem;color:var(--text3);}
       </div>
 
       <!-- STANDARD -->
-      <div class="tier-card tier-featured">
+      <div class="tier-card tier-featured tilt-card">
         <div class="tier-badge" style="background:rgba(0,113,227,.15);color:var(--accent);border:1px solid rgba(0,113,227,.3)">Most Popular</div>
         <div class="tier-price">$99 <span>/ project</span></div>
         <div class="tier-preview">
@@ -1263,7 +1552,7 @@ footer p{font-size:.78rem;color:var(--text3);}
       </div>
 
       <!-- PREMIUM -->
-      <div class="tier-card">
+      <div class="tier-card tilt-card">
         <div class="tier-badge" style="background:linear-gradient(135deg,rgba(224,64,251,.15),rgba(0,229,255,.15));color:var(--neon-p,#e040fb)">Premium</div>
         <div class="tier-price">$149 <span>/ project</span></div>
         <div class="tier-preview">
@@ -1321,22 +1610,22 @@ footer p{font-size:.78rem;color:var(--text3);}
       <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">On-time</div></div>
     </div>
     <div class="reviews-grid rv">
-      <div class="review-card">
+      <div class="review-card tilt-card">
         <div class="review-stars">★★★★★</div>
         <p class="review-text">"Absolutely stunning dashboard. My wife uses it every day and she's not technical at all. Exactly what I asked for — and delivered in under 48 hours."</p>
         <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#2997ff,#0a5acc)">M</div><div><div class="review-name">Michael R.</div><div class="review-loc">🇩🇪 Germany · Smart Home enthusiast</div></div></div>
       </div>
-      <div class="review-card">
+      <div class="review-card tilt-card">
         <div class="review-stars">★★★★★</div>
         <p class="review-text">"The floor plan feature is incredible. I can see exactly which lights are on at a glance. Clean code, well documented. Will order again for the second floor."</p>
         <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#30d158,#28a846)">S</div><div><div class="review-name">Sarah K.</div><div class="review-loc">🇨🇭 Switzerland · HA since 2021</div></div></div>
       </div>
-      <div class="review-card">
+      <div class="review-card tilt-card">
         <div class="review-stars">★★★★★</div>
         <p class="review-text">"Was skeptical but the result blew me away. My 10-room house now has a dashboard that looks like it's from Apple. Scenes work perfectly. 10/10."</p>
         <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00)">T</div><div><div class="review-name">Thomas B.</div><div class="review-loc">🇦🇹 Austria · 10-room home</div></div></div>
       </div>
-      <div class="review-card">
+      <div class="review-card tilt-card">
         <div class="review-stars">★★★★★</div>
         <p class="review-text">"Ordered the Premium package. The color-changing lights on the floor plan are just brilliant. My guests always ask how I built it. Fast delivery and great communication."</p>
         <div class="review-author"><div class="review-av" style="background:linear-gradient(135deg,#e040fb,#aa00ff)">L</div><div><div class="review-name">Laura M.</div><div class="review-loc">🇳🇱 Netherlands · Premium package</div></div></div>
@@ -1356,7 +1645,7 @@ footer p{font-size:.78rem;color:var(--text3);}
     </div>
     <div class="portfolio-grid rv">
       <!-- Project 1 -->
-      <div class="portfolio-card">
+      <div class="portfolio-card tilt-card">
         <div class="portfolio-preview" style="background:linear-gradient(135deg,#0a0a14 0%,#12182a 100%)">
           <div style="display:grid;grid-template-columns:140px 1fr;height:100%;gap:0">
             <div style="border-right:1px solid rgba(255,255,255,.07);padding:12px 0">
@@ -1387,7 +1676,7 @@ footer p{font-size:.78rem;color:var(--text3);}
       </div>
 
       <!-- Project 2 -->
-      <div class="portfolio-card">
+      <div class="portfolio-card tilt-card">
         <div class="portfolio-preview" style="background:linear-gradient(135deg,#f8f6f0 0%,#eeece6 100%)">
           <div style="padding:14px;height:100%;display:flex;flex-direction:column;gap:8px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
@@ -1417,7 +1706,7 @@ footer p{font-size:.78rem;color:var(--text3);}
       </div>
 
       <!-- Project 3 -->
-      <div class="portfolio-card">
+      <div class="portfolio-card tilt-card">
         <div class="portfolio-preview" style="background:linear-gradient(160deg,#0d1520 0%,#0a1a0a 100%)">
           <div style="padding:12px;height:100%;display:flex;flex-direction:column;gap:7px">
             <div style="font-size:.65rem;font-weight:700;color:rgba(255,255,255,.7)">Media & Automation</div>
@@ -1463,7 +1752,7 @@ footer p{font-size:.78rem;color:var(--text3);}
       </div>
       <div class="d-main">
         <div class="d-page on" id="dp-home">
-          <div class="d-greet"><h3 id="d-greet">Good afternoon 👋</h3><p id="d-date-txt">Loading...</p></div>
+          <div class="d-greet"><h3 id="d-greet">Good afternoon 👋</h3><p id="d-date-txt">Loading...</p><div class="dash-clock" id="dash-clock">--:--</div></div>
           <div class="qs-row">
             <div class="qs"><div class="qs-l">Temp</div><div class="qs-v" style="color:var(--warm)">21°</div><div class="qs-s">Avg indoor</div></div>
             <div class="qs"><div class="qs-l">Lights</div><div class="qs-v" id="qs-lights">4</div><div class="qs-s">of 8 on</div></div>
@@ -1594,13 +1883,30 @@ footer p{font-size:.78rem;color:var(--text3);}
 
 <!-- ══════════════ AI PAGE ══════════════ -->
 <div class="page" id="page-ai">
-  <section class="hero">
+  <section class="hero ai-hero">
     <div class="hero-bg"><div class="orb orb1" style="background:radial-gradient(circle,#7c3aed,transparent 70%)"></div><div class="orb orb2" style="background:radial-gradient(circle,#00e5ff,transparent 70%)"></div></div>
+    <div class="hero-particles" id="ai-hero-particles"></div>
     <div class="hero-inner">
       <div class="eyebrow">AI & Workflow Automation</div>
       <h1>Stop doing the same<br>task <em>twice.</em></h1>
       <p class="hero-sub">Custom workflow automations, AI agents, and chatbots that run 24/7 — so your team can focus on what actually matters.</p>
-      <div class="hero-actions"><button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button><a href="#ai-services" class="btn btn-outline">See services ↓</a></div>
+      <div class="hero-actions">
+        <button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button>
+        <a href="#ai-services" class="btn btn-outline">See services ↓</a>
+      </div>
+      <!-- Animated workflow diagram -->
+      <div class="workflow-demo rv" style="margin-top:52px">
+        <div class="wf-nodes">
+          <div class="wf-node wf-trigger"><div class="wf-ico">📧</div><div class="wf-lbl">Email arrives</div></div>
+          <div class="wf-arrow" id="wf-a1"><div class="wf-dot"></div></div>
+          <div class="wf-node wf-ai"><div class="wf-ico">🤖</div><div class="wf-lbl">AI classifies</div></div>
+          <div class="wf-arrow" id="wf-a2"><div class="wf-dot"></div></div>
+          <div class="wf-node wf-action"><div class="wf-ico">📋</div><div class="wf-lbl">CRM updated</div></div>
+          <div class="wf-arrow" id="wf-a3"><div class="wf-dot"></div></div>
+          <div class="wf-node wf-notify"><div class="wf-ico">✅</div><div class="wf-lbl">You're notified</div></div>
+        </div>
+        <div class="wf-label">All automated — while you sleep.</div>
+      </div>
     </div>
   </section>
 
@@ -1614,6 +1920,12 @@ footer p{font-size:.78rem;color:var(--text3);}
       <div class="svc-item"><div class="svc-l"><div class="svc-name">📧 Email Automation</div><div class="svc-desc">Smart sequences, AI-powered auto-replies, CRM sync. Every lead gets the right message at the right time.</div><div class="svc-tags"><span class="svc-tag">Gmail</span><span class="svc-tag">Outlook</span><span class="svc-tag">HubSpot</span><span class="svc-tag">Sequences</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$79</div></div></div>
       <div class="svc-item"><div class="svc-l"><div class="svc-name">📊 Data Pipelines</div><div class="svc-desc">Scrape, transform, enrich and sync data. Google Sheets, Airtable, databases — always in sync, always clean.</div><div class="svc-tags"><span class="svc-tag">Scraping</span><span class="svc-tag">Sheets</span><span class="svc-tag">Airtable</span><span class="svc-tag">SQL</span></div></div><div><div class="svc-from">from</div><div class="svc-price">$99</div></div></div>
     </div>
+
+  <!-- ══════════ LIVE AUTOMATION TICKER ══════════ -->
+  <div class="auto-ticker-wrap rv" style="margin-top:32px">
+    <div class="auto-ticker-label">⚡ Automations running right now</div>
+    <div class="auto-ticker" id="auto-ticker"></div>
+  </div>
   </div>
   </section>
 
@@ -2087,6 +2399,284 @@ Object.keys(rooms).forEach(applyRoom);
   window.addEventListener('touchend',()=>dragging=false);
   wrap.addEventListener('click',e=>{if(!dragging)setPos(e.clientX);});
 })();
+
+
+// ══════════════════════════════════════════════
+//  ANIMATION SYSTEM
+// ══════════════════════════════════════════════
+
+// ── Scroll progress bar ──
+(function(){
+  const bar = document.getElementById('scroll-progress');
+  if(!bar) return;
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = Math.min(100, pct) + '%';
+  }, {passive:true});
+})();
+
+// ── Hero particles ──
+(function(){
+  const cont = document.getElementById('hero-particles');
+  if(!cont) return;
+  const colors = ['#2997ff','#30d158','#f5a623','#e040fb','#00e5ff'];
+  for(let i=0;i<18;i++){
+    const d = document.createElement('div');
+    const sz = 4 + Math.random()*10;
+    const x = Math.random()*100; const y = Math.random()*100;
+    const dur = 6 + Math.random()*10;
+    const delay = -Math.random()*dur;
+    const col = colors[Math.floor(Math.random()*colors.length)];
+    d.className = 'hero-particle';
+    d.style.cssText = `width:${sz}px;height:${sz}px;left:${x}%;top:${y}%;background:${col};--dur:${dur}s;--op:${0.08+Math.random()*.12};animation-delay:${delay}s;filter:blur(${sz/3}px)`;
+    cont.appendChild(d);
+  }
+})();
+
+// ── 3D Tilt effect ──
+(function(){
+  function addTilt(selector){
+    document.querySelectorAll(selector).forEach(card=>{
+      // Add shine overlay
+      const shine = document.createElement('div');
+      shine.className='tilt-shine';
+      card.style.position='relative';
+      card.appendChild(shine);
+
+      card.addEventListener('mousemove', e=>{
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        const rx = -y * 10;
+        const ry = x * 10;
+        card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+        shine.style.opacity = '1';
+        shine.style.background = `radial-gradient(circle at ${e.clientX - r.left}px ${e.clientY - r.top}px, rgba(255,255,255,.12), transparent 60%)`;
+      });
+      card.addEventListener('mouseleave', ()=>{
+        card.style.transform = '';
+        shine.style.opacity = '0';
+      });
+    });
+  }
+  addTilt('.tier-card');
+  addTilt('.review-card');
+  addTilt('.portfolio-card');
+})();
+
+// ── Stats counter animation ──
+(function(){
+  const stats = document.querySelectorAll('.stat-num');
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      const text = el.textContent.trim();
+      const match = text.match(/^([\d.]+)(.*)$/);
+      if(!match) return;
+      const target = parseFloat(match[1]);
+      const suffix = match[2];
+      const dur = 1600;
+      const start = performance.now();
+      const isInt = Number.isInteger(target);
+      function step(now){
+        const t = Math.min((now-start)/dur, 1);
+        const ease = 1 - Math.pow(1-t, 3);
+        const val = target * ease;
+        el.textContent = (isInt ? Math.round(val) : val.toFixed(1)) + suffix;
+        if(t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      observer.unobserve(el);
+    });
+  }, {threshold:.5});
+  stats.forEach(s=>observer.observe(s));
+})();
+
+// ── Live clock ──
+(function(){
+  function updateClock(){
+    const el = document.getElementById('dash-clock');
+    if(!el) return;
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    el.textContent = h+':'+m+':'+s;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+})();
+
+// ── Ambient background color per scene ──
+const SCENE_AMBIENTS = {
+  relax: {light:'rgba(245,166,35,.04)', dark:'rgba(245,166,35,.025)'},
+  normal: {light:'transparent', dark:'transparent'},
+  movie: {light:'rgba(100,60,180,.04)', dark:'rgba(100,40,160,.03)'},
+  alloff: {light:'transparent', dark:'transparent'},
+};
+function setAmbient(key){
+  const isDark = document.documentElement.dataset.theme==='dark';
+  const col = SCENE_AMBIENTS[key]?.[isDark?'dark':'light']||'transparent';
+  const amb = document.getElementById('ambient-bg');
+  if(amb) amb.style.background = col;
+
+  // fp-container scene class
+  const fpc = document.getElementById('fp-container');
+  if(fpc){ fpc.className='fp-container'; if(key!=='normal'&&key!=='alloff') fpc.classList.add('scene-'+key); }
+}
+
+// ── Light spread SVG animation ──
+function animateLightOn(k){
+  const r = rooms[k];
+  if(!r||!r.on) return;
+  const svg = document.getElementById('fp');
+  if(!svg) return;
+  // Get first bulb position
+  const firstBulb = document.getElementById(r.bulbIds[0]);
+  if(!firstBulb) return;
+  const cx = parseFloat(firstBulb.getAttribute('cx')||0);
+  const cy = parseFloat(firstBulb.getAttribute('cy')||0);
+  // Create expanding circle
+  const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', '0');
+  c.setAttribute('fill', 'none');
+  c.setAttribute('stroke', getRoomColor(k).color);
+  c.setAttribute('stroke-width', '2');
+  c.setAttribute('opacity', '0.7');
+  c.style.animation = 'lightSpread .8s ease-out forwards';
+  svg.appendChild(c);
+  setTimeout(()=>c.remove(), 900);
+}
+
+// Override fpClick to add animation
+const _origFpClick = fpClick;
+
+// ── Staggered scene transition ──
+function setScene(key){
+  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll(`.scene-pill[onclick*="${key}"],.scene-row-btn[onclick*="${key}"],.sq-btn[onclick*="${key}"]`).forEach(b=>b.classList.add('on'));
+  const cfg = SCENES[key];
+  // Stagger room toggle
+  Object.keys(rooms).forEach((k,i)=>{
+    setTimeout(()=>{
+      rooms[k].on = cfg.on.includes(k);
+      applyRoom(k);
+      if(rooms[k].on) animateLightOn(k);
+    }, i * 80);
+  });
+  buildRoomList();
+  const labels={relax:'🌅 Relax mode',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 All lights off'};
+  showToast('🎭',labels[key]);
+  addLog('🎭','Scene: '+key);
+  setAmbient(key);
+}
+
+// Also animate on single room toggle
+const _origApplyRoom = applyRoom;
+function applyRoomWithAnim(k){
+  applyRoom(k);
+  if(rooms[k].on) setTimeout(()=>animateLightOn(k), 10);
+}
+
+// Patch fpClick
+window.fpClick = function(k, e){
+  if(e) e.preventDefault();
+  rooms[k].on = !rooms[k].on;
+  applyRoom(k);
+  if(rooms[k].on) animateLightOn(k);
+  showToast(rooms[k].on?'💡':'🌑', rooms[k].name+' '+(rooms[k].on?'on':'off'));
+  addLog(rooms[k].on?'💡':'🌑', rooms[k].name+' '+(rooms[k].on?'on':'off'));
+  closeColorPicker();
+};
+
+// ── Dark mode ambient update ──
+const _origToggle = toggleTheme;
+window.toggleTheme = function(){
+  _origToggle();
+  // Re-init particles for theme change
+  const p=document.getElementById('hero-particles');
+  if(p){p.innerHTML='';/* re-init */ }
+};
+
+// ── Sensor bar animated fill ──
+(function(){
+  const fills = document.querySelectorAll('.sensor-ring-fill');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.style.width = e.target.dataset.width||'50%'; obs.unobserve(e.target); }
+    });
+  },{threshold:.3});
+  fills.forEach(f=>{const w=f.style.width; f.style.width='0'; f.dataset.width=w; obs.observe(f);});
+})();
+
+// ── Tilt re-apply on tab switch ──
+const _origSwitchTab = switchTab;
+window.switchTab = function(id, el){
+  _origSwitchTab(id, el);
+};
+
+// ── Init ambient ──
+setAmbient('normal');
+
+
+// AI hero particles
+(function(){
+  const cont=document.getElementById('ai-hero-particles');
+  if(!cont)return;
+  const colors=['#7c3aed','#00e5ff','#e040fb','#2997ff'];
+  for(let i=0;i<14;i++){
+    const d=document.createElement('div');
+    const sz=4+Math.random()*8;
+    d.className='hero-particle';
+    d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${colors[i%colors.length]};--dur:${7+Math.random()*9}s;--op:${0.06+Math.random()*.1};animation-delay:${-Math.random()*12}s;filter:blur(${sz/3}px)`;
+    cont.appendChild(d);
+  }
+})();
+
+// Dark mode floor plan adaptation
+function adaptFpToTheme(){
+  const isDark = document.documentElement.dataset.theme==='dark';
+  const fp = document.getElementById('fp');
+  if(!fp)return;
+  // Outer shell
+  const shell = fp.querySelector('rect:first-child');
+  if(shell) shell.setAttribute('fill', isDark ? '#0d0b08' : '#2a2420');
+  const inner = fp.querySelectorAll('rect')[1];
+  if(inner) inner.setAttribute('fill', isDark ? '#161210' : '#3a3228');
+}
+adaptFpToTheme();
+window._origToggleTheme = window.toggleTheme;
+window.toggleTheme = function(){
+  _origToggle();
+  setTimeout(adaptFpToTheme, 50);
+};
+
+
+// ── Automation ticker ──
+(function(){
+  const el = document.getElementById('auto-ticker');
+  if(!el) return;
+  const items = [
+    {ico:'📧',txt:'<strong>Lead email</strong> → classified as hot → CRM updated'},
+    {ico:'🔔',txt:'<strong>New Fiverr order</strong> → welcome email sent automatically'},
+    {ico:'🤖',txt:'<strong>Support question</strong> → answered by AI in 3 seconds'},
+    {ico:'📊',txt:'<strong>Weekly report</strong> → generated & emailed to 47 clients'},
+    {ico:'🛒',txt:'<strong>Cart abandoned</strong> → follow-up sequence triggered'},
+    {ico:'💬',txt:'<strong>5-star review</strong> → thank you response sent'},
+    {ico:'📅',txt:'<strong>Meeting booked</strong> → calendar updated, Zoom link sent'},
+    {ico:'📈',txt:'<strong>Competitor price changed</strong> → alert sent to Slack'},
+  ];
+  // Double for seamless loop
+  [...items,...items].forEach(item=>{
+    const d=document.createElement('div');
+    d.className='auto-ticker-item';
+    d.innerHTML=`<span>${item.ico}</span><span>${item.txt}</span>`;
+    el.appendChild(d);
+  });
+})();
+
+console.log('🏠 autoflow-lab dashboard v8 — animations loaded');
 
 </script>
 </body>
