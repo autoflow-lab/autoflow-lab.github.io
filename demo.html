@@ -855,6 +855,1654 @@ h2{position:relative;}
 @media(max-width:780px){.fab-txt{display:none;}.fab{padding:14px;border-radius:50%;}}
 
 
+/* ── Lamp list sidebar ── */
+.lamp-list{display:flex;flex-direction:column;gap:0;}
+.lamp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s;}
+.lamp-row:hover{background:var(--bg2);}
+.lamp-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background .4s,box-shadow .4s;}
+.lamp-dot.on{box-shadow:0 0 6px currentColor;}
+.lamp-name{font-size:.78rem;font-weight:500;flex:1;color:var(--text);}
+.lamp-zone{font-size:.65rem;color:var(--text3);}
+.lamp-sw{width:28px;height:17px;border-radius:8.5px;position:relative;cursor:pointer;transition:background .3s;background:var(--bg3);border:1px solid var(--border2);flex-shrink:0;}
+.lamp-sw::after{content:'';position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.lamp-sw.on{background:var(--green-c);border-color:var(--green-c);}
+[data-theme="dark"] .lamp-sw.on{background:var(--warm);border-color:var(--warm);}
+.lamp-sw.on::after{transform:translateX(11px);}
+
+/* Scene row override */
+.demo-layout{grid-template-columns:1.5fr 1fr;}
+@media(max-width:900px){.demo-layout{grid-template-columns:1fr;}}
+
+
+/* ━━━━ PHOTO FLOOR PLAN ━━━━ */
+.photo-fp {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #1a1510;
+  box-shadow: 0 12px 60px rgba(0,0,0,.3), 0 2px 8px rgba(0,0,0,.15);
+  user-select: none;
+}
+[data-theme="dark"] .photo-fp {
+  box-shadow: 0 12px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.05);
+}
+.photo-fp:hover #fp-labels { opacity: 1 !important; }
+
+/* Lamp fixture transitions */
+.lamp-fix .lamp-bulb    { transition: fill .4s ease, filter .4s ease, r .25s ease; }
+.lamp-fix .lamp-ring    { transition: stroke .4s ease, opacity .4s ease, r .25s ease; }
+.lamp-fix .lamp-hitzone { transition: fill .2s; }
+.lamp-fix:hover .lamp-hitzone { fill: rgba(255,255,255,.04); }
+.lamp-fix:hover .lamp-bulb { r: 11; }
+
+/* Ring pulse animation */
+@keyframes ringPulse {
+  0%   { r: 14; opacity: .7; stroke-width: 2; }
+  100% { r: 40; opacity: 0;  stroke-width: .5; }
+}
+@keyframes lampBlink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: .4; }
+}
+
+/* Pool transitions */
+[id^="pool-"] { transition: opacity .55s cubic-bezier(.4,0,.2,1); }
+
+/* ── Lamp list panel ── */
+.lamp-zone-header {
+  font-size: .62rem; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--text3);
+  padding: 8px 10px 3px; margin-top: 4px;
+}
+.lamp-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background .15s;
+}
+.lamp-row:hover { background: var(--bg2); }
+.lamp-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  flex-shrink: 0; transition: background .4s, box-shadow .4s;
+}
+.lamp-name { font-size: .78rem; font-weight: 500; flex: 1; color: var(--text); }
+.lamp-zone-tag { font-size: .62rem; color: var(--text3); }
+.lamp-sw {
+  width: 28px; height: 17px; border-radius: 8.5px;
+  position: relative; cursor: pointer; transition: background .3s;
+  background: var(--bg3); border: 1px solid var(--border2); flex-shrink: 0;
+}
+.lamp-sw::after {
+  content: ''; position: absolute;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: #fff; top: 2px; left: 2px;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.lamp-sw.on { background: var(--green-c); border-color: var(--green-c); }
+[data-theme="dark"] .lamp-sw.on { background: var(--warm); border-color: var(--warm); }
+.lamp-sw.on::after { transform: translateX(11px); }
+
+/* Demo sidebar override */
+.demo-layout { grid-template-columns: 1.6fr 1fr; }
+@media(max-width:900px) { .demo-layout { grid-template-columns: 1fr; } }
+
+
+/* ━━━━ PHOTO FLOOR PLAN v14 ━━━━ */
+.photo-fp {
+  position: relative; border-radius: 14px; overflow: hidden;
+  background: #0a0e14;
+  box-shadow: 0 14px 70px rgba(0,0,0,.35), 0 2px 10px rgba(0,0,0,.2);
+  user-select: none;
+}
+[data-theme="dark"] .photo-fp {
+  box-shadow: 0 14px 90px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.05);
+}
+.photo-fp:hover #fp-labels { opacity: 1 !important; }
+.lamp-fix .lamp-bulb    { transition: fill .4s ease, filter .4s ease, r .25s ease; }
+.lamp-fix .lamp-ring    { transition: stroke .4s ease, opacity .4s ease, r .25s ease; }
+.lamp-fix .lamp-hitzone { transition: fill .2s; }
+.lamp-fix:hover .lamp-hitzone { fill: rgba(255,255,255,.04); }
+.lamp-fix:hover .lamp-bulb { r: 12; }
+[id^="pool-"],[id^="room-"],[id^="led-"] {
+  transition: opacity .5s cubic-bezier(.4,0,.2,1);
+}
+@keyframes ringPulse {
+  0%   { r: 14; opacity: .75; stroke-width: 2.5; }
+  100% { r: 48; opacity: 0;   stroke-width: .5; }
+}
+.lamp-zone-header {
+  font-size: .62rem; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--text3);
+  padding: 8px 10px 3px; margin-top: 4px;
+}
+.lamp-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background .15s;
+}
+.lamp-row:hover { background: var(--bg2); }
+.lamp-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  flex-shrink: 0; transition: background .4s, box-shadow .4s;
+}
+.lamp-name { font-size: .78rem; font-weight: 500; flex: 1; color: var(--text); }
+.lamp-sw {
+  width: 28px; height: 17px; border-radius: 8.5px;
+  position: relative; cursor: pointer; transition: background .3s;
+  background: var(--bg3); border: 1px solid var(--border2); flex-shrink: 0;
+}
+.lamp-sw::after {
+  content: ''; position: absolute;
+  width: 11px; height: 11px; border-radius: 50%; background: #fff;
+  top: 2px; left: 2px;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.lamp-sw.on { background: var(--green-c); border-color: var(--green-c); }
+[data-theme="dark"] .lamp-sw.on { background: var(--warm); border-color: var(--warm); }
+.lamp-sw.on::after { transform: translateX(11px); }
+.demo-layout { grid-template-columns: 1.6fr 1fr; }
+@media(max-width:900px) { .demo-layout { grid-template-columns: 1fr; } }
+
+</style>
+</head>
+<body>
+<div id="scroll-progress"></div>
+<div id="ambient-bg"></div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="nav">
+  <a href="#" class="nav-logo" onclick="goHome(event)">🏠 autoflow<em>-lab</em></a>
+  <div class="nav-center">
+    <button class="nav-tab active" onclick="switchTab('smarthome',this)">🏠 Smart Home</button>
+    <button class="nav-tab" onclick="switchTab('ai',this)">⚡ AI & Automation</button>
+  </div>
+  <div class="nav-right">
+    <div class="theme-toggle" onclick="toggleTheme()" title="Light / Dark"></div>
+    <button class="nav-contact" onclick="openContact()">✉ Contact</button>
+    <button class="nav-cta" onclick="openOrder()">Order →</button>
+    <div class="nav-hamburger" onclick="toggleMobMenu()" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<!-- Mobile menu -->
+<div class="nav-mob-menu" id="mob-menu">
+  <button class="nav-mob-item" onclick="switchTab('smarthome',null);closeMobMenu()">🏠 Smart Home</button>
+  <button class="nav-mob-item" onclick="switchTab('ai',null);closeMobMenu()">⚡ AI & Automation</button>
+  <div class="nav-mob-sep"></div>
+  <button class="nav-mob-item accent" onclick="openOrder();closeMobMenu()">📋 Get a Quote →</button>
+  <button class="nav-mob-item" onclick="openContact();closeMobMenu()">✉ Contact Me</button>
+  <div class="nav-mob-sep"></div>
+  <a class="nav-mob-item" href="https://www.fiverr.com/autoflow-lab" target="_blank" onclick="closeMobMenu()">↗ Fiverr Profile</a>
+</div>
+
+<!-- ══════════════ ORDER MODAL ══════════════ -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeOrder()">
+<div class="modal">
+  <div class="modal-head">
+    <div>
+      <h3>Get a Quote 💬</h3>
+      <p>Configure your project — get an instant estimate. No commitment.</p>
+    </div>
+    <button class="modal-close" onclick="closeOrder()">✕</button>
+  </div>
+  <div class="modal-body">
+    <!-- Service -->
+    <div class="form-section">
+      <div class="form-section-title">Service</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>What do you need?</label>
+          <select id="q-service" onchange="calcPrice()">
+            <option value="sh-basic">🏠 Smart Home — Basic Dashboard ($49)</option>
+            <option value="sh-full" selected>🏠 Smart Home — Full Dashboard ($99)</option>
+            <option value="sh-premium">🏠 Smart Home — Premium + Floor Plan ($149)</option>
+            <option value="ai-workflow">⚡ AI — Workflow Automation (from $49)</option>
+            <option value="ai-agent">🤖 AI — Chatbot / AI Agent (from $99)</option>
+            <option value="ai-enterprise">🚀 AI — Enterprise System (from $349)</option>
+          </select>
+        </div>
+        <div class="form-field" id="q-rooms-wrap">
+          <label>How many rooms?</label>
+          <select id="q-rooms" onchange="calcPrice()">
+            <option value="1">1–2 rooms</option>
+            <option value="2" selected>3–4 rooms</option>
+            <option value="3">5–6 rooms</option>
+            <option value="4">7+ rooms</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="form-section" id="sh-features">
+      <div class="form-section-title">Smart Home Features (add-ons)</div>
+      <div class="check-grid">
+        <label class="check-item" onclick="toggleCheck(this,20)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🗺️ Interactive Floor Plan</span><span class="check-plus">+$20</span></label>
+        <label class="check-item" onclick="toggleCheck(this,15)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🎬 Scenes & Automations</span><span class="check-plus">+$15</span></label>
+        <label class="check-item" onclick="toggleCheck(this,10)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🎵 Media Controls</span><span class="check-plus">+$10</span></label>
+        <label class="check-item" onclick="toggleCheck(this,10)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🌡️ Sensor Dashboard</span><span class="check-plus">+$10</span></label>
+        <label class="check-item" onclick="toggleCheck(this,15)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🌿 Garden / Outdoor View</span><span class="check-plus">+$15</span></label>
+        <label class="check-item" onclick="toggleCheck(this,10)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🌤️ Weather Widget</span><span class="check-plus">+$10</span></label>
+        <label class="check-item" onclick="toggleCheck(this,0)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">📱 Mobile Optimised</span><span class="check-plus">free</span></label>
+        <label class="check-item" onclick="toggleCheck(this,25)"><input type="checkbox"><div class="check-box">✓</div><span class="check-label">🎨 Custom Theme/Brand Colors</span><span class="check-plus">+$25</span></label>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="form-section">
+      <div class="form-section-title">Your Contact Details</div>
+      <div class="form-row">
+        <div class="form-field"><label>Name *</label><input type="text" id="q-name" placeholder="Your name"></div>
+        <div class="form-field"><label>Email *</label><input type="email" id="q-email" placeholder="you@example.com"></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-field"><label>Anything else?</label><textarea id="q-notes" placeholder="e.g. existing devices, special requests, HA version..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- Estimate -->
+    <div class="estimate-box">
+      <div class="est-label">Estimated Price (non-binding)</div>
+      <div class="est-price-row">
+        <div class="est-price" id="est-total">$99</div>
+        <div style="font-size:.75rem;color:var(--text2);text-align:right">Typical delivery<br><strong style="color:var(--text)">2–4 days</strong></div>
+      </div>
+      <div class="est-note">This is an indicative estimate. Final price confirmed after a free consultation.</div>
+      <div class="est-breakdown" id="est-breakdown"></div>
+    </div>
+
+    <button class="submit-btn" onclick="submitQuote()">
+      <span id="submit-ico">📩</span> Send Quote Request
+    </button>
+    <p class="form-note">You'll receive a confirmation email within 24h. No payment required now. By submitting you agree to be contacted about your project.</p>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ SMART HOME PAGE ══════════════ -->
+<div class="page active" id="page-smarthome">
+
+  <section class="hero">
+    <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <div class="hero-particles" id="hero-particles"></div>
+    <div class="hero-inner">
+      <div class="eyebrow">Handcrafted for Home Assistant</div>
+      <h1>Your home, <em>beautifully</em><br>in control.</h1>
+      <p class="hero-sub">Custom Lovelace dashboards that look stunning, feel intuitive, and work perfectly — for everyone in the house.</p>
+      <div class="hero-actions">
+        <button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button>
+        <a href="#smarthome-demo" class="btn btn-outline">▶ Try live demo</a>
+      </div>
+    </div>
+      <div class="hero-device rv rv-d1" style="margin-top:48px">
+        <div class="hd-phone">
+          <div class="hd-notch"></div>
+          <div class="hd-screen">
+            <div style="padding:10px;height:100%;display:flex;flex-direction:column;gap:6px;overflow:hidden">
+              <div style="font-size:.58rem;font-weight:700;color:var(--text2)">Good evening 👋</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+                <div style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:7px;padding:7px"><div style="font-size:.5rem;color:rgba(245,166,35,.8)">LIVING</div><div style="font-size:.8rem">💡 On</div></div>
+                <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px"><div style="font-size:.5rem;color:var(--text3)">KITCHEN</div><div style="font-size:.8rem">💡 Off</div></div>
+              </div>
+              <div style="background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:7px;display:flex;gap:6px;align-items:center">
+                <div style="width:22px;height:22px;border-radius:5px;background:linear-gradient(135deg,#e040fb,#7c3aed);display:grid;place-items:center;font-size:.65rem">🎵</div>
+                <div style="font-size:.58rem;font-weight:600;color:var(--text)">Blinding Lights</div>
+                <div style="margin-left:auto;color:var(--accent);font-size:.65rem">⏸</div>
+              </div>
+              <div style="display:flex;gap:3px;margin-top:auto">
+                <div style="flex:1;background:var(--accent);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;font-weight:700;color:#fff">☀️</div>
+                <div style="flex:1;background:var(--bg2);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;color:var(--text3)">🌅</div>
+                <div style="flex:1;background:var(--bg2);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;color:var(--text3)">🎬</div>
+                <div style="flex:1;background:var(--bg2);border-radius:5px;padding:5px;text-align:center;font-size:.52rem;color:var(--text3)">🌙</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Tablet behind -->
+        <div class="hd-tablet">
+          <div class="hd-tablet-screen">
+            <div style="height:100%;background:var(--bg2);display:flex;flex-direction:column;overflow:hidden">
+              <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;gap:6px;font-size:.52rem;font-weight:700;color:var(--text3)">🏠 DASHBOARD</div>
+              <div style="padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1">
+                <div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🛋️</div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🍳</div>
+                <div style="background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🏢</div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🛏️</div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🚿</div>
+                <div style="background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);border-radius:5px;display:grid;place-items:center;font-size:.75rem">🌿</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">What you get</div>
+      <h2>Everything a great dashboard needs</h2>
+      <p class="section-sub">Built with precision, custom cards, and your whole family in mind.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat rv rv-d1"><div class="feat-ico">🗺️</div><h3>Interactive Floor Plan</h3><p>See your home at a glance. Tap any room to toggle lights or choose a color — on a visual map that mirrors your actual layout.</p></div>
+      <div class="feat rv rv-d2"><div class="feat-ico">✦</div><h3>Pixel-perfect Lovelace Design</h3><p>Custom themes, card-mod styling, careful typography. Your dashboard looks like an Apple product, not a config file.</p></div>
+      <div class="feat rv rv-d3"><div class="feat-ico">🎬</div><h3>Smart Scenes & Automations</h3><p>One-tap scenes for Relax, Movie Night, Work, Goodnight. Automations included, clean YAML docs.</p></div>
+      <div class="feat rv rv-d4"><div class="feat-ico">📱</div><h3>All Screens Supported</h3><p>Wall panels, tablets, iPhones, desktop. Large tap targets, responsive grids, readable at any distance.</p></div>
+    </div>
+  </div>
+  </section>
+
+  <!-- FLOOR PLAN DEMO -->
+  <section class="section demo-section" id="smarthome-demo">
+  <div class="wrap">
+    <div class="rv">
+      <div class="label">Interactive Demo</div>
+      <h2>Try it yourself</h2>
+      <p class="section-sub">Click any room to toggle lights. Long-press (or right-click) to choose a light color.</p>
+    </div>
+    <div class="demo-layout">
+      <div class="device rv rv-d1">
+        <div class="device-bar">
+          <div class="device-title">MY HOME · DASHBOARD</div>
+          <div class="device-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="scene-row-top">
+          <button class="scene-pill" onclick="setScene('relax',this)">🌅 Relax</button>
+          <button class="scene-pill on" onclick="setScene('normal',this)">☀️ Normal</button>
+          <button class="scene-pill" onclick="setScene('movie',this)">🎬 Movie</button>
+          <button class="scene-pill" onclick="setScene('alloff',this)">🌙 Night</button>
+        </div>
+        <div class="fp-wrap">
+              <div class="fp-hint">Klick: An/Aus &nbsp;·&nbsp; Rechtsklick: Farbe wählen</div>
+            <div class="photo-fp" id="fp-container">
+
+  <!-- Color picker popover -->
+  <div class="color-popover" id="color-popover">
+    <div class="cp-title" id="cp-room-label">Lampe</div>
+    <div class="cp-swatches" id="cp-swatches"></div>
+    <div class="cp-brightness">
+      <label>Helligkeit</label>
+      <input type="range" min="10" max="100" value="80" id="cp-bright"
+             oninput="applyLampBrightness(this.value)">
+    </div>
+    <button onclick="closeColorPicker()"
+      style="margin-top:6px;width:100%;padding:5px;border-radius:7px;
+             border:1px solid var(--border2);background:var(--bg2);
+             color:var(--text2);font-size:.7rem;cursor:pointer;font-family:inherit">
+      Schließen
+    </button>
+  </div>
+
+  <!-- Base image: desaturated/dark via CSS filter — SVG overlay adds all color -->
+  <img id="fp-img-base"
+       src="https://autoflow-lab.github.io/fp_new.png"
+       alt="Smart Home Floor Plan"
+       style="width:100%;display:block;border-radius:12px;position:relative;z-index:1;
+              user-select:none;-webkit-user-drag:none;pointer-events:none;
+              filter:grayscale(1) brightness(0.42) contrast(1.15);">
+
+  <!--
+    SVG LIGHT OVERLAY — 1376×768 viewBox
+    mix-blend-mode:screen → colors add on top of the dark base
+    Each room:  polygon fill (ambient glow) + polyline LED strips
+    Each lamp:  radial gradient pool + fixture symbol
+  -->
+  <svg id="fp-lights" viewBox="0 0 1376 768"
+       xmlns="http://www.w3.org/2000/svg"
+       style="position:absolute;inset:0;width:100%;height:100%;z-index:2;
+              pointer-events:none;border-radius:12px;mix-blend-mode:screen">
+    <defs>
+      <!-- ── Filters ── -->
+      <filter id="led-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="strip-glow" x="-100%" y="-100%" width="300%" height="300%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+      </filter>
+      <filter id="lamp-glow" x="-80%" y="-80%" width="360%" height="360%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="bulb-soft" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4"/>
+      </filter>
+
+      <!-- ── Room ambient fill gradients (one per room) ── -->
+      <radialGradient id="rg-bed1" cx="50%" cy="50%" r="55%">
+        <stop offset="0%"   id="rg-bed1-s0" stop-color="#00e5ff" stop-opacity="0"/>
+        <stop offset="60%"  id="rg-bed1-s1" stop-color="#00b0cc" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#005566" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="rg-bed2" cx="50%" cy="50%" r="55%">
+        <stop offset="0%"   id="rg-bed2-s0" stop-color="#00e5ff" stop-opacity="0"/>
+        <stop offset="60%"  id="rg-bed2-s1" stop-color="#00b0cc" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#005566" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="rg-kitchen" cx="50%" cy="50%" r="55%">
+        <stop offset="0%"   id="rg-kit-s0" stop-color="#00e5ff" stop-opacity="0"/>
+        <stop offset="70%"  id="rg-kit-s1" stop-color="#00b0cc" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#004455" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="rg-bath" cx="50%" cy="50%" r="55%">
+        <stop offset="0%"   id="rg-bath-s0" stop-color="#00e5ff" stop-opacity="0"/>
+        <stop offset="60%"  id="rg-bath-s1" stop-color="#00b0cc" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#005566" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="rg-office" cx="50%" cy="50%" r="55%">
+        <stop offset="0%"   id="rg-off-s0" stop-color="#00e5ff" stop-opacity="0"/>
+        <stop offset="60%"  id="rg-off-s1" stop-color="#00b0cc" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#005566" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="rg-dining" cx="50%" cy="50%" r="55%">
+        <stop offset="0%"   id="rg-din-s0" stop-color="#00e5ff" stop-opacity="0"/>
+        <stop offset="60%"  id="rg-din-s1" stop-color="#00b0cc" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#005566" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- ── Individual lamp pool gradients ── -->
+      <radialGradient id="lg-L1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffe8a0" stop-opacity="0.9"/>
+        <stop offset="50%" stop-color="#f5c860" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffe8a0" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L3" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffe8a0" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L4" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffe8a0" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L5" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffe8a0" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L6" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L8" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L9" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lg-L11" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#ffe8a0" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- Pulse ring animation -->
+      <filter id="ring-blur"><feGaussianBlur stdDeviation="2"/></filter>
+    </defs>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--  LAYER 1: ROOM AMBIENT FILLS                   -->
+    <!-- ══════════════════════════════════════════════ -->
+
+    <!-- Master Bedroom — large ellipse covering room floor -->
+    <ellipse id="room-bed1" cx="808" cy="200" rx="205" ry="115"
+             fill="url(#rg-bed1)" opacity="1"/>
+
+    <!-- 2nd Bedroom -->
+    <ellipse id="room-bed2" cx="305" cy="385" rx="160" ry="105"
+             fill="url(#rg-bed2)" opacity="1"/>
+
+    <!-- Kitchen / Open Living -->
+    <ellipse id="room-kitchen" cx="635" cy="390" rx="215" ry="150"
+             fill="url(#rg-kitchen)" opacity="1"/>
+
+    <!-- Dining area -->
+    <ellipse id="room-dining" cx="872" cy="458" rx="108" ry="82"
+             fill="url(#rg-dining)" opacity="1"/>
+
+    <!-- Bathroom -->
+    <ellipse id="room-bath" cx="1112" cy="305" rx="100" ry="135"
+             fill="url(#rg-bath)" opacity="1"/>
+
+    <!-- Office / Study -->
+    <ellipse id="room-office" cx="572" cy="565" rx="125" ry="90"
+             fill="url(#rg-office)" opacity="1"/>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--  LAYER 2: LED WALL STRIPS                      -->
+    <!--  Polylines along wall coves, blurred = glow     -->
+    <!-- ══════════════════════════════════════════════ -->
+
+    <!-- MASTER BEDROOM LED strips -->
+    <g id="led-bed1" opacity="1">
+      <!-- Back wall (top edge of room, diagonal) -->
+      <polyline id="ls-bed1-back" points="650,108 1005,108"
+                fill="none" stroke="#00e5ff" stroke-width="4" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <!-- Left wall (diagonal going down-left) -->
+      <polyline id="ls-bed1-left" points="653,112 640,282"
+                fill="none" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <!-- Right wall -->
+      <polyline id="ls-bed1-right" points="1002,112 1012,280"
+                fill="none" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <!-- Solid bright core on back wall -->
+      <polyline points="655,108 1000,108"
+                fill="none" stroke="rgba(180,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- 2ND BEDROOM LED strips -->
+    <g id="led-bed2" opacity="1">
+      <polyline id="ls-bed2-back" points="180,308 392,292"
+                fill="none" stroke="#00e5ff" stroke-width="4" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline id="ls-bed2-left" points="180,308 195,440"
+                fill="none" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline id="ls-bed2-right" points="392,292 402,422"
+                fill="none" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline points="185,308 388,293"
+                fill="none" stroke="rgba(180,255,255,0.55)" stroke-width="1.5"/>
+    </g>
+
+    <!-- BATHROOM LED strips -->
+    <g id="led-bath" opacity="1">
+      <polyline id="ls-bath-back" points="1042,178 1198,178"
+                fill="none" stroke="#00e5ff" stroke-width="4" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline id="ls-bath-right" points="1198,178 1195,382"
+                fill="none" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline id="ls-bath-left" points="1042,178 1052,355"
+                fill="none" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline points="1045,178 1195,178"
+                fill="none" stroke="rgba(180,255,255,0.55)" stroke-width="1.5"/>
+    </g>
+
+    <!-- OFFICE/STUDY LED strip -->
+    <g id="led-office" opacity="1">
+      <polyline id="ls-off-back" points="482,508 645,512"
+                fill="none" stroke="#00e5ff" stroke-width="4" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline id="ls-off-left" points="482,508 468,620"
+                fill="none" stroke="#00e5ff" stroke-width="3" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline points="485,508 642,512"
+                fill="none" stroke="rgba(180,255,255,0.5)" stroke-width="1.5"/>
+    </g>
+
+    <!-- KITCHEN counter LED accent -->
+    <g id="led-kitchen" opacity="1">
+      <polyline id="ls-kit-counter" points="522,268 652,268"
+                fill="none" stroke="#00e5ff" stroke-width="3.5" stroke-linecap="round"
+                filter="url(#strip-glow)"/>
+      <polyline points="524,268 650,268"
+                fill="none" stroke="rgba(180,255,255,0.45)" stroke-width="1.2"/>
+    </g>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--  LAYER 3: INDIVIDUAL LAMP LIGHT POOLS          -->
+    <!-- ══════════════════════════════════════════════ -->
+
+    <!-- L1: Master bedroom pendant (center) — ON by default -->
+    <ellipse id="pool-L1" cx="770" cy="175" rx="175" ry="120"
+             fill="url(#lg-L1)" opacity="1"/>
+
+    <!-- L2: Bedside left -->
+    <ellipse id="pool-L2" cx="735" cy="215" rx="95" ry="72"
+             fill="url(#lg-L2)" opacity="0"/>
+    <!-- L3: Bedside right -->
+    <ellipse id="pool-L3" cx="825" cy="198" rx="95" ry="72"
+             fill="url(#lg-L3)" opacity="0"/>
+    <!-- L4: 2nd bedroom floor lamp -->
+    <ellipse id="pool-L4" cx="395" cy="370" rx="145" ry="108"
+             fill="url(#lg-L4)" opacity="0"/>
+    <!-- L5: 2nd bedroom wall sconce -->
+    <ellipse id="pool-L5" cx="278" cy="318" rx="90" ry="70"
+             fill="url(#lg-L5)" opacity="0"/>
+    <!-- L6: Kitchen pendant over island -->
+    <ellipse id="pool-L6" cx="580" cy="290" rx="155" ry="110"
+             fill="url(#lg-L6)" opacity="0"/>
+    <!-- L8: Office desk/hanging lamp -->
+    <ellipse id="pool-L8" cx="565" cy="545" rx="118" ry="85"
+             fill="url(#lg-L8)" opacity="0"/>
+    <!-- L9: Bathroom mirror light -->
+    <ellipse id="pool-L9" cx="1090" cy="230" rx="100" ry="80"
+             fill="url(#lg-L9)" opacity="0"/>
+    <!-- L11: Dining accent/pendant -->
+    <ellipse id="pool-L11" cx="870" cy="458" rx="105" ry="78"
+             fill="url(#lg-L11)" opacity="0"/>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--  LAYER 4: LAMP FIXTURES (clickable)            -->
+    <!-- ══════════════════════════════════════════════ -->
+    <g style="pointer-events:all">
+
+      <!-- L1: Master bedroom ceiling pendant — ON -->
+      <g id="lamp-L1" class="lamp-fix" data-lamp="L1"
+         onclick="lampClick('L1',event)" oncontextmenu="lampLongPress('L1',event)"
+         ontouchstart="lampTouchStart('L1',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <!-- Ceiling plate -->
+        <ellipse cx="770" cy="142" rx="14" ry="6" fill="rgba(220,220,220,.7)"/>
+        <!-- Cord -->
+        <line x1="770" y1="142" x2="770" y2="158" stroke="rgba(200,200,200,.7)" stroke-width="2"/>
+        <!-- Shade dome -->
+        <ellipse cx="770" cy="165" rx="20" ry="9" fill="rgba(235,230,215,.9)"/>
+        <ellipse cx="770" cy="160" rx="20" ry="9" fill="rgba(200,195,185,.75)"/>
+        <!-- Glow bulb -->
+        <circle id="lc-L1" cx="770" cy="163" r="10"
+                fill="#f5d060" filter="url(#lamp-glow)" class="lamp-bulb"/>
+        <!-- Ring indicator -->
+        <circle id="lr-L1" cx="770" cy="163" r="22"
+                fill="none" stroke="#f5d060" stroke-width="1.5" opacity=".55"
+                class="lamp-ring"/>
+        <circle cx="770" cy="160" r="30" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L2: Bedside lamp LEFT -->
+      <g id="lamp-L2" class="lamp-fix" data-lamp="L2"
+         onclick="lampClick('L2',event)" oncontextmenu="lampLongPress('L2',event)"
+         ontouchstart="lampTouchStart('L2',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <rect x="729" y="195" width="12" height="15" rx="3" fill="rgba(200,185,160,.7)"/>
+        <ellipse cx="735" cy="193" rx="10" ry="5" fill="rgba(210,200,180,.6)"/>
+        <circle id="lc-L2" cx="735" cy="190" r="7"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L2" cx="735" cy="190" r="13"
+                fill="none" stroke="#6a6a6a" stroke-width="1" opacity=".2" class="lamp-ring"/>
+        <circle cx="735" cy="195" r="22" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L3: Bedside lamp RIGHT -->
+      <g id="lamp-L3" class="lamp-fix" data-lamp="L3"
+         onclick="lampClick('L3',event)" oncontextmenu="lampLongPress('L3',event)"
+         ontouchstart="lampTouchStart('L3',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <rect x="819" y="180" width="12" height="15" rx="3" fill="rgba(200,185,160,.7)"/>
+        <ellipse cx="825" cy="178" rx="10" ry="5" fill="rgba(210,200,180,.6)"/>
+        <circle id="lc-L3" cx="825" cy="176" r="7"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L3" cx="825" cy="176" r="13"
+                fill="none" stroke="#6a6a6a" stroke-width="1" opacity=".2" class="lamp-ring"/>
+        <circle cx="825" cy="182" r="22" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L4: 2nd Bedroom floor/tripod lamp -->
+      <g id="lamp-L4" class="lamp-fix" data-lamp="L4"
+         onclick="lampClick('L4',event)" oncontextmenu="lampLongPress('L4',event)"
+         ontouchstart="lampTouchStart('L4',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <!-- Tripod legs -->
+        <line x1="390" y1="415" x2="378" y2="375" stroke="rgba(160,150,130,.7)" stroke-width="2"/>
+        <line x1="390" y1="415" x2="403" y2="372" stroke="rgba(160,150,130,.7)" stroke-width="2"/>
+        <line x1="390" y1="415" x2="393" y2="370" stroke="rgba(160,150,130,.7)" stroke-width="1.5"/>
+        <!-- Shade -->
+        <ellipse cx="394" cy="368" rx="18" ry="8" fill="rgba(225,215,195,.85)"/>
+        <ellipse cx="394" cy="363" rx="18" ry="8" fill="rgba(200,190,170,.7)"/>
+        <circle id="lc-L4" cx="394" cy="365" r="9"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L4" cx="394" cy="365" r="16"
+                fill="none" stroke="#6a6a6a" stroke-width="1.5" opacity=".2" class="lamp-ring"/>
+        <circle cx="394" cy="385" r="30" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L5: 2nd Bedroom wall sconce -->
+      <g id="lamp-L5" class="lamp-fix" data-lamp="L5"
+         onclick="lampClick('L5',event)" oncontextmenu="lampLongPress('L5',event)"
+         ontouchstart="lampTouchStart('L5',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <rect x="262" y="308" width="18" height="10" rx="3" fill="rgba(190,180,165,.65)"/>
+        <ellipse cx="278" cy="312" rx="9" ry="5" fill="rgba(200,190,170,.6)"/>
+        <circle id="lc-L5" cx="280" cy="310" r="7"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L5" cx="280" cy="310" r="13"
+                fill="none" stroke="#6a6a6a" stroke-width="1" opacity=".2" class="lamp-ring"/>
+        <circle cx="274" cy="312" r="24" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L6: Kitchen ceiling pendant over island -->
+      <g id="lamp-L6" class="lamp-fix" data-lamp="L6"
+         onclick="lampClick('L6',event)" oncontextmenu="lampLongPress('L6',event)"
+         ontouchstart="lampTouchStart('L6',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <ellipse cx="580" cy="265" rx="13" ry="6" fill="rgba(215,210,200,.7)"/>
+        <line x1="580" y1="265" x2="580" y2="278" stroke="rgba(200,195,180,.7)" stroke-width="2"/>
+        <ellipse cx="580" cy="284" rx="18" ry="8" fill="rgba(235,230,218,.85)"/>
+        <ellipse cx="580" cy="279" rx="18" ry="8" fill="rgba(205,200,188,.7)"/>
+        <circle id="lc-L6" cx="580" cy="281" r="8"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L6" cx="580" cy="281" r="16"
+                fill="none" stroke="#6a6a6a" stroke-width="1.5" opacity=".2" class="lamp-ring"/>
+        <circle cx="580" cy="278" r="28" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L8: Office hanging lamp -->
+      <g id="lamp-L8" class="lamp-fix" data-lamp="L8"
+         onclick="lampClick('L8',event)" oncontextmenu="lampLongPress('L8',event)"
+         ontouchstart="lampTouchStart('L8',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <ellipse cx="565" cy="518" rx="12" ry="5" fill="rgba(215,210,200,.65)"/>
+        <line x1="565" y1="518" x2="565" y2="530" stroke="rgba(200,195,180,.65)" stroke-width="2"/>
+        <ellipse cx="565" cy="537" rx="16" ry="7" fill="rgba(230,225,215,.8)"/>
+        <ellipse cx="565" cy="532" rx="16" ry="7" fill="rgba(200,195,185,.65)"/>
+        <circle id="lc-L8" cx="565" cy="534" r="7"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L8" cx="565" cy="534" r="14"
+                fill="none" stroke="#6a6a6a" stroke-width="1.5" opacity=".2" class="lamp-ring"/>
+        <circle cx="565" cy="530" r="26" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L9: Bathroom mirror/wall light -->
+      <g id="lamp-L9" class="lamp-fix" data-lamp="L9"
+         onclick="lampClick('L9',event)" oncontextmenu="lampLongPress('L9',event)"
+         ontouchstart="lampTouchStart('L9',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <!-- Horizontal bar fixture -->
+        <rect x="1070" y="212" width="40" height="7" rx="3"
+              fill="rgba(210,210,210,.7)"/>
+        <circle id="lc-L9" cx="1090" cy="215" r="7"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L9" cx="1090" cy="215" r="14"
+                fill="none" stroke="#6a6a6a" stroke-width="1.5" opacity=".2" class="lamp-ring"/>
+        <circle cx="1090" cy="218" r="26" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+
+      <!-- L11: Dining pendant lamp -->
+      <g id="lamp-L11" class="lamp-fix" data-lamp="L11"
+         onclick="lampClick('L11',event)" oncontextmenu="lampLongPress('L11',event)"
+         ontouchstart="lampTouchStart('L11',event)" ontouchend="lampTouchEnd(event)"
+         style="cursor:pointer">
+        <ellipse cx="870" cy="430" rx="11" ry="5" fill="rgba(215,210,200,.65)"/>
+        <line x1="870" y1="430" x2="870" y2="442" stroke="rgba(200,195,180,.65)" stroke-width="1.5"/>
+        <ellipse cx="870" cy="448" rx="16" ry="7" fill="rgba(230,225,215,.8)"/>
+        <ellipse cx="870" cy="443" rx="16" ry="7" fill="rgba(200,195,185,.65)"/>
+        <circle id="lc-L11" cx="870" cy="446" r="7"
+                fill="#6a6a6a" class="lamp-bulb" style="transition:fill .4s,filter .4s"/>
+        <circle id="lr-L11" cx="870" cy="446" r="14"
+                fill="none" stroke="#6a6a6a" stroke-width="1.5" opacity=".2" class="lamp-ring"/>
+        <circle cx="870" cy="444" r="26" fill="rgba(255,255,255,0)" class="lamp-hitzone"/>
+      </g>
+    </g>
+
+    <!-- Label layer -->
+    <g id="fp-labels" style="pointer-events:none;opacity:0;transition:opacity .3s">
+      <g style="font-size:11px;font-family:Inter,sans-serif;font-weight:700;fill:rgba(255,255,255,.85)">
+        <text x="770" y="128">L1</text>
+        <text x="730" y="178">L2</text>
+        <text x="820" y="164">L3</text>
+        <text x="388" y="352">L4</text>
+        <text x="264" y="298">L5</text>
+        <text x="574" y="252">L6</text>
+        <text x="558" y="518">L8</text>
+        <text x="1083" y="202">L9</text>
+        <text x="863" y="428">L11</text>
+      </g>
+    </g>
+  </svg>
+</div>
+theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Custom Home Assistant dashboards & AI automation — from €49. Interactive floor plans, smart scenes, delivered in 48h. Portfolio by autoflow-lab.">
+<meta name="keywords" content="Home Assistant dashboard, Lovelace custom, smart home automation, floor plan, AI automation, n8n, chatbot">
+<meta property="og:title" content="autoflow-lab — Smart Home Dashboards & AI Automation">
+<meta property="og:description" content="Custom Home Assistant dashboards from €49. Interactive floor plans, smart scenes, delivered in 48h.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://autoflow-lab.github.io/demo.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0071e3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoFlow Lab — Smart Home & AI Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ━━━━ TOKENS ━━━━ */
+:root {
+  --bg:#fff;--bg2:#f5f5f7;--bg3:#ebebed;--surface:#fff;--card:#fff;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.14);
+  --text:#1d1d1f;--text2:#6e6e73;--text3:rgba(29,29,31,.45);
+  --accent:#0071e3;--warm:#f5a623;--green-c:#30d158;--red-c:#ff3b30;
+  --neon-p:#e040fb;--neon-c:#00e5ff;--neon-g:#69ff47;
+  --radius:18px;--radius-sm:12px;
+  --shadow:0 2px 12px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.05);
+  --shadow-md:0 8px 32px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg:0 24px 80px rgba(0,0,0,.12);
+  --t:.35s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"]{
+  --bg:#000;--bg2:#0a0a0a;--bg3:#141414;--surface:#111;--card:#1a1a1a;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#f5f5f7;--text2:rgba(245,245,247,.55);--text3:rgba(245,245,247,.3);
+  --accent:#2997ff;--shadow:0 2px 12px rgba(0,0,0,.4);
+  --shadow-md:0 8px 32px rgba(0,0,0,.5);--shadow-lg:0 24px 80px rgba(0,0,0,.6);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:17px;line-height:1.47;-webkit-font-smoothing:antialiased;transition:background var(--t),color var(--t);overflow-x:hidden;}
+
+/* ━━━━ NAV ━━━━ */
+.nav{position:fixed;inset-inline:0;top:0;z-index:200;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border);transition:background var(--t),border-color var(--t);}
+[data-theme="dark"] .nav{background:rgba(0,0,0,.82);}
+.nav-logo{font-size:.9rem;font-weight:700;letter-spacing:-.3px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:6px;transition:opacity .2s;}
+.nav-logo:hover{opacity:.7;}
+.nav-logo em{color:var(--accent);font-style:normal;}
+.nav-center{display:flex;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:980px;padding:3px;gap:2px;}
+.nav-tab{padding:5px 16px;border-radius:980px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .25s;border:none;background:transparent;color:var(--text2);font-family:inherit;}
+.nav-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.12),0 0 0 1px var(--border);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.theme-toggle{width:36px;height:22px;border-radius:11px;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;position:relative;transition:background var(--t);flex-shrink:0;}
+.theme-toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:var(--text);top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1),background var(--t);}
+[data-theme="dark"] .theme-toggle::after{transform:translateX(14px);}
+.nav-contact{padding:7px 14px;border-radius:980px;background:transparent;color:var(--text2);font-size:.8rem;font-weight:600;text-decoration:none;border:1px solid var(--border2);transition:all .2s;cursor:pointer;font-family:inherit;}
+.nav-contact:hover{background:var(--bg2);color:var(--text);}
+.nav-cta{padding:7px 18px;border-radius:980px;background:var(--accent);color:#fff;font-size:.8rem;font-weight:600;text-decoration:none;transition:opacity .2s;}
+.nav-cta:hover{opacity:.85;}
+
+/* ━━━━ PAGES ━━━━ */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ━━━━ HERO ━━━━ */
+.hero{min-height:100svh;display:grid;place-items:center;text-align:center;padding:100px 6% 60px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;transition:opacity var(--t);}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,#2997ff,transparent 70%);top:-10%;left:-10%;}
+.orb2{width:500px;height:500px;background:radial-gradient(circle,#30d158,transparent 70%);bottom:0;right:-5%;}
+[data-theme="dark"] .orb1{background:radial-gradient(circle,rgba(224,64,251,.6),transparent 70%);opacity:.2;}
+[data-theme="dark"] .orb2{background:radial-gradient(circle,rgba(0,229,255,.6),transparent 70%);opacity:.15;}
+.hero-inner{position:relative;max-width:780px;}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:.78rem;font-weight:600;letter-spacing:.5px;margin-bottom:22px;opacity:0;transform:translateY(10px);animation:up .6s .1s ease forwards;}
+.eyebrow::before{content:'✦';opacity:.7;}
+h1{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:22px;opacity:0;transform:translateY(14px);animation:up .7s .2s ease forwards;}
+h1 em{font-style:normal;color:var(--accent);}
+[data-theme="dark"] h1 em{background:linear-gradient(135deg,var(--neon-c),var(--neon-p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:1.1rem;color:var(--text2);line-height:1.7;max-width:500px;margin:0 auto 36px;opacity:0;animation:up .7s .3s ease forwards;}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;opacity:0;animation:up .7s .4s ease forwards;}
+@keyframes up{to{opacity:1;transform:none;}}
+
+/* ━━━━ BUTTONS ━━━━ */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:13px 26px;border-radius:980px;font-size:.9rem;font-weight:600;text-decoration:none;transition:opacity .2s,transform .2s;cursor:pointer;border:none;font-family:inherit;}
+.btn:hover{opacity:.85;transform:scale(1.02);}
+.btn-fill{background:var(--accent);color:#fff;}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.btn-outline:hover{background:var(--bg2);}
+
+/* ━━━━ SECTIONS ━━━━ */
+.section{padding:96px 6%;}
+.wrap{max-width:1080px;margin:0 auto;}
+.label{font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+h2{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px;}
+.section-sub{font-size:1rem;color:var(--text2);line-height:1.7;max-width:480px;margin-bottom:56px;}
+.centered{text-align:center;}
+.centered .section-sub{margin-inline:auto;}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.rv.in{opacity:1;transform:none;}
+.rv-d1{transition-delay:.08s;}.rv-d2{transition-delay:.16s;}.rv-d3{transition-delay:.24s;}.rv-d4{transition-delay:.32s;}
+
+/* ━━━━ FEAT GRID ━━━━ */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);}
+@media(max-width:640px){.feat-grid{grid-template-columns:1fr;}}
+.feat{background:var(--surface);padding:40px 36px;transition:background var(--t);}
+.feat:hover{background:var(--bg2);}
+.feat-ico{font-size:1.8rem;margin-bottom:16px;}
+.feat h3{font-size:1.05rem;font-weight:600;margin-bottom:10px;letter-spacing:-.02em;}
+.feat p{font-size:.9rem;color:var(--text2);line-height:1.65;}
+
+/* ━━━━ DEMO DEVICE ━━━━ */
+.demo-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.demo-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:start;}
+@media(max-width:900px){.demo-layout{grid-template-columns:1fr;}}
+.device{background:var(--bg3);border:1px solid var(--border2);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);transition:background var(--t),border-color var(--t),box-shadow var(--t);}
+[data-theme="dark"] .device{box-shadow:0 0 0 1px rgba(255,255,255,.04),0 40px 100px rgba(0,0,0,.8);}
+.device-bar{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);}
+.device-title{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);}
+.device-dots{display:flex;gap:5px;}
+.device-dots span{width:8px;height:8px;border-radius:50%;}
+.device-dots span:nth-child(1){background:var(--red-c);}
+.device-dots span:nth-child(2){background:var(--warm);}
+.device-dots span:nth-child(3){background:var(--green-c);}
+.scene-row-top{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;background:var(--surface);}
+.scene-pill{padding:5px 14px;border-radius:980px;font-size:.75rem;font-weight:600;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .2s;font-family:inherit;}
+.scene-pill.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.fp-wrap{padding:14px;}
+.fp-hint{font-size:.72rem;color:var(--text3);text-align:center;margin-bottom:8px;}
+
+/* ━━━━ COLOR PICKER POPOVER ━━━━ */
+.color-popover{position:absolute;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow-md);z-index:100;display:none;flex-direction:column;gap:8px;min-width:160px;}
+.color-popover.show{display:flex;}
+.cp-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);}
+.cp-swatches{display:flex;gap:7px;flex-wrap:wrap;}
+.cp-sw{width:24px;height:24px;border-radius:50%;cursor:pointer;transition:transform .2s,box-shadow .2s;border:2px solid transparent;}
+.cp-sw:hover{transform:scale(1.2);}
+.cp-sw.active{border-color:var(--text);box-shadow:0 0 0 1px var(--text);}
+.cp-brightness{display:flex;align-items:center;gap:6px;margin-top:2px;}
+.cp-brightness label{font-size:.68rem;color:var(--text2);}
+.cp-brightness input{flex:1;accent-color:var(--accent);cursor:pointer;}
+.fp-container{position:relative;}
+
+/* ━━━━ SIDEBAR CARDS ━━━━ */
+.demo-side{display:flex;flex-direction:column;gap:16px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:background var(--t),border-color var(--t);}
+.card-title{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;}
+.scene-list{display:flex;flex-direction:column;gap:6px;}
+.scene-row-btn{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--radius-sm);background:var(--bg2);border:1px solid transparent;cursor:pointer;transition:all .2s;font-family:inherit;width:100%;text-align:left;}
+.scene-row-btn:hover{border-color:var(--border2);background:var(--bg3);}
+.scene-row-btn.on{background:rgba(0,113,227,.08);border-color:rgba(0,113,227,.25);}
+[data-theme="dark"] .scene-row-btn.on{background:rgba(0,229,255,.06);border-color:rgba(0,229,255,.2);}
+.srb-ico{font-size:1rem;flex-shrink:0;}
+.srb-name{font-size:.85rem;font-weight:600;color:var(--text);}
+.srb-desc{font-size:.72rem;color:var(--text2);}
+.room-list{display:flex;flex-direction:column;gap:4px;}
+.room-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s;}
+.room-row:hover{background:var(--bg2);}
+.rr-ico{font-size:.95rem;width:24px;text-align:center;}
+.rr-name{font-size:.83rem;font-weight:500;flex:1;color:var(--text);}
+.rr-sw{width:30px;height:18px;border-radius:9px;position:relative;cursor:pointer;transition:background .3s;background:var(--bg3);border:1px solid var(--border2);}
+.rr-sw::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.rr-sw.on{background:var(--green-c);border-color:var(--green-c);}
+[data-theme="dark"] .rr-sw.on{background:var(--warm);border-color:var(--warm);}
+.rr-sw.on::after{transform:translateX(12px);}
+
+/* ━━━━ FULL DASH ━━━━ */
+.dash-section{background:var(--bg);}
+.dash-frame{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);display:grid;grid-template-columns:200px 1fr 240px;min-height:560px;}
+@media(max-width:1000px){.dash-frame{grid-template-columns:1fr;}.d-left,.d-right{display:none;}}
+.d-left{background:var(--surface);border-right:1px solid var(--border);padding:16px 0;transition:background var(--t);}
+.d-nav-lbl{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:0 12px 6px;}
+.d-nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);margin:1px 8px;cursor:pointer;font-size:.83rem;font-weight:500;color:var(--text2);transition:all .2s;}
+.d-nav-item:hover{background:var(--bg2);color:var(--text);}
+.d-nav-item.on{background:rgba(0,113,227,.1);color:var(--accent);}
+[data-theme="dark"] .d-nav-item.on{background:rgba(0,229,255,.08);color:var(--neon-c);}
+.d-nav-ico{font-size:.9rem;width:20px;text-align:center;}
+.d-main{padding:20px;overflow:hidden;background:var(--bg);transition:background var(--t);}
+.d-page{display:none;}
+.d-page.on{display:block;}
+.d-greet h3{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;}
+.d-greet p{font-size:.8rem;color:var(--text2);margin-bottom:18px;}
+.qs-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+@media(max-width:800px){.qs-row{grid-template-columns:repeat(2,1fr);}}
+.qs{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px;transition:background var(--t);}
+.qs-l{font-size:.65rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+.qs-v{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;}
+.qs-s{font-size:.68rem;color:var(--text2);margin-top:3px;}
+.sq-row{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;}
+.sq-btn{padding:7px 14px;border-radius:980px;font-size:.76rem;font-weight:600;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;}
+.sq-btn:hover{border-color:var(--border2);color:var(--text);}
+.sq-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+@media(max-width:700px){.rooms-grid{grid-template-columns:repeat(2,1fr);}}
+.room-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;}
+.room-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;pointer-events:none;}
+.room-card.on{border-color:rgba(245,166,35,.35);}
+.room-card.on::before{background:radial-gradient(circle at 20% 20%,rgba(245,166,35,.1),transparent 60%);opacity:1;}
+[data-theme="dark"] .room-card.on{border-color:rgba(255,180,70,.3);box-shadow:0 0 20px rgba(255,180,70,.08);}
+.room-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.rc-ico{font-size:1.2rem;margin-bottom:8px;}
+.rc-name{font-size:.8rem;font-weight:700;margin-bottom:3px;}
+.rc-info{font-size:.7rem;color:var(--text2);}
+.rc-sw-wrap{display:flex;justify-content:flex-end;margin-top:10px;}
+.rc-sw{width:30px;height:18px;border-radius:9px;position:relative;transition:background .3s;background:var(--bg2);border:1px solid var(--border2);}
+.rc-sw::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.room-card.on .rc-sw{background:var(--green-c);border-color:var(--green-c);}
+[data-theme="dark"] .room-card.on .rc-sw{background:var(--warm);border-color:var(--warm);}
+.room-card.on .rc-sw::after{transform:translateX(12px);}
+.d-right{background:var(--surface);border-left:1px solid var(--border);padding:16px;overflow-y:auto;transition:background var(--t);}
+.dw{margin-bottom:20px;}
+.dw-t{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.weather-num{font-size:2.5rem;font-weight:700;letter-spacing:-.03em;}
+.weather-desc{font-size:.8rem;color:var(--text2);margin-top:2px;}
+.ww-row{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.wwi{font-size:.72rem;color:var(--text2);text-align:center;}
+.wwi strong{display:block;color:var(--text);font-size:.8rem;margin-bottom:2px;}
+.fc-row{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.fc-d{text-align:center;font-size:.7rem;color:var(--text2);}
+.fc-d span{font-size:1.05rem;display:block;margin:3px 0;}
+.fc-d strong{color:var(--text);}
+.log{display:flex;flex-direction:column;gap:8px;}
+.log-item{display:flex;gap:8px;align-items:flex-start;font-size:.76rem;}
+.log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.log-txt{color:var(--text2);flex:1;line-height:1.5;}
+.log-t{color:var(--text3);white-space:nowrap;}
+.media-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;display:flex;gap:14px;align-items:center;margin-bottom:10px;transition:background var(--t);}
+.media-art{width:50px;height:50px;border-radius:10px;display:grid;place-items:center;font-size:1.5rem;flex-shrink:0;}
+.media-title{font-size:.88rem;font-weight:600;margin-bottom:3px;}
+.media-sub{font-size:.75rem;color:var(--text2);}
+.media-btns{display:flex;gap:7px;margin-top:10px;align-items:center;}
+.mc{width:28px;height:28px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:grid;place-items:center;cursor:pointer;font-size:.7rem;color:var(--text);transition:all .2s;}
+.mc:hover{background:var(--bg3);}
+.mc.play{background:var(--accent);border-color:var(--accent);color:#fff;width:32px;height:32px;}
+[data-theme="dark"] .mc.play{background:var(--neon-p);border-color:var(--neon-p);box-shadow:0 0 12px rgba(224,64,251,.3);}
+.prog-bar{height:3px;background:var(--bg2);border-radius:2px;margin-top:10px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;}
+[data-theme="dark"] .prog-fill{background:var(--neon-p);}
+
+/* ━━━━ GARDEN ━━━━ */
+.garden-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.garden-frame{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);position:relative;background:#0d1a10;min-height:280px;display:flex;align-items:flex-end;}
+.coming-soon-badge{position:absolute;top:16px;right:16px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);padding:5px 12px;border-radius:980px;font-size:.72rem;font-weight:600;letter-spacing:.5px;}
+.garden-scene{width:100%;position:relative;}
+.garden-controls{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);padding:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.color-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .2s,border-color .2s;}
+.color-swatch:hover{transform:scale(1.18);}
+.color-swatch.active{border-color:#fff;}
+.gc-label{font-size:.76rem;font-weight:600;color:rgba(255,255,255,.65);margin-right:2px;}
+.gc-brightness{display:flex;align-items:center;gap:7px;margin-left:auto;}
+.gc-brightness label{font-size:.73rem;color:rgba(255,255,255,.6);}
+.gc-brightness input{width:75px;accent-color:var(--warm);cursor:pointer;}
+
+/* ━━━━ PROCESS ━━━━ */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin-top:56px;}
+@media(max-width:640px){.process-grid{grid-template-columns:1fr 1fr;}}
+.proc-step{background:var(--surface);padding:36px 28px;position:relative;transition:background var(--t);}
+.proc-n{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:18px;}
+.proc-ico{font-size:1.5rem;margin-bottom:14px;}
+.proc-step h3{font-size:.95rem;font-weight:700;margin-bottom:8px;letter-spacing:-.01em;}
+.proc-step p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.proc-ghost{position:absolute;bottom:12px;right:16px;font-size:3.5rem;font-weight:800;color:var(--text);opacity:.04;line-height:1;pointer-events:none;}
+
+/* ━━━━ AI SERVICES ━━━━ */
+.services-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin-top:56px;}
+.svc-item{background:var(--surface);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;transition:background var(--t);}
+.svc-item:hover{background:var(--bg2);}
+.svc-l{flex:1;}
+.svc-name{font-size:1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;}
+.svc-desc{font-size:.85rem;color:var(--text2);line-height:1.6;max-width:540px;}
+.svc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+.svc-tag{font-size:.7rem;font-weight:500;padding:3px 10px;border-radius:6px;background:var(--bg2);color:var(--text2);border:1px solid var(--border);}
+.svc-price{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:var(--accent);white-space:nowrap;text-align:right;}
+.svc-from{font-size:.68rem;color:var(--text3);font-weight:500;}
+
+/* ━━━━ PRICING ━━━━ */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;}
+@media(max-width:700px){.pricing-grid{grid-template-columns:1fr;}}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;position:relative;transition:all .3s;}
+.price-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);}
+.price-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow);}
+[data-theme="dark"] .price-card.featured{border-color:var(--neon-c);box-shadow:0 0 0 1px var(--neon-c),0 0 40px rgba(0,229,255,.08);}
+.featured-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:3px 14px;border-radius:980px;font-size:.7rem;font-weight:700;white-space:nowrap;}
+[data-theme="dark"] .featured-badge{background:var(--neon-c);color:#000;}
+.pc-tier{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.pc-price{font-size:2.8rem;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:4px;}
+.pc-price small{font-size:.9rem;font-weight:500;color:var(--text2);}
+.pc-desc{font-size:.83rem;color:var(--text2);margin-bottom:24px;}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:28px;}
+.pc-list li{font-size:.83rem;color:var(--text2);display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
+.pc-list li::before{content:'✓';color:var(--green-c);font-weight:700;flex-shrink:0;}
+.pc-btn{display:block;width:100%;text-align:center;padding:11px;border-radius:10px;font-size:.85rem;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:inherit;}
+.pc-btn.solid{background:var(--accent);color:#fff;}
+[data-theme="dark"] .pc-btn.solid{background:var(--neon-c);color:#000;}
+.pc-btn.ghost{border:1px solid var(--border2);color:var(--text2);background:transparent;}
+.pc-btn.ghost:hover{background:var(--bg2);color:var(--text);}
+
+/* ━━━━ FAQ ━━━━ */
+.faq-list{max-width:640px;margin:48px auto 0;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 0;cursor:pointer;font-size:.9rem;font-weight:500;color:var(--text);gap:16px;transition:color .2s;user-select:none;}
+.faq-q:hover{color:var(--accent);}
+.faq-ico{width:24px;height:24px;border-radius:50%;border:1px solid var(--border2);display:grid;place-items:center;font-size:.7rem;flex-shrink:0;transition:all .3s;color:var(--text2);}
+.faq-item.open .faq-ico{transform:rotate(45deg);background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="dark"] .faq-item.open .faq-ico{background:var(--neon-c);border-color:var(--neon-c);color:#000;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s;font-size:.88rem;color:var(--text2);line-height:1.75;padding:0;}
+.faq-item.open .faq-a{max-height:160px;padding-bottom:18px;}
+
+/* ━━━━ CTA BOX ━━━━ */
+.cta-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:72px 6%;text-align:center;position:relative;overflow:hidden;}
+.cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(0,113,227,.06),transparent 60%);pointer-events:none;}
+[data-theme="dark"] .cta-box::before{background:radial-gradient(ellipse at 50% -20%,rgba(0,229,255,.08),transparent 60%);}
+.cta-box h2{position:relative;margin-bottom:14px;}
+.cta-box p{position:relative;font-size:.95rem;color:var(--text2);max-width:440px;margin:0 auto 32px;line-height:1.7;}
+.cta-btns{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+/* ━━━━ TOAST ━━━━ */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--surface);border:1px solid var(--border2);backdrop-filter:blur(20px);border-radius:12px;padding:10px 18px;font-size:.83rem;display:flex;align-items:center;gap:8px;z-index:999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:var(--shadow-md);color:var(--text);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ━━━━ ORDER MODAL ━━━━ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:300;display:none;place-items:center;padding:20px;}
+.modal-overlay.open{display:grid;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:24px;width:100%;max-width:680px;max-height:90svh;overflow-y:auto;box-shadow:var(--shadow-lg);position:relative;}
+.modal-head{padding:28px 28px 0;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;background:var(--card);padding-bottom:16px;border-bottom:1px solid var(--border);z-index:2;}
+.modal-head h3{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;}
+.modal-head p{font-size:.82rem;color:var(--text2);margin-top:3px;}
+.modal-close{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);cursor:pointer;font-size:1rem;display:grid;place-items:center;transition:background .2s;flex-shrink:0;color:var(--text);}
+.modal-close:hover{background:var(--bg3);}
+.modal-body{padding:24px 28px;}
+.form-section{margin-bottom:28px;}
+.form-section-title{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+.form-row.single{grid-template-columns:1fr;}
+.form-field{display:flex;flex-direction:column;gap:5px;}
+.form-field label{font-size:.78rem;font-weight:600;color:var(--text2);}
+.form-field input,.form-field select,.form-field textarea{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-size:.88rem;color:var(--text);font-family:inherit;transition:border-color .2s,background .2s;outline:none;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--accent);background:var(--surface);}
+.form-field select{cursor:pointer;}
+.form-field textarea{resize:vertical;min-height:80px;}
+.check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+@media(max-width:420px){.check-grid{grid-template-columns:1fr;}}
+.check-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s;user-select:none;}
+.check-item:hover{border-color:var(--border2);}
+.check-item.checked{background:rgba(0,113,227,.08);border-color:rgba(0,113,227,.3);}
+[data-theme="dark"] .check-item.checked{background:rgba(0,229,255,.06);border-color:rgba(0,229,255,.2);}
+.check-item input{display:none;}
+.check-box{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);display:grid;place-items:center;flex-shrink:0;transition:all .2s;font-size:.6rem;color:transparent;background:transparent;}
+.check-item.checked .check-box{background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="dark"] .check-item.checked .check-box{background:var(--neon-c);border-color:var(--neon-c);color:#000;}
+.check-label{font-size:.8rem;font-weight:500;color:var(--text);}
+.check-plus{font-size:.7rem;color:var(--accent);font-weight:700;margin-left:auto;}
+/* Estimate box */
+.estimate-box{background:rgba(0,113,227,.06);border:1px solid rgba(0,113,227,.2);border-radius:14px;padding:18px;margin-bottom:24px;}
+[data-theme="dark"] .estimate-box{background:rgba(0,229,255,.05);border-color:rgba(0,229,255,.15);}
+.est-label{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.est-price-row{display:flex;justify-content:space-between;align-items:center;}
+.est-price{font-size:2rem;font-weight:700;letter-spacing:-.02em;color:var(--text);}
+.est-note{font-size:.72rem;color:var(--text2);margin-top:5px;line-height:1.5;}
+.est-breakdown{margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,113,227,.12);display:flex;flex-direction:column;gap:4px;}
+[data-theme="dark"] .est-breakdown{border-top-color:rgba(0,229,255,.08);}
+.est-line{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text2);}
+.est-line strong{color:var(--text);}
+.submit-btn{width:100%;padding:14px;border-radius:12px;background:var(--accent);color:#fff;font-size:.95rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:opacity .2s,transform .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+[data-theme="dark"] .submit-btn{background:var(--neon-c);color:#000;}
+.submit-btn:hover{opacity:.88;transform:scale(1.01);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.form-note{font-size:.73rem;color:var(--text3);text-align:center;margin-top:10px;line-height:1.6;}
+
+footer{border-top:1px solid var(--border);padding:32px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-logo{font-size:.9rem;font-weight:700;}
+.footer-logo em{color:var(--accent);font-style:normal;}
+footer p{font-size:.78rem;color:var(--text3);}
+
+/* ━━━━ MOBILE NAV ━━━━ */
+.nav-mob-menu{display:none;flex-direction:column;gap:0;position:fixed;inset-inline:0;top:52px;background:var(--bg);border-bottom:1px solid var(--border);z-index:199;padding:12px 0;}
+.nav-mob-menu.open{display:flex;}
+.nav-mob-item{padding:14px 6%;font-size:.9rem;font-weight:500;color:var(--text2);cursor:pointer;transition:background .15s;border:none;background:transparent;font-family:inherit;text-align:left;width:100%;text-decoration:none;display:block;}
+.nav-mob-item:hover,.nav-mob-item:active{background:var(--bg2);color:var(--text);}
+.nav-mob-item.accent{color:var(--accent);font-weight:700;}
+.nav-mob-sep{height:1px;background:var(--border);margin:6px 0;}
+.nav-hamburger{display:none;width:36px;height:36px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0;}
+.nav-hamburger span{width:16px;height:1.5px;background:var(--text);border-radius:2px;transition:all .3s;}
+
+/* ━━━━ MOBILE BREAKPOINTS ━━━━ */
+@media(max-width:780px){
+  .nav-center{display:none;}
+  .nav-contact{display:none;}
+  .nav-hamburger{display:flex;}
+  .nav-cta{padding:7px 14px;font-size:.77rem;}
+
+  h1{font-size:clamp(2.2rem,9vw,3.2rem);}
+  h2{font-size:clamp(1.6rem,6vw,2.2rem);}
+  .hero{padding:90px 5% 50px;}
+  .hero-sub{font-size:.95rem;}
+  .btn{padding:11px 20px;font-size:.85rem;}
+  .hero-actions{flex-direction:column;align-items:center;}
+  .hero-actions .btn{width:100%;max-width:320px;justify-content:center;}
+
+  .section{padding:64px 5%;}
+  .section-sm{padding:48px 5%;}
+
+  .feat-grid{grid-template-columns:1fr;}
+  .feat{padding:28px 24px;}
+
+  .demo-layout{grid-template-columns:1fr;gap:24px;}
+  .device{border-radius:16px;}
+  .fp-wrap{padding:10px;}
+
+  .qs-row{grid-template-columns:repeat(2,1fr);}
+  .rooms-grid{grid-template-columns:repeat(2,1fr);}
+
+  .process-grid{grid-template-columns:1fr 1fr;}
+  .proc-step{padding:24px 20px;}
+
+  .services-list{border-radius:var(--radius-sm);}
+  .svc-item{flex-direction:column;gap:10px;padding:20px;}
+  .svc-price{text-align:left;}
+
+  .pricing-grid{grid-template-columns:1fr;}
+
+  .cta-box{padding:48px 5%;}
+  .cta-btns{flex-direction:column;align-items:center;}
+  .cta-btns .btn{width:100%;max-width:320px;justify-content:center;}
+
+  .modal{border-radius:20px 20px 0 0;max-height:92svh;position:fixed;bottom:0;left:0;right:0;max-width:100%;}
+  .modal-overlay{align-items:flex-end;padding:0;}
+  .modal-body{padding:20px;}
+  .modal-head{padding:20px 20px 14px;}
+
+  footer{flex-direction:column;text-align:center;padding:24px 5%;gap:6px;}
+
+  .demo-side{display:none;}
+  .garden-controls{gap:7px;padding:14px;}
+  .gc-brightness{display:none;}
+}
+
+@media(max-width:480px){
+  .qs-row{grid-template-columns:1fr 1fr;}
+  .rooms-grid{grid-template-columns:1fr 1fr;}
+  .check-grid{grid-template-columns:1fr;}
+  .sq-row{gap:5px;}
+  .sq-btn{padding:7px 10px;font-size:.72rem;}
+  .scene-row-top{gap:4px;padding:8px 10px;}
+  .scene-pill{padding:4px 10px;font-size:.72rem;}
+  h1{font-size:2.1rem;}
+}
+
+/* ━━━━ TIER CARDS ━━━━ */
+.tiers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+@media(max-width:860px){.tiers-grid{grid-template-columns:1fr;max-width:400px;margin-inline:auto;}}
+.tier-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:14px;transition:all .35s;}
+.tier-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+.tier-featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+[data-theme="dark"] .tier-featured{border-color:var(--neon-c);box-shadow:0 0 0 1px var(--neon-c),0 0 32px rgba(0,229,255,.06);}
+.tier-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:980px;font-size:.68rem;font-weight:700;letter-spacing:.5px;width:fit-content;}
+.tier-price{font-size:1.8rem;font-weight:700;letter-spacing:-.02em;}
+.tier-price span{font-size:.85rem;font-weight:400;color:var(--text2);}
+.tier-preview{border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);}
+.tier-mock{background:var(--bg2);min-height:120px;}
+.tier-list{list-style:none;display:flex;flex-direction:column;gap:7px;flex:1;}
+.tier-list li{font-size:.82rem;color:var(--text2);display:flex;gap:7px;align-items:center;}
+.tier-list li::before{content:'✓';color:var(--green-c);font-weight:700;flex-shrink:0;}
+.tier-btn{padding:11px;border-radius:10px;font-size:.85rem;font-weight:600;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;text-align:center;}
+.tier-btn:hover{background:var(--bg2);color:var(--text);}
+.tier-btn-fill{background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="dark"] .tier-btn-fill{background:var(--neon-c);border-color:var(--neon-c);color:#000;}
+.tier-btn-fill:hover{opacity:.85;background:var(--accent);}
+
+/* ━━━━ STATS ROW ━━━━ */
+.stats-row{display:flex;align-items:center;justify-content:center;gap:0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:40px;}
+@media(max-width:600px){.stats-row{flex-wrap:wrap;gap:16px;}.stat-div{display:none;}}
+.stat-item{text-align:center;flex:1;}
+.stat-num{font-size:2rem;font-weight:700;letter-spacing:-.03em;color:var(--accent);}
+[data-theme="dark"] .stat-num{background:linear-gradient(135deg,var(--neon-c),var(--neon-p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-lbl{font-size:.75rem;color:var(--text2);margin-top:3px;font-weight:500;}
+.stat-div{width:1px;height:40px;background:var(--border);flex-shrink:0;}
+
+/* ━━━━ REVIEWS ━━━━ */
+.reviews-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media(max-width:680px){.reviews-grid{grid-template-columns:1fr;}}
+.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s;}
+.review-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.review-stars{color:#f5a623;font-size:.95rem;letter-spacing:1px;margin-bottom:12px;}
+.review-text{font-size:.85rem;color:var(--text2);line-height:1.7;margin-bottom:16px;font-style:italic;}
+.review-author{display:flex;align-items:center;gap:10px;}
+.review-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;font-weight:700;color:#fff;flex-shrink:0;}
+.review-name{font-size:.83rem;font-weight:600;}
+.review-loc{font-size:.72rem;color:var(--text3);}
+
+/* ━━━━ PORTFOLIO ━━━━ */
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
+@media(max-width:860px){.portfolio-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.portfolio-grid{grid-template-columns:1fr;}}
+.portfolio-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .3s;}
+.portfolio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.portfolio-preview{height:180px;overflow:hidden;}
+.portfolio-info{padding:16px;}
+.portfolio-title{font-size:.85rem;font-weight:600;margin-bottom:8px;}
+.portfolio-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.portfolio-tags span{font-size:.68rem;padding:3px 9px;border-radius:6px;background:var(--bg2);color:var(--text2);border:1px solid var(--border);}
+
+/* ━━━━ HERO DEVICE MOCKUP ━━━━ */
+.hero-device{display:flex;justify-content:center;align-items:flex-end;gap:-30px;position:relative;height:220px;}
+.hd-phone{width:110px;height:200px;background:var(--bg3);border:2px solid var(--border2);border-radius:22px;position:relative;z-index:2;box-shadow:var(--shadow-lg);overflow:visible;flex-shrink:0;}
+.hd-notch{width:28px;height:6px;background:var(--bg3);border-radius:0 0 5px 5px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:3;}
+.hd-screen{position:absolute;inset:8px;border-radius:15px;background:var(--bg);overflow:hidden;border:1px solid var(--border);}
+.hd-tablet{width:200px;height:155px;background:var(--bg3);border:2px solid var(--border2);border-radius:14px;position:absolute;right:calc(50% - 190px);bottom:0;z-index:1;box-shadow:var(--shadow-md);overflow:hidden;}
+.hd-tablet-screen{position:absolute;inset:6px;border-radius:9px;background:var(--bg);overflow:hidden;border:1px solid var(--border);}
+@media(max-width:780px){.hero-device{display:none;}}
+
+/* ━━━━ BEFORE / AFTER ━━━━ */
+.ba-container{margin-top:48px;}
+.ba-slider-wrap{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);height:260px;box-shadow:var(--shadow-lg);user-select:none;}
+.ba-before{position:absolute;inset:0;background:#f5f5f7;z-index:1;}
+.ba-after{position:absolute;inset:0;background:#07080f;z-index:2;clip-path:inset(0 50% 0 0);transition:clip-path 0s;}
+.ba-label{position:absolute;top:10px;font-size:.68rem;font-weight:700;letter-spacing:.5px;padding:4px 10px;border-radius:5px;z-index:5;pointer-events:none;}
+.ba-label-before{left:10px;background:rgba(29,29,31,.12);color:#1d1d1f;}
+.ba-label-after{right:10px;background:rgba(255,255,255,.12);color:#f5f5f7;}
+.ba-handle{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;cursor:ew-resize;width:40px;}
+.ba-handle-line{flex:1;width:2px;background:rgba(255,255,255,.8);}
+.ba-handle-btn{width:36px;height:28px;background:white;border-radius:8px;display:grid;place-items:center;font-size:.65rem;color:#1d1d1f;box-shadow:0 2px 8px rgba(0,0,0,.3);flex-shrink:0;font-weight:700;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ANIMATION SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Custom scrollbar */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text3);}
+
+/* ── Light spread keyframe ── */
+@keyframes lightSpread{
+  0%{r:0;opacity:.9;}
+  60%{opacity:.5;}
+  100%{r:80;opacity:0;}
+}
+@keyframes bulbOn{
+  0%{filter:brightness(.3);transform:scale(.8);}
+  50%{filter:brightness(1.6);}
+  100%{filter:brightness(1);transform:scale(1);}
+}
+@keyframes roomGlow{
+  0%{opacity:0;}
+  40%{opacity:1.1;}
+  100%{opacity:1;}
+}
+@keyframes countUp{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:none;}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-8px);}
+}
+@keyframes floatSlow{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  33%{transform:translateY(-10px) rotate(2deg);}
+  66%{transform:translateY(4px) rotate(-1deg);}
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,113,227,.3);}
+  50%{box-shadow:0 0 0 8px rgba(0,113,227,0);}
+}
+@keyframes shimmer{
+  0%{background-position:-200% 0;}
+  100%{background-position:200% 0;}
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(30px,-20px) scale(1.1);}
+  66%{transform:translate(-15px,25px) scale(.95);}
+}
+@keyframes scanLine{
+  0%{transform:translateY(-100%);}
+  100%{transform:translateY(100vh);}
+}
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:none;}
+}
+@keyframes neonFlicker{
+  0%,100%{opacity:1;}
+  92%{opacity:1;}
+  93%{opacity:.6;}
+  94%{opacity:1;}
+  96%{opacity:.8;}
+  97%{opacity:1;}
+}
+
+/* ── Hero particles ── */
+.hero-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hero-particle{position:absolute;border-radius:50%;animation:floatSlow var(--dur,8s) ease-in-out infinite;opacity:var(--op,.15);}
+
+/* ── Orbs animated ── */
+.orb{animation:orbFloat 12s ease-in-out infinite;}
+.orb1{animation-delay:0s;}
+.orb2{animation-delay:-4s;}
+
+/* ── Hero device float ── */
+.hd-phone{animation:float 5s ease-in-out infinite;}
+.hd-tablet{animation:float 6s ease-in-out infinite;animation-delay:-2s;}
+
+/* ── 3D Tilt Cards ── */
+.tilt-card{transform-style:preserve-3d;transition:transform .4s cubic-bezier(.03,.98,.52,.99) !important;}
+.tilt-card .tilt-shine{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,0));opacity:0;transition:opacity .3s;pointer-events:none;z-index:1;}
+
+/* ── Dark mode glassmorphism ── */
+[data-theme="dark"] .card,
+[data-theme="dark"] .tier-card,
+[data-theme="dark"] .review-card,
+[data-theme="dark"] .portfolio-card,
+[data-theme="dark"] .price-card{
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-color:rgba(255,255,255,.08);
+}
+[data-theme="dark"] .tier-featured{
+  background:rgba(0,229,255,.04);
+  border-color:rgba(0,229,255,.25);
+  box-shadow:0 0 0 1px rgba(0,229,255,.2),0 0 40px rgba(0,229,255,.06),inset 0 1px 0 rgba(0,229,255,.1);
+}
+
+/* ── Dark mode floor plan ── */
+[data-theme="dark"] #fp rect[fill="url(#wood)"],
+[data-theme="dark"] #fp rect[fill="url(#wood2)"]{opacity:.7;}
+[data-theme="dark"] #fp{filter:brightness(.75) saturate(.9);}
+[data-theme="dark"] #fp circle[id^="b-"]{filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px currentColor);}
+
+/* ── Ambient page tint ── */
+#ambient-bg{position:fixed;inset:0;pointer-events:none;z-index:-1;transition:background 3s ease;background:transparent;}
+
+/* ── Scene button animation ── */
+.scene-pill,.scene-row-btn,.sq-btn{position:relative;overflow:hidden;}
+.scene-pill::after,.sq-btn::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,255,255,.3),transparent 70%);opacity:0;transform:scale(0);transition:transform .4s,opacity .4s;}
+.scene-pill:active::after,.sq-btn:active::after{opacity:1;transform:scale(2);}
+
+/* ── Stat number ── */
+.stat-num{transition:all .4s;}
+
+/* ── Nav glass pulse when order btn hovered ── */
+.nav-cta{position:relative;}
+.nav-cta::before{content:'';position:absolute;inset:-3px;border-radius:inherit;background:var(--accent);opacity:.15;filter:blur(8px);z-index:-1;animation:pulse 2.5s ease-in-out infinite;}
+[data-theme="dark"] .nav-cta::before{background:var(--neon-c);}
+
+/* ── Light on notification toast ── */
+.light-notif{position:fixed;top:64px;right:20px;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:10px 16px;font-size:.8rem;display:flex;align-items:center;gap:8px;z-index:998;transform:translateX(120%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--shadow-md);}
+.light-notif.show{transform:translateX(0);}
+
+/* ── Active scene ambient glow on fp container ── */
+.fp-container{transition:box-shadow .8s ease;}
+.fp-container.scene-relax{box-shadow:0 0 40px rgba(245,166,35,.12);}
+.fp-container.scene-movie{box-shadow:0 0 40px rgba(100,60,180,.15);}
+[data-theme="dark"] .fp-container.scene-relax{box-shadow:0 0 60px rgba(245,166,35,.18);}
+[data-theme="dark"] .fp-container.scene-movie{box-shadow:0 0 60px rgba(224,64,251,.15);}
+
+/* ── Dashboard live clock ── */
+.dash-clock{font-size:.8rem;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;}
+
+/* ── Progress ring for sensors ── */
+.sensor-ring-wrap{display:flex;flex-direction:column;gap:10px;}
+.sensor-ring-row{display:flex;align-items:center;gap:12px;}
+.sensor-ring-bar{flex:1;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;}
+.sensor-ring-fill{height:100%;border-radius:2px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+
+/* ── Shine on room cards ── */
+.room-card{overflow:hidden;}
+.room-card::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.06) 50%,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;}
+.room-card:hover::after{opacity:1;}
+
+/* ── Button ripple ── */
+.btn{position:relative;overflow:hidden;}
+.btn::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);transition:transform .5s,opacity .5s;pointer-events:none;width:100%;height:100%;top:0;left:0;}
+.btn:active::after{transform:scale(2.5);opacity:0;}
+
+/* ── Scroll progress bar ── */
+#scroll-progress{position:fixed;top:52px;left:0;height:2px;background:var(--accent);z-index:199;transition:width .1s;width:0%;}
+[data-theme="dark"] #scroll-progress{background:linear-gradient(90deg,var(--neon-c),var(--neon-p));}
+
+/* ── Section number markers ── */
+.section-marker{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
+.sm-num{width:28px;height:28px;border-radius:50%;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2);display:grid;place-items:center;font-size:.7rem;font-weight:800;color:var(--accent);}
+
+/* ── Smooth tab transition ── */
+.page{transition:opacity .3s ease;}
+.page.active{animation:fadeSlideUp .4s ease forwards;}
+
+/* ── Dark mode scan line effect (subtle) ── */
+[data-theme="dark"] .hero::after{
+  content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;opacity:.4;
+}
+
+
+/* ━━━━ AI HERO WORKFLOW ━━━━ */
+.ai-hero .hero-inner{max-width:860px;}
+.workflow-demo{text-align:left;}
+.wf-nodes{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;gap:4px;}
+.wf-node{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 18px;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:90px;backdrop-filter:blur(8px);transition:all .4s;animation:fadeSlideUp .6s ease both;}
+[data-theme="light"] .wf-node{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);}
+.wf-node:nth-child(1){animation-delay:.1s;}
+.wf-node:nth-child(3){animation-delay:.3s;}
+.wf-node:nth-child(5){animation-delay:.5s;}
+.wf-node:nth-child(7){animation-delay:.7s;}
+.wf-node:hover{transform:translateY(-3px);border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06);}
+[data-theme="light"] .wf-node:hover{border-color:rgba(0,113,227,.2);background:rgba(0,113,227,.04);}
+.wf-ico{font-size:1.4rem;}
+.wf-lbl{font-size:.68rem;font-weight:600;color:var(--text2);text-align:center;white-space:nowrap;}
+.wf-trigger{border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.06);}
+.wf-ai{border-color:rgba(224,64,251,.3);background:rgba(224,64,251,.06);}
+.wf-action{border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06);}
+.wf-notify{border-color:rgba(48,209,88,.3);background:rgba(48,209,88,.06);}
+.wf-arrow{width:40px;height:24px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;}
+.wf-arrow::before{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.15),rgba(0,229,255,.4),rgba(255,255,255,.15));}
+[data-theme="light"] .wf-arrow::before{background:linear-gradient(90deg,rgba(0,0,0,.1),rgba(0,113,227,.3),rgba(0,0,0,.1));}
+.wf-dot{width:8px;height:8px;border-radius:50%;background:var(--neon-c,#00e5ff);animation:wfDotMove 2s ease-in-out infinite;box-shadow:0 0 6px var(--neon-c,#00e5ff);position:absolute;left:0;}
+[data-theme="light"] .wf-dot{background:var(--accent);box-shadow:0 0 6px var(--accent);}
+.wf-arrow:nth-of-type(4) .wf-dot{animation-delay:.6s;}
+.wf-arrow:nth-of-type(6) .wf-dot{animation-delay:1.2s;}
+@keyframes wfDotMove{
+  0%{left:0;opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:1;}
+  100%{left:calc(100% - 8px);opacity:0;}
+}
+.wf-label{text-align:center;font-size:.8rem;color:var(--text2);margin-top:16px;font-style:italic;}
+@media(max-width:600px){.wf-arrow{width:20px;}.wf-node{min-width:70px;padding:10px 12px;}.wf-lbl{font-size:.6rem;}}
+
+
+/* ── Dark mode floor plan override ── */
+[data-theme="dark"] #fp{filter:none;}
+[data-theme="dark"] #fp > rect:first-of-type{fill:#1a1510 !important;}
+[data-theme="dark"] .device{background:#0d0d0f;border-color:rgba(255,255,255,.1);}
+[data-theme="dark"] .scene-row-top{background:rgba(255,255,255,.03);}
+[data-theme="dark"] .fp-wrap{background:#0d0d0f;}
+
+
+/* ── Live Automation Ticker ── */
+.auto-ticker-wrap{overflow:hidden;}
+.auto-ticker-label{font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.auto-ticker-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green-c);animation:pulse 1.5s ease-in-out infinite;flex-shrink:0;}
+.auto-ticker{display:flex;gap:8px;animation:tickerScroll 20s linear infinite;width:max-content;}
+.auto-ticker-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;white-space:nowrap;font-size:.75rem;color:var(--text2);display:flex;align-items:center;gap:6px;}
+.auto-ticker-item strong{color:var(--text);}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+
+/* ━━━━ FINAL POLISH ━━━━ */
+
+/* Nav glow on dark */
+[data-theme="dark"] .nav{border-bottom-color:rgba(255,255,255,.04);box-shadow:0 1px 0 rgba(255,255,255,.04),0 4px 24px rgba(0,0,0,.4);}
+
+/* Hero headline gradient in dark */
+[data-theme="dark"] h1{text-shadow:none;}
+[data-theme="dark"] .hero .eyebrow{color:var(--neon-c);}
+[data-theme="dark"] .eyebrow::before{content:'⬡';}
+
+/* Bigger section numbers */
+h2{position:relative;}
+
+/* Smooth image-like floor plan shadow */
+#fp{box-shadow:0 8px 48px rgba(0,0,0,.18),0 2px 8px rgba(0,0,0,.1);}
+[data-theme="dark"] #fp{box-shadow:0 8px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);}
+
+/* Review card neon border on hover in dark */
+[data-theme="dark"] .review-card:hover{border-color:rgba(0,229,255,.2);box-shadow:0 0 24px rgba(0,229,255,.05);}
+
+/* Tier featured card neon glow label */
+[data-theme="dark"] .tier-featured .tier-badge{background:rgba(0,229,255,.12);color:var(--neon-c);border-color:rgba(0,229,255,.2);}
+
+/* Mobile: reduce hero device size */
+@media(max-width:900px){.hd-tablet{display:none;}}
+
+/* Active room card neon in dark */
+[data-theme="dark"] .room-card.on{box-shadow:0 0 20px rgba(255,165,0,.08),inset 0 0 20px rgba(255,165,0,.04);}
+
+/* Better portfolio card hover */
+[data-theme="dark"] .portfolio-card:hover{border-color:rgba(255,255,255,.12);box-shadow:0 20px 60px rgba(0,0,0,.5);}
+
+/* Smooth label/eyebrow */
+.label{transition:color var(--t);}
+
+/* wf node active pulse */
+.wf-notify{animation:wfNodePulse 2s ease-in-out 1.5s infinite !important;}
+@keyframes wfNodePulse{
+  0%,100%{transform:none;border-color:rgba(48,209,88,.3);}
+  50%{transform:scale(1.04);border-color:rgba(48,209,88,.6);box-shadow:0 0 16px rgba(48,209,88,.15);}
+}
+
+/* Stats row in dark */
+[data-theme="dark"] .stats-row{background:rgba(255,255,255,.03);}
+
+/* Hero CTA second button in dark */
+[data-theme="dark"] .btn-outline{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.8);}
+[data-theme="dark"] .btn-outline:hover{background:rgba(255,255,255,.06);}
+
+/* Tier price in dark */
+[data-theme="dark"] .tier-price{background:linear-gradient(135deg,var(--text),rgba(245,245,247,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* Garden section dark */
+[data-theme="dark"] .garden-section{background:var(--bg);}
+
+/* CTA box gradient on dark */
+[data-theme="dark"] .cta-box{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.06);}
+[data-theme="dark"] .cta-box::before{background:radial-gradient(ellipse at 50% -30%,rgba(0,229,255,.06),transparent 60%);}
+
+
+/* ━━━━ ROOM TOOLTIP ━━━━ */
+.fp-tooltip{
+  position:absolute;background:var(--card);border:1px solid var(--border2);
+  border-radius:10px;padding:8px 12px;font-size:.75rem;pointer-events:none;
+  z-index:50;box-shadow:var(--shadow-md);min-width:120px;
+  transform:translateX(-50%);transition:opacity .2s;opacity:0;
+  white-space:nowrap;
+}
+.fp-tooltip.show{opacity:1;}
+.fp-tooltip-name{font-weight:700;margin-bottom:3px;color:var(--text);}
+.fp-tooltip-status{color:var(--text2);}
+.fp-tooltip-color{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+
+
+/* ━━━━ HOW IT WORKS TIMELINE ━━━━ */
+.hiw-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.hiw-timeline{margin-top:56px;display:flex;flex-direction:column;gap:0;position:relative;max-width:680px;margin-inline:auto;}
+.hiw-timeline::before{content:'';position:absolute;left:27px;top:28px;bottom:28px;width:1px;background:linear-gradient(to bottom,var(--accent),var(--border),transparent);}
+[data-theme="dark"] .hiw-timeline::before{background:linear-gradient(to bottom,var(--neon-c),rgba(255,255,255,.08),transparent);}
+.hiw-step{display:flex;gap:24px;padding:0 0 40px;position:relative;}
+.hiw-last{padding-bottom:0;}
+.hiw-icon-wrap{width:56px;height:56px;border-radius:50%;background:var(--card);border:1px solid var(--border2);display:grid;place-items:center;flex-shrink:0;position:relative;z-index:1;transition:all .4s;}
+.hiw-step:hover .hiw-icon-wrap{border-color:var(--accent);background:rgba(0,113,227,.06);transform:scale(1.08);}
+[data-theme="dark"] .hiw-step:hover .hiw-icon-wrap{border-color:var(--neon-c);background:rgba(0,229,255,.05);box-shadow:0 0 20px rgba(0,229,255,.1);}
+.hiw-icon{font-size:1.4rem;}
+.hiw-content{padding-top:12px;}
+.hiw-content h3{font-size:1rem;font-weight:700;margin-bottom:8px;letter-spacing:-.01em;}
+.hiw-content p{font-size:.87rem;color:var(--text2);line-height:1.7;}
+.hiw-step::before{content:attr(data-n);position:absolute;left:40px;top:-8px;font-size:.6rem;font-weight:800;letter-spacing:1px;color:var(--accent);opacity:.5;}
+[data-theme="dark"] .hiw-step::before{color:var(--neon-c);}
+
+
+/* ━━━━ TRUST BADGES ━━━━ */
+.trust-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.trust-item{display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:980px;font-size:.78rem;font-weight:500;color:var(--text2);transition:all .2s;}
+.trust-item:hover{border-color:var(--border2);color:var(--text);background:var(--bg3);}
+.trust-ico{font-size:.9rem;}
+[data-theme="dark"] .trust-item{background:rgba(255,255,255,.04);}
+[data-theme="dark"] .trust-item:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);}
+
+/* ━━━━ FAB ━━━━ */
+.fab{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;border-radius:980px;padding:12px 20px;display:flex;align-items:center;gap:8px;cursor:pointer;z-index:190;box-shadow:0 4px 20px rgba(0,113,227,.4);transition:all .3s cubic-bezier(.34,1.56,.64,1);font-size:.82rem;font-weight:700;animation:fadeSlideUp .6s 1s ease both;}
+.fab:hover{transform:scale(1.06) translateY(-2px);box-shadow:0 8px 32px rgba(0,113,227,.5);}
+.fab-ico{font-size:1rem;}
+.fab-txt{}
+[data-theme="dark"] .fab{background:linear-gradient(135deg,var(--neon-c),#0077cc);color:#000;box-shadow:0 4px 20px rgba(0,229,255,.3);}
+[data-theme="dark"] .fab:hover{box-shadow:0 8px 32px rgba(0,229,255,.4);}
+@media(max-width:780px){.fab-txt{display:none;}.fab{padding:14px;border-radius:50%;}}
+
+
 /* ━━━━ PHOTO FLOOR PLAN ━━━━ */
 .photo-fp{
   position:relative;border-radius:14px;overflow:hidden;
@@ -4295,552 +5943,354 @@ window.toggleTheme = function(){
 console.log('🏠 autoflow-lab dashboard v8 — animations loaded');
 
 
-// ══════════════════════════════════════════════
-//  INDIVIDUAL LAMP CONTROL SYSTEM
-// ══════════════════════════════════════════════
+
+
+
+// ══════════════════════════════════════════════════════
+//  LAMP SYSTEM v14 — Photo Floor Plan with LED Strips
+// ══════════════════════════════════════════════════════
 
 const LAMP_COLORS = {
-  warm:  {color:'#f5a623', label:'Warm White', op:.75},
-  cool:  {color:'#cce8ff', label:'Cool White', op:.65},
-  white: {color:'#ffffff', label:'Pure White', op:.6},
-  cyan:  {color:'#00e5ff', label:'Cyan',        op:.7},
-  pink:  {color:'#e040fb', label:'Pink',         op:.7},
-  green: {color:'#69ff47', label:'Green',        op:.65},
-  red:   {color:'#ff3b30', label:'Red',          op:.65},
-  blue:  {color:'#2997ff', label:'Blue',         op:.7},
+  warm:   { color:'#ffe090', gc:'#f5b840', label:'Warm White',  op:0.88 },
+  cool:   { color:'#d0eeff', gc:'#80c8ff', label:'Cool White',  op:0.72 },
+  white:  { color:'#ffffff', gc:'#e0f0ff', label:'Pure White',  op:0.80 },
+  cyan:   { color:'#40ffff', gc:'#00d0e0', label:'Cyan',        op:0.82 },
+  blue:   { color:'#60a0ff', gc:'#2060ff', label:'Blue',        op:0.75 },
+  pink:   { color:'#ff70e0', gc:'#e040fb', label:'Pink',        op:0.72 },
+  purple: { color:'#c060ff', gc:'#9020e0', label:'Purple',      op:0.70 },
+  red:    { color:'#ff6040', gc:'#ff1800', label:'Red',         op:0.70 },
+  green:  { color:'#70ff60', gc:'#30d040', label:'Green',       op:0.72 },
+  amber:  { color:'#ffc030', gc:'#e07800', label:'Amber',       op:0.85 },
 };
 
-// Lamp definitions: id → {on, color, label, zone}
-const lamps = {
-  L1:  {on:true,  color:'warm',  label:'Ceiling 1', zone:'Living Room'},
-  L2:  {on:true,  color:'warm',  label:'Ceiling 2', zone:'Living Room'},
-  L3:  {on:true,  color:'warm',  label:'Floor Lamp', zone:'Living Room'},
-  K1:  {on:false, color:'cool',  label:'Ceiling 1', zone:'Kitchen'},
-  K2:  {on:false, color:'cool',  label:'Counter',   zone:'Kitchen'},
-  B1:  {on:false, color:'warm',  label:'Ceiling',   zone:'Bedroom'},
-  B2:  {on:false, color:'warm',  label:'Bedside',   zone:'Bedroom'},
-  BA1: {on:false, color:'white', label:'Ceiling',   zone:'Bathroom'},
-  H1:  {on:false, color:'cool',  label:'Hallway',   zone:'Hallway'},
-  O1:  {on:true,  color:'green', label:'Deck Left', zone:'Outdoor'},
-  O2:  {on:true,  color:'green', label:'Deck Right',zone:'Outdoor'},
+// LED zone → list of strip element IDs
+const LED_ZONES = {
+  bed1:    ['ls-bed1-back','ls-bed1-left','ls-bed1-right'],
+  bed2:    ['ls-bed2-back','ls-bed2-left','ls-bed2-right'],
+  bath:    ['ls-bath-back','ls-bath-right','ls-bath-left'],
+  office:  ['ls-off-back','ls-off-left'],
+  kitchen: ['ls-kit-counter'],
 };
 
-function getLampColor(id){return LAMP_COLORS[lamps[id]?.color]||LAMP_COLORS.warm;}
-
-function applyLamp(id){
-  const l = lamps[id]; if(!l) return;
-  const on = l.on;
-  const lc = getLampColor(id);
-  const col = lc.color;
-  const op  = lc.op;
-
-  // Bulb element
-  const bulb = document.getElementById('lc-'+id);
-  if(bulb){
-    bulb.setAttribute('fill', on ? col : '#7a7a7a');
-    bulb.setAttribute('filter', on ? 'url(#softglow)' : 'none');
-    bulb.setAttribute('r', on ? '7' : '5');
-  }
-  // Ring
-  const ring = document.getElementById('lr-'+id);
-  if(ring){
-    ring.setAttribute('stroke', on ? col : '#5a5a5a');
-    ring.setAttribute('opacity', on ? '0.55' : '0.18');
-  }
-  // Pool gradient — update color
-  const grad = document.getElementById('lg-'+id);
-  if(grad){
-    const stops = grad.querySelectorAll('stop');
-    if(stops[0]){stops[0].setAttribute('stop-color', col); stops[0].setAttribute('stop-opacity', on ? String(op) : '0');}
-    if(stops[1]){stops[1].setAttribute('stop-color', col); stops[1].setAttribute('stop-opacity', on ? String(op*.28) : '0');}
-    if(stops[2]){stops[2].setAttribute('stop-color', col); stops[2].setAttribute('stop-opacity', '0');}
-  }
-  // Pool opacity
-  const pool = document.getElementById('pool-'+id);
-  if(pool) pool.setAttribute('opacity', on ? '1' : '0');
-
-  buildLampList();
-  updateLampCounts();
-}
-
-function lampClick(id, e){
-  if(e) e.preventDefault();
-  lamps[id].on = !lamps[id].on;
-  applyLamp(id);
-  // Spread ring animation
-  if(lamps[id].on) animateLampOn(id);
-  showToast(lamps[id].on ? '💡' : '🌑', lamps[id].zone + ' — ' + lamps[id].label + ' ' + (lamps[id].on?'on':'off'));
-  closeColorPicker();
-}
-
-function lampLongPress(id, e){
-  e.preventDefault();
-  openLampColorPicker(id, e);
-}
-
-let lpTimer = null;
-function lampTouchStart(id, e){
-  lpTimer = setTimeout(()=>openLampColorPicker(id, e.touches[0]), 600);
-}
-function lampTouchEnd(e){ clearTimeout(lpTimer); }
-
-function animateLampOn(id){
-  const svg = document.getElementById('fp-lights');
-  const bulb = document.getElementById('lc-'+id);
-  if(!svg||!bulb) return;
-  const cx = bulb.getAttribute('cx'); const cy = bulb.getAttribute('cy');
-  const col = getLampColor(id).color;
-  const pulse = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  pulse.setAttribute('cx',cx); pulse.setAttribute('cy',cy);
-  pulse.setAttribute('r','4'); pulse.setAttribute('fill','none');
-  pulse.setAttribute('stroke',col); pulse.setAttribute('stroke-width','2');
-  pulse.style.animation = 'ringPulse .7s ease-out forwards';
-  svg.appendChild(pulse);
-  setTimeout(()=>pulse.remove(), 750);
-}
-
-// ── Lamp Color Picker ──
-let cpLamp = null;
-function openLampColorPicker(id, e){
-  cpLamp = id;
-  const pop = document.getElementById('color-popover');
-  const container = document.getElementById('fp-container');
-  if(!pop||!container) return;
-  const cr = container.getBoundingClientRect();
-  let x = ((e.clientX||0) - cr.left);
-  let y = ((e.clientY||0) - cr.top);
-  x = Math.min(x, cr.width-185); y = Math.min(y, cr.height-160);
-  pop.style.left = Math.max(5,x)+'px';
-  pop.style.top  = Math.max(5,y)+'px';
-  pop.style.transform = 'none';
-  document.getElementById('cp-room-label').textContent = '💡 '+ lamps[id].label + ' · ' + lamps[id].zone;
-  const sw = document.getElementById('cp-swatches');
-  sw.innerHTML = '';
-  Object.entries(LAMP_COLORS).forEach(([k,v])=>{
-    const d = document.createElement('div');
-    d.className='cp-sw'+(lamps[id].color===k?' active':'');
-    d.style.background = v.color;
-    d.style.border = v.color==='#ffffff' ? '1px solid #ccc' : '';
-    d.title = v.label;
-    d.onclick = ()=>{
-      lamps[id].color = k;
-      lamps[id].on = true;
-      applyLamp(id);
-      animateLampOn(id);
-      document.querySelectorAll('.cp-sw').forEach(s=>s.classList.remove('active'));
-      d.classList.add('active');
-      showToast('🎨', lamps[id].label+' → '+v.label);
-    };
-    sw.appendChild(d);
-  });
-  const bright = document.getElementById('cp-bright');
-  if(bright) bright.value = 80;
-  pop.classList.add('show');
-}
-
-function closeColorPicker(){
-  const p=document.getElementById('color-popover');
-  if(p)p.classList.remove('show');
-  cpLamp=null;
-}
-
-function applyLampBrightness(val){
-  if(!cpLamp) return;
-  const l = lamps[cpLamp]; const col = getLampColor(cpLamp).color;
-  const op = (val/100) * LAMP_COLORS[l.color].op;
-  const grad = document.getElementById('lg-'+cpLamp);
-  if(grad){ const s=grad.querySelectorAll('stop'); if(s[0])s[0].setAttribute('stop-opacity',String(op)); if(s[1])s[1].setAttribute('stop-opacity',String(op*.3)); }
-}
-
-// ── Lamp list panel ──
-function buildLampList(){
-  const el = document.getElementById('room-list');
-  if(!el) return;
-  el.innerHTML = '';
-  const zones = {};
-  Object.entries(lamps).forEach(([id,l])=>{
-    if(!zones[l.zone]) zones[l.zone]=[];
-    zones[l.zone].push({id,...l});
-  });
-  Object.entries(zones).forEach(([zone,ls])=>{
-    // Zone header
-    const hdr = document.createElement('div');
-    hdr.style.cssText='font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:6px 10px 3px;';
-    hdr.textContent = zone;
-    el.appendChild(hdr);
-    ls.forEach(l=>{
-      const c = getLampColor(l.id).color;
-      const d = document.createElement('div');
-      d.className = 'lamp-row';
-      d.innerHTML = `
-        <div class="lamp-dot ${l.on?'on':''}" style="background:${l.on?c:'#6a6a6a'};${l.on?'box-shadow:0 0 6px '+c:''}"></div>
-        <div class="lamp-name">${l.label}</div>
-        <div class="lamp-sw ${l.on?'on':''}" onclick="event.stopPropagation();lamps['${l.id}'].on=!lamps['${l.id}'].on;applyLamp('${l.id}');if(lamps['${l.id}'].on)animateLampOn('${l.id}')"></div>
-      `;
-      d.onclick = ()=>{ lamps[l.id].on=!lamps[l.id].on; applyLamp(l.id); if(lamps[l.id].on)animateLampOn(l.id); };
-      d.oncontextmenu = e=>{ e.preventDefault(); openLampColorPicker(l.id,e); };
-      el.appendChild(d);
-    });
-  });
-}
-
-function updateLampCounts(){
-  const onCount = Object.values(lamps).filter(l=>l.on).length;
-  const qe = document.getElementById('qs-lights');
-  if(qe) qe.textContent = onCount;
-}
-
-// ── Scene presets now control lamps ──
-const LAMP_SCENES = {
-  relax:  {L1:'warm',L2:'warm',L3:'warm',K1:null,K2:null,B1:null,B2:null,BA1:null,H1:null,O1:'warm',O2:'warm'},
-  normal: {L1:'warm',L2:'cool',L3:'warm',K1:'cool',K2:'cool',B1:null,B2:null,BA1:null,H1:'cool',O1:'green',O2:'green'},
-  movie:  {L1:'pink',L2:null, L3:'red', K1:null,K2:null,B1:null,B2:null,BA1:null,H1:null,O1:null,O2:null},
-  alloff: {L1:null,L2:null,L3:null,K1:null,K2:null,B1:null,B2:null,BA1:null,H1:null,O1:null,O2:null},
+// Zone → room ambient gradient stops
+const ZONE_GRAD = {
+  bed1:    {el:'rg-bed1',   s0:'rg-bed1-s0',  s1:'rg-bed1-s1'},
+  bed2:    {el:'rg-bed2',   s0:'rg-bed2-s0',  s1:'rg-bed2-s1'},
+  kitchen: {el:'rg-kitchen',s0:'rg-kit-s0',   s1:'rg-kit-s1'},
+  bath:    {el:'rg-bath',   s0:'rg-bath-s0',  s1:'rg-bath-s1'},
+  office:  {el:'rg-office', s0:'rg-off-s0',   s1:'rg-off-s1'},
+  dining:  {el:'rg-dining', s0:'rg-din-s0',   s1:'rg-din-s1'},
 };
 
-// Override setScene for lamp system
-window.setScene = function(key){
-  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll(`.scene-pill[onclick*="${key}"],.scene-row-btn[onclick*="${key}"],.sq-btn[onclick*="${key}"]`).forEach(b=>b.classList.add('on'));
-  const cfg = LAMP_SCENES[key];
-  let i = 0;
-  Object.keys(lamps).forEach(id=>{
-    setTimeout(()=>{
-      if(cfg[id] !== undefined){
-        lamps[id].on = cfg[id] !== null;
-        if(cfg[id]) lamps[id].color = cfg[id];
-        applyLamp(id);
-        if(lamps[id].on) animateLampOn(id);
-      }
-    }, i++ * 60);
-  });
-  const labels={relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 All off'};
-  showToast('🎭',labels[key]);
-  setAmbient(key);
-};
-
-// ── Room-level toggle from dashboard ──
-const LAMP_ZONES = {
-  living:   ['L1','L2','L3'],
-  kitchen:  ['K1','K2'],
-  bedroom:  ['B1','B2'],
-  bathroom: ['BA1'],
-  hallway:  ['H1'],
-  garden:   ['O1','O2'],
-};
-
-// Patch drToggle for lamp system
-window.drToggle = function(card){
-  const zone = card.dataset.r;
-  const lampIds = LAMP_ZONES[zone]||[];
-  const anyOn = lampIds.some(id=>lamps[id]?.on);
-  lampIds.forEach((id,i)=>{
-    setTimeout(()=>{
-      if(lamps[id]){ lamps[id].on=!anyOn; applyLamp(id); if(lamps[id].on)animateLampOn(id); }
-    }, i*60);
-  });
-  card.classList.toggle('on',!anyOn);
-  showToast(!anyOn?'💡':'🌑', zone+' '+((!anyOn)?'on':'off'));
-};
-
-// ── Also patch rooms object for qs-lights ──
-const _rooms_compat = {
-  living:{on:true},kitchen:{on:false},bedroom:{on:false},
-  bathroom:{on:false},hallway:{on:false},garden:{on:true},
-  office:{on:false},
-};
-Object.keys(_rooms_compat).forEach(zone=>{
-  Object.defineProperty(_rooms_compat[zone],'on',{
-    get(){ const ids=LAMP_ZONES[zone]||[]; return ids.some(id=>lamps[id]?.on); },
-    set(v){ (LAMP_ZONES[zone]||[]).forEach(id=>{if(lamps[id]){lamps[id].on=v;applyLamp(id);}}); }
-  });
-});
-
-// ── Init ──
-document.addEventListener('click', e=>{
-  const pop=document.getElementById('color-popover');
-  if(pop&&pop.classList.contains('show')&&!pop.contains(e.target)&&!e.target.closest('.lamp-fix'))closeColorPicker();
-});
-
-// Initialize all lamps
-Object.keys(lamps).forEach(applyLamp);
-buildLampList();
-updateLampCounts();
-
-console.log('💡 Lamp system: '+Object.keys(lamps).length+' individual lamps ready');
-
-
-// ══════════════════════════════════════════════
-//  INDIVIDUAL LAMP SYSTEM — Photo Floor Plan
-// ══════════════════════════════════════════════
-
-const LAMP_COLORS = {
-  warm:   { color: '#ffe8a0', gradColor: '#f5c850', label: 'Warm White',  op: 0.92 },
-  cool:   { color: '#d8eeff', gradColor: '#a8d4ff', label: 'Cool White',  op: 0.75 },
-  white:  { color: '#ffffff', gradColor: '#e8f0ff', label: 'Bright White', op: 0.80 },
-  cyan:   { color: '#40ffff', gradColor: '#00cfff', label: 'Cyan',         op: 0.70 },
-  pink:   { color: '#ff70e0', gradColor: '#e040fb', label: 'Pink',         op: 0.70 },
-  green:  { color: '#80ff60', gradColor: '#40d040', label: 'Green',        op: 0.65 },
-  red:    { color: '#ff6040', gradColor: '#ff2000', label: 'Red',          op: 0.65 },
-  blue:   { color: '#60a0ff', gradColor: '#2060ff', label: 'Blue',         op: 0.70 },
-  purple: { color: '#c060ff', gradColor: '#9020e0', label: 'Purple',       op: 0.68 },
-  amber:  { color: '#ffc030', gradColor: '#e08000', label: 'Amber',        op: 0.85 },
+// Lamp → zone mapping (for LED zone control)
+const LAMP_TO_ZONE = {
+  L1:'bed1',L2:'bed1',L3:'bed1',
+  L4:'bed2',L5:'bed2',
+  L6:'kitchen',
+  L8:'office',
+  L9:'bath',
+  L11:'dining',
 };
 
 // Lamp definitions
 const lamps = {
-  MB1: { on:true,  color:'warm',  label:'Hängelampe',    zone:'Schlafzimmer' },
-  MB2: { on:true,  color:'warm',  label:'Nachttisch L',  zone:'Schlafzimmer' },
-  MB3: { on:true,  color:'warm',  label:'Nachttisch R',  zone:'Schlafzimmer' },
-  BA1: { on:false, color:'white', label:'Deckenlampe',   zone:'Bad' },
-  BD1: { on:false, color:'warm',  label:'Stehlampe',     zone:'Zimmer 2' },
-  BD2: { on:false, color:'warm',  label:'Wandlampe',     zone:'Zimmer 2' },
-  ST1: { on:false, color:'cool',  label:'Schreibtischlampe', zone:'Büro' },
-  KI1: { on:false, color:'white', label:'Deckenlampe',   zone:'Küche' },
-  DI1: { on:false, color:'warm',  label:'Pendellampe',   zone:'Esszimmer' },
-  HL1: { on:false, color:'cool',  label:'Deckenlampe',   zone:'Flur' },
+  L1:  {on:true,  color:'warm',  label:'Hängelampe',      zone:'Schlafzimmer 1'},
+  L2:  {on:false, color:'warm',  label:'Nachttisch L',    zone:'Schlafzimmer 1'},
+  L3:  {on:false, color:'warm',  label:'Nachttisch R',    zone:'Schlafzimmer 1'},
+  L4:  {on:false, color:'warm',  label:'Stehlampe',       zone:'Zimmer 2'},
+  L5:  {on:false, color:'warm',  label:'Wandlampe',       zone:'Zimmer 2'},
+  L6:  {on:false, color:'white', label:'Küchenlampe',     zone:'Küche'},
+  L8:  {on:false, color:'cool',  label:'Hängelampe',      zone:'Büro'},
+  L9:  {on:false, color:'white', label:'Spiegellampe',    zone:'Bad'},
+  L11: {on:false, color:'warm',  label:'Pendellampe',     zone:'Esszimmer'},
 };
 
-// Bloom companion pools (get same treatment)
-const BLOOM_COMPANIONS = {
-  MB1: 'pool-MB1-bloom', BA1: 'pool-BA1-bloom',
-  ST1: 'pool-ST1-bloom', KI1: 'pool-KI1-bloom', DI1: 'pool-DI1-bloom',
+// LED zone state
+const ledZones = {
+  bed1:    {on:true,  color:'cyan'},
+  bed2:    {on:false, color:'cyan'},
+  bath:    {on:false, color:'cyan'},
+  office:  {on:false, color:'cyan'},
+  kitchen: {on:false, color:'cyan'},
 };
 
-function getLampColor(id) { return LAMP_COLORS[lamps[id]?.color] || LAMP_COLORS.warm; }
+function getLampColor(id){ return LAMP_COLORS[lamps[id]?.color] || LAMP_COLORS.warm; }
 
+// ── Apply LED Zone ──
+function applyLedZone(zone, forceColor) {
+  const z = ledZones[zone]; if (!z) return;
+  const col = LAMP_COLORS[forceColor || z.color] || LAMP_COLORS.cyan;
+
+  // Set strip colors
+  (LED_ZONES[zone]||[]).forEach(sid => {
+    const el = document.getElementById(sid);
+    if (!el) return;
+    el.setAttribute('stroke', z.on ? col.color : 'transparent');
+  });
+
+  // Room LED group opacity
+  const ledGrp = document.getElementById('led-'+zone);
+  if (ledGrp) ledGrp.style.opacity = z.on ? '1' : '0';
+
+  // Room ambient gradient
+  const g = ZONE_GRAD[zone];
+  if (g) {
+    const s0 = document.getElementById(g.s0);
+    const s1 = document.getElementById(g.s1);
+    if (s0) {
+      s0.setAttribute('stop-color', col.color);
+      s0.setAttribute('stop-opacity', z.on ? String(col.op * 0.55) : '0');
+    }
+    if (s1) {
+      s1.setAttribute('stop-color', col.gc);
+      s1.setAttribute('stop-opacity', z.on ? String(col.op * 0.22) : '0');
+    }
+  }
+}
+
+// ── Apply individual lamp ──
 function applyLamp(id) {
   const l = lamps[id]; if (!l) return;
   const on = l.on;
   const lc = getLampColor(id);
 
-  // ── Bulb visual ──
-  const bulb = document.getElementById('lc-' + id);
+  // Bulb
+  const bulb = document.getElementById('lc-'+id);
   if (bulb) {
-    bulb.setAttribute('fill', on ? lc.color : '#6a6a6a');
+    bulb.setAttribute('fill', on ? lc.color : '#5a5a5a');
     bulb.setAttribute('filter', on ? 'url(#lamp-glow)' : 'none');
-    bulb.setAttribute('r', on ? '9' : '6');
+    bulb.setAttribute('r', on ? '10' : '6');
   }
-  const ring = document.getElementById('lr-' + id);
+  // Ring
+  const ring = document.getElementById('lr-'+id);
   if (ring) {
-    ring.setAttribute('stroke', on ? lc.color : '#5a5a5a');
-    ring.setAttribute('opacity', on ? '0.55' : '0.15');
-    ring.setAttribute('r', on ? '18' : '13');
+    ring.setAttribute('stroke', on ? lc.color : '#484848');
+    ring.setAttribute('opacity', on ? '0.6' : '0.15');
+    ring.setAttribute('r', on ? '20' : '13');
   }
-
-  // ── Gradient color ──
-  const grad = document.getElementById('lg-' + id);
+  // Pool gradient
+  const grad = document.getElementById('lg-'+id);
   if (grad) {
-    const stops = grad.querySelectorAll('stop');
-    if (stops[0]) {
-      stops[0].setAttribute('stop-color', lc.color);
-      stops[0].setAttribute('stop-opacity', on ? String(lc.op) : '0');
-    }
-    if (stops[1]) {
-      stops[1].setAttribute('stop-color', lc.gradColor || lc.color);
-      stops[1].setAttribute('stop-opacity', on ? String(lc.op * 0.3) : '0');
-    }
-    if (stops[2]) stops[2].setAttribute('stop-opacity', '0');
+    const s = grad.querySelectorAll('stop');
+    if(s[0]){s[0].setAttribute('stop-color',lc.color);s[0].setAttribute('stop-opacity',on?String(lc.op):'0');}
+    if(s[1]){s[1].setAttribute('stop-color',lc.gc||lc.color);s[1].setAttribute('stop-opacity',on?String(lc.op*0.28):'0');}
+    if(s[2]) s[2].setAttribute('stop-opacity','0');
   }
-
-  // ── Pool opacity ──
-  const pool = document.getElementById('pool-' + id);
+  const pool = document.getElementById('pool-'+id);
   if (pool) pool.setAttribute('opacity', on ? '1' : '0');
 
-  // ── Bloom companion ──
-  const bloomId = BLOOM_COMPANIONS[id];
-  if (bloomId) {
-    const bloom = document.getElementById(bloomId);
-    if (bloom) {
-      bloom.setAttribute('opacity', on ? '0.45' : '0');
-      // Update bloom gradient too
-      const bg = document.getElementById('lg-' + id);
-      if (bg) bloom.setAttribute('fill', 'url(#lg-' + id + ')');
-    }
+  // Turn on LED zone when lamp goes on
+  const zone = LAMP_TO_ZONE[id];
+  if (zone && on && !ledZones[zone]?.on) {
+    // Don't auto-toggle LED when lamp turns on — keep LED separate
   }
 
   buildLampList();
   updateLampCount();
 }
 
-// ── Click handler ──
+// ── Lamp click ──
 function lampClick(id, e) {
   if (e) e.preventDefault();
   lamps[id].on = !lamps[id].on;
   applyLamp(id);
   if (lamps[id].on) animateLampOn(id);
-  const lc = getLampColor(id);
   showToast(lamps[id].on ? '💡' : '🌑',
     lamps[id].zone + ' · ' + lamps[id].label + ' ' + (lamps[id].on ? 'an' : 'aus'));
   closeColorPicker();
 }
-
-function lampLongPress(id, e) { e.preventDefault(); openLampPicker(id, e); }
-let _lpTimer = null;
-function lampTouchStart(id, e) { _lpTimer = setTimeout(() => openLampPicker(id, e.touches[0]), 600); }
-function lampTouchEnd(e) { clearTimeout(_lpTimer); }
+function lampLongPress(id,e){e.preventDefault();openLampPicker(id,e);}
+let _lpTimer=null;
+function lampTouchStart(id,e){_lpTimer=setTimeout(()=>openLampPicker(id,e.touches[0]),600);}
+function lampTouchEnd(e){clearTimeout(_lpTimer);}
 
 // ── Spread ring animation ──
 function animateLampOn(id) {
   const svg = document.getElementById('fp-lights');
-  const bulb = document.getElementById('lc-' + id);
-  if (!svg || !bulb) return;
-  const cx = bulb.getAttribute('cx');
-  const cy = bulb.getAttribute('cy');
-  const col = getLampColor(id).color;
-  for (let i = 0; i < 2; i++) {
-    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    c.setAttribute('cx', cx); c.setAttribute('cy', cy);
-    c.setAttribute('r', '12'); c.setAttribute('fill', 'none');
-    c.setAttribute('stroke', col); c.setAttribute('stroke-width', i === 0 ? '2' : '1.5');
-    c.style.cssText = `animation:ringPulse ${0.6 + i * 0.2}s ease-out ${i * 0.12}s forwards`;
+  const bulb = document.getElementById('lc-'+id);
+  if (!svg||!bulb) return;
+  const cx=bulb.getAttribute('cx'), cy=bulb.getAttribute('cy');
+  const col=getLampColor(id).color;
+  for(let i=0;i<2;i++){
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',cx);c.setAttribute('cy',cy);
+    c.setAttribute('r','12');c.setAttribute('fill','none');
+    c.setAttribute('stroke',col);c.setAttribute('stroke-width',i===0?'2':'1.5');
+    c.style.cssText=`animation:ringPulse ${0.6+i*0.2}s ease-out ${i*0.12}s forwards`;
     svg.appendChild(c);
-    setTimeout(() => c.remove(), 900 + i * 200);
+    setTimeout(()=>c.remove(),900+i*200);
   }
 }
 
 // ── Color picker ──
-let _cpLamp = null;
-function openLampPicker(id, e) {
-  _cpLamp = id;
-  const pop = document.getElementById('color-popover');
-  const container = document.getElementById('fp-container');
-  if (!pop || !container) return;
-  const cr = container.getBoundingClientRect();
-  let x = (e.clientX || 0) - cr.left;
-  let y = (e.clientY || 0) - cr.top;
-  x = Math.max(5, Math.min(x, cr.width - 195));
-  y = Math.max(5, Math.min(y, cr.height - 175));
-  pop.style.left = x + 'px';
-  pop.style.top  = y + 'px';
-  pop.style.transform = 'none';
-  document.getElementById('cp-room-label').textContent =
-    '💡 ' + lamps[id].label + ' · ' + lamps[id].zone;
-  const sw = document.getElementById('cp-swatches');
-  sw.innerHTML = '';
-  Object.entries(LAMP_COLORS).forEach(([k, v]) => {
-    const d = document.createElement('div');
-    d.className = 'cp-sw' + (lamps[id].color === k ? ' active' : '');
-    d.style.cssText = `background:${v.color};${v.color==='#ffffff'?'border:1px solid #ccc;':''}`;
-    d.title = v.label;
-    d.onclick = () => {
-      lamps[id].color = k;
-      lamps[id].on = true;
-      applyLamp(id);
-      animateLampOn(id);
-      document.querySelectorAll('.cp-sw').forEach(s => s.classList.remove('active'));
+let _cpLamp=null;
+function openLampPicker(id,e){
+  _cpLamp=id;
+  const pop=document.getElementById('color-popover');
+  const ctr=document.getElementById('fp-container');
+  if(!pop||!ctr) return;
+  const cr=ctr.getBoundingClientRect();
+  let x=(e.clientX||0)-cr.left, y=(e.clientY||0)-cr.top;
+  x=Math.max(5,Math.min(x,cr.width-200));
+  y=Math.max(5,Math.min(y,cr.height-185));
+  pop.style.left=x+'px'; pop.style.top=y+'px'; pop.style.transform='none';
+  document.getElementById('cp-room-label').textContent='💡 '+lamps[id].label+' · '+lamps[id].zone;
+  const sw=document.getElementById('cp-swatches');
+  sw.innerHTML='';
+  Object.entries(LAMP_COLORS).forEach(([k,v])=>{
+    const d=document.createElement('div');
+    d.className='cp-sw'+(lamps[id].color===k?' active':'');
+    d.style.cssText=`background:${v.color};${v.color==='#ffffff'?'border:1px solid #ccc;':''}`;
+    d.title=v.label;
+    d.onclick=()=>{
+      lamps[id].color=k; lamps[id].on=true;
+      applyLamp(id); animateLampOn(id);
+      document.querySelectorAll('.cp-sw').forEach(s=>s.classList.remove('active'));
       d.classList.add('active');
-      showToast('🎨', lamps[id].label + ' → ' + v.label);
+      showToast('🎨',lamps[id].label+' → '+v.label);
     };
     sw.appendChild(d);
   });
-  document.getElementById('cp-bright').value = 80;
+  document.getElementById('cp-bright').value=80;
   pop.classList.add('show');
 }
-
-function closeColorPicker() {
+function closeColorPicker(){
   document.getElementById('color-popover')?.classList.remove('show');
-  _cpLamp = null;
+  _cpLamp=null;
 }
-
-function applyLampBrightness(val) {
-  if (!_cpLamp) return;
-  const lc = getLampColor(_cpLamp);
-  const op = (val / 100) * lc.op;
-  const grad = document.getElementById('lg-' + _cpLamp);
-  if (grad) {
-    const s = grad.querySelectorAll('stop');
-    if (s[0]) s[0].setAttribute('stop-opacity', String(op));
-    if (s[1]) s[1].setAttribute('stop-opacity', String(op * 0.3));
+function applyLampBrightness(val){
+  if(!_cpLamp) return;
+  const lc=getLampColor(_cpLamp);
+  const op=(val/100)*lc.op;
+  const grad=document.getElementById('lg-'+_cpLamp);
+  if(grad){const s=grad.querySelectorAll('stop');
+    if(s[0])s[0].setAttribute('stop-opacity',String(op));
+    if(s[1])s[1].setAttribute('stop-opacity',String(op*0.28));
   }
-  const bloom = BLOOM_COMPANIONS[_cpLamp];
-  if (bloom) document.getElementById(bloom)?.setAttribute('opacity', String(op * 0.45));
 }
 
-// ── Lamp list sidebar ──
-function buildLampList() {
-  const el = document.getElementById('room-list');
-  if (!el) return;
-  el.innerHTML = '';
-  const zones = {};
-  Object.entries(lamps).forEach(([id, l]) => {
-    if (!zones[l.zone]) zones[l.zone] = [];
-    zones[l.zone].push({ id, ...l });
+// ── Build lamp list sidebar ──
+function buildLampList(){
+  const el=document.getElementById('room-list'); if(!el) return;
+  el.innerHTML='';
+  const zones={};
+  Object.entries(lamps).forEach(([id,l])=>{
+    if(!zones[l.zone])zones[l.zone]=[];
+    zones[l.zone].push({id,...l});
   });
-  Object.entries(zones).forEach(([zone, ls]) => {
-    const hdr = document.createElement('div');
-    hdr.className = 'lamp-zone-header';
-    hdr.textContent = zone;
+  // LED zone toggles first
+  const ledHdr=document.createElement('div');
+  ledHdr.className='lamp-zone-header'; ledHdr.textContent='LED Strips';
+  el.appendChild(ledHdr);
+  Object.entries(ledZones).forEach(([zone,z])=>{
+    const lc=LAMP_COLORS[z.color]||LAMP_COLORS.cyan;
+    const names={bed1:'Schlafzimmer 1',bed2:'Zimmer 2',bath:'Bad',office:'Büro',kitchen:'Küche'};
+    const row=document.createElement('div'); row.className='lamp-row';
+    row.innerHTML=`
+      <div class="lamp-dot" style="background:${z.on?lc.color:'#484848'};
+           ${z.on?'box-shadow:0 0 7px '+lc.color:''}"></div>
+      <div class="lamp-name">${names[zone]||zone}</div>
+      <div class="lamp-sw ${z.on?'on':''}"
+           onclick="event.stopPropagation();
+                    ledZones['${zone}'].on=!ledZones['${zone}'].on;
+                    applyLedZone('${zone}');
+                    buildLampList();
+                    showToast(ledZones['${zone}'].on?'💡':'🌑','LED ${names[zone]||zone} '+(ledZones['${zone}'].on?'an':'aus'))"></div>`;
+    el.appendChild(row);
+  });
+
+  Object.entries(zones).forEach(([zone,ls])=>{
+    const hdr=document.createElement('div');
+    hdr.className='lamp-zone-header'; hdr.textContent=zone;
     el.appendChild(hdr);
-    ls.forEach(l => {
-      const lc = getLampColor(l.id);
-      const row = document.createElement('div');
-      row.className = 'lamp-row';
-      row.innerHTML = `
-        <div class="lamp-dot" style="background:${l.on ? lc.color : '#5a5a5a'};
-             ${l.on ? 'box-shadow:0 0 7px ' + lc.color : ''}"></div>
+    ls.forEach(l=>{
+      const lc=getLampColor(l.id);
+      const row=document.createElement('div'); row.className='lamp-row';
+      row.innerHTML=`
+        <div class="lamp-dot" style="background:${l.on?lc.color:'#484848'};
+             ${l.on?'box-shadow:0 0 7px '+lc.color:''}"></div>
         <div class="lamp-name">${l.label}</div>
-        <div class="lamp-sw ${l.on ? 'on' : ''}"
+        <div class="lamp-sw ${l.on?'on':''}"
              onclick="event.stopPropagation();
                       lamps['${l.id}'].on=!lamps['${l.id}'].on;
                       applyLamp('${l.id}');
                       if(lamps['${l.id}'].on)animateLampOn('${l.id}')"></div>`;
-      row.onclick = () => {
-        lamps[l.id].on = !lamps[l.id].on;
-        applyLamp(l.id);
-        if (lamps[l.id].on) animateLampOn(l.id);
+      row.onclick=()=>{
+        lamps[l.id].on=!lamps[l.id].on; applyLamp(l.id);
+        if(lamps[l.id].on)animateLampOn(l.id);
       };
-      row.oncontextmenu = e => { e.preventDefault(); openLampPicker(l.id, e); };
+      row.oncontextmenu=e=>{e.preventDefault();openLampPicker(l.id,e);};
       el.appendChild(row);
     });
   });
 }
 
-function updateLampCount() {
-  const n = Object.values(lamps).filter(l => l.on).length;
-  const el = document.getElementById('qs-lights');
-  if (el) el.textContent = n;
+function updateLampCount(){
+  const n=Object.values(lamps).filter(l=>l.on).length
+          +Object.values(ledZones).filter(z=>z.on).length;
+  const el=document.getElementById('qs-lights');
+  if(el) el.textContent=n;
 }
 
-// ── Scene presets ──
-const LAMP_SCENES = {
-  relax:  { MB1:'warm', MB2:'warm', MB3:'warm', BA1:null, BD1:'amber', BD2:'amber', ST1:null, KI1:null, DI1:'warm',  HL1:null },
-  normal: { MB1:'warm', MB2:'cool', MB3:'cool', BA1:'white', BD1:null, BD2:null, ST1:'cool', KI1:'white', DI1:'warm', HL1:'cool' },
-  movie:  { MB1:'pink', MB2:'purple', MB3:null, BA1:null, BD1:null, BD2:null, ST1:null, KI1:null, DI1:null, HL1:null },
-  alloff: { MB1:null, MB2:null, MB3:null, BA1:null, BD1:null, BD2:null, ST1:null, KI1:null, DI1:null, HL1:null },
+// ── Scenes (control both LEDs and lamps) ──
+const SCENES_V14 = {
+  relax: {
+    lamps:  {L1:'warm',L2:'warm',L3:null,L4:'amber',L5:null,L6:null,L8:null,L9:null,L11:'warm'},
+    leds:   {bed1:{on:true,color:'warm'},bed2:{on:false},bath:{on:false},office:{on:false},kitchen:{on:false}},
+  },
+  normal: {
+    lamps:  {L1:'white',L2:null,L3:null,L4:null,L5:null,L6:'white',L8:'cool',L9:'white',L11:'warm'},
+    leds:   {bed1:{on:true,color:'cool'},bed2:{on:true,color:'cool'},bath:{on:true,color:'white'},office:{on:true,color:'cool'},kitchen:{on:true,color:'white'}},
+  },
+  movie: {
+    lamps:  {L1:'purple',L2:'blue',L3:null,L4:null,L5:null,L6:null,L8:null,L9:null,L11:null},
+    leds:   {bed1:{on:true,color:'purple'},bed2:{on:false},bath:{on:false},office:{on:false},kitchen:{on:false}},
+  },
+  alloff: {
+    lamps:  {L1:null,L2:null,L3:null,L4:null,L5:null,L6:null,L8:null,L9:null,L11:null},
+    leds:   {bed1:{on:false},bed2:{on:false},bath:{on:false},office:{on:false},kitchen:{on:false}},
+  },
 };
 
 window.setScene = function(key) {
-  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.scene-pill,.scene-row-btn,.sq-btn').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll(`.scene-pill[onclick*="${key}"],.scene-row-btn[onclick*="${key}"],.sq-btn[onclick*="${key}"]`)
-          .forEach(b => b.classList.add('on'));
-  const cfg = LAMP_SCENES[key] || {};
-  let i = 0;
-  Object.keys(lamps).forEach(id => {
-    setTimeout(() => {
-      const val = cfg[id];
-      lamps[id].on = val !== null && val !== undefined;
-      if (lamps[id].on && val) lamps[id].color = val;
-      applyLamp(id);
-      if (lamps[id].on) animateLampOn(id);
-    }, i++ * 55);
+          .forEach(b=>b.classList.add('on'));
+  const cfg = SCENES_V14[key]; if(!cfg) return;
+  // Apply LEDs first
+  Object.entries(cfg.leds||{}).forEach(([zone,v],i)=>{
+    setTimeout(()=>{
+      Object.assign(ledZones[zone]||{},v);
+      if(ledZones[zone]) applyLedZone(zone);
+    },i*40);
   });
-  showToast('🎭', { relax:'🌅 Relax', normal:'☀️ Normal', movie:'🎬 Movie Night', alloff:'🌙 Alles aus' }[key]);
-  if (typeof setAmbient === 'function') setAmbient(key);
+  // Apply lamps with stagger
+  let i=0;
+  Object.entries(cfg.lamps||{}).forEach(([id,col])=>{
+    setTimeout(()=>{
+      lamps[id].on = col!==null && col!==undefined;
+      if(col) lamps[id].color=col;
+      applyLamp(id);
+      if(lamps[id].on) animateLampOn(id);
+    },i++*50+60);
+  });
+  showToast('🎭',{relax:'🌅 Relax',normal:'☀️ Normalmodus',movie:'🎬 Movie Night',alloff:'🌙 Alles aus'}[key]);
+  if(typeof setAmbient==='function') setAmbient(key);
 };
 
 // Close picker on outside click
-document.addEventListener('click', e => {
-  const pop = document.getElementById('color-popover');
-  if (pop?.classList.contains('show') && !pop.contains(e.target) && !e.target.closest('.lamp-fix'))
+document.addEventListener('click',e=>{
+  const p=document.getElementById('color-popover');
+  if(p?.classList.contains('show')&&!p.contains(e.target)&&!e.target.closest('.lamp-fix'))
     closeColorPicker();
 });
 
 // ── Init ──
 Object.keys(lamps).forEach(applyLamp);
+Object.keys(ledZones).forEach(applyLedZone);
 buildLampList();
 updateLampCount();
-console.log('💡 Photo floor plan lamp system ready —', Object.keys(lamps).length, 'lamps');
+console.log('💡 v14 Lamp+LED system ready');
 
 </script>
 
