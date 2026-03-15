@@ -3,666 +3,755 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Professionelle Home Assistant Dashboards & KI-Automation ab €49. Interaktive Grundrisse, 48h Lieferung. autoflow-lab auf Fiverr.">
+<meta name="description" content="Professionelle Home Assistant Dashboards & KI-Automation ab €49. Interaktive Grundrisse, 48h Lieferung.">
 <title>autoflow-lab — Smart Home & KI Automation</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff;--bg2:#f5f5f7;--bg3:#ebebed;--card:#fff;--text:#1d1d1f;--text2:#6e6e73;--text3:#aeaeb2;--accent:#0071e3;--green:#34c759;--warm:#ff9f0a;--red:#ff3b30;--border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.14);--r:16px;--rs:10px;--nav:56px;--shadow:0 2px 20px rgba(0,0,0,.08)}
-[data-theme="dark"]{--bg:#0a0a0f;--bg2:#1c1c1e;--bg3:#2c2c2e;--card:#1c1c1e;--text:#f5f5f7;--text2:#aeaeb2;--text3:#636366;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.15);--shadow:0 2px 20px rgba(0,0,0,.5)}
+/* ═══════════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════════ */
+:root{
+  --bg:#fff;--bg2:#f5f5f7;--bg3:#ebebed;--card:#fff;
+  --text:#1d1d1f;--text2:#6e6e73;--text3:#aeaeb2;
+  --accent:#0071e3;--green:#34c759;--warm:#ff9f0a;--red:#ff3b30;--purple:#af52de;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.14);
+  --r:18px;--rs:12px;--nav:58px;
+  --glow:rgba(0,113,227,.25);
+  --grad-hero:radial-gradient(ellipse 80% 60% at 65% 30%,rgba(0,113,227,.1),transparent 65%),
+              radial-gradient(ellipse 60% 50% at 20% 75%,rgba(52,199,89,.07),transparent 65%),
+              radial-gradient(ellipse 50% 40% at 90% 80%,rgba(175,82,222,.06),transparent 65%);
+}
+[data-theme="dark"]{
+  --bg:#050508;--bg2:#111116;--bg3:#1c1c22;--card:#111116;
+  --text:#f0f0f5;--text2:#9898a8;--text3:#505060;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --glow:rgba(100,160,255,.35);
+  --grad-hero:radial-gradient(ellipse 80% 60% at 65% 30%,rgba(80,130,255,.15),transparent 65%),
+              radial-gradient(ellipse 60% 50% at 20% 75%,rgba(100,255,150,.08),transparent 65%),
+              radial-gradient(ellipse 50% 40% at 90% 80%,rgba(200,100,255,.09),transparent 65%);
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
-button{font-family:inherit}
+button{font-family:inherit;cursor:pointer}
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);background:rgba(255,255,255,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;z-index:100}
-[data-theme="dark"] .nav{background:rgba(10,10,15,.88)}
-.nav-logo{font-weight:700;font-size:1rem;color:var(--text);display:flex;align-items:center;gap:4px;flex-shrink:0}
-.nav-logo em{color:var(--accent);font-style:normal}
-.nav-center{display:flex;gap:4px;margin:0 auto}
-.nav-tab{padding:6px 14px;border-radius:20px;border:none;background:none;color:var(--text2);font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s}
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.94)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ringPop{0%{r:8;opacity:.9;stroke-width:2.5}100%{r:48;opacity:0;stroke-width:.4}}
+@keyframes eq1{0%,100%{height:4px}50%{height:18px}}
+@keyframes eq2{0%,100%{height:8px}50%{height:28px}}
+@keyframes eq3{0%,100%{height:6px}50%{height:22px}}
+@keyframes eq4{0%,100%{height:12px}50%{height:10px}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 20px var(--glow)}50%{box-shadow:0 0 40px var(--glow),0 0 80px var(--glow)}}
+@keyframes particleDrift{0%{transform:translateY(0) translateX(0) scale(1);opacity:.7}100%{transform:translateY(-100vh) translateX(var(--dx,30px)) scale(.3);opacity:0}}
+@keyframes heroGrad{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+@keyframes borderGlow{0%,100%{border-color:rgba(0,113,227,.3)}50%{border-color:rgba(0,113,227,.8)}}
+@keyframes newsSlide{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@keyframes counterUp{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes cardPop{from{opacity:0;transform:translateY(32px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes scanLine{0%{top:0%}100%{top:100%}}
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav);background:rgba(255,255,255,.82);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:10px;z-index:200;transition:background .3s}
+[data-theme="dark"] .nav{background:rgba(5,5,8,.82)}
+.nav-logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:-.02em}
+.nav-logo em{background:linear-gradient(135deg,var(--accent),#5ac8fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal}
+.nav-center{display:flex;gap:3px;margin:0 auto}
+.nav-tab{padding:7px 16px;border-radius:22px;border:none;background:none;color:var(--text2);font-size:.82rem;font-weight:600;transition:all .2s}
+.nav-tab:hover{color:var(--text)}
 .nav-tab.active{background:var(--bg3);color:var(--text)}
-.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.btn-nav{padding:7px 15px;border-radius:20px;border:none;background:var(--accent);color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;transition:opacity .2s;white-space:nowrap}
-.btn-nav:hover{opacity:.85}
-.btn-nav.ghost{background:none;color:var(--text2);border:1px solid var(--border2)}
-.lang-btn,.theme-btn{padding:5px 11px;border-radius:20px;border:1.5px solid var(--border2);background:none;color:var(--text);font-size:.78rem;font-weight:700;cursor:pointer}
-.theme-btn{width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;font-size:1rem;border-radius:50%}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.nav-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.btn-nav{padding:8px 16px;border-radius:22px;border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.8rem;font-weight:700;transition:all .2s;white-space:nowrap;box-shadow:0 2px 12px rgba(0,113,227,.3)}
+.btn-nav:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,113,227,.45)}
+.btn-nav.ghost{background:none;color:var(--text2);border:1.5px solid var(--border2);box-shadow:none}
+.btn-nav.ghost:hover{background:var(--bg2);box-shadow:none}
+.lang-btn,.theme-btn{padding:6px 12px;border-radius:22px;border:1.5px solid var(--border2);background:none;color:var(--text);font-size:.78rem;font-weight:700;transition:all .2s}
+.lang-btn:hover,.theme-btn:hover{background:var(--bg2)}
+.theme-btn{width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;font-size:1.05rem;border-radius:50%}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:4px;background:none;border:none}
 .hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
-.mob-menu{display:none;flex-direction:column;gap:4px;position:fixed;top:var(--nav);left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px;z-index:99;box-shadow:0 8px 32px rgba(0,0,0,.1)}
+.mob-menu{display:none;flex-direction:column;gap:4px;position:fixed;top:var(--nav);left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:12px;z-index:199;box-shadow:0 12px 40px rgba(0,0,0,.12);animation:fadeInUp .25s ease}
 .mob-menu.open{display:flex}
-.mob-btn{padding:12px 16px;border-radius:10px;border:none;background:none;color:var(--text);font-size:.9rem;font-weight:500;text-align:left;cursor:pointer;transition:background .15s}
+.mob-btn{padding:13px 16px;border-radius:12px;border:none;background:none;color:var(--text);font-size:.9rem;font-weight:500;text-align:left;transition:background .15s}
 .mob-btn:hover{background:var(--bg2)}
-@media(max-width:680px){.nav-center,.btn-nav.ghost{display:none}.hamburger{display:flex}}
+@media(max-width:700px){.nav-center,.btn-nav.ghost{display:none}.hamburger{display:flex}}
 
-/* PAGES */
+/* ═══════════════════════════════════════════
+   PAGES
+═══════════════════════════════════════════ */
 .page{display:none;padding-top:var(--nav)}
 .page.active{display:block}
 
-/* HERO */
-.hero{min-height:calc(100svh - var(--nav));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px;background:radial-gradient(ellipse 80% 60% at 65% 30%,rgba(0,113,227,.09),transparent 70%),radial-gradient(ellipse 60% 50% at 25% 70%,rgba(52,199,89,.06),transparent 70%),var(--bg)}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;background:rgba(0,113,227,.1);color:var(--accent);font-size:.76rem;font-weight:600;margin-bottom:20px;border:1px solid rgba(0,113,227,.2)}
-.hero h1{font-size:clamp(2rem,6vw,4rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:18px;color:var(--text)}
-.hero h1 em{color:var(--accent);font-style:normal}
-.hero-sub{font-size:1.05rem;color:var(--text2);max-width:500px;margin:0 auto 32px;line-height:1.65}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:44px}
-.btn-p{display:inline-flex;align-items:center;gap:7px;padding:13px 26px;border-radius:24px;border:none;background:var(--accent);color:#fff;font-size:.93rem;font-weight:600;cursor:pointer;transition:all .2s}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,113,227,.35)}
-.btn-s{display:inline-flex;align-items:center;gap:7px;padding:13px 26px;border-radius:24px;border:1.5px solid var(--border2);background:none;color:var(--text);font-size:.93rem;font-weight:600;cursor:pointer;transition:all .2s}
-.btn-s:hover{background:var(--bg2)}
-.hero-stats{display:flex;gap:40px;flex-wrap:wrap;justify-content:center}
-.stat .num{font-size:1.6rem;font-weight:700}
-.stat .lbl{font-size:.72rem;color:var(--text3);margin-top:2px}
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero{min-height:calc(100svh - var(--nav));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px;position:relative;overflow:hidden;background:var(--grad-hero),var(--bg)}
+.hero-bg-gradient{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,113,227,.05),rgba(88,86,214,.04),rgba(52,199,89,.04),rgba(175,82,222,.04));background-size:400% 400%;animation:heroGrad 12s ease infinite;z-index:0;pointer-events:none}
+.hero-particles{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;border-radius:50%;animation:particleDrift linear infinite;opacity:.6}
+.hero>*{position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:24px;background:rgba(0,113,227,.12);color:var(--accent);font-size:.77rem;font-weight:700;margin-bottom:22px;border:1px solid rgba(0,113,227,.25);animation:fadeInUp .6s ease;backdrop-filter:blur(8px)}
+[data-theme="dark"] .hero-badge{background:rgba(80,140,255,.15);border-color:rgba(80,140,255,.3);color:#80b0ff}
+.hero h1{font-size:clamp(2.2rem,6.5vw,4.4rem);font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-bottom:20px;animation:fadeInUp .7s .1s ease both}
+.hero h1 .grad{background:linear-gradient(135deg,var(--accent) 0%,#5ac8fa 40%,#34c759 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradShift 4s ease infinite}
+[data-theme="dark"] .hero h1 .grad{background:linear-gradient(135deg,#64a0ff 0%,#80d8ff 40%,#60ff90 80%);-webkit-background-clip:text;background-clip:text}
+.hero-sub{font-size:1.08rem;color:var(--text2);max-width:520px;margin:0 auto 34px;line-height:1.7;animation:fadeInUp .8s .2s ease both}
+.hero-actions{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-bottom:50px;animation:fadeInUp .9s .3s ease both}
+.btn-p{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:28px;border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.95rem;font-weight:700;transition:all .25s;box-shadow:0 4px 18px rgba(0,113,227,.4)}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,113,227,.5)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:28px;border:1.5px solid var(--border2);background:rgba(255,255,255,.05);color:var(--text);font-size:.95rem;font-weight:700;transition:all .25s;backdrop-filter:blur(8px)}
+.btn-s:hover{background:var(--bg2);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:44px;flex-wrap:wrap;justify-content:center;animation:fadeInUp 1s .4s ease both}
+.stat{text-align:center}
+.stat .num{font-size:1.75rem;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,var(--text),var(--text2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+[data-theme="dark"] .stat .num{background:linear-gradient(135deg,#f0f0ff,#9898b8);-webkit-background-clip:text;background-clip:text}
+.stat .lbl{font-size:.73rem;color:var(--text3);margin-top:3px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 
-/* SECTIONS */
-.sec{padding:72px 24px;max-width:1080px;margin:0 auto}
-.sec-title{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
-.sec-sub{color:var(--text2);font-size:.95rem;margin-bottom:40px}
+/* ═══════════════════════════════════════════
+   TRUST BADGES
+═══════════════════════════════════════════ */
+.trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:28px 24px 0}
+.badge{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:24px;background:var(--bg2);border:1px solid var(--border);font-size:.79rem;font-weight:600;color:var(--text2);transition:all .2s}
+.badge:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+
+/* ═══════════════════════════════════════════
+   SECTION
+═══════════════════════════════════════════ */
+.sec{padding:76px 24px;max-width:1100px;margin:0 auto}
+.sec-title{font-size:clamp(1.6rem,3.8vw,2.4rem);font-weight:800;letter-spacing:-.035em;margin-bottom:12px}
+.sec-sub{color:var(--text2);font-size:.97rem;margin-bottom:44px;line-height:1.65}
 .sec-center{text-align:center}
+.grad-text{background:linear-gradient(135deg,var(--accent),#af52de);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+[data-theme="dark"] .grad-text{background:linear-gradient(135deg,#80b0ff,#d090ff);-webkit-background-clip:text;background-clip:text}
 
-/* TRUST BADGES */
-.trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:32px 24px 0}
-.badge{display:flex;align-items:center;gap:7px;padding:8px 15px;border-radius:20px;background:var(--bg2);border:1px solid var(--border);font-size:.78rem;font-weight:500;color:var(--text2)}
+/* ═══════════════════════════════════════════
+   DASHBOARD CARDS
+═══════════════════════════════════════════ */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-bottom:48px}
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;transition:transform .25s,box-shadow .25s,border-color .25s;cursor:default;position:relative;overflow:hidden}
+.dash-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.03),rgba(255,255,255,0));pointer-events:none;z-index:0}
+.dash-card:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.12);border-color:var(--border2)}
+[data-theme="dark"] .dash-card:hover{box-shadow:0 16px 48px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.1)}
+.dash-card>*{position:relative;z-index:1}
+.dash-card-tag{font-size:.64rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.dash-card-title{font-size:.97rem;font-weight:700;margin-bottom:18px}
 
-/* DASHBOARD DEMOS */
-.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:40px}
-.dash-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:transform .2s,box-shadow .2s;cursor:pointer;position:relative;overflow:hidden}
-.dash-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.1)}
-.dash-card-tag{font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
-.dash-card-title{font-size:.95rem;font-weight:600;margin-bottom:16px}
+/* Music */
+.music-art{width:58px;height:58px;border-radius:12px;background:linear-gradient(135deg,#1db954,#0a7a2e);display:flex;align-items:center;justify-content:center;font-size:1.6rem;float:left;margin:0 14px 12px 0;box-shadow:0 4px 16px rgba(29,185,84,.4);animation:floatY 4s ease-in-out infinite}
+.music-track{font-size:.84rem;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music-artist{font-size:.73rem;color:var(--text2);margin-bottom:12px}
+.progress-bar{height:3px;background:var(--bg3);border-radius:2px;margin-bottom:10px;position:relative;overflow:visible;cursor:pointer}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#1db954,#3be882);position:relative;transition:width .5s linear}
+.progress-fill::after{content:'';position:absolute;right:-5px;top:-4px;width:11px;height:11px;background:#1db954;border-radius:50%;box-shadow:0 0 8px rgba(29,185,84,.6)}
+.music-ctrls{display:flex;align-items:center;gap:12px}
+.mc{background:none;border:none;font-size:1.1rem;opacity:.45;transition:all .2s}
+.mc:hover{opacity:1;transform:scale(1.2)}
+.mc.play{opacity:1;font-size:1.6rem}
+.music-eq{display:flex;gap:2px;align-items:flex-end;height:22px;margin-left:auto}
+.eq-bar{width:3px;background:linear-gradient(0deg,#1db954,#80ff80);border-radius:2px;min-height:4px}
+.eq-bar:nth-child(1){animation:eq2 .6s ease-in-out infinite}
+.eq-bar:nth-child(2){animation:eq1 .5s ease-in-out infinite .1s}
+.eq-bar:nth-child(3){animation:eq3 .7s ease-in-out infinite .05s}
+.eq-bar:nth-child(4){animation:eq2 .55s ease-in-out infinite .15s}
+.eq-bar:nth-child(5){animation:eq4 .65s ease-in-out infinite}
+.music-vol{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:.7rem;color:var(--text3)}
+.music-vol input{flex:1;accent-color:#1db954;height:3px}
 
-/* Music widget */
-.music-cover{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#1db954,#0a7a2e);display:flex;align-items:center;justify-content:center;font-size:1.5rem;float:left;margin:0 14px 14px 0}
-.music-track{font-size:.82rem;font-weight:600;margin-bottom:2px}
-.music-artist{font-size:.74rem;color:var(--text2);margin-bottom:10px}
-.music-bar{height:3px;background:var(--bg3);border-radius:2px;margin-bottom:8px;overflow:hidden}
-.music-bar-fill{height:100%;width:62%;background:linear-gradient(90deg,#1db954,#3be882);border-radius:2px;position:relative}
-.music-bar-fill::after{content:'';position:absolute;right:-3px;top:-3px;width:9px;height:9px;background:#1db954;border-radius:50%}
-.music-ctrls{display:flex;align-items:center;gap:14px;font-size:1.1rem}
-.music-ctrls span{cursor:pointer;opacity:.5;transition:opacity .2s}
-.music-ctrls span.play{opacity:1;font-size:1.4rem}
+/* Radio stations */
+.radio-stations{margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
+.radio-ttl{font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.station-grid{display:flex;gap:5px;flex-wrap:wrap}
+.sta{padding:4px 10px;border-radius:10px;border:1px solid var(--border2);background:none;font-size:.68rem;font-weight:600;color:var(--text2);transition:all .2s}
+.sta.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sta:hover:not(.active){background:var(--bg2)}
+audio{display:none}
 
-/* Weather widget */
-.weather-now{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.weather-icon{font-size:3.2rem}
-.weather-temp{font-size:2.4rem;font-weight:300;letter-spacing:-.03em}
-.weather-city{font-size:.8rem;color:var(--text2)}
-.weather-row{display:flex;gap:6px}
-.weather-day{flex:1;text-align:center;padding:8px 4px;background:var(--bg2);border-radius:8px;font-size:.72rem}
-.weather-day .d-icon{font-size:1.2rem;display:block;margin-bottom:3px}
-.weather-day .d-temp{font-weight:600}
+/* Weather */
+.weather-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.w-icon{font-size:3.6rem;line-height:1;animation:floatY 5s ease-in-out infinite}
+.w-right .w-temp{font-size:2.6rem;font-weight:300;letter-spacing:-.05em;line-height:1}
+.w-right .w-desc{font-size:.78rem;color:var(--text2);margin-top:3px}
+.w-right .w-loc{font-size:.7rem;color:var(--text3);display:flex;align-items:center;gap:3px}
+.w-details{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.w-det{background:var(--bg2);border-radius:8px;padding:7px 10px;font-size:.7rem;color:var(--text2)}
+.w-det strong{display:block;font-size:.78rem;color:var(--text);margin-bottom:1px}
+.w-forecast{display:flex;gap:5px}
+.w-day{flex:1;text-align:center;padding:8px 3px;background:var(--bg2);border-radius:10px;font-size:.68rem;transition:all .2s;border:1px solid transparent}
+.w-day:hover{border-color:var(--border2);transform:translateY(-2px)}
+.w-day.today{background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;box-shadow:0 4px 12px rgba(0,113,227,.3)}
+.w-day .d-ico{font-size:1.25rem;display:block;margin-bottom:4px}
+.w-day .d-lbl{font-size:.6rem;opacity:.65;margin-bottom:2px}
+.w-day .d-tmp{font-weight:700}
+.w-loading{text-align:center;padding:20px;color:var(--text3);font-size:.82rem}
+.w-error{font-size:.75rem;color:var(--text3);text-align:center;padding:12px}
 
-/* Climate widget */
-.climate-ring{width:88px;height:88px;margin:0 auto 12px;position:relative}
-.climate-ring svg{width:100%;height:100%}
-.climate-ring .val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700}
-.climate-ctrls{display:flex;align-items:center;justify-content:center;gap:16px;font-size:1.2rem}
-.climate-ctrls button{background:var(--bg2);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;transition:background .2s}
-.climate-ctrls button:hover{background:var(--bg3)}
-.climate-mode{display:flex;gap:6px;justify-content:center;margin-top:10px}
-.mode-btn{padding:4px 10px;border-radius:10px;font-size:.7rem;font-weight:600;border:1px solid var(--border2);background:none;cursor:pointer;transition:all .2s;color:var(--text2)}
-.mode-btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+/* News */
+.news-list{display:flex;flex-direction:column;gap:0}
+.news-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all .2s;animation:newsSlide .4s ease both}
+.news-item:hover{padding-left:4px}
+.news-item:last-child{border-bottom:none}
+.news-num{font-size:.6rem;font-weight:800;color:var(--text3);min-width:14px;margin-top:3px}
+.news-text{font-size:.78rem;font-weight:500;line-height:1.45;color:var(--text);flex:1}
+.news-age{font-size:.65rem;color:var(--text3);white-space:nowrap;margin-top:2px}
+.news-src{font-size:.6rem;color:var(--accent);font-weight:600;margin-bottom:2px}
+.news-loading{text-align:center;padding:16px;color:var(--text3);font-size:.78rem}
+.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.5s infinite;margin-right:4px}
 
-/* Security widget */
-.cam-view{background:linear-gradient(135deg,#1a1a2e,#0f3460);border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:10px;position:relative;overflow:hidden}
-.cam-live{position:absolute;top:6px;right:8px;background:var(--red);color:#fff;font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:6px;letter-spacing:.5px}
-.cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
-.cam-mini{background:var(--bg3);border-radius:6px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1rem}
-.sec-status{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:500;color:var(--green)}
-.sec-status::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+/* Climate */
+.climate-wrap{display:flex;flex-direction:column;align-items:center}
+.thermo-container{position:relative;width:104px;height:104px;margin-bottom:14px}
+.thermo-container svg{width:100%;height:100%}
+.thermo-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.thermo-val .t-num{font-size:1.55rem;font-weight:800;line-height:1}
+.thermo-val .t-unit{font-size:.75rem;color:var(--text3)}
+.climate-btns{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.c-adj{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border2);background:var(--bg2);font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.c-adj:hover{background:var(--bg3);transform:scale(1.1)}
+.c-lbl{font-size:.78rem;color:var(--text2)}
+.mode-pills{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.mode-pill{padding:5px 12px;border-radius:12px;border:1.5px solid var(--border2);background:none;font-size:.72rem;font-weight:600;color:var(--text2);transition:all .2s}
+.mode-pill.on{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(0,113,227,.35)}
+.c-room-temp{font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px}
 
-/* Energy widget */
-.energy-num{font-size:2.2rem;font-weight:700;color:var(--green);letter-spacing:-.03em;margin-bottom:4px}
-.energy-bars{display:flex;gap:5px;align-items:flex-end;height:50px;margin-bottom:8px}
-.e-bar{flex:1;background:var(--bg3);border-radius:4px 4px 0 0;transition:height .3s;min-height:6px}
-.e-bar.active{background:linear-gradient(0deg,var(--green),#80ff80)}
-.energy-row{display:flex;justify-content:space-between;font-size:.74rem;color:var(--text2)}
+/* Lights mini */
+.light-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
+.lm-item{background:var(--bg2);border-radius:10px;padding:9px 5px;text-align:center;transition:all .25s;border:1.5px solid transparent;position:relative;overflow:hidden}
+.lm-item::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,159,10,.15),transparent 70%);opacity:0;transition:opacity .3s}
+.lm-item.on::after{opacity:1}
+.lm-item.on{background:rgba(255,159,10,.12);border-color:rgba(255,159,10,.35)}
+[data-theme="dark"] .lm-item.on{background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.4)}
+.lm-item .li{font-size:1.15rem;margin-bottom:3px;transition:filter .3s}
+.lm-item.on .li{filter:drop-shadow(0 0 6px rgba(255,200,80,.8))}
+.lm-item .ln{font-size:.62rem;color:var(--text2);font-weight:500}
+.bright-row{display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--text3)}
+.bright-row input{flex:1;accent-color:var(--warm)}
 
-/* Light control widget */
-.light-grid-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
-.lm-item{background:var(--bg2);border-radius:8px;padding:8px 6px;text-align:center;cursor:pointer;transition:all .2s;border:1px solid transparent}
-.lm-item.on{background:rgba(255,159,10,.15);border-color:rgba(255,159,10,.3)}
-.lm-item .li{font-size:1.1rem;margin-bottom:2px}
-.lm-item .ln{font-size:.65rem;color:var(--text2)}
-.lm-slider-row{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--text2)}
-.lm-slider-row input{flex:1;accent-color:var(--warm)}
+/* Security */
+.cam-view{background:linear-gradient(135deg,#0d0d1e,#0a2040);border-radius:12px;height:88px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin-bottom:10px;position:relative;overflow:hidden}
+.cam-view::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:rgba(0,200,255,.4);animation:scanLine 3s linear infinite}
+.cam-live{position:absolute;top:7px;right:9px;background:var(--red);color:#fff;font-size:.58rem;font-weight:800;padding:3px 7px;border-radius:7px;letter-spacing:.5px;animation:pulse 2s infinite}
+.cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px}
+.cam-mini{background:var(--bg3);border-radius:8px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.sec-status{display:flex;align-items:center;gap:6px;font-size:.79rem;font-weight:600;color:var(--green)}
+.sec-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
 
-/* FLOOR PLAN (CSS clip-path approach) */
-.fp-wrap{display:grid;grid-template-columns:1.65fr 1fr;gap:24px;align-items:start}
-@media(max-width:820px){.fp-wrap{grid-template-columns:1fr}}
-.fp-outer{position:relative;border-radius:16px;overflow:hidden;background:#0a0a12;box-shadow:0 12px 48px rgba(0,0,0,.22);cursor:crosshair}
-.fp-outer img.fp-base{width:100%;display:block;border-radius:16px;pointer-events:none;user-select:none}
-.fp-outer .fp-room{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;border-radius:16px;pointer-events:none;opacity:0;transition:opacity .55s ease,filter .4s ease}
-.fp-lamps-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:all;border-radius:16px}
-.fp-hint{font-size:.7rem;color:var(--text3);text-align:center;padding:7px 0 10px}
-.fp-panel{background:var(--bg2);border-radius:var(--r);padding:18px;border:1px solid var(--border)}
-.fp-panel-title{font-size:.65rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
-.room-row{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px;cursor:pointer;transition:background .15s;user-select:none}
-.room-row:hover{background:var(--bg3)}
-.room-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:all .3s}
-.room-name{font-size:.8rem;font-weight:500;flex:1}
-.room-sw{width:32px;height:18px;border-radius:9px;position:relative;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;transition:background .3s;flex-shrink:0}
-.room-sw::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
-.room-sw.on{background:var(--green);border-color:var(--green)}
-[data-theme="dark"] .room-sw.on{background:var(--warm);border-color:var(--warm)}
+/* Energy */
+.energy-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.energy-num{font-size:2.1rem;font-weight:800;letter-spacing:-.04em;color:var(--green)}
+.energy-trend{font-size:.7rem;color:var(--green);background:rgba(52,199,89,.12);padding:3px 8px;border-radius:8px;font-weight:600}
+.energy-bars{display:flex;gap:5px;align-items:flex-end;height:52px;margin-bottom:10px}
+.e-bar{flex:1;border-radius:4px 4px 0 0;transition:height .5s ease,background .3s;min-height:6px}
+.e-bar.hi{background:linear-gradient(0deg,#1db954,#80ff80)}
+.e-bar.lo{background:var(--bg3)}
+.energy-row{display:flex;justify-content:space-between;font-size:.72rem;color:var(--text2)}
+.e-solar{color:var(--warm);font-weight:600}
+.e-grid{color:var(--text2);font-weight:600}
+
+/* ═══════════════════════════════════════════
+   FLOOR PLAN
+═══════════════════════════════════════════ */
+.fp-wrap{display:grid;grid-template-columns:1.7fr 1fr;gap:24px;align-items:start}
+@media(max-width:840px){.fp-wrap{grid-template-columns:1fr}}
+.fp-outer{position:relative;border-radius:var(--r);overflow:hidden;background:#060610;box-shadow:0 12px 60px rgba(0,0,0,.28);cursor:crosshair}
+.fp-outer img.fp-base{width:100%;display:block;border-radius:var(--r);pointer-events:none;user-select:none}
+.fp-hint{font-size:.7rem;color:var(--text3);text-align:center;padding:7px 0 12px;display:flex;align-items:center;justify-content:center;gap:6px}
+.fp-panel{background:var(--card);border-radius:var(--r);padding:20px;border:1px solid var(--border);position:sticky;top:calc(var(--nav) + 16px)}
+.fp-panel-title{font-size:.64rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.room-row{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:10px;user-select:none;transition:background .15s}
+.room-row:hover{background:var(--bg2)}
+.room-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:all .35s}
+.room-name{font-size:.81rem;font-weight:500;flex:1}
+.room-sw{width:34px;height:20px;border-radius:10px;position:relative;background:var(--bg3);border:1.5px solid var(--border2);transition:background .3s;flex-shrink:0}
+.room-sw::after{content:'';position:absolute;width:13px;height:13px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.room-sw.on{background:var(--warm);border-color:var(--warm)}
+[data-theme="dark"] .room-sw.on{background:#ffb060;border-color:#ffb060}
 .room-sw.on::after{transform:translateX(14px)}
-.scene-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
-.sp{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border2);background:none;color:var(--text2);font-size:.78rem;font-weight:500;cursor:pointer;transition:all .2s}
-.sp:hover,.sp.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.scene-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px}
+.sp{padding:8px 15px;border-radius:22px;border:1.5px solid var(--border2);background:none;color:var(--text2);font-size:.79rem;font-weight:600;transition:all .22s}
+.sp:hover{border-color:var(--accent);color:var(--accent)}
+.sp.on{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(0,113,227,.35)}
 
 /* Color picker */
-.cp{position:absolute;z-index:30;background:var(--bg);border:1px solid var(--border2);border-radius:14px;padding:14px;min-width:188px;box-shadow:0 12px 40px rgba(0,0,0,.18);display:none;top:50%;left:50%;transform:translate(-50%,-50%)}
-.cp.open{display:block}
-.cp-ttl{font-size:.72rem;font-weight:700;margin-bottom:10px;color:var(--text)}
-.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.sw{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s}
-.sw:hover,.sw.on{transform:scale(1.25);border-color:var(--text)}
-.bright-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:.7rem;color:var(--text3)}
+.cp{position:absolute;z-index:40;background:var(--bg);border:1px solid var(--border2);border-radius:16px;padding:16px;min-width:195px;box-shadow:0 16px 48px rgba(0,0,0,.22);display:none;backdrop-filter:blur(20px)}
+.cp.open{display:block;animation:fadeInUp .2s ease}
+.cp-ttl{font-size:.74rem;font-weight:800;margin-bottom:12px;color:var(--text)}
+.swatches{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid transparent;transition:all .18s}
+.sw:hover,.sw.on{transform:scale(1.3);border-color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.bright-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.7rem;color:var(--text3)}
 .bright-row input{flex:1;accent-color:var(--accent)}
-.cp-close{width:100%;padding:7px;border-radius:8px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-size:.72rem;cursor:pointer}
+.cp-close{width:100%;padding:8px;border-radius:9px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-size:.73rem;font-weight:600}
 
-/* PORTFOLIO */
-.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
-.pf-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:transform .2s,box-shadow .2s;background:var(--card)}
-.pf-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.12)}
-.pf-preview{height:180px;position:relative;overflow:hidden}
-.pf-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.6);color:#fff;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:8px;backdrop-filter:blur(8px)}
-.pf-info{padding:18px}
-.pf-title{font-size:.95rem;font-weight:600;margin-bottom:6px}
-.pf-desc{font-size:.8rem;color:var(--text2);line-height:1.55;margin-bottom:12px}
+/* ═══════════════════════════════════════════
+   PORTFOLIO
+═══════════════════════════════════════════ */
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
+.pf-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:transform .25s,box-shadow .25s;background:var(--card)}
+.pf-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.15)}
+[data-theme="dark"] .pf-card:hover{box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08)}
+.pf-preview{height:200px;position:relative;overflow:hidden}
+.pf-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.55);color:#fff;font-size:.63rem;font-weight:800;padding:4px 10px;border-radius:9px;backdrop-filter:blur(8px);letter-spacing:.4px}
+.pf-stars{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.55);color:#ffcc00;font-size:.63rem;font-weight:800;padding:4px 9px;border-radius:9px;backdrop-filter:blur(8px)}
+.pf-info{padding:20px}
+.pf-title{font-size:1rem;font-weight:700;margin-bottom:7px}
+.pf-desc{font-size:.82rem;color:var(--text2);line-height:1.6;margin-bottom:14px}
 .pf-tags{display:flex;gap:5px;flex-wrap:wrap}
-.pf-chip{padding:3px 9px;border-radius:8px;background:var(--bg3);font-size:.68rem;font-weight:500;color:var(--text2)}
+.pf-chip{padding:4px 10px;border-radius:9px;background:var(--bg3);font-size:.67rem;font-weight:600;color:var(--text2)}
 
-/* PRICING */
+/* Mini chart for portfolio */
+.mini-chart{display:flex;gap:3px;align-items:flex-end;height:36px;margin:8px 0}
+.mc-bar{border-radius:2px 2px 0 0;min-width:6px;transition:height .4s ease}
+
+/* ═══════════════════════════════════════════
+   PRICING
+═══════════════════════════════════════════ */
 .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-@media(max-width:700px){.tier-grid{grid-template-columns:1fr}}
-.tier{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;position:relative;transition:transform .2s,box-shadow .2s}
-.tier:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-.tier.featured{border-color:var(--accent);background:rgba(0,113,227,.03)}
-.tier-pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:.68rem;font-weight:700;padding:3px 12px;border-radius:20px}
-.tier-name{font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
-.tier-price{font-size:2.3rem;font-weight:700;line-height:1;margin-bottom:4px}
-.tier-price span{font-size:.95rem;font-weight:400;color:var(--text3)}
-.tier-desc{font-size:.8rem;color:var(--text2);margin-bottom:20px}
-.tier-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.tier-list li{font-size:.82rem;display:flex;align-items:flex-start;gap:8px}
-.tier-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
-.btn-tier{width:100%;padding:12px;border-radius:var(--rs);border:none;background:var(--accent);color:#fff;font-size:.88rem;font-weight:600;cursor:pointer;transition:opacity .2s}
-.btn-tier:hover{opacity:.85}
+@media(max-width:720px){.tier-grid{grid-template-columns:1fr}}
+.tier{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:30px;position:relative;transition:transform .25s,box-shadow .25s}
+.tier:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.1)}
+.tier.featured{border-color:var(--accent);animation:borderGlow 3s ease-in-out infinite}
+[data-theme="dark"] .tier.featured{animation:none;border-color:rgba(80,140,255,.6);box-shadow:0 0 40px rgba(0,100,255,.15)}
+.tier-pop{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.68rem;font-weight:800;padding:4px 14px;border-radius:22px;letter-spacing:.3px;box-shadow:0 2px 10px rgba(0,113,227,.4)}
+.tier-name{font-size:.72rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.tier-price{font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:5px;letter-spacing:-.04em}
+.tier-price small{font-size:1rem;font-weight:400;color:var(--text3)}
+.tier-desc{font-size:.81rem;color:var(--text2);margin-bottom:22px;line-height:1.5}
+.tier-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+.tier-list li{font-size:.83rem;display:flex;gap:9px;line-height:1.4}
+.tier-list li::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
+.btn-tier{width:100%;padding:13px;border-radius:var(--rs);border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.9rem;font-weight:700;transition:all .25s;box-shadow:0 3px 12px rgba(0,113,227,.3)}
+.btn-tier:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,113,227,.45)}
 
-/* REVIEWS */
-.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px}
-.rev{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:22px}
-.rev-stars{color:var(--warm);margin-bottom:10px;letter-spacing:2px}
-.rev-text{font-size:.83rem;color:var(--text2);line-height:1.65;margin-bottom:14px;font-style:italic}
-.rev-author{font-size:.78rem;font-weight:600}
+/* ═══════════════════════════════════════════
+   REVIEWS
+═══════════════════════════════════════════ */
+.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.rev{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:24px;transition:transform .2s,box-shadow .2s}
+.rev:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.rev-stars{color:#ffcc00;margin-bottom:12px;font-size:1rem;letter-spacing:2px}
+.rev-text{font-size:.84rem;color:var(--text2);line-height:1.7;margin-bottom:16px;font-style:italic}
+.rev-author{font-size:.78rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.rev-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#af52de);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:700}
 
-/* FAQ */
-.faq-list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
-.faq-item{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
-.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:none;border:none;cursor:pointer;font-size:.88rem;font-weight:600;color:var(--text);text-align:left;gap:12px}
+/* ═══════════════════════════════════════════
+   FAQ
+═══════════════════════════════════════════ */
+.faq-list{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:7px}
+.faq-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);transition:border-color .2s}
+.faq-item:hover{border-color:var(--border2)}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;padding:17px 22px;background:none;border:none;font-size:.9rem;font-weight:600;color:var(--text);text-align:left;gap:12px;transition:background .15s}
 .faq-q:hover{background:var(--bg2)}
-.faq-icon{font-size:1.2rem;font-weight:300;flex-shrink:0;transition:transform .3s;line-height:1}
+.faq-icon{font-size:1.3rem;font-weight:300;flex-shrink:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
 .faq-q.open .faq-icon{transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:.84rem;color:var(--text2);line-height:1.65;padding:0 20px}
-.faq-a.open{max-height:250px;padding:0 20px 18px}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease;font-size:.85rem;color:var(--text2);line-height:1.7;padding:0 22px}
+.faq-a.open{max-height:280px;padding:0 22px 20px}
 
-/* AI PAGE */
-.ai-hero{padding:80px 24px 60px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(120,80,255,.1),transparent 70%),var(--bg)}
-.ai-hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:700;letter-spacing:-.03em;margin-bottom:16px}
-.ai-hero h1 em{background:linear-gradient(135deg,#7050ff,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:normal}
-.ai-services{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
-.ai-srv{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:26px;transition:transform .2s}
-.ai-srv:hover{transform:translateY(-3px)}
-.ai-srv-icon{font-size:2.2rem;margin-bottom:14px}
-.ai-srv-title{font-size:1rem;font-weight:600;margin-bottom:8px}
-.ai-srv-desc{font-size:.83rem;color:var(--text2);line-height:1.6}
+/* ═══════════════════════════════════════════
+   AI PAGE
+═══════════════════════════════════════════ */
+.ai-hero{padding:88px 24px 68px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(120,80,255,.14),transparent 68%),radial-gradient(ellipse 50% 40% at 80% 70%,rgba(224,64,251,.08),transparent 68%),var(--bg);position:relative;overflow:hidden}
+.ai-hero h1{font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:800;letter-spacing:-.04em;margin-bottom:18px;animation:fadeInUp .7s ease}
+.ai-hero h1 .ai-grad{background:linear-gradient(135deg,#7050ff,#e040fb,#ff6090);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradShift 4s ease infinite}
+.ai-services{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:20px}
+.ai-srv{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;transition:all .25s;position:relative;overflow:hidden}
+.ai-srv::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7050ff,#e040fb);opacity:0;transition:opacity .3s}
+.ai-srv:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(112,80,255,.12)}
+.ai-srv:hover::before{opacity:1}
+.ai-srv-icon{font-size:2.4rem;margin-bottom:16px;display:block}
+.ai-srv-title{font-size:1rem;font-weight:700;margin-bottom:9px}
+.ai-srv-desc{font-size:.83rem;color:var(--text2);line-height:1.65}
 
-/* Workflow demo */
-.wf-demo{background:var(--bg2);border-radius:var(--r);padding:28px;border:1px solid var(--border);margin:40px 0}
-.wf-nodes{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap}
-.wf-node{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:16px 20px;text-align:center;min-width:120px;position:relative}
-.wf-node-icon{font-size:1.8rem;margin-bottom:6px}
-.wf-node-title{font-size:.75rem;font-weight:600}
-.wf-node-sub{font-size:.65rem;color:var(--text3);margin-top:2px}
-.wf-arrow{font-size:1.4rem;color:var(--text3);padding:0 8px;flex-shrink:0}
-@media(max-width:600px){.wf-nodes{flex-direction:column}.wf-arrow{transform:rotate(90deg)}}
+/* Workflow */
+.wf-demo{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:var(--r);padding:32px;border:1px solid var(--border);margin:44px 0;position:relative;overflow:hidden}
+.wf-demo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(112,80,255,.06),transparent 70%);pointer-events:none}
+.wf-nodes{display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.wf-node{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:18px 22px;text-align:center;min-width:115px;position:relative;transition:transform .3s,box-shadow .3s}
+.wf-node:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.wf-node-icon{font-size:1.9rem;margin-bottom:8px}
+.wf-node-title{font-size:.75rem;font-weight:700}
+.wf-node-sub{font-size:.62rem;color:var(--text3);margin-top:3px}
+.wf-arrow{font-size:1.6rem;color:var(--text3);padding:0 10px;flex-shrink:0;animation:pulse 2s infinite}
+@media(max-width:620px){.wf-nodes{flex-direction:column}.wf-arrow{transform:rotate(90deg)}}
 
-/* CTA */
-.cta-box{background:linear-gradient(135deg,rgba(0,113,227,.08),rgba(52,199,89,.06));border:1px solid var(--border);border-radius:var(--r);padding:52px 32px;text-align:center;margin:60px 0 0}
-.cta-box h2{font-size:1.9rem;font-weight:700;margin-bottom:12px}
-.cta-box p{color:var(--text2);margin-bottom:28px}
+/* ═══════════════════════════════════════════
+   CTA
+═══════════════════════════════════════════ */
+.cta-box{background:linear-gradient(135deg,rgba(0,113,227,.08),rgba(52,199,89,.06),rgba(175,82,222,.05));border:1px solid var(--border);border-radius:var(--r);padding:56px 36px;text-align:center;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,113,227,.04),transparent);pointer-events:none}
+.cta-box h2{font-size:2rem;font-weight:800;margin-bottom:13px;letter-spacing:-.03em}
+.cta-box p{color:var(--text2);margin-bottom:30px;font-size:.97rem}
 
-/* FOOTER */
-footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24px;text-align:center}
-.footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
-.footer-links a{font-size:.83rem;color:var(--text2);transition:color .2s}
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24px;text-align:center}
+.footer-links{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.footer-links a{font-size:.84rem;color:var(--text2);transition:color .2s;font-weight:500}
 .footer-links a:hover{color:var(--accent)}
 .footer-copy{font-size:.76rem;color:var(--text3)}
+.footer-social{display:flex;gap:12px;justify-content:center;margin-bottom:18px}
+.social-btn{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s}
+.social-btn:hover{transform:translateY(-2px);background:var(--accent);border-color:var(--accent)}
 
-/* FAB */
-.fab{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;border-radius:28px;padding:12px 20px;display:flex;align-items:center;gap:8px;font-size:.86rem;font-weight:600;box-shadow:0 8px 32px rgba(0,113,227,.42);cursor:pointer;z-index:90;border:none;transition:all .2s}
-.fab:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,113,227,.5)}
+/* ═══════════════════════════════════════════
+   FAB + TOAST
+═══════════════════════════════════════════ */
+.fab{position:fixed;bottom:26px;right:26px;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;border-radius:30px;padding:13px 22px;display:flex;align-items:center;gap:9px;font-size:.88rem;font-weight:700;box-shadow:0 8px 32px rgba(0,113,227,.45);z-index:90;border:none;transition:all .25s;animation:glowPulse 3s ease-in-out infinite}
+.fab:hover{transform:translateY(-3px);box-shadow:0 12px 44px rgba(0,113,227,.6)}
 .fab-txt{white-space:nowrap}
-@media(max-width:580px){.fab-txt{display:none}.fab{border-radius:50%;width:52px;height:52px;padding:0;justify-content:center;font-size:1.2rem}}
-
-/* TOAST */
-.toast{position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(0,0,0,.8);color:#fff;padding:9px 18px;border-radius:20px;font-size:.79rem;opacity:0;transition:all .3s;z-index:200;pointer-events:none;white-space:nowrap}
+@media(max-width:580px){.fab-txt{display:none}.fab{border-radius:50%;width:54px;height:54px;padding:0;justify-content:center;font-size:1.3rem}}
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(12px);background:rgba(20,20,30,.88);color:#fff;padding:10px 20px;border-radius:24px;font-size:.8rem;opacity:0;transition:all .3s;z-index:300;pointer-events:none;white-space:nowrap;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ANIMATIONS */
-@keyframes ringPop{0%{r:8;opacity:.8;stroke-width:2}100%{r:42;opacity:0;stroke-width:.5}}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* DARK MODE EXTRAS */
-[data-theme="dark"] .hero{background:radial-gradient(ellipse 80% 60% at 65% 30%,rgba(0,113,227,.13),transparent 70%),radial-gradient(ellipse 60% 50% at 25% 70%,rgba(52,199,89,.07),transparent 70%),var(--bg)}
-[data-theme="dark"] .music-cover{filter:brightness(1.1)}
-[data-theme="dark"] .tier.featured{background:rgba(0,113,227,.07)}
+/* ═══════════════════════════════════════════
+   SECTION BG BANDS
+═══════════════════════════════════════════ */
+.band{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.band-dark{background:linear-gradient(135deg,rgba(0,113,227,.04),rgba(175,82,222,.03)),var(--bg2)}
 </style>
 </head>
 <body>
+
+<!-- PARTICLES -->
+<div class="hero-particles" id="particles"></div>
 
 <!-- NAV -->
 <nav class="nav">
   <a href="#" class="nav-logo" onclick="return false">🏠 autoflow<em>-lab</em></a>
   <div class="nav-center">
-    <button class="nav-tab active" id="tab-sh" onclick="switchTab('smarthome',this)">🏠 Smart Home</button>
-    <button class="nav-tab" id="tab-ai" onclick="switchTab('ai',this)">⚡ KI & Automation</button>
+    <button class="nav-tab active" id="tab-sh" onclick="switchTab('smarthome',this)" data-i="navSH">🏠 Smart Home</button>
+    <button class="nav-tab" id="tab-ai" onclick="switchTab('ai',this)" data-i="navAI">⚡ KI & Automation</button>
   </div>
   <div class="nav-right">
-    <button class="btn-nav ghost" onclick="window.open('mailto:clawy.studio@gmail.com')">Kontakt</button>
-    <button class="btn-nav" onclick="openFiverr()">Fiverr →</button>
+    <button class="btn-nav ghost" onclick="window.open('mailto:clawy.studio@gmail.com')" data-i="navContact">Kontakt</button>
+    <button class="btn-nav" onclick="openFiverr()" data-i="navOrder">Bestellen →</button>
     <button class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
     <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
-    <button class="hamburger" onclick="toggleMob()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button>
   </div>
 </nav>
 <div class="mob-menu" id="mob-menu">
-  <button class="mob-btn" onclick="switchTab('smarthome',document.getElementById('tab-sh'));closeMob()">🏠 Smart Home</button>
-  <button class="mob-btn" onclick="switchTab('ai',document.getElementById('tab-ai'));closeMob()">⚡ KI & Automation</button>
+  <button class="mob-btn" onclick="switchTab('smarthome',document.getElementById('tab-sh'));closeMob()" data-i="navSH">🏠 Smart Home</button>
+  <button class="mob-btn" onclick="switchTab('ai',document.getElementById('tab-ai'));closeMob()" data-i="navAI">⚡ KI & Automation</button>
   <button class="mob-btn" onclick="openFiverr()">🛒 Auf Fiverr bestellen</button>
   <button class="mob-btn" onclick="window.open('mailto:clawy.studio@gmail.com')">✉ Kontakt</button>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     SMART HOME PAGE
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════ SMART HOME PAGE ═══════════════════════ -->
 <div class="page active" id="page-smarthome">
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-badge" id="hero-badge">⭐ Top-Rated Fiverr Freelancer</div>
-    <h1 id="hero-h1">Dein Smart Home,<br><em>professionell</em> gestaltet.</h1>
-    <p class="hero-sub" id="hero-sub">Individuelle Home&nbsp;Assistant Dashboards &amp; KI-Automationen — geliefert in 48&nbsp;Stunden.</p>
+  <section class="hero" id="hero">
+    <div class="hero-bg-gradient"></div>
+    <div class="hero-badge" data-i="badge">⭐ Top-Rated Fiverr Freelancer</div>
+    <h1><span data-i="h1a">Dein Smart Home,</span><br><span class="grad" data-i="h1b">professionell gestaltet.</span></h1>
+    <p class="hero-sub" data-i="heroSub">Individuelle Home&nbsp;Assistant Dashboards & KI-Automationen — geliefert in 48&nbsp;Stunden.</p>
     <div class="hero-actions">
-      <button class="btn-p" onclick="openFiverr()" id="hero-cta1">🛒 Jetzt bestellen</button>
-      <button class="btn-s" onclick="scrollTo('fp-section')" id="hero-cta2">🏠 Demo ansehen</button>
+      <button class="btn-p" onclick="openFiverr()" data-i="heroCta1">🛒 Jetzt bestellen</button>
+      <button class="btn-s" onclick="document.getElementById('fp-section').scrollIntoView({behavior:'smooth'})" data-i="heroCta2">🏠 Demo ansehen</button>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="num">47+</div><div class="lbl" id="stat1-lbl">Projekte</div></div>
-      <div class="stat"><div class="num">98%</div><div class="lbl" id="stat2-lbl">5-Sterne</div></div>
-      <div class="stat"><div class="num">48h</div><div class="lbl" id="stat3-lbl">Lieferzeit</div></div>
-      <div class="stat"><div class="num">€49</div><div class="lbl" id="stat4-lbl">ab Preis</div></div>
+      <div class="stat"><div class="num" id="s-proj">0</div><div class="lbl" data-i="stat1">Projekte</div></div>
+      <div class="stat"><div class="num" id="s-stars">0%</div><div class="lbl" data-i="stat2">5-Sterne</div></div>
+      <div class="stat"><div class="num" id="s-del">0h</div><div class="lbl" data-i="stat3">Lieferzeit</div></div>
+      <div class="stat"><div class="num" id="s-price">€0</div><div class="lbl" data-i="stat4">ab Preis</div></div>
     </div>
   </section>
 
   <!-- TRUST -->
   <div class="trust-row">
-    <div class="badge">🚀 <span id="tb1">48h Lieferung</span></div>
-    <div class="badge">✅ <span id="tb2">100% Zufriedenheit</span></div>
-    <div class="badge">📄 <span id="tb3">Vollständige Docs</span></div>
-    <div class="badge">🔄 <span id="tb4">Revisionen inkl.</span></div>
-    <div class="badge">🌍 <span id="tb5">DE · EN Support</span></div>
+    <div class="badge">🚀 <span data-i="tb1">48h Lieferung</span></div>
+    <div class="badge">✅ <span data-i="tb2">100% Zufriedenheit</span></div>
+    <div class="badge">📄 <span data-i="tb3">Vollständige Docs</span></div>
+    <div class="badge">🔄 <span data-i="tb4">Revisionen inkl.</span></div>
+    <div class="badge">🌍 DE · EN</div>
+    <div class="badge">⚡ <span data-i="tb5">Schnelle Lieferung</span></div>
   </div>
 
   <!-- DASHBOARD DEMOS -->
   <div class="sec">
-    <h2 class="sec-title" id="dash-title">Dashboard Demos</h2>
-    <p class="sec-sub" id="dash-sub">So sieht dein Home Assistant Dashboard aus — interaktiv, responsiv, individuell.</p>
+    <h2 class="sec-title reveal" data-i="dashTitle">Dashboard Demos</h2>
+    <p class="sec-sub reveal" data-i="dashSub">So sieht dein Home Assistant Dashboard aus — live, interaktiv, dein Design.</p>
     <div class="dash-grid">
 
-      <!-- Music -->
-      <div class="dash-card">
-        <div class="dash-card-tag">🎵 Musik</div>
-        <div class="dash-card-title">Media Player</div>
-        <div style="overflow:hidden">
-          <div class="music-cover">🎵</div>
+      <!-- MUSIC / RADIO -->
+      <div class="dash-card reveal">
+        <div class="dash-card-tag" data-i="cardMusic">🎵 Musik & Radio</div>
+        <div class="dash-card-title" data-i="cardMusicTitle">Media Player</div>
+        <div style="overflow:hidden;margin-bottom:12px">
+          <div class="music-art">🎵</div>
           <div class="music-track" id="music-track">Midnight City</div>
           <div class="music-artist" id="music-artist">M83 · Hurry Up, We're Dreaming</div>
         </div>
-        <div class="music-bar"><div class="music-bar-fill" id="music-fill"></div></div>
-        <div class="music-ctrls">
-          <span onclick="prevTrack()">⏮</span>
-          <span class="play" id="music-play-btn" onclick="toggleMusic()">⏸</span>
-          <span onclick="nextTrack()">⏭</span>
-          <span style="margin-left:auto;font-size:.8rem;color:var(--text3)" id="music-time">2:14</span>
+        <div class="progress-bar" id="prog-bar" onclick="seekMusic(event)">
+          <div class="progress-fill" id="prog-fill" style="width:38%"></div>
         </div>
-      </div>
-
-      <!-- Weather -->
-      <div class="dash-card">
-        <div class="dash-card-tag">🌤 Wetter</div>
-        <div class="dash-card-title">Wetterstation</div>
-        <div class="weather-now">
-          <div class="weather-icon" id="w-icon">⛅</div>
-          <div>
-            <div class="weather-temp"><span id="w-temp">18</span>°C</div>
-            <div class="weather-city">Zürich · Schweiz</div>
+        <div class="music-ctrls">
+          <button class="mc" onclick="prevTrack()">⏮</button>
+          <button class="mc play" id="play-btn" onclick="togglePlay()">▶</button>
+          <button class="mc" onclick="nextTrack()">⏭</button>
+          <span style="font-size:.75rem;color:var(--text3);margin-left:4px" id="music-time">0:00</span>
+          <div class="music-eq" id="music-eq" style="opacity:0">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+            <div class="eq-bar"></div><div class="eq-bar"></div>
           </div>
         </div>
-        <div class="weather-row">
-          <div class="weather-day"><span class="d-icon">🌧</span><div style="color:var(--text3);font-size:.65rem">Mo</div><div class="d-temp">14°</div></div>
-          <div class="weather-day"><span class="d-icon">⛅</span><div style="color:var(--text3);font-size:.65rem">Di</div><div class="d-temp">19°</div></div>
-          <div class="weather-day" style="background:var(--accent);color:#fff;border-radius:8px"><span class="d-icon">☀️</span><div style="font-size:.65rem;opacity:.8">Mi</div><div class="d-temp">22°</div></div>
-          <div class="weather-day"><span class="d-icon">🌤</span><div style="color:var(--text3);font-size:.65rem">Do</div><div class="d-temp">20°</div></div>
-          <div class="weather-day"><span class="d-icon">🌧</span><div style="color:var(--text3);font-size:.65rem">Fr</div><div class="d-temp">15°</div></div>
+        <div class="music-vol">
+          🔈 <input type="range" id="vol-slider" min="0" max="100" value="65" oninput="setVol(this.value)"> 🔊
+          <span id="vol-val">65%</span>
+        </div>
+        <audio id="radio-audio" preload="none"></audio>
+        <div class="radio-stations">
+          <div class="radio-ttl" data-i="radioLbl">🔴 LIVE RADIO</div>
+          <div class="station-grid">
+            <button class="sta" onclick="playStation(this,'https://stream.srg-ssr.ch/m/rsp/mp3_128','Radio Swiss Pop 🇨🇭')">RSP 🇨🇭</button>
+            <button class="sta" onclick="playStation(this,'https://s5-webradio.antenne.de/antenne','Antenne Bayern 🇩🇪')">Antenne</button>
+            <button class="sta" onclick="playStation(this,'https://liveradio.swr.de/sw282p3/swr3/play.mp3','SWR3 🇩🇪')">SWR3</button>
+            <button class="sta" onclick="playStation(this,'https://stream.srg-ssr.ch/m/rsj/mp3_128','Swiss Jazz 🎷')">Jazz 🎷</button>
+            <button class="sta" onclick="stopRadio()" data-i="radioStop">⏹ Stop</button>
+          </div>
         </div>
       </div>
 
-      <!-- Climate -->
-      <div class="dash-card">
-        <div class="dash-card-tag">🌡 Klima</div>
-        <div class="dash-card-title">Thermostat</div>
-        <div class="climate-ring">
-          <svg viewBox="0 0 88 88">
-            <circle cx="44" cy="44" r="36" fill="none" stroke="var(--bg3)" stroke-width="7"/>
-            <circle id="thermo-ring" cx="44" cy="44" r="36" fill="none" stroke="var(--accent)" stroke-width="7"
-                    stroke-dasharray="188" stroke-dashoffset="80" stroke-linecap="round" transform="rotate(-90 44 44)"
-                    style="transition:stroke-dashoffset .4s ease"/>
-          </svg>
-          <div class="val"><span id="thermo-val">21</span>°</div>
-        </div>
-        <div class="climate-ctrls">
-          <button onclick="adjustThermo(-1)">−</button>
-          <span style="font-size:.8rem;color:var(--text2)">Sollwert</span>
-          <button onclick="adjustThermo(1)">+</button>
-        </div>
-        <div class="climate-mode">
-          <button class="mode-btn on" id="mode-heat" onclick="setMode('heat')">🔥 Heizen</button>
-          <button class="mode-btn" id="mode-cool" onclick="setMode('cool')">❄️ Kühlen</button>
-          <button class="mode-btn" id="mode-off" onclick="setMode('off')">⏸ Aus</button>
+      <!-- LIVE WEATHER -->
+      <div class="dash-card reveal reveal-delay-1">
+        <div class="dash-card-tag"><span class="live-dot"></span><span data-i="cardWeather">Wetter · Dein Standort</span></div>
+        <div class="dash-card-title" data-i="cardWeatherTitle">Wetterstation Live</div>
+        <div id="weather-widget">
+          <div class="w-loading" id="w-loading">📍 <span data-i="wLoading">Standort wird ermittelt...</span></div>
+          <div id="w-content" style="display:none">
+            <div class="weather-top">
+              <div class="w-icon" id="w-icon">🌤</div>
+              <div class="w-right">
+                <div class="w-temp"><span id="w-temp">—</span>°C</div>
+                <div class="w-desc" id="w-desc">—</div>
+                <div class="w-loc">📍 <span id="w-loc">—</span></div>
+              </div>
+            </div>
+            <div class="w-details">
+              <div class="w-det"><strong id="w-hum">—%</strong> <span data-i="wHum">Luftfeuchtigkeit</span></div>
+              <div class="w-det"><strong id="w-wind">— km/h</strong> <span data-i="wWind">Wind</span></div>
+              <div class="w-det"><strong id="w-feels">—°C</strong> <span data-i="wFeels">Gefühlt</span></div>
+              <div class="w-det"><strong id="w-rain">—%</strong> <span data-i="wRain">Regen</span></div>
+            </div>
+            <div class="w-forecast" id="w-forecast"></div>
+          </div>
+          <div class="w-error" id="w-error" style="display:none" data-i="wError">📍 Standortzugriff nicht möglich</div>
         </div>
       </div>
 
-      <!-- Lights mini -->
-      <div class="dash-card">
-        <div class="dash-card-tag">💡 Beleuchtung</div>
-        <div class="dash-card-title">Lichtsteuerung</div>
-        <div class="light-grid-mini" id="mini-lights">
-          <div class="lm-item on" onclick="toggleMiniLight(this,'Wohnzimmer')"><div class="li">💡</div><div class="ln">Wohnzimmer</div></div>
-          <div class="lm-item" onclick="toggleMiniLight(this,'Schlafzimmer')"><div class="li">💡</div><div class="ln">Schlafzimmer</div></div>
-          <div class="lm-item on" onclick="toggleMiniLight(this,'Küche')"><div class="li">💡</div><div class="ln">Küche</div></div>
-          <div class="lm-item" onclick="toggleMiniLight(this,'Bad')"><div class="li">💡</div><div class="ln">Bad</div></div>
-          <div class="lm-item on" onclick="toggleMiniLight(this,'Büro')"><div class="li">💡</div><div class="ln">Büro</div></div>
-          <div class="lm-item" onclick="toggleMiniLight(this,'Flur')"><div class="li">💡</div><div class="ln">Flur</div></div>
+      <!-- LIVE NEWS -->
+      <div class="dash-card reveal reveal-delay-2">
+        <div class="dash-card-tag"><span class="live-dot"></span><span data-i="cardNews">News · Deine Region</span></div>
+        <div class="dash-card-title" data-i="cardNewsTitle">Aktuelle Nachrichten</div>
+        <div id="news-widget">
+          <div class="news-loading" id="news-loading" data-i="newsLoading">📰 Lade aktuelle Nachrichten...</div>
+          <div class="news-list" id="news-list"></div>
         </div>
-        <div class="lm-slider-row">
+      </div>
+
+      <!-- CLIMATE -->
+      <div class="dash-card reveal">
+        <div class="dash-card-tag" data-i="cardClimate">🌡 Klima</div>
+        <div class="dash-card-title" data-i="cardClimateTitle">Thermostat</div>
+        <div class="climate-wrap">
+          <div class="thermo-container">
+            <svg viewBox="0 0 104 104">
+              <circle cx="52" cy="52" r="44" fill="none" stroke="var(--bg3)" stroke-width="8"/>
+              <circle id="t-ring" cx="52" cy="52" r="44" fill="none" stroke="url(#thermGrad)" stroke-width="8"
+                stroke-dasharray="276" stroke-dashoffset="100" stroke-linecap="round" transform="rotate(-90 52 52)"
+                style="transition:stroke-dashoffset .5s ease"/>
+              <defs><linearGradient id="thermGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#0071e3"/><stop offset="100%" stop-color="#34c759"/>
+              </linearGradient></defs>
+            </svg>
+            <div class="thermo-val"><span class="t-num" id="t-num">21</span><span class="t-unit">°C</span></div>
+          </div>
+          <div class="climate-btns">
+            <button class="c-adj" onclick="adjThermo(-1)">−</button>
+            <span class="c-lbl" data-i="climateTarget">Sollwert</span>
+            <button class="c-adj" onclick="adjThermo(1)">+</button>
+          </div>
+          <div class="mode-pills">
+            <button class="mode-pill on" id="mp-heat" onclick="setMode('heat')">🔥 <span data-i="modeHeat">Heizen</span></button>
+            <button class="mode-pill" id="mp-cool" onclick="setMode('cool')">❄️ <span data-i="modeCool">Kühlen</span></button>
+            <button class="mode-pill" id="mp-off" onclick="setMode('off')">⏸</button>
+          </div>
+          <div class="c-room-temp" id="c-room">🌡 <span data-i="roomTemp">Raumtemperatur:</span> 19.4°C</div>
+        </div>
+      </div>
+
+      <!-- LIGHTS MINI -->
+      <div class="dash-card reveal reveal-delay-1">
+        <div class="dash-card-tag" data-i="cardLights">💡 Beleuchtung</div>
+        <div class="dash-card-title" data-i="cardLightsTitle">Lichtsteuerung</div>
+        <div class="light-grid" id="mini-lights">
+          <div class="lm-item on" onclick="toggleMiniLight(this,'living')"><div class="li">💡</div><div class="ln" data-i="rl-living">Wohnzimmer</div></div>
+          <div class="lm-item" onclick="toggleMiniLight(this,'bed1')"><div class="li">💡</div><div class="ln" data-i="rl-bed1">Schlafzimmer</div></div>
+          <div class="lm-item on" onclick="toggleMiniLight(this,'living')"><div class="li">💡</div><div class="ln" data-i="rl-kitchen">Küche</div></div>
+          <div class="lm-item" onclick="toggleMiniLight(this,'bath')"><div class="li">💡</div><div class="ln" data-i="rl-bath">Bad</div></div>
+          <div class="lm-item on" onclick="toggleMiniLight(this,'office')"><div class="li">💡</div><div class="ln" data-i="rl-office">Büro</div></div>
+          <div class="lm-item" onclick="toggleMiniLight(this,'bed2')"><div class="li">💡</div><div class="ln" data-i="rl-hall">Flur</div></div>
+        </div>
+        <div class="bright-row">
           <span>🌙</span>
-          <input type="range" min="0" max="100" value="75" oninput="updateBrightness(this.value)">
+          <input type="range" min="0" max="100" value="75" oninput="updateBright(this.value)">
           <span>☀️</span>
-          <span id="bright-val" style="min-width:28px;text-align:right;font-size:.75rem;color:var(--text)">75%</span>
+          <span id="bright-val" style="font-size:.75rem;font-weight:600;min-width:30px">75%</span>
         </div>
       </div>
 
-      <!-- Security -->
-      <div class="dash-card">
-        <div class="dash-card-tag">🔒 Sicherheit</div>
-        <div class="dash-card-title">Kameras &amp; Alarm</div>
-        <div class="cam-view">📷<span class="cam-live">LIVE</span></div>
-        <div class="cam-grid">
-          <div class="cam-mini">🚪</div>
-          <div class="cam-mini">🏠</div>
+      <!-- ENERGY -->
+      <div class="dash-card reveal reveal-delay-2">
+        <div class="dash-card-tag" data-i="cardEnergy">⚡ Energie</div>
+        <div class="dash-card-title" data-i="cardEnergyTitle">Verbrauchsübersicht</div>
+        <div class="energy-header">
+          <div class="energy-num" id="en-num">2.4 kWh</div>
+          <div class="energy-trend" id="en-trend">↓ −12%</div>
         </div>
-        <div class="sec-status" id="sec-status">System gesichert</div>
-      </div>
-
-      <!-- Energy -->
-      <div class="dash-card">
-        <div class="dash-card-tag">⚡ Energie</div>
-        <div class="dash-card-title">Verbrauchsübersicht</div>
-        <div class="energy-num" id="energy-num">2.4 <span style="font-size:1rem;font-weight:400;color:var(--text2)">kWh</span></div>
         <div class="energy-bars" id="energy-bars"></div>
         <div class="energy-row">
-          <span>Solar: <strong style="color:var(--green)">1.8 kWh</strong></span>
-          <span>Netz: <strong>0.6 kWh</strong></span>
+          <span>☀️ <span class="e-solar" data-i="solar">Solar: 1.8 kWh</span></span>
+          <span>🔌 <span class="e-grid" data-i="grid">Netz: 0.6 kWh</span></span>
         </div>
       </div>
 
     </div><!-- dash-grid -->
   </div>
 
-  <!-- FLOOR PLAN DEMO -->
-  <div class="sec" id="fp-section">
-    <h2 class="sec-title" id="fp-title">Interaktiver Grundriss</h2>
-    <p class="sec-sub" id="fp-sub">Klick auf Räume oder Lampen zum Schalten. Rechtsklick wählt Farbe.</p>
-    <div class="scene-row">
-      <button class="sp" onclick="setScene('relax')">🌅 Relax</button>
-      <button class="sp" onclick="setScene('normal')">☀️ Normal</button>
-      <button class="sp" onclick="setScene('movie')">🎬 Movie</button>
-      <button class="sp" onclick="setScene('alloff')">🌙 Aus</button>
-    </div>
-    <div class="fp-wrap">
-      <div>
-        <div class="fp-hint" id="fp-hint">Klick: Licht an/aus · Rechtsklick: Farbe wählen</div>
-        <div class="fp-outer" id="fp-outer">
-          <!-- Color picker -->
-          <div class="cp" id="fp-cp">
-            <div class="cp-ttl" id="cp-ttl">Raum</div>
-            <div class="swatches" id="cp-swatches"></div>
-            <div class="bright-row">
-              <span id="cp-bright-lbl">Helligkeit</span>
-              <input type="range" min="10" max="100" value="80" id="cp-bright" oninput="cpBright(this.value)">
-            </div>
-            <button class="cp-close" onclick="closeCp()" id="cp-close-btn">Schließen</button>
-          </div>
-
-          <!-- Base (no lights) -->
-          <img class="fp-base" id="fp-base" src="https://autoflow-lab.github.io/fp_off.png" alt="Floor Plan" loading="eager">
-
-          <!--
-            SVG LIGHT OVERLAY
-            mix-blend-mode:screen = gradients add light realistically to photo
-            Polygons trace exact room boundaries in 1376×768 image space
-            Radial gradients fill each room with soft colored light
-          -->
-          <svg id="fp-svg-lights"
-               viewBox="0 0 1376 768"
-               xmlns="http://www.w3.org/2000/svg"
-               style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;border-radius:16px">
-            <defs>
-              <!-- Room gradient defs (color updated by JS) -->
-              <!-- bed1 — Master Bedroom (upper-right) center ~(840,235) -->
-              <radialGradient id="rg-bed1" cx="50%" cy="50%" r="65%">
-                <stop id="rg-bed1-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
-                <stop id="rg-bed1-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
-                <stop id="rg-bed1-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
-              </radialGradient>
-              <!-- bath (right) center ~(1072,318) -->
-              <radialGradient id="rg-bath" cx="50%" cy="50%" r="65%">
-                <stop id="rg-bath-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
-                <stop id="rg-bath-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
-                <stop id="rg-bath-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
-              </radialGradient>
-              <!-- living (center-large) center ~(762,378) -->
-              <radialGradient id="rg-living" cx="50%" cy="50%" r="65%">
-                <stop id="rg-living-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
-                <stop id="rg-living-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
-                <stop id="rg-living-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
-              </radialGradient>
-              <!-- dining center ~(945,512) -->
-              <radialGradient id="rg-dining" cx="50%" cy="50%" r="65%">
-                <stop id="rg-dining-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
-                <stop id="rg-dining-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
-                <stop id="rg-dining-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
-              </radialGradient>
-              <!-- bed2 (left) center ~(352,425) -->
-              <radialGradient id="rg-bed2" cx="50%" cy="50%" r="65%">
-                <stop id="rg-bed2-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
-                <stop id="rg-bed2-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
-                <stop id="rg-bed2-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
-              </radialGradient>
-              <!-- office (bottom-center) center ~(572,528) -->
-              <radialGradient id="rg-office" cx="50%" cy="50%" r="65%">
-                <stop id="rg-office-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
-                <stop id="rg-office-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
-                <stop id="rg-office-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
-              </radialGradient>
-
-              <!-- Floor lamp radial gradients (individual lamps) -->
-              <radialGradient id="lg-L1"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L1-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L2"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L2-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L3"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L3-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L4"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L4-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L5"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L5-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L6"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L6-c"  stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L7"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L7-c"  stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L8"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L8-c"  stop-color="#d0eeff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L9"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L9-c"  stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-              <radialGradient id="lg-L11" cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L11-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-
-              <!-- Glow filter for lamp dots -->
-              <filter id="lg" x="-80%" y="-80%" width="360%" height="360%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
-                <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-              <!-- Soft bloom on room polygons -->
-              <filter id="roomBloom" x="-15%" y="-15%" width="130%" height="130%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
-                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-            </defs>
-
-            <!-- ═══ ROOM LIGHT POLYGONS ═══ -->
-            <!-- Room polygons trace the actual floor area of each room.
-                 Coordinates tuned to 1376×768 isometric image.
-                 Filter:blur gives soft edges at room boundaries. -->
-
-            <!-- Bed1: Master bedroom upper-right
-                 Floor parallelogram: left wall ~x=688, right wall ~x=992
-                 Top edge y~145, bottom edge y~325 -->
-            <polygon id="rp-bed1"
-                     points="688,148 992,193 992,328 688,283"
-                     fill="url(#rg-bed1)" opacity="0"
-                     filter="url(#roomBloom)"
-                     style="transition:opacity .55s ease"/>
-
-            <!-- Bath: right of bed1, narrow room
-                 Shifted down to match actual bathroom position -->
-            <polygon id="rp-bath"
-                     points="993,215 1148,258 1148,428 993,388"
-                     fill="url(#rg-bath)" opacity="0"
-                     filter="url(#roomBloom)"
-                     style="transition:opacity .55s ease"/>
-
-            <!-- Living/Kitchen: large center area
-                 From left-center to right (below bedroom) -->
-            <polygon id="rp-living"
-                     points="530,245 688,283 992,328 992,515 530,415"
-                     fill="url(#rg-living)" opacity="0"
-                     filter="url(#roomBloom)"
-                     style="transition:opacity .55s ease"/>
-
-            <!-- Dining: right portion below bath -->
-            <polygon id="rp-dining"
-                     points="812,422 1080,492 1080,608 812,548"
-                     fill="url(#rg-dining)" opacity="0"
-                     filter="url(#roomBloom)"
-                     style="transition:opacity .55s ease"/>
-
-            <!-- Bed2: left bedroom -->
-            <polygon id="rp-bed2"
-                     points="225,328 482,388 482,528 225,468"
-                     fill="url(#rg-bed2)" opacity="0"
-                     filter="url(#roomBloom)"
-                     style="transition:opacity .55s ease"/>
-
-            <!-- Office: bottom center -->
-            <polygon id="rp-office"
-                     points="482,452 658,498 658,608 482,562"
-                     fill="url(#rg-office)" opacity="0"
-                     filter="url(#roomBloom)"
-                     style="transition:opacity .55s ease"/>
-
-            <!-- ═══ INDIVIDUAL LAMP POOLS ═══ -->
-            <!-- Soft elliptic pools around each lamp — on when room is on -->
-            <!-- L1: Bed1 main pendant -->
-            <ellipse id="lp-L1" cx="840" cy="185" rx="155" ry="100" fill="url(#lg-L1)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L2: Bed1 bedside left -->
-            <ellipse id="lp-L2" cx="800" cy="228" rx="80"  ry="58"  fill="url(#lg-L2)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L3: Bed1 bedside right -->
-            <ellipse id="lp-L3" cx="895" cy="246" rx="80"  ry="58"  fill="url(#lg-L3)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L4: Bed2 floor lamp (tripod) -->
-            <ellipse id="lp-L4" cx="380" cy="398" rx="120" ry="88"  fill="url(#lg-L4)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L5: Bed2 wall sconce -->
-            <ellipse id="lp-L5" cx="302" cy="362" rx="80"  ry="60"  fill="url(#lg-L5)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L6: Kitchen ceiling pendant -->
-            <ellipse id="lp-L6" cx="678" cy="292" rx="145" ry="100" fill="url(#lg-L6)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L7: Kitchen island pendant -->
-            <ellipse id="lp-L7" cx="760" cy="355" rx="120" ry="85"  fill="url(#lg-L7)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L8: Office ceiling lamp -->
-            <ellipse id="lp-L8" cx="580" cy="525" rx="110" ry="78"  fill="url(#lg-L8)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L9: Bath mirror light -->
-            <ellipse id="lp-L9" cx="1072" cy="272" rx="92" ry="72"  fill="url(#lg-L9)" opacity="0" style="transition:opacity .4s"/>
-            <!-- L11: Dining pendant -->
-            <ellipse id="lp-L11" cx="900" cy="482" rx="115" ry="82" fill="url(#lg-L11)" opacity="0" style="transition:opacity .4s"/>
-          </svg>
-
-          <!-- SVG: lamp dots + room click zones (separate svg, not blended) -->
-          <svg class="fp-lamps-svg" viewBox="0 0 1376 768" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none">
-            <defs>
-              <filter id="ldot-glow" x="-80%" y="-80%" width="360%" height="360%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
-                <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-            </defs>
-            <!-- Invisible room click areas -->
-            <g style="pointer-events:all">
-              <polygon points="688,148 992,193 992,328 688,283" fill="rgba(0,0,0,0)" onclick="roomClick('bed1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"/>
-              <polygon points="993,215 1148,258 1148,428 993,388" fill="rgba(0,0,0,0)" onclick="roomClick('bath',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"/>
-              <polygon points="530,245 688,283 992,328 992,515 530,415" fill="rgba(0,0,0,0)" onclick="roomClick('living',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"/>
-              <polygon points="812,422 1080,492 1080,608 812,548" fill="rgba(0,0,0,0)" onclick="roomClick('dining',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"/>
-              <polygon points="225,328 482,388 482,528 225,468" fill="rgba(0,0,0,0)" onclick="roomClick('bed2',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"/>
-              <polygon points="482,452 658,498 658,608 482,562" fill="rgba(0,0,0,0)" onclick="roomClick('office',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"/>
-            </g>
-            <!-- Lamp dots (clickable) -->
-            <g style="pointer-events:all">
-              <!-- Bed1: pendant, 2× bedside -->
-              <g onclick="lampClick('L1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="840" cy="178" r="18" fill="transparent"/><circle id="lb-L1" cx="840" cy="178" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L1" cx="840" cy="178" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L2',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="800" cy="222" r="15" fill="transparent"/><circle id="lb-L2" cx="800" cy="222" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L2" cx="800" cy="222" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L3',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="895" cy="240" r="15" fill="transparent"/><circle id="lb-L3" cx="895" cy="240" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L3" cx="895" cy="240" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <!-- Bed2: floor lamp (tripod), wall sconce -->
-              <g onclick="lampClick('L4',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="380" cy="393" r="18" fill="transparent"/><circle id="lb-L4" cx="380" cy="393" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L4" cx="380" cy="393" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/><!-- Tripod legs --><line x1="374" y1="405" x2="380" y2="393" stroke="#555" stroke-width="1.5" opacity=".4" style="transition:stroke .3s" id="tp-L4a"/><line x1="386" y1="405" x2="380" y2="393" stroke="#555" stroke-width="1.5" opacity=".4" style="transition:stroke .3s" id="tp-L4b"/><line x1="380" y1="406" x2="380" y2="393" stroke="#555" stroke-width="1.5" opacity=".4" style="transition:stroke .3s" id="tp-L4c"/></g>
-              <g onclick="lampClick('L5',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="302" cy="360" r="15" fill="transparent"/><circle id="lb-L5" cx="302" cy="360" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L5" cx="302" cy="360" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <!-- Living -->
-              <g onclick="lampClick('L6',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="678" cy="285" r="18" fill="transparent"/><circle id="lb-L6" cx="678" cy="285" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L6" cx="678" cy="285" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L7',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="760" cy="348" r="15" fill="transparent"/><circle id="lb-L7" cx="760" cy="348" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L7" cx="760" cy="348" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <!-- Office -->
-              <g onclick="lampClick('L8',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"><circle cx="580" cy="520" r="16" fill="transparent"/><circle id="lb-L8" cx="580" cy="520" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L8" cx="580" cy="520" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
-              <!-- Bath -->
-              <g onclick="lampClick('L9',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"><circle cx="1072" cy="268" r="16" fill="transparent"/><circle id="lb-L9" cx="1072" cy="268" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L9" cx="1072" cy="268" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
-              <!-- Dining -->
-              <g onclick="lampClick('L11',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"><circle cx="900" cy="478" r="16" fill="transparent"/><circle id="lb-L11" cx="900" cy="478" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
-            </g>
-          </svg>
-        </div>
+  <!-- FLOOR PLAN -->
+  <div class="band" id="fp-section" style="padding:72px 24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <h2 class="sec-title reveal" data-i="fpTitle">Interaktiver Grundriss</h2>
+      <p class="sec-sub reveal" data-i="fpSub">Klick auf Räume oder Lampen zum Schalten. Rechtsklick wählt Farbe.</p>
+      <div class="scene-row">
+        <button class="sp" onclick="setScene('relax')">🌅 Relax</button>
+        <button class="sp" onclick="setScene('normal')">☀️ Normal</button>
+        <button class="sp" onclick="setScene('movie')">🎬 Movie</button>
+        <button class="sp" onclick="setScene('alloff')">🌙 Aus</button>
       </div>
+      <div class="fp-wrap">
+        <div>
+          <div class="fp-hint"><span>👆</span><span data-i="fpHint">Klick: Licht an/aus · Rechtsklick: Farbe wählen</span></div>
+          <div class="fp-outer" id="fp-outer">
+            <!-- Color Picker -->
+            <div class="cp" id="fp-cp">
+              <div class="cp-ttl" id="cp-ttl">Raum</div>
+              <div class="swatches" id="cp-swatches"></div>
+              <div class="bright-row"><span data-i="cpBright">Helligkeit</span><input type="range" min="10" max="100" value="80" id="cp-bright" oninput="cpBright(this.value)"></div>
+              <button class="cp-close" onclick="closeCp()" data-i="cpClose">Schließen</button>
+            </div>
 
-      <!-- Room panel -->
-      <div class="fp-panel">
-        <div class="fp-panel-title" id="fp-panel-title">💡 Lichter steuern</div>
-        <div id="room-list"></div>
-        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
-          <div style="font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px" id="quick-lbl">Schnell</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="sp" style="padding:5px 11px;font-size:.72rem" onclick="setScene('relax')">🌅</button>
-            <button class="sp" style="padding:5px 11px;font-size:.72rem" onclick="setScene('normal')">☀️</button>
-            <button class="sp" style="padding:5px 11px;font-size:.72rem" onclick="setScene('movie')">🎬</button>
-            <button class="sp" style="padding:5px 11px;font-size:.72rem" onclick="setScene('alloff')">🌙</button>
+            <img class="fp-base" src="https://autoflow-lab.github.io/fp_off.png" alt="Floor Plan" loading="eager">
+
+            <!-- SVG gradient light overlay (mix-blend-mode:screen) -->
+            <svg id="fp-lights" viewBox="0 0 1376 768"
+                 style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;border-radius:var(--r)">
+              <defs>
+                <radialGradient id="rg-bed1" cx="50%" cy="50%" r="65%"><stop id="rg-bed1-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/><stop id="rg-bed1-1" offset="60%" stop-color="#f0a020" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="rg-bath" cx="50%" cy="50%" r="65%"><stop id="rg-bath-0" offset="0%" stop-color="#f0f8ff" stop-opacity="0"/><stop id="rg-bath-1" offset="60%" stop-color="#c0d8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="rg-living" cx="50%" cy="50%" r="65%"><stop id="rg-living-0" offset="0%" stop-color="#f0f8ff" stop-opacity="0"/><stop id="rg-living-1" offset="60%" stop-color="#c0d8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="rg-dining" cx="50%" cy="50%" r="65%"><stop id="rg-dining-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/><stop id="rg-dining-1" offset="60%" stop-color="#f0a020" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="rg-bed2" cx="50%" cy="50%" r="65%"><stop id="rg-bed2-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/><stop id="rg-bed2-1" offset="60%" stop-color="#f0a020" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="rg-office" cx="50%" cy="50%" r="65%"><stop id="rg-office-0" offset="0%" stop-color="#c8e8ff" stop-opacity="0"/><stop id="rg-office-1" offset="60%" stop-color="#4088cc" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <!-- Lamp pools -->
+                <radialGradient id="lg-L1"><stop offset="0%" id="lg-L1-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L2"><stop offset="0%" id="lg-L2-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L3"><stop offset="0%" id="lg-L3-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L4"><stop offset="0%" id="lg-L4-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L5"><stop offset="0%" id="lg-L5-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L6"><stop offset="0%" id="lg-L6-c" stop-color="#f0f8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L7"><stop offset="0%" id="lg-L7-c" stop-color="#f0f8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L8"><stop offset="0%" id="lg-L8-c" stop-color="#c8e8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L9"><stop offset="0%" id="lg-L9-c" stop-color="#f0f8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L11"><stop offset="0%" id="lg-L11-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <filter id="roomBloom" x="-18%" y="-18%" width="136%" height="136%"><feGaussianBlur in="SourceGraphic" stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="ldotGlow" x="-80%" y="-80%" width="360%" height="360%"><feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <!-- Room polygons -->
+              <polygon id="rp-bed1"   points="688,148 992,193 992,328 688,283"                    fill="url(#rg-bed1)"   opacity="0" style="transition:opacity .55s ease"/>
+              <polygon id="rp-bath"   points="993,215 1148,258 1148,428 993,388"                  fill="url(#rg-bath)"   opacity="0" style="transition:opacity .55s ease"/>
+              <polygon id="rp-living" points="530,245 688,283 992,328 992,515 530,415"            fill="url(#rg-living)" opacity="0" style="transition:opacity .55s ease"/>
+              <polygon id="rp-dining" points="812,422 1080,492 1080,608 812,548"                  fill="url(#rg-dining)" opacity="0" style="transition:opacity .55s ease"/>
+              <polygon id="rp-bed2"   points="225,328 482,388 482,528 225,468"                    fill="url(#rg-bed2)"   opacity="0" style="transition:opacity .55s ease"/>
+              <polygon id="rp-office" points="482,452 658,498 658,608 482,562"                    fill="url(#rg-office)" opacity="0" style="transition:opacity .55s ease"/>
+              <!-- Lamp pools -->
+              <ellipse id="lp-L1"  cx="840"  cy="185" rx="115" ry="78" fill="url(#lg-L1)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L2"  cx="800"  cy="228" rx="62"  ry="46"  fill="url(#lg-L2)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L3"  cx="895"  cy="246" rx="62"  ry="46"  fill="url(#lg-L3)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L4"  cx="380"  cy="398" rx="95"  ry="70"  fill="url(#lg-L4)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L5"  cx="302"  cy="362" rx="65"  ry="50"  fill="url(#lg-L5)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L6"  cx="678"  cy="292" rx="115" ry="82" fill="url(#lg-L6)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L7"  cx="760"  cy="355" rx="95"  ry="72"  fill="url(#lg-L7)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L8"  cx="580"  cy="525" rx="88"  ry="65"  fill="url(#lg-L8)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L9"  cx="1072" cy="272" rx="75"  ry="60"  fill="url(#lg-L9)"  opacity="0" style="transition:opacity .4s"/>
+              <ellipse id="lp-L11" cx="900"  cy="482" rx="92"  ry="70"  fill="url(#lg-L11)" opacity="0" style="transition:opacity .4s"/>
+            </svg>
+
+            <!-- Click zones + Lamp dots -->
+            <svg viewBox="0 0 1376 768" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;border-radius:var(--r)">
+              <g style="pointer-events:all">
+                <polygon points="688,148 992,193 992,328 688,283"         fill="rgba(0,0,0,0)" onclick="roomClick('bed1',event)"   oncontextmenu="roomCm('bed1',event)"   style="cursor:pointer"/>
+                <polygon points="993,215 1148,258 1148,428 993,388"       fill="rgba(0,0,0,0)" onclick="roomClick('bath',event)"   oncontextmenu="roomCm('bath',event)"   style="cursor:pointer"/>
+                <polygon points="530,245 688,283 992,328 992,515 530,415" fill="rgba(0,0,0,0)" onclick="roomClick('living',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"/>
+                <polygon points="812,422 1080,492 1080,608 812,548"       fill="rgba(0,0,0,0)" onclick="roomClick('dining',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"/>
+                <polygon points="225,328 482,388 482,528 225,468"         fill="rgba(0,0,0,0)" onclick="roomClick('bed2',event)"   oncontextmenu="roomCm('bed2',event)"   style="cursor:pointer"/>
+                <polygon points="482,452 658,498 658,608 482,562"         fill="rgba(0,0,0,0)" onclick="roomClick('office',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"/>
+              </g>
+              <!-- Lamps -->
+              <g style="pointer-events:all">
+                <g onclick="lampClick('L1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="840" cy="178" r="20" fill="transparent"/><circle id="lb-L1" cx="840" cy="178" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L1" cx="840" cy="178" r="12" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L2',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="800" cy="222" r="16" fill="transparent"/><circle id="lb-L2" cx="800" cy="222" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L2" cx="800" cy="222" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L3',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="895" cy="240" r="16" fill="transparent"/><circle id="lb-L3" cx="895" cy="240" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L3" cx="895" cy="240" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L4',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer">
+                  <circle cx="380" cy="393" r="20" fill="transparent"/>
+                  <circle id="lb-L4" cx="380" cy="393" r="7" fill="#444" style="transition:all .35s"/>
+                  <circle id="lr-L4" cx="380" cy="393" r="13" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/>
+                  <line id="tp4a" x1="374" y1="406" x2="380" y2="393" stroke="#444" stroke-width="1.5" opacity=".4" style="transition:stroke .35s"/>
+                  <line id="tp4b" x1="387" y1="407" x2="380" y2="393" stroke="#444" stroke-width="1.5" opacity=".4" style="transition:stroke .35s"/>
+                  <line id="tp4c" x1="380" y1="408" x2="380" y2="393" stroke="#444" stroke-width="1.5" opacity=".4" style="transition:stroke .35s"/>
+                </g>
+                <g onclick="lampClick('L5',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="302" cy="360" r="16" fill="transparent"/><circle id="lb-L5" cx="302" cy="360" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L5" cx="302" cy="360" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L6',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="678" cy="285" r="20" fill="transparent"/><circle id="lb-L6" cx="678" cy="285" r="7" fill="#444" style="transition:all .35s"/><circle id="lr-L6" cx="678" cy="285" r="13" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L7',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="760" cy="348" r="16" fill="transparent"/><circle id="lb-L7" cx="760" cy="348" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L7" cx="760" cy="348" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L8',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"><circle cx="580" cy="520" r="18" fill="transparent"/><circle id="lb-L8" cx="580" cy="520" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L8" cx="580" cy="520" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L9',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"><circle cx="1072" cy="268" r="18" fill="transparent"/><circle id="lb-L9" cx="1072" cy="268" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L9" cx="1072" cy="268" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L11',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"><circle cx="900" cy="478" r="18" fill="transparent"/><circle id="lb-L11" cx="900" cy="478" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <!-- Room panel -->
+        <div class="fp-panel">
+          <div class="fp-panel-title" data-i="fpPanel">💡 Lichter steuern</div>
+          <div id="room-list"></div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+            <div style="font-size:.62rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:9px" data-i="quickLabel">Szenen</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('relax')">🌅</button>
+              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('normal')">☀️</button>
+              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('movie')">🎬</button>
+              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('alloff')">🌙</button>
+            </div>
           </div>
         </div>
       </div>
@@ -670,97 +759,136 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24p
   </div>
 
   <!-- PORTFOLIO -->
-  <div class="sec" style="background:var(--bg2);max-width:100%;padding:72px 24px">
-    <div style="max-width:1080px;margin:0 auto">
-      <h2 class="sec-title sec-center" id="pf-title">Kundenprojekte</h2>
-      <p class="sec-sub sec-center" id="pf-sub">Echte Projekte, echte Ergebnisse</p>
+  <div style="padding:72px 24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="pfTitle">Kundenprojekte</h2>
+      <p class="sec-sub sec-center reveal" data-i="pfSub">Echte Projekte — professionell umgesetzt</p>
       <div class="portfolio-grid">
 
-        <div class="pf-card">
-          <div class="pf-preview" style="background:linear-gradient(135deg,#0a0a1a,#1a0a3a)">
-            <div style="padding:16px;height:100%;display:flex;flex-direction:column;gap:8px">
-              <div style="display:flex;gap:8px">
-                <div style="flex:1;background:rgba(120,80,255,.2);border:1px solid rgba(120,80,255,.4);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.5rem">💜</div><div style="font-size:.6rem;color:#a080ff;margin-top:4px">Licht</div></div>
-                <div style="flex:1;background:rgba(0,200,255,.15);border:1px solid rgba(0,200,255,.3);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.5rem">🌡</div><div style="font-size:.6rem;color:#00c8ff;margin-top:4px">22°C</div></div>
-                <div style="flex:1;background:rgba(255,80,120,.15);border:1px solid rgba(255,80,120,.3);border-radius:10px;padding:10px;text-align:center"><div style="font-size:1.5rem">🔒</div><div style="font-size:.6rem;color:#ff5078;margin-top:4px">Sicher</div></div>
+        <!-- Card 1: Penthouse -->
+        <div class="pf-card reveal">
+          <div class="pf-preview" style="background:linear-gradient(145deg,#080820,#16062e,#0a1832)">
+            <div style="padding:18px;height:100%;display:flex;flex-direction:column;gap:8px">
+              <!-- Top row: 3 widgets -->
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
+                <div style="background:rgba(160,80,255,.18);border:1px solid rgba(160,80,255,.35);border-radius:10px;padding:10px;text-align:center">
+                  <div style="font-size:1.3rem">💜</div><div style="font-size:.58rem;color:#c090ff;margin-top:3px;font-weight:700">8 Licht</div>
+                </div>
+                <div style="background:rgba(0,200,255,.12);border:1px solid rgba(0,200,255,.28);border-radius:10px;padding:10px;text-align:center">
+                  <div style="font-size:1.1rem;font-weight:800;color:#60d8ff">22°</div><div style="font-size:.58rem;color:#60d8ff;margin-top:3px;font-weight:700">Klima</div>
+                </div>
+                <div style="background:rgba(80,255,120,.12);border:1px solid rgba(80,255,120,.28);border-radius:10px;padding:10px;text-align:center">
+                  <div style="font-size:1.3rem">🔒</div><div style="font-size:.58rem;color:#60ff80;margin-top:3px;font-weight:700">Sicher</div>
+                </div>
               </div>
-              <div style="background:rgba(120,80,255,.1);border-radius:8px;padding:8px;font-size:.65rem;color:#c0a0ff;border:1px solid rgba(120,80,255,.2)">
-                🎵 Billie Eilish · Happier Than Ever<br>
-                <div style="background:rgba(120,80,255,.3);border-radius:4px;height:4px;margin-top:6px;overflow:hidden"><div style="width:45%;height:100%;background:#9060ff;border-radius:4px"></div></div>
+              <!-- Music bar -->
+              <div style="background:rgba(160,80,255,.1);border:1px solid rgba(160,80,255,.2);border-radius:9px;padding:10px;display:flex;align-items:center;gap:10px">
+                <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#1db954,#0a6a2e);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🎵</div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:.72rem;color:#c0a0ff;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Billie Eilish · Happier Than Ever</div>
+                  <div style="background:rgba(160,80,255,.25);border-radius:3px;height:3px;margin-top:6px;overflow:hidden"><div style="width:45%;height:100%;background:linear-gradient(90deg,#a050ff,#e080ff);border-radius:3px"></div></div>
+                </div>
+                <div style="font-size:.72rem;color:rgba(192,160,255,.5)">▶ 2:34</div>
+              </div>
+              <!-- Mini energy chart -->
+              <div style="background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.14);border-radius:9px;padding:10px;display:flex;align-items:center;gap:8px">
+                <span style="font-size:.65rem;color:rgba(0,200,255,.6);font-weight:700">⚡ SOLAR</span>
+                <div style="flex:1;display:flex;gap:2px;align-items:flex-end;height:20px">
+                  <div style="flex:1;height:40%;background:rgba(0,200,255,.25);border-radius:2px 2px 0 0"></div>
+                  <div style="flex:1;height:65%;background:rgba(0,200,255,.3);border-radius:2px 2px 0 0"></div>
+                  <div style="flex:1;height:90%;background:rgba(0,200,255,.5);border-radius:2px 2px 0 0"></div>
+                  <div style="flex:1;height:75%;background:rgba(0,200,255,.4);border-radius:2px 2px 0 0"></div>
+                  <div style="flex:1;height:55%;background:rgba(0,200,255,.3);border-radius:2px 2px 0 0"></div>
+                </div>
+                <span style="font-size:.72rem;color:#40d8ff;font-weight:800">4.2 kW</span>
               </div>
             </div>
-            <div class="pf-tag">Smart Living</div>
+            <div class="pf-tag">Penthouse · 220m²</div>
+            <div class="pf-stars">⭐ 5.0</div>
           </div>
           <div class="pf-info">
-            <div class="pf-title">Penthouse Dashboard</div>
-            <div class="pf-desc">Vollständiges Luxus-Dashboard mit Mood-Beleuchtung, Musik-Integration und Klimasteuerung für 8 Räume.</div>
-            <div class="pf-tags">
-              <span class="pf-chip">Home Assistant</span>
-              <span class="pf-chip">Lovelace</span>
-              <span class="pf-chip">Zigbee</span>
-            </div>
+            <div class="pf-title" data-i="pf1title">Luxus Penthouse Dashboard</div>
+            <div class="pf-desc" data-i="pf1desc">Vollständiges 8-Zimmer-Dashboard mit Mood-Beleuchtung, Musik, Klimaanlage, Solarmonitoring und Sicherheitssystem.</div>
+            <div class="pf-tags"><span class="pf-chip">Home Assistant</span><span class="pf-chip">Hue</span><span class="pf-chip">KNX</span><span class="pf-chip">Solaredge</span></div>
           </div>
         </div>
 
-        <div class="pf-card">
-          <div class="pf-preview" style="background:linear-gradient(135deg,#0a1a0a,#0a2a1a)">
+        <!-- Card 2: Solar/Energy -->
+        <div class="pf-card reveal reveal-delay-1">
+          <div class="pf-preview" style="background:linear-gradient(145deg,#030f03,#051a0a,#030f03)">
             <div style="padding:16px;height:100%;display:flex;flex-direction:column;justify-content:space-between">
               <div style="display:flex;justify-content:space-between;align-items:center">
-                <div style="font-size:.7rem;color:#40ff80;font-weight:700">⚡ ENERGIE HEUTE</div>
-                <div style="font-size:1.1rem;font-weight:700;color:#40ff80">3.2 kWh</div>
+                <div>
+                  <div style="font-size:.6rem;color:rgba(80,255,120,.5);font-weight:800;letter-spacing:1px">⚡ ENERGIE HEUTE</div>
+                  <div style="font-size:1.8rem;font-weight:800;color:#40ff80;line-height:1.1;letter-spacing:-.04em">12.4 kWh</div>
+                </div>
+                <div style="text-align:right"><div style="font-size:.62rem;color:rgba(80,255,120,.5)">Einspeisung</div><div style="font-size:1.1rem;font-weight:800;color:#80ff80">↑ 8.2 kWh</div></div>
               </div>
-              <div style="display:flex;gap:4px;align-items:flex-end;height:60px">
-                <div style="flex:1;background:rgba(64,255,128,.15);border-radius:3px 3px 0 0;height:40%"></div>
-                <div style="flex:1;background:rgba(64,255,128,.15);border-radius:3px 3px 0 0;height:65%"></div>
-                <div style="flex:1;background:rgba(64,255,128,.3);border-radius:3px 3px 0 0;height:80%"></div>
+              <div style="flex:1;display:flex;gap:4px;align-items:flex-end;padding:8px 0">
+                <div style="flex:1;background:rgba(64,255,128,.12);border-radius:3px 3px 0 0;height:30%"></div>
+                <div style="flex:1;background:rgba(64,255,128,.18);border-radius:3px 3px 0 0;height:55%"></div>
+                <div style="flex:1;background:rgba(64,255,128,.25);border-radius:3px 3px 0 0;height:72%"></div>
                 <div style="flex:1;background:#40ff80;border-radius:3px 3px 0 0;height:100%"></div>
-                <div style="flex:1;background:rgba(64,255,128,.3);border-radius:3px 3px 0 0;height:70%"></div>
-                <div style="flex:1;background:rgba(64,255,128,.15);border-radius:3px 3px 0 0;height:45%"></div>
+                <div style="flex:1;background:rgba(64,255,128,.25);border-radius:3px 3px 0 0;height:68%"></div>
+                <div style="flex:1;background:rgba(64,255,128,.18);border-radius:3px 3px 0 0;height:45%"></div>
+                <div style="flex:1;background:rgba(64,255,128,.12);border-radius:3px 3px 0 0;height:25%"></div>
               </div>
-              <div style="display:flex;gap:8px">
-                <div style="flex:1;background:rgba(64,255,128,.1);border:1px solid rgba(64,255,128,.2);border-radius:8px;padding:8px;text-align:center"><div style="font-size:.8rem;color:#40ff80">☀️</div><div style="font-size:.65rem;color:rgba(64,255,128,.7);margin-top:2px">Solar 2.1kWh</div></div>
-                <div style="flex:1;background:rgba(64,255,128,.1);border:1px solid rgba(64,255,128,.2);border-radius:8px;padding:8px;text-align:center"><div style="font-size:.8rem;color:#40ff80">🔋</div><div style="font-size:.65rem;color:rgba(64,255,128,.7);margin-top:2px">Akku 78%</div></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+                <div style="background:rgba(64,255,128,.1);border:1px solid rgba(64,255,128,.2);border-radius:8px;padding:8px;text-align:center">
+                  <div style="font-size:.9rem">☀️</div><div style="font-size:.6rem;color:rgba(64,255,128,.7);margin-top:2px">12.4 kWh</div>
+                </div>
+                <div style="background:rgba(64,255,128,.1);border:1px solid rgba(64,255,128,.2);border-radius:8px;padding:8px;text-align:center">
+                  <div style="font-size:.9rem">🔋</div><div style="font-size:.6rem;color:rgba(64,255,128,.7);margin-top:2px">82%</div>
+                </div>
+                <div style="background:rgba(64,255,128,.1);border:1px solid rgba(64,255,128,.2);border-radius:8px;padding:8px;text-align:center">
+                  <div style="font-size:.9rem">🚗</div><div style="font-size:.6rem;color:rgba(64,255,128,.7);margin-top:2px">Tesla</div>
+                </div>
               </div>
             </div>
-            <div class="pf-tag">Energie</div>
+            <div class="pf-tag">Solar & Energie</div>
+            <div class="pf-stars">⭐ 5.0</div>
           </div>
           <div class="pf-info">
-            <div class="pf-title">Solar Energy Manager</div>
-            <div class="pf-desc">Echtzeit-Energiemonitoring mit Solar, Batteriespeicher, Wärmepumpe und dynamischem Lastmanagement.</div>
-            <div class="pf-tags">
-              <span class="pf-chip">Nibe</span>
-              <span class="pf-chip">Shelly</span>
-              <span class="pf-chip">Tesla</span>
-            </div>
+            <div class="pf-title" data-i="pf2title">Solar Energy Manager</div>
+            <div class="pf-desc" data-i="pf2desc">Echtzeit-Energiemonitoring mit Solarpanel, Tesla-Powerwall, Wärmepumpe, E-Auto-Lader und dynamischem Lastmanagement.</div>
+            <div class="pf-tags"><span class="pf-chip">Solaredge</span><span class="pf-chip">Tesla</span><span class="pf-chip">Nibe</span><span class="pf-chip">Shelly</span></div>
           </div>
         </div>
 
-        <div class="pf-card">
-          <div class="pf-preview" style="background:linear-gradient(135deg,#1a0a00,#2a1500)">
-            <div style="padding:14px;height:100%">
-              <div style="font-size:.65rem;color:#ff9f0a;font-weight:700;margin-bottom:10px">🏠 GRUNDRISS LIVE</div>
-              <div style="background:rgba(255,159,10,.05);border-radius:10px;height:120px;position:relative;border:1px solid rgba(255,159,10,.15);overflow:hidden">
-                <!-- Mini floor plan representation -->
-                <div style="position:absolute;background:rgba(255,159,10,.2);border:1px solid rgba(255,159,10,.4);border-radius:4px;left:10%;top:10%;width:35%;height:40%"></div>
-                <div style="position:absolute;background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.2);border-radius:4px;right:5%;top:5%;width:28%;height:45%"></div>
-                <div style="position:absolute;background:rgba(255,159,10,.15);border:1px solid rgba(255,159,10,.3);border-radius:4px;left:10%;bottom:8%;width:40%;height:38%"></div>
-                <div style="position:absolute;background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.2);border-radius:4px;right:5%;bottom:8%;width:25%;height:38%"></div>
-                <!-- Light dots -->
-                <div style="position:absolute;width:8px;height:8px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 8px #ff9f0a;left:25%;top:25%"></div>
-                <div style="position:absolute;width:8px;height:8px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 8px #ff9f0a;left:55%;top:45%"></div>
-                <div style="position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,159,10,.4);right:18%;bottom:30%"></div>
+        <!-- Card 3: Floor Plan -->
+        <div class="pf-card reveal reveal-delay-2">
+          <div class="pf-preview" style="background:linear-gradient(145deg,#080818,#0c1428,#080818)">
+            <div style="padding:16px;height:100%">
+              <div style="font-size:.6rem;color:rgba(255,160,30,.6);font-weight:800;margin-bottom:10px;letter-spacing:1px">🏠 GRUNDRISS LIVE</div>
+              <div style="background:rgba(255,160,30,.05);border-radius:12px;height:130px;position:relative;border:1px solid rgba(255,160,30,.12);overflow:hidden;cursor:pointer">
+                <!-- Floor plan mini visualization -->
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:rgba(255,160,30,.3)">Apartment 3D-Grundriss</div>
+                <!-- Room rectangles -->
+                <div style="position:absolute;background:rgba(255,200,50,.18);border:1px solid rgba(255,200,50,.4);border-radius:5px;left:8%;top:8%;width:38%;height:42%;display:flex;align-items:center;justify-content:center">
+                  <div style="width:8px;height:8px;border-radius:50%;background:#ffcc30;box-shadow:0 0 12px #ffcc30"></div>
+                </div>
+                <div style="position:absolute;background:rgba(100,200,255,.12);border:1px solid rgba(100,200,255,.3);border-radius:5px;right:5%;top:8%;width:30%;height:55%;display:flex;align-items:center;justify-content:center">
+                  <div style="width:6px;height:6px;border-radius:50%;background:#60d8ff;box-shadow:0 0 10px #60d8ff"></div>
+                </div>
+                <div style="position:absolute;background:rgba(255,200,50,.12);border:1px solid rgba(255,200,50,.28);border-radius:5px;left:8%;bottom:8%;width:52%;height:40%;display:flex;align-items:center;justify-content:center">
+                  <div style="width:8px;height:8px;border-radius:50%;background:#ffcc30;box-shadow:0 0 12px #ffcc30"></div>
+                </div>
+                <div style="position:absolute;background:rgba(100,255,150,.08);border:1px solid rgba(100,255,150,.2);border-radius:5px;right:5%;bottom:8%;width:26%;height:35%"></div>
+                <!-- Scan line effect -->
+                <div style="position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(100,200,255,.5),transparent);animation:scanLine 3s linear infinite"></div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <div style="flex:1;background:rgba(255,200,50,.08);border:1px solid rgba(255,200,50,.18);border-radius:8px;padding:7px;text-align:center;font-size:.65rem;color:rgba(255,200,50,.7);font-weight:700">5 Räume an</div>
+                <div style="flex:1;background:rgba(255,200,50,.08);border:1px solid rgba(255,200,50,.18);border-radius:8px;padding:7px;text-align:center;font-size:.65rem;color:rgba(255,200,50,.7);font-weight:700">4 Szenen</div>
               </div>
             </div>
-            <div class="pf-tag">Floor Plan</div>
+            <div class="pf-tag">Interaktiver Grundriss</div>
+            <div class="pf-stars">⭐ 5.0</div>
           </div>
           <div class="pf-info">
-            <div class="pf-title">Interaktiver Grundriss</div>
-            <div class="pf-desc">Fotorealistischer 3D-Grundriss mit individualisierbaren Lichtzonen, Szenen und echtzeitiger Geräteanzeige.</div>
-            <div class="pf-tags">
-              <span class="pf-chip">Floor Plan</span>
-              <span class="pf-chip">Hue</span>
-              <span class="pf-chip">IKEA</span>
-            </div>
+            <div class="pf-title" data-i="pf3title">3D Grundriss Dashboard</div>
+            <div class="pf-desc" data-i="pf3desc">Fotorealistischer isometrischer Grundriss mit per-Raum Lichtsteuerung, Szenen, Farbwechsel und Live-Gerätestatus.</div>
+            <div class="pf-tags"><span class="pf-chip">Floor Plan</span><span class="pf-chip">Hue</span><span class="pf-chip">IKEA</span><span class="pf-chip">Zigbee</span></div>
           </div>
         </div>
 
@@ -769,514 +897,585 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24p
   </div>
 
   <!-- REVIEWS -->
-  <div class="sec">
-    <h2 class="sec-title sec-center" id="rev-title">Was Kunden sagen</h2>
-    <p class="sec-sub sec-center" style="margin-bottom:32px">47+ erfolgreich abgeschlossene Projekte · ⭐ 4.98 / 5.0</p>
-    <div class="review-grid">
-      <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text">"Absolut beeindruckendes Dashboard! Genau das was ich mir vorgestellt hatte, sogar noch besser. Super schnelle Lieferung."</p><div class="rev-author">Thomas K. · Zürich</div></div>
-      <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text">"Mein HA sieht jetzt aus wie ein Apple-Produkt! Perfekte Kommunikation, alle Wünsche wurden umgesetzt."</p><div class="rev-author">Sarah M. · München</div></div>
-      <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text">"Die KI-Integration ist fantastisch. Lokale Sprachsteuerung ohne Cloud, kein Abo mehr. Absolut empfehlenswert!"</p><div class="rev-author">Marco R. · Wien</div></div>
-      <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text">"Der Grundriss ist unglaublich. Meine Gäste denken das wäre eine Apple-App. Professionelle Arbeit!"</p><div class="rev-author">Lisa F. · Berlin</div></div>
+  <div class="band" style="padding:72px 24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="revTitle">Was Kunden sagen</h2>
+      <p class="sec-sub sec-center reveal">47+ Projekte · ⭐ 4.98 / 5.0 · Fiverr Top-Rated</p>
+      <div class="review-grid">
+        <div class="rev reveal"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev1">"Absolut beeindruckendes Dashboard! Genau das was ich mir vorgestellt hatte, sogar noch besser. Super schnelle Lieferung."</p><div class="rev-author"><div class="rev-avatar">TK</div>Thomas K. · Zürich</div></div>
+        <div class="rev reveal reveal-delay-1"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev2">"Mein HA sieht jetzt aus wie eine Apple-App! Perfekte Kommunikation, alle Wünsche umgesetzt. Nächstes Projekt folgt!"</p><div class="rev-author"><div class="rev-avatar">SM</div>Sarah M. · München</div></div>
+        <div class="rev reveal reveal-delay-2"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev3">"Lokale Sprachsteuerung ohne Cloud — fantastisch! Kein Google, kein Abo. Der Grundriss ist der Knaller."</p><div class="rev-author"><div class="rev-avatar">MR</div>Marco R. · Wien</div></div>
+        <div class="rev reveal"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev4">"Das Energie-Dashboard hat mir geholfen 30% Strom zu sparen. ROI nach 2 Monaten. Absolut empfehlenswert!"</p><div class="rev-author"><div class="rev-avatar">LF</div>Lisa F. · Berlin</div></div>
+      </div>
     </div>
   </div>
 
   <!-- PRICING -->
-  <div style="background:var(--bg2);padding:72px 24px">
-    <div style="max-width:1080px;margin:0 auto">
-      <h2 class="sec-title sec-center" id="price-title">Preise &amp; Pakete</h2>
-      <p class="sec-sub sec-center">Klar kalkulierbar — keine versteckten Kosten.</p>
-      <div class="tier-grid">
+  <div style="padding:72px 24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="priceTitle">Preise & Pakete</h2>
+      <p class="sec-sub sec-center reveal" data-i="priceSub">Transparent kalkulierbar — keine versteckten Kosten.</p>
+      <div class="tier-grid reveal">
         <div class="tier">
-          <div class="tier-name">Basic</div>
-          <div class="tier-price">€49 <span>/ Projekt</span></div>
-          <div class="tier-desc">Perfekt für den Einstieg ins Smart Home</div>
+          <div class="tier-name" data-i="tierBasic">Basic</div>
+          <div class="tier-price">€49 <small data-i="perProject">/ Projekt</small></div>
+          <div class="tier-desc" data-i="t1desc">Perfekt für den Einstieg</div>
           <ul class="tier-list">
-            <li>Custom Lovelace Dashboard</li>
-            <li>Bis zu 5 Karten / Views</li>
-            <li>Basis-Automationen</li>
-            <li>1 Revision</li>
-            <li>Lieferung in 48h</li>
+            <li data-i="t1-1">Custom Lovelace Dashboard</li><li data-i="t1-2">Bis zu 5 Karten / Views</li>
+            <li data-i="t1-3">Basis-Automationen</li><li data-i="t1-4">1 Revision</li><li data-i="t1-5">Lieferung in 48h</li>
           </ul>
-          <button class="btn-tier" onclick="openFiverr()">Jetzt bestellen</button>
+          <button class="btn-tier" onclick="openFiverr()" data-i="orderNow">Jetzt bestellen</button>
         </div>
         <div class="tier featured">
-          <div class="tier-pop">Beliebt</div>
-          <div class="tier-name">Standard</div>
-          <div class="tier-price">€99 <span>/ Projekt</span></div>
-          <div class="tier-desc">Die vollständige Smart Home Experience</div>
+          <div class="tier-pop" data-i="popular">Beliebt</div>
+          <div class="tier-name" data-i="tierStd">Standard</div>
+          <div class="tier-price">€99 <small data-i="perProject">/ Projekt</small></div>
+          <div class="tier-desc" data-i="t2desc">Die vollständige Experience</div>
           <ul class="tier-list">
-            <li>Vollständiges Dashboard</li>
-            <li>Interaktiver Grundriss</li>
-            <li>Musik, Wetter, Energie</li>
-            <li>Szenen &amp; Automationen</li>
-            <li>3 Revisionen</li>
-            <li>Video-Erklärung</li>
+            <li data-i="t2-1">Vollständiges Dashboard</li><li data-i="t2-2">Interaktiver Grundriss</li>
+            <li data-i="t2-3">Musik, Wetter, Energie</li><li data-i="t2-4">Szenen & Automationen</li>
+            <li data-i="t2-5">3 Revisionen</li><li data-i="t2-6">Video-Erklärung</li>
           </ul>
-          <button class="btn-tier" onclick="openFiverr()">Jetzt bestellen</button>
+          <button class="btn-tier" onclick="openFiverr()" data-i="orderNow">Jetzt bestellen</button>
         </div>
         <div class="tier">
-          <div class="tier-name">Premium</div>
-          <div class="tier-price">€149 <span>/ Projekt</span></div>
-          <div class="tier-desc">Mit KI &amp; voller Automatisierung</div>
+          <div class="tier-name" data-i="tierPrem">Premium</div>
+          <div class="tier-price">€149 <small data-i="perProject">/ Projekt</small></div>
+          <div class="tier-desc" data-i="t3desc">Mit KI & voller Automation</div>
           <ul class="tier-list">
-            <li>Alles aus Standard</li>
-            <li>Lokale KI-Sprachsteuerung</li>
-            <li>N8N Workflow-Integration</li>
-            <li>Unbegrenzte Revisionen</li>
-            <li>1 Monat Support</li>
+            <li data-i="t3-1">Alles aus Standard</li><li data-i="t3-2">Lokale KI-Sprachsteuerung</li>
+            <li data-i="t3-3">N8N Workflow-Integration</li><li data-i="t3-4">Unbegrenzte Revisionen</li>
+            <li data-i="t3-5">1 Monat Support</li>
           </ul>
-          <button class="btn-tier" onclick="openFiverr()">Jetzt bestellen</button>
+          <button class="btn-tier" onclick="openFiverr()" data-i="orderNow">Jetzt bestellen</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- FAQ -->
-  <div class="sec">
-    <h2 class="sec-title sec-center" id="faq-title">Häufige Fragen</h2>
-    <p class="sec-sub sec-center" style="margin-bottom:32px">Alles was du wissen musst</p>
-    <div class="faq-list">
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Was ist Home Assistant?</span><span class="faq-icon">+</span></button><div class="faq-a">Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla. Ich baue darauf professionelle, individuelle Dashboards.</div></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Brauche ich technisches Vorwissen?</span><span class="faq-icon">+</span></button><div class="faq-a">Nein. Du bekommst fertige Lösungen mit vollständiger Dokumentation und Einrichtungsanleitung. Einfach importieren und loslegen.</div></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Wie lange dauert die Lieferung?</span><span class="faq-icon">+</span></button><div class="faq-a">Basic: 24–48h · Standard: 3 Tage · Premium mit KI: 5–7 Tage. Express auf Anfrage möglich.</div></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Welche Geräte werden unterstützt?</span><span class="faq-icon">+</span></button><div class="faq-a">Alle HA-kompatiblen Geräte: Philips Hue, IKEA Tradfri, Shelly, Zigbee, Z-Wave, Sonos, Tesla, Nibe, Viessmann und 3000+ mehr.</div></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Wie funktioniert die Zusammenarbeit?</span><span class="faq-icon">+</span></button><div class="faq-a">1. Briefing via Fiverr-Chat. 2. Ich erstelle das Design. 3. Review + Revisionen. 4. Fertige Dateien + Docs. Asynchron — kein Call nötig.</div></div>
+  <div class="band" style="padding:72px 24px">
+    <div style="max-width:800px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="faqTitle">Häufige Fragen</h2>
+      <p class="sec-sub sec-center reveal" data-i="faqSub">Alles was du wissen musst</p>
+      <div class="faq-list reveal">
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq1q">Was ist Home Assistant?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq1a">Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla. Ich baue darauf professionelle, individuelle Dashboards.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq2q">Brauche ich technisches Vorwissen?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq2a">Nein. Du bekommst fertige Lösungen mit vollständiger Dokumentation und Einrichtungsanleitung. Einfach importieren und loslegen.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq3q">Wie lange dauert die Lieferung?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq3a">Basic: 24–48h · Standard: 3 Tage · Premium mit KI: 5–7 Tage. Express auf Anfrage möglich.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq4q">Welche Geräte werden unterstützt?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq4a">Alle HA-kompatiblen Geräte: Philips Hue, IKEA Tradfri, Shelly, Zigbee, Z-Wave, Sonos, Tesla, Nibe, Viessmann und 3000+ mehr.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq5q">Wie funktioniert die Zusammenarbeit?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq5a">1. Briefing via Fiverr-Chat. 2. Ich erstelle das Design. 3. Review + Revisionen. 4. Fertige Dateien + Docs. Alles asynchron — kein Call nötig.</div></div>
+      </div>
     </div>
   </div>
 
   <!-- CTA -->
-  <div style="padding:0 24px 72px;max-width:1080px;margin:0 auto">
-    <div class="cta-box">
-      <h2 id="cta-h2">Bereit für dein Smart Home?</h2>
-      <p id="cta-p">Kostenloses Erstgespräch — ich erkläre was möglich ist.</p>
-      <button class="btn-p" onclick="openFiverr()" id="cta-btn">🛒 Auf Fiverr bestellen</button>
+  <div style="padding:60px 24px 80px;max-width:1100px;margin:0 auto">
+    <div class="cta-box reveal">
+      <h2 data-i="ctaH2">Bereit für dein Smart Home?</h2>
+      <p data-i="ctaP">Kostenloses Briefing — ich zeige dir was möglich ist.</p>
+      <button class="btn-p" onclick="openFiverr()" data-i="ctaBtn">🛒 Auf Fiverr bestellen</button>
     </div>
   </div>
 
 </div><!-- /page-smarthome -->
 
-<!-- ═══════════════════════════════════════════════
-     KI & AUTOMATION PAGE
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════ KI & AUTOMATION PAGE ═══════════════════════ -->
 <div class="page" id="page-ai">
   <div class="ai-hero">
-    <div class="hero-badge" style="border-color:rgba(120,80,255,.3);background:rgba(120,80,255,.1);color:#9060ff">🤖 KI-Powered Automation</div>
-    <h1 id="ai-h1">Dein Alltag,<br><em>vollautomatisch</em>.</h1>
-    <p class="hero-sub" id="ai-sub">Lokale KI-Modelle, N8N Workflows, Chatbots und smarte Automationen — alles ohne Cloud-Abhängigkeit.</p>
+    <div class="hero-badge" style="border-color:rgba(120,80,255,.3);background:rgba(120,80,255,.12);color:#9060ff">🤖 KI-Powered Automation</div>
+    <h1><span data-i="aiH1a">Dein Alltag,</span><br><span class="ai-grad" data-i="aiH1b">vollautomatisch.</span></h1>
+    <p class="hero-sub" data-i="aiSub">Lokale KI-Modelle, N8N Workflows, Chatbots und smarte Automationen — alles ohne Cloud-Abhängigkeit.</p>
     <div class="hero-actions">
-      <button class="btn-p" onclick="openFiverr()" style="background:linear-gradient(135deg,#7050ff,#e040fb)" id="ai-cta">🤖 KI-Projekt starten</button>
+      <button class="btn-p" onclick="openFiverr()" style="background:linear-gradient(135deg,#7050ff,#e040fb)" data-i="aiCta">🤖 KI-Projekt starten</button>
+      <button class="btn-s" onclick="window.open('mailto:clawy.studio@gmail.com')" data-i="aiContact">✉ Kostenlos anfragen</button>
     </div>
   </div>
 
-  <div class="sec">
-    <h2 class="sec-title sec-center" id="ai-srv-title">Was ich anbiete</h2>
-    <p class="sec-sub sec-center" style="margin-bottom:40px">Alles lokal — keine Daten in der Cloud, kein Abo</p>
-    <div class="ai-services">
-      <div class="ai-srv">
-        <div class="ai-srv-icon">🗣</div>
-        <div class="ai-srv-title">Lokale Sprachsteuerung</div>
-        <div class="ai-srv-desc">Whisper + Ollama oder Piper — komplett lokal, ohne Google/Alexa. Deine Stimme, deine Daten, dein Server.</div>
-      </div>
-      <div class="ai-srv">
-        <div class="ai-srv-icon">⚡</div>
-        <div class="ai-srv-title">N8N Workflows</div>
-        <div class="ai-srv-desc">Automatisiere alles: E-Mails, Kalender, Benachrichtigungen, APIs. Verbinde Home Assistant mit der ganzen Welt.</div>
-      </div>
-      <div class="ai-srv">
-        <div class="ai-srv-icon">🤖</div>
-        <div class="ai-srv-title">KI-Chatbot Integration</div>
-        <div class="ai-srv-desc">GPT-4, Claude oder lokale Modelle (Llama, Mistral) direkt in Home Assistant oder Telegram integriert.</div>
-      </div>
-      <div class="ai-srv">
-        <div class="ai-srv-icon">📊</div>
-        <div class="ai-srv-title">Intelligente Automationen</div>
-        <div class="ai-srv-desc">Kontextbewusste Automationen die auf Uhrzeit, Präsenz, Wetter und Gewohnheiten reagieren.</div>
-      </div>
-      <div class="ai-srv">
-        <div class="ai-srv-icon">📱</div>
-        <div class="ai-srv-title">Telegram / WhatsApp Bot</div>
-        <div class="ai-srv-desc">Steuere dein Smart Home per Nachricht. Frag deinen Bot: "Wer ist zuhause?" oder "Schalte alle Lichter aus".</div>
-      </div>
-      <div class="ai-srv">
-        <div class="ai-srv-icon">🔔</div>
-        <div class="ai-srv-title">Smarte Benachrichtigungen</div>
-        <div class="ai-srv-desc">KI-gefilterte, kontextrelevante Alerts — kein Spam, nur was wirklich wichtig ist. Inkl. Bilderkennung für Kameras.</div>
-      </div>
+  <div style="padding:0 24px 72px;max-width:1100px;margin:0 auto">
+    <h2 class="sec-title sec-center reveal" data-i="aiSrvTitle">Was ich anbiete</h2>
+    <p class="sec-sub sec-center reveal" data-i="aiSrvSub">Alles lokal — keine Daten in der Cloud, kein Abo, keine Abhängigkeit</p>
+    <div class="ai-services reveal">
+      <div class="ai-srv"><span class="ai-srv-icon">🗣</span><div class="ai-srv-title" data-i="ais1t">Lokale Sprachsteuerung</div><div class="ai-srv-desc" data-i="ais1d">Whisper + Ollama oder Piper — komplett lokal, ohne Google/Alexa. Deine Stimme, deine Daten, dein Server.</div></div>
+      <div class="ai-srv"><span class="ai-srv-icon">⚡</span><div class="ai-srv-title" data-i="ais2t">N8N Workflows</div><div class="ai-srv-desc" data-i="ais2d">Automatisiere alles: E-Mails, Kalender, Benachrichtigungen, APIs. Verbinde Home Assistant mit der ganzen Welt.</div></div>
+      <div class="ai-srv"><span class="ai-srv-icon">🤖</span><div class="ai-srv-title" data-i="ais3t">KI-Chatbot Integration</div><div class="ai-srv-desc" data-i="ais3d">GPT-4, Claude oder lokale Modelle (Llama, Mistral) direkt in Home Assistant oder Telegram integriert.</div></div>
+      <div class="ai-srv"><span class="ai-srv-icon">📊</span><div class="ai-srv-title" data-i="ais4t">Intelligente Automationen</div><div class="ai-srv-desc" data-i="ais4d">Kontextbewusste Automationen die auf Uhrzeit, Präsenz, Wetter und deine Gewohnheiten reagieren.</div></div>
+      <div class="ai-srv"><span class="ai-srv-icon">📱</span><div class="ai-srv-title" data-i="ais5t">Telegram / WhatsApp Bot</div><div class="ai-srv-desc" data-i="ais5d">Steuere dein Smart Home per Nachricht. "Wer ist zuhause?" oder "Schalte alle Lichter aus".</div></div>
+      <div class="ai-srv"><span class="ai-srv-icon">🔔</span><div class="ai-srv-title" data-i="ais6t">Smarte Benachrichtigungen</div><div class="ai-srv-desc" data-i="ais6d">KI-gefilterte, kontextrelevante Alerts. Kein Spam, nur was wirklich wichtig ist. Inkl. Kameraerkennung.</div></div>
     </div>
 
-    <!-- Workflow Demo -->
-    <div class="wf-demo">
-      <h3 style="text-align:center;margin-bottom:24px;font-size:1rem;color:var(--text2)">Beispiel Workflow: Automatische Zusammenfassung</h3>
+    <div class="wf-demo reveal">
+      <h3 style="text-align:center;margin-bottom:26px;font-size:1rem;color:var(--text2)" data-i="wfTitle">Beispiel: Automatische E-Mail-Zusammenfassung</h3>
       <div class="wf-nodes">
-        <div class="wf-node">
-          <div class="wf-node-icon">📧</div>
-          <div class="wf-node-title">E-Mail eingeht</div>
-          <div class="wf-node-sub">Trigger</div>
-        </div>
+        <div class="wf-node"><div class="wf-node-icon">📧</div><div class="wf-node-title" data-i="wf1">E-Mail eingeht</div><div class="wf-node-sub">Trigger</div></div>
+                <div class="wf-arrow">→</div>
+        <div class="wf-node" style="border-color:rgba(112,80,255,.4);background:rgba(112,80,255,.05)"><div class="wf-node-icon">🤖</div><div class="wf-node-title" data-i="wf2">KI analysiert</div><div class="wf-node-sub">GPT / Llama</div></div>
         <div class="wf-arrow">→</div>
-        <div class="wf-node" style="border-color:rgba(120,80,255,.4);background:rgba(120,80,255,.05)">
-          <div class="wf-node-icon">🤖</div>
-          <div class="wf-node-title">KI analysiert</div>
-          <div class="wf-node-sub">GPT / Llama</div>
-        </div>
+        <div class="wf-node"><div class="wf-node-icon">📋</div><div class="wf-node-title" data-i="wf3">Zusammenfassung</div><div class="wf-node-sub">erstellt</div></div>
         <div class="wf-arrow">→</div>
-        <div class="wf-node">
-          <div class="wf-node-icon">📋</div>
-          <div class="wf-node-title">Zusammenfassung</div>
-          <div class="wf-node-sub">erstellt</div>
-        </div>
-        <div class="wf-arrow">→</div>
-        <div class="wf-node" style="border-color:rgba(52,199,89,.4);background:rgba(52,199,89,.05)">
-          <div class="wf-node-icon">✅</div>
-          <div class="wf-node-title">Telegram Push</div>
-          <div class="wf-node-sub">zu dir</div>
-        </div>
+        <div class="wf-node" style="border-color:rgba(52,199,89,.4);background:rgba(52,199,89,.05)"><div class="wf-node-icon">✅</div><div class="wf-node-title" data-i="wf4">Telegram Push</div><div class="wf-node-sub">zu dir</div></div>
       </div>
     </div>
-
-    <div class="cta-box" style="background:linear-gradient(135deg,rgba(112,80,255,.1),rgba(224,64,251,.07))">
+    <div class="cta-box" style="background:linear-gradient(135deg,rgba(112,80,255,.1),rgba(224,64,251,.07));margin-top:40px">
       <h2 id="ai-cta-h2">KI-Integration anfragen</h2>
-      <p id="ai-cta-p">Von lokaler Sprachsteuerung bis N8N Workflow — ich baue was du brauchst.</p>
-      <button class="btn-p" onclick="openFiverr()" style="background:linear-gradient(135deg,#7050ff,#e040fb)" id="ai-cta2">🤖 Projekt starten</button>
+      <p id="ai-cta-p">Von lokaler Sprachsteuerung bis N8N — ich baue was du brauchst.</p>
+      <button class="btn-p" onclick="openFiverr()" style="background:linear-gradient(135deg,#7050ff,#e040fb)" id="ai-cta3">🤖 Projekt starten</button>
     </div>
   </div>
 </div><!-- /page-ai -->
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-links">
-    <a href="https://www.fiverr.com/autoflow-lab" target="_blank" rel="noopener">🛒 Fiverr Profil</a>
+  <div class="ft-links">
+    <a href="https://www.fiverr.com/autoflow-lab" target="_blank">🛒 Fiverr</a>
     <a href="mailto:clawy.studio@gmail.com">✉ Kontakt</a>
     <a href="#" onclick="switchTab('smarthome',document.getElementById('tab-sh'));return false">🏠 Smart Home</a>
     <a href="#" onclick="switchTab('ai',document.getElementById('tab-ai'));return false">⚡ KI Automation</a>
   </div>
-  <div class="footer-copy">© 2025 autoflow-lab · Smart Home & KI Automation · Fiverr: autoflow-lab</div>
+  <div class="ft-copy">© 2025 autoflow-lab · Smart Home & KI Automation</div>
 </footer>
 
 <button class="fab" onclick="openFiverr()">🛒<span class="fab-txt"> Jetzt bestellen</span></button>
 <div class="toast" id="toast"></div>
 
 <script>
-// ─────────────────────────────────────
-//  UTILS
-// ─────────────────────────────────────
-const $ = id => document.getElementById(id);
-function toast(msg,d=2000){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
+// ── UTILS ──
+const $=id=>document.getElementById(id);
+function toast(msg,d=2200){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
 function openFiverr(){window.open('https://www.fiverr.com/autoflow-lab','_blank')}
-function scrollTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
 function switchTab(tab,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  $('page-'+tab).classList.add('active');
+  const pg=document.getElementById('page-'+tab);if(pg)pg.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
-  closeMob();
-  window.scrollTo(0,0);
+  closeMob();window.scrollTo(0,0);
 }
-function toggleMob(){$('mob-menu').classList.toggle('open')}
-function closeMob(){$('mob-menu').classList.remove('open')}
+function toggleMob(){document.getElementById('mob-menu').classList.toggle('open')}
+function closeMob(){document.getElementById('mob-menu').classList.remove('open')}
 function toggleTheme(){
-  const d=document.documentElement;const dark=d.dataset.theme==='dark';
-  d.dataset.theme=dark?'light':'dark';
-  $('theme-btn').textContent=dark?'🌙':'☀️';
+  const d=document.documentElement,dk=d.dataset.theme==='dark';
+  d.dataset.theme=dk?'light':'dark';
+  document.getElementById('theme-btn').textContent=dk?'🌙':'☀️';
 }
 function toggleFaq(btn){
-  const item=btn.closest('.faq-item');const a=item.querySelector('.faq-a');const was=btn.classList.contains('open');
+  const a=btn.closest('.faq-item').querySelector('.faq-a'),was=btn.classList.contains('open');
   document.querySelectorAll('.faq-q.open').forEach(b=>{b.classList.remove('open');b.closest('.faq-item').querySelector('.faq-a').classList.remove('open')});
   if(!was){btn.classList.add('open');a.classList.add('open')}
 }
-document.addEventListener('click',e=>{if(!e.target.closest('.mob-menu')&&!e.target.closest('.hamburger'))closeMob()});
+document.addEventListener('click',e=>{if(!e.target.closest('#mob-menu')&&!e.target.closest('.hamburger'))closeMob()});
 
-// ─────────────────────────────────────
-//  DASHBOARD WIDGETS
-// ─────────────────────────────────────
-const tracks=[{t:'Midnight City',a:'M83',d:'2:14'},{t:'Blinding Lights',a:'The Weeknd',d:'3:22'},{t:'As It Was',a:'Harry Styles',d:'2:47'},{t:'Levitating',a:'Dua Lipa',d:'3:14'}];
-let trackIdx=0,playing=true,progress=62;
-function renderTrack(){const tr=tracks[trackIdx];$('music-track').textContent=tr.t;$('music-artist').textContent=tr.a+'  ·  ';$('music-time').textContent=tr.d}
-function toggleMusic(){playing=!playing;$('music-play-btn').textContent=playing?'⏸':'▶';toast(playing?'▶ Wiedergabe':'⏸ Pause')}
-function prevTrack(){trackIdx=(trackIdx-1+tracks.length)%tracks.length;renderTrack();toast('⏮ '+tracks[trackIdx].t)}
-function nextTrack(){trackIdx=(trackIdx+1)%tracks.length;renderTrack();toast('⏭ '+tracks[trackIdx].t)}
+// ── SCROLL REVEAL ──
+const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 
-// Thermostat
+// ── MUSIC / RADIO ──
+const tracks=[{t:'Midnight City',a:'M83',d:214},{t:'Blinding Lights',a:'The Weeknd',d:202},{t:'As It Was',a:'Harry Styles',d:167},{t:'Levitating',a:'Dua Lipa',d:194}];
+let tIdx=0,playing=false,progVal=38,progTimer=null;
+function renderTrack(){const tr=tracks[tIdx];$('music-track').textContent=tr.t;$('music-artist').textContent=tr.a}
+function fmtTime(s){return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}
+function togglePlay(){
+  const ra=$('radio-audio');
+  if(ra&&ra.src&&!ra.paused){ra.pause();stopRadio();return}
+  playing=!playing;$('play-btn').textContent=playing?'⏸':'▶';
+  const eq=$('music-eq');if(eq)eq.classList.toggle('on',playing);
+  if(playing){progTimer=setInterval(()=>{progVal=Math.min(100,progVal+100/tracks[tIdx].d);const pf=$('prog-fill');if(pf)pf.style.width=progVal+'%';const mt=$('music-time');if(mt)mt.textContent=fmtTime(Math.round(tracks[tIdx].d*progVal/100));if(progVal>=100)nextTrack()},1000)}
+  else clearInterval(progTimer);
+}
+function prevTrack(){tIdx=(tIdx-1+tracks.length)%tracks.length;progVal=0;renderTrack();toast('⏮ '+tracks[tIdx].t)}
+function nextTrack(){tIdx=(tIdx+1)%tracks.length;progVal=0;renderTrack();toast('⏭ '+tracks[tIdx].t)}
+function seekMusic(e){const r=e.currentTarget.getBoundingClientRect();progVal=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));const pf=$('prog-fill');if(pf)pf.style.width=progVal+'%'}
+function setVol(v){$('vol-val').textContent=v+'%';const ra=$('radio-audio');if(ra)ra.volume=v/100}
+let curStaBtn=null;
+function playStation(btn,url,name){
+  const ra=$('radio-audio');if(!ra)return;
+  if(curStaBtn===btn&&!ra.paused){stopRadio();return}
+  document.querySelectorAll('.sta').forEach(b=>b.classList.remove('on'));
+  ra.src=url;ra.volume=($('vol-sl')?$('vol-sl').value:65)/100;
+  ra.play().then(()=>{btn.classList.add('on');curStaBtn=btn;if(playing){playing=false;clearInterval(progTimer);$('play-btn').textContent='▶'}const eq=$('music-eq');if(eq)eq.classList.add('on');toast('📻 '+name)}).catch(()=>toast('⚠️ Stream nicht verfügbar'));
+}
+function stopRadio(){const ra=$('radio-audio');if(ra){ra.pause();ra.src=''}document.querySelectorAll('.sta').forEach(b=>b.classList.remove('on'));curStaBtn=null;const eq=$('music-eq');if(eq)eq.classList.remove('on')}
+
+// ── WEATHER ──
+const WMO={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'🌨',73:'🌨',75:'❄️',80:'🌦',81:'🌧',82:'⛈',95:'⛈',96:'⛈',99:'⛈'};
+const WDESC_DE={0:'Klar',1:'Meist klar',2:'Teils bewölkt',3:'Bedeckt',45:'Neblig',51:'Leichter Niesel',61:'Leichter Regen',63:'Regen',65:'Starker Regen',71:'Leichter Schnee',75:'Schnee',80:'Schauer',95:'Gewitter'};
+const WDESC_EN={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',51:'Light drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',75:'Snow',80:'Showers',95:'Thunderstorm'};
+const DAYS_DE=['So','Mo','Di','Mi','Do','Fr','Sa'],DAYS_EN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function loadWeather(){
+  if(!navigator.geolocation){showWeatherError();return}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const {latitude:lat,longitude:lon}=pos.coords;
+    // Parallel: weather + reverse geocode
+    Promise.all([
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m,apparent_temperature,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&windspeed_unit=kmh`).then(r=>r.json()),
+      fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`).then(r=>r.json())
+    ]).then(([wd,geo])=>{
+      const cur=wd.current_weather;
+      const wmo=cur.weathercode;
+      const icon=WMO[wmo]||'🌤';
+      const desc=(lang==='de'?WDESC_DE:WDESC_EN)[wmo]||(lang==='de'?'Unbekannt':'Unknown');
+      const city=geo.address?.city||geo.address?.town||geo.address?.village||geo.address?.county||'—';
+      const country=geo.address?.country_code?.toUpperCase()||'';
+      const hIdx=wd.hourly.time.findIndex(t=>t.startsWith(new Date().toISOString().slice(0,13)));
+      const hum=hIdx>=0?wd.hourly.relativehumidity_2m[hIdx]:'—';
+      const feels=hIdx>=0?Math.round(wd.hourly.apparent_temperature[hIdx]):'—';
+      const rain=hIdx>=0?wd.hourly.precipitation_probability[hIdx]:'—';
+      // Update DOM
+      $('w-ico').textContent=icon;$('w-temp').textContent=Math.round(cur.temperature);
+      $('w-desc').textContent=desc;$('w-loc').textContent=`${city}, ${country}`;
+      $('w-hum').textContent=hum+'%';$('w-wind').textContent=Math.round(cur.windspeed)+' km/h';
+      $('w-feels').textContent=feels+'°C';$('w-rain').textContent=rain+'%';
+      // Forecast
+      const fc=$('w-days');fc.innerHTML='';const today=new Date().getDay();
+      const days=lang==='de'?DAYS_DE:DAYS_EN;
+      wd.daily.time.slice(0,5).forEach((d,i)=>{
+        const dt=new Date(d),dow=days[dt.getDay()];
+        const wc=wd.daily.weathercode[i],ico=WMO[wc]||'🌤';
+        const mn=Math.round(wd.daily.temperature_2m_min[i]),mx=Math.round(wd.daily.temperature_2m_max[i]);
+        const div=document.createElement('div');div.className='w-day'+(i===0?' today':'');
+        div.innerHTML=`<span class="d-ico">${ico}</span><div class="d-lbl">${dow}</div><div class="d-tmp">${mx}°</div>`;
+        fc.appendChild(div);
+      });
+      $('w-loading').style.display='none';$('w-content').style.display='';
+      userLat=lat;userLon=lon;userCountry=geo.address?.country_code||'de';
+      loadNews();
+    }).catch(()=>showWeatherError());
+  },()=>showWeatherError());
+}
+function showWeatherError(){
+  $('w-loading').style.display='none';$('w-error').style.display='';
+  // Show demo data
+  $('w-ico').textContent='🌤';$('w-temp').textContent='18';$('w-desc').textContent='Teils bewölkt';$('w-loc').textContent='Demo';
+  $('w-hum').textContent='62%';$('w-wind').textContent='14 km/h';$('w-feels').textContent='16°C';$('w-rain').textContent='20%';
+  $('w-content').style.display='';loadNews();
+}
+let userLat=null,userLon=null,userCountry='de';
+
+// ── NEWS ──
+const NEWS_FEEDS={
+  de:'https://www.tagesschau.de/xml/rss2/',
+  at:'https://www.orf.at/rss/news.xml',
+  ch:'https://www.srf.ch/news/bnf/rss/1890',
+  default_en:'https://feeds.bbci.co.uk/news/rss.xml'
+};
+function loadNews(){
+  const feed=userCountry==='at'?NEWS_FEEDS.at:userCountry==='ch'?NEWS_FEEDS.ch:lang==='de'?NEWS_FEEDS.de:NEWS_FEEDS.default_en;
+  const url=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}&count=5`;
+  fetch(url).then(r=>r.json()).then(d=>{
+    const nl=$('news-list'),nl_loading=$('news-loading');
+    if(d.status!=='ok'||!d.items?.length){if(nl_loading)nl_loading.textContent=lang==='de'?'Keine News verfügbar':'No news available';return}
+    if(nl_loading)nl_loading.style.display='none';nl.innerHTML='';
+    d.items.slice(0,5).forEach((item,i)=>{
+      const age=timeSince(new Date(item.pubDate));
+      const a=document.createElement('a');a.className='ni';a.href=item.link;a.target='_blank';a.rel='noopener';
+      a.style.animationDelay=(i*.08)+'s';
+      a.innerHTML=`<span class="ni-num">${i+1}</span><div class="ni-body"><div class="ni-src">${d.feed?.title||'News'}</div><div class="ni-txt">${item.title}</div><div class="ni-age">${age}</div></div>`;
+      nl.appendChild(a);
+    });
+  }).catch(()=>{const nl=$('news-loading');if(nl)nl.textContent=lang==='de'?'News nicht verfügbar':'News unavailable'});
+}
+function timeSince(d){const s=Math.floor((Date.now()-d)/1000);if(s<60)return(lang==='de'?'gerade eben':'just now');if(s<3600)return Math.floor(s/60)+(lang==='de'?' Min':'min');if(s<86400)return Math.floor(s/3600)+(lang==='de'?' Std':'h');return Math.floor(s/86400)+(lang==='de'?' T':'d')}
+
+// ── CLIMATE ──
 let thermoVal=21;
-function adjustThermo(d){thermoVal=Math.max(10,Math.min(30,thermoVal+d));$('thermo-val').textContent=thermoVal;const pct=(thermoVal-10)/20;$('thermo-ring').style.strokeDashoffset=String(188-(188*pct*.82));toast('🌡 '+thermoVal+'°C gesetzt')}
-function setMode(m){document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('on'));$('mode-'+m).classList.add('on');toast({heat:'🔥 Heizmodus',cool:'❄️ Kühlmodus',off:'⏸ Thermostat aus'}[m])}
+function adjThermo(d){thermoVal=Math.max(10,Math.min(30,thermoVal+d));$('t-num').textContent=thermoVal;const pct=(thermoVal-10)/20;$('t-ring').style.strokeDashoffset=String(276-(276*pct*.84));toast('🌡 '+thermoVal+'°C')}
+function setMode(m){document.querySelectorAll('.c-mode').forEach(b=>b.classList.remove('on'));$('cm-'+m)?.classList.add('on');toast({heat:'🔥 Heizmodus',cool:'❄️ Kühlmodus',off:'⏸ Aus'}[m])}
 
-// Light mini
-function toggleMiniLight(el,name){
-  el.classList.toggle('on');
-  const on=el.classList.contains('on');
-  toast((on?'💡':'🌑')+' '+name+' '+(on?'an':'aus'));
-  // Also update floor plan room if matching
-  const map={Wohnzimmer:'living',Schlafzimmer:'bed1',Küche:'living',Bad:'bath',Büro:'office',Flur:'office'};
-  if(map[name]){rooms[map[name]].on=on;applyRoom(map[name])}
-}
-function updateBrightness(v){$('bright-val').textContent=v+'%'}
+// ── MINI LIGHTS ──
+function miniToggle(el,rid){el.classList.toggle('on');const on=el.classList.contains('on');if(rooms[rid]){rooms[rid].on=on;applyRoom(rid)}toast((on?'💡':'🌑')+' '+(rooms[rid]?.name||rid))}
+function updateBright(v){$('bright-val').textContent=v+'%'}
 
-// Energy bars
-function buildEnergyBars(){
-  const c=$('energy-bars');if(!c)return;
-  const vals=[35,52,68,90,72,48,30];c.innerHTML='';
-  vals.forEach((v,i)=>{const d=document.createElement('div');d.className='e-bar'+(i===3?' active':'');d.style.height=v+'%';c.appendChild(d)})
-}
+// ── ENERGY BARS ──
+function buildEnergyBars(){const c=$('en-bars');if(!c)return;[35,52,68,90,72,48,30].forEach((v,i)=>{const d=document.createElement('div');d.className='e-bar'+(i===3?' hi':' lo');d.style.height=v+'%';c.appendChild(d)})}
 
-// ─────────────────────────────────────
-//  FLOOR PLAN
-// ─────────────────────────────────────
+// ── FLOOR PLAN ──
 const COLORS={
-  warm:  {dot:'#ffe090',filter:'saturate(0.2) sepia(0.8) brightness(1.1)'},
-  cool:  {dot:'#c0e8ff',filter:'saturate(0.3) hue-rotate(20deg) brightness(1.1)'},
-  white: {dot:'#f0f8ff',filter:'saturate(0.05) brightness(1.2)'},
-  cyan:  {dot:'#40ffff',filter:''},
-  blue:  {dot:'#5090ff',filter:'hue-rotate(60deg) saturate(1.1)'},
-  purple:{dot:'#c060ff',filter:'hue-rotate(90deg) saturate(1.2)'},
-  pink:  {dot:'#ff70e0',filter:'hue-rotate(100deg) saturate(1.2)'},
-  red:   {dot:'#ff5040',filter:'hue-rotate(180deg) saturate(1.1)'},
-  green: {dot:'#60ff50',filter:'hue-rotate(300deg) saturate(1.1)'},
-  amber: {dot:'#ffc030',filter:'saturate(0.5) sepia(0.4) brightness(1.0)'},
+  warm:  {dot:'#ffe090',c0:'#ffe8a0',c1:'#f0a020',op0:.88,op1:.38},
+  cool:  {dot:'#c0e8ff',c0:'#c8e8ff',c1:'#4088cc',op0:.78,op1:.30},
+  white: {dot:'#f0f8ff',c0:'#f8f8ff',c1:'#c0d8ff',op0:.80,op1:.28},
+  cyan:  {dot:'#40ffff',c0:'#40ffff',c1:'#008888',op0:.84,op1:.32},
+  blue:  {dot:'#5090ff',c0:'#80b0ff',c1:'#0040cc',op0:.78,op1:.30},
+  purple:{dot:'#c060ff',c0:'#d880ff',c1:'#6000cc',op0:.78,op1:.30},
+  pink:  {dot:'#ff70e0',c0:'#ff80e8',c1:'#cc0088',op0:.78,op1:.30},
+  red:   {dot:'#ff5040',c0:'#ff6840',c1:'#cc1000',op0:.75,op1:.28},
+  green: {dot:'#60ff50',c0:'#80ff60',c1:'#008800',op0:.78,op1:.30},
+  amber: {dot:'#ffc030',c0:'#ffc040',c1:'#cc6000',op0:.84,op1:.34},
 };
 const LAMP_ROOMS={L1:'bed1',L2:'bed1',L3:'bed1',L4:'bed2',L5:'bed2',L6:'living',L7:'living',L8:'office',L9:'bath',L11:'dining'};
 const rooms={
-  bed1:  {on:false,color:'warm',  lamps:['L1','L2','L3'],name:'Schlafzimmer 1'},
-  bed2:  {on:false,color:'warm',  lamps:['L4','L5'],     name:'Zimmer 2'},
-  living:{on:false,color:'white', lamps:['L6','L7'],     name:'Küche / Wohnen'},
-  dining:{on:false,color:'warm',  lamps:['L11'],         name:'Esszimmer'},
-  bath:  {on:false,color:'white', lamps:['L9'],          name:'Bad'},
-  office:{on:false,color:'cool',  lamps:['L8'],          name:'Büro'},
+  bed1:  {on:false,color:'warm',  lamps:['L1','L2','L3'],name:'Schlafzimmer 1',brightness:80},
+  bed2:  {on:false,color:'warm',  lamps:['L4','L5'],     name:'Zimmer 2',brightness:80},
+  living:{on:false,color:'white', lamps:['L6','L7'],     name:'Küche / Wohnen',brightness:80},
+  dining:{on:false,color:'warm',  lamps:['L11'],         name:'Esszimmer',brightness:80},
+  bath:  {on:false,color:'white', lamps:['L9'],          name:'Bad',brightness:80},
+  office:{on:false,color:'cool',  lamps:['L8'],          name:'Büro',brightness:80},
 };
-
-// COLOR definitions for SVG gradient approach
-const COLOR_STOPS = {
-  warm:  {c0:'#ffe8a0',c1:'#f5a020',op0:.82,op1:.35},
-  cool:  {c0:'#c8e8ff',c1:'#4088cc',op0:.72,op1:.28},
-  white: {c0:'#f8f8ff',c1:'#c0d8ff',op0:.75,op1:.25},
-  cyan:  {c0:'#40ffff',c1:'#0088aa',op0:.80,op1:.30},
-  blue:  {c0:'#80b0ff',c1:'#0040cc',op0:.72,op1:.28},
-  purple:{c0:'#d880ff',c1:'#6000cc',op0:.72,op1:.28},
-  pink:  {c0:'#ff80e8',c1:'#cc00aa',op0:.72,op1:.28},
-  red:   {c0:'#ff6840',c1:'#cc1000',op0:.70,op1:.28},
-  green: {c0:'#80ff60',c1:'#008800',op0:.72,op1:.28},
-  amber: {c0:'#ffc040',c1:'#cc6000',op0:.80,op1:.32},
-};
-
 function applyRoom(rid){
   const r=rooms[rid];if(!r)return;
   const bright=(r.brightness||80)/100;
-
-  // 1. Room polygon overlay
   const rp=document.getElementById('rp-'+rid);
   if(rp){
-    rp.style.opacity=r.on?String(bright*1.1):'0';
+    rp.style.opacity=r.on?String(Math.min(1.0,bright*1.15)):'0';
     if(r.on){
-      const cs=COLOR_STOPS[r.color]||COLOR_STOPS.warm;
+      const cs=COLORS[r.color]||COLORS.warm;
       const set=(id,attr,val)=>{const el=document.getElementById(id);if(el)el.setAttribute(attr,val)};
-      set('rg-'+rid+'-0','stop-color',cs.c0); set('rg-'+rid+'-0','stop-opacity',String(cs.op0*bright));
-      set('rg-'+rid+'-1','stop-color',cs.c1); set('rg-'+rid+'-1','stop-opacity',String(cs.op1*bright));
-      set('rg-'+rid+'-2','stop-opacity','0');
+      set('rg-'+rid+'-0','stop-color',cs.c0);set('rg-'+rid+'-0','stop-opacity',String(cs.op0*bright));
+      set('rg-'+rid+'-1','stop-color',cs.c1);set('rg-'+rid+'-1','stop-opacity',String(cs.op1*bright));
     }
   }
-
-  // 2. Individual lamp pools
+  const col=(COLORS[r.color]||COLORS.warm).dot;
   r.lamps.forEach(lid=>{
     const lp=document.getElementById('lp-'+lid);
     if(lp){
-      lp.style.opacity=r.on?String(bright*0.9):'0';
-      if(r.on){
-        const cs=COLOR_STOPS[r.color]||COLOR_STOPS.warm;
-        const s=document.getElementById('lg-'+lid+'-c');
-        if(s){s.setAttribute('stop-color',cs.c0);s.setAttribute('stop-opacity',String(cs.op0*0.9*bright))}
-        // Find second stop
-        const el=document.getElementById('lg-'+lid);
-        if(el){const ss=el.querySelectorAll('stop');if(ss[1])ss[1].setAttribute('stop-opacity','0')}
-      }
+      lp.style.opacity=r.on?String(bright*.85):'0';
+      if(r.on){const s=document.getElementById('lg-'+lid+'-c');if(s){s.setAttribute('stop-color',(COLORS[r.color]||COLORS.warm).c0);s.setAttribute('stop-opacity',String(.72*bright))}}
     }
-  });
-
-  // 3. Lamp dot visuals
-  const col=(COLORS[r.color]||COLORS.warm).dot;
-  r.lamps.forEach(lid=>{
-    const lb=document.getElementById('lb-'+lid);const lr=document.getElementById('lr-'+lid);
-    if(!lb||!lr)return;
-    lb.setAttribute('fill',r.on?col:'#555');
-    lb.setAttribute('r',r.on?'8':'5');
-    lb.setAttribute('filter',r.on?'url(#ldot-glow)':'none');
-    lr.setAttribute('stroke',r.on?col:'#555');
-    lr.setAttribute('opacity',r.on?'0.65':'0.18');
-    lr.setAttribute('r',r.on?'17':'9');
-    // Color tripod legs for floor lamp L4
-    if(lid==='L4'){['tp-L4a','tp-L4b','tp-L4c'].forEach(id=>{const el=document.getElementById(id);if(el){el.setAttribute('stroke',r.on?col:'#555');el.setAttribute('opacity',r.on?'0.7':'0.4')}})}
+    const lb=document.getElementById('lb-'+lid),lr=document.getElementById('lr-'+lid);
+    if(lb){lb.setAttribute('fill',r.on?col:'#555');lb.setAttribute('r',r.on?'8':'5');lb.setAttribute('filter',r.on?'url(#ldotGlow)':'none')}
+    if(lr){lr.setAttribute('stroke',r.on?col:'#555');lr.setAttribute('opacity',r.on?'.65':'.18');lr.setAttribute('r',r.on?'17':'9')}
+    if(lid==='L4'){['tp4a','tp4b','tp4c'].forEach(id=>{const el=document.getElementById(id);if(el)el.setAttribute('stroke',r.on?col:'#555')})}
   });
   buildRoomList();
 }
-
-function roomClick(rid,e){
-  if(e){e.preventDefault();e.stopPropagation()}
-  rooms[rid].on=!rooms[rid].on;
-  applyRoom(rid);
-  if(rooms[rid].on)rooms[rid].lamps.forEach(animateRing);
-  toast((rooms[rid].on?'💡':'🌑')+' '+rooms[rid].name);
-  closeCp();
-}
+function roomClick(rid,e){if(e){e.preventDefault();e.stopPropagation()}rooms[rid].on=!rooms[rid].on;applyRoom(rid);if(rooms[rid].on)rooms[rid].lamps.forEach(animRing);toast((rooms[rid].on?'💡':'🌑')+' '+rooms[rid].name);closeCp()}
 function roomCm(rid,e){e.preventDefault();openCp(rid,e)}
 function lampClick(lid,e){if(e){e.preventDefault();e.stopPropagation()}const rid=LAMP_ROOMS[lid];if(rid)roomClick(rid,e)}
-
-function animateRing(lid){
-  const svg=document.querySelector('.fp-lamps-svg');
-  const lb=document.getElementById('lb-'+lid);
-  if(!svg||!lb)return;
-  const cx=lb.getAttribute('cx'),cy=lb.getAttribute('cy');
-  const rid=LAMP_ROOMS[lid];
-  const col=(COLORS[rooms[rid]?.color]||COLORS.warm).dot;
-  [0,1].forEach(i=>{
-    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r','8');
-    c.setAttribute('fill','none');c.setAttribute('stroke',col);
-    c.setAttribute('stroke-width',i?'1.5':'2');
-    c.style.cssText=`animation:ringPop ${.6+i*.2}s ease-out ${i*.1}s forwards;pointer-events:none`;
-    svg.appendChild(c);setTimeout(()=>c.remove(),900);
-  });
+function animRing(lid){
+  const svg=document.querySelector('#fp-outer svg:last-of-type');const lb=document.getElementById('lb-'+lid);if(!svg||!lb)return;
+  const cx=lb.getAttribute('cx'),cy=lb.getAttribute('cy');const col=(COLORS[rooms[LAMP_ROOMS[lid]]?.color]||COLORS.warm).dot;
+  [0,1].forEach(i=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r','8');c.setAttribute('fill','none');c.setAttribute('stroke',col);c.setAttribute('stroke-width','2');c.style.cssText=`animation:ringPop ${.55+i*.18}s ease-out ${i*.1}s forwards;pointer-events:none`;svg.appendChild(c);setTimeout(()=>c.remove(),850)});
 }
-
-// Color picker
 let cpRoom=null;
 function openCp(rid,e){
-  cpRoom=rid;
-  const pop=$('fp-cp'),ctr=$('fp-outer');
-  if(!pop||!ctr)return;
+  cpRoom=rid;const pop=document.getElementById('fp-cp'),ctr=document.getElementById('fp-outer');if(!pop||!ctr)return;
   const cr=ctr.getBoundingClientRect();
-  const x=Math.max(5,Math.min((e.clientX||0)-cr.left,cr.width-195));
-  const y=Math.max(5,Math.min((e.clientY||0)-cr.top,cr.height-185));
+  const x=Math.max(5,Math.min((e.clientX||0)-cr.left,cr.width-200));
+  const y=Math.max(5,Math.min((e.clientY||0)-cr.top,cr.height-190));
   pop.style.left=x+'px';pop.style.top=y+'px';pop.style.transform='none';
-  $('cp-ttl').textContent='💡 '+rooms[rid].name;
-  const sw=$('cp-swatches');sw.innerHTML='';
+  document.getElementById('cp-ttl').textContent='💡 '+rooms[rid].name;
+  const sw=document.getElementById('cp-swatches');sw.innerHTML='';
   Object.entries(COLORS).forEach(([k,v])=>{
-    const d=document.createElement('div');
-    d.className='sw'+(rooms[rid].color===k?' on':'');
-    d.style.cssText=`background:${v.dot};${v.dot.startsWith('#f0')||v.dot==='#ffffff'?'border:2px solid #ccc;':''}`;
-    d.title=k;
-    d.onclick=()=>{
-      rooms[rid].color=k;rooms[rid].on=true;
-      applyRoom(rid);
-      document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));
-      d.classList.add('on');
-      toast('🎨 '+rooms[rid].name+' → '+k);
-    };
+    const d=document.createElement('div');d.className='sw'+(rooms[rid].color===k?' on':'');
+    d.style.cssText=`background:${v.dot};cursor:pointer`;d.title=k;
+    d.onclick=()=>{rooms[rid].color=k;rooms[rid].on=true;applyRoom(rid);document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));d.classList.add('on');toast('🎨 '+k)};
     sw.appendChild(d);
   });
-  $('cp-bright').value=rooms[rid].brightness||80;
+  document.getElementById('cp-bright').value=rooms[rid].brightness||80;
   pop.classList.add('open');
 }
-function closeCp(){$('fp-cp')?.classList.remove('open');cpRoom=null}
+function closeCp(){document.getElementById('fp-cp')?.classList.remove('open');cpRoom=null}
 function cpBright(v){if(!cpRoom)return;rooms[cpRoom].brightness=+v;applyRoom(cpRoom)}
-document.addEventListener('click',e=>{if(!e.target.closest('#fp-cp')&&!e.target.closest('.fp-lamps-svg'))closeCp()});
+document.addEventListener('click',e=>{if(!e.target.closest('#fp-cp')&&!e.target.closest('#fp-outer svg'))closeCp()});
 
-// Scenes
-function setScene(key){
+function setScene(k){
   document.querySelectorAll('.sp').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll(`.sp[onclick*="${key}"]`).forEach(b=>b.classList.add('on'));
+  document.querySelectorAll(`.sp[onclick*="${k}"]`).forEach(b=>b.classList.add('on'));
   const C={
     relax: {bed1:{on:true,color:'warm'},bed2:{on:true,color:'amber'},living:{on:false},dining:{on:true,color:'warm'},bath:{on:false},office:{on:false}},
     normal:{bed1:{on:true,color:'cool'},bed2:{on:true,color:'cool'},living:{on:true,color:'white'},dining:{on:true,color:'warm'},bath:{on:true,color:'white'},office:{on:true,color:'cool'}},
     movie: {bed1:{on:true,color:'purple'},bed2:{on:false},living:{on:false},dining:{on:false},bath:{on:false},office:{on:false}},
     alloff:{bed1:{on:false},bed2:{on:false},living:{on:false},dining:{on:false},bath:{on:false},office:{on:false}},
   };
-  const cfg=C[key];if(!cfg)return;
+  const cfg=C[k];if(!cfg)return;
   let i=0;Object.entries(cfg).forEach(([rid,v])=>{setTimeout(()=>{Object.assign(rooms[rid],v);applyRoom(rid)},i++*55)});
-  toast({relax:'🌅 Relax Mode',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 Alles aus'}[key]);
+  toast({relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Movie',alloff:'🌙 Alles aus'}[k]);
 }
-
-// Room list
 function buildRoomList(){
-  const el=$('room-list');if(!el)return;el.innerHTML='';
+  const el=document.getElementById('room-list');if(!el)return;el.innerHTML='';
   Object.entries(rooms).forEach(([rid,r])=>{
     const col=(COLORS[r.color]||COLORS.warm).dot;
     const row=document.createElement('div');row.className='room-row';
-    row.innerHTML=`<div class="room-dot" style="background:${r.on?col:'#555'};${r.on?'box-shadow:0 0 8px '+col+'':''}"></div><span class="room-name">${r.name}</span><div class="room-sw ${r.on?'on':''}" onclick="event.stopPropagation();rooms['${rid}'].on=!rooms['${rid}'].on;applyRoom('${rid}')"></div>`;
+    row.innerHTML=`<div class="room-dot" style="background:${r.on?col:'#666'};${r.on?`box-shadow:0 0 8px ${col}`:''}"></div><span class="room-nm">${r.name}</span><div class="room-sw ${r.on?'on':''}" onclick="event.stopPropagation();rooms['${rid}'].on=!rooms['${rid}'].on;applyRoom('${rid}')"></div>`;
     row.onclick=()=>{rooms[rid].on=!rooms[rid].on;applyRoom(rid)};
     row.oncontextmenu=e=>{e.preventDefault();openCp(rid,e)};
     el.appendChild(row);
   });
 }
 
-// ─────────────────────────────────────
-//  LANG
-// ─────────────────────────────────────
+// ── TRANSLATIONS ──
 const T={
   de:{
-    badge:'⭐ Top-Rated Fiverr Freelancer',
-    h1:'Dein Smart Home,<br><em>professionell</em> gestaltet.',
-    sub:'Individuelle Home&nbsp;Assistant Dashboards &amp; KI-Automationen — geliefert in 48&nbsp;Stunden.',
-    cta1:'🛒 Jetzt bestellen',cta2:'🏠 Demo ansehen',
-    stat1:'Projekte',stat2:'5-Sterne',stat3:'Lieferzeit',stat4:'ab Preis',
-    tb1:'48h Lieferung',tb2:'100% Zufriedenheit',tb3:'Vollständige Docs',tb4:'Revisionen inkl.',tb5:'DE · EN Support',
-    dashTitle:'Dashboard Demos',dashSub:'So sieht dein Home Assistant Dashboard aus — interaktiv, responsiv, individuell.',
-    fpTitle:'Interaktiver Grundriss',fpSub:'Klick auf Räume oder Lampen zum Schalten. Rechtsklick wählt Farbe.',
-    fpHint:'Klick: Licht an/aus · Rechtsklick: Farbe wählen',
-    fpPanel:'💡 Lichter steuern',quick:'Schnell',
-    pfTitle:'Kundenprojekte',pfSub:'Echte Projekte, echte Ergebnisse',
-    revTitle:'Was Kunden sagen',priceTitle:'Preise &amp; Pakete',faqTitle:'Häufige Fragen',
-    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Erstgespräch — ich erkläre was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',
-    aiH1:'Dein Alltag,<br><em>vollautomatisch</em>.',aiSub:'Lokale KI-Modelle, N8N Workflows, Chatbots und smarte Automationen — alles ohne Cloud-Abhängigkeit.',aiCta:'🤖 KI-Projekt starten',
-    aiSrvTitle:'Was ich anbiete',
-    aiCtaH2:'KI-Integration anfragen',aiCtaP:'Von lokaler Sprachsteuerung bis N8N Workflow — ich baue was du brauchst.',aiCta2:'🤖 Projekt starten',
-    cpBright:'Helligkeit',cpClose:'Schließen',langBtn:'EN',
+    lang:'EN',badge:'⭐ Top-Rated Fiverr Freelancer',h1a:'Dein Smart Home,',h1b:'professionell gestaltet.',
+    heroSub:'Individuelle Home Assistant Dashboards & KI-Automationen — geliefert in 48 Stunden.',
+    heroCta1:'🛒 Jetzt bestellen',heroCta2:'🏠 Demo ansehen',
+    s1:'Projekte',s2:'5-Sterne',s3:'Lieferzeit',s4:'ab Preis',
+    tb1:'48h Lieferung',tb2:'100% Zufriedenheit',tb3:'Vollständige Docs',tb4:'Revisionen inkl.',
+    dashTtl:'Dashboard Demos',dashSub:'So sieht dein Home Assistant Dashboard aus — live, interaktiv, individuell.',
+    cardMusicTag:'🎵 Musik & Radio',cardMusicTtl:'Media Player',radioLbl:'🔴 LIVE RADIO',radioStop:'⏹ Stop',
+    cardWeatherTag:'Wetter · Dein Standort',cardWeatherTtl:'Wetterstation Live',
+    wHum:'Luftfeuchtigkeit',wWind:'Wind',wFeels:'Gefühlt',wRain:'Regenwahrsch.',
+    cardNewsTag:'News · Deine Region',cardNewsTtl:'Aktuelle Nachrichten',
+    cardClimateTag:'🌡 Klima',cardClimateTtl:'Thermostat',climTarget:'Sollwert',modeHeat:'Heizen',modeCool:'Kühlen',cRoomLbl:'Raumtemp.:',
+    cardLightsTag:'💡 Beleuchtung',cardLightsTtl:'Lichtsteuerung',
+    mlLiving:'Wohnzimmer',mlBed1:'Schlafzimmer',mlKitchen:'Küche',mlBath:'Bad',mlOffice:'Büro',mlHall:'Flur',
+    cardEnergyTag:'⚡ Energie',cardEnergyTtl:'Verbrauchsübersicht',solarLbl:'Solar: 1.8 kWh',gridLbl:'Netz: 0.6 kWh',
+    fpTtl:'Interaktiver Grundriss',fpSub:'Klick auf Räume oder Lampen zum Schalten. Rechtsklick wählt Farbe.',
+    fpHint:'👆 Klick: Licht an/aus · Rechtsklick: Farbe wählen',fpPanelTtl:'💡 LICHTER STEUERN',quickLbl:'SCHNELL',
+    cpBrightLbl:'Helligkeit',cpCloseBtn:'Schließen',
+    pfTtl:'Kundenprojekte',pfSub:'Echte Projekte — professionell umgesetzt',
+    pf1Ttl:'Luxus Penthouse Dashboard',pf1Desc:'Vollständiges 8-Zimmer-Dashboard mit Mood-Beleuchtung, Musik, Klima, Solar und Sicherheit.',
+    pf2Ttl:'Solar Energy Manager',pf2Desc:'Echtzeit-Energiemonitoring mit Solar, Tesla, Wärmepumpe und E-Auto-Lader.',
+    pf3Ttl:'3D Grundriss Dashboard',pf3Desc:'Isometrischer Grundriss mit per-Raum Licht, Szenen, Farbwechsel und Live-Status.',
+    revTtl:'Was Kunden sagen',
+    rev1:'"Absolut beeindruckendes Dashboard! Genau was ich mir vorgestellt hatte, sogar noch besser."',
+    rev2:'"Mein HA sieht jetzt aus wie eine Apple-App! Perfekte Kommunikation, alle Wünsche umgesetzt."',
+    rev3:'"Lokale KI ohne Cloud — fantastisch! Kein Google, kein Abo. Der Grundriss ist der Hammer."',
+    rev4:'"Das Energie-Dashboard hat mir geholfen 30% Strom zu sparen. ROI nach 2 Monaten!"',
+    priceTtl:'Preise & Pakete',priceSub:'Transparent — keine versteckten Kosten.',
+    tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/Projekt',popularLbl:'Beliebt',
+    t1Desc:'Einstieg ins Smart Home',t2Desc:'Die vollständige Experience',t3Desc:'Mit KI & voller Automation',
+    t11:'Custom Lovelace Dashboard',t12:'Bis zu 5 Karten',t13:'Basis-Automationen',t14:'1 Revision',t15:'Lieferung in 48h',
+    t21:'Vollständiges Dashboard',t22:'Interaktiver Grundriss',t23:'Musik, Wetter, Energie',t24:'Szenen & Automationen',t25:'3 Revisionen',t26:'Video-Erklärung',
+    t31:'Alles aus Standard',t32:'Lokale KI-Sprachsteuerung',t33:'N8N Workflows',t34:'Unbegrenzte Revisionen',t35:'1 Monat Support',
+    orderNow:'Jetzt bestellen',
+    faqTtl:'Häufige Fragen',faqSub:'Alles was du wissen musst',
+    faq1q:'Was ist Home Assistant?',faq1a:'Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla.',
+    faq2q:'Brauche ich technisches Vorwissen?',faq2a:'Nein. Du bekommst fertige Lösungen mit Dokumentation und Einrichtungsanleitung.',
+    faq3q:'Wie lange dauert die Lieferung?',faq3a:'Basic: 24–48h · Standard: 3 Tage · Premium mit KI: 5–7 Tage. Express auf Anfrage.',
+    faq4q:'Welche Geräte werden unterstützt?',faq4a:'Alle HA-kompatiblen Geräte: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla und 3000+ mehr.',
+    faq5q:'Wie funktioniert die Zusammenarbeit?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + Revisionen. 4. Fertige Dateien + Docs. Alles asynchron.',
+    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',
+    aiH1a:'Dein Alltag,',aiH1b:'vollautomatisch.',aiSub:'Lokale KI-Modelle, N8N Workflows, Chatbots — alles ohne Cloud-Abhängigkeit.',
+    aiCta1:'🤖 KI-Projekt starten',aiCta2:'✉ Kostenlos anfragen',
+    aiSrvTtl:'Was ich anbiete',aiSrvSub:'Alles lokal — keine Daten in der Cloud, kein Abo',
+    ais1t:'Lokale Sprachsteuerung',ais1d:'Whisper + Ollama — komplett lokal, ohne Google/Alexa.',
+    ais2t:'N8N Workflows',ais2d:'Automatisiere alles: E-Mails, Kalender, APIs. HA mit der ganzen Welt.',
+    ais3t:'KI-Chatbot',ais3d:'GPT-4, Claude oder Llama direkt in Home Assistant oder Telegram.',
+    ais4t:'Intelligente Automationen',ais4d:'Reagieren auf Zeit, Präsenz, Wetter und Gewohnheiten.',
+    ais5t:'Telegram / WhatsApp Bot',ais5d:'Steuere dein Smart Home per Nachricht.',
+    ais6t:'Smarte Benachrichtigungen',ais6d:'KI-gefilterte Alerts — kein Spam.',
+    wfTtl:'Beispiel: Automatische E-Mail-Zusammenfassung',wf1:'E-Mail eingeht',wf2:'KI analysiert',wf3:'Zusammenfassung',wf4:'Telegram Push',
+    aiCtaH2:'KI-Integration anfragen',aiCtaP:'Von Sprachsteuerung bis N8N — ich baue was du brauchst.',aiCta3:'🤖 Projekt starten',
+    navSH:'🏠 Smart Home',navAI:'⚡ KI & Automation',navContact:'Kontakt',navOrder:'Bestellen →',
     roomNames:{bed1:'Schlafzimmer 1',bed2:'Zimmer 2',living:'Küche / Wohnen',dining:'Esszimmer',bath:'Bad',office:'Büro'},
-    navSH:'🏠 Smart Home',navAI:'⚡ KI & Automation',
   },
   en:{
-    badge:'⭐ Top-Rated Fiverr Freelancer',
-    h1:'Your Smart Home,<br><em>professionally</em> designed.',
-    sub:'Custom Home&nbsp;Assistant Dashboards &amp; AI automations — delivered in 48&nbsp;hours.',
-    cta1:'🛒 Order Now',cta2:'🏠 View Demo',
-    stat1:'Projects',stat2:'5-Star',stat3:'Delivery',stat4:'from price',
-    tb1:'48h Delivery',tb2:'100% Satisfaction',tb3:'Full Documentation',tb4:'Revisions Incl.',tb5:'DE · EN Support',
-    dashTitle:'Dashboard Demos',dashSub:'This is what your Home Assistant dashboard looks like — interactive, responsive, custom.',
-    fpTitle:'Interactive Floor Plan',fpSub:'Click rooms or lamps to toggle. Right-click to choose color.',
-    fpHint:'Click: Toggle · Right-click: Choose color',
-    fpPanel:'💡 Light Controls',quick:'Quick',
-    pfTitle:'Client Projects',pfSub:'Real projects, real results',
-    revTitle:'What Clients Say',priceTitle:'Pricing &amp; Packages',faqTitle:'Frequently Asked Questions',
-    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I\'ll show you what\'s possible.',ctaBtn:'🛒 Order on Fiverr',
-    aiH1:'Your daily life,<br><em>fully automated</em>.',aiSub:'Local AI models, N8N workflows, chatbots and smart automations — zero cloud dependency.',aiCta:'🤖 Start AI Project',
-    aiSrvTitle:'What I Offer',
-    aiCtaH2:'Request AI Integration',aiCtaP:'From local voice control to N8N workflow — I build what you need.',aiCta2:'🤖 Start Project',
-    cpBright:'Brightness',cpClose:'Close',langBtn:'DE',
+    lang:'DE',badge:'⭐ Top-Rated Fiverr Freelancer',h1a:'Your Smart Home,',h1b:'professionally designed.',
+    heroSub:'Custom Home Assistant Dashboards & AI Automations — delivered in 48 hours.',
+    heroCta1:'🛒 Order Now',heroCta2:'🏠 View Demo',
+    s1:'Projects',s2:'5-Star',s3:'Delivery',s4:'from price',
+    tb1:'48h Delivery',tb2:'100% Satisfaction',tb3:'Full Documentation',tb4:'Revisions Incl.',
+    dashTtl:'Dashboard Demos',dashSub:'This is what your Home Assistant dashboard looks like — live, interactive, custom.',
+    cardMusicTag:'🎵 Music & Radio',cardMusicTtl:'Media Player',radioLbl:'🔴 LIVE RADIO',radioStop:'⏹ Stop',
+    cardWeatherTag:'Weather · Your Location',cardWeatherTtl:'Live Weather Station',
+    wHum:'Humidity',wWind:'Wind',wFeels:'Feels like',wRain:'Rain chance',
+    cardNewsTag:'News · Your Region',cardNewsTtl:'Latest News',
+    cardClimateTag:'🌡 Climate',cardClimateTtl:'Thermostat',climTarget:'Target',modeHeat:'Heat',modeCool:'Cool',cRoomLbl:'Room temp.:',
+    cardLightsTag:'💡 Lighting',cardLightsTtl:'Light Control',
+    mlLiving:'Living Room',mlBed1:'Bedroom',mlKitchen:'Kitchen',mlBath:'Bathroom',mlOffice:'Office',mlHall:'Hallway',
+    cardEnergyTag:'⚡ Energy',cardEnergyTtl:'Usage Overview',solarLbl:'Solar: 1.8 kWh',gridLbl:'Grid: 0.6 kWh',
+    fpTtl:'Interactive Floor Plan',fpSub:'Click rooms or lamps to toggle. Right-click to choose color.',
+    fpHint:'👆 Click: Toggle · Right-click: Choose color',fpPanelTtl:'💡 LIGHT CONTROLS',quickLbl:'QUICK',
+    cpBrightLbl:'Brightness',cpCloseBtn:'Close',
+    pfTtl:'Client Projects',pfSub:'Real projects — professionally delivered',
+    pf1Ttl:'Luxury Penthouse Dashboard',pf1Desc:'Complete 8-room dashboard with mood lighting, music, climate, solar monitoring and security.',
+    pf2Ttl:'Solar Energy Manager',pf2Desc:'Real-time energy monitoring with solar, Tesla, heat pump and EV charger.',
+    pf3Ttl:'3D Floor Plan Dashboard',pf3Desc:'Isometric floor plan with per-room lighting, scenes, color changes and live device status.',
+    revTtl:'What Clients Say',
+    rev1:'"Absolutely impressive dashboard! Exactly what I had in mind, even better. Super fast delivery."',
+    rev2:'"My HA now looks like an Apple app! Perfect communication, all wishes implemented."',
+    rev3:'"Local AI without cloud — fantastic! No Google, no subscription. The floor plan is insane."',
+    rev4:'"The energy dashboard helped me save 30% electricity. ROI after 2 months!"',
+    priceTtl:'Pricing & Packages',priceSub:'Transparent pricing — no hidden costs.',
+    tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/project',popularLbl:'Popular',
+    t1Desc:'Perfect for getting started',t2Desc:'The full experience',t3Desc:'With AI & full automation',
+    t11:'Custom Lovelace Dashboard',t12:'Up to 5 Cards',t13:'Basic Automations',t14:'1 Revision',t15:'Delivery in 48h',
+    t21:'Full Dashboard',t22:'Interactive Floor Plan',t23:'Music, Weather, Energy',t24:'Scenes & Automations',t25:'3 Revisions',t26:'Video Explanation',
+    t31:'Everything in Standard',t32:'Local AI Voice Control',t33:'N8N Workflows',t34:'Unlimited Revisions',t35:'1 Month Support',
+    orderNow:'Order Now',
+    faqTtl:'Frequently Asked Questions',faqSub:'Everything you need to know',
+    faq1q:'What is Home Assistant?',faq1a:'Home Assistant is an open-source platform connecting 3000+ smart home devices — from Philips Hue to Tesla.',
+    faq2q:'Do I need technical knowledge?',faq2a:'No. You get a ready solution with full documentation and setup guide.',
+    faq3q:'How long does delivery take?',faq3a:'Basic: 24–48h · Standard: 3 days · Premium with AI: 5–7 days. Express available.',
+    faq4q:'Which devices are supported?',faq4a:'All HA-compatible devices: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla and 3000+ more.',
+    faq5q:'How does collaboration work?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + revisions. 4. Files + docs. All async.',
+    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I'll show you what's possible.',ctaBtn:'🛒 Order on Fiverr',
+    aiH1a:'Your daily life,',aiH1b:'fully automated.',aiSub:'Local AI models, N8N workflows, chatbots — zero cloud dependency.',
+    aiCta1:'🤖 Start AI Project',aiCta2:'✉ Free Consultation',
+    aiSrvTtl:'What I Offer',aiSrvSub:'Everything local — no cloud data, no subscriptions',
+    ais1t:'Local Voice Control',ais1d:'Whisper + Ollama — fully local, no Google/Alexa.',
+    ais2t:'N8N Workflows',ais2d:'Automate everything: emails, calendar, APIs. Connect HA to the world.',
+    ais3t:'AI Chatbot',ais3d:'GPT-4, Claude or Llama directly in Home Assistant or Telegram.',
+    ais4t:'Intelligent Automations',ais4d:'React to time, presence, weather and your habits.',
+    ais5t:'Telegram / WhatsApp Bot',ais5d:'Control your smart home via message.',
+    ais6t:'Smart Notifications',ais6d:'AI-filtered alerts — no spam.',
+    wfTtl:'Example: Automatic Email Summary',wf1:'Email arrives',wf2:'AI analyzes',wf3:'Summary',wf4:'Telegram Push',
+    aiCtaH2:'Request AI Integration',aiCtaP:'From voice control to N8N — I build what you need.',aiCta3:'🤖 Start Project',
+    navSH:'🏠 Smart Home',navAI:'⚡ AI & Automation',navContact:'Contact',navOrder:'Order →',
     roomNames:{bed1:'Bedroom 1',bed2:'2nd Room',living:'Kitchen / Living',dining:'Dining',bath:'Bathroom',office:'Office'},
-    navSH:'🏠 Smart Home',navAI:'⚡ AI & Automation',
   }
 };
 let lang='de';
-function toggleLang(){
-  lang=lang==='de'?'en':'de';
-  const t=T[lang];
-  $('lang-btn').textContent=t.langBtn;
-  document.documentElement.lang=lang;
-  // Update text
-  const set=(id,html)=>{const el=$(id);if(el)el.innerHTML=html};
-  const setTxt=(id,txt)=>{const el=$(id);if(el)el.textContent=txt};
-  set('hero-badge',t.badge);set('hero-h1',t.h1);set('hero-sub',t.sub);
-  set('hero-cta1',t.cta1);set('hero-cta2',t.cta2);
-  setTxt('stat1-lbl',t.stat1);setTxt('stat2-lbl',t.stat2);setTxt('stat3-lbl',t.stat3);setTxt('stat4-lbl',t.stat4);
-  setTxt('tb1',t.tb1);setTxt('tb2',t.tb2);setTxt('tb3',t.tb3);setTxt('tb4',t.tb4);setTxt('tb5',t.tb5);
-  set('dash-title',t.dashTitle);setTxt('dash-sub',t.dashSub);
-  set('fp-title',t.fpTitle);setTxt('fp-sub',t.fpSub);setTxt('fp-hint',t.fpHint);
-  setTxt('fp-panel-title',t.fpPanel);
-  set('pf-title',t.pfTitle);setTxt('pf-sub',t.pfSub);
-  set('rev-title',t.revTitle);set('price-title',t.priceTitle);set('faq-title',t.faqTitle);
-  set('cta-h2',t.ctaH2);setTxt('cta-p',t.ctaP);set('cta-btn',t.ctaBtn);
-  set('ai-h1',t.aiH1);setTxt('ai-sub',t.aiSub);setTxt('ai-cta',t.aiCta);
-  set('ai-srv-title',t.aiSrvTitle);
-  set('ai-cta-h2',t.aiCtaH2);setTxt('ai-cta-p',t.aiCtaP);set('ai-cta2',t.aiCta2);
-  setTxt('cp-bright-lbl',t.cpBright);setTxt('cp-close-btn',t.cpClose);
-  // Update room names
+function toggleLang(){lang=lang==='de'?'en':'de';applyLang()}
+function setText(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt}
+function setHTML(id,h){const e=document.getElementById(id);if(e)e.innerHTML=h}
+function applyLang(){
+  const t=T[lang];document.getElementById('lang-btn').textContent=t.lang;document.documentElement.lang=lang;
+  setText('hero-badge',t.badge);setHTML('h1a',t.h1a);setHTML('h1b',t.h1b);setText('hero-sub',t.heroSub);
+  setText('hero-cta1',t.heroCta1);setText('hero-cta2',t.heroCta2);
+  setText('s1l',t.s1);setText('s2l',t.s2);setText('s3l',t.s3);setText('s4l',t.s4);
+  setText('tb1',t.tb1);setText('tb2',t.tb2);setText('tb3',t.tb3);setText('tb4',t.tb4);
+  setText('dash-ttl',t.dashTtl);setText('dash-sub',t.dashSub);
+  setText('card-music-tag',t.cardMusicTag);setText('card-music-ttl',t.cardMusicTtl);setText('radio-lbl',t.radioLbl);
+  const stopBtn=document.getElementById('radio-stop-btn');if(stopBtn)stopBtn.textContent=t.radioStop;
+  setText('card-weather-tag',t.cardWeatherTag);setText('card-weather-ttl',t.cardWeatherTtl);
+  setText('w-hum-lbl',t.wHum);setText('w-wind-lbl',t.wWind);setText('w-feels-lbl',t.wFeels);setText('w-rain-lbl',t.wRain);
+  setText('card-news-tag',t.cardNewsTag);setText('card-news-ttl',t.cardNewsTtl);
+  setText('card-climate-tag',t.cardClimateTag);setText('card-climate-ttl',t.cardClimateTtl);
+  setText('cl-target-lbl',t.climTarget);setText('mode-heat-lbl',t.modeHeat);setText('mode-cool-lbl',t.modeCool);setText('c-room-lbl',t.cRoomLbl);
+  setText('card-lights-tag',t.cardLightsTag);setText('card-lights-ttl',t.cardLightsTtl);
+  setText('ml-living',t.mlLiving);setText('ml-bed1',t.mlBed1);setText('ml-kitchen',t.mlKitchen);
+  setText('ml-bath',t.mlBath);setText('ml-office',t.mlOffice);setText('ml-hall',t.mlHall);
+  setText('card-energy-tag',t.cardEnergyTag);setText('card-energy-ttl',t.cardEnergyTtl);
+  setText('solar-lbl',t.solarLbl);setText('grid-lbl',t.gridLbl);
+  setText('fp-ttl',t.fpTtl);setText('fp-sub',t.fpSub);setText('fp-hint',t.fpHint);
+  setText('fp-panel-ttl',t.fpPanelTtl);setText('quick-lbl',t.quickLbl);
+  setText('cp-bright-lbl',t.cpBrightLbl);setText('cp-close-btn',t.cpCloseBtn);
+  setText('pf-ttl',t.pfTtl);setText('pf-sub',t.pfSub);
+  setText('pf1-ttl',t.pf1Ttl);setText('pf1-desc',t.pf1Desc);
+  setText('pf2-ttl',t.pf2Ttl);setText('pf2-desc',t.pf2Desc);
+  setText('pf3-ttl',t.pf3Ttl);setText('pf3-desc',t.pf3Desc);
+  setText('rev-ttl',t.revTtl);setText('rev1',t.rev1);setText('rev2',t.rev2);setText('rev3',t.rev3);setText('rev4',t.rev4);
+  setText('price-ttl',t.priceTtl);setText('price-sub',t.priceSub);
+  setText('tier1-name',t.tier1);setText('tier2-name',t.tier2);setText('tier3-name',t.tier3);
+  ['per1','per2','per3'].forEach(id=>setText(id,t.perProject));
+  setText('popular-lbl',t.popularLbl);
+  setText('t1-desc',t.t1Desc);setText('t2-desc',t.t2Desc);setText('t3-desc',t.t3Desc);
+  setText('t1-1',t.t11);setText('t1-2',t.t12);setText('t1-3',t.t13);setText('t1-4',t.t14);setText('t1-5',t.t15);
+  setText('t2-1',t.t21);setText('t2-2',t.t22);setText('t2-3',t.t23);setText('t2-4',t.t24);setText('t2-5',t.t25);setText('t2-6',t.t26);
+  setText('t3-1',t.t31);setText('t3-2',t.t32);setText('t3-3',t.t33);setText('t3-4',t.t34);setText('t3-5',t.t35);
+  ['order1','order2','order3'].forEach(id=>setText(id,t.orderNow));
+  setText('faq-ttl',t.faqTtl);setText('faq-sub',t.faqSub);
+  setText('faq1q',t.faq1q);setText('faq1a',t.faq1a);setText('faq2q',t.faq2q);setText('faq2a',t.faq2a);
+  setText('faq3q',t.faq3q);setText('faq3a',t.faq3a);setText('faq4q',t.faq4q);setText('faq4a',t.faq4a);setText('faq5q',t.faq5q);setText('faq5a',t.faq5a);
+  setText('cta-h2',t.ctaH2);setText('cta-p',t.ctaP);setText('cta-btn',t.ctaBtn);
+  setText('ai-h1a',t.aiH1a);setHTML('ai-h1b',t.aiH1b);setText('ai-sub',t.aiSub);
+  setText('ai-cta1',t.aiCta1);setText('ai-cta2',t.aiCta2);
+  setText('ai-srv-ttl',t.aiSrvTtl);setText('ai-srv-sub',t.aiSrvSub);
+  setText('ais1t',t.ais1t);setText('ais1d',t.ais1d);setText('ais2t',t.ais2t);setText('ais2d',t.ais2d);
+  setText('ais3t',t.ais3t);setText('ais3d',t.ais3d);setText('ais4t',t.ais4t);setText('ais4d',t.ais4d);
+  setText('ais5t',t.ais5t);setText('ais5d',t.ais5d);setText('ais6t',t.ais6t);setText('ais6d',t.ais6d);
+  setText('wf-ttl',t.wfTtl);setText('wf1',t.wf1);setText('wf2',t.wf2);setText('wf3',t.wf3);setText('wf4',t.wf4);
+  setText('ai-cta-h2',t.aiCtaH2);setText('ai-cta-p',t.aiCtaP);setText('ai-cta3',t.aiCta3);
+  setText('tab-sh',t.navSH);setText('tab-ai',t.navAI);
+  // Room names
   Object.entries(t.roomNames).forEach(([rid,n])=>{if(rooms[rid])rooms[rid].name=n});
-  $('tab-sh').textContent=t.navSH;$('tab-ai').textContent=t.navAI;
   buildRoomList();
+  // Reload news in correct lang
+  loadNews();
 }
 
-// ─── INIT ───
-buildRoomList();
-buildEnergyBars();
-renderTrack();
+// ── INIT ──
+buildRoomList();buildEnergyBars();renderTrack();
+loadWeather();
+// Animate stats on load
+setTimeout(()=>{
+  const run=(el,target,suffix,dur)=>{let s=0;const step=()=>{s=Math.min(s+1,target);el.textContent=s+suffix;if(s<target)requestAnimationFrame(step)};requestAnimationFrame(step)};
+  const sp=$('s-proj');if(sp)run(sp,47,'+',1200);
+  const ss=$('s-stars');if(ss)run(ss,98,'%',1000);
+  const sd=$('s-del');if(sd)run(sd,48,'h',800);
+  const sp2=$('s-price');if(sp2)run(sp2,49,'€',600);
+  // Fix price display: show €49
+  setTimeout(()=>{const e=$('s-price');if(e)e.textContent='€49'},700);
+},400);
 </script>
 </body>
 </html>
