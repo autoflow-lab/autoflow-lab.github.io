@@ -362,8 +362,29 @@ audio{display:none}
 .fp-outer{position:relative;border-radius:var(--r);overflow:hidden;background:#060610;box-shadow:0 12px 60px rgba(0,0,0,.28);cursor:crosshair}
 .fp-outer img.fp-base{width:100%;display:block;border-radius:var(--r);pointer-events:none;user-select:none}
 .fp-hint{font-size:.7rem;color:var(--text3);text-align:center;padding:7px 0 12px;display:flex;align-items:center;justify-content:center;gap:6px}
-.fp-panel{background:var(--card);border-radius:var(--r);padding:20px;border:1px solid var(--border);position:sticky;top:calc(var(--nav) + 16px)}
-.fp-panel-title{font-size:.64rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.fp-panel{background:var(--card);border-radius:var(--r);padding:16px;border:1px solid var(--border);position:sticky;top:calc(var(--nav) + 16px);max-height:calc(100vh - var(--nav) - 48px);overflow-y:auto}
+.fp-panel-title{font-size:.62rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+/* Room card iOS-style */
+.room-card{background:var(--bg2);border-radius:14px;padding:13px 14px;margin-bottom:8px;cursor:pointer;transition:all .2s;border:1.5px solid transparent;position:relative;overflow:hidden}
+.room-card:hover{background:var(--bg3);transform:translateY(-1px)}
+.room-card.on{border-color:var(--room-col,var(--accent));background:var(--bg2)}
+.room-card.on::before{content:'';position:absolute;inset:0;background:var(--room-col,var(--accent));opacity:.06;pointer-events:none}
+.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .3s;background:var(--bg3)}
+.room-card.on .rc-icon{background:var(--room-col,var(--accent));box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.rc-toggle{width:40px;height:24px;border-radius:12px;background:var(--bg3);border:none;cursor:pointer;position:relative;transition:all .25s;flex-shrink:0}
+.rc-toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .25s,background .25s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.room-card.on .rc-toggle{background:var(--room-col,var(--accent))}
+.room-card.on .rc-toggle::after{transform:translateX(16px)}
+.rc-name{font-size:.82rem;font-weight:700;margin-bottom:1px}
+.rc-status{font-size:.65rem;color:var(--text3)}
+.room-card.on .rc-status{color:var(--room-col,var(--accent))}
+.rc-bright{width:100%;height:3px;background:var(--bg3);border-radius:2px;appearance:none;-webkit-appearance:none;outline:none;cursor:pointer;accent-color:var(--room-col,var(--accent))}
+.rc-bright::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:var(--room-col,var(--accent));box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.scene-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px}
+.scene-btn{padding:9px 6px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);font-size:.72rem;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.scene-btn:hover{background:var(--bg3);border-color:var(--border2)}
+.scene-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .room-row{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:10px;user-select:none;transition:background .15s}
 .room-row:hover{background:var(--bg2)}
 .room-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:all .35s}
@@ -585,38 +606,61 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
       <div class="dash-card reveal">
         <div class="dash-card-tag" data-i="cardMusic">🎵 Musik & Radio</div>
         <div class="dash-card-title" data-i="cardMusicTitle">Media Player</div>
-        <div style="overflow:hidden;margin-bottom:12px">
-          <div class="music-art">🎵</div>
-          <div class="music-track" id="music-track">Midnight City</div>
-          <div class="music-artist" id="music-artist">M83 · Hurry Up, We're Dreaming</div>
+
+        <!-- Album Art + Track info -->
+        <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
+          <div id="music-art-wrap" style="width:72px;height:72px;border-radius:14px;flex-shrink:0;background:linear-gradient(135deg,#1db954,#121212);display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;overflow:hidden;box-shadow:0 4px 18px rgba(29,185,84,.3)">
+            <span id="music-art-icon">🎵</span>
+            <div id="music-art-spin" style="position:absolute;inset:0;background:conic-gradient(from 0deg,rgba(29,185,84,.0),rgba(29,185,84,.25),rgba(29,185,84,.0));animation:spin 3s linear infinite;opacity:0;transition:opacity .4s"></div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div id="music-track" style="font-size:.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Midnight City</div>
+            <div id="music-artist" style="font-size:.72rem;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">M83 · Hurry Up, We're Dreaming</div>
+            <!-- Equalizer bars -->
+            <div class="music-eq" id="music-eq" style="margin-top:6px;opacity:0;height:18px;display:flex;align-items:flex-end;gap:2px">
+              <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+              <div class="eq-bar"></div><div class="eq-bar"></div>
+            </div>
+          </div>
         </div>
-        <div class="progress-bar" id="prog-bar" onclick="seekMusic(event)">
+
+        <!-- Progress -->
+        <div class="progress-bar" id="prog-bar" onclick="seekMusic(event)" style="margin-bottom:6px">
           <div class="progress-fill" id="prog-fill" style="width:38%"></div>
         </div>
-        <div class="music-ctrls">
-          <button class="mc" onclick="prevTrack()">⏮</button>
-          <button class="mc play" id="play-btn" onclick="togglePlay()">▶</button>
-          <button class="mc" onclick="nextTrack()">⏭</button>
-          <span style="font-size:.75rem;color:var(--text3);margin-left:4px" id="music-time">0:00</span>
-          <div class="music-eq" id="music-eq" style="opacity:0">
-            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
-            <div class="eq-bar"></div><div class="eq-bar"></div>
-          </div>
+        <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--text3);margin-bottom:12px">
+          <span id="music-time">0:00</span><span id="music-dur">3:34</span>
         </div>
-        <div class="music-vol">
-          🔈 <input type="range" id="vol-slider" min="0" max="100" value="65" oninput="setVol(this.value)"> 🔊
-          <span id="vol-val">65%</span>
+
+        <!-- Controls -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px">
+          <button class="mc" onclick="prevTrack()" style="width:34px;height:34px;border-radius:50%;font-size:.85rem">⏮</button>
+          <button class="mc play" id="play-btn" onclick="togglePlay()" style="width:48px;height:48px;border-radius:50%;font-size:1.2rem;background:linear-gradient(135deg,#1db954,#17a349);border:none;color:#fff;box-shadow:0 4px 14px rgba(29,185,84,.4)">▶</button>
+          <button class="mc" onclick="nextTrack()" style="width:34px;height:34px;border-radius:50%;font-size:.85rem">⏭</button>
+        </div>
+
+        <!-- Volume -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span style="font-size:.8rem">🔈</span>
+          <input type="range" id="vol-slider" min="0" max="100" value="65" oninput="setVol(this.value)" style="flex:1;accent-color:#1db954">
+          <span style="font-size:.8rem">🔊</span>
+          <span id="vol-val" style="font-size:.68rem;color:var(--text2);min-width:28px">65%</span>
         </div>
         <audio id="radio-audio" preload="none"></audio>
-        <div class="radio-stations">
-          <div class="radio-ttl" data-i="radioLbl">🔴 LIVE RADIO</div>
-          <div class="station-grid">
-            <button class="sta" onclick="playStation(this,'https://stream.srg-ssr.ch/m/rsp/mp3_128','Radio Swiss Pop 🇨🇭')">RSP 🇨🇭</button>
-            <button class="sta" onclick="playStation(this,'https://s5-webradio.antenne.de/antenne','Antenne Bayern 🇩🇪')">Antenne</button>
-            <button class="sta" onclick="playStation(this,'https://liveradio.swr.de/sw282p3/swr3/play.mp3','SWR3 🇩🇪')">SWR3</button>
-            <button class="sta" onclick="playStation(this,'https://stream.srg-ssr.ch/m/rsj/mp3_128','Swiss Jazz 🎷')">Jazz 🎷</button>
-            <button class="sta" onclick="stopRadio()" data-i="radioStop">⏹ Stop</button>
+
+        <!-- Live Radio -->
+        <div style="border-top:1px solid var(--border);padding-top:12px">
+          <div style="font-size:.6rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:5px">
+            <span style="width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 1.5s infinite;display:inline-block"></span>
+            <span data-i="radioLbl">LIVE RADIO</span>
           </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px">
+            <button class="sta" onclick="playStation(this,'https://stream.srg-ssr.ch/m/rsp/mp3_128','Radio Swiss Pop 🇨🇭')" style="padding:8px 4px;font-size:.62rem;border-radius:9px">🇨🇭 RSP</button>
+            <button class="sta" onclick="playStation(this,'https://s5-webradio.antenne.de/antenne','Antenne Bayern 🇩🇪')" style="padding:8px 4px;font-size:.62rem;border-radius:9px">🇩🇪 ANT</button>
+            <button class="sta" onclick="playStation(this,'https://liveradio.swr.de/sw282p3/swr3/play.mp3','SWR3 🇩🇪')" style="padding:8px 4px;font-size:.62rem;border-radius:9px">🇩🇪 SWR</button>
+            <button class="sta" onclick="playStation(this,'https://stream.srg-ssr.ch/m/rsj/mp3_128','Swiss Jazz 🎷')" style="padding:8px 4px;font-size:.62rem;border-radius:9px">🎷 Jazz</button>
+          </div>
+          <button class="sta" onclick="stopRadio()" style="width:100%;margin-top:5px;padding:7px;border-radius:9px;font-size:.7rem" data-i="radioStop">⏹ Stop</button>
         </div>
       </div>
 
@@ -712,29 +756,65 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
       <div class="dash-card reveal reveal-delay-2">
         <div class="dash-card-tag" id="card-energy-tag">⚡ Energie</div>
         <div class="dash-card-title" id="card-energy-ttl">Verbrauchsübersicht</div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+
+        <!-- Top row: total + trend -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
           <div>
-            <div id="en-num" style="font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--green)">2.4 kWh</div>
-            <div id="en-sub" style="font-size:.7rem;color:var(--text3)">Heute · Solar aktiv ☀️</div>
+            <div id="en-num" style="font-size:2.2rem;font-weight:800;letter-spacing:-.04em;color:var(--green);transition:color .4s">2.4 kWh</div>
+            <div id="en-sub" style="font-size:.68rem;color:var(--text3)">Heute · Solar aktiv ☀️</div>
           </div>
-          <div style="background:rgba(52,199,89,.1);color:var(--green);font-size:.7rem;font-weight:700;padding:4px 9px;border-radius:9px;border:1px solid rgba(52,199,89,.25)">↓ −12%</div>
-        </div>
-        <div id="energy-bars" style="display:flex;gap:4px;align-items:flex-end;height:56px;margin-bottom:4px"></div>
-        <div id="en-detail" class="en-detail">
-          <div style="font-weight:700;font-size:.78rem;margin-bottom:6px" id="en-detail-ttl">Mittwoch · 12:00</div>
-          <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text2)">
-            <span>☀️ Solar: <strong style="color:var(--warm)" id="en-d-solar">1.8 kWh</strong></span>
-            <span>🔌 Netz: <strong id="en-d-grid">0.6 kWh</strong></span>
-          </div>
-          <div class="en-source-row">
-            <div class="en-source solar on" id="en-src-solar" onclick="toggleEnSource('solar')">☀️ Solar</div>
-            <div class="en-source grid on" id="en-src-grid" onclick="toggleEnSource('grid')">🔌 Netz</div>
-            <div class="en-source" id="en-src-bat" onclick="toggleEnSource('bat')" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid transparent;text-align:center;cursor:pointer;font-size:.68rem;font-weight:600;transition:all .2s;opacity:.4">🔋 Akku</div>
+          <div style="text-align:right">
+            <div style="background:rgba(52,199,89,.12);color:var(--green);font-size:.7rem;font-weight:700;padding:4px 9px;border-radius:9px;border:1px solid rgba(52,199,89,.2);margin-bottom:4px">↓ −12%</div>
+            <div style="font-size:.62rem;color:var(--text3)" id="en-day-lbl">Diese Woche</div>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text2);margin-top:6px">
-          <span id="solar-lbl">☀️ Solar: 1.8 kWh</span>
-          <span id="grid-lbl">🔌 Netz: 0.6 kWh</span>
+
+        <!-- SVG Area Chart -->
+        <div style="position:relative;margin-bottom:4px">
+          <svg id="en-chart" width="100%" height="80" viewBox="0 0 280 80" preserveAspectRatio="none"
+               style="display:block;cursor:crosshair;overflow:visible">
+            <defs>
+              <linearGradient id="en-grad-solar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ff9f0a" stop-opacity=".5"/>
+                <stop offset="100%" stop-color="#ff9f0a" stop-opacity=".02"/>
+              </linearGradient>
+              <linearGradient id="en-grad-grid" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0071e3" stop-opacity=".4"/>
+                <stop offset="100%" stop-color="#0071e3" stop-opacity=".02"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid lines -->
+            <line x1="0" y1="20" x2="280" y2="20" stroke="var(--border)" stroke-width=".5"/>
+            <line x1="0" y1="40" x2="280" y2="40" stroke="var(--border)" stroke-width=".5"/>
+            <line x1="0" y1="60" x2="280" y2="60" stroke="var(--border)" stroke-width=".5"/>
+            <!-- Solar area -->
+            <path id="en-solar-area" d="" fill="url(#en-grad-solar)"/>
+            <path id="en-solar-line" d="" fill="none" stroke="#ff9f0a" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- Grid area -->
+            <path id="en-grid-area" d="" fill="url(#en-grad-grid)"/>
+            <path id="en-grid-line" d="" fill="none" stroke="#0071e3" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- Hover tooltip line -->
+            <line id="en-hover-line" x1="0" y1="0" x2="0" y2="80" stroke="var(--text2)" stroke-width="1" opacity="0" stroke-dasharray="3,2"/>
+            <!-- Hover dots -->
+            <circle id="en-dot-solar" r="4" fill="#ff9f0a" stroke="#fff" stroke-width="1.5" opacity="0"/>
+            <circle id="en-dot-grid"  r="4" fill="#0071e3" stroke="#fff" stroke-width="1.5" opacity="0"/>
+          </svg>
+          <!-- Tooltip -->
+          <div id="en-tooltip" style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border2);border-radius:9px;padding:7px 10px;font-size:.68rem;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:10">
+            <div style="font-weight:700;margin-bottom:3px" id="en-tt-day">—</div>
+            <div style="color:#ff9f0a">☀️ <span id="en-tt-solar">—</span></div>
+            <div style="color:var(--accent)">🔌 <span id="en-tt-grid">—</span></div>
+          </div>
+        </div>
+
+        <!-- Day labels -->
+        <div id="en-day-labels" style="display:flex;justify-content:space-between;font-size:.58rem;color:var(--text3);margin-bottom:10px;padding:0 2px"></div>
+
+        <!-- Sources legend + toggle -->
+        <div class="en-source-row">
+          <div class="en-source solar on" id="en-src-solar" onclick="toggleEnSource('solar')">☀️ <span id="solar-lbl">Solar: 1.8 kWh</span></div>
+          <div class="en-source grid on" id="en-src-grid" onclick="toggleEnSource('grid')">🔌 <span id="grid-lbl">Netz: 0.6 kWh</span></div>
+          <div class="en-source" id="en-src-bat" onclick="toggleEnSource('bat')" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid transparent;text-align:center;cursor:pointer;font-size:.68rem;font-weight:600;transition:all .2s;opacity:.4">🔋 Akku</div>
         </div>
       </div>
 
@@ -843,8 +923,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
                 <radialGradient id="lg-L8"><stop offset="0%" id="lg-L8-c" stop-color="#c8e8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="lg-L9"><stop offset="0%" id="lg-L9-c" stop-color="#f0f8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="lg-L11"><stop offset="0%" id="lg-L11-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-                <filter id="roomBloom" x="-18%" y="-18%" width="136%" height="136%"><feGaussianBlur in="SourceGraphic" stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                 <filter id="ldotGlow" x="-80%" y="-80%" width="360%" height="360%"><feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <!-- Room clip paths — lamps stay within walls -->
+                <clipPath id="clip-bed1">  <polygon points="688,148 992,193 992,328 688,283"/></clipPath>
+                <clipPath id="clip-bath">  <polygon points="993,215 1148,258 1148,428 993,388"/></clipPath>
+                <clipPath id="clip-living"><polygon points="530,245 688,283 992,328 992,515 530,415"/></clipPath>
+                <clipPath id="clip-dining"><polygon points="812,422 1080,492 1080,608 812,548"/></clipPath>
+                <clipPath id="clip-bed2">  <polygon points="225,328 482,388 482,528 225,468"/></clipPath>
+                <clipPath id="clip-office"><polygon points="482,452 658,498 658,608 482,562"/></clipPath>
               </defs>
               <!-- Room polygons -->
               <polygon id="rp-bed1"   points="688,148 992,193 992,328 688,283"                    fill="url(#rg-bed1)"   opacity="0" style="transition:opacity .55s ease"/>
@@ -853,17 +939,29 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
               <polygon id="rp-dining" points="812,422 1080,492 1080,608 812,548"                  fill="url(#rg-dining)" opacity="0" style="transition:opacity .55s ease"/>
               <polygon id="rp-bed2"   points="225,328 482,388 482,528 225,468"                    fill="url(#rg-bed2)"   opacity="0" style="transition:opacity .55s ease"/>
               <polygon id="rp-office" points="482,452 658,498 658,608 482,562"                    fill="url(#rg-office)" opacity="0" style="transition:opacity .55s ease"/>
-              <!-- Lamp pools -->
-              <ellipse id="lp-L1"  cx="840"  cy="185" rx="115" ry="78" fill="url(#lg-L1)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L2"  cx="800"  cy="228" rx="62"  ry="46"  fill="url(#lg-L2)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L3"  cx="895"  cy="246" rx="62"  ry="46"  fill="url(#lg-L3)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L4"  cx="380"  cy="398" rx="95"  ry="70"  fill="url(#lg-L4)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L5"  cx="302"  cy="362" rx="65"  ry="50"  fill="url(#lg-L5)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L6"  cx="678"  cy="292" rx="115" ry="82" fill="url(#lg-L6)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L7"  cx="760"  cy="355" rx="95"  ry="72"  fill="url(#lg-L7)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L8"  cx="580"  cy="525" rx="88"  ry="65"  fill="url(#lg-L8)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L9"  cx="1072" cy="272" rx="75"  ry="60"  fill="url(#lg-L9)"  opacity="0" style="transition:opacity .4s"/>
-              <ellipse id="lp-L11" cx="900"  cy="482" rx="92"  ry="70"  fill="url(#lg-L11)" opacity="0" style="transition:opacity .4s"/>
+              <!-- Lamp pools — clipped to room boundaries -->
+              <g clip-path="url(#clip-bed1)">
+                <ellipse id="lp-L1" cx="840" cy="185" rx="140" ry="105" fill="url(#lg-L1)" opacity="0" style="transition:opacity .45s"/>
+                <ellipse id="lp-L2" cx="800" cy="228" rx="80"  ry="58"  fill="url(#lg-L2)" opacity="0" style="transition:opacity .45s"/>
+                <ellipse id="lp-L3" cx="895" cy="246" rx="80"  ry="58"  fill="url(#lg-L3)" opacity="0" style="transition:opacity .45s"/>
+              </g>
+              <g clip-path="url(#clip-bed2)">
+                <ellipse id="lp-L4" cx="380" cy="398" rx="120" ry="90"  fill="url(#lg-L4)" opacity="0" style="transition:opacity .45s"/>
+                <ellipse id="lp-L5" cx="302" cy="362" rx="80"  ry="60"  fill="url(#lg-L5)" opacity="0" style="transition:opacity .45s"/>
+              </g>
+              <g clip-path="url(#clip-living)">
+                <ellipse id="lp-L6" cx="678" cy="292" rx="140" ry="100" fill="url(#lg-L6)" opacity="0" style="transition:opacity .45s"/>
+                <ellipse id="lp-L7" cx="760" cy="355" rx="110" ry="82"  fill="url(#lg-L7)" opacity="0" style="transition:opacity .45s"/>
+              </g>
+              <g clip-path="url(#clip-office)">
+                <ellipse id="lp-L8" cx="580" cy="525" rx="100" ry="76"  fill="url(#lg-L8)" opacity="0" style="transition:opacity .45s"/>
+              </g>
+              <g clip-path="url(#clip-bath)">
+                <ellipse id="lp-L9" cx="1072" cy="272" rx="88" ry="70"  fill="url(#lg-L9)" opacity="0" style="transition:opacity .45s"/>
+              </g>
+              <g clip-path="url(#clip-dining)">
+                <ellipse id="lp-L11" cx="900" cy="482" rx="110" ry="82" fill="url(#lg-L11)" opacity="0" style="transition:opacity .45s"/>
+              </g>
             </svg>
 
             <!-- Click zones + Lamp dots -->
@@ -1399,26 +1497,78 @@ const EN_DATA=[
   {label:'Fr',val:72,solar:2.6,grid:0.7},{label:'Sa',val:48,solar:1.5,grid:1.1},
   {label:'So',val:30,solar:0.8,grid:1.4}
 ];
-let selBar=3;
+let _enChartListenerAdded=false;
 function buildEnergyBars(){
-  const c=$('energy-bars');if(!c)return;c.innerHTML='';
-  EN_DATA.forEach((d,i)=>{
-    const wrap=document.createElement('div');wrap.className='en-bar-wrap'+(i===selBar?' sel':'');
-    wrap.innerHTML=`<div class="en-bar ${i===selBar?'hi':'lo'}" style="height:${d.val}%;transition:height .5s ease,opacity .2s"></div><div class="en-bar-label">${d.label}</div>`;
-    wrap.onclick=()=>selectBar(i);
-    c.appendChild(wrap);
+  drawEnergyChart();
+  // day labels
+  const lc=$('en-day-labels');
+  if(lc){
+    const days=lang==='de'?['Mo','Di','Mi','Do','Fr','Sa','So']:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    lc.innerHTML=days.map(d=>`<span>${d}</span>`).join('');
+  }
+  if(!_enChartListenerAdded){
+    const svg=$('en-chart');
+    if(svg){
+      svg.addEventListener('mousemove',onChartHover);
+      svg.addEventListener('mouseleave',()=>{
+        $('en-tooltip').style.opacity='0';
+        $('en-hover-line').style.opacity='0';
+        $('en-dot-solar').style.opacity='0';
+        $('en-dot-grid').style.opacity='0';
+      });
+      _enChartListenerAdded=true;
+    }
+  }
+}
+function drawEnergyChart(){
+  const svg=$('en-chart');if(!svg)return;
+  const W=280,H=80,pad=4;
+  const maxVal=Math.max(...EN_DATA.map(d=>d.solar+d.grid))*1.15||5;
+  const pts=(key)=>EN_DATA.map((d,i)=>{
+    const x=pad+(i/(EN_DATA.length-1))*(W-pad*2);
+    const y=H-pad-(d[key]/maxVal)*(H-pad*2);
+    return [x,y];
   });
-  showBarDetail(selBar);
+  const toPath=(pts)=>pts.map((p,i)=>(i===0?`M${p[0]},${p[1]}`:`L${p[0]},${p[1]}`)).join(' ');
+  const toArea=(pts,bottom=H)=>toPath(pts)+` L${pts[pts.length-1][0]},${bottom} L${pts[0][0]},${bottom} Z`;
+
+  const sp=pts('solar'),gp=pts('grid');
+  const sa=$('en-solar-area'),sl=$('en-solar-line');
+  const ga=$('en-grid-area'),gl=$('en-grid-line');
+  if(sa)sa.setAttribute('d',toArea(sp));
+  if(sl)sl.setAttribute('d',toPath(sp));
+  if(ga)ga.setAttribute('d',toArea(gp));
+  if(gl)gl.setAttribute('d',toPath(gp));
 }
-function selectBar(i){
-  selBar=i;buildEnergyBars();
-}
-function showBarDetail(i){
-  const d=EN_DATA[i];const det=$('en-detail');if(!det)return;
-  det.classList.add('show');
-  const t=$('en-detail-ttl');if(t)t.textContent=(lang==='de'?['Mo','Di','Mi','Do','Fr','Sa','So']:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])[i]+' · '+Math.round(d.val*0.027*10)/10+' kWh';
-  const ds=$('en-d-solar');if(ds)ds.textContent=d.solar+' kWh';
-  const dg=$('en-d-grid');if(dg)dg.textContent=d.grid+' kWh';
+function onChartHover(e){
+  const svg=$('en-chart');if(!svg)return;
+  const rect=svg.getBoundingClientRect();
+  const xPct=(e.clientX-rect.left)/rect.width;
+  const W=280,pad=4,H=80;
+  const idx=Math.round(xPct*(EN_DATA.length-1));
+  const i=Math.max(0,Math.min(EN_DATA.length-1,idx));
+  const d=EN_DATA[i];
+  const x=pad+(i/(EN_DATA.length-1))*(W-pad*2);
+  const maxVal=Math.max(...EN_DATA.map(d=>d.solar+d.grid))*1.15||5;
+  const sy=H-pad-(d.solar/maxVal)*(H-pad*2);
+  const gy=H-pad-(d.grid/maxVal)*(H-pad*2);
+  // hover line
+  const hl=$('en-hover-line');if(hl){hl.setAttribute('x1',x);hl.setAttribute('x2',x);hl.style.opacity='0.6'}
+  // dots
+  const ds=$('en-dot-solar');if(ds){ds.setAttribute('cx',x);ds.setAttribute('cy',sy);ds.style.opacity='1'}
+  const dg=$('en-dot-grid');if(dg){dg.setAttribute('cx',x);dg.setAttribute('cy',gy);dg.style.opacity='1'}
+  // tooltip
+  const tt=$('en-tooltip');
+  if(tt){
+    const days=lang==='de'?['Mo','Di','Mi','Do','Fr','Sa','So']:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const td=$('en-tt-day');const ts=$('en-tt-solar');const tg=$('en-tt-grid');
+    if(td)td.textContent=days[i];
+    if(ts)ts.textContent=d.solar+' kWh';
+    if(tg)tg.textContent=d.grid+' kWh';
+    const leftPct=(x/W)*100;
+    tt.style.left=Math.max(10,Math.min(90,leftPct))+'%';
+    tt.style.opacity='1';
+  }
 }
 function toggleEnSource(src){
   const el=$('en-src-'+src);if(!el)return;
@@ -1596,17 +1746,60 @@ function setScene(k){
   toast({relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Kino Modus',alloff:'🌙 Alles aus'}[k]);
   setTimeout(()=>{syncMiniFromRooms()},Object.keys(cfg).length*55+100);
 }
+// Room icon + color helpers
+const ROOM_ICONS={bed1:'🛏',bed2:'🛏',living:'🛋',dining:'🍽',bath:'🚿',office:'💻'};
+const ROOM_COLS={warm:'#ffaa30',amber:'#ffc040',cool:'#60aaff',white:'#d8ecff',cyan:'#40ffee',blue:'#4080ff',purple:'#c060ff',pink:'#ff70cc',red:'#ff5040',green:'#60ee40'};
 function buildRoomList(){
-  const el=document.getElementById('room-list');if(!el)return;el.innerHTML='';
+  const cont=document.getElementById('room-list');if(!cont)return;cont.innerHTML='';
   Object.entries(rooms).forEach(([rid,r])=>{
-    const col=(COLORS[r.color]||COLORS.warm).dot;
-    const row=document.createElement('div');row.className='room-row';
-    row.innerHTML=`<div class="room-dot" style="background:${r.on?col:'#666'};${r.on?`box-shadow:0 0 8px ${col}`:''}"></div><span class="room-nm">${r.name}</span><div class="room-sw ${r.on?'on':''}" onclick="event.stopPropagation();rooms['${rid}'].on=!rooms['${rid}'].on;applyRoom('${rid}')"></div>`;
-    row.onclick=()=>{rooms[rid].on=!rooms[rid].on;applyRoom(rid)};
-    row.oncontextmenu=e=>{e.preventDefault();openCp(rid,e)};
-    el.appendChild(row);
+    const col=ROOM_COLS[r.color]||'#0071e3';
+    const div=document.createElement('div');
+    div.className='room-card'+(r.on?' on':'');
+    div.id='rl-'+rid;
+    div.style.setProperty('--room-col',r.on?col:'#0071e3');
+    const name=lang==='de'?r.name:(r.nameEn||r.name);
+    const state=r.on?(lang==='de'?'Ein':'On'):(lang==='de'?'Aus':'Off');
+    div.innerHTML=`<div class="rc-top">
+      <div class="rc-icon" id="rci-${rid}">${ROOM_ICONS[rid]||'💡'}</div>
+      <div style="flex:1;padding:0 10px">
+        <div class="rc-name">${name}</div>
+        <div class="rc-status" id="rcs-${rid}">${state}</div>
+      </div>
+      <button class="rc-toggle" onclick="event.stopPropagation();roomClick('${rid}')"></button>
+    </div>
+    <input type="range" class="rc-bright" min="10" max="100" value="${r.bright||80}" id="rcb-${rid}"
+      style="display:${r.on?'block':'none'};margin-top:6px;accent-color:${col}"
+      oninput="event.stopPropagation();rooms['${rid}'].bright=parseInt(this.value);updateEnergyFromLights()"
+      onclick="event.stopPropagation()">`;
+    div.onclick=()=>roomClick(rid);
+    div.oncontextmenu=e=>{e.preventDefault();openCp(rid,e)};
+    cont.appendChild(div);
   });
+  // Scene buttons
+  const sw=document.createElement('div');
+  sw.innerHTML=`<div style="font-size:.6rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin:12px 0 7px">${lang==='de'?'Szenen':'Scenes'}</div>
+    <div class="scene-btn-grid">
+      <button class="scene-btn" onclick="setScene('relax')">🌅 Relax</button>
+      <button class="scene-btn" onclick="setScene('normal')">☀️ Normal</button>
+      <button class="scene-btn" onclick="setScene('movie')">🎬 Kino</button>
+      <button class="scene-btn" onclick="setScene('alloff')">🌙 Aus</button>
+    </div>`;
+  cont.appendChild(sw);
 }
+// Sync card UI after room toggle
+const _origApplyRoom=applyRoom;
+applyRoom=function(rid){
+  _origApplyRoom(rid);
+  const r=rooms[rid];if(!r)return;
+  const col=ROOM_COLS[r.color]||'#0071e3';
+  const card=document.getElementById('rl-'+rid);if(!card)return;
+  card.style.setProperty('--room-col',r.on?col:'#0071e3');
+  card.className='room-card'+(r.on?' on':'');
+  const s=document.getElementById('rcs-'+rid);
+  if(s)s.textContent=r.on?(lang==='de'?'Ein':'On'):(lang==='de'?'Aus':'Off');
+  const br=document.getElementById('rcb-'+rid);
+  if(br){br.style.display=r.on?'block':'none';br.style.accentColor=col}
+};
 
 // ── TRANSLATIONS ──
 const T={
