@@ -1021,6 +1021,36 @@ h2{position:relative;}
 .demo-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .demo-tabs::-webkit-scrollbar { display: none; }
 
+
+/* ── FAQ Accordion ── */
+.faq-section { margin: 60px 0; }
+.faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+.faq-item { border-radius: var(--radius-sm); border: 1px solid var(--border2); overflow: hidden; background: var(--bg); }
+.faq-q {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 20px; background: none; border: none; cursor: pointer;
+  font-size: .9rem; font-weight: 600; color: var(--text); text-align: left;
+  transition: background .2s; font-family: inherit; gap: 12px;
+}
+.faq-q:hover { background: var(--bg2); }
+.faq-q.open { color: var(--green-c); }
+[data-theme="dark"] .faq-q.open { color: var(--warm); }
+.faq-icon { font-size: 1.2rem; font-weight: 300; flex-shrink: 0; transition: transform .3s; }
+.faq-q.open .faq-icon { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s cubic-bezier(.4,0,.2,1), padding .3s;
+  font-size: .85rem; color: var(--text2); line-height: 1.65;
+  padding: 0 20px;
+}
+.faq-a.open { max-height: 200px; padding: 12px 20px 18px; }
+
+
+/* Prevent zoom on double-tap in floor plan area */
+#fp-container { touch-action: pan-x pan-y; }
+#fp-lights { touch-action: none; }
+.lamp-hitzone { touch-action: manipulation; }
+
 </style>
 </head>
 <body>
@@ -1482,7 +1512,70 @@ h2{position:relative;}
 
   <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready for a dashboard<br>that delights you?</h2><p>Custom Home Assistant dashboards from $49. Delivered in 2–4 days.</p><div class="cta-btns"><button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-outline">Fiverr Profile</a></div></div></div></section>
 
-  <footer>
+  
+        <!-- ── FAQ Accordion ── -->
+        <div class="faq-section">
+          <h2 class="section-title" style="text-align:center;margin-bottom:32px" data-i18n="faq_title">Häufige Fragen</h2>
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-q" onclick="toggleFaq(this)">
+                <span data-i18n="faq_q1">Was ist Home Assistant?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-a" data-i18n="faq_a1">
+                Home Assistant ist eine Open-Source Smart Home Plattform, die über 3000 Geräte und Dienste verbindet — von Philips Hue bis zur Nibe Wärmepumpe. Ich baue darauf professionelle, individuelle Dashboards und Automationen.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" onclick="toggleFaq(this)">
+                <span data-i18n="faq_q2">Brauche ich technisches Vorwissen?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-a" data-i18n="faq_a2">
+                Nein. Ich liefere fertige Lösungen mit vollständiger Dokumentation und Einrichtungsanleitung. Du musst nur auf „Speichern" klicken.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" onclick="toggleFaq(this)">
+                <span data-i18n="faq_q3">Wie lange dauert die Lieferung?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-a" data-i18n="faq_a3">
+                Basic-Dashboards: 24–48 Stunden. Standard: 3 Tage. Premium mit KI-Integration: 5–7 Tage. Expresslieferung auf Anfrage möglich.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" onclick="toggleFaq(this)">
+                <span data-i18n="faq_q4">Welche Geräte werden unterstützt?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-a" data-i18n="faq_a4">
+                Alle Home-Assistant-kompatiblen Geräte: Philips Hue, IKEA Tradfri, Shelly, Z-Wave, Zigbee, Google/Alexa, Sonos, Tesla, Nibe, Viessmann und tausende mehr.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" onclick="toggleFaq(this)">
+                <span data-i18n="faq_q5">Kann ich Revisionen anfragen?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-a" data-i18n="faq_a5">
+                Ja. Basic: 1 Revision, Standard: 3 Revisionen, Premium: unbegrenzte Revisionen bis du 100% zufrieden bist.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" onclick="toggleFaq(this)">
+                <span data-i18n="faq_q6">Arbeitest du auch mit KI-Integrationen?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-a" data-i18n="faq_a6">
+                Ja! Ich integriere lokale KI-Modelle (Ollama, Whisper), ChatGPT-API, und baue intelligente Automationen die auf Sprache, Kontext und Zeitpläne reagieren.
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      <footer>
   <div style="max-width:1080px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
     <div>
       <div class="footer-logo" style="margin-bottom:4px">autoflow<em>-lab</em></div>
@@ -2427,6 +2520,19 @@ const TRANSLATIONS = {
     cta_btn: 'Kostenloses Angebot',
     // Footer
     footer_fiverr: 'Fiverr Profil', footer_contact: 'Kontakt',
+
+    faq_q1: 'Was ist Home Assistant?',
+    faq_a1: 'Home Assistant ist eine Open-Source Smart Home Plattform, die über 3000 Geräte verbindet. Ich baue darauf professionelle, individuelle Dashboards und Automationen.',
+    faq_q2: 'Brauche ich technisches Vorwissen?',
+    faq_a2: 'Nein. Ich liefere fertige Lösungen mit vollständiger Dokumentation. Du musst nur auf „Speichern" klicken.',
+    faq_q3: 'Wie lange dauert die Lieferung?',
+    faq_a3: 'Basic: 24–48h. Standard: 3 Tage. Premium mit KI: 5–7 Tage. Express auf Anfrage.',
+    faq_q4: 'Welche Geräte werden unterstützt?',
+    faq_a4: 'Alle HA-kompatiblen Geräte: Philips Hue, IKEA, Shelly, Zigbee, Sonos, Tesla, Viessmann und 3000+ mehr.',
+    faq_q5: 'Kann ich Revisionen anfragen?',
+    faq_a5: 'Basic: 1 Revision, Standard: 3, Premium: unbegrenzt bis 100% Zufriedenheit.',
+    faq_q6: 'Arbeitest du mit KI-Integrationen?',
+    faq_a6: 'Ja! Ollama, Whisper, ChatGPT-API — intelligente Automationen die auf Sprache und Kontext reagieren.',
     footer_copy: '© 2025 autoflow-lab · Smart Home & KI Automatisierung',
   },
   en: {
@@ -2450,6 +2556,19 @@ const TRANSLATIONS = {
     cta_sub: 'Free consultation — I\'ll show you what\'s possible.',
     cta_btn: 'Get Free Quote',
     footer_fiverr: 'Fiverr Profile', footer_contact: 'Contact',
+
+    faq_q1: 'What is Home Assistant?',
+    faq_a1: 'Home Assistant is an open-source smart home platform connecting 3000+ devices. I build professional custom dashboards and automations on top of it.',
+    faq_q2: 'Do I need technical knowledge?',
+    faq_a2: 'No. I deliver ready-to-use solutions with full documentation. You just need to click "Save".',
+    faq_q3: 'How long does delivery take?',
+    faq_a3: 'Basic: 24–48h. Standard: 3 days. Premium with AI: 5–7 days. Express available.',
+    faq_q4: 'Which devices are supported?',
+    faq_a4: 'All HA-compatible devices: Philips Hue, IKEA, Shelly, Zigbee, Sonos, Tesla, Viessmann and 3000+ more.',
+    faq_q5: 'Can I request revisions?',
+    faq_a5: 'Basic: 1 revision, Standard: 3, Premium: unlimited until 100% satisfied.',
+    faq_q6: 'Do you work with AI integrations?',
+    faq_a6: 'Yes! Ollama, Whisper, ChatGPT API — smart automations that respond to voice and context.',
     footer_copy: '© 2025 autoflow-lab · Smart Home & AI Automation',
   }
 };
@@ -2815,6 +2934,40 @@ Object.keys(lamps).forEach(applyLampVisual);
 buildRoomList();
 updateCount();
 console.log('💡 v15 Floor plan system ready — real image overlay technique');
+
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const answer = item.querySelector('.faq-a');
+  const isOpen = btn.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-q.open').forEach(b => {
+    b.classList.remove('open');
+    b.closest('.faq-item').querySelector('.faq-a').classList.remove('open');
+  });
+  if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+}
+
+
+// Quick scene helpers
+function allRoomsOn(color) {
+  const lang = curLang();
+  Object.keys(rooms).forEach((rid, i) => {
+    setTimeout(() => {
+      rooms[rid].on = true;
+      if (color) rooms[rid].color = color;
+      applyRoom(rid);
+    }, i * 50);
+  });
+  showToast('💡', lang === 'de' ? 'Alles an — ' + (ROOM_COLORS[color]?.label?.de || '') : 'All on — ' + (ROOM_COLORS[color]?.label?.en || ''));
+}
+function allRoomsOff() {
+  const lang = curLang();
+  Object.keys(rooms).forEach((rid, i) => {
+    setTimeout(() => { rooms[rid].on = false; applyRoom(rid); }, i * 40);
+  });
+  showToast('🌑', lang === 'de' ? 'Alles aus' : 'All off');
+}
 
 </script>
 
