@@ -522,6 +522,39 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 .social-btn:hover{transform:translateY(-2px);background:var(--accent);border-color:var(--accent)}
 
 /* ═══════════════════════════════════════════
+   INTERACTIVE HINTS
+═══════════════════════════════════════════ */
+/* Pulsing "try me" dot */
+.hint-dot{position:absolute;z-index:30;pointer-events:none}
+.hint-ring{width:28px;height:28px;border-radius:50%;border:2.5px solid var(--accent);animation:hintPulse 1.8s ease-in-out infinite;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.hint-ring2{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--accent);animation:hintPulse 1.8s ease-in-out infinite .3s;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.4}
+@keyframes hintPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.9}50%{transform:translate(-50%,-50%) scale(1.25);opacity:.3}}
+
+/* Speech bubble */
+.hint-bubble{position:absolute;z-index:40;background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:7px 12px;border-radius:18px;white-space:nowrap;box-shadow:0 4px 18px rgba(0,113,227,.4);animation:bubbleFloat 2.5s ease-in-out infinite;pointer-events:none;letter-spacing:.1px}
+.hint-bubble::after{content:'';position:absolute;width:10px;height:10px;background:var(--accent);clip-path:polygon(0 0,100% 0,50% 100%);bottom:-8px;left:50%;transform:translateX(-50%)}
+.hint-bubble.right::after{left:auto;right:18px;transform:none}
+.hint-bubble.left::after{left:18px}
+.hint-bubble.top::after{top:-8px;bottom:auto;clip-path:polygon(0 100%,100% 100%,50% 0)}
+.hint-bubble.warm{background:#ff9f0a;box-shadow:0 4px 18px rgba(255,159,10,.4)}
+.hint-bubble.warm::after{background:#ff9f0a}
+.hint-bubble.green{background:#34c759;box-shadow:0 4px 18px rgba(52,199,89,.4)}
+.hint-bubble.green::after{background:#34c759}
+.hint-bubble.purple{background:#af52de;box-shadow:0 4px 18px rgba(175,82,222,.4)}
+.hint-bubble.purple::after{background:#af52de}
+.hint-bubble.red{background:#ff3b30;box-shadow:0 4px 18px rgba(255,59,48,.4)}
+.hint-bubble.red::after{background:#ff3b30}
+@keyframes bubbleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* Finger pointer badge */
+.hint-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.65rem;font-weight:800;padding:4px 10px;border-radius:20px;animation:badgePop .5s cubic-bezier(.34,1.56,.64,1) forwards, badgeGlow 2s ease-in-out 1s infinite;letter-spacing:.3px;vertical-align:middle;margin-left:6px;cursor:default}
+@keyframes badgePop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@keyframes badgeGlow{0%,100%{box-shadow:0 2px 8px rgba(0,113,227,.3)}50%{box-shadow:0 2px 16px rgba(0,113,227,.7)}}
+
+/* Tour dismissed: hide all hints */
+body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-auto{display:none!important}
+
+/* ═══════════════════════════════════════════
    FAB + TOAST
 ═══════════════════════════════════════════ */
 .fab{position:fixed;bottom:26px;right:26px;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;border-radius:30px;padding:13px 22px;display:flex;align-items:center;gap:9px;font-size:.88rem;font-weight:700;box-shadow:0 8px 32px rgba(0,113,227,.45);z-index:90;border:none;transition:all .25s;animation:glowPulse 3s ease-in-out infinite}
@@ -635,7 +668,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
         <!-- Controls -->
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px">
           <button class="mc" onclick="prevTrack()" style="width:34px;height:34px;border-radius:50%;font-size:.85rem">⏮</button>
-          <button class="mc play" id="play-btn" onclick="togglePlay()" style="width:48px;height:48px;border-radius:50%;font-size:1.2rem;background:linear-gradient(135deg,#1db954,#17a349);border:none;color:#fff;box-shadow:0 4px 14px rgba(29,185,84,.4)">▶</button>
+          <div style="position:relative;display:inline-block">
+            <button class="mc play" id="play-btn" onclick="togglePlay();dismissHint('hint-play')" style="width:48px;height:48px;border-radius:50%;font-size:1.2rem;background:linear-gradient(135deg,#1db954,#17a349);border:none;color:#fff;box-shadow:0 4px 14px rgba(29,185,84,.4)">▶</button>
+            <div class="hint-bubble green" id="hint-play" style="top:-52px;left:50%;transform:translateX(-50%)">▶ Abspielen!</div>
+          </div>
           <button class="mc" onclick="nextTrack()" style="width:34px;height:34px;border-radius:50%;font-size:.85rem">⏭</button>
         </div>
 
@@ -650,9 +686,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 
         <!-- Live Radio -->
         <div style="border-top:1px solid var(--border);padding-top:12px">
-          <div style="font-size:.6rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:5px">
+          <div style="font-size:.6rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:5px;position:relative">
             <span style="width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 1.5s infinite;display:inline-block"></span>
             <span data-i="radioLbl">LIVE RADIO</span>
+            <span class="hint-badge hint-badge-auto" style="position:relative">👆 Live hören</span>
           </div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px">
             <button class="sta" onclick="playStation(this,'https://stream.srg-ssr.ch/m/rsp/mp3_128','Radio Swiss Pop 🇨🇭')" style="padding:8px 4px;font-size:.62rem;border-radius:9px">🇨🇭 RSP</button>
@@ -771,6 +808,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 
         <!-- SVG Area Chart -->
         <div style="position:relative;margin-bottom:4px">
+          <div class="hint-bubble warm" id="hint-energy" style="top:-44px;right:0;font-size:.65rem" onclick="dismissHint('hint-energy')" style="pointer-events:auto;cursor:pointer">📊 Hover für Details ×</div>
           <svg id="en-chart" width="100%" height="80" viewBox="0 0 280 80" preserveAspectRatio="none"
                style="display:block;cursor:crosshair;overflow:visible">
             <defs>
@@ -838,7 +876,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
             <div class="sec-status-dot ok" id="sec-dot"></div>
             <span id="sec-status-txt">System gesichert</span>
           </div>
-          <button class="sec-arm-btn disarmed" id="sec-arm-btn" onclick="toggleAlarm()">🛡 Scharf</button>
+          <div style="position:relative">
+            <button class="sec-arm-btn disarmed" id="sec-arm-btn" onclick="toggleAlarm();dismissHint('hint-alarm')">🛡 Scharf</button>
+            <div class="hint-bubble red" id="hint-alarm" style="bottom:calc(100% + 8px);right:0;font-size:.65rem">🚨 Alarm testen!</div>
+          </div>
         </div>
         <div class="sec-alert-banner" id="sec-alert">⚠️ <span id="sec-alert-txt">Bewegung erkannt — Eingang</span></div>
       </div>
@@ -880,18 +921,24 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
   <!-- FLOOR PLAN -->
   <div class="band" id="fp-section" style="padding:72px 24px">
     <div style="max-width:1100px;margin:0 auto">
-      <h2 class="sec-title reveal" data-i="fpTitle">Interaktiver Grundriss</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px">
+        <h2 class="sec-title reveal" data-i="fpTitle" style="margin-bottom:0">Interaktiver Grundriss</h2>
+        <button onclick="dismissAllHints()" style="font-size:.7rem;color:var(--text3);background:none;border:1px solid var(--border);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">✕ <span data-i="hideHints">Tipps ausblenden</span></button>
+      </div>
       <p class="sec-sub reveal" data-i="fpSub">Klick auf Räume oder Lampen zum Schalten. Rechtsklick wählt Farbe.</p>
-      <div class="scene-row">
-        <button class="sp" onclick="setScene('relax')">🌅 Relax</button>
-        <button class="sp" onclick="setScene('normal')">☀️ Normal</button>
-        <button class="sp" onclick="setScene('movie')">🎬 Movie</button>
-        <button class="sp" onclick="setScene('alloff')">🌙 Aus</button>
+      <div class="scene-row" style="position:relative">
+        <button class="sp" onclick="setScene('relax');dismissHint('hint-scene')">🌅 Relax</button>
+        <button class="sp" onclick="setScene('normal');dismissHint('hint-scene')">☀️ Normal</button>
+        <button class="sp" onclick="setScene('movie');dismissHint('hint-scene')">🎬 Movie</button>
+        <button class="sp" onclick="setScene('alloff');dismissHint('hint-scene')">🌙 Aus</button>
+        <div class="hint-bubble purple" id="hint-scene" style="top:-52px;left:50%;transform:translateX(-50%)">✨ Szene auswählen!</div>
       </div>
       <div class="fp-wrap">
         <div>
-          <div class="fp-hint"><span>👆</span><span data-i="fpHint">Klick: Licht an/aus · Rechtsklick: Farbe wählen</span></div>
-          <div class="fp-outer" id="fp-outer">
+          <div class="fp-hint" style="position:relative">
+              <span>👆</span><span data-i="fpHint">Klick: Licht an/aus · Rechtsklick: Farbe wählen</span>
+            </div>
+          <div class="fp-outer" id="fp-outer" style="position:relative">
             <!-- Color Picker -->
             <div class="cp" id="fp-cp">
               <div class="cp-ttl" id="cp-ttl">Raum</div>
@@ -995,11 +1042,18 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
                 <g onclick="lampClick('L11',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"><circle cx="900" cy="478" r="18" fill="transparent"/><circle id="lb-L11" cx="900" cy="478" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
               </g>
             </svg>
+          <!-- Hint bubbles on floor plan -->
+          <div class="hint-bubble" id="hint-fp-room" style="bottom:calc(62% + 8px);left:calc(64% - 50px)">👆 Raum antippen!</div>
+          <div class="hint-bubble purple" id="hint-fp-lamp" style="top:calc(18% - 48px);left:calc(60% - 55px)">💡 Lampe klicken</div>
+          <div class="hint-bubble warm" id="hint-fp-rc" style="bottom:calc(38% - 8px);right:calc(27% + 4px)">🎨 Rechtsklick = Farbe</div>
           </div>
         </div>
         <!-- Room panel -->
         <div class="fp-panel">
           <div class="fp-panel-title" data-i="fpPanel">💡 Lichter steuern</div>
+          <div style="font-size:.65rem;color:var(--text2);margin-bottom:10px;padding:8px 10px;background:var(--bg2);border-radius:9px;line-height:1.5" id="hint-panel-tip">
+            👇 <strong>Tippen</strong> = an/aus &nbsp;·&nbsp; 🎨 <strong>Rechtsklick</strong> = Farbe<br>🌅 <strong>Szene</strong> = alles auf einmal
+          </div>
           <div id="room-list"></div>
 
         </div>
@@ -1291,6 +1345,31 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 <script>
 // ── UTILS ──
 const $=id=>document.getElementById(id);
+
+// ── HINT SYSTEM ──
+const _hintDismissed=new Set();
+function dismissHint(id){
+  const el=$(id);
+  if(el){el.style.transition='opacity .4s,transform .4s';el.style.opacity='0';el.style.transform+=' scale(.8)';setTimeout(()=>el.remove(),400)}
+  _hintDismissed.add(id);
+}
+// Auto-dismiss floor plan hints after first room click
+function _autoHintFP(){
+  ['hint-fp-room','hint-fp-lamp','hint-fp-rc'].forEach(id=>dismissHint(id));
+}
+// Dismiss all hints button (shown in tour)
+function dismissAllHints(){
+  document.querySelectorAll('.hint-bubble,.hint-badge-auto').forEach(el=>{
+    el.style.transition='opacity .4s';el.style.opacity='0';setTimeout(()=>el.style.display='none',400);
+  });
+  document.body.classList.add('hints-off');
+  localStorage.setItem('alf-hints','off');
+  toast(lang==='de'?'💡 Tipps ausgeblendet':'💡 Tips hidden');
+}
+// On load: if hints were dismissed before, hide them
+if(localStorage.getItem('alf-hints')==='off'){
+  setTimeout(()=>document.body.classList.add('hints-off'),100);
+}
 function toast(msg,d=2200){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
 function openFiverr(){window.open('https://www.fiverr.com/autoflow-lab','_blank')}
 function switchTab(tab,btn){
@@ -1961,6 +2040,7 @@ function applyLang(){
   setText('wf-ttl',t.wfTtl);setText('wf1',t.wf1);setText('wf2',t.wf2);setText('wf3',t.wf3);setText('wf4',t.wf4);
   setText('ai-cta-h2',t.aiCtaH2);setText('ai-cta-p',t.aiCtaP);setText('ai-cta3',t.aiCta3);
   setText('tab-sh',t.navSH);setText('tab-ai',t.navAI);
+  document.querySelectorAll('[data-i="hideHints"]').forEach(el=>el.textContent=t.hideHints||'Tipps ausblenden');
   // Security + Energy
   const armBtn=$('sec-arm-btn');
   if(armBtn&&!alarmArmed)armBtn.textContent='🛡 '+(lang==='de'?'Scharf':'Arm');
