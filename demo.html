@@ -125,6 +125,7 @@ html[data-mode="security"] #sec-card{box-shadow:0 0 0 2px rgba(255,59,48,.5),0 0
 @keyframes scanLine{0%{top:-2px}100%{top:102%}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
+@media(max-width:640px){.hiw-line{display:none!important}}
 /* ═══════════════════════════════════════════
    ANIMATIONS
 ═══════════════════════════════════════════ */
@@ -570,7 +571,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 @keyframes hintPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.9}50%{transform:translate(-50%,-50%) scale(1.25);opacity:.3}}
 
 /* Speech bubble */
-.hint-bubble{position:absolute;z-index:40;background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:7px 12px;border-radius:18px;white-space:nowrap;box-shadow:0 4px 18px rgba(0,113,227,.4);animation:bubbleFloat 2.5s ease-in-out infinite;pointer-events:none;letter-spacing:.1px}
+.hint-bubble{position:absolute;z-index:40;background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:7px 12px;border-radius:18px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,113,227,.3);animation:bubbleFloat 2.5s ease-in-out infinite;pointer-events:auto;cursor:pointer;letter-spacing:.1px;opacity:.88;transition:opacity .3s,transform .3s}
+.hint-bubble:hover{opacity:.65}
 .hint-bubble::after{content:'';position:absolute;width:10px;height:10px;background:var(--accent);clip-path:polygon(0 0,100% 0,50% 100%);bottom:-8px;left:50%;transform:translateX(-50%)}
 .hint-bubble.right::after{left:auto;right:18px;transform:none}
 .hint-bubble.left::after{left:18px}
@@ -600,6 +602,9 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
 .fab:hover{transform:translateY(-3px);box-shadow:0 12px 44px rgba(0,113,227,.6)}
 .fab-txt{white-space:nowrap}
 @media(max-width:580px){.fab-txt{display:none}.fab{border-radius:50%;width:54px;height:54px;padding:0;justify-content:center;font-size:1.3rem}}
+.pin-btn{padding:14px;border-radius:12px;border:1.5px solid var(--border2);background:var(--bg2);font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text)}
+.pin-btn:hover{background:var(--bg3);border-color:var(--accent)}
+.pin-btn:active{transform:scale(.92);background:rgba(0,113,227,.15)}
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(12px);background:rgba(20,20,30,.88);color:#fff;padding:10px 20px;border-radius:24px;font-size:.8rem;opacity:0;transition:all .3s;z-index:300;pointer-events:none;white-space:nowrap;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -709,7 +714,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
           <button class="mc" onclick="prevTrack()" style="width:34px;height:34px;border-radius:50%;font-size:.85rem">⏮</button>
           <div style="position:relative;display:inline-block">
             <button class="mc play" id="play-btn" onclick="togglePlay();dismissHint('hint-play')" style="width:48px;height:48px;border-radius:50%;font-size:1.2rem;background:linear-gradient(135deg,#1db954,#17a349);border:none;color:#fff;box-shadow:0 4px 14px rgba(29,185,84,.4)">▶</button>
-            <div class="hint-bubble green" id="hint-play" style="top:-52px;left:50%;transform:translateX(-50%)">▶ Abspielen!</div>
+            <div class="hint-bubble green" id="hint-play" onclick="dismissHint('hint-play')" style="top:-52px;left:50%;transform:translateX(-50%)">▶ Abspielen!</div>
           </div>
           <button class="mc" onclick="nextTrack()" style="width:34px;height:34px;border-radius:50%;font-size:.85rem">⏭</button>
         </div>
@@ -917,11 +922,36 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
           </div>
           <div style="position:relative">
             <button class="sec-arm-btn disarmed" id="sec-arm-btn" onclick="toggleAlarm();dismissHint('hint-alarm')">🛡 Scharf</button>
-            <div class="hint-bubble red" id="hint-alarm" style="bottom:calc(100% + 8px);right:0;font-size:.65rem">🚨 Alarm testen!</div>
+            <div class="hint-bubble red" id="hint-alarm" onclick="dismissHint('hint-alarm')" style="bottom:calc(100% + 8px);right:0;font-size:.65rem">🚨 Alarm testen!</div>
           </div>
         </div>
         <div class="sec-alert-banner" id="sec-alert">⚠️ <span id="sec-alert-txt">Bewegung erkannt — Eingang</span></div>
       </div>
+
+<!-- ALARM MODAL -->
+<div id="alarm-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;animation:fadeIn .3s">
+  <div style="background:var(--card);border-radius:24px;padding:32px 28px;max-width:320px;width:90%;text-align:center;border:2px solid rgba(255,59,48,.4);box-shadow:0 0 60px rgba(255,59,48,.3)">
+    <div style="font-size:3rem;margin-bottom:8px;animation:pulse 1s infinite">🚨</div>
+    <div style="font-size:1.1rem;font-weight:800;color:var(--red);margin-bottom:4px" id="alarm-modal-title">ALARM AKTIV</div>
+    <div style="font-size:.8rem;color:var(--text2);margin-bottom:20px" id="alarm-modal-loc">Bewegung erkannt</div>
+    <div style="font-size:.75rem;font-weight:700;color:var(--text3);margin-bottom:10px" id="alarm-pin-lbl">PIN-Code eingeben</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px" id="alarm-pin-display">
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid var(--border2)" class="pin-dot"></div>
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid var(--border2)" class="pin-dot"></div>
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid var(--border2)" class="pin-dot"></div>
+      <div style="width:14px;height:14px;border-radius:50%;border:2px solid var(--border2)" class="pin-dot"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px" id="alarm-keypad">
+      <button onclick="pinPress(1)" class="pin-btn">1</button><button onclick="pinPress(2)" class="pin-btn">2</button><button onclick="pinPress(3)" class="pin-btn">3</button>
+      <button onclick="pinPress(4)" class="pin-btn">4</button><button onclick="pinPress(5)" class="pin-btn">5</button><button onclick="pinPress(6)" class="pin-btn">6</button>
+      <button onclick="pinPress(7)" class="pin-btn">7</button><button onclick="pinPress(8)" class="pin-btn">8</button><button onclick="pinPress(9)" class="pin-btn">9</button>
+      <button onclick="pinClear()" class="pin-btn" style="font-size:.75rem;color:var(--text2)">✕</button>
+      <button onclick="pinPress(0)" class="pin-btn">0</button>
+      <button onclick="pinBackspace()" class="pin-btn" style="font-size:.75rem">⌫</button>
+    </div>
+    <div style="font-size:.65rem;color:var(--text3)" id="alarm-hint-txt">Tipp: 1234</div>
+  </div>
+</div>
 
     </div><!-- dash-grid -->
   </div>
@@ -934,7 +964,6 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
       <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative">
         <!-- Connector line -->
         <div style="position:absolute;top:40px;left:calc(16.67% + 20px);right:calc(16.67% + 20px);height:2px;background:linear-gradient(90deg,var(--accent),#af52de);opacity:.3;z-index:0" class="hiw-line"></div>
-        @media(max-width:640px){.hiw-line{display:none}}
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
           <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#34aadc);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
           <div style="font-size:.65rem;font-weight:800;color:var(--accent);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw1-step">Schritt 1</div>
@@ -970,7 +999,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
         <button class="sp" onclick="setScene('normal');dismissHint('hint-scene')">☀️ Normal</button>
         <button class="sp" onclick="setScene('movie');dismissHint('hint-scene')">🎬 Movie</button>
         <button class="sp" onclick="setScene('alloff');dismissHint('hint-scene')">🌙 Aus</button>
-        <div class="hint-bubble purple" id="hint-scene" style="top:-52px;left:50%;transform:translateX(-50%)">✨ Szene auswählen!</div>
+        <div class="hint-bubble purple" id="hint-scene" onclick="dismissHint('hint-scene')" style="top:-52px;left:50%;transform:translateX(-50%)">✨ Szene auswählen!</div>
       </div>
       <div class="fp-wrap">
         <div>
@@ -1082,9 +1111,9 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
               </g>
             </svg>
           <!-- Hint bubbles on floor plan -->
-          <div class="hint-bubble" id="hint-fp-room" style="bottom:calc(62% + 8px);left:calc(64% - 50px)">👆 Raum antippen!</div>
-          <div class="hint-bubble purple" id="hint-fp-lamp" style="top:calc(18% - 48px);left:calc(60% - 55px)">💡 Lampe klicken</div>
-          <div class="hint-bubble warm" id="hint-fp-rc" style="bottom:calc(38% - 8px);right:calc(27% + 4px)">🎨 Rechtsklick = Farbe</div>
+          <div class="hint-bubble" id="hint-fp-room" onclick="dismissHint('hint-fp-room')" style="bottom:calc(62% + 8px);left:calc(64% - 50px)">👆 Raum antippen!</div>
+          <div class="hint-bubble purple" id="hint-fp-lamp" onclick="dismissHint('hint-fp-lamp')" style="top:calc(18% - 48px);left:calc(60% - 55px)">💡 Lampe klicken</div>
+          <div class="hint-bubble warm" id="hint-fp-rc" onclick="dismissHint('hint-fp-rc')" style="bottom:calc(38% - 8px);right:calc(27% + 4px)">🎨 Rechtsklick = Farbe</div>
           </div>
         </div>
         <!-- Room panel -->
@@ -1898,39 +1927,97 @@ function selectCam(idx){
   if(ic)ic.textContent=cams[idx].icon;if(lb)lb.textContent=cams[idx].label;
 }
 function switchCam(){selectCam((curCam+1)%cams.length);toast('📷 '+cams[curCam].label)}
+// ── ALARM + PIN SYSTEM ──
+const ALARM_PIN='1234';
+let pinEntry='';
+let alarmTriggered=false;
+
 function toggleAlarm(){
-  alarmArmed=!alarmArmed;
-  const btn=$('sec-arm-btn'),dot=$('sec-dot'),txt=$('sec-status-txt'),html=document.documentElement;
+  alarmArmed=!alarmArmed;alarmTriggered=false;
+  const btn=$('sec-arm-btn'),html=document.documentElement;
   if(alarmArmed){
-    btn.className='sec-arm-btn armed';btn.textContent='🚨 Deaktivieren';
-    dot.className='sec-status-dot alert';
-    if(txt)txt.innerHTML='<div class="sec-status-dot alert" id="sec-dot"></div>'+(lang==='de'?'System scharf':'System armed');
-    // Trigger site security mode
+    btn.className='sec-arm-btn armed';btn.textContent='🚨 '+(lang==='de'?'Deaktivieren':'Disarm');
+    updateSecStatus(false);
     html.dataset.mode='security';
     const banner=$('mode-banner');
-    if(banner){banner.textContent=lang==='de'?'🚨 ALARM AKTIV — System gesichert':'🚨 ALARM ACTIVE — System armed';banner.classList.add('show')}
-    // Random motion detection after 3s
-    clearTimeout(motionTimer);
-    motionTimer=setTimeout(()=>{
-      if(alarmArmed){
-        const alert=$('sec-alert');const alertTxt=$('sec-alert-txt');
-        if(alertTxt)alertTxt.textContent=lang==='de'?'Bewegung erkannt — '+cams[curCam].label:'Motion detected — '+cams[curCam].label;
-        if(alert)alert.classList.add('show');
-        toast('🚨 '+(lang==='de'?'Bewegung erkannt!':'Motion detected!'));
-        setTimeout(()=>{if(alert)alert.classList.remove('show')},5000);
-      }
-    },3000);
-    toast(lang==='de'?'🚨 Alarm aktiviert':'🚨 Alarm activated');
+    if(banner){banner.textContent=lang==='de'?'🚨 ALARM SCHARF — System gesichert':'🚨 ALARM ARMED — System secured';banner.classList.add('show')}
+    // Hook clicks to trigger motion
+    document.addEventListener('click',triggerMotionOnClick,{once:false});
+    toast(lang==='de'?'🚨 Alarm aktiviert — nächster Klick löst aus!':'🚨 Alarm armed — next click triggers!');
   } else {
     btn.className='sec-arm-btn disarmed';btn.textContent='🛡 '+(lang==='de'?'Scharf':'Arm');
-    dot.className='sec-status-dot ok';
-    if(txt)txt.innerHTML='<div class="sec-status-dot ok" id="sec-dot"></div>'+(lang==='de'?'System gesichert':'System secured');
+    updateSecStatus(true);
     html.dataset.mode='';
+    document.removeEventListener('click',triggerMotionOnClick);
+    closeAlarmModal();
     const banner=$('mode-banner');if(banner)banner.classList.remove('show');
     const alert=$('sec-alert');if(alert)alert.classList.remove('show');
-    clearTimeout(motionTimer);
+    clearTimeout(motionTimer);alarmTriggered=false;
     toast(lang==='de'?'✅ Alarm deaktiviert':'✅ Alarm deactivated');
   }
+}
+
+function triggerMotionOnClick(e){
+  if(!alarmArmed||alarmTriggered)return;
+  if(e.target.closest('#alarm-modal'))return;
+  alarmTriggered=true;
+  document.removeEventListener('click',triggerMotionOnClick);
+  const loc=cams[Math.floor(Math.random()*cams.length)].label;
+  // Show alert banner
+  const alert=$('sec-alert');const alertTxt=$('sec-alert-txt');
+  if(alertTxt)alertTxt.textContent=(lang==='de'?'Bewegung erkannt — ':'Motion detected — ')+loc;
+  if(alert)alert.classList.add('show');
+  // Shake cam view
+  const cam=$('main-cam');if(cam){cam.style.animation='shiver .4s ease-in-out 3';setTimeout(()=>cam.style.animation='',1500)}
+  // Open PIN modal after short delay
+  setTimeout(()=>showAlarmModal(loc),800);
+}
+
+function updateSecStatus(ok){
+  const dot=$('sec-dot');const txt=$('sec-status-txt');
+  if(dot)dot.className='sec-status-dot '+(ok?'ok':'alert');
+  if(txt)txt.innerHTML='<div class="sec-status-dot '+(ok?'ok':'alert')+'" id="sec-dot"></div>'+(ok?(lang==='de'?'System gesichert':'System secured'):(lang==='de'?'System scharf':'System armed'));
+}
+
+function showAlarmModal(loc){
+  const m=$('alarm-modal');if(!m)return;
+  const title=$('alarm-modal-title');if(title)title.textContent=lang==='de'?'ALARM AUSGELÖST!':'ALARM TRIGGERED!';
+  const locEl=$('alarm-modal-loc');if(locEl)locEl.textContent=(lang==='de'?'📍 Bewegung erkannt — ':'📍 Motion detected — ')+loc;
+  const lbl=$('alarm-pin-lbl');if(lbl)lbl.textContent=lang==='de'?'Alarm-PIN eingeben zum Deaktivieren':'Enter alarm PIN to deactivate';
+  const hint=$('alarm-hint-txt');if(hint)hint.textContent=lang==='de'?'💡 Tipp: 1-2-3-4':'💡 Hint: 1-2-3-4';
+  m.style.display='flex';pinEntry='';updatePinDisplay();
+  toast('🚨 '+(lang==='de'?'ALARM! PIN eingeben!':'ALARM! Enter PIN!'),4000);
+}
+function closeAlarmModal(){const m=$('alarm-modal');if(m)m.style.display='none';pinEntry='';}
+
+function pinPress(n){
+  if(pinEntry.length>=4)return;
+  pinEntry+=n;updatePinDisplay();
+  if(pinEntry.length===4){
+    setTimeout(()=>{
+      if(pinEntry===ALARM_PIN){
+        // correct!
+        const m=$('alarm-modal');if(m){m.querySelector('div').style.borderColor='rgba(52,199,89,.6)';m.querySelector('div').style.boxShadow='0 0 60px rgba(52,199,89,.3)'}
+        $('alarm-modal-title').textContent='✅ '+(lang==='de'?'ENTSPERRT':'UNLOCKED');
+        setTimeout(()=>{alarmArmed=false;toggleAlarm();closeAlarmModal()},1000);
+      } else {
+        // wrong!
+        $('alarm-modal-title').textContent='❌ '+(lang==='de'?'FALSCHER CODE':'WRONG CODE');
+        $('alarm-modal-title').style.animation='shiver .4s ease-in-out 3';
+        setTimeout(()=>{pinEntry='';updatePinDisplay();$('alarm-modal-title').textContent=lang==='de'?'ALARM AUSGELÖST!':'ALARM TRIGGERED!';$('alarm-modal-title').style.animation=''},1500);
+      }
+    },300);
+  }
+}
+function pinClear(){pinEntry='';updatePinDisplay()}
+function pinBackspace(){pinEntry=pinEntry.slice(0,-1);updatePinDisplay()}
+function updatePinDisplay(){
+  document.querySelectorAll('.pin-dot').forEach((d,i)=>{
+    d.style.background=i<pinEntry.length?'var(--red)':'transparent';
+    d.style.borderColor=i<pinEntry.length?'var(--red)':'var(--border2)';
+    d.style.transform=i<pinEntry.length?'scale(1.2)':'scale(1)';
+    d.style.transition='all .15s';
+  });
 }
 
 // ── FLOOR PLAN ──
@@ -2103,9 +2190,9 @@ function buildRoomList(){
       </div>
       <button class="rc-toggle" onclick="event.stopPropagation();roomClick('${rid}')"></button>
     </div>
-    <input type="range" class="rc-bright" min="10" max="100" value="${r.bright||80}" id="rcb-${rid}"
+    <input type="range" class="rc-bright" min="10" max="100" value="${r.brightness||80}" id="rcb-${rid}"
       style="display:${r.on?'block':'none'};margin-top:6px;accent-color:${col}"
-      oninput="event.stopPropagation();rooms['${rid}'].bright=parseInt(this.value);updateEnergyFromLights()"
+      oninput="event.stopPropagation();rooms['${rid}'].brightness=parseInt(this.value);applyRoom('${rid}');updateEnergyFromLights()"
       onclick="event.stopPropagation()">`;
     div.onclick=()=>roomClick(rid);
     div.oncontextmenu=e=>{e.preventDefault();openCp(rid,e)};
