@@ -652,7 +652,10 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
     <h1><span data-i="h1a">Dein Smart Home,</span><br><span class="grad" data-i="h1b">professionell gestaltet.</span></h1>
     <p class="hero-sub" data-i="heroSub">Individuelle Home&nbsp;Assistant Dashboards & KI-Automationen — geliefert in 48&nbsp;Stunden.</p>
     <div class="hero-actions">
-      <button class="btn-p" onclick="openFiverr()" data-i="heroCta1">🛒 Jetzt bestellen</button>
+      <button class="btn-p" onclick="openFiverr()" data-i="heroCta1" style="display:flex;align-items:center;gap:8px">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Fiverr_Logo_09.2020.svg/120px-Fiverr_Logo_09.2020.svg.png" height="16" style="filter:brightness(10)" alt="Fiverr" onerror="this.style.display='none'">
+        <span data-i="heroCta1">Jetzt auf Fiverr</span>
+      </button>
       <button class="btn-s" onclick="document.getElementById('fp-section').scrollIntoView({behavior:'smooth'})" data-i="heroCta2">🏠 Demo ansehen</button>
     </div>
     <div class="hero-stats">
@@ -787,7 +790,8 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
         <div class="dash-card-tag" data-i="cardClimate">🌡 Klima</div>
         <div class="dash-card-title" data-i="cardClimateTitle">Thermostat</div>
         <div class="climate-wrap">
-          <div class="thermo-container">
+          <div class="thermo-container" id="thermo-container" style="cursor:grab;user-select:none"
+              onmousedown="thermoStartDrag(event)" ontouchstart="thermoStartDrag(event)">
             <svg viewBox="0 0 104 104">
               <circle cx="52" cy="52" r="44" fill="none" stroke="var(--bg3)" stroke-width="8"/>
               <circle id="t-ring" cx="52" cy="52" r="44" fill="none" stroke="url(#thermGrad)" stroke-width="8"
@@ -1027,16 +1031,47 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
                 <radialGradient id="rg-dining" cx="50%" cy="50%" r="65%"><stop id="rg-dining-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/><stop id="rg-dining-1" offset="60%" stop-color="#f0a020" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="rg-bed2" cx="50%" cy="50%" r="65%"><stop id="rg-bed2-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/><stop id="rg-bed2-1" offset="60%" stop-color="#f0a020" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="rg-office" cx="50%" cy="50%" r="65%"><stop id="rg-office-0" offset="0%" stop-color="#c8e8ff" stop-opacity="0"/><stop id="rg-office-1" offset="60%" stop-color="#4088cc" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-                <!-- Lamp pools -->
+                <!-- Room glow gradients — centered, userSpaceOnUse -->
+                <radialGradient id="rg-glow-bed1" cx="840" cy="232" r="95" gradientUnits="userSpaceOnUse">
+                  <stop id="rgg-bed1-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop id="rgg-bed1-1" offset="70%" stop-color="#f0a020" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-glow-bath" cx="1070" cy="320" r="72" gradientUnits="userSpaceOnUse">
+                  <stop id="rgg-bath-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop id="rgg-bath-1" offset="70%" stop-color="#f0a020" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-glow-living" cx="748" cy="370" r="115" gradientUnits="userSpaceOnUse">
+                  <stop id="rgg-living-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop id="rgg-living-1" offset="70%" stop-color="#f0a020" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-glow-dining" cx="946" cy="512" r="72" gradientUnits="userSpaceOnUse">
+                  <stop id="rgg-dining-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop id="rgg-dining-1" offset="70%" stop-color="#f0a020" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-glow-bed2" cx="354" cy="425" r="98" gradientUnits="userSpaceOnUse">
+                  <stop id="rgg-bed2-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop id="rgg-bed2-1" offset="70%" stop-color="#f0a020" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="rg-glow-office" cx="570" cy="528" r="65" gradientUnits="userSpaceOnUse">
+                  <stop id="rgg-office-0" offset="0%" stop-color="#ffe8a0" stop-opacity="0"/>
+                  <stop id="rgg-office-1" offset="70%" stop-color="#f0a020" stop-opacity="0"/>
+                  <stop offset="100%" stop-opacity="0"/>
+                </radialGradient>
+                <!-- Legacy lamp-dot gradients for dot colors -->
                 <radialGradient id="lg-L1"><stop offset="0%" id="lg-L1-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="lg-L2"><stop offset="0%" id="lg-L2-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="lg-L3"><stop offset="0%" id="lg-L3-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="lg-L4"><stop offset="0%" id="lg-L4-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="lg-L5"><stop offset="0%" id="lg-L5-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-                <radialGradient id="lg-L6"><stop offset="0%" id="lg-L6-c" stop-color="#f0f8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-                <radialGradient id="lg-L7"><stop offset="0%" id="lg-L7-c" stop-color="#f0f8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-                <radialGradient id="lg-L8"><stop offset="0%" id="lg-L8-c" stop-color="#c8e8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-                <radialGradient id="lg-L9"><stop offset="0%" id="lg-L9-c" stop-color="#f0f8ff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L6"><stop offset="0%" id="lg-L6-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L7"><stop offset="0%" id="lg-L7-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L8"><stop offset="0%" id="lg-L8-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lg-L9"><stop offset="0%" id="lg-L9-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <radialGradient id="lg-L11"><stop offset="0%" id="lg-L11-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
                 <filter id="ldotGlow" x="-80%" y="-80%" width="360%" height="360%"><feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                 <!-- Room clip paths — lamps stay within walls -->
@@ -1054,29 +1089,36 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
               <polygon id="rp-dining" points="812,422 1080,492 1080,608 812,548"                  fill="url(#rg-dining)" opacity="0" style="transition:opacity .55s ease"/>
               <polygon id="rp-bed2"   points="225,328 482,388 482,528 225,468"                    fill="url(#rg-bed2)"   opacity="0" style="transition:opacity .55s ease"/>
               <polygon id="rp-office" points="482,452 658,498 658,608 482,562"                    fill="url(#rg-office)" opacity="0" style="transition:opacity .55s ease"/>
-              <!-- Lamp pools — clipped to room boundaries -->
+              <!-- Room glow circles — centered, clipped to room, guaranteed no bleed -->
               <g clip-path="url(#clip-bed1)">
-                <ellipse id="lp-L1" cx="840" cy="185" rx="140" ry="105" fill="url(#lg-L1)" opacity="0" style="transition:opacity .45s"/>
-                <ellipse id="lp-L2" cx="800" cy="228" rx="80"  ry="58"  fill="url(#lg-L2)" opacity="0" style="transition:opacity .45s"/>
-                <ellipse id="lp-L3" cx="895" cy="246" rx="80"  ry="58"  fill="url(#lg-L3)" opacity="0" style="transition:opacity .45s"/>
-              </g>
-              <g clip-path="url(#clip-bed2)">
-                <ellipse id="lp-L4" cx="380" cy="398" rx="120" ry="90"  fill="url(#lg-L4)" opacity="0" style="transition:opacity .45s"/>
-                <ellipse id="lp-L5" cx="302" cy="362" rx="80"  ry="60"  fill="url(#lg-L5)" opacity="0" style="transition:opacity .45s"/>
-              </g>
-              <g clip-path="url(#clip-living)">
-                <ellipse id="lp-L6" cx="678" cy="292" rx="140" ry="100" fill="url(#lg-L6)" opacity="0" style="transition:opacity .45s"/>
-                <ellipse id="lp-L7" cx="760" cy="355" rx="110" ry="82"  fill="url(#lg-L7)" opacity="0" style="transition:opacity .45s"/>
-              </g>
-              <g clip-path="url(#clip-office)">
-                <ellipse id="lp-L8" cx="580" cy="525" rx="100" ry="76"  fill="url(#lg-L8)" opacity="0" style="transition:opacity .45s"/>
+                <circle id="lp-bed1" cx="840" cy="232" r="95" fill="url(#rg-glow-bed1)" opacity="0" style="transition:opacity .5s ease"/>
               </g>
               <g clip-path="url(#clip-bath)">
-                <ellipse id="lp-L9" cx="1072" cy="272" rx="88" ry="70"  fill="url(#lg-L9)" opacity="0" style="transition:opacity .45s"/>
+                <circle id="lp-bath" cx="1070" cy="320" r="72" fill="url(#rg-glow-bath)" opacity="0" style="transition:opacity .5s ease"/>
+              </g>
+              <g clip-path="url(#clip-living)">
+                <circle id="lp-living" cx="748" cy="370" r="115" fill="url(#rg-glow-living)" opacity="0" style="transition:opacity .5s ease"/>
               </g>
               <g clip-path="url(#clip-dining)">
-                <ellipse id="lp-L11" cx="900" cy="482" rx="110" ry="82" fill="url(#lg-L11)" opacity="0" style="transition:opacity .45s"/>
+                <circle id="lp-dining" cx="946" cy="512" r="72" fill="url(#rg-glow-dining)" opacity="0" style="transition:opacity .5s ease"/>
               </g>
+              <g clip-path="url(#clip-bed2)">
+                <circle id="lp-bed2" cx="354" cy="425" r="98" fill="url(#rg-glow-bed2)" opacity="0" style="transition:opacity .5s ease"/>
+              </g>
+              <g clip-path="url(#clip-office)">
+                <circle id="lp-office" cx="570" cy="528" r="65" fill="url(#rg-glow-office)" opacity="0" style="transition:opacity .5s ease"/>
+              </g>
+              <!-- Legacy lp-L* anchors for JS compat -->
+              <circle id="lp-L1" r="0" opacity="0"/>
+              <circle id="lp-L2" r="0" opacity="0"/>
+              <circle id="lp-L3" r="0" opacity="0"/>
+              <circle id="lp-L4" r="0" opacity="0"/>
+              <circle id="lp-L5" r="0" opacity="0"/>
+              <circle id="lp-L6" r="0" opacity="0"/>
+              <circle id="lp-L7" r="0" opacity="0"/>
+              <circle id="lp-L8" r="0" opacity="0"/>
+              <circle id="lp-L9" r="0" opacity="0"/>
+              <circle id="lp-L11" r="0" opacity="0"/>
             </svg>
 
             <!-- Click zones + Lamp dots -->
@@ -1576,26 +1618,96 @@ const NEWS_FEEDS={
   default_en:'https://feeds.bbci.co.uk/news/rss.xml'
 };
 function loadNews(){
-  const feed=userCountry==='at'?NEWS_FEEDS.at:userCountry==='ch'?NEWS_FEEDS.ch:lang==='de'?NEWS_FEEDS.de:NEWS_FEEDS.default_en;
-  const url=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}&count=5`;
-  fetch(url).then(r=>r.json()).then(d=>{
-    const nl=$('news-list'),nl_loading=$('news-loading');
-    if(d.status!=='ok'||!d.items?.length){if(nl_loading)nl_loading.textContent=lang==='de'?'Keine News verfügbar':'No news available';return}
-    if(nl_loading)nl_loading.style.display='none';nl.innerHTML='';
-    d.items.slice(0,5).forEach((item,i)=>{
-      const age=timeSince(new Date(item.pubDate));
-      const a=document.createElement('a');a.className='ni';a.href=item.link;a.target='_blank';a.rel='noopener';
-      a.style.animationDelay=(i*.08)+'s';
-      a.innerHTML=`<span class="ni-num">${i+1}</span><div class="ni-body"><div class="ni-src">${d.feed?.title||'News'}</div><div class="ni-txt">${item.title}</div><div class="ni-age">${age}</div></div>`;
-      nl.appendChild(a);
-    });
-  }).catch(()=>{const nl=$('news-loading');if(nl)nl.textContent=lang==='de'?'News nicht verfügbar':'News unavailable'});
+  const nl=$('news-list'),nl_loading=$('news-loading');
+  if(nl_loading)nl_loading.style.display='none';
+  // Try Hacker News API (no CORS issues)
+  fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
+    .then(r=>r.json())
+    .then(ids=>{
+      const top=ids.slice(0,8);
+      return Promise.all(top.map(id=>fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r=>r.json())));
+    })
+    .then(items=>{
+      if(nl)nl.innerHTML='';
+      items.filter(i=>i&&i.title).slice(0,5).forEach((item,i)=>{
+        const age=timeSince(new Date(item.time*1000));
+        const a=document.createElement('a');a.className='ni';a.href=item.url||`https://news.ycombinator.com/item?id=${item.id}`;a.target='_blank';a.rel='noopener';
+        a.style.animationDelay=(i*.08)+'s';
+        a.innerHTML=`<span class="ni-num">${i+1}</span><div class="ni-body"><div class="ni-src">Hacker News · ⬆ ${item.score||0}</div><div class="ni-txt">${item.title}</div><div class="ni-age">${age}</div></div>`;
+        if(nl)nl.appendChild(a);
+      });
+    })
+    .catch(()=>showDemoNews());
+}
+function showDemoNews(){
+  const nl=$('news-list');if(!nl)return;nl.innerHTML='';
+  const demoDE=[
+    {t:'Home Assistant 2025: Neue Matter-Integration für alle Zigbee-Geräte',u:'#',s:'Home Assistant Blog',a:'2h'},
+    {t:'Smart Home Markt wächst auf 150 Mrd. € bis 2026',u:'#',s:'Heise Online',a:'4h'},
+    {t:'Philips Hue führt neue adaptive Beleuchtungs-API ein',u:'#',s:'The Verge',a:'6h'},
+    {t:'N8N v1.0: Open-Source Automation jetzt mit AI-Nodes',u:'#',s:'Dev.to',a:'8h'},
+    {t:'Energiekosten 2025: Smart Home spart bis zu 30% Strom',u:'#',s:'Spiegel Online',a:'12h'},
+  ];
+  const demoEN=[
+    {t:'Home Assistant 2025: Matter support for all Zigbee devices',u:'#',s:'Home Assistant Blog',a:'2h'},
+    {t:'Smart Home market to reach €150B by 2026',u:'#',s:'TechCrunch',a:'4h'},
+    {t:'Philips Hue launches new adaptive lighting API',u:'#',s:'The Verge',a:'6h'},
+    {t:'N8N v1.0: Open-source automation now with AI nodes',u:'#',s:'Dev.to',a:'8h'},
+    {t:'Energy costs 2025: Smart homes save up to 30% electricity',u:'#',s:'Bloomberg',a:'12h'},
+  ];
+  (lang==='de'?demoDE:demoEN).forEach((item,i)=>{
+    const a=document.createElement('a');a.className='ni';a.href=item.u;a.target='_blank';
+    a.innerHTML=`<span class="ni-num">${i+1}</span><div class="ni-body"><div class="ni-src">${item.s}</div><div class="ni-txt">${item.t}</div><div class="ni-age">${item.a} ${lang==='de'?'ago':'ago'}</div></div>`;
+    nl.appendChild(a);
+  });
 }
 function timeSince(d){const s=Math.floor((Date.now()-d)/1000);if(s<60)return(lang==='de'?'gerade eben':'just now');if(s<3600)return Math.floor(s/60)+(lang==='de'?' Min':'min');if(s<86400)return Math.floor(s/3600)+(lang==='de'?' Std':'h');return Math.floor(s/86400)+(lang==='de'?' T':'d')}
 
 // ── CLIMATE ──
 let thermoVal=21;
-let _fxState='normal'; // 'freeze','cold','normal','warm','hot','inferno'
+let _fxState='normal';
+
+// ── THERMOSTAT DRAG ──
+let _thermoDragging=false,_thermoLastAngle=null,_thermoAccum=0;
+function thermoStartDrag(e){
+  _thermoDragging=true;_thermoAccum=0;
+  const el=$('thermo-container');if(el)el.style.cursor='grabbing';
+  e.preventDefault();
+  document.addEventListener('mousemove',thermoDrag);
+  document.addEventListener('mouseup',thermoEndDrag);
+  document.addEventListener('touchmove',thermoDrag,{passive:false});
+  document.addEventListener('touchend',thermoEndDrag);
+  _thermoLastAngle=getThermoAngle(e);
+}
+function thermoDrag(e){
+  if(!_thermoDragging)return;
+  e.preventDefault();
+  const angle=getThermoAngle(e);
+  if(_thermoLastAngle===null){_thermoLastAngle=angle;return}
+  let delta=angle-_thermoLastAngle;
+  if(delta>180)delta-=360;if(delta<-180)delta+=360;
+  _thermoAccum+=delta;
+  _thermoLastAngle=angle;
+  // Every 18° = 1 degree of temp (20 steps over 360°)
+  const steps=Math.round(_thermoAccum/18);
+  if(steps!==0){adjThermo(steps);_thermoAccum-=steps*18}
+}
+function thermoEndDrag(){
+  _thermoDragging=false;_thermoLastAngle=null;
+  const el=$('thermo-container');if(el)el.style.cursor='grab';
+  document.removeEventListener('mousemove',thermoDrag);
+  document.removeEventListener('mouseup',thermoEndDrag);
+  document.removeEventListener('touchmove',thermoDrag);
+  document.removeEventListener('touchend',thermoEndDrag);
+}
+function getThermoAngle(e){
+  const el=$('thermo-container');if(!el)return 0;
+  const rect=el.getBoundingClientRect();
+  const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  const px=e.touches?e.touches[0].clientX:e.clientX;
+  const py=e.touches?e.touches[0].clientY:e.clientY;
+  return Math.atan2(py-cy,px-cx)*180/Math.PI;
+} // 'freeze','cold','normal','warm','hot','inferno'
 let _snowInterval=null,_sweatInterval=null;
 
 function adjThermo(d){
@@ -1653,9 +1765,12 @@ function setThermoFX(t){
 }
 
 function clearThermoFX(){
-  clearInterval(_snowInterval);clearInterval(_sweatInterval);
-  document.querySelectorAll('.snowflake,.frost-overlay,.icicle,.polar-bear,.sweat-drop,.fire-emoji,.sun-aura,.snow-pile').forEach(el=>el.remove());
+  clearInterval(_snowInterval);clearInterval(_sweatInterval);_snowInterval=null;_sweatInterval=null;
+  document.querySelectorAll('.snowflake,.frost-overlay,.icicle,.polar-bear,.sweat-drop,.fire-emoji,.sun-aura,.snow-pile,.heat-overlay').forEach(el=>el.remove());
   document.querySelectorAll('.btn-hat').forEach(el=>el.classList.remove('btn-hat'));
+  const hat=$('thermo-hat');if(hat){hat.remove();const tn=$('t-num');if(tn)tn._hatted=false;}
+  const fab=document.querySelector('.fab');if(fab){fab.style.background='';fab.style.boxShadow='';}
+  const nav=document.querySelector('.nav');if(nav){nav.style.borderBottom='';nav.style.boxShadow='';}
   document.body.classList.remove('thermo-cold','thermo-hot');
 }
 
