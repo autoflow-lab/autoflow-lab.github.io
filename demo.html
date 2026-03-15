@@ -2591,7 +2591,7 @@ function setLang(lang) {
   if (btn) btn.textContent = t.lang_btn;
 
   // Update room list (re-renders with new language)
-  if (typeof buildRoomList === 'function') buildRoomList();
+  try { if (typeof buildRoomList === 'function' && typeof rooms !== 'undefined') buildRoomList(); } catch(e) {}
 
   // Persist
   try { localStorage.setItem('lang', lang); } catch(e) {}
@@ -2601,12 +2601,7 @@ function toggleLang() {
   setLang(currentLang === 'de' ? 'en' : 'de');
 }
 
-// Auto-detect browser language on first load
-(function() {
-  const saved = (() => { try { return localStorage.getItem('lang'); } catch(e){} })();
-  const browser = navigator.language?.startsWith('en') ? 'en' : 'de';
-  setLang(saved || browser);
-})();
+// i18n init will run after all declarations (see end of script)
 
 
 // ══════════════════════════════════════════════════════
@@ -2934,6 +2929,13 @@ Object.keys(lamps).forEach(applyLampVisual);
 buildRoomList();
 updateCount();
 console.log('💡 v15 Floor plan system ready — real image overlay technique');
+
+// ── i18n init (MUST run after all const declarations) ──
+(function() {
+  const saved = (() => { try { return localStorage.getItem('lang'); } catch(e){} })();
+  const browser = (navigator.language || '').startsWith('en') ? 'en' : 'de';
+  setLang(saved || browser);
+})();
 
 
 function toggleFaq(btn) {
