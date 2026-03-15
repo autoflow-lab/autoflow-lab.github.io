@@ -242,7 +242,9 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
 .hero h1{font-size:clamp(2.2rem,6.5vw,4.4rem);font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-bottom:20px;animation:fadeInUp .7s .1s ease both}
 .hero h1 .grad{background:linear-gradient(135deg,var(--accent) 0%,#5ac8fa 40%,#34c759 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradShift 4s ease infinite}
 [data-theme="dark"] .hero h1 .grad{background:linear-gradient(135deg,#64a0ff 0%,#80d8ff 40%,#60ff90 80%);-webkit-background-clip:text;background-clip:text}
-.hero-sub{font-size:1.08rem;color:var(--text2);max-width:520px;margin:0 auto 34px;line-height:1.7;animation:fadeInUp .8s .2s ease both}
+.hero-sub{font-size:1.08rem;color:var(--text2);max-width:520px;margin:0 auto 34px;line-height:1.7;animation:fadeInUp .8s .2s ease both;min-height:3.4em}
+.typed-cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:2px;vertical-align:text-bottom;border-radius:1px;animation:cursorBlink 1s step-end infinite}
+@keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
 .hero-actions{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-bottom:50px;animation:fadeInUp .9s .3s ease both}
 .btn-p{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:28px;border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.95rem;font-weight:700;transition:all .25s;box-shadow:0 4px 18px rgba(0,113,227,.4)}
 .btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,113,227,.5)}
@@ -655,7 +657,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
     <div class="hero-bg-gradient"></div>
     <div class="hero-badge" data-i="badge">⭐ Top-Rated Fiverr Freelancer</div>
     <h1><span data-i="h1a">Dein Smart Home,</span><br><span class="grad" data-i="h1b">professionell gestaltet.</span></h1>
-    <p class="hero-sub" data-i="heroSub">Individuelle Home&nbsp;Assistant Dashboards & KI-Automationen — geliefert in 48&nbsp;Stunden.</p>
+    <p class="hero-sub" id="hero-sub"><span id="typed-text"></span><span class="typed-cursor"></span></p>
     <div class="hero-actions">
       <button class="btn-p" onclick="openFiverr()" data-i="heroCta1" style="display:flex;align-items:center;gap:8px">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Fiverr_Logo_09.2020.svg/120px-Fiverr_Logo_09.2020.svg.png" height="16" style="filter:brightness(10)" alt="Fiverr" onerror="this.style.display='none'">
@@ -2631,6 +2633,62 @@ if(_origGetPos){
   }
 }
 
+</script>
+
+<!-- Typewriter hero subtitle -->
+<script>
+(function(){
+  var phrases={
+    de:[
+      'Individuelle Home Assistant Dashboards & KI-Automationen — geliefert in 48 Stunden.',
+      'Smart Home, das wirklich zu dir passt — vom Profi eingerichtet.',
+      'Automatisiere dein Zuhause. Spar Zeit. Leb smarter.'
+    ],
+    en:[
+      'Custom Home Assistant Dashboards & AI Automations — delivered in 48 hours.',
+      'Smart Home tailored to you — set up by a professional.',
+      'Automate your home. Save time. Live smarter.'
+    ]
+  };
+  var el=document.getElementById('typed-text');
+  if(!el)return;
+  var lang='de',idx=0,charIdx=0,deleting=false,timer=null;
+  function getLang(){return(document.documentElement.lang||'de').startsWith('en')?'en':'de';}
+  function tick(){
+    var list=phrases[lang]||phrases.de;
+    var full=list[idx%list.length];
+    if(!deleting){
+      charIdx++;
+      el.textContent=full.slice(0,charIdx);
+      if(charIdx>=full.length){deleting=true;timer=setTimeout(tick,2200);return;}
+      timer=setTimeout(tick,38);
+    }else{
+      charIdx--;
+      el.textContent=full.slice(0,charIdx);
+      if(charIdx<=0){deleting=false;idx=(idx+1)%list.length;timer=setTimeout(tick,500);return;}
+      timer=setTimeout(tick,18);
+    }
+  }
+  function start(newLang){
+    clearTimeout(timer);
+    lang=newLang||getLang();
+    idx=0;charIdx=0;deleting=false;
+    el.textContent='';
+    timer=setTimeout(tick,700);
+  }
+  // Intercept language changes: patch setText for hero-sub
+  var _origSetText=window.setText;
+  window.setText=function(id,txt){
+    if(id==='hero-sub'){
+      // detect language from txt content
+      var isEn=txt&&(txt.indexOf('delivered')>-1||txt.indexOf('Custom')>-1);
+      start(isEn?'en':'de');
+      return;
+    }
+    if(_origSetText)_origSetText(id,txt);
+  };
+  start(getLang());
+})();
 </script>
 
 <!-- Scroll-to-top button -->
