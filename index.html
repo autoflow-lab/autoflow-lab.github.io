@@ -1,601 +1,1023 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoFlow Studio — AI & Automation Agency</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<meta name="description" content="Professionelle Smart Home Dashboards & KI-Automatisierung von €49. Home Assistant, interaktive Grundrisse, 48h Lieferung.">
+<meta property="og:title" content="autoflow-lab — Smart Home Dashboards & KI Automation">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0071e3">
+<title>AutoFlow Lab — Smart Home & KI Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --pink:#e040fb;--cyan:#00e5ff;--green:#69ff47;--purple:#7c3aed;
-  --bg:#000;--card:rgba(255,255,255,.032);--border:rgba(255,255,255,.07);
-  --muted:rgba(255,255,255,.42);--text:#fff;
+/* ─── TOKENS ─── */
+:root {
+  --bg:#ffffff; --bg2:#f5f5f7; --bg3:#ebebed;
+  --text:#1d1d1f; --text2:#6e6e73; --text3:#aeaeb2;
+  --accent:#0071e3; --green:#34c759; --warm:#ff9f0a;
+  --border:rgba(0,0,0,.08); --border2:rgba(0,0,0,.14);
+  --radius:18px; --radius-sm:12px;
+  --shadow:0 2px 20px rgba(0,0,0,.08);
+  --nav-h:56px;
 }
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-/* NAV */
-nav{position:fixed;top:0;inset-inline:0;z-index:100;height:56px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.75);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.logo{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-.3px}
-.logo span{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-links{display:flex;gap:24px;align-items:center}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .2s}
-.nav-links a:hover,.nav-links a.active{color:#fff}
-.nav-cta{background:var(--pink);color:#fff!important;padding:7px 18px;border-radius:980px;font-weight:600!important;transition:opacity .2s!important}
-.nav-cta:hover{opacity:.85!important}
-
-/* PAGES */
-.page{display:none;position:relative;z-index:1;min-height:100vh;padding-top:56px}
-.page.active{display:block}
-
-/* HERO */
-.hero{min-height:calc(100vh - 56px);display:grid;place-items:center;text-align:center;padding:60px 6%;position:relative}
-.glow{position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,.2),rgba(0,229,255,.08) 50%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(60px);pointer-events:none;animation:pulse 8s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-52%) scale(1.06)}}
-.hero-inner{position:relative;max-width:860px}
-.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:5px 16px 5px 6px;border-radius:980px;font-size:.75rem;font-weight:500;color:rgba(255,255,255,.65);margin-bottom:32px}
-.badge-dot{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));display:grid;place-items:center;font-size:.65rem}
-h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:800;line-height:1.01;letter-spacing:-3px;margin-bottom:24px}
-.g{background:linear-gradient(135deg,var(--pink) 0%,#a855f7 40%,var(--cyan) 100%);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gshift 4s ease infinite}
-@keyframes gshift{0%,100%{background-position:0%}50%{background-position:100%}}
-.sub{font-size:clamp(1rem,1.8vw,1.2rem);color:var(--muted);line-height:1.75;max-width:520px;margin:0 auto 40px}
-.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:980px;font-size:.88rem;font-weight:600;text-decoration:none;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
-.btn:hover{transform:scale(1.04)}
-.btn-p{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;box-shadow:0 0 40px rgba(224,64,251,.25)}
-.btn-p:hover{box-shadow:0 0 60px rgba(224,64,251,.45)}
-.btn-g{background:rgba(255,255,255,.06);border:1px solid var(--border);color:#fff}
-.btn-g:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
-
-/* MARQUEE */
-.marquee-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px 0;overflow:hidden;mask:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent)}
-.marquee{display:flex;gap:40px;width:max-content;animation:scroll 28s linear infinite}
-@keyframes scroll{to{transform:translateX(-50%)}}
-.marquee span{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.2);white-space:nowrap;letter-spacing:.5px}
-.marquee span.d{color:var(--pink);font-size:.6rem;opacity:.5}
-
-/* BENTO */
-.bento{padding:100px 6%;max-width:1200px;margin:0 auto}
-.section-label{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.section-label::before{content:'';width:20px;height:1px;background:var(--pink)}
-.section-h{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;line-height:1.1}
-.section-p{color:var(--muted);font-size:.92rem;line-height:1.75;max-width:480px;margin-bottom:56px}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;position:relative;overflow:hidden;transition:border-color .35s,box-shadow .35s,transform .35s;cursor:default}
-.card::before{content:'';position:absolute;inset:0;border-radius:20px;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(224,64,251,.1),transparent 55%);opacity:0;transition:opacity .35s;pointer-events:none}
-.card:hover::before{opacity:1}
-.card:hover{border-color:rgba(224,64,251,.3);box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(-3px)}
-.c1{grid-column:1/8}.c2{grid-column:8/13}.c3{grid-column:1/5}.c4{grid-column:5/9}.c5{grid-column:9/13}.c6{grid-column:1/7}.c7{grid-column:7/13}
-@media(max-width:860px){.card{grid-column:1/-1!important}}
-.ctag{font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--pink);margin-bottom:18px}
-.card h3{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:-.5px;margin-bottom:10px;line-height:1.25}
-.c1 h3{font-size:1.8rem;letter-spacing:-1px}
-.card p{color:var(--muted);font-size:.85rem;line-height:1.7}
-.ghost-num{position:absolute;bottom:20px;right:24px;font-family:'Space Grotesk',sans-serif;font-size:5rem;font-weight:800;color:rgba(255,255,255,.025);line-height:1;user-select:none}
-.big-stat{font-family:'Space Grotesk',sans-serif;font-size:3.2rem;font-weight:800;background:linear-gradient(135deg,#fff,rgba(255,255,255,.5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:6px}
-.stat-lbl{color:var(--muted);font-size:.8rem;line-height:1.5}
-.wf{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:22px}
-.wf-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:9px;padding:7px 12px;font-size:.76rem;font-weight:500;color:rgba(255,255,255,.6);transition:all .3s}
-.wf-chip:hover{border-color:var(--pink);color:#fff;background:rgba(224,64,251,.08)}
-.arr{color:var(--pink);opacity:.45;font-size:.85rem}
-.pbadge{display:inline-block;background:linear-gradient(135deg,rgba(105,255,71,.15),rgba(0,229,255,.1));border:1px solid rgba(105,255,71,.2);color:var(--green);padding:5px 12px;border-radius:7px;font-size:.75rem;font-weight:700;margin-top:16px}
-.tools{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
-.tool{padding:4px 11px;border-radius:7px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:.72rem;font-weight:500;color:rgba(255,255,255,.45);transition:all .3s}
-.tool:hover{color:#fff;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.08)}
-
-/* SERVICES PAGE */
-.services-page{padding:80px 6% 100px;max-width:1000px;margin:0 auto}
-.svc-list{display:flex;flex-direction:column;gap:1px;border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:56px}
-.svc{
-  padding:36px 40px;background:var(--card);
-  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;
-  border-bottom:1px solid var(--border);transition:background .25s;cursor:pointer;
+[data-theme="dark"] {
+  --bg:#0a0a0f; --bg2:#1c1c1e; --bg3:#2c2c2e;
+  --text:#f5f5f7; --text2:#aeaeb2; --text3:#636366;
+  --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.15);
+  --shadow:0 2px 20px rgba(0,0,0,.4);
 }
-.svc:last-child{border-bottom:none}
-.svc:hover{background:rgba(255,255,255,.05)}
-.svc-n{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
-.svc-d{color:var(--muted);font-size:.87rem;line-height:1.7;max-width:580px}
-.svc-t{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-.svc-tag{padding:3px 10px;border-radius:6px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.4);font-size:.7rem;font-weight:500}
-.svc-price{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;color:var(--green);white-space:nowrap;text-align:right}
-.svc-from{font-size:.7rem;color:var(--muted);font-weight:500;font-family:'Inter',sans-serif}
 
-/* PRICING PAGE */
-.pricing-page{padding:80px 6% 100px;max-width:1100px;margin:0 auto;text-align:center}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;text-align:left}
-@media(max-width:700px){.cards{grid-template-columns:1fr}}
-.pc{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;position:relative;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .3s,box-shadow .3s}
-.pc:hover{transform:translateY(-6px);border-color:rgba(224,64,251,.25);box-shadow:0 32px 80px rgba(0,0,0,.5)}
-.pc.hot{border-color:rgba(224,64,251,.3);background:linear-gradient(135deg,rgba(224,64,251,.07),rgba(124,58,237,.04))}
-.hot-b{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff;padding:3px 14px;border-radius:980px;font-size:.7rem;font-weight:700;white-space:nowrap}
-.pc-tier{font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
-.pc-price{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-1.5px;line-height:1;margin-bottom:4px}
-.pc-price small{font-size:1rem;font-weight:500;color:var(--muted);vertical-align:top;margin-top:8px;display:inline-block}
-.pc-desc{color:var(--muted);font-size:.82rem;margin-bottom:26px;line-height:1.6}
-.pc-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:30px}
-.pc-list li{font-size:.83rem;color:rgba(255,255,255,.65);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
-.pc-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
-.pc-btn{display:block;width:100%;text-align:center;padding:12px;border-radius:10px;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;font-family:inherit;transition:all .25s}
-.pc-btn.solid{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff}
-.pc-btn.solid:hover{box-shadow:0 8px 32px rgba(224,64,251,.4)}
-.pc-btn.ghost{border:1px solid var(--border);color:rgba(255,255,255,.7);background:transparent}
-.pc-btn.ghost:hover{border-color:rgba(255,255,255,.25);color:#fff;background:rgba(255,255,255,.05)}
-
-/* FAQ */
-.faq{max-width:700px;margin:80px auto 0;text-align:left}
-.faq h3{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:-.5px;margin-bottom:36px;text-align:center}
-.fi{border-bottom:1px solid var(--border)}
-.fq{display:flex;justify-content:space-between;align-items:center;padding:18px 0;cursor:pointer;font-size:.9rem;font-weight:500;gap:16px;transition:color .2s;user-select:none}
-.fq:hover{color:var(--pink)}
-.fi-ico{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;font-size:.7rem;flex-shrink:0;transition:transform .3s,background .3s,border-color .3s}
-.fi.open .fi-ico{transform:rotate(45deg);background:var(--pink);border-color:var(--pink)}
-.fa{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s;font-size:.85rem;color:var(--muted);line-height:1.8;padding:0}
-.fi.open .fa{max-height:180px;padding-bottom:18px}
-
-/* CHATBOT WIDGET */
-#chat-bubble{
-  position:fixed;bottom:28px;right:28px;z-index:1000;
-  width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  display:grid;place-items:center;cursor:pointer;
-  box-shadow:0 4px 24px rgba(224,64,251,.45);
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1);font-size:1.3rem;
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Inter',-apple-system,sans-serif;
+  font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-#chat-bubble:hover{transform:scale(1.1)}
-#chat-win{
-  position:fixed;bottom:90px;right:28px;z-index:1000;
-  width:360px;
-  background:rgba(12,10,20,.97);
-  border:1px solid rgba(224,64,251,.2);
-  border-radius:20px;overflow:hidden;
-  box-shadow:0 24px 80px rgba(0,0,0,.7);
-  display:none;flex-direction:column;
-  backdrop-filter:blur(20px);
+a { color:inherit; text-decoration:none; }
+img { max-width:100%; }
+
+/* ─── NAV ─── */
+.nav {
+  position:fixed; top:0; left:0; right:0; height:var(--nav-h);
+  background:rgba(255,255,255,.85); backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; padding:0 24px; gap:16px;
+  z-index:100;
 }
-#chat-win.open{display:flex}
-.chat-hdr{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.02)}
-.chat-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));display:grid;place-items:center;font-size:.9rem;flex-shrink:0}
-.chat-nm{font-size:.85rem;font-weight:600}
-.chat-st{font-size:.72rem;color:var(--green);display:flex;align-items:center;gap:4px}
-.chat-st::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
-.chat-close{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:2px 6px;border-radius:6px;transition:color .2s,background .2s}
-.chat-close:hover{color:#fff;background:rgba(255,255,255,.08)}
-#chat-msgs{padding:16px;height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
-#chat-msgs::-webkit-scrollbar{width:3px}
-#chat-msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
-.msg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:.83rem;line-height:1.6;animation:pop .2s cubic-bezier(.34,1.56,.64,1)}
-@keyframes pop{from{opacity:0;transform:scale(.94) translateY(4px)}to{opacity:1;transform:none}}
-.msg.b{background:rgba(224,64,251,.1);border:1px solid rgba(224,64,251,.15);align-self:flex-start;border-bottom-left-radius:3px}
-.msg.u{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);align-self:flex-end;border-bottom-right-radius:3px}
-.typing{opacity:.5;font-style:italic;font-size:.78rem}
-.chat-ft{padding:12px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:8px}
-.chat-ft input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:#fff;font-size:.83rem;outline:none;font-family:inherit;transition:border-color .2s}
-.chat-ft input:focus{border-color:rgba(224,64,251,.5)}
-.chat-ft button{background:linear-gradient(135deg,var(--pink),var(--purple));border:none;border-radius:10px;padding:10px 14px;color:#fff;font-weight:600;cursor:pointer;font-size:.82rem;transition:opacity .2s}
-.chat-ft button:hover{opacity:.85}
+[data-theme="dark"] .nav {
+  background:rgba(10,10,15,.85);
+}
+.nav-logo {
+  font-weight:700; font-size:1.05rem; color:var(--text);
+  display:flex; align-items:center; gap:6px;
+}
+.nav-logo em { color:var(--accent); font-style:normal; }
+.nav-center { display:flex; gap:4px; margin:0 auto; }
+.nav-tab {
+  padding:6px 14px; border-radius:20px; border:none;
+  background:none; color:var(--text2); font-size:.85rem;
+  font-weight:500; cursor:pointer; transition:all .2s;
+  font-family:inherit;
+}
+.nav-tab.active { background:var(--bg3); color:var(--text); }
+.nav-right { display:flex; align-items:center; gap:8px; }
+.btn-nav {
+  padding:7px 16px; border-radius:20px; border:none;
+  background:var(--accent); color:#fff; font-size:.82rem;
+  font-weight:600; cursor:pointer; font-family:inherit;
+  transition:opacity .2s;
+}
+.btn-nav:hover { opacity:.85; }
+.btn-nav.ghost {
+  background:none; color:var(--text2);
+  border:1px solid var(--border2);
+}
+.lang-btn {
+  padding:5px 11px; border-radius:20px;
+  border:1.5px solid var(--border2);
+  background:none; color:var(--text); font-size:.78rem;
+  font-weight:700; cursor:pointer; font-family:inherit;
+  transition:all .2s;
+}
+.theme-btn {
+  width:32px; height:32px; border-radius:50%; border:none;
+  background:var(--bg3); cursor:pointer; font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+}
 
-/* CTA */
-.cta-bar{position:relative;z-index:1;margin:0 5% 80px;padding:72px 5%;border-radius:24px;text-align:center;background:linear-gradient(135deg,rgba(224,64,251,.12),rgba(124,58,237,.1),rgba(0,229,255,.06));border:1px solid rgba(224,64,251,.18);overflow:hidden}
-.cta-bar::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -10%,rgba(224,64,251,.2),transparent 60%);pointer-events:none}
-.cta-bar h2{position:relative;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,3.2rem);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px}
-.cta-bar p{position:relative;color:var(--muted);font-size:.95rem;max-width:420px;margin:0 auto 32px;line-height:1.7}
-.cta-bar .btns{position:relative}
+/* ─── PAGES ─── */
+.page { display:none; padding-top:var(--nav-h); }
+.page.active { display:block; }
 
-/* FOOTER */
-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:32px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.fl{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:800}
-.fl span{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-footer p{color:rgba(255,255,255,.18);font-size:.75rem}
+/* ─── HERO ─── */
+.hero {
+  min-height:calc(100svh - var(--nav-h));
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:60px 24px 48px;
+  background: radial-gradient(ellipse 80% 60% at 60% 30%, rgba(0,113,227,.08) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 50% at 20% 70%, rgba(52,199,89,.05) 0%, transparent 70%),
+              var(--bg);
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 14px; border-radius:20px;
+  background:rgba(0,113,227,.1); color:var(--accent);
+  font-size:.78rem; font-weight:600; margin-bottom:20px;
+  border:1px solid rgba(0,113,227,.2);
+}
+.hero h1 {
+  font-size:clamp(2.2rem, 6vw, 4.2rem);
+  font-weight:700; letter-spacing:-.03em;
+  line-height:1.1; margin-bottom:20px;
+  color:var(--text);
+}
+.hero h1 em { color:var(--accent); font-style:normal; }
+.hero-sub {
+  font-size:1.05rem; color:var(--text2); max-width:520px;
+  margin:0 auto 36px; line-height:1.7;
+}
+.hero-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:48px; }
+.btn-primary {
+  padding:13px 28px; border-radius:24px; border:none;
+  background:var(--accent); color:#fff; font-size:.95rem;
+  font-weight:600; cursor:pointer; font-family:inherit;
+  transition:all .2s; display:inline-flex; align-items:center; gap:6px;
+}
+.btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(0,113,227,.35); }
+.btn-secondary {
+  padding:13px 28px; border-radius:24px;
+  border:1.5px solid var(--border2);
+  background:none; color:var(--text); font-size:.95rem;
+  font-weight:600; cursor:pointer; font-family:inherit;
+  transition:all .2s;
+}
+.btn-secondary:hover { background:var(--bg2); }
+.hero-stats {
+  display:flex; gap:40px; justify-content:center;
+  flex-wrap:wrap;
+}
+.stat { text-align:center; }
+.stat-num { font-size:1.6rem; font-weight:700; color:var(--text); }
+.stat-lbl { font-size:.75rem; color:var(--text3); font-weight:500; margin-top:2px; }
+
+/* ─── SECTION ─── */
+.section { padding:80px 24px; max-width:1080px; margin:0 auto; }
+.section-title {
+  font-size:clamp(1.6rem, 4vw, 2.4rem);
+  font-weight:700; letter-spacing:-.02em;
+  margin-bottom:12px; color:var(--text);
+}
+.section-sub { color:var(--text2); font-size:1rem; margin-bottom:44px; }
+
+/* ─── FLOOR PLAN ─── */
+.fp-wrap {
+  display:grid; grid-template-columns:1.6fr 1fr;
+  gap:24px; align-items:start;
+}
+@media(max-width:800px) { .fp-wrap { grid-template-columns:1fr; } }
+
+.fp-container {
+  position:relative; border-radius:16px;
+  overflow:hidden; background:#111;
+  box-shadow:0 12px 48px rgba(0,0,0,.2);
+  cursor:default;
+}
+.fp-container img {
+  width:100%; display:block; border-radius:16px;
+  pointer-events:none; user-select:none;
+}
+.fp-svg {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  border-radius:16px; pointer-events:none;
+}
+.fp-lamps { pointer-events:all; }
+.lamp-g { cursor:pointer; }
+.lamp-g circle.hit { pointer-events:all; }
+
+.fp-hint {
+  font-size:.72rem; color:var(--text3);
+  padding:8px 4px; margin-bottom:8px;
+  text-align:center;
+}
+
+/* ─── ROOM LIST ─── */
+.room-panel {
+  background:var(--bg2); border-radius:var(--radius-sm);
+  padding:16px; border:1px solid var(--border);
+}
+.room-panel-title {
+  font-size:.7rem; font-weight:700; letter-spacing:1.2px;
+  text-transform:uppercase; color:var(--text3);
+  margin-bottom:12px;
+}
+.room-row {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 8px; border-radius:8px; cursor:pointer;
+  transition:background .15s;
+}
+.room-row:hover { background:var(--bg3); }
+.room-dot {
+  width:8px; height:8px; border-radius:50%;
+  flex-shrink:0; transition:all .3s;
+}
+.room-name { font-size:.8rem; font-weight:500; flex:1; }
+.room-sw {
+  width:32px; height:18px; border-radius:9px;
+  position:relative; background:var(--bg3);
+  border:1px solid var(--border2);
+  cursor:pointer; transition:background .3s; flex-shrink:0;
+}
+.room-sw::after {
+  content:''; position:absolute;
+  width:12px; height:12px; border-radius:50%;
+  background:#fff; top:2px; left:2px;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.room-sw.on { background:var(--green); border-color:var(--green); }
+.room-sw.on::after { transform:translateX(14px); }
+
+/* Scene pills */
+.scene-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.scene-pill {
+  padding:6px 14px; border-radius:20px; border:1.5px solid var(--border2);
+  background:none; color:var(--text2); font-size:.78rem;
+  font-weight:500; cursor:pointer; font-family:inherit;
+  transition:all .2s;
+}
+.scene-pill:hover { border-color:var(--accent); color:var(--accent); }
+.scene-pill.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+/* Color picker popover */
+.cp-pop {
+  position:absolute; z-index:50;
+  background:var(--bg); border:1px solid var(--border2);
+  border-radius:14px; padding:14px; min-width:190px;
+  box-shadow:0 12px 40px rgba(0,0,0,.18);
+  display:none;
+}
+.cp-pop.open { display:block; }
+.cp-pop-title { font-size:.72rem; font-weight:700; margin-bottom:10px; color:var(--text); }
+.cp-swatches { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+.cp-sw {
+  width:24px; height:24px; border-radius:50%;
+  cursor:pointer; border:2px solid transparent;
+  transition:transform .15s;
+}
+.cp-sw:hover, .cp-sw.on { transform:scale(1.2); border-color:var(--text); }
+.cp-bright-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.cp-bright-row label { font-size:.7rem; color:var(--text3); white-space:nowrap; }
+.cp-bright-row input { flex:1; accent-color:var(--accent); }
+.cp-close {
+  width:100%; padding:6px; border-radius:8px;
+  border:1px solid var(--border2); background:var(--bg2);
+  color:var(--text); font-size:.72rem; cursor:pointer; font-family:inherit;
+}
+
+/* ─── PRICING ─── */
+.tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+@media(max-width:700px) { .tier-grid { grid-template-columns:1fr; } }
+.tier-card {
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:var(--radius); padding:28px;
+  transition:transform .2s, box-shadow .2s;
+  position:relative;
+}
+.tier-card:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
+.tier-card.featured { border-color:var(--accent); background:rgba(0,113,227,.03); }
+.tier-badge {
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  background:var(--accent); color:#fff; font-size:.7rem;
+  font-weight:700; padding:3px 12px; border-radius:20px;
+}
+.tier-name { font-size:.8rem; font-weight:700; color:var(--text3); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
+.tier-price { font-size:2.4rem; font-weight:700; margin-bottom:4px; }
+.tier-price span { font-size:1rem; font-weight:500; color:var(--text3); }
+.tier-desc { font-size:.82rem; color:var(--text2); margin-bottom:20px; }
+.tier-features { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:24px; }
+.tier-features li { font-size:.83rem; display:flex; align-items:center; gap:8px; }
+.tier-features li::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; }
+.btn-tier {
+  width:100%; padding:12px; border-radius:var(--radius-sm);
+  border:none; background:var(--accent); color:#fff;
+  font-size:.9rem; font-weight:600; cursor:pointer; font-family:inherit;
+  transition:opacity .2s;
+}
+.btn-tier:hover { opacity:.85; }
+
+/* ─── FAQ ─── */
+.faq-list { max-width:680px; margin:0 auto; display:flex; flex-direction:column; gap:6px; }
+.faq-item { border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--bg); }
+.faq-q {
+  width:100%; display:flex; justify-content:space-between; align-items:center;
+  padding:16px 20px; background:none; border:none;
+  cursor:pointer; font-size:.9rem; font-weight:600;
+  color:var(--text); text-align:left; font-family:inherit; gap:12px;
+}
+.faq-q:hover { background:var(--bg2); }
+.faq-icon { font-size:1.2rem; font-weight:300; flex-shrink:0; transition:transform .3s; }
+.faq-q.open .faq-icon { transform:rotate(45deg); }
+.faq-a {
+  max-height:0; overflow:hidden; transition:max-height .4s ease;
+  font-size:.85rem; color:var(--text2); line-height:1.7; padding:0 20px;
+}
+.faq-a.open { max-height:200px; padding:0 20px 18px; }
+
+/* ─── REVIEWS ─── */
+.review-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+.review-card {
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:var(--radius-sm); padding:22px;
+}
+.review-stars { color:#ff9f0a; font-size:1rem; margin-bottom:10px; }
+.review-text { font-size:.85rem; color:var(--text2); line-height:1.65; margin-bottom:14px; font-style:italic; }
+.review-author { font-size:.8rem; font-weight:600; color:var(--text); }
+
+/* ─── CTA BOX ─── */
+.cta-box {
+  background:linear-gradient(135deg, rgba(0,113,227,.08), rgba(52,199,89,.06));
+  border:1px solid var(--border); border-radius:var(--radius);
+  padding:48px 32px; text-align:center; margin:60px 0 0;
+}
+.cta-box h2 { font-size:1.8rem; font-weight:700; margin-bottom:12px; }
+.cta-box p { color:var(--text2); margin-bottom:28px; }
+
+/* ─── TRUST BADGES ─── */
+.trust-row { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:40px 0; }
+.trust-badge {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 16px; border-radius:20px;
+  background:var(--bg2); border:1px solid var(--border);
+  font-size:.8rem; font-weight:500; color:var(--text2);
+}
+.trust-badge span:first-child { font-size:1rem; }
+
+/* ─── FOOTER ─── */
+footer {
+  background:var(--bg2); border-top:1px solid var(--border);
+  padding:40px 24px; text-align:center;
+}
+.footer-links { display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
+.footer-links a { font-size:.85rem; color:var(--text2); transition:color .2s; }
+.footer-links a:hover { color:var(--accent); }
+.footer-copy { font-size:.78rem; color:var(--text3); }
+
+/* ─── FAB ─── */
+.fab {
+  position:fixed; bottom:24px; right:24px;
+  background:var(--accent); color:#fff;
+  border-radius:28px; padding:12px 20px;
+  display:flex; align-items:center; gap:8px;
+  font-size:.88rem; font-weight:600;
+  box-shadow:0 8px 32px rgba(0,113,227,.4);
+  cursor:pointer; z-index:90; transition:all .2s;
+  border:none; font-family:inherit;
+}
+.fab:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(0,113,227,.5); }
+@media(max-width:600px) { .fab-txt { display:none; } .fab { border-radius:50%; width:52px; height:52px; padding:0; justify-content:center; } }
+
+/* ─── MOBILE NAV ─── */
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; background:none; border:none; }
+.hamburger span { width:22px; height:2px; background:var(--text); border-radius:2px; transition:all .3s; }
+.mob-menu {
+  display:none; flex-direction:column; gap:4px;
+  position:fixed; top:var(--nav-h); left:0; right:0;
+  background:var(--bg); border-bottom:1px solid var(--border);
+  padding:12px 16px; z-index:99;
+}
+.mob-menu.open { display:flex; }
+.mob-btn {
+  padding:12px 16px; border-radius:10px; border:none;
+  background:none; color:var(--text); font-size:.92rem;
+  font-weight:500; text-align:left; cursor:pointer; font-family:inherit;
+  transition:background .15s;
+}
+.mob-btn:hover { background:var(--bg2); }
+@media(max-width:680px) {
+  .nav-center, .btn-nav.ghost { display:none; }
+  .hamburger { display:flex; }
+}
+
+/* ─── TOAST ─── */
+.toast {
+  position:fixed; bottom:80px; left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:rgba(0,0,0,.8); color:#fff;
+  padding:9px 18px; border-radius:20px;
+  font-size:.8rem; font-weight:500;
+  opacity:0; transition:all .3s;
+  z-index:200; pointer-events:none; white-space:nowrap;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes ringPulse {
+  0%   { r:8; opacity:.8; stroke-width:2; }
+  100% { r:40; opacity:0; stroke-width:.5; }
+}
+
+/* ─── DARK MODE TWEAKS ─── */
+[data-theme="dark"] .hero {
+  background: radial-gradient(ellipse 80% 60% at 60% 30%, rgba(0,113,227,.12) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 50% at 20% 70%, rgba(52,199,89,.06) 0%, transparent 70%),
+              var(--bg);
+}
+[data-theme="dark"] .tier-card.featured { background:rgba(0,113,227,.06); }
+[data-theme="dark"] .cta-box { background:linear-gradient(135deg, rgba(0,113,227,.1), rgba(52,199,89,.07)); }
 </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
 
-<!-- CHAT BUBBLE -->
-<div id="chat-bubble" onclick="toggleChat()" title="Chat with us">🤖</div>
-<div id="chat-win">
-  <div class="chat-hdr">
-    <div class="chat-av">🤖</div>
-    <div>
-      <div class="chat-nm">AutoFlow Assistant</div>
-      <div class="chat-st">Online · AI-powered</div>
-    </div>
-    <button class="chat-close" onclick="toggleChat()">✕</button>
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <a href="#" class="nav-logo" onclick="return false">🏠 autoflow<em>-lab</em></a>
+  <div class="nav-center">
+    <button class="nav-tab active" onclick="switchTab('smarthome',this)">🏠 Smart Home</button>
+    <button class="nav-tab" onclick="switchTab('ai',this)">⚡ KI & Automation</button>
   </div>
-  <div id="chat-msgs">
-    <div class="msg b">Hey! 👋 I'm the AutoFlow AI assistant. Ask me anything about our services, pricing, or what we can automate for you!</div>
-  </div>
-  <div class="chat-ft">
-    <input id="ci" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendMsg()">
-    <button onclick="sendMsg()">→</button>
-  </div>
-</div>
-
-<!-- NAV -->
-<nav>
-  <div class="logo">Auto<span>Flow</span> Studio</div>
-  <div class="nav-links">
-    <a href="#" class="active" onclick="show('home',this)">Home</a>
-    <a href="#" onclick="show('services',this)">Services</a>
-    <a href="#" onclick="show('pricing',this)">Pricing</a>
-    <a href="demo.html" class="nav-links" style="color:var(--cyan);font-weight:600">✨ Live Demo</a><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="nav-cta">Hire Me →</a>
+  <div class="nav-right">
+    <button class="btn-nav ghost" onclick="window.open('mailto:clawy.studio@gmail.com')">Kontakt</button>
+    <button class="btn-nav" onclick="openFiverr()">Fiverr →</button>
+    <button class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
+    <button class="hamburger" onclick="toggleMobMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
-<!-- HOME PAGE -->
-<div id="page-home" class="page active">
+<!-- Mobile menu -->
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-btn" onclick="switchTab('smarthome',null);closeMob()">🏠 Smart Home</button>
+  <button class="mob-btn" onclick="switchTab('ai',null);closeMob()">⚡ KI & Automation</button>
+  <button class="mob-btn" onclick="openFiverr();closeMob()">🛒 Jetzt bestellen</button>
+  <button class="mob-btn" onclick="window.open('mailto:clawy.studio@gmail.com');closeMob()">✉ Kontakt</button>
+</div>
+
+<!-- ─── SMART HOME PAGE ─── -->
+<div class="page active" id="page-smarthome">
+
+  <!-- HERO -->
   <section class="hero">
-    <div class="glow"></div>
-    <div class="hero-inner">
-      <div class="badge"><div class="badge-dot">⚡</div>AI & Automation Specialist · Available Now</div>
-      <h1>Smart Home &<br><span class="g">AI Automation.</span></h1>
-      <p class="sub">Custom Home Assistant dashboards, AI workflows and automation systems — delivered in 48 hours, tested and documented.</p>
-      <div class="btns">
-        <a href="https://www.fiverr.com" target="_blank" class="btn btn-p">🚀 Hire me on Fiverr</a>
-        <a href="demo.html" class="btn btn-g">✨ Try Live Demo</a>
-      </div>
+    <div class="hero-badge">⭐ Top-Rated Fiverr Freelancer</div>
+    <h1>Dein Smart Home,<br><em>professionell</em> gestaltet.</h1>
+    <p class="hero-sub">Individuelle Home Assistant Dashboards & KI-Automationen — geliefert in 48 Stunden.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openFiverr()">🛒 Jetzt bestellen</button>
+      <button class="btn-secondary" onclick="document.getElementById('fp-section').scrollIntoView({behavior:'smooth'})">🏠 Demo ansehen</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">47+</div><div class="stat-lbl">Projekte</div></div>
+      <div class="stat"><div class="stat-num">98%</div><div class="stat-lbl">5-Sterne</div></div>
+      <div class="stat"><div class="stat-num">48h</div><div class="stat-lbl">Lieferzeit</div></div>
+      <div class="stat"><div class="stat-num">€49</div><div class="stat-lbl">ab Preis</div></div>
     </div>
   </section>
 
-  <div class="marquee-wrap">
-    <div class="marquee">
-      <span>n8n</span><span class="d">·</span><span>Make</span><span class="d">·</span><span>Zapier</span><span class="d">·</span><span>OpenAI GPT-4</span><span class="d">·</span><span>Claude API</span><span class="d">·</span><span>HubSpot</span><span class="d">·</span><span>Shopify</span><span class="d">·</span><span>Notion</span><span class="d">·</span><span>Airtable</span><span class="d">·</span><span>Slack</span><span class="d">·</span><span>Gmail</span><span class="d">·</span><span>WhatsApp</span><span class="d">·</span><span>Stripe</span><span class="d">·</span><span>Google Sheets</span><span class="d">·</span><span>Calendly</span><span class="d">·</span><span>Typeform</span><span class="d">·</span><span>WordPress</span><span class="d">·</span>
-      <span>n8n</span><span class="d">·</span><span>Make</span><span class="d">·</span><span>Zapier</span><span class="d">·</span><span>OpenAI GPT-4</span><span class="d">·</span><span>Claude API</span><span class="d">·</span><span>HubSpot</span><span class="d">·</span><span>Shopify</span><span class="d">·</span><span>Notion</span><span class="d">·</span><span>Airtable</span><span class="d">·</span><span>Slack</span><span class="d">·</span><span>Gmail</span><span class="d">·</span><span>WhatsApp</span><span class="d">·</span><span>Stripe</span><span class="d">·</span><span>Google Sheets</span><span class="d">·</span><span>Calendly</span><span class="d">·</span><span>Typeform</span><span class="d">·</span><span>WordPress</span><span class="d">·</span>
+  <!-- TRUST BADGES -->
+  <div class="section" style="padding-top:0;padding-bottom:0">
+    <div class="trust-row">
+      <div class="trust-badge"><span>🚀</span> 48h Lieferung</div>
+      <div class="trust-badge"><span>✅</span> 100% Zufriedenheit</div>
+      <div class="trust-badge"><span>📄</span> Vollständige Docs</div>
+      <div class="trust-badge"><span>🔄</span> Revisionen inkl.</div>
+      <div class="trust-badge"><span>🌍</span> DE · EN Support</div>
     </div>
   </div>
 
-  <div class="bento">
-    <div class="section-label">What I build</div>
-    <h2 class="section-h">Connect anything.<br>Automate everything.</h2>
-    <p class="section-p">From simple app connections to full AI agents — I build it, test it, and hand it over with documentation.</p>
+  <!-- FLOOR PLAN DEMO -->
+  <div class="section" id="fp-section">
+    <h2 class="section-title">Interaktive Live Demo</h2>
+    <p class="section-sub">Klick auf Räume um Lichter zu schalten — Rechtsklick für Farbe.</p>
 
-    <div class="grid">
-      <div class="card c1">
-        <div class="ctag">Core Service</div>
-        <h3>Workflow Automation<br>that actually works</h3>
-        <p style="margin-top:10px;max-width:440px">Connect your apps, eliminate manual steps. n8n or Make workflows built and tested in 48h — documented so you understand every step.</p>
-        <div class="wf">
-          <div class="wf-chip"><span>📧</span> Email</div><div class="arr">→</div>
-          <div class="wf-chip"><span>🤖</span> AI</div><div class="arr">→</div>
-          <div class="wf-chip"><span>📋</span> CRM</div><div class="arr">→</div>
-          <div class="wf-chip"><span>✅</span> Done</div>
+    <!-- Scene buttons -->
+    <div class="scene-row" style="margin-bottom:20px">
+      <button class="scene-pill" onclick="setScene('relax')">🌅 Relax</button>
+      <button class="scene-pill" onclick="setScene('normal')">☀️ Normal</button>
+      <button class="scene-pill" onclick="setScene('movie')">🎬 Movie</button>
+      <button class="scene-pill" onclick="setScene('alloff')">🌙 Aus</button>
+    </div>
+
+    <div class="fp-wrap">
+      <!-- Floor plan -->
+      <div>
+        <div class="fp-hint">Klick: Licht an/aus · Rechtsklick: Farbe wählen</div>
+        <div class="fp-container" id="fp-container">
+          <!-- Color picker (absolute positioned inside fp-container) -->
+          <div class="cp-pop" id="cp-pop">
+            <div class="cp-pop-title" id="cp-pop-title">Raum</div>
+            <div class="cp-swatches" id="cp-swatches"></div>
+            <div class="cp-bright-row">
+              <label>Helligkeit</label>
+              <input type="range" min="10" max="100" value="80" id="cp-bright" oninput="applyBright(this.value)">
+            </div>
+            <button class="cp-close" onclick="closeCp()">Schließen</button>
+          </div>
+
+          <!-- Base image (no lights) -->
+          <img id="fp-img" src="https://autoflow-lab.github.io/fp_off.png"
+               alt="Floor Plan" loading="eager">
+
+          <!-- SVG light overlay -->
+          <svg class="fp-svg" id="fp-svg" viewBox="0 0 1376 768" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="cp-bed1"><polygon points="695,148 990,195 990,335 695,290"/></clipPath>
+              <clipPath id="cp-bath"><polygon points="1000,200 1145,250 1145,430 1000,380"/></clipPath>
+              <clipPath id="cp-living"><polygon points="530,240 990,340 990,520 530,420"/></clipPath>
+              <clipPath id="cp-dining"><polygon points="810,420 1080,490 1080,610 810,545"/></clipPath>
+              <clipPath id="cp-bed2"><polygon points="230,330 480,390 480,530 230,470"/></clipPath>
+              <clipPath id="cp-office"><polygon points="485,450 660,500 660,610 485,565"/></clipPath>
+              <filter id="lglow" x="-80%" y="-80%" width="360%" height="360%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Room overlays (lit image clipped per room) -->
+            <g id="rl-bed1"   opacity="0" style="transition:opacity .6s ease"><image href="https://autoflow-lab.github.io/fp_cyan.png" width="1376" height="768" clip-path="url(#cp-bed1)"   id="ri-bed1"   style="transition:filter .4s"/></g>
+            <g id="rl-bath"   opacity="0" style="transition:opacity .6s ease"><image href="https://autoflow-lab.github.io/fp_cyan.png" width="1376" height="768" clip-path="url(#cp-bath)"   id="ri-bath"   style="transition:filter .4s"/></g>
+            <g id="rl-living" opacity="0" style="transition:opacity .6s ease"><image href="https://autoflow-lab.github.io/fp_cyan.png" width="1376" height="768" clip-path="url(#cp-living)" id="ri-living" style="transition:filter .4s"/></g>
+            <g id="rl-dining" opacity="0" style="transition:opacity .6s ease"><image href="https://autoflow-lab.github.io/fp_cyan.png" width="1376" height="768" clip-path="url(#cp-dining)" id="ri-dining" style="transition:filter .4s"/></g>
+            <g id="rl-bed2"   opacity="0" style="transition:opacity .6s ease"><image href="https://autoflow-lab.github.io/fp_cyan.png" width="1376" height="768" clip-path="url(#cp-bed2)"   id="ri-bed2"   style="transition:filter .4s"/></g>
+            <g id="rl-office" opacity="0" style="transition:opacity .6s ease"><image href="https://autoflow-lab.github.io/fp_cyan.png" width="1376" height="768" clip-path="url(#cp-office)" id="ri-office" style="transition:filter .4s"/></g>
+
+            <!-- Lamp fixture dots (clickable) -->
+            <g class="fp-lamps">
+              <!-- Bed1: pendant, bedside L, bedside R -->
+              <g class="lamp-g" id="lg-L1" data-room="bed1" onclick="lampClick('L1',event)" oncontextmenu="lampCm('bed1',event)">
+                <circle cx="840" cy="178" r="16" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L1" cx="840" cy="178" r="6" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L1" cx="840" cy="178" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <g class="lamp-g" id="lg-L2" data-room="bed1" onclick="lampClick('L2',event)" oncontextmenu="lampCm('bed1',event)">
+                <circle cx="800" cy="222" r="14" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L2" cx="800" cy="222" r="5" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L2" cx="800" cy="222" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <g class="lamp-g" id="lg-L3" data-room="bed1" onclick="lampClick('L3',event)" oncontextmenu="lampCm('bed1',event)">
+                <circle cx="895" cy="240" r="14" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L3" cx="895" cy="240" r="5" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L3" cx="895" cy="240" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <!-- Bed2: floor lamp, wall sconce -->
+              <g class="lamp-g" id="lg-L4" data-room="bed2" onclick="lampClick('L4',event)" oncontextmenu="lampCm('bed2',event)">
+                <circle cx="380" cy="395" r="16" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L4" cx="380" cy="395" r="6" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L4" cx="380" cy="395" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <g class="lamp-g" id="lg-L5" data-room="bed2" onclick="lampClick('L5',event)" oncontextmenu="lampCm('bed2',event)">
+                <circle cx="302" cy="360" r="14" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L5" cx="302" cy="360" r="5" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L5" cx="302" cy="360" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <!-- Living/Kitchen -->
+              <g class="lamp-g" id="lg-L6" data-room="living" onclick="lampClick('L6',event)" oncontextmenu="lampCm('living',event)">
+                <circle cx="678" cy="285" r="16" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L6" cx="678" cy="285" r="6" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L6" cx="678" cy="285" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <g class="lamp-g" id="lg-L7" data-room="living" onclick="lampClick('L7',event)" oncontextmenu="lampCm('living',event)">
+                <circle cx="760" cy="348" r="14" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L7" cx="760" cy="348" r="5" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L7" cx="760" cy="348" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <!-- Office -->
+              <g class="lamp-g" id="lg-L8" data-room="office" onclick="lampClick('L8',event)" oncontextmenu="lampCm('office',event)">
+                <circle cx="580" cy="520" r="15" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L8" cx="580" cy="520" r="6" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L8" cx="580" cy="520" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <!-- Bathroom -->
+              <g class="lamp-g" id="lg-L9" data-room="bath" onclick="lampClick('L9',event)" oncontextmenu="lampCm('bath',event)">
+                <circle cx="1072" cy="268" r="15" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L9" cx="1072" cy="268" r="6" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L9" cx="1072" cy="268" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+              <!-- Dining -->
+              <g class="lamp-g" id="lg-L11" data-room="dining" onclick="lampClick('L11',event)" oncontextmenu="lampCm('dining',event)">
+                <circle cx="900" cy="478" r="15" fill="rgba(0,0,0,0)" class="hit"/>
+                <circle id="lb-L11" cx="900" cy="478" r="6" fill="#555" style="transition:all .3s"/>
+                <circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/>
+              </g>
+            </g>
+          </svg>
         </div>
-        <div class="ghost-num">01</div>
       </div>
 
-      <div class="card c2">
-        <div class="ctag">AI Agents</div>
-        <h3>Agents that think and act autonomously</h3>
-        <p style="margin-top:10px">Custom AI trained on your data. Handles emails, qualifies leads, processes orders — without human input.</p>
-        <div class="pbadge">from $149</div>
-        <div class="ghost-num">02</div>
-      </div>
-
-      <div class="card c3">
-        <div class="big-stat" id="sc1">0h</div>
-        <div class="stat-lbl">Average<br>delivery time</div>
-        <div class="ghost-num">48</div>
-      </div>
-
-      <div class="card c4">
-        <div class="ctag">Chatbots</div>
-        <h3>GPT-4 chatbot for your site</h3>
-        <p style="margin-top:8px;font-size:.83rem">Answers questions, captures leads, books calls 24/7 in any language.</p>
-        <div class="pbadge">from $99</div>
-      </div>
-
-      <div class="card c5">
-        <div class="big-stat" id="sc2">0+</div>
-        <div class="stat-lbl">App integrations<br>supported</div>
-        <div class="ghost-num">100</div>
-      </div>
-
-      <div class="card c6">
-        <div class="ctag">Integrations</div>
-        <h3>Works with every tool<br>you already use</h3>
-        <div class="tools">
-          <span class="tool">n8n</span><span class="tool">Make</span><span class="tool">Zapier</span><span class="tool">OpenAI</span><span class="tool">Claude</span><span class="tool">HubSpot</span><span class="tool">Shopify</span><span class="tool">Notion</span><span class="tool">Airtable</span><span class="tool">Slack</span><span class="tool">Gmail</span><span class="tool">Outlook</span><span class="tool">Google Sheets</span><span class="tool">WhatsApp</span><span class="tool">Stripe</span><span class="tool">+ 100 more</span>
+      <!-- Room control panel -->
+      <div class="room-panel">
+        <div class="room-panel-title">💡 Lichter steuern</div>
+        <div id="room-list"></div>
+        <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Schnell</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button onclick="setScene('relax')" style="padding:4px 10px;border-radius:12px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:.72rem;cursor:pointer;font-family:inherit">🌅</button>
+            <button onclick="setScene('normal')" style="padding:4px 10px;border-radius:12px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:.72rem;cursor:pointer;font-family:inherit">☀️</button>
+            <button onclick="setScene('movie')" style="padding:4px 10px;border-radius:12px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:.72rem;cursor:pointer;font-family:inherit">🎬</button>
+            <button onclick="setScene('alloff')" style="padding:4px 10px;border-radius:12px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:.72rem;cursor:pointer;font-family:inherit">🌙</button>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="card c7">
-        <div class="ctag">Smart Home & IoT</div>
-        <h3>Home Assistant dashboards & automations</h3>
-        <p style="margin-top:8px;font-size:.83rem">Device integrations, voice control, custom dashboards. Your environment, fully automated.</p>
-        <div class="pbadge">from $69</div>
+  <!-- REVIEWS -->
+  <div class="section" style="padding-top:0">
+    <h2 class="section-title" style="text-align:center;margin-bottom:8px">Was Kunden sagen</h2>
+    <p class="section-sub" style="text-align:center">47+ erfolgreich abgeschlossene Projekte</p>
+    <div class="review-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Absolut beeindruckendes Dashboard! Genau das was ich mir vorgestellt hatte, sogar noch besser."</p>
+        <div class="review-author">Thomas K. · Smart Home Enthusiast</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Super schnelle Lieferung und perfekte Kommunikation. Mein HA sieht jetzt aus wie ein Apple-Produkt!"</p>
+        <div class="review-author">Sarah M. · Home Automation</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Die KI-Integration ist fantastisch. Sprachsteuerung funktioniert jetzt komplett lokal, kein Cloud-Abo mehr."</p>
+        <div class="review-author">Marco R. · Privacy-First Home</div>
       </div>
     </div>
   </div>
 
-  <div class="cta-bar">
-    <h2>Ready to automate<br>your business?</h2>
-    <p>Free consultation, no commitment. Most projects start within 24 hours.</p>
-    <div class="btns">
-      <a href="https://www.fiverr.com" target="_blank" class="btn btn-p">🚀 Message me on Fiverr</a>
-      <a href="#" onclick="toggleChat()" class="btn btn-g">💬 Ask a question</a>
+  <!-- PRICING -->
+  <div class="section" style="background:var(--bg2);max-width:100%;padding:80px 24px">
+    <div style="max-width:1080px;margin:0 auto">
+      <h2 class="section-title" style="text-align:center;margin-bottom:8px">Preise & Pakete</h2>
+      <p class="section-sub" style="text-align:center">Klar kalkulierbar, keine versteckten Kosten.</p>
+      <div class="tier-grid">
+        <div class="tier-card">
+          <div class="tier-name">Basic</div>
+          <div class="tier-price">€49 <span>/ Projekt</span></div>
+          <div class="tier-desc">Perfekt für den Einstieg</div>
+          <ul class="tier-features">
+            <li>Custom Dashboard Design</li>
+            <li>Bis zu 5 Karten/Views</li>
+            <li>1 Revision</li>
+            <li>Lieferung in 48h</li>
+          </ul>
+          <button class="btn-tier" onclick="openFiverr()">Jetzt bestellen</button>
+        </div>
+        <div class="tier-card featured">
+          <div class="tier-badge">Beliebt</div>
+          <div class="tier-name">Standard</div>
+          <div class="tier-price">€99 <span>/ Projekt</span></div>
+          <div class="tier-desc">Für die vollständige Smart Home Experience</div>
+          <ul class="tier-features">
+            <li>Vollständiges Dashboard</li>
+            <li>Grundriss-Integration</li>
+            <li>Automationen inkl.</li>
+            <li>3 Revisionen</li>
+            <li>Video-Erklärung</li>
+          </ul>
+          <button class="btn-tier" onclick="openFiverr()">Jetzt bestellen</button>
+        </div>
+        <div class="tier-card">
+          <div class="tier-name">Premium</div>
+          <div class="tier-price">€149 <span>/ Projekt</span></div>
+          <div class="tier-desc">Mit KI & voller Automatisierung</div>
+          <ul class="tier-features">
+            <li>Alles aus Standard</li>
+            <li>KI-Sprachsteuerung (lokal)</li>
+            <li>N8N Workflow-Integration</li>
+            <li>Unbegrenzte Revisionen</li>
+            <li>1 Monat Support</li>
+          </ul>
+          <button class="btn-tier" onclick="openFiverr()">Jetzt bestellen</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <footer>
-    <div class="fl">Auto<span>Flow</span> Studio</div>
-    <p>AI & Automation Specialist · Available on Fiverr</p>
-    <p>© 2026 AutoFlow Studio</p>
-  </footer>
+  <!-- FAQ -->
+  <div class="section">
+    <h2 class="section-title" style="text-align:center;margin-bottom:8px">Häufige Fragen</h2>
+    <p class="section-sub" style="text-align:center;margin-bottom:32px">Alles was du wissen musst</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Was ist Home Assistant?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Open-Source Smart Home Plattform die 3000+ Geräte verbindet — von Philips Hue bis Tesla. Ich baue darauf professionelle Dashboards und Automationen.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Brauche ich technisches Vorwissen?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Nein. Du bekommst fertige Lösungen mit vollständiger Dokumentation. Einrichten = nur auf Speichern klicken.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Wie lange dauert die Lieferung?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Basic: 24–48h. Standard: 3 Tage. Premium mit KI: 5–7 Tage. Express auf Anfrage möglich.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Welche Geräte werden unterstützt?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Philips Hue, IKEA Tradfri, Shelly, Zigbee, Z-Wave, Google, Alexa, Sonos, Tesla und 3000+ mehr.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Wie funktioniert die Zusammenarbeit?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">1. Briefing via Fiverr-Chat. 2. Ich erstelle das Design. 3. Du reviewst + Revisionen. 4. Fertige Dateien + Docs. Alles asynchron, kein Call nötig.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="section" style="padding-top:0">
+    <div class="cta-box">
+      <h2>Bereit für dein Smart Home?</h2>
+      <p>Kostenloses Erstgespräch — ich erkläre was möglich ist.</p>
+      <button class="btn-primary" onclick="openFiverr()">🛒 Auf Fiverr bestellen</button>
+    </div>
+  </div>
+
+</div><!-- page-smarthome -->
+
+<!-- ─── AI PAGE (placeholder) ─── -->
+<div class="page" id="page-ai">
+  <div class="section" style="text-align:center;padding-top:100px">
+    <h1 style="font-size:2.5rem;font-weight:700;margin-bottom:16px">KI & Automation</h1>
+    <p style="color:var(--text2);margin-bottom:32px">N8N Workflows · Lokale KI · Chatbots · API-Integrationen</p>
+    <button class="btn-primary" onclick="openFiverr()">Projekt starten →</button>
+  </div>
 </div>
 
-<!-- SERVICES PAGE -->
-<div id="page-services" class="page">
-  <div class="services-page">
-    <div class="section-label">What I offer</div>
-    <h2 class="section-h">Services</h2>
-    <p class="section-p">Every project is built from scratch for your specific needs, tested until it works perfectly, and documented so you're never stuck.</p>
-
-    <div class="svc-list">
-      <div class="svc">
-        <div>
-          <div class="svc-n">⚡ Workflow Automation</div>
-          <div class="svc-d">Connect your apps and eliminate manual steps. I build n8n or Make workflows that run 24/7, handle errors gracefully, and come with full documentation and video walkthrough.</div>
-          <div class="svc-t"><span class="svc-tag">n8n</span><span class="svc-tag">Make</span><span class="svc-tag">Zapier</span><span class="svc-tag">APIs</span><span class="svc-tag">Webhooks</span></div>
-        </div>
-        <div><div class="svc-from">from</div><div class="svc-price">$49</div></div>
-      </div>
-      <div class="svc">
-        <div>
-          <div class="svc-n">🤖 AI Agents</div>
-          <div class="svc-d">Autonomous AI that handles repetitive decisions — reading emails, qualifying leads, updating your CRM, sending messages. Built with GPT-4o or Claude, trained on your business data.</div>
-          <div class="svc-t"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Claude</span><span class="svc-tag">LangChain</span><span class="svc-tag">RAG</span><span class="svc-tag">Embeddings</span></div>
-        </div>
-        <div><div class="svc-from">from</div><div class="svc-price">$149</div></div>
-      </div>
-      <div class="svc">
-        <div>
-          <div class="svc-n">💬 Website Chatbot</div>
-          <div class="svc-d">GPT-4o powered chatbot trained on your business. Embedded on your website in 2 lines of code. Answers questions, captures leads, books appointments — in any language, 24/7.</div>
-          <div class="svc-t"><span class="svc-tag">GPT-4o</span><span class="svc-tag">Multilingual</span><span class="svc-tag">Lead capture</span><span class="svc-tag">CRM sync</span></div>
-        </div>
-        <div><div class="svc-from">from</div><div class="svc-price">$99</div></div>
-      </div>
-      <div class="svc">
-        <div>
-          <div class="svc-n">📧 Email Automation</div>
-          <div class="svc-d">Smart sequences, AI-powered auto-replies, CRM sync. Every lead gets the right message at the right time. Works with Gmail, Outlook, ActiveCampaign, Mailchimp and more.</div>
-          <div class="svc-t"><span class="svc-tag">Gmail</span><span class="svc-tag">Outlook</span><span class="svc-tag">HubSpot</span><span class="svc-tag">Sequences</span></div>
-        </div>
-        <div><div class="svc-from">from</div><div class="svc-price">$79</div></div>
-      </div>
-      <div class="svc">
-        <div>
-          <div class="svc-n">📊 Data Pipelines</div>
-          <div class="svc-d">Scrape, transform, enrich and sync data across your stack. Google Sheets, Airtable, SQL databases — always up to date, always consistent.</div>
-          <div class="svc-t"><span class="svc-tag">Scraping</span><span class="svc-tag">Sheets</span><span class="svc-tag">Airtable</span><span class="svc-tag">SQL</span><span class="svc-tag">APIs</span></div>
-        </div>
-        <div><div class="svc-from">from</div><div class="svc-price">$99</div></div>
-      </div>
-      <div class="svc">
-        <div>
-          <div class="svc-n">🏠 Smart Home & IoT</div>
-          <div class="svc-d">Home Assistant dashboards, device integrations, custom automations, voice control. Your home or office, fully automated and beautifully visualized.</div>
-          <div class="svc-t"><span class="svc-tag">Home Assistant</span><span class="svc-tag">IoT</span><span class="svc-tag">Dashboards</span><span class="svc-tag">Automations</span></div>
-        </div>
-        <div><div class="svc-from">from</div><div class="svc-price">$69</div></div>
-      </div>
-    </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://www.fiverr.com/autoflow-lab" target="_blank">🛒 Fiverr Profil</a>
+    <a href="mailto:clawy.studio@gmail.com">✉ Kontakt</a>
+    <a href="#" onclick="toggleTheme();return false">🎨 Dark Mode</a>
   </div>
-  <div class="cta-bar" style="margin-top:0">
-    <h2>Not sure what you need?</h2>
-    <p>Message me — free consultation, I'll tell you exactly what's possible and what it costs.</p>
-    <div class="btns"><a href="https://www.fiverr.com" target="_blank" class="btn btn-p">Message me on Fiverr</a></div>
-  </div>
-  <footer>
-    <div class="fl">Auto<span>Flow</span> Studio</div>
-    <p>AI & Automation Specialist</p>
-    <p>© 2026 AutoFlow Studio</p>
-  </footer>
-</div>
+  <div class="footer-copy">© 2025 autoflow-lab · Smart Home & KI Automation</div>
+</footer>
 
-<!-- PRICING PAGE -->
-<div id="page-pricing" class="page">
-  <div class="pricing-page">
-    <div class="section-label" style="justify-content:center">Pricing</div>
-    <h2 class="section-h">Simple, transparent pricing</h2>
-    <p class="section-p" style="margin:0 auto 0;max-width:420px">No hidden fees, no surprises. Pick a plan or message me for a custom quote.</p>
+<!-- FAB -->
+<button class="fab" onclick="openFiverr()">
+  <span>🛒</span><span class="fab-txt">Jetzt bestellen</span>
+</button>
 
-    <div class="cards">
-      <div class="pc">
-        <div class="pc-tier">Starter</div>
-        <div class="pc-price">$49<small>/project</small></div>
-        <div class="pc-desc">Simple automation, 1–2 apps</div>
-        <ul class="pc-list">
-          <li>1 workflow (up to 5 steps)</li>
-          <li>2 app integrations</li>
-          <li>3 day delivery</li>
-          <li>2 revisions</li>
-          <li>Basic documentation</li>
-        </ul>
-        <a href="https://www.fiverr.com" target="_blank" class="pc-btn ghost">Get Started</a>
-      </div>
-      <div class="pc hot">
-        <div class="hot-b">Most Popular</div>
-        <div class="pc-tier">Professional</div>
-        <div class="pc-price">$149<small>/project</small></div>
-        <div class="pc-desc">Complex workflow or AI integration</div>
-        <ul class="pc-list">
-          <li>1 complex workflow (unlimited steps)</li>
-          <li>Up to 5 app integrations</li>
-          <li>Error handling + monitoring</li>
-          <li>3 day delivery</li>
-          <li>Unlimited revisions</li>
-          <li>Video walkthrough + full docs</li>
-          <li>14 days support</li>
-        </ul>
-        <a href="https://www.fiverr.com" target="_blank" class="pc-btn solid">Hire Me Now</a>
-      </div>
-      <div class="pc">
-        <div class="pc-tier">Enterprise</div>
-        <div class="pc-price">$349<small>+</small></div>
-        <div class="pc-desc">Full system or custom AI agent</div>
-        <ul class="pc-list">
-          <li>Complete automation system</li>
-          <li>AI agent with custom training</li>
-          <li>Unlimited integrations</li>
-          <li>5-7 day delivery</li>
-          <li>Priority 30-day support</li>
-          <li>Monthly maintenance option</li>
-        </ul>
-        <a href="https://www.fiverr.com" target="_blank" class="pc-btn ghost">Let's Talk</a>
-      </div>
-    </div>
-
-    <div class="faq">
-      <h3>Common questions</h3>
-      <div class="fi"><div class="fq">Do I need technical knowledge? <div class="fi-ico">+</div></div><div class="fa">Not at all. You describe what you want in plain English — I handle all the technical implementation. Most clients are business owners with zero coding background.</div></div>
-      <div class="fi"><div class="fq">What if it breaks after delivery? <div class="fi-ico">+</div></div><div class="fa">All packages include a support period (14–30 days). I also provide full documentation. For ongoing peace of mind, monthly maintenance packages are available.</div></div>
-      <div class="fi"><div class="fq">How fast can you start? <div class="fi-ico">+</div></div><div class="fa">Usually within 24 hours of agreeing on the scope. I do a free consultation first to make sure we're aligned before any payment.</div></div>
-      <div class="fi"><div class="fq">Can you automate [my specific tool]? <div class="fi-ico">+</div></div><div class="fa">If it has an API or webhook — almost certainly yes. Message me with your tool and I'll confirm within a few hours, for free.</div></div>
-      <div class="fi"><div class="fq">Do you offer refunds? <div class="fi-ico">+</div></div><div class="fa">I offer unlimited revisions until you're happy. In the rare case I can't deliver what was agreed, Fiverr's buyer protection applies.</div></div>
-    </div>
-  </div>
-  <footer style="margin-top:80px">
-    <div class="fl">Auto<span>Flow</span> Studio</div>
-    <p>AI & Automation Specialist</p>
-    <p>© 2026 AutoFlow Studio</p>
-  </footer>
-</div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script>
-// THREE.JS BACKGROUND
-const cv=document.getElementById('bg');
-const rr=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
-rr.setPixelRatio(Math.min(devicePixelRatio,2));
-rr.setSize(innerWidth,innerHeight);
-const sc=new THREE.Scene(),cm=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,1000);
-cm.position.z=38;
-const N=200,pos=new Float32Array(N*3),col=new Float32Array(N*3);
-const pal=[[.88,.25,.98],[0,.9,1],[.47,1,.02]];
-for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*90;pos[i*3+1]=(Math.random()-.5)*90;pos[i*3+2]=(Math.random()-.5)*40;const c=pal[i%3];col[i*3]=c[0];col[i*3+1]=c[1];col[i*3+2]=c[2]}
-const g=new THREE.BufferGeometry();
-g.setAttribute('position',new THREE.BufferAttribute(pos,3));
-g.setAttribute('color',new THREE.BufferAttribute(col,3));
-const pts=new THREE.Points(g,new THREE.PointsMaterial({size:.2,vertexColors:true,transparent:true,opacity:.5}));
-sc.add(pts);
-const lp=[];for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const d=Math.hypot(pos[i*3]-pos[j*3],pos[i*3+1]-pos[j*3+1],pos[i*3+2]-pos[j*3+2]);if(d<13)lp.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2])}
-const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(lp),3));
-sc.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0xe040fb,transparent:true,opacity:.04})));
-let mx=0,my=0;
-document.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2});
-window.addEventListener('resize',()=>{cm.aspect=innerWidth/innerHeight;cm.updateProjectionMatrix();rr.setSize(innerWidth,innerHeight)});
-(function a(){requestAnimationFrame(a);pts.rotation.y+=.0003;pts.rotation.x+=.00015;cm.position.x+=(mx*3-cm.position.x)*.04;cm.position.y+=(-my*3-cm.position.y)*.04;cm.lookAt(0,0,0);rr.render(sc,cm)})();
-
-// BENTO MOUSE GLOW
-document.querySelectorAll('.card').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%')})});
-
-// COUNTERS
-function animCount(el,t,suf=''){let v=0;const i=setInterval(()=>{v=Math.min(v+t/50,t);el.textContent=Math.floor(v)+suf;if(v>=t)clearInterval(i)},18)}
-const co=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting&&!x.target.dataset.d){x.target.dataset.d=1;if(x.target.id==='sc1')animCount(x.target,48,'h');if(x.target.id==='sc2')animCount(x.target,100,'+')}}),{threshold:.5});
-document.querySelectorAll('#sc1,#sc2').forEach(el=>co.observe(el));
-
-// NAV / PAGE SWITCHING
-function show(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-  if(el)el.classList.add('active');
-  window.scrollTo(0,0);
-  return false;
+// ─────────────────────────────
+//  CORE UTILS
+// ─────────────────────────────
+function showToast(msg, duration=2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), duration);
 }
 
-// FAQ
-document.querySelectorAll('.fq').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
-
-// CHAT WINDOW
-function toggleChat(){document.getElementById('chat-win').classList.toggle('open')}
-
-// REAL AI CHATBOT
-
-
-
-
-function sendMsg(){
-  const inp=document.getElementById('ci');
-  const msgs=document.getElementById('chat-msgs');
-  const txt=inp.value.trim();
-  if(!txt)return;
-  inp.value='';
-  const um=document.createElement('div');um.className='msg u';um.textContent=txt;msgs.appendChild(um);
-  const tm=document.createElement('div');tm.className='msg b';
-  tm.textContent='…';msgs.appendChild(tm);msgs.scrollTop=msgs.scrollHeight;
-  setTimeout(()=>{tm.textContent=getReply(txt);msgs.scrollTop=msgs.scrollHeight},600+Math.random()*400);
+function openFiverr() {
+  window.open('https://www.fiverr.com/autoflow-lab', '_blank');
 }
 
-function detectLang(t){
-  t=t.toLowerCase();
-  if(/ich|wie|was|kann|haben|bin|der|die|das|preis|kosten|schnell/.test(t))return'de';
-  if(/je|quoi|prix|combien|comment|pouvez/.test(t))return'fr';
-  return'en';
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('.nav-tab').forEach(b => {
+      if (b.onclick && b.onclick.toString().includes(tab)) b.classList.add('active');
+    });
+  }
+  closeMob();
 }
 
-function getReply(msg){
-  const m=msg.toLowerCase();
-  const lang=detectLang(msg);
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.dataset.theme === 'dark';
+  html.dataset.theme = isDark ? 'light' : 'dark';
+  document.getElementById('theme-btn').textContent = isDark ? '🌙' : '☀️';
+}
 
-  const R={
-    greeting:{
-      en:"Hey! 👋 I'm the AutoFlow assistant. Ask me anything about our services, pricing, or what we can automate for you!",
-      de:"Hey! 👋 Ich bin der AutoFlow Assistent. Frag mich alles über unsere Services, Preise oder was wir für dich automatisieren können!",
-      fr:"Hey! 👋 Je suis l'assistant AutoFlow. Demandez-moi tout sur nos services, tarifs ou ce qu'on peut automatiser pour vous!"
-    },
-    price:{
-      en:"Our pricing starts at $49 for simple workflow automations, $99 for AI chatbots, $149 for AI agents, and up to $349+ for full automation systems. All include documentation and revisions. Want a custom quote?",
-      de:"Unsere Preise starten bei $49 für einfache Automationen, $99 für AI Chatbots, $149 für AI Agents, und $349+ für komplette Systeme. Alles inklusive Dokumentation. Möchtest du ein individuelles Angebot?",
-      fr:"Nos tarifs commencent à 49$ pour des automatisations simples, 99$ pour des chatbots IA, 149$ pour des agents IA, et 349$+ pour des systèmes complets. Vous voulez un devis personnalisé?"
-    },
-    time:{
-      en:"Most projects are delivered in 48-72 hours. Complex AI systems may take up to 5 days. You'll always get an exact timeline before we start — no surprises.",
-      de:"Die meisten Projekte liefere ich in 48-72 Stunden. Komplexe KI-Systeme können bis zu 5 Tage dauern. Du bekommst immer einen genauen Zeitplan vorab.",
-      fr:"La plupart des projets sont livrés en 48-72h. Les systèmes IA complexes peuvent prendre jusqu'à 5 jours. Vous aurez toujours un délai précis avant de commencer."
-    },
-    automation:{
-      en:"I build automations with n8n, Make, or Zapier that connect your apps and run 24/7. Examples: Lead capture → CRM → email, new orders → Slack notifications, data sync between Google Sheets and Airtable. What's your use case?",
-      de:"Ich baue Automationen mit n8n, Make oder Zapier die deine Apps verbinden und 24/7 laufen. Zum Beispiel: Lead-Erfassung → CRM → E-Mail, neue Bestellungen → Slack, Datensync zwischen Tools. Was ist dein Anwendungsfall?",
-      fr:"Je crée des automatisations avec n8n, Make ou Zapier qui connectent vos applications 24h/24. Exemples: capture de leads → CRM → email, nouvelles commandes → Slack. Quel est votre cas d'usage?"
-    },
-    chatbot:{
-      en:"I build GPT-4o powered chatbots that embed on any website in 2 lines of code. They answer questions in any language, capture leads, book appointments, and sync with your CRM — all 24/7.",
-      de:"Ich baue GPT-4o Chatbots die sich mit 2 Zeilen Code in jede Website einbetten lassen. Sie antworten in jeder Sprache, erfassen Leads, buchen Termine und synchronisieren mit deinem CRM — alles 24/7.",
-      fr:"Je crée des chatbots GPT-4o qui s'intègrent sur n'importe quel site en 2 lignes de code. Ils répondent dans n'importe quelle langue, capturent des leads et synchronisent avec votre CRM."
-    },
-    agent:{
-      en:"AI agents are autonomous bots that work independently — reading emails, making decisions, updating your CRM, sending messages, all without human input. They're the next level beyond simple automation.",
-      de:"KI-Agents sind autonome Bots die selbstständig arbeiten — E-Mails lesen, Entscheidungen treffen, CRM aktualisieren, Nachrichten senden, alles ohne menschliches Eingreifen. Das nächste Level über einfache Automation.",
-      fr:"Les agents IA sont des bots autonomes qui travaillent indépendamment — lire des emails, prendre des décisions, mettre à jour votre CRM, envoyer des messages, sans intervention humaine."
-    },
-    start:{
-      en:"Easy! Just send me a message on Fiverr describing what you want to automate. I'll get back to you within a few hours with a plan and exact price. No commitment needed — the consultation is free.",
-      de:"Ganz einfach! Schick mir eine Nachricht auf Fiverr und beschreibe was du automatisieren möchtest. Ich melde mich innerhalb weniger Stunden mit einem Plan und Preis. Keine Verpflichtung — die Beratung ist kostenlos.",
-      fr:"Simple! Envoyez-moi un message sur Fiverr en décrivant ce que vous voulez automatiser. Je vous réponds en quelques heures avec un plan et un prix. Pas d'engagement — la consultation est gratuite."
-    },
-    default:{
-      en:"Great question! That's very likely something I can automate or build for you. Send me a message on Fiverr with the details and I'll give you a free assessment within a few hours.",
-      de:"Gute Frage! Das ist sehr wahrscheinlich etwas das ich für dich automatisieren oder bauen kann. Schick mir eine Nachricht auf Fiverr mit den Details und ich gebe dir innerhalb weniger Stunden eine kostenlose Einschätzung.",
-      fr:"Bonne question! C'est très probablement quelque chose que je peux automatiser pour vous. Envoyez-moi un message sur Fiverr avec les détails et je vous donnerai une évaluation gratuite."
-    }
+function toggleMobMenu() {
+  document.getElementById('mob-menu').classList.toggle('open');
+}
+function closeMob() {
+  document.getElementById('mob-menu').classList.remove('open');
+}
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const ans = item.querySelector('.faq-a');
+  const open = btn.classList.contains('open');
+  document.querySelectorAll('.faq-q.open').forEach(b => {
+    b.classList.remove('open');
+    b.closest('.faq-item').querySelector('.faq-a').classList.remove('open');
+  });
+  if (!open) { btn.classList.add('open'); ans.classList.add('open'); }
+}
+
+// ─────────────────────────────
+//  FLOOR PLAN SYSTEM
+// ─────────────────────────────
+const COLORS = {
+  warm:   { dot:'#ffe090', filter:'saturate(0.25) sepia(0.75) brightness(1.05)' },
+  cool:   { dot:'#d0eeff', filter:'saturate(0.35) hue-rotate(22deg) brightness(1.08)' },
+  white:  { dot:'#ffffff', filter:'saturate(0.1) brightness(1.18)' },
+  cyan:   { dot:'#40ffff', filter:'hue-rotate(0deg)' },
+  blue:   { dot:'#60a0ff', filter:'hue-rotate(60deg) saturate(1.15)' },
+  purple: { dot:'#c060ff', filter:'hue-rotate(90deg) saturate(1.2)' },
+  pink:   { dot:'#ff70e0', filter:'hue-rotate(100deg) saturate(1.25)' },
+  red:    { dot:'#ff6040', filter:'hue-rotate(180deg) saturate(1.1)' },
+  green:  { dot:'#70ff60', filter:'hue-rotate(300deg) saturate(1.1)' },
+  amber:  { dot:'#ffc030', filter:'saturate(0.5) sepia(0.45)' },
+};
+
+const rooms = {
+  bed1:   { on:false, color:'warm',  lamps:['L1','L2','L3'], name:'Schlafzimmer 1' },
+  bed2:   { on:false, color:'warm',  lamps:['L4','L5'],      name:'Zimmer 2' },
+  living: { on:false, color:'white', lamps:['L6','L7'],      name:'Küche/Wohnen' },
+  dining: { on:false, color:'warm',  lamps:['L11'],          name:'Esszimmer' },
+  bath:   { on:false, color:'white', lamps:['L9'],           name:'Bad' },
+  office: { on:false, color:'cool',  lamps:['L8'],           name:'Büro' },
+};
+
+let currentRoom = null;
+let brightness = 80;
+
+function applyRoom(rid) {
+  const r = rooms[rid]; if (!r) return;
+  const rl = document.getElementById('rl-' + rid);
+  const ri = document.getElementById('ri-' + rid);
+  if (!rl || !ri) return;
+  rl.style.opacity = r.on ? '1' : '0';
+  if (r.on) {
+    const bright = (r.brightness || 80) / 80;
+    ri.style.filter = COLORS[r.color].filter + ` brightness(${bright})`;
+  }
+  // Update lamp dots
+  r.lamps.forEach(lid => {
+    const lb = document.getElementById('lb-' + lid);
+    const lr = document.getElementById('lr-' + lid);
+    if (!lb || !lr) return;
+    const col = COLORS[r.color].dot;
+    lb.setAttribute('fill', r.on ? col : '#555');
+    lb.setAttribute('r', r.on ? '8' : '5');
+    lb.setAttribute('filter', r.on ? 'url(#lglow)' : 'none');
+    lr.setAttribute('stroke', r.on ? col : '#555');
+    lr.setAttribute('opacity', r.on ? '0.6' : '0.2');
+    lr.setAttribute('r', r.on ? '16' : '9');
+  });
+  buildRoomList();
+}
+
+function lampClick(lid, e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  // Find which room this lamp belongs to
+  const rid = Object.keys(rooms).find(r => rooms[r].lamps.includes(lid));
+  if (!rid) return;
+  rooms[rid].on = !rooms[rid].on;
+  applyRoom(rid);
+  if (rooms[rid].on) animateRing(lid);
+  showToast((rooms[rid].on ? '💡' : '🌑') + ' ' + rooms[rid].name);
+  closeCp();
+}
+
+function lampCm(rid, e) {
+  e.preventDefault();
+  openCp(rid, e);
+}
+
+function animateRing(lid) {
+  const svg = document.getElementById('fp-svg');
+  const lb = document.getElementById('lb-' + lid);
+  if (!svg || !lb) return;
+  const cx = lb.getAttribute('cx'), cy = lb.getAttribute('cy');
+  const col = COLORS[rooms[Object.keys(rooms).find(r=>rooms[r].lamps.includes(lid))]?.color]?.dot || '#fff';
+  [0,1].forEach(i => {
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',cx); c.setAttribute('cy',cy);
+    c.setAttribute('r','8'); c.setAttribute('fill','none');
+    c.setAttribute('stroke',col); c.setAttribute('stroke-width', i?'1.5':'2');
+    c.style.cssText = `animation:ringPulse ${0.6+i*0.2}s ease-out ${i*0.1}s forwards;pointer-events:none`;
+    svg.appendChild(c);
+    setTimeout(() => c.remove(), 950);
+  });
+}
+
+// Color picker
+function openCp(rid, e) {
+  currentRoom = rid;
+  const r = rooms[rid];
+  const pop = document.getElementById('cp-pop');
+  const ctr = document.getElementById('fp-container');
+  if (!pop || !ctr) return;
+  const cr = ctr.getBoundingClientRect();
+  const ex = (e.clientX||0) - cr.left;
+  const ey = (e.clientY||0) - cr.top;
+  pop.style.left = Math.max(5, Math.min(ex, cr.width-200)) + 'px';
+  pop.style.top  = Math.max(5, Math.min(ey, cr.height-185)) + 'px';
+  document.getElementById('cp-pop-title').textContent = '💡 ' + r.name;
+  const sw = document.getElementById('cp-swatches');
+  sw.innerHTML = '';
+  Object.entries(COLORS).forEach(([k,v]) => {
+    const d = document.createElement('div');
+    d.className = 'cp-sw' + (r.color===k?' on':'');
+    d.style.background = v.dot;
+    d.style.border = v.dot==='#ffffff' ? '2px solid #ccc' : '';
+    d.title = k;
+    d.onclick = () => {
+      rooms[rid].color = k;
+      rooms[rid].on = true;
+      applyRoom(rid);
+      document.querySelectorAll('.cp-sw').forEach(s=>s.classList.remove('on'));
+      d.classList.add('on');
+      showToast('🎨 ' + r.name + ' → ' + k);
+    };
+    sw.appendChild(d);
+  });
+  document.getElementById('cp-bright').value = r.brightness || 80;
+  pop.classList.add('open');
+}
+
+function closeCp() {
+  document.getElementById('cp-pop')?.classList.remove('open');
+  currentRoom = null;
+}
+
+function applyBright(val) {
+  if (!currentRoom) return;
+  rooms[currentRoom].brightness = parseInt(val);
+  applyRoom(currentRoom);
+}
+
+// Close CP on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('#cp-pop') && !e.target.closest('.lamp-g'))
+    closeCp();
+});
+
+// Scenes
+function setScene(key) {
+  document.querySelectorAll('.scene-pill').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll(`.scene-pill[onclick*="${key}"]`).forEach(b => b.classList.add('on'));
+  const configs = {
+    relax:  { bed1:{on:true,color:'warm'}, bed2:{on:true,color:'amber'}, living:{on:false}, dining:{on:true,color:'warm'}, bath:{on:false}, office:{on:false} },
+    normal: { bed1:{on:true,color:'cool'}, bed2:{on:true,color:'cool'},  living:{on:true,color:'white'}, dining:{on:true,color:'warm'}, bath:{on:true,color:'white'}, office:{on:true,color:'cool'} },
+    movie:  { bed1:{on:true,color:'purple'}, bed2:{on:false}, living:{on:false}, dining:{on:false}, bath:{on:false}, office:{on:false} },
+    alloff: { bed1:{on:false}, bed2:{on:false}, living:{on:false}, dining:{on:false}, bath:{on:false}, office:{on:false} },
   };
-
-  const pick=(k)=>R[k][lang]||R[k]['en'];
-
-  if(/^(hi|hey|hello|hallo|salut|bonjour|yo|guten|grüezi|ciao)/.test(m))return pick('greeting');
-  if(/price|cost|how much|preis|kosten|wie viel|tarif|combien/.test(m))return pick('price');
-  if(/time|long|fast|quick|days|zeit|lange|schnell|délai|jours/.test(m))return pick('time');
-  if(/chatbot|chat bot/.test(m))return pick('chatbot');
-  if(/agent|autonom/.test(m))return pick('agent');
-  if(/automat|workflow|n8n|make|zapier|connect|verknüpf/.test(m))return pick('automation');
-  if(/start|begin|order|contact|hire|anfang|bestell|fiverr|kontakt/.test(m))return pick('start');
-  return pick('default');
+  const cfg = configs[key]; if (!cfg) return;
+  let i = 0;
+  Object.entries(cfg).forEach(([rid,v]) => {
+    setTimeout(() => { Object.assign(rooms[rid],v); applyRoom(rid); }, i++ * 60);
+  });
+  const names = {relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Movie Night',alloff:'🌙 Alles aus'};
+  showToast(names[key]);
 }
+
+// Build room list panel
+function buildRoomList() {
+  const el = document.getElementById('room-list'); if (!el) return;
+  el.innerHTML = '';
+  Object.entries(rooms).forEach(([rid, r]) => {
+    const col = COLORS[r.color]?.dot || '#888';
+    const row = document.createElement('div');
+    row.className = 'room-row';
+    row.innerHTML = `
+      <div class="room-dot" style="background:${r.on?col:'#555'};${r.on?'box-shadow:0 0 8px '+col:''}"></div>
+      <span class="room-name">${r.name}</span>
+      <div class="room-sw ${r.on?'on':''}" onclick="event.stopPropagation();rooms['${rid}'].on=!rooms['${rid}'].on;applyRoom('${rid}')"></div>
+    `;
+    row.onclick = () => { rooms[rid].on = !rooms[rid].on; applyRoom(rid); };
+    row.oncontextmenu = e => { e.preventDefault(); openCp(rid, e); };
+    el.appendChild(row);
+  });
+}
+
+// ─── LANG ───
+const LANG = {
+  de: {
+    badge:'⭐ Top-Rated Fiverr Freelancer',
+    h1:'Dein Smart Home,<br><em>professionell</em> gestaltet.',
+    sub:'Individuelle Home Assistant Dashboards & KI-Automationen — geliefert in 48 Stunden.',
+    cta1:'🛒 Jetzt bestellen', cta2:'🏠 Demo ansehen',
+    langbtn:'EN', nav2:'KI & Automation',
+  },
+  en: {
+    badge:'⭐ Top-Rated Fiverr Freelancer',
+    h1:'Your Smart Home,<br><em>professionally</em> designed.',
+    sub:'Custom Home Assistant dashboards & AI automations — delivered in 48 hours.',
+    cta1:'🛒 Order Now', cta2:'🏠 View Demo',
+    langbtn:'DE', nav2:'AI & Automation',
+  }
+};
+let lang = 'de';
+function toggleLang() {
+  lang = lang === 'de' ? 'en' : 'de';
+  const t = LANG[lang];
+  document.getElementById('lang-btn').textContent = t.langbtn;
+  document.documentElement.lang = lang;
+  // Update specific elements
+  document.querySelector('.hero-badge').innerHTML = t.badge;
+  document.querySelector('.hero h1').innerHTML = t.h1;
+  document.querySelector('.hero-sub').textContent = t.sub;
+  const btns = document.querySelectorAll('.hero-actions button');
+  if (btns[0]) btns[0].innerHTML = t.cta1;
+  if (btns[1]) btns[1].innerHTML = t.cta2;
+  // Update room names in panel
+  const roomNames = {
+    de: {bed1:'Schlafzimmer 1',bed2:'Zimmer 2',living:'Küche/Wohnen',dining:'Esszimmer',bath:'Bad',office:'Büro'},
+    en: {bed1:'Bedroom 1',bed2:'2nd Room',living:'Kitchen/Living',dining:'Dining',bath:'Bathroom',office:'Office'},
+  };
+  Object.entries(roomNames[lang]).forEach(([rid,n]) => { if(rooms[rid]) rooms[rid].name = n; });
+  buildRoomList();
+}
+
+// ─── INIT ───
+buildRoomList();
 </script>
 </body>
 </html>
