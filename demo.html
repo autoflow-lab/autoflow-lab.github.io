@@ -836,6 +836,24 @@ h2{position:relative;}
 .hiw-step::before{content:attr(data-n);position:absolute;left:40px;top:-8px;font-size:.6rem;font-weight:800;letter-spacing:1px;color:var(--accent);opacity:.5;}
 [data-theme="dark"] .hiw-step::before{color:var(--neon-c);}
 
+
+/* ━━━━ TRUST BADGES ━━━━ */
+.trust-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.trust-item{display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:980px;font-size:.78rem;font-weight:500;color:var(--text2);transition:all .2s;}
+.trust-item:hover{border-color:var(--border2);color:var(--text);background:var(--bg3);}
+.trust-ico{font-size:.9rem;}
+[data-theme="dark"] .trust-item{background:rgba(255,255,255,.04);}
+[data-theme="dark"] .trust-item:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);}
+
+/* ━━━━ FAB ━━━━ */
+.fab{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;border-radius:980px;padding:12px 20px;display:flex;align-items:center;gap:8px;cursor:pointer;z-index:190;box-shadow:0 4px 20px rgba(0,113,227,.4);transition:all .3s cubic-bezier(.34,1.56,.64,1);font-size:.82rem;font-weight:700;animation:fadeSlideUp .6s 1s ease both;}
+.fab:hover{transform:scale(1.06) translateY(-2px);box-shadow:0 8px 32px rgba(0,113,227,.5);}
+.fab-ico{font-size:1rem;}
+.fab-txt{}
+[data-theme="dark"] .fab{background:linear-gradient(135deg,var(--neon-c),#0077cc);color:#000;box-shadow:0 4px 20px rgba(0,229,255,.3);}
+[data-theme="dark"] .fab:hover{box-shadow:0 8px 32px rgba(0,229,255,.4);}
+@media(max-width:780px){.fab-txt{display:none;}.fab{padding:14px;border-radius:50%;}}
+
 </style>
 </head>
 <body>
@@ -1916,9 +1934,32 @@ h2{position:relative;}
   </div>
   </section>
 
+
+    <!-- Trust badges row -->
+    <div class="trust-row rv" style="margin-top:56px">
+      <div class="trust-item"><span class="trust-ico">⚡</span><span>48h delivery</span></div>
+      <div class="trust-item"><span class="trust-ico">💯</span><span>Satisfaction guarantee</span></div>
+      <div class="trust-item"><span class="trust-ico">🔧</span><span>Full documentation</span></div>
+      <div class="trust-item"><span class="trust-ico">🔄</span><span>Free revision round</span></div>
+      <div class="trust-item"><span class="trust-ico">💬</span><span>English & German</span></div>
+    </div>
+
   <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready for a dashboard<br>that delights you?</h2><p>Custom Home Assistant dashboards from $49. Delivered in 2–4 days.</p><div class="cta-btns"><button class="btn btn-fill" onclick="openOrder()">Get a Free Quote →</button><a href="https://www.fiverr.com/autoflow-lab" target="_blank" class="btn btn-outline">Fiverr Profile</a></div></div></div></section>
 
-  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>Custom Home Assistant Dashboards · Fiverr</p><p>© 2026 autoflow-lab</p></footer>
+  <footer>
+  <div style="max-width:1080px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div class="footer-logo" style="margin-bottom:4px">autoflow<em>-lab</em></div>
+      <p>Smart Home Dashboards & AI Automation</p>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <a href="https://www.fiverr.com/autoflow-lab" target="_blank" style="font-size:.78rem;color:var(--text3);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Fiverr Profile ↗</a>
+      <button onclick="openContact()" style="background:none;border:none;font-size:.78rem;color:var(--text3);cursor:pointer;font-family:inherit;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Contact ✉</button>
+      <button onclick="openOrder()" style="background:none;border:none;font-size:.78rem;color:var(--accent);cursor:pointer;font-family:inherit;font-weight:600">Get a Quote →</button>
+    </div>
+    <p>© 2026 autoflow-lab · clawy.studio@gmail.com</p>
+  </div>
+</footer>
 </div>
 
 <!-- ══════════════ AI PAGE ══════════════ -->
@@ -2030,7 +2071,20 @@ h2{position:relative;}
 
   <section class="section"><div class="wrap"><div class="cta-box rv"><h2>Ready to automate<br>your business?</h2><p>Free consultation, no commitment. Most projects start within 24 hours.</p><div class="cta-btns"><button onclick="openOrder()" class="btn btn-fill">Get a Free Quote →</button><button onclick="switchTab('smarthome',document.querySelector('.nav-tab'))" class="btn btn-outline">← Smart Home</button></div></div></div></section>
 
-  <footer><div class="footer-logo">autoflow<em>-lab</em></div><p>AI & Automation Specialist · Fiverr</p><p>© 2026 autoflow-lab</p></footer>
+  <footer>
+  <div style="max-width:1080px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div class="footer-logo" style="margin-bottom:4px">autoflow<em>-lab</em></div>
+      <p>Smart Home Dashboards & AI Automation</p>
+    </div>
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <a href="https://www.fiverr.com/autoflow-lab" target="_blank" style="font-size:.78rem;color:var(--text3);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Fiverr Profile ↗</a>
+      <button onclick="openContact()" style="background:none;border:none;font-size:.78rem;color:var(--text3);cursor:pointer;font-family:inherit;transition:color .2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Contact ✉</button>
+      <button onclick="openOrder()" style="background:none;border:none;font-size:.78rem;color:var(--accent);cursor:pointer;font-family:inherit;font-weight:600">Get a Quote →</button>
+    </div>
+    <p>© 2026 autoflow-lab · clawy.studio@gmail.com</p>
+  </div>
+</footer>
 </div>
 
 <!-- TOAST -->
@@ -2795,5 +2849,11 @@ window.toggleTheme = function(){
 console.log('🏠 autoflow-lab dashboard v8 — animations loaded');
 
 </script>
+
+<!-- Floating action button -->
+<div class="fab" onclick="openOrder()" title="Get a free quote">
+  <span class="fab-ico">💬</span>
+  <span class="fab-txt">Free Quote</span>
+</div>
 </body>
 </html>
