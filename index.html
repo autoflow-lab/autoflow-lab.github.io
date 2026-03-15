@@ -1001,15 +1001,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
         <div class="fp-panel">
           <div class="fp-panel-title" data-i="fpPanel">💡 Lichter steuern</div>
           <div id="room-list"></div>
-          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
-            <div style="font-size:.62rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:9px" data-i="quickLabel">Szenen</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('relax')">🌅</button>
-              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('normal')">☀️</button>
-              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('movie')">🎬</button>
-              <button class="sp" style="padding:6px 12px;font-size:.72rem" onclick="setScene('alloff')">🌙</button>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
@@ -1486,7 +1478,7 @@ function updateEnergyFromLights(bPct){
   if(gl)gl.textContent='🔌 Netz: '+grid+' kWh';
   // Update today's bar
   EN_DATA[3].val=Math.round(30+kwh*8);EN_DATA[3].solar=solar;EN_DATA[3].grid=grid;
-  if(selBar===3)buildEnergyBars();updateEnergyFromLights();
+  drawEnergyChart();updateEnergyFromLights();
 }
 
 // ── ENERGY BARS ──
@@ -1677,11 +1669,13 @@ function lampClick(lid,e){if(e){e.preventDefault();e.stopPropagation()}const rid
 
 // ── SYNC: floor plan → mini lights + energy ──
 function syncMiniFromRooms(){
-  const map={living:'living',bed1:'bed1',bed2:'bed2',bath:'bath',office:'office',dining:'dining'};
   document.querySelectorAll('.lm-item').forEach(el=>{
-    const rid=el.getAttribute('onclick')?.match(/'([^']+)'\)/)?.[1];
-    if(rid&&rooms[rid]!==undefined){el.classList.toggle('on',!!rooms[rid]?.on)}
+    const m=el.getAttribute('onclick')?.match(/miniToggle\(this,'([^']+)'\)/);
+    const rid=m?.[1];
+    if(rid&&rid!=='kitchen'&&rooms[rid]){el.classList.toggle('on',!!rooms[rid].on)}
   });
+  // Rebuild room cards too
+  buildRoomList();
   updateEnergyFromLights();
 }
 function animRing(lid){
