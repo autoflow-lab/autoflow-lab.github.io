@@ -129,6 +129,45 @@ html[data-mode="security"] #sec-card{box-shadow:0 0 0 2px rgba(255,59,48,.5),0 0
    ANIMATIONS
 ═══════════════════════════════════════════ */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+/* ── SNOW FX ── */
+@keyframes snowFall{0%{transform:translateY(-20px) translateX(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) translateX(var(--drift,40px)) rotate(360deg);opacity:.2}}
+@keyframes snowAccum{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes icePulse{0%,100%{filter:brightness(1) saturate(1)}50%{filter:brightness(1.15) saturate(.5) hue-rotate(180deg)}}
+@keyframes frostIn{from{opacity:0}to{opacity:1}}
+@keyframes melt{0%{height:6px;opacity:1}100%{height:0px;opacity:0}}
+@keyframes sweat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(28px);opacity:0}}
+@keyframes heatShimmer{0%,100%{transform:skewY(0deg)}25%{transform:skewY(.4deg)}75%{transform:skewY(-.3deg)}}
+@keyframes fireFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.1)}}
+@keyframes sizzle{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes hatBounce{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes shiver{0%,100%{transform:translateX(0)}20%{transform:translateX(-2px)}40%{transform:translateX(2px)}60%{transform:translateX(-1px)}80%{transform:translateX(1px)}}
+@keyframes bearWalk{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+@keyframes sunRay{0%,100%{transform:rotate(0deg) scaleX(1);opacity:.6}50%{transform:rotate(15deg) scaleX(1.2);opacity:.9}}
+
+.snowflake{position:fixed;top:-30px;font-size:1.2rem;pointer-events:none;z-index:9999;animation:snowFall var(--dur,4s) linear var(--delay,0s) infinite;user-select:none}
+.snow-pile{position:fixed;bottom:0;left:0;right:0;height:6px;background:linear-gradient(180deg,rgba(255,255,255,.9),#e8f4ff);border-radius:4px 4px 0 0;transform-origin:center;z-index:9998;pointer-events:none;transition:height 1.5s ease;box-shadow:0 -2px 12px rgba(180,220,255,.5)}
+.frost-overlay{position:fixed;inset:0;pointer-events:none;z-index:9997;background:
+  radial-gradient(ellipse at 0% 0%,rgba(160,210,255,.18),transparent 40%),
+  radial-gradient(ellipse at 100% 0%,rgba(160,210,255,.14),transparent 35%),
+  radial-gradient(ellipse at 100% 100%,rgba(160,210,255,.16),transparent 38%),
+  radial-gradient(ellipse at 0% 100%,rgba(160,210,255,.12),transparent 35%);
+  animation:frostIn .8s ease forwards}
+.icicle{position:fixed;top:var(--nav);font-size:1rem;pointer-events:none;z-index:9996;filter:drop-shadow(0 2px 4px rgba(100,180,255,.5))}
+.btn-hat{position:relative}
+.btn-hat::before{content:'🎿';position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.8rem;animation:hatBounce 2s ease-in-out infinite;z-index:10}
+.heat-overlay{position:fixed;inset:0;pointer-events:none;z-index:9997;background:radial-gradient(ellipse at 50% 100%,rgba(255,100,0,.08),transparent 60%),radial-gradient(ellipse at 30% 80%,rgba(255,60,0,.06),transparent 40%);animation:sizzle 2s ease-in-out infinite}
+.sweat-drop{position:fixed;font-size:1.1rem;pointer-events:none;z-index:9999;animation:sweat var(--dur,2s) ease-in var(--delay,0s) infinite}
+.fire-emoji{position:fixed;bottom:80px;right:90px;font-size:2rem;pointer-events:none;z-index:9999;animation:fireFloat 1.5s ease-in-out infinite}
+.polar-bear{position:fixed;bottom:88px;left:20px;font-size:2.5rem;pointer-events:none;z-index:9999;animation:bearWalk 3s ease-in-out infinite;cursor:default;transition:opacity .5s}
+.polar-bear:hover::after{content:" 🐟";font-size:1.2rem}
+.sun-aura{position:fixed;top:60px;right:0;width:200px;height:200px;pointer-events:none;z-index:9996;opacity:.4}
+body.thermo-cold .nav{border-bottom-color:rgba(100,180,255,.4)!important;transition:border-color .5s}
+body.thermo-cold .btn-p,body.thermo-cold .fab{filter:hue-rotate(160deg)!important;transition:filter .8s}
+body.thermo-cold .dash-card{border-color:rgba(100,180,255,.25)!important}
+body.thermo-hot .nav{border-bottom-color:rgba(255,80,0,.3)!important;transition:border-color .5s}
+body.thermo-hot .btn-p,body.thermo-hot .fab{filter:hue-rotate(-20deg) saturate(1.3)!important;transition:filter .8s}
+body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:heatShimmer 3s ease-in-out infinite}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
@@ -1527,8 +1566,189 @@ function timeSince(d){const s=Math.floor((Date.now()-d)/1000);if(s<60)return(lan
 
 // ── CLIMATE ──
 let thermoVal=21;
-function adjThermo(d){thermoVal=Math.max(10,Math.min(30,thermoVal+d));$('t-num').textContent=thermoVal;const pct=(thermoVal-10)/20;$('t-ring').style.strokeDashoffset=String(276-(276*pct*.84));toast('🌡 '+thermoVal+'°C')}
-function setMode(m){document.querySelectorAll('.c-mode').forEach(b=>b.classList.remove('on'));$('cm-'+m)?.classList.add('on');toast({heat:'🔥 Heizmodus',cool:'❄️ Kühlmodus',off:'⏸ Aus'}[m])}
+let _fxState='normal'; // 'freeze','cold','normal','warm','hot','inferno'
+let _snowInterval=null,_sweatInterval=null;
+
+function adjThermo(d){
+  thermoVal=Math.max(10,Math.min(30,thermoVal+d));
+  $('t-num').textContent=thermoVal;
+  const pct=(thermoVal-10)/20;
+  $('t-ring').style.strokeDashoffset=String(276-(276*pct*.84));
+  // Color ring based on temp
+  const ring=$('t-ring');
+  if(ring){
+    if(thermoVal<=14)ring.style.stroke='#60c8ff';
+    else if(thermoVal<=18)ring.style.stroke='#90d8ff';
+    else if(thermoVal<=23)ring.style.stroke='url(#thermGrad)';
+    else if(thermoVal<=27)ring.style.stroke='#ff9f0a';
+    else ring.style.stroke='#ff3b30';
+  }
+  setThermoFX(thermoVal);
+  const emoji=thermoVal<=10?'🥶':thermoVal<=14?'❄️':thermoVal<=18?'🌤':thermoVal<=24?'😊':thermoVal<=27?'☀️':thermoVal<=29?'🥵':'🔥';
+  toast(emoji+' '+thermoVal+'°C');
+}
+
+function setThermoFX(t){
+  const body=document.body;
+  const newState=t<=11?'freeze':t<=15?'cold':t<=24?'normal':t<=27?'warm':t<=29?'hot':'inferno';
+  if(newState===_fxState)return;
+  const prev=_fxState; _fxState=newState;
+
+  // Clear all FX first
+  clearThermoFX();
+
+  if(newState==='freeze'||newState==='cold'){
+    body.classList.add('thermo-cold');
+    body.classList.remove('thermo-hot');
+    startSnow(newState==='freeze'?30:14, newState==='freeze');
+    if(newState==='freeze'){
+      addFrost();addIcicles();addPolarBear();
+      addHatsToButtons();
+      toast('🥶 Es ist EISKALT! Der Bär ist da...');
+    } else {
+      toast('❄️ Schnee fällt...');
+    }
+  } else if(newState==='warm'||newState==='hot'||newState==='inferno'){
+    body.classList.add('thermo-hot');
+    body.classList.remove('thermo-cold');
+    // Melt snow if transitioning from cold
+    meltSnow();
+    if(newState==='hot'){startSweat();addSunAura();toast('🥵 Phew... es schwitzt!')}
+    if(newState==='inferno'){startSweat(true);addFire();addSunAura(true);toast('🔥 ALLES BRENNT! 🔥🔥🔥')}
+    if(newState==='warm'){addSunAura(false,true);toast('☀️ Schön warm!')}
+  } else {
+    // normal - already cleared
+    body.classList.remove('thermo-cold','thermo-hot');
+    toast('😊 Angenehme Temperatur');
+  }
+}
+
+function clearThermoFX(){
+  clearInterval(_snowInterval);clearInterval(_sweatInterval);
+  document.querySelectorAll('.snowflake,.frost-overlay,.icicle,.polar-bear,.sweat-drop,.fire-emoji,.sun-aura,.snow-pile').forEach(el=>el.remove());
+  document.querySelectorAll('.btn-hat').forEach(el=>el.classList.remove('btn-hat'));
+  document.body.classList.remove('thermo-cold','thermo-hot');
+}
+
+function startSnow(count=15, heavy=false){
+  const flakes=['❄','❅','❆','✦','*'];
+  const existing=document.querySelectorAll('.snowflake').length;
+  if(existing>=count)return;
+  for(let i=existing;i<count;i++){
+    const s=document.createElement('div');s.className='snowflake';
+    s.textContent=flakes[Math.floor(Math.random()*flakes.length)];
+    s.style.cssText=`left:${Math.random()*100}vw;--dur:${2.5+Math.random()*4}s;--delay:${Math.random()*4}s;--drift:${(Math.random()-.5)*80}px;font-size:${heavy?1.4+Math.random():.7+Math.random()*.8}rem;opacity:${.5+Math.random()*.5}`;
+    document.body.appendChild(s);
+  }
+  // Snow pile at bottom
+  if(!$('snow-pile-el')){
+    const pile=document.createElement('div');pile.className='snow-pile';pile.id='snow-pile-el';
+    pile.style.height=heavy?'14px':'6px';
+    document.body.appendChild(pile);
+  }
+}
+
+function meltSnow(){
+  // Animate snow piles melting
+  document.querySelectorAll('.snowflake').forEach((el,i)=>{
+    setTimeout(()=>{el.style.transition='opacity 1s';el.style.opacity='0';setTimeout(()=>el.remove(),1000)},i*80);
+  });
+  const pile=$('snow-pile-el');
+  if(pile){pile.style.transition='height 2s ease,opacity 1s';pile.style.height='0';pile.style.opacity='0';setTimeout(()=>pile.remove(),2000)}
+  // Sweat drop appears on the ° symbol as snow "melts"
+  const tnum=$('t-num');if(tnum){
+    const d=document.createElement('span');d.textContent='💧';d.style.cssText='font-size:.8rem;animation:sweat 1.5s ease forwards;display:inline-block;margin-left:2px';
+    tnum.parentNode.appendChild(d);setTimeout(()=>d.remove(),2000);
+  }
+}
+
+function addFrost(){
+  const f=document.createElement('div');f.className='frost-overlay';document.body.appendChild(f);
+  // Add ice crystals to corners
+  const pos=[{top:'calc(var(--nav) + 5px)',left:'8px'},{top:'calc(var(--nav) + 5px)',right:'8px'},{top:'calc(var(--nav) + 5px)',left:'50%',transform:'translateX(-50%)'}];
+  pos.forEach(p=>{
+    const ic=document.createElement('div');ic.className='icicle';
+    ic.textContent=['🧊','💎','❄️'][Math.floor(Math.random()*3)];
+    Object.assign(ic.style,p);document.body.appendChild(ic);
+  });
+}
+
+function addIcicles(){
+  const nav=document.querySelector('.nav');if(!nav)return;
+  // Add icicle drips pseudo-style
+  nav.style.borderBottom='2px solid rgba(100,200,255,.6)';
+  nav.style.boxShadow='0 4px 20px rgba(100,200,255,.25)';
+}
+
+function addPolarBear(){
+  if($('polar-bear-el'))return;
+  const b=document.createElement('div');b.className='polar-bear';b.id='polar-bear-el';
+  b.textContent='🐻‍❄️';b.title='Polarbär wegen der Kälte erschienen!';
+  b.onclick=()=>{b.textContent='🐟';setTimeout(()=>b.textContent='🐻‍❄️',1000)};
+  document.body.appendChild(b);
+}
+
+function addHatsToButtons(){
+  // Put winter hat on certain buttons
+  document.querySelectorAll('.btn-p,.fab,.btn-tier').forEach(btn=>{
+    if(!btn.classList.contains('btn-hat'))btn.classList.add('btn-hat');
+  });
+  // Put hat on thermostat + button
+  const tnum=$('t-num');
+  if(tnum&&!tnum._hatted){
+    const hat=document.createElement('span');hat.textContent=' 🎿';hat.id='thermo-hat';
+    tnum.parentNode.insertBefore(hat,tnum.nextSibling);tnum._hatted=true;
+  }
+}
+
+function startSweat(extreme=false){
+  const positions=['top:80px;right:30px','top:120px;left:40px','top:200px;right:60px','top:180px;left:20px'];
+  clearInterval(_sweatInterval);
+  _sweatInterval=setInterval(()=>{
+    const s=document.createElement('div');s.className='sweat-drop';
+    s.textContent=extreme?['💦','💧','🔥'][Math.floor(Math.random()*3)]:'💦';
+    const pos=positions[Math.floor(Math.random()*positions.length)];
+    s.style.cssText=pos+`;--dur:${1.2+Math.random()}s;--delay:0s`;
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),2500);
+  },extreme?600:1200);
+  // Heat overlay
+  const h=document.createElement('div');h.className='heat-overlay';document.body.appendChild(h);
+}
+
+function addFire(){
+  if($('fire-el'))return;
+  const f=document.createElement('div');f.className='fire-emoji';f.id='fire-el';
+  f.textContent='🔥';document.body.appendChild(f);
+  // Make the fab button glow red
+  const fab=document.querySelector('.fab');
+  if(fab){fab.style.background='linear-gradient(135deg,#ff3b30,#ff9f0a)';fab.style.boxShadow='0 8px 32px rgba(255,59,48,.6)'}
+}
+
+function addSunAura(hot=false,warm=false){
+  const s=document.createElement('div');s.className='sun-aura';
+  const size=hot?'300px':warm?'180px':'200px';
+  const opacity=hot?'.5':warm?'.25':'.35';
+  s.innerHTML=`<svg width="${size}" height="${size}" viewBox="0 0 200 200" style="position:absolute;top:0;right:0;opacity:${opacity}">
+    <circle cx="150" cy="50" r="${hot?60:40}" fill="${hot?'#ff5500':'#ffaa00'}" opacity=".15"/>
+    ${hot?'<circle cx="150" cy="50" r="80" fill="#ff3300" opacity=".07"/>':''}
+  </svg>`;
+  document.body.appendChild(s);
+}
+
+function setMode(m){
+  document.querySelectorAll('.c-mode').forEach(b=>b.classList.remove('on'));
+  $('cm-'+m)?.classList.add('on');
+  if(m==='cool'&&thermoVal>16){
+    // Force cold!
+    const steps=thermoVal-12;
+    for(let i=0;i<steps;i++)setTimeout(()=>adjThermo(-1),i*120);
+  } else if(m==='heat'&&thermoVal<24){
+    const steps=24-thermoVal;
+    for(let i=0;i<steps;i++)setTimeout(()=>adjThermo(1),i*120);
+  }
+  toast({heat:'🔥 Heizmodus',cool:'❄️ Kühlmodus',off:'⏸ Aus'}[m]);
+}
 
 // ── MINI LIGHTS ──
 // Per-room wattage (approximate W)
@@ -1834,9 +2054,32 @@ function setScene(k){
     if(mode){banner.classList.add('show');clearTimeout(banner._t);if(k!=='movie'&&k!=='relax')banner._t=setTimeout(()=>banner.classList.remove('show'),3000)}
     else{clearTimeout(banner._t);setTimeout(()=>banner.classList.remove('show'),1500)}
   }
-  // Music: kino → play something cinematic feel
-  if(k==='movie'){const eq=document.getElementById('music-eq');if(eq)eq.classList.add('on')}
-  toast({relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Kino Modus',alloff:'🌙 Alles aus'}[k]);
+  // Easter eggs per scene
+  if(k==='movie'){
+    const eq=document.getElementById('music-eq');if(eq)eq.classList.add('on');
+    // Popcorn rain!
+    for(let i=0;i<12;i++){
+      const p=document.createElement('div');p.textContent='🍿';
+      p.style.cssText=`position:fixed;bottom:-30px;left:${10+Math.random()*80}vw;font-size:${1+Math.random()}rem;z-index:9999;pointer-events:none;animation:snowFall ${2+Math.random()*2}s ease-in ${Math.random()*1.5}s forwards;transform:rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(p);setTimeout(()=>p.remove(),5000);
+    }
+    // Cinematic bars
+    const bars=document.createElement('div');bars.id='cinema-bars';
+    bars.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9995';
+    bars.innerHTML='<div style="position:absolute;top:0;left:0;right:0;height:60px;background:#000;animation:fadeIn .5s"></div><div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:#000;animation:fadeIn .5s"></div>';
+    document.body.appendChild(bars);setTimeout(()=>bars.remove(),3000);
+  } else {
+    const cb=$('cinema-bars');if(cb)cb.remove();
+  }
+  if(k==='alloff'){
+    // Stars fall
+    for(let i=0;i<15;i++){
+      const s=document.createElement('div');s.textContent=['⭐','🌟','✨'][Math.floor(Math.random()*3)];
+      s.style.cssText=`position:fixed;top:-20px;left:${Math.random()*100}vw;font-size:.8rem;z-index:9999;pointer-events:none;animation:snowFall ${3+Math.random()*3}s ease-in ${Math.random()*2}s forwards`;
+      document.body.appendChild(s);setTimeout(()=>s.remove(),7000);
+    }
+  }
+  toast({relax:'🌅 Relax',normal:'☀️ Normal',movie:'🎬 Kino Modus 🍿',alloff:'🌙 Gute Nacht ⭐'}[k]);
   setTimeout(()=>{syncMiniFromRooms()},Object.keys(cfg).length*55+100);
 }
 // Room icon + color helpers
