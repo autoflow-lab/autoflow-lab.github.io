@@ -2,6 +2,14 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
+<meta name="description" content="Custom Home Assistant dashboards & AI automation — from €49. Interactive floor plans, smart scenes, delivered in 48h. Portfolio by autoflow-lab.">
+<meta name="keywords" content="Home Assistant dashboard, Lovelace custom, smart home automation, floor plan, AI automation, n8n, chatbot">
+<meta property="og:title" content="autoflow-lab — Smart Home Dashboards & AI Automation">
+<meta property="og:description" content="Custom Home Assistant dashboards from €49. Interactive floor plans, smart scenes, delivered in 48h.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://autoflow-lab.github.io/demo.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0071e3">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AutoFlow Lab — Smart Home & AI Automation</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -795,6 +803,38 @@ h2{position:relative;}
 /* CTA box gradient on dark */
 [data-theme="dark"] .cta-box{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.06);}
 [data-theme="dark"] .cta-box::before{background:radial-gradient(ellipse at 50% -30%,rgba(0,229,255,.06),transparent 60%);}
+
+
+/* ━━━━ ROOM TOOLTIP ━━━━ */
+.fp-tooltip{
+  position:absolute;background:var(--card);border:1px solid var(--border2);
+  border-radius:10px;padding:8px 12px;font-size:.75rem;pointer-events:none;
+  z-index:50;box-shadow:var(--shadow-md);min-width:120px;
+  transform:translateX(-50%);transition:opacity .2s;opacity:0;
+  white-space:nowrap;
+}
+.fp-tooltip.show{opacity:1;}
+.fp-tooltip-name{font-weight:700;margin-bottom:3px;color:var(--text);}
+.fp-tooltip-status{color:var(--text2);}
+.fp-tooltip-color{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+
+
+/* ━━━━ HOW IT WORKS TIMELINE ━━━━ */
+.hiw-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.hiw-timeline{margin-top:56px;display:flex;flex-direction:column;gap:0;position:relative;max-width:680px;margin-inline:auto;}
+.hiw-timeline::before{content:'';position:absolute;left:27px;top:28px;bottom:28px;width:1px;background:linear-gradient(to bottom,var(--accent),var(--border),transparent);}
+[data-theme="dark"] .hiw-timeline::before{background:linear-gradient(to bottom,var(--neon-c),rgba(255,255,255,.08),transparent);}
+.hiw-step{display:flex;gap:24px;padding:0 0 40px;position:relative;}
+.hiw-last{padding-bottom:0;}
+.hiw-icon-wrap{width:56px;height:56px;border-radius:50%;background:var(--card);border:1px solid var(--border2);display:grid;place-items:center;flex-shrink:0;position:relative;z-index:1;transition:all .4s;}
+.hiw-step:hover .hiw-icon-wrap{border-color:var(--accent);background:rgba(0,113,227,.06);transform:scale(1.08);}
+[data-theme="dark"] .hiw-step:hover .hiw-icon-wrap{border-color:var(--neon-c);background:rgba(0,229,255,.05);box-shadow:0 0 20px rgba(0,229,255,.1);}
+.hiw-icon{font-size:1.4rem;}
+.hiw-content{padding-top:12px;}
+.hiw-content h3{font-size:1rem;font-weight:700;margin-bottom:8px;letter-spacing:-.01em;}
+.hiw-content p{font-size:.87rem;color:var(--text2);line-height:1.7;}
+.hiw-step::before{content:attr(data-n);position:absolute;left:40px;top:-8px;font-size:.6rem;font-weight:800;letter-spacing:1px;color:var(--accent);opacity:.5;}
+[data-theme="dark"] .hiw-step::before{color:var(--neon-c);}
 
 </style>
 </head>
@@ -1929,6 +1969,48 @@ h2{position:relative;}
   </div>
   </section>
 
+
+  <!-- ══════════ HOW IT WORKS (AI) ══════════ -->
+  <section class="section hiw-section">
+  <div class="wrap">
+    <div class="rv centered">
+      <div class="label">The Process</div>
+      <h2>From idea to running in 48h</h2>
+      <p class="section-sub">No fluff, no wasted time. Here's exactly how it works.</p>
+    </div>
+    <div class="hiw-timeline rv">
+      <div class="hiw-step" data-n="01">
+        <div class="hiw-icon-wrap"><div class="hiw-icon">💬</div></div>
+        <div class="hiw-content">
+          <h3>Tell me what you need</h3>
+          <p>Describe your goal in plain language — no technical knowledge needed. "When I get an email from a lead, add them to my CRM and send a welcome message."</p>
+        </div>
+      </div>
+      <div class="hiw-step" data-n="02">
+        <div class="hiw-icon-wrap"><div class="hiw-icon">🗺️</div></div>
+        <div class="hiw-content">
+          <h3>I map the workflow</h3>
+          <p>I sketch the automation flow and confirm it covers all edge cases before writing a single line of code. You approve the design.</p>
+        </div>
+      </div>
+      <div class="hiw-step" data-n="03">
+        <div class="hiw-icon-wrap"><div class="hiw-icon">⚙️</div></div>
+        <div class="hiw-content">
+          <h3>Built, tested & deployed</h3>
+          <p>I build and test with real data. Error handling, edge cases, retries — all covered. Delivered as a working workflow file + documentation.</p>
+        </div>
+      </div>
+      <div class="hiw-step hiw-last" data-n="04">
+        <div class="hiw-icon-wrap"><div class="hiw-icon">🚀</div></div>
+        <div class="hiw-content">
+          <h3>It runs while you sleep</h3>
+          <p>Your automation runs 24/7, handling tasks automatically. I include a video walkthrough so you understand exactly what happens and why.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
   <section class="section" id="ai-pricing">
   <div class="wrap centered">
     <div class="rv"><div class="label">Pricing</div><h2>Simple, transparent pricing</h2><p class="section-sub">No hidden fees. Pick a plan or message me for a custom quote.</p></div>
@@ -2673,6 +2755,40 @@ window.toggleTheme = function(){
     d.className='auto-ticker-item';
     d.innerHTML=`<span>${item.ico}</span><span>${item.txt}</span>`;
     el.appendChild(d);
+  });
+})();
+
+
+// ── Room hover tooltip ──
+(function(){
+  const fp = document.getElementById('fp');
+  const container = document.getElementById('fp-container');
+  if(!fp||!container) return;
+
+  const tip = document.createElement('div');
+  tip.className = 'fp-tooltip';
+  tip.innerHTML = '<div class="fp-tooltip-name"></div><div class="fp-tooltip-status"></div>';
+  container.appendChild(tip);
+
+  const roomEls = fp.querySelectorAll('[id^="room-"]');
+  roomEls.forEach(el=>{
+    el.addEventListener('mouseenter', e=>{
+      const k = el.id.replace('room-','');
+      const r = rooms[k]; if(!r) return;
+      const c = getRoomColor(k).color;
+      const rect = container.getBoundingClientRect();
+      const eRect = el.getBoundingClientRect();
+      const x = eRect.left + eRect.width/2 - rect.left;
+      const y = eRect.top - rect.top - 8;
+      tip.querySelector('.fp-tooltip-name').textContent = r.icon + ' ' + r.name;
+      tip.querySelector('.fp-tooltip-status').innerHTML =
+        `<span class="fp-tooltip-color" style="background:${r.on?c:'#aaa'}"></span>${r.on ? getRoomColor(k).label : 'Off'}`;
+      tip.style.left = x + 'px';
+      tip.style.top = y + 'px';
+      tip.style.transform = 'translateX(-50%) translateY(-100%)';
+      tip.classList.add('show');
+    });
+    el.addEventListener('mouseleave', ()=>tip.classList.remove('show'));
   });
 })();
 
