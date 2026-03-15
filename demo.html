@@ -709,7 +709,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
           <div class="w-loading" id="w-loading">📍 <span data-i="wLoading">Standort wird ermittelt...</span></div>
           <div id="w-content" style="display:none">
             <div class="weather-top">
-              <div class="w-icon" id="w-icon">🌤</div>
+              <div class="w-icon" id="w-ico">🌤</div>
               <div class="w-right">
                 <div class="w-temp"><span id="w-temp">—</span>°C</div>
                 <div class="w-desc" id="w-desc">—</div>
@@ -722,7 +722,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
               <div class="w-det"><strong id="w-feels">—°C</strong> <span data-i="wFeels">Gefühlt</span></div>
               <div class="w-det"><strong id="w-rain">—%</strong> <span data-i="wRain">Regen</span></div>
             </div>
-            <div class="w-forecast" id="w-forecast"></div>
+            <div class="w-forecast" id="w-days"></div>
           </div>
           <div class="w-error" id="w-error" style="display:none" data-i="wError">📍 Standortzugriff nicht möglich</div>
         </div>
@@ -1472,11 +1472,31 @@ function loadWeather(){
   },()=>showWeatherError());
 }
 function showWeatherError(){
-  $('w-loading').style.display='none';$('w-error').style.display='';
-  // Show demo data
-  $('w-ico').textContent='🌤';$('w-temp').textContent='18';$('w-desc').textContent='Teils bewölkt';$('w-loc').textContent='Demo';
-  $('w-hum').textContent='62%';$('w-wind').textContent='14 km/h';$('w-feels').textContent='16°C';$('w-rain').textContent='20%';
-  $('w-content').style.display='';loadNews();
+  $('w-loading').style.display='none';
+  $('w-error').style.display='';
+  // Show demo data anyway so widget isn't empty
+  const ico=$('w-ico');if(ico)ico.textContent='🌤';
+  const tmp=$('w-temp');if(tmp)tmp.textContent='18';
+  const desc=$('w-desc');if(desc)desc.textContent=lang==='de'?'Teils bewölkt':'Partly cloudy';
+  const loc=$('w-loc');if(loc)loc.textContent='📍 Demo';
+  const hum=$('w-hum');if(hum)hum.textContent='62%';
+  const wind=$('w-wind');if(wind)wind.textContent='14 km/h';
+  const feels=$('w-feels');if(feels)feels.textContent='16°C';
+  const rain=$('w-rain');if(rain)rain.textContent='20%';
+  // Build demo forecast
+  const fc=$('w-days');
+  if(fc){
+    const days=lang==='de'?DAYS_DE:DAYS_EN;
+    const icons=['🌤','⛅','🌧','🌤','☀️'];const highs=[18,15,12,17,20];
+    fc.innerHTML='';
+    icons.forEach((ic,i)=>{
+      const d=document.createElement('div');d.className='w-day'+(i===0?' today':'');
+      d.innerHTML=`<span class="d-ico">${ic}</span><div class="d-lbl">${days[(new Date().getDay()+i)%7]}</div><div class="d-tmp">${highs[i]}°</div>`;
+      fc.appendChild(d);
+    });
+  }
+  $('w-content').style.display='';
+  loadNews();
 }
 let userLat=null,userLon=null,userCountry='de';
 
