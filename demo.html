@@ -464,57 +464,189 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24p
           <!-- Base (no lights) -->
           <img class="fp-base" id="fp-base" src="https://autoflow-lab.github.io/fp_off.png" alt="Floor Plan" loading="eager">
 
-          <!-- Room lit overlays — CSS clip-path approach (no CORS issues) -->
-          <!-- Each img is positioned absolute, covers full container, clipped to room shape -->
-          <!-- Coordinates as % of image size (1376x768) -->
-          <img class="fp-room" id="fr-bed1"
-               src="https://autoflow-lab.github.io/fp_cyan.png"
-               style="clip-path:polygon(50.5% 19.3%, 71.9% 25.4%, 71.9% 43.6%, 50.5% 37.8%)">
-          <img class="fp-room" id="fr-bath"
-               src="https://autoflow-lab.github.io/fp_cyan.png"
-               style="clip-path:polygon(72.7% 26.0%, 83.2% 32.6%, 83.2% 56.0%, 72.7% 49.5%)">
-          <img class="fp-room" id="fr-living"
-               src="https://autoflow-lab.github.io/fp_cyan.png"
-               style="clip-path:polygon(38.5% 31.3%, 71.9% 44.3%, 71.9% 67.7%, 38.5% 54.7%)">
-          <img class="fp-room" id="fr-dining"
-               src="https://autoflow-lab.github.io/fp_cyan.png"
-               style="clip-path:polygon(58.9% 54.7%, 78.5% 63.8%, 78.5% 79.4%, 58.9% 71.0%)">
-          <img class="fp-room" id="fr-bed2"
-               src="https://autoflow-lab.github.io/fp_cyan.png"
-               style="clip-path:polygon(16.7% 43.0%, 34.9% 50.8%, 34.9% 69.0%, 16.7% 61.2%)">
-          <img class="fp-room" id="fr-office"
-               src="https://autoflow-lab.github.io/fp_cyan.png"
-               style="clip-path:polygon(35.2% 58.6%, 48.0% 65.1%, 48.0% 79.4%, 35.2% 73.6%)">
-
-          <!-- SVG: lamp dots + room click zones (on top) -->
-          <svg class="fp-lamps-svg" viewBox="0 0 1376 768" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none">
+          <!--
+            SVG LIGHT OVERLAY
+            mix-blend-mode:screen = gradients add light realistically to photo
+            Polygons trace exact room boundaries in 1376×768 image space
+            Radial gradients fill each room with soft colored light
+          -->
+          <svg id="fp-svg-lights"
+               viewBox="0 0 1376 768"
+               xmlns="http://www.w3.org/2000/svg"
+               style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;border-radius:16px">
             <defs>
+              <!-- Room gradient defs (color updated by JS) -->
+              <!-- bed1 — Master Bedroom (upper-right) center ~(840,235) -->
+              <radialGradient id="rg-bed1" cx="50%" cy="50%" r="65%">
+                <stop id="rg-bed1-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
+                <stop id="rg-bed1-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
+                <stop id="rg-bed1-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
+              </radialGradient>
+              <!-- bath (right) center ~(1072,318) -->
+              <radialGradient id="rg-bath" cx="50%" cy="50%" r="65%">
+                <stop id="rg-bath-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
+                <stop id="rg-bath-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
+                <stop id="rg-bath-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
+              </radialGradient>
+              <!-- living (center-large) center ~(762,378) -->
+              <radialGradient id="rg-living" cx="50%" cy="50%" r="65%">
+                <stop id="rg-living-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
+                <stop id="rg-living-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
+                <stop id="rg-living-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
+              </radialGradient>
+              <!-- dining center ~(945,512) -->
+              <radialGradient id="rg-dining" cx="50%" cy="50%" r="65%">
+                <stop id="rg-dining-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
+                <stop id="rg-dining-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
+                <stop id="rg-dining-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
+              </radialGradient>
+              <!-- bed2 (left) center ~(352,425) -->
+              <radialGradient id="rg-bed2" cx="50%" cy="50%" r="65%">
+                <stop id="rg-bed2-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
+                <stop id="rg-bed2-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
+                <stop id="rg-bed2-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
+              </radialGradient>
+              <!-- office (bottom-center) center ~(572,528) -->
+              <radialGradient id="rg-office" cx="50%" cy="50%" r="65%">
+                <stop id="rg-office-0" offset="0%"   stop-color="#ffe8a0" stop-opacity="0"/>
+                <stop id="rg-office-1" offset="55%"  stop-color="#f5c050" stop-opacity="0"/>
+                <stop id="rg-office-2" offset="100%" stop-color="#e08000" stop-opacity="0"/>
+              </radialGradient>
+
+              <!-- Floor lamp radial gradients (individual lamps) -->
+              <radialGradient id="lg-L1"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L1-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L2"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L2-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L3"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L3-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L4"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L4-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L5"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L5-c"  stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L6"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L6-c"  stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L7"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L7-c"  stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L8"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L8-c"  stop-color="#d0eeff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L9"  cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L9-c"  stop-color="#ffffff" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+              <radialGradient id="lg-L11" cx="50%" cy="50%" r="50%"><stop offset="0%" id="lg-L11-c" stop-color="#ffe8a0" stop-opacity="0"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+
+              <!-- Glow filter for lamp dots -->
               <filter id="lg" x="-80%" y="-80%" width="360%" height="360%">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
                 <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
               </filter>
+              <!-- Soft bloom on room polygons -->
+              <filter id="roomBloom" x="-15%" y="-15%" width="130%" height="130%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
             </defs>
-            <!-- Room click areas (invisible, pointer-events:all) -->
+
+            <!-- ═══ ROOM LIGHT POLYGONS ═══ -->
+            <!-- Room polygons trace the actual floor area of each room.
+                 Coordinates tuned to 1376×768 isometric image.
+                 Filter:blur gives soft edges at room boundaries. -->
+
+            <!-- Bed1: Master bedroom upper-right
+                 Floor parallelogram: left wall ~x=688, right wall ~x=992
+                 Top edge y~145, bottom edge y~325 -->
+            <polygon id="rp-bed1"
+                     points="688,148 992,193 992,328 688,283"
+                     fill="url(#rg-bed1)" opacity="0"
+                     filter="url(#roomBloom)"
+                     style="transition:opacity .55s ease"/>
+
+            <!-- Bath: right of bed1, narrow room
+                 Shifted down to match actual bathroom position -->
+            <polygon id="rp-bath"
+                     points="993,215 1148,258 1148,428 993,388"
+                     fill="url(#rg-bath)" opacity="0"
+                     filter="url(#roomBloom)"
+                     style="transition:opacity .55s ease"/>
+
+            <!-- Living/Kitchen: large center area
+                 From left-center to right (below bedroom) -->
+            <polygon id="rp-living"
+                     points="530,245 688,283 992,328 992,515 530,415"
+                     fill="url(#rg-living)" opacity="0"
+                     filter="url(#roomBloom)"
+                     style="transition:opacity .55s ease"/>
+
+            <!-- Dining: right portion below bath -->
+            <polygon id="rp-dining"
+                     points="812,422 1080,492 1080,608 812,548"
+                     fill="url(#rg-dining)" opacity="0"
+                     filter="url(#roomBloom)"
+                     style="transition:opacity .55s ease"/>
+
+            <!-- Bed2: left bedroom -->
+            <polygon id="rp-bed2"
+                     points="225,328 482,388 482,528 225,468"
+                     fill="url(#rg-bed2)" opacity="0"
+                     filter="url(#roomBloom)"
+                     style="transition:opacity .55s ease"/>
+
+            <!-- Office: bottom center -->
+            <polygon id="rp-office"
+                     points="482,452 658,498 658,608 482,562"
+                     fill="url(#rg-office)" opacity="0"
+                     filter="url(#roomBloom)"
+                     style="transition:opacity .55s ease"/>
+
+            <!-- ═══ INDIVIDUAL LAMP POOLS ═══ -->
+            <!-- Soft elliptic pools around each lamp — on when room is on -->
+            <!-- L1: Bed1 main pendant -->
+            <ellipse id="lp-L1" cx="840" cy="185" rx="155" ry="100" fill="url(#lg-L1)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L2: Bed1 bedside left -->
+            <ellipse id="lp-L2" cx="800" cy="228" rx="80"  ry="58"  fill="url(#lg-L2)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L3: Bed1 bedside right -->
+            <ellipse id="lp-L3" cx="895" cy="246" rx="80"  ry="58"  fill="url(#lg-L3)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L4: Bed2 floor lamp (tripod) -->
+            <ellipse id="lp-L4" cx="380" cy="398" rx="120" ry="88"  fill="url(#lg-L4)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L5: Bed2 wall sconce -->
+            <ellipse id="lp-L5" cx="302" cy="362" rx="80"  ry="60"  fill="url(#lg-L5)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L6: Kitchen ceiling pendant -->
+            <ellipse id="lp-L6" cx="678" cy="292" rx="145" ry="100" fill="url(#lg-L6)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L7: Kitchen island pendant -->
+            <ellipse id="lp-L7" cx="760" cy="355" rx="120" ry="85"  fill="url(#lg-L7)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L8: Office ceiling lamp -->
+            <ellipse id="lp-L8" cx="580" cy="525" rx="110" ry="78"  fill="url(#lg-L8)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L9: Bath mirror light -->
+            <ellipse id="lp-L9" cx="1072" cy="272" rx="92" ry="72"  fill="url(#lg-L9)" opacity="0" style="transition:opacity .4s"/>
+            <!-- L11: Dining pendant -->
+            <ellipse id="lp-L11" cx="900" cy="482" rx="115" ry="82" fill="url(#lg-L11)" opacity="0" style="transition:opacity .4s"/>
+          </svg>
+
+          <!-- SVG: lamp dots + room click zones (separate svg, not blended) -->
+          <svg class="fp-lamps-svg" viewBox="0 0 1376 768" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none">
+            <defs>
+              <filter id="ldot-glow" x="-80%" y="-80%" width="360%" height="360%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <!-- Invisible room click areas -->
             <g style="pointer-events:all">
-              <polygon points="695,148 990,195 990,335 695,290" fill="rgba(0,0,0,0)" onclick="roomClick('bed1',event)" oncontextmenu="roomCm('bed1',event)"/>
-              <polygon points="1000,200 1145,250 1145,430 1000,380" fill="rgba(0,0,0,0)" onclick="roomClick('bath',event)" oncontextmenu="roomCm('bath',event)"/>
-              <polygon points="530,240 990,340 990,520 530,420" fill="rgba(0,0,0,0)" onclick="roomClick('living',event)" oncontextmenu="roomCm('living',event)"/>
-              <polygon points="810,420 1080,490 1080,610 810,545" fill="rgba(0,0,0,0)" onclick="roomClick('dining',event)" oncontextmenu="roomCm('dining',event)"/>
-              <polygon points="230,330 480,390 480,530 230,470" fill="rgba(0,0,0,0)" onclick="roomClick('bed2',event)" oncontextmenu="roomCm('bed2',event)"/>
-              <polygon points="485,450 660,500 660,610 485,565" fill="rgba(0,0,0,0)" onclick="roomClick('office',event)" oncontextmenu="roomCm('office',event)"/>
+              <polygon points="688,148 992,193 992,328 688,283" fill="rgba(0,0,0,0)" onclick="roomClick('bed1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"/>
+              <polygon points="993,215 1148,258 1148,428 993,388" fill="rgba(0,0,0,0)" onclick="roomClick('bath',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"/>
+              <polygon points="530,245 688,283 992,328 992,515 530,415" fill="rgba(0,0,0,0)" onclick="roomClick('living',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"/>
+              <polygon points="812,422 1080,492 1080,608 812,548" fill="rgba(0,0,0,0)" onclick="roomClick('dining',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"/>
+              <polygon points="225,328 482,388 482,528 225,468" fill="rgba(0,0,0,0)" onclick="roomClick('bed2',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"/>
+              <polygon points="482,452 658,498 658,608 482,562" fill="rgba(0,0,0,0)" onclick="roomClick('office',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"/>
             </g>
-            <!-- Lamp dots -->
+            <!-- Lamp dots (clickable) -->
             <g style="pointer-events:all">
-              <g onclick="lampClick('L1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="840" cy="178" r="16" fill="transparent"/><circle id="lb-L1" cx="840" cy="178" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L1" cx="840" cy="178" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L2',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="800" cy="222" r="14" fill="transparent"/><circle id="lb-L2" cx="800" cy="222" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L2" cx="800" cy="222" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L3',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="895" cy="240" r="14" fill="transparent"/><circle id="lb-L3" cx="895" cy="240" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L3" cx="895" cy="240" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L4',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="380" cy="395" r="16" fill="transparent"/><circle id="lb-L4" cx="380" cy="395" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L4" cx="380" cy="395" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L5',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="302" cy="360" r="14" fill="transparent"/><circle id="lb-L5" cx="302" cy="360" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L5" cx="302" cy="360" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L6',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="678" cy="285" r="16" fill="transparent"/><circle id="lb-L6" cx="678" cy="285" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L6" cx="678" cy="285" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L7',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="760" cy="348" r="14" fill="transparent"/><circle id="lb-L7" cx="760" cy="348" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L7" cx="760" cy="348" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L8',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"><circle cx="580" cy="520" r="15" fill="transparent"/><circle id="lb-L8" cx="580" cy="520" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L8" cx="580" cy="520" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L9',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"><circle cx="1072" cy="268" r="15" fill="transparent"/><circle id="lb-L9" cx="1072" cy="268" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L9" cx="1072" cy="268" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
-              <g onclick="lampClick('L11',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"><circle cx="900" cy="478" r="15" fill="transparent"/><circle id="lb-L11" cx="900" cy="478" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
+              <!-- Bed1: pendant, 2× bedside -->
+              <g onclick="lampClick('L1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="840" cy="178" r="18" fill="transparent"/><circle id="lb-L1" cx="840" cy="178" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L1" cx="840" cy="178" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
+              <g onclick="lampClick('L2',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="800" cy="222" r="15" fill="transparent"/><circle id="lb-L2" cx="800" cy="222" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L2" cx="800" cy="222" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
+              <g onclick="lampClick('L3',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="895" cy="240" r="15" fill="transparent"/><circle id="lb-L3" cx="895" cy="240" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L3" cx="895" cy="240" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
+              <!-- Bed2: floor lamp (tripod), wall sconce -->
+              <g onclick="lampClick('L4',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="380" cy="393" r="18" fill="transparent"/><circle id="lb-L4" cx="380" cy="393" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L4" cx="380" cy="393" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/><!-- Tripod legs --><line x1="374" y1="405" x2="380" y2="393" stroke="#555" stroke-width="1.5" opacity=".4" style="transition:stroke .3s" id="tp-L4a"/><line x1="386" y1="405" x2="380" y2="393" stroke="#555" stroke-width="1.5" opacity=".4" style="transition:stroke .3s" id="tp-L4b"/><line x1="380" y1="406" x2="380" y2="393" stroke="#555" stroke-width="1.5" opacity=".4" style="transition:stroke .3s" id="tp-L4c"/></g>
+              <g onclick="lampClick('L5',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="302" cy="360" r="15" fill="transparent"/><circle id="lb-L5" cx="302" cy="360" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L5" cx="302" cy="360" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
+              <!-- Living -->
+              <g onclick="lampClick('L6',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="678" cy="285" r="18" fill="transparent"/><circle id="lb-L6" cx="678" cy="285" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L6" cx="678" cy="285" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
+              <g onclick="lampClick('L7',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="760" cy="348" r="15" fill="transparent"/><circle id="lb-L7" cx="760" cy="348" r="5" fill="#555" style="transition:all .3s"/><circle id="lr-L7" cx="760" cy="348" r="9" fill="none" stroke="#555" stroke-width="1" opacity=".2" style="transition:all .3s"/></g>
+              <!-- Office -->
+              <g onclick="lampClick('L8',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"><circle cx="580" cy="520" r="16" fill="transparent"/><circle id="lb-L8" cx="580" cy="520" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L8" cx="580" cy="520" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
+              <!-- Bath -->
+              <g onclick="lampClick('L9',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"><circle cx="1072" cy="268" r="16" fill="transparent"/><circle id="lb-L9" cx="1072" cy="268" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L9" cx="1072" cy="268" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
+              <!-- Dining -->
+              <g onclick="lampClick('L11',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"><circle cx="900" cy="478" r="16" fill="transparent"/><circle id="lb-L11" cx="900" cy="478" r="6" fill="#555" style="transition:all .3s"/><circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#555" stroke-width="1.5" opacity=".2" style="transition:all .3s"/></g>
             </g>
           </svg>
         </div>
@@ -912,28 +1044,66 @@ const rooms={
   office:{on:false,color:'cool',  lamps:['L8'],          name:'Büro'},
 };
 
+// COLOR definitions for SVG gradient approach
+const COLOR_STOPS = {
+  warm:  {c0:'#ffe8a0',c1:'#f5a020',op0:.82,op1:.35},
+  cool:  {c0:'#c8e8ff',c1:'#4088cc',op0:.72,op1:.28},
+  white: {c0:'#f8f8ff',c1:'#c0d8ff',op0:.75,op1:.25},
+  cyan:  {c0:'#40ffff',c1:'#0088aa',op0:.80,op1:.30},
+  blue:  {c0:'#80b0ff',c1:'#0040cc',op0:.72,op1:.28},
+  purple:{c0:'#d880ff',c1:'#6000cc',op0:.72,op1:.28},
+  pink:  {c0:'#ff80e8',c1:'#cc00aa',op0:.72,op1:.28},
+  red:   {c0:'#ff6840',c1:'#cc1000',op0:.70,op1:.28},
+  green: {c0:'#80ff60',c1:'#008800',op0:.72,op1:.28},
+  amber: {c0:'#ffc040',c1:'#cc6000',op0:.80,op1:.32},
+};
+
 function applyRoom(rid){
   const r=rooms[rid];if(!r)return;
-  const img=document.getElementById('fr-'+rid);
-  if(img){
-    img.style.opacity=r.on?'1':'0';
+  const bright=(r.brightness||80)/100;
+
+  // 1. Room polygon overlay
+  const rp=document.getElementById('rp-'+rid);
+  if(rp){
+    rp.style.opacity=r.on?String(bright*1.1):'0';
     if(r.on){
-      const bright=(r.brightness||80)/80;
-      const cf=COLORS[r.color]||COLORS.cyan;
-      img.style.filter=cf.filter+(cf.filter?' ':'')+`brightness(${bright})`;
+      const cs=COLOR_STOPS[r.color]||COLOR_STOPS.warm;
+      const set=(id,attr,val)=>{const el=document.getElementById(id);if(el)el.setAttribute(attr,val)};
+      set('rg-'+rid+'-0','stop-color',cs.c0); set('rg-'+rid+'-0','stop-opacity',String(cs.op0*bright));
+      set('rg-'+rid+'-1','stop-color',cs.c1); set('rg-'+rid+'-1','stop-opacity',String(cs.op1*bright));
+      set('rg-'+rid+'-2','stop-opacity','0');
     }
   }
+
+  // 2. Individual lamp pools
   r.lamps.forEach(lid=>{
-    const lb=document.getElementById('lb-'+lid);
-    const lr=document.getElementById('lr-'+lid);
+    const lp=document.getElementById('lp-'+lid);
+    if(lp){
+      lp.style.opacity=r.on?String(bright*0.9):'0';
+      if(r.on){
+        const cs=COLOR_STOPS[r.color]||COLOR_STOPS.warm;
+        const s=document.getElementById('lg-'+lid+'-c');
+        if(s){s.setAttribute('stop-color',cs.c0);s.setAttribute('stop-opacity',String(cs.op0*0.9*bright))}
+        // Find second stop
+        const el=document.getElementById('lg-'+lid);
+        if(el){const ss=el.querySelectorAll('stop');if(ss[1])ss[1].setAttribute('stop-opacity','0')}
+      }
+    }
+  });
+
+  // 3. Lamp dot visuals
+  const col=(COLORS[r.color]||COLORS.warm).dot;
+  r.lamps.forEach(lid=>{
+    const lb=document.getElementById('lb-'+lid);const lr=document.getElementById('lr-'+lid);
     if(!lb||!lr)return;
-    const col=(COLORS[r.color]||COLORS.warm).dot;
     lb.setAttribute('fill',r.on?col:'#555');
     lb.setAttribute('r',r.on?'8':'5');
-    lb.setAttribute('filter',r.on?'url(#lg)':'none');
+    lb.setAttribute('filter',r.on?'url(#ldot-glow)':'none');
     lr.setAttribute('stroke',r.on?col:'#555');
-    lr.setAttribute('opacity',r.on?'0.65':'0.2');
+    lr.setAttribute('opacity',r.on?'0.65':'0.18');
     lr.setAttribute('r',r.on?'17':'9');
+    // Color tripod legs for floor lamp L4
+    if(lid==='L4'){['tp-L4a','tp-L4b','tp-L4c'].forEach(id=>{const el=document.getElementById(id);if(el){el.setAttribute('stroke',r.on?col:'#555');el.setAttribute('opacity',r.on?'0.7':'0.4')}})}
   });
   buildRoomList();
 }
