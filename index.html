@@ -572,6 +572,18 @@ audio{display:none}
 /* ═══════════════════════════════════════════
    CTA
 ═══════════════════════════════════════════ */
+/* Contact Form */
+.contact-form{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:40px;max-width:640px;margin:0 auto}
+.cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.cf-grid{grid-template-columns:1fr}}
+.cf-field{display:flex;flex-direction:column;gap:6px}
+.cf-field label{font-size:.78rem;font-weight:700;color:var(--text2);letter-spacing:.4px;text-transform:uppercase}
+.cf-field input,.cf-field select,.cf-field textarea{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);padding:11px 14px;font-size:.88rem;color:var(--text);font-family:inherit;transition:border-color .2s,box-shadow .2s;outline:none;width:100%;box-sizing:border-box}
+.cf-field input:focus,.cf-field select:focus,.cf-field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,113,227,.12)}
+.cf-field textarea{resize:vertical;min-height:100px}
+.cf-field select option{background:var(--bg);color:var(--text)}
+.cf-full{grid-column:1/-1}
+.cf-success{display:none;text-align:center;padding:20px;font-size:.95rem;font-weight:600;color:var(--green)}
 .cta-box{background:linear-gradient(135deg,rgba(0,113,227,.08),rgba(52,199,89,.06),rgba(175,82,222,.05));border:1px solid var(--border);border-radius:var(--r);padding:56px 36px;text-align:center;position:relative;overflow:hidden}
 .cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,113,227,.04),transparent);pointer-events:none}
 .cta-box h2{font-size:2rem;font-weight:800;margin-bottom:13px;letter-spacing:-.03em}
@@ -1668,6 +1680,53 @@ input[type=range]{touch-action:none}
     </div>
   </div>
 
+  <!-- CONTACT FORM -->
+  <div style="padding:72px 24px 40px">
+    <div style="max-width:800px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" id="cf-title">Kostenloses Briefing</h2>
+      <p class="sec-sub sec-center reveal" id="cf-sub">Beschreib dein Projekt — ich melde mich innerhalb von 24h.</p>
+      <div class="contact-form reveal">
+        <div class="cf-grid" id="cf-form-inner">
+          <div class="cf-field">
+            <label id="cf-lbl-name">Name</label>
+            <input type="text" id="cf-name" placeholder="Max Mustermann" autocomplete="name">
+          </div>
+          <div class="cf-field">
+            <label id="cf-lbl-email">E-Mail</label>
+            <input type="email" id="cf-email" placeholder="max@beispiel.de" autocomplete="email">
+          </div>
+          <div class="cf-field">
+            <label id="cf-lbl-type">Projekttyp</label>
+            <select id="cf-type">
+              <option value="Dashboard" data-de="Dashboard" data-en="Dashboard">Dashboard</option>
+              <option value="Floor Plan" data-de="Interaktiver Grundriss" data-en="Interactive Floor Plan">Interaktiver Grundriss</option>
+              <option value="KI" data-de="KI & Sprachsteuerung" data-en="AI & Voice Control">KI & Sprachsteuerung</option>
+              <option value="N8N" data-de="N8N Automation" data-en="N8N Automation">N8N Automation</option>
+              <option value="Sonstiges" data-de="Sonstiges" data-en="Other">Sonstiges</option>
+            </select>
+          </div>
+          <div class="cf-field">
+            <label id="cf-lbl-budget">Budget</label>
+            <select id="cf-budget">
+              <option data-de="Basic (~€49)" data-en="Basic (~€49)">Basic (~€49)</option>
+              <option data-de="Standard (~€99)" data-en="Standard (~€99)">Standard (~€99)</option>
+              <option data-de="Premium (~€149+)" data-en="Premium (~€149+)">Premium (~€149+)</option>
+              <option data-de="Noch unklar" data-en="Not sure yet">Noch unklar</option>
+            </select>
+          </div>
+          <div class="cf-field cf-full">
+            <label id="cf-lbl-msg">Nachricht</label>
+            <textarea id="cf-msg" placeholder="Kurze Beschreibung deines Smart Home Setups und was du dir vorstellst..."></textarea>
+          </div>
+          <div class="cf-full" style="text-align:center;margin-top:4px">
+            <button class="btn-p" onclick="submitContact()" id="cf-submit" style="min-width:200px">✉ Anfrage senden</button>
+          </div>
+        </div>
+        <div class="cf-success" id="cf-success">✅ <span id="cf-success-txt">Danke! Deine Anfrage wurde gesendet. Ich melde mich bald.</span></div>
+      </div>
+    </div>
+  </div>
+
   <!-- CTA -->
   <div style="padding:60px 24px 80px;max-width:1100px;margin:0 auto">
     <div class="cta-box reveal">
@@ -1784,6 +1843,20 @@ if(localStorage.getItem('alf-hints')==='off'){
 }
 function toast(msg,d=2200){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
 function openFiverr(){window.open('https://www.fiverr.com/autoflow-lab','_blank')}
+// ── CONTACT FORM ──
+function submitContact(){
+  const name=document.getElementById('cf-name').value.trim();
+  const email=document.getElementById('cf-email').value.trim();
+  const type=document.getElementById('cf-type').value;
+  const budget=document.getElementById('cf-budget').value;
+  const msg=document.getElementById('cf-msg').value.trim();
+  const subject=encodeURIComponent('Briefing: '+type+' Projekt');
+  const body=encodeURIComponent('Name: '+name+'\nE-Mail: '+email+'\nProjekttyp: '+type+'\nBudget: '+budget+'\n\nNachricht:\n'+msg);
+  window.location.href='mailto:clawy.studio@gmail.com?subject='+subject+'&body='+body;
+  const inner=document.getElementById('cf-form-inner');
+  const success=document.getElementById('cf-success');
+  if(inner&&success){inner.style.display='none';success.style.display='block';}
+}
 // ── TESTIMONIAL CAROUSEL ──
 let revIdx=0,revTimer=null;
 const REV_COUNT=6;
@@ -2719,6 +2792,10 @@ const T={
     faq3q:'Wie lange dauert die Lieferung?',faq3a:'Basic: 24–48h · Standard: 3 Tage · Premium mit KI: 5–7 Tage. Express auf Anfrage.',
     faq4q:'Welche Geräte werden unterstützt?',faq4a:'Alle HA-kompatiblen Geräte: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla und 3000+ mehr.',
     faq5q:'Wie funktioniert die Zusammenarbeit?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + Revisionen. 4. Fertige Dateien + Docs. Alles asynchron.',
+    cfTitle:'Kostenloses Briefing',cfSub:'Beschreib dein Projekt — ich melde mich innerhalb von 24h.',
+    cfLblName:'Name',cfLblEmail:'E-Mail',cfLblType:'Projekttyp',cfLblBudget:'Budget',cfLblMsg:'Nachricht',
+    cfSubmit:'✉ Anfrage senden',cfSuccess:'Danke! Deine Anfrage wurde gesendet. Ich melde mich bald.',
+    cfPh1:'Max Mustermann',cfPh2:'max@beispiel.de',cfPh3:'Kurze Beschreibung deines Smart Home Setups und was du dir vorstellst...',
     ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ KI Automation',ftLinkOrder:'🛒 Bestellen',
     ftTagline:'Handgefertigte Smart Home Dashboards — keine Cloud, kein Abo, ganz deins.',
@@ -2779,6 +2856,10 @@ const T={
     faq3q:'How long does delivery take?',faq3a:'Basic: 24–48h · Standard: 3 days · Premium with AI: 5–7 days. Express available.',
     faq4q:'Which devices are supported?',faq4a:'All HA-compatible devices: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla and 3000+ more.',
     faq5q:'How does collaboration work?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + revisions. 4. Files + docs. All async.',
+    cfTitle:'Free Briefing',cfSub:'Describe your project — I will reply within 24h.',
+    cfLblName:'Name',cfLblEmail:'Email',cfLblType:'Project Type',cfLblBudget:'Budget',cfLblMsg:'Message',
+    cfSubmit:'✉ Send Request',cfSuccess:'Thank you! Your request was sent. I will be in touch soon.',
+    cfPh1:'John Smith',cfPh2:'john@example.com',cfPh3:'Brief description of your smart home setup and what you have in mind...',
     ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I will show you what is possible.',ctaBtn:'🛒 Order on Fiverr',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ AI Automation',ftLinkOrder:'🛒 Order',
     ftTagline:'Handcrafted Smart Home dashboards — no cloud, no subscription, just yours.',
@@ -2848,6 +2929,15 @@ function applyLang(){
   setText('faq3q',t.faq3q);setText('faq3a',t.faq3a);setText('faq4q',t.faq4q);setText('faq4a',t.faq4a);setText('faq5q',t.faq5q);setText('faq5a',t.faq5a);
   setText('cta-h2',t.ctaH2);setText('cta-p',t.ctaP);setText('cta-btn',t.ctaBtn);
   setText('ft-tagline',t.ftTagline);
+  // Contact form i18n
+  setText('cf-title',t.cfTitle);setText('cf-sub',t.cfSub);
+  setText('cf-lbl-name',t.cfLblName);setText('cf-lbl-email',t.cfLblEmail);
+  setText('cf-lbl-type',t.cfLblType);setText('cf-lbl-budget',t.cfLblBudget);setText('cf-lbl-msg',t.cfLblMsg);
+  setText('cf-submit',t.cfSubmit);setText('cf-success-txt',t.cfSuccess);
+  const cfn=document.getElementById('cf-name');if(cfn)cfn.placeholder=t.cfPh1;
+  const cfe=document.getElementById('cf-email');if(cfe)cfe.placeholder=t.cfPh2;
+  const cfm=document.getElementById('cf-msg');if(cfm)cfm.placeholder=t.cfPh3;
+  document.querySelectorAll('#cf-type option,#cf-budget option').forEach(o=>{const v=o.getAttribute('data-'+lang);if(v)o.textContent=v;});
   // Update lamp floating labels
   document.querySelectorAll('.lamp-lbl-txt').forEach(el=>{const v=el.getAttribute('data-'+lang);if(v)el.textContent=v;});
   setText('ai-h1a',t.aiH1a);setHTML('ai-h1b',t.aiH1b);setText('ai-sub',t.aiSub);
