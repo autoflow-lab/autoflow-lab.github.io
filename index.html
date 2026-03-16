@@ -637,6 +637,185 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
 ═══════════════════════════════════════════ */
 .band{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .band-dark{background:linear-gradient(135deg,rgba(0,113,227,.04),rgba(175,82,222,.03)),var(--bg2)}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — vollständiger Overhaul für ≤768px
+═══════════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* === GLOBAL === */
+  html{font-size:15px}
+  .sec{padding:48px 16px}
+  .sec-title{font-size:1.6rem}
+  .sec-sub{font-size:.92rem}
+
+  /* === NAV === */
+  nav{padding:12px 16px}
+  .nav-center,.btn-nav.ghost{display:none}
+  .hamburger{display:flex}
+
+  /* === HERO === */
+  .hero{padding:80px 20px 48px;min-height:auto}
+  .hero-title{font-size:clamp(1.8rem,7vw,2.6rem);letter-spacing:-.03em}
+  .hero-sub{font-size:.95rem;margin-bottom:24px}
+  .hero-btns{flex-direction:column;align-items:center;gap:10px}
+  .hero-btns .btn{width:100%;max-width:320px;justify-content:center}
+  .hero-badge{font-size:.68rem;padding:5px 12px}
+
+  /* === DASHBOARD PREVIEW === */
+  .fp-wrap{grid-template-columns:1fr;gap:16px}
+  #fp-section{padding:32px 12px}
+
+  /* Floor plan SVG – scrollable container */
+  .fp-svg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px}
+  .fp-svg-wrap svg{min-width:600px}
+
+  /* Dashboard cards – single column, full width */
+  .dash-grid{
+    grid-template-columns:1fr !important;
+    gap:14px;
+    padding:0
+  }
+  .dash-card{border-radius:18px;padding:18px 16px}
+  .dash-card-title{font-size:1rem}
+
+  /* Room list cards – 2 cols on phone */
+  #room-list{grid-template-columns:1fr 1fr !important;gap:10px}
+  .rc{border-radius:16px;padding:14px 12px}
+  .rc-emoji{font-size:1.4rem}
+  .rc-name{font-size:.75rem}
+  .rc-status{font-size:.65rem}
+
+  /* === THERMOSTAT === */
+  /* On mobile: disable drag, rely on +/- buttons which are already there */
+  .thermo-container{
+    touch-action:none; /* prevent page scroll when touching thermostat */
+    width:110px !important;
+    height:110px !important
+  }
+  .climate-wrap{gap:10px}
+  .c-adj{
+    width:44px;height:44px;
+    font-size:1.4rem;border-radius:14px
+  }
+
+  /* === BRIGHTNESS SLIDER === */
+  /* Make it easier to drag without scrolling */
+  #bright-slider{
+    touch-action:none;
+    height:28px;
+    cursor:pointer
+  }
+  .bright-row{gap:6px;padding:8px 0}
+
+  /* === MINI LIGHTS GRID === */
+  .light-grid{
+    grid-template-columns:repeat(3,1fr);
+    gap:8px
+  }
+  .lm-item{padding:10px 6px;border-radius:14px;font-size:.7rem}
+
+  /* === WEATHER WIDGET === */
+  .w-main{flex-wrap:wrap;gap:12px}
+  .w-temp{font-size:2.4rem}
+  .w-forecast{
+    display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    gap:8px;padding-bottom:4px
+  }
+  .w-day{min-width:52px;flex-shrink:0}
+
+  /* === MUSIC PLAYER === */
+  .music-card{padding:14px}
+  .mc-track-wrap{flex-wrap:wrap;gap:10px}
+  .mc-art{width:52px;height:52px;border-radius:12px}
+  .mc-controls{gap:14px}
+  .mc-play{width:44px;height:44px;font-size:1.1rem}
+  .mc-prev,.mc-next{font-size:1.1rem}
+  .mc-spectrum{height:28px}
+
+  /* === ENERGY CHART === */
+  #en-chart{height:60px}
+  .en-source-row{flex-wrap:wrap;gap:6px}
+  .en-source{font-size:.65rem;padding:5px 8px}
+
+  /* === CONTROL POPUP === */
+  .cp{
+    position:fixed !important;
+    bottom:0 !important; top:auto !important;
+    left:0 !important; right:0 !important;
+    width:100% !important;
+    min-width:unset !important;
+    border-radius:20px 20px 0 0 !important;
+    padding:20px 20px 32px !important;
+    box-shadow:0 -8px 40px rgba(0,0,0,.25) !important
+  }
+
+  /* === SECURITY === */
+  .sec-cam-view{height:140px}
+  .cam-grid{gap:8px}
+  .cam-mini{width:40px;height:40px;font-size:1rem}
+
+  /* === HOW IT WORKS === */
+  .hiw-steps{gap:20px}
+  .hiw-step{padding:16px 12px}
+  .hiw-line{display:none!important}
+
+  /* === PRICING TIERS === */
+  .tier-grid{grid-template-columns:1fr !important}
+  .tier-card{padding:22px 18px}
+
+  /* === FAQ === */
+  .faq-q{font-size:.9rem}
+
+  /* === WORKFLOW === */
+  .wf-nodes{flex-direction:column;gap:10px}
+  .wf-arrow{transform:rotate(90deg)}
+  .wf-node{min-width:unset;padding:14px 16px}
+
+  /* === FOOTER === */
+  .footer-links{flex-direction:column;gap:8px;align-items:center}
+
+  /* === KINO MODE === */
+  body.kino-mode .dash-card{border-radius:12px}
+
+  /* Hint bubbles – don't overlap on mobile */
+  .hint-bubble{max-width:200px;font-size:.65rem}
+
+  /* FAB repositioned for mobile nav thumb reach */
+  .fab{bottom:20px;right:16px}
+
+  /* Mode banner condensed */
+  #mode-banner{font-size:.72rem;padding:6px 12px;border-radius:10px}
+
+  /* Alarm modal */
+  #alarm-modal > div{
+    width:95% !important;
+    max-width:340px !important
+  }
+}
+
+/* === PHONES ONLY (≤480px) === */
+@media(max-width:480px){
+  .hero-title{font-size:1.7rem}
+  #room-list{grid-template-columns:1fr !important}
+  .dash-card{padding:15px 13px}
+  .light-grid{grid-template-columns:repeat(2,1fr)}
+  .tier-badge{font-size:.62rem}
+  .sec-title{font-size:1.35rem}
+
+  /* Floor plan – scrollable hint */
+  .fp-svg-wrap::after{
+    content:'← Scrollen →';
+    display:block;text-align:center;
+    font-size:.65rem;color:var(--text3);
+    padding:4px 0 8px
+  }
+}
+
+/* === TOUCH SCROLLING FIX für Slider === */
+/* Verhindert dass Slider-Bewegung die ganze Seite scrollt */
+input[type=range]{touch-action:none}
+
 </style>
 </head>
 <body>
@@ -814,7 +993,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
         <div class="dash-card-tag" data-i="cardClimate">🌡 Klima</div>
         <div class="dash-card-title" data-i="cardClimateTitle">Thermostat</div>
         <div class="climate-wrap">
-          <div class="thermo-container" id="thermo-container" style="cursor:grab;user-select:none"
+          <div class="thermo-container" id="thermo-container" style="cursor:grab;user-select:none;touch-action:none"
               onmousedown="thermoStartDrag(event)" ontouchstart="thermoStartDrag(event)">
             <svg viewBox="0 0 104 104">
               <circle cx="52" cy="52" r="44" fill="none" stroke="var(--bg3)" stroke-width="8"/>
@@ -2688,6 +2867,23 @@ if(_origGetPos){
   }
 }
 
+
+// ═══════════════════════════════════
+//  MOBILE TOUCH HELPERS
+// ═══════════════════════════════════
+(function(){
+  // Prevent page scroll when dragging range sliders
+  function fixSliders(){
+    document.querySelectorAll('input[type=range]').forEach(function(sl){
+      sl.addEventListener('touchstart',function(e){e.stopPropagation();},{passive:true});
+      sl.addEventListener('touchmove',function(e){e.stopPropagation();},{passive:true});
+    });
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',fixSliders);
+  } else { fixSliders(); }
+})();
+
 </script>
 
 <!-- 3D Tilt effect for portfolio cards -->
@@ -2794,6 +2990,31 @@ if(_origGetPos){
     btn.classList.toggle('visible',window.scrollY>320);
   },{passive:true});
 })();
+
+
+// ═══════════════════════════════════
+//  MOBILE TOUCH HELPERS
+// ═══════════════════════════════════
+(function(){
+  // Prevent page scroll when dragging range sliders on mobile
+  document.querySelectorAll('input[type=range]').forEach(sl=>{
+    sl.addEventListener('touchstart',e=>{e.stopPropagation()},{passive:true});
+    sl.addEventListener('touchmove',e=>{e.stopPropagation()},{passive:true});
+  });
+
+  // Show mobile scroll hint for floor plan once
+  var isMobile=window.innerWidth<=768;
+  if(isMobile){
+    var fpWrap=document.querySelector('.fp-svg-wrap');
+    if(!fpWrap){
+      var fpSvg=document.querySelector('#fp-svg');
+      if(fpSvg&&fpSvg.parentElement){
+        fpSvg.parentElement.classList.add('fp-svg-wrap');
+      }
+    }
+  }
+})();
+
 </script>
 </body>
 </html>
