@@ -512,13 +512,22 @@ audio{display:none}
 /* ═══════════════════════════════════════════
    REVIEWS
 ═══════════════════════════════════════════ */
-.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-.rev{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:24px;transition:transform .2s,box-shadow .2s}
-.rev:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.08)}
-.rev-stars{color:#ffcc00;margin-bottom:12px;font-size:1rem;letter-spacing:2px}
-.rev-text{font-size:.84rem;color:var(--text2);line-height:1.7;margin-bottom:16px;font-style:italic}
-.rev-author{font-size:.78rem;font-weight:700;display:flex;align-items:center;gap:8px}
-.rev-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#af52de);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:700}
+/* Testimonial Carousel */
+.rev-carousel-outer{position:relative;max-width:760px;margin:0 auto}
+.rev-carousel-viewport{overflow:hidden;border-radius:var(--r)}
+.rev-track{display:flex;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.rev{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px 36px;min-width:100%;box-sizing:border-box;transition:box-shadow .2s}
+.rev-stars{color:#ffcc00;margin-bottom:14px;font-size:1.1rem;letter-spacing:3px}
+.rev-text{font-size:.92rem;color:var(--text2);line-height:1.8;margin-bottom:20px;font-style:italic}
+.rev-author{font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:10px}
+.rev-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#af52de);display:flex;align-items:center;justify-content:center;font-size:.78rem;color:#fff;font-weight:700;flex-shrink:0}
+.rev-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--card);border:1.5px solid var(--border);color:var(--text1);font-size:1.3rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:2}
+.rev-nav:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-50%) scale(1.08)}
+.rev-prev{left:-22px}.rev-next{right:-22px}
+.rev-dots{display:flex;justify-content:center;gap:8px;margin-top:20px}
+.rev-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s;cursor:pointer;border:none;padding:0}
+.rev-dot.active{background:var(--accent);width:22px;border-radius:4px}
+@media(max-width:640px){.rev-prev{left:-12px}.rev-next{right:-12px}.rev{padding:24px 20px}}
 
 /* ═══════════════════════════════════════════
    FAQ
@@ -1567,11 +1576,27 @@ input[type=range]{touch-action:none}
     <div style="max-width:1100px;margin:0 auto">
       <h2 class="sec-title sec-center reveal" data-i="revTitle">Was Kunden sagen</h2>
       <p class="sec-sub sec-center reveal">47+ Projekte · ⭐ 4.98 / 5.0 · Fiverr Top-Rated</p>
-      <div class="review-grid">
-        <div class="rev reveal"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev1">"Absolut beeindruckendes Dashboard! Genau das was ich mir vorgestellt hatte, sogar noch besser. Super schnelle Lieferung."</p><div class="rev-author"><div class="rev-avatar">TK</div>Thomas K. · Zürich</div></div>
-        <div class="rev reveal reveal-delay-1"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev2">"Mein HA sieht jetzt aus wie eine Apple-App! Perfekte Kommunikation, alle Wünsche umgesetzt. Nächstes Projekt folgt!"</p><div class="rev-author"><div class="rev-avatar">SM</div>Sarah M. · München</div></div>
-        <div class="rev reveal reveal-delay-2"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev3">"Lokale Sprachsteuerung ohne Cloud — fantastisch! Kein Google, kein Abo. Der Grundriss ist der Knaller."</p><div class="rev-author"><div class="rev-avatar">MR</div>Marco R. · Wien</div></div>
-        <div class="rev reveal"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev4">"Das Energie-Dashboard hat mir geholfen 30% Strom zu sparen. ROI nach 2 Monaten. Absolut empfehlenswert!"</p><div class="rev-author"><div class="rev-avatar">LF</div>Lisa F. · Berlin</div></div>
+      <div class="rev-carousel-outer reveal">
+        <button class="rev-nav rev-prev" onclick="revMove(-1)" aria-label="Vorherige Bewertung">‹</button>
+        <div class="rev-carousel-viewport">
+          <div class="rev-track" id="rev-track">
+            <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev1">"Absolut beeindruckendes Dashboard! Genau das was ich mir vorgestellt hatte, sogar noch besser. Super schnelle Lieferung."</p><div class="rev-author"><div class="rev-avatar">TK</div><span>Thomas K. · Zürich</span></div></div>
+            <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev2">"Mein HA sieht jetzt aus wie eine Apple-App! Perfekte Kommunikation, alle Wünsche umgesetzt. Nächstes Projekt folgt!"</p><div class="rev-author"><div class="rev-avatar">SM</div><span>Sarah M. · München</span></div></div>
+            <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev3">"Lokale Sprachsteuerung ohne Cloud — fantastisch! Kein Google, kein Abo. Der Grundriss ist der Knaller."</p><div class="rev-author"><div class="rev-avatar">MR</div><span>Marco R. · Wien</span></div></div>
+            <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev4">"Das Energie-Dashboard hat mir geholfen 30% Strom zu sparen. ROI nach 2 Monaten. Absolut empfehlenswert!"</p><div class="rev-author"><div class="rev-avatar">LF</div><span>Lisa F. · Berlin</span></div></div>
+            <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev5">"Binnen eines Wochenendes alles eingerichtet. Video-Erklärung war super hilfreich — auch für Nicht-Techniker!"</p><div class="rev-author"><div class="rev-avatar">JP</div><span>Jan P. · Hamburg</span></div></div>
+            <div class="rev"><div class="rev-stars">★★★★★</div><p class="rev-text" data-i="rev6">"N8N + HA-Integration läuft perfekt. Heizung, Licht, Kalender — alles automatisch. Traumhaft!"</p><div class="rev-author"><div class="rev-avatar">NW</div><span>Nina W. · Stuttgart</span></div></div>
+          </div>
+        </div>
+        <button class="rev-nav rev-next" onclick="revMove(1)" aria-label="Nächste Bewertung">›</button>
+        <div class="rev-dots" id="rev-dots">
+          <button class="rev-dot active" onclick="revGoto(0)"></button>
+          <button class="rev-dot" onclick="revGoto(1)"></button>
+          <button class="rev-dot" onclick="revGoto(2)"></button>
+          <button class="rev-dot" onclick="revGoto(3)"></button>
+          <button class="rev-dot" onclick="revGoto(4)"></button>
+          <button class="rev-dot" onclick="revGoto(5)"></button>
+        </div>
       </div>
     </div>
   </div>
@@ -1759,6 +1784,18 @@ if(localStorage.getItem('alf-hints')==='off'){
 }
 function toast(msg,d=2200){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
 function openFiverr(){window.open('https://www.fiverr.com/autoflow-lab','_blank')}
+// ── TESTIMONIAL CAROUSEL ──
+let revIdx=0,revTimer=null;
+const REV_COUNT=6;
+function revGoto(i){
+  revIdx=(i+REV_COUNT)%REV_COUNT;
+  const track=document.getElementById('rev-track');
+  if(track)track.style.transform='translateX(-'+revIdx*100+'%)';
+  document.querySelectorAll('.rev-dot').forEach((d,j)=>d.classList.toggle('active',j===revIdx));
+  clearInterval(revTimer);revTimer=setInterval(()=>revMove(1),5000);
+}
+function revMove(dir){revGoto(revIdx+dir);}
+document.addEventListener('DOMContentLoaded',()=>{revTimer=setInterval(()=>revMove(1),5000);});
 function switchPricing(monthly){
   const lang=document.documentElement.lang||'de';
   const unitTxt=monthly?(lang==='de'?'/ Monat':'/ month'):(lang==='de'?'/ Projekt':'/ project');
@@ -2666,6 +2703,8 @@ const T={
     rev2:'"Mein HA sieht jetzt aus wie eine Apple-App! Perfekte Kommunikation, alle Wünsche umgesetzt."',
     rev3:'"Lokale KI ohne Cloud — fantastisch! Kein Google, kein Abo. Der Grundriss ist der Hammer."',
     rev4:'"Das Energie-Dashboard hat mir geholfen 30% Strom zu sparen. ROI nach 2 Monaten!"',
+    rev5:'"Binnen eines Wochenendes alles eingerichtet. Video-Erklärung war super hilfreich — auch für Nicht-Techniker!"',
+    rev6:'"N8N + HA-Integration läuft perfekt. Heizung, Licht, Kalender — alles automatisch. Traumhaft!"',
     priceTtl:'Preise & Pakete',priceSub:'Transparent — keine versteckten Kosten.',
     lblOnetime:'Einmalig',lblMonthly:'Monatlich',saveBadge:'–40%',
     tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/ Projekt',popularLbl:'Beliebt',
@@ -2724,6 +2763,8 @@ const T={
     rev2:'"My HA now looks like an Apple app! Perfect communication, all wishes implemented."',
     rev3:'"Local AI without cloud — fantastic! No Google, no subscription. The floor plan is insane."',
     rev4:'"The energy dashboard helped me save 30% electricity. ROI after 2 months!"',
+    rev5:'"Set everything up within a weekend. The video explanation was super helpful — even for non-techies!"',
+    rev6:'"N8N + HA integration works perfectly. Heating, lights, calendar — all automated. Dreamlike!"',
     priceTtl:'Pricing & Packages',priceSub:'Transparent pricing — no hidden costs.',
     lblOnetime:'One-time',lblMonthly:'Monthly',saveBadge:'–40%',
     tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/ project',popularLbl:'Popular',
