@@ -593,6 +593,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 .ft-soc-btn:hover{transform:translateY(-3px);background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 18px var(--glow)}
 .ft-soc-btn svg{width:18px;height:18px;fill:currentColor}
 .ft-tagline{font-size:.78rem;color:var(--text3);margin-bottom:16px;line-height:1.5}
+/* Lamp floating labels */
+.lamp-lbl{pointer-events:none;opacity:0;transition:opacity .18s,transform .18s;transform:translateY(4px)}
+#fp-lights g:hover>.lamp-lbl{opacity:1;transform:translateY(0)}
+.lamp-lbl rect{fill:rgba(0,0,0,.72);rx:8}
+.lamp-lbl text{font-size:11px;font-weight:700;fill:#fff;text-anchor:middle;dominant-baseline:middle;font-family:inherit}
+/* Lamp Tooltip */
+#lamp-tip{position:absolute;pointer-events:none;z-index:30;background:rgba(10,10,20,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:.7rem;font-weight:700;padding:4px 11px;border-radius:20px;white-space:nowrap;opacity:0;transform:translateY(6px) scale(.92);transition:opacity .18s ease,transform .18s ease;letter-spacing:.4px;border:1px solid rgba(255,255,255,.12);box-shadow:0 4px 16px rgba(0,0,0,.35)}
+#lamp-tip.show{opacity:1;transform:translateY(0) scale(1)}
 
 /* ═══════════════════════════════════════════
    INTERACTIVE HINTS
@@ -1376,9 +1384,9 @@ input[type=range]{touch-action:none}
               </g>
               <!-- Lamps -->
               <g style="pointer-events:all">
-                <g onclick="lampClick('L1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="840" cy="178" r="20" fill="transparent"/><circle id="lb-L1" cx="840" cy="178" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L1" cx="840" cy="178" r="12" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
-                <g onclick="lampClick('L2',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="800" cy="222" r="16" fill="transparent"/><circle id="lb-L2" cx="800" cy="222" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L2" cx="800" cy="222" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
-                <g onclick="lampClick('L3',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="895" cy="240" r="16" fill="transparent"/><circle id="lb-L3" cx="895" cy="240" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L3" cx="895" cy="240" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L1',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="840" cy="178" r="20" fill="transparent"/><circle id="lb-L1" cx="840" cy="178" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L1" cx="840" cy="178" r="12" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="811" y="150" width="58" height="17" rx="8"/><text x="840" y="159" class="lamp-lbl-txt" data-de="Zimmer 1" data-en="Bedroom 1">Zimmer 1</text></g></g>
+                <g onclick="lampClick('L2',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="800" cy="222" r="16" fill="transparent"/><circle id="lb-L2" cx="800" cy="222" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L2" cx="800" cy="222" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="771" y="194" width="58" height="17" rx="8"/><text x="800" y="203" class="lamp-lbl-txt" data-de="Zimmer 1" data-en="Bedroom 1">Zimmer 1</text></g></g>
+                <g onclick="lampClick('L3',event)" oncontextmenu="roomCm('bed1',event)" style="cursor:pointer"><circle cx="895" cy="240" r="16" fill="transparent"/><circle id="lb-L3" cx="895" cy="240" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L3" cx="895" cy="240" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="866" y="212" width="58" height="17" rx="8"/><text x="895" y="221" class="lamp-lbl-txt" data-de="Zimmer 1" data-en="Bedroom 1">Zimmer 1</text></g></g>
                 <g onclick="lampClick('L4',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer">
                   <circle cx="380" cy="393" r="20" fill="transparent"/>
                   <circle id="lb-L4" cx="380" cy="393" r="7" fill="#444" style="transition:all .35s"/>
@@ -1386,19 +1394,21 @@ input[type=range]{touch-action:none}
                   <line id="tp4a" x1="374" y1="406" x2="380" y2="393" stroke="#444" stroke-width="1.5" opacity=".4" style="transition:stroke .35s"/>
                   <line id="tp4b" x1="387" y1="407" x2="380" y2="393" stroke="#444" stroke-width="1.5" opacity=".4" style="transition:stroke .35s"/>
                   <line id="tp4c" x1="380" y1="408" x2="380" y2="393" stroke="#444" stroke-width="1.5" opacity=".4" style="transition:stroke .35s"/>
+                  <g class="lamp-lbl"><rect x="351" y="365" width="58" height="17" rx="8"/><text x="380" y="374" class="lamp-lbl-txt" data-de="Zimmer 2" data-en="Bedroom 2">Zimmer 2</text></g>
                 </g>
-                <g onclick="lampClick('L5',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="302" cy="360" r="16" fill="transparent"/><circle id="lb-L5" cx="302" cy="360" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L5" cx="302" cy="360" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
-                <g onclick="lampClick('L6',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="678" cy="285" r="20" fill="transparent"/><circle id="lb-L6" cx="678" cy="285" r="7" fill="#444" style="transition:all .35s"/><circle id="lr-L6" cx="678" cy="285" r="13" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
-                <g onclick="lampClick('L7',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="760" cy="348" r="16" fill="transparent"/><circle id="lb-L7" cx="760" cy="348" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L7" cx="760" cy="348" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/></g>
-                <g onclick="lampClick('L8',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"><circle cx="580" cy="520" r="18" fill="transparent"/><circle id="lb-L8" cx="580" cy="520" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L8" cx="580" cy="520" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
-                <g onclick="lampClick('L9',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"><circle cx="1072" cy="268" r="18" fill="transparent"/><circle id="lb-L9" cx="1072" cy="268" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L9" cx="1072" cy="268" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
-                <g onclick="lampClick('L11',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"><circle cx="900" cy="478" r="18" fill="transparent"/><circle id="lb-L11" cx="900" cy="478" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/></g>
+                <g onclick="lampClick('L5',event)" oncontextmenu="roomCm('bed2',event)" style="cursor:pointer"><circle cx="302" cy="360" r="16" fill="transparent"/><circle id="lb-L5" cx="302" cy="360" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L5" cx="302" cy="360" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="273" y="332" width="58" height="17" rx="8"/><text x="302" y="341" class="lamp-lbl-txt" data-de="Zimmer 2" data-en="Bedroom 2">Zimmer 2</text></g></g>
+                <g onclick="lampClick('L6',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="678" cy="285" r="20" fill="transparent"/><circle id="lb-L6" cx="678" cy="285" r="7" fill="#444" style="transition:all .35s"/><circle id="lr-L6" cx="678" cy="285" r="13" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="649" y="257" width="58" height="17" rx="8"/><text x="678" y="266" class="lamp-lbl-txt" data-de="Wohnen" data-en="Living">Wohnen</text></g></g>
+                <g onclick="lampClick('L7',event)" oncontextmenu="roomCm('living',event)" style="cursor:pointer"><circle cx="760" cy="348" r="16" fill="transparent"/><circle id="lb-L7" cx="760" cy="348" r="5" fill="#444" style="transition:all .35s"/><circle id="lr-L7" cx="760" cy="348" r="9" fill="none" stroke="#444" stroke-width="1" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="731" y="320" width="58" height="17" rx="8"/><text x="760" y="329" class="lamp-lbl-txt" data-de="Wohnen" data-en="Living">Wohnen</text></g></g>
+                <g onclick="lampClick('L8',event)" oncontextmenu="roomCm('office',event)" style="cursor:pointer"><circle cx="580" cy="520" r="18" fill="transparent"/><circle id="lb-L8" cx="580" cy="520" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L8" cx="580" cy="520" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="551" y="492" width="58" height="17" rx="8"/><text x="580" y="501" class="lamp-lbl-txt" data-de="Büro" data-en="Office">Büro</text></g></g>
+                <g onclick="lampClick('L9',event)" oncontextmenu="roomCm('bath',event)" style="cursor:pointer"><circle cx="1072" cy="268" r="18" fill="transparent"/><circle id="lb-L9" cx="1072" cy="268" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L9" cx="1072" cy="268" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="1048" y="240" width="48" height="17" rx="8"/><text x="1072" y="249" class="lamp-lbl-txt" data-de="Bad" data-en="Bath">Bad</text></g></g>
+                <g onclick="lampClick('L11',event)" oncontextmenu="roomCm('dining',event)" style="cursor:pointer"><circle cx="900" cy="478" r="18" fill="transparent"/><circle id="lb-L11" cx="900" cy="478" r="6" fill="#444" style="transition:all .35s"/><circle id="lr-L11" cx="900" cy="478" r="11" fill="none" stroke="#444" stroke-width="1.5" opacity=".18" style="transition:all .35s"/><g class="lamp-lbl"><rect x="871" y="450" width="58" height="17" rx="8"/><text x="900" y="459" class="lamp-lbl-txt" data-de="Essen" data-en="Dining">Essen</text></g></g>
               </g>
             </svg>
           <!-- Hint bubbles on floor plan -->
           <div class="hint-bubble" id="hint-fp-room" onclick="dismissHint('hint-fp-room')" style="bottom:calc(62% + 8px);left:calc(64% - 50px)">👆 Raum antippen!</div>
           <div class="hint-bubble purple" id="hint-fp-lamp" onclick="dismissHint('hint-fp-lamp')" style="top:calc(18% - 48px);left:calc(60% - 55px)">💡 Lampe klicken</div>
           <div class="hint-bubble warm" id="hint-fp-rc" onclick="dismissHint('hint-fp-rc')" style="bottom:calc(38% - 8px);right:calc(27% + 4px)">🎨 Rechtsklick = Farbe</div>
+          <div id="lamp-tip"></div>
           </div>
         </div>
         <!-- Room panel -->
@@ -2797,6 +2807,8 @@ function applyLang(){
   setText('faq3q',t.faq3q);setText('faq3a',t.faq3a);setText('faq4q',t.faq4q);setText('faq4a',t.faq4a);setText('faq5q',t.faq5q);setText('faq5a',t.faq5a);
   setText('cta-h2',t.ctaH2);setText('cta-p',t.ctaP);setText('cta-btn',t.ctaBtn);
   setText('ft-tagline',t.ftTagline);
+  // Update lamp floating labels
+  document.querySelectorAll('.lamp-lbl-txt').forEach(el=>{const v=el.getAttribute('data-'+lang);if(v)el.textContent=v;});
   setText('ai-h1a',t.aiH1a);setHTML('ai-h1b',t.aiH1b);setText('ai-sub',t.aiSub);
   setText('ai-cta1',t.aiCta1);setText('ai-cta2',t.aiCta2);
   setText('ai-srv-ttl',t.aiSrvTtl);setText('ai-srv-sub',t.aiSrvSub);
