@@ -456,9 +456,12 @@ audio{display:none}
    PORTFOLIO
 ═══════════════════════════════════════════ */
 .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
-.pf-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:transform .25s,box-shadow .25s;background:var(--card)}
-.pf-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.15)}
-[data-theme="dark"] .pf-card:hover{box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08)}
+.pf-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:transform .12s ease,box-shadow .12s ease;background:var(--card);transform-style:preserve-3d;will-change:transform}
+.pf-card:hover{box-shadow:0 24px 64px rgba(0,0,0,.18)}
+[data-theme="dark"] .pf-card:hover{box-shadow:0 24px 64px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08)}
+.pf-card .tilt-shine{position:absolute;inset:0;border-radius:var(--r);pointer-events:none;opacity:0;transition:opacity .2s;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.18),transparent 65%);z-index:10}
+.pf-card{position:relative}
+.pf-card:hover .tilt-shine{opacity:1}
 .pf-preview{height:200px;position:relative;overflow:hidden}
 .pf-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.55);color:#fff;font-size:.63rem;font-weight:800;padding:4px 10px;border-radius:9px;backdrop-filter:blur(8px);letter-spacing:.4px}
 .pf-stars{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.55);color:#ffcc00;font-size:.63rem;font-weight:800;padding:4px 9px;border-radius:9px;backdrop-filter:blur(8px)}
@@ -2633,6 +2636,42 @@ if(_origGetPos){
   }
 }
 
+</script>
+
+<!-- 3D Tilt effect for portfolio cards -->
+<script>
+(function(){
+  function initTilt(){
+    document.querySelectorAll('.pf-card').forEach(function(card){
+      // add shine overlay if not present
+      if(!card.querySelector('.tilt-shine')){
+        var shine=document.createElement('div');
+        shine.className='tilt-shine';
+        card.appendChild(shine);
+      }
+      var shine=card.querySelector('.tilt-shine');
+      var MAX=12; // max tilt degrees
+
+      card.addEventListener('mousemove',function(e){
+        var r=card.getBoundingClientRect();
+        var x=(e.clientX-r.left)/r.width;   // 0–1
+        var y=(e.clientY-r.top)/r.height;   // 0–1
+        var rotY=(x-.5)*MAX*2;
+        var rotX=-(y-.5)*MAX*2;
+        card.style.transform='perspective(900px) rotateX('+rotX+'deg) rotateY('+rotY+'deg) translateZ(8px)';
+        card.style.transition='transform .05s ease,box-shadow .05s ease';
+        shine.style.backgroundPosition=(x*100)+'% '+(y*100)+'%';
+        shine.style.background='radial-gradient(circle at '+(x*100)+'% '+(y*100)+'%,rgba(255,255,255,.22),transparent 65%)';
+      });
+      card.addEventListener('mouseleave',function(){
+        card.style.transition='transform .4s cubic-bezier(.23,1,.32,1),box-shadow .4s ease';
+        card.style.transform='perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+      });
+    });
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initTilt);}
+  else{initTilt();}
+})();
 </script>
 
 <!-- Typewriter hero subtitle -->
