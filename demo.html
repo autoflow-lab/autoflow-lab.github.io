@@ -494,6 +494,20 @@ audio{display:none}
 .tier-list li::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
 .btn-tier{width:100%;padding:13px;border-radius:var(--rs);border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.9rem;font-weight:700;transition:all .25s;box-shadow:0 3px 12px rgba(0,113,227,.3)}
 .btn-tier:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,113,227,.45)}
+/* Pricing Toggle */
+.price-toggle-wrap{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:36px}
+.price-toggle-wrap span{font-size:.9rem;font-weight:600;color:var(--text2);transition:color .2s}
+.price-toggle-wrap span.active{color:var(--accent)}
+.price-toggle{position:relative;width:52px;height:28px;cursor:pointer}
+.price-toggle input{opacity:0;width:0;height:0}
+.price-toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:34px;transition:background .3s}
+.price-toggle-slider::before{content:'';position:absolute;height:20px;width:20px;left:4px;bottom:4px;background:#fff;border-radius:50%;transition:transform .3s,box-shadow .3s;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.price-toggle input:checked+.price-toggle-slider{background:var(--accent)}
+.price-toggle input:checked+.price-toggle-slider::before{transform:translateX(24px)}
+.price-badge{font-size:.68rem;font-weight:700;background:linear-gradient(135deg,#34c759,#30b352);color:#fff;padding:2px 8px;border-radius:20px;margin-left:6px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.price-badge.show{opacity:1;transform:translateY(0)}
+.tier-price-val{display:inline-block;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s}
+.tier-price-val.swap{transform:translateY(8px) scale(.85);opacity:0}
 
 /* ═══════════════════════════════════════════
    REVIEWS
@@ -1369,10 +1383,19 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
     <div style="max-width:1100px;margin:0 auto">
       <h2 class="sec-title sec-center reveal" data-i="priceTitle">Preise & Pakete</h2>
       <p class="sec-sub sec-center reveal" data-i="priceSub">Transparent kalkulierbar — keine versteckten Kosten.</p>
+      <!-- Pricing Toggle -->
+      <div class="price-toggle-wrap reveal">
+        <span id="lbl-onetime" class="active" data-i="lblOnetime">Einmalig</span>
+        <label class="price-toggle" aria-label="Preismodell wechseln">
+          <input type="checkbox" id="price-toggle-cb" onchange="switchPricing(this.checked)">
+          <span class="price-toggle-slider"></span>
+        </label>
+        <span id="lbl-monthly" data-i="lblMonthly">Monatlich <span class="price-badge" id="save-badge" data-i="saveBadge">–40%</span></span>
+      </div>
       <div class="tier-grid reveal">
         <div class="tier">
           <div class="tier-name" data-i="tierBasic">Basic</div>
-          <div class="tier-price">€49 <small data-i="perProject">/ Projekt</small></div>
+          <div class="tier-price"><span class="tier-price-val" id="p1-val" data-one="49" data-mo="29">€49</span> <small id="p1-unit" data-i="perProject">/ Projekt</small></div>
           <div class="tier-desc" data-i="t1desc">Perfekt für den Einstieg</div>
           <ul class="tier-list">
             <li data-i="t1-1">Custom Lovelace Dashboard</li><li data-i="t1-2">Bis zu 5 Karten / Views</li>
@@ -1383,7 +1406,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
         <div class="tier featured">
           <div class="tier-pop" data-i="popular">Beliebt</div>
           <div class="tier-name" data-i="tierStd">Standard</div>
-          <div class="tier-price">€99 <small data-i="perProject">/ Projekt</small></div>
+          <div class="tier-price"><span class="tier-price-val" id="p2-val" data-one="99" data-mo="59">€99</span> <small id="p2-unit" data-i="perProject">/ Projekt</small></div>
           <div class="tier-desc" data-i="t2desc">Die vollständige Experience</div>
           <ul class="tier-list">
             <li data-i="t2-1">Vollständiges Dashboard</li><li data-i="t2-2">Interaktiver Grundriss</li>
@@ -1394,7 +1417,7 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
         </div>
         <div class="tier">
           <div class="tier-name" data-i="tierPrem">Premium</div>
-          <div class="tier-price">€149 <small data-i="perProject">/ Projekt</small></div>
+          <div class="tier-price"><span class="tier-price-val" id="p3-val" data-one="149" data-mo="89">€149</span> <small id="p3-unit" data-i="perProject">/ Projekt</small></div>
           <div class="tier-desc" data-i="t3desc">Mit KI & voller Automation</div>
           <ul class="tier-list">
             <li data-i="t3-1">Alles aus Standard</li><li data-i="t3-2">Lokale KI-Sprachsteuerung</li>
@@ -1523,6 +1546,27 @@ if(localStorage.getItem('alf-hints')==='off'){
 }
 function toast(msg,d=2200){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
 function openFiverr(){window.open('https://www.fiverr.com/autoflow-lab','_blank')}
+function switchPricing(monthly){
+  const lang=document.documentElement.lang||'de';
+  const unitTxt=monthly?(lang==='de'?'/ Monat':'/ month'):(lang==='de'?'/ Projekt':'/ project');
+  const lblOne=document.getElementById('lbl-onetime');
+  const lblMo=document.getElementById('lbl-monthly');
+  const badge=document.getElementById('save-badge');
+  if(lblOne)lblOne.classList.toggle('active',!monthly);
+  if(lblMo)lblMo.classList.toggle('active',monthly);
+  if(badge)badge.classList.toggle('show',monthly);
+  ['p1','p2','p3'].forEach(id=>{
+    const el=document.getElementById(id+'-val');
+    const unit=document.getElementById(id+'-unit');
+    if(!el)return;
+    el.classList.add('swap');
+    setTimeout(()=>{
+      el.textContent='€'+(monthly?el.dataset.mo:el.dataset.one);
+      if(unit)unit.textContent=unitTxt;
+      el.classList.remove('swap');
+    },220);
+  });
+}
 function switchTab(tab,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pg=document.getElementById('page-'+tab);if(pg)pg.classList.add('active');
@@ -2410,7 +2454,8 @@ const T={
     rev3:'"Lokale KI ohne Cloud — fantastisch! Kein Google, kein Abo. Der Grundriss ist der Hammer."',
     rev4:'"Das Energie-Dashboard hat mir geholfen 30% Strom zu sparen. ROI nach 2 Monaten!"',
     priceTtl:'Preise & Pakete',priceSub:'Transparent — keine versteckten Kosten.',
-    tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/Projekt',popularLbl:'Beliebt',
+    lblOnetime:'Einmalig',lblMonthly:'Monatlich',saveBadge:'–40%',
+    tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/ Projekt',popularLbl:'Beliebt',
     t1Desc:'Einstieg ins Smart Home',t2Desc:'Die vollständige Experience',t3Desc:'Mit KI & voller Automation',
     t11:'Custom Lovelace Dashboard',t12:'Bis zu 5 Karten',t13:'Basis-Automationen',t14:'1 Revision',t15:'Lieferung in 48h',
     t21:'Vollständiges Dashboard',t22:'Interaktiver Grundriss',t23:'Musik, Wetter, Energie',t24:'Szenen & Automationen',t25:'3 Revisionen',t26:'Video-Erklärung',
@@ -2465,7 +2510,8 @@ const T={
     rev3:'"Local AI without cloud — fantastic! No Google, no subscription. The floor plan is insane."',
     rev4:'"The energy dashboard helped me save 30% electricity. ROI after 2 months!"',
     priceTtl:'Pricing & Packages',priceSub:'Transparent pricing — no hidden costs.',
-    tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/project',popularLbl:'Popular',
+    lblOnetime:'One-time',lblMonthly:'Monthly',saveBadge:'–40%',
+    tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/ project',popularLbl:'Popular',
     t1Desc:'Perfect for getting started',t2Desc:'The full experience',t3Desc:'With AI & full automation',
     t11:'Custom Lovelace Dashboard',t12:'Up to 5 Cards',t13:'Basic Automations',t14:'1 Revision',t15:'Delivery in 48h',
     t21:'Full Dashboard',t22:'Interactive Floor Plan',t23:'Music, Weather, Energy',t24:'Scenes & Automations',t25:'3 Revisions',t26:'Video Explanation',
@@ -2526,6 +2572,12 @@ function applyLang(){
   setText('rev-ttl',t.revTtl);setText('rev1',t.rev1);setText('rev2',t.rev2);setText('rev3',t.rev3);setText('rev4',t.rev4);
   setText('price-ttl',t.priceTtl);setText('price-sub',t.priceSub);
   setText('tier1-name',t.tier1);setText('tier2-name',t.tier2);setText('tier3-name',t.tier3);
+  setText('lbl-onetime',t.lblOnetime);
+  const lblMoEl=document.getElementById('lbl-monthly');
+  if(lblMoEl){const badge=document.getElementById('save-badge');const cb=document.getElementById('price-toggle-cb');const mo=cb&&cb.checked;lblMoEl.textContent=t.lblMonthly+' ';if(badge){badge.textContent=t.saveBadge;lblMoEl.appendChild(badge);}if(mo)lblMoEl.classList.add('active');}
+  const cb=document.getElementById('price-toggle-cb');const mo=cb&&cb.checked;
+  const unitTxt=mo?(lang==='de'?'/ Monat':'/ month'):(lang==='de'?'/ Projekt':'/ project');
+  ['p1','p2','p3'].forEach(id=>{const u=document.getElementById(id+'-unit');if(u)u.textContent=unitTxt;});
   ['per1','per2','per3'].forEach(id=>setText(id,t.perProject));
   setText('popular-lbl',t.popularLbl);
   setText('t1-desc',t.t1Desc);setText('t2-desc',t.t2Desc);setText('t3-desc',t.t3Desc);
