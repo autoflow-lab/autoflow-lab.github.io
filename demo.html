@@ -882,6 +882,56 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
 /* Verhindert dass Slider-Bewegung die ganze Seite scrollt */
 input[type=range]{touch-action:none}
 
+
+/* Extra mobile fixes v29b */
+@media(max-width:768px){
+  /* "So funktioniert es" — 1 column on mobile */
+  .hiw-grid{grid-template-columns:1fr !important;gap:16px !important}
+  .hiw-line{display:none!important}
+
+  /* No zoom / no horizontal overflow */
+  html,body{max-width:100vw;overflow-x:hidden}
+
+  /* Hint text */
+  .desktop-only{display:none}
+  .mobile-only{display:inline}
+
+  /* Slider: taller touch target */
+  input[type=range]{
+    height:32px;
+    -webkit-appearance:none;
+    appearance:none
+  }
+  input[type=range]::-webkit-slider-thumb{
+    width:28px;height:28px;
+    -webkit-appearance:none;
+    background:var(--accent);
+    border-radius:50%;
+    cursor:pointer
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:6px;border-radius:3px;
+    background:var(--bg3)
+  }
+
+  /* Floor plan: no text select anywhere in section */
+  #fp-section *{
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none
+  }
+  /* Room cards — prevent text select on long press */
+  .rc,.rc-toggle,#room-list *{
+    -webkit-user-select:none;
+    user-select:none
+  }
+}
+/* Desktop: hide mobile-only spans */
+@media(min-width:769px){
+  .mobile-only{display:none}
+  .desktop-only{display:inline}
+}
+
 </style>
 </head>
 <body>
@@ -1280,7 +1330,7 @@ input[type=range]{touch-action:none}
     <div style="max-width:1100px;margin:0 auto;text-align:center">
       <h2 class="sec-ttl reveal" id="hiw-ttl">So funktioniert es</h2>
       <p class="sec-sub reveal" id="hiw-sub" style="max-width:520px;margin:0 auto 48px">In 3 einfachen Schritten zu deinem perfekten Smart Home Dashboard.</p>
-      <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative">
+      <div class="reveal hiw-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative">
         <!-- Connector line -->
         <div style="position:absolute;top:40px;left:calc(16.67% + 20px);right:calc(16.67% + 20px);height:2px;background:linear-gradient(90deg,var(--accent),#af52de);opacity:.3;z-index:0" class="hiw-line"></div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
@@ -1312,7 +1362,7 @@ input[type=range]{touch-action:none}
         <h2 class="sec-title reveal" data-i="fpTitle" style="margin-bottom:0">Interaktiver Grundriss</h2>
         <button onclick="dismissAllHints()" style="font-size:.7rem;color:var(--text3);background:none;border:1px solid var(--border);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">✕ <span data-i="hideHints">Tipps ausblenden</span></button>
       </div>
-      <p class="sec-sub reveal" data-i="fpSub">Klick auf Räume oder Lampen zum Schalten. Rechtsklick wählt Farbe.</p>
+      <p class="sec-sub reveal" data-i="fpSub">Klick auf Räume oder Lampen zum Schalten. <span class="desktop-only">Rechtsklick</span><span class="mobile-only">Lang drücken</span> wählt Farbe.</p>
       <div class="scene-row" style="position:relative">
         <button class="sp" onclick="setScene('relax');dismissHint('hint-scene')">🌅 Relax</button>
         <button class="sp" onclick="setScene('normal');dismissHint('hint-scene')">☀️ Normal</button>
@@ -1323,9 +1373,9 @@ input[type=range]{touch-action:none}
       <div class="fp-wrap">
         <div>
           <div class="fp-hint" style="position:relative">
-              <span>👆</span><span data-i="fpHint">Klick: Licht an/aus · Rechtsklick: Farbe wählen</span>
+              <span>👆</span><span data-i="fpHint" class="desktop-only">Klick: Licht an/aus · Rechtsklick: Farbe wählen</span><span class="mobile-only">Tippen: Licht an/aus · Lang drücken: Farbe</span>
             </div>
-          <div class="fp-outer" id="fp-outer" style="position:relative">
+          <div class="fp-outer" style="-webkit-user-select:none;user-select:none;-webkit-touch-callout:none" id="fp-outer" style="position:relative">
             <!-- Color Picker -->
             <div class="cp" id="fp-cp">
               <div class="cp-ttl" id="cp-ttl">Raum</div>
@@ -3176,6 +3226,42 @@ if(_origGetPos){
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded',fixSliders);
   } else { fixSliders(); }
+})();
+
+
+// ─── Long press on mobile → color picker (replaces right-click) ───
+(function(){
+  var _lpt=null,_lpe=null;
+  function cancelLp(){clearTimeout(_lpt);_lpt=null}
+  document.addEventListener('touchstart',function(e){
+    var el=e.target.closest('[oncontextmenu]');
+    if(!el)return;
+    e.preventDefault(); // stop text selection
+    _lpe=e;
+    _lpt=setTimeout(function(){
+      // simulate contextmenu
+      var cm=el.getAttribute('oncontextmenu');
+      if(cm){
+        try{ eval(cm.replace(/event/g,'_lpe')); }catch(x){}
+      }
+    },500);
+  },{passive:false});
+  document.addEventListener('touchend',cancelLp,{passive:true});
+  document.addEventListener('touchmove',cancelLp,{passive:true});
+
+  // Also fix brightness slider: prevent parent scroll when sliding
+  document.addEventListener('DOMContentLoaded',function(){
+    var sliders=document.querySelectorAll('input[type=range]');
+    sliders.forEach(function(sl){
+      sl.addEventListener('touchstart',function(e){
+        e.stopPropagation();
+      },{passive:true});
+      sl.addEventListener('touchmove',function(e){
+        e.stopPropagation();
+        // Do NOT preventDefault here — range inputs need it for value change
+      },{passive:true});
+    });
+  });
 })();
 
 </script>
