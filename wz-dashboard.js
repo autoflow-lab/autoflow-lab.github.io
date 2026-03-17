@@ -126,7 +126,7 @@ class WzDashboard extends HTMLElement {
       .ctrl-btn:active { transform:scale(.85); opacity:.7; }
       .ctrl-btn.play {
         background:${c.text};
-        color:${c._isDaytime ? '#fff' : '#000'};
+        color:${this._isDaytime() ? '#1d1d1f' : '#f5f5f7'};
         width:52px; height:52px;
         box-shadow:0 4px 20px rgba(0,0,0,.22);
       }
@@ -289,9 +289,10 @@ class WzDashboard extends HTMLElement {
     }).join('');
 
     // Play icon SVG
+    const playFill = this._isDaytime() ? '#1d1d1f' : '#f0f0f5';
     const playIcon = almState === 'playing'
-      ? `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="${c.text}"/></svg>`
-      : `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="${c.text}"/></svg>`;
+      ? `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="${playFill}"/></svg>`
+      : `<svg width="22" height="22" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="${playFill}"/></svg>`;
 
     this.shadowRoot.innerHTML = `
       <style>${this._css(c)}</style>
