@@ -572,6 +572,21 @@ audio{display:none}
 /* ═══════════════════════════════════════════
    CTA
 ═══════════════════════════════════════════ */
+/* Comparison Table */
+.cmp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:480px}
+.cmp-table th{padding:14px 18px;text-align:center;font-size:.78rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;border-bottom:2px solid var(--border)}
+.cmp-table th:first-child{text-align:left}
+.cmp-table th.col-ha{color:var(--accent);border-bottom-color:var(--accent)}
+.cmp-table td{padding:13px 18px;border-bottom:1px solid var(--border);text-align:center;color:var(--text2);transition:background .15s}
+.cmp-table td:first-child{text-align:left;font-weight:600;color:var(--text);font-size:.84rem}
+.cmp-table tr:hover td{background:var(--bg2)}
+.cmp-table .col-ha{background:rgba(0,113,227,.04)}
+[data-theme="dark"] .cmp-table .col-ha{background:rgba(0,113,227,.08)}
+.cmp-check{color:var(--green);font-size:1.05rem;font-weight:800}
+.cmp-cross{color:#ff3b30;font-size:1.1rem}
+.cmp-partial{color:#ff9500;font-size:.8rem;font-weight:700}
+.cmp-ha-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:20px;margin-left:6px;vertical-align:middle}
 /* Contact Form */
 .contact-form{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:40px;max-width:640px;margin:0 auto}
 .cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -1609,6 +1624,37 @@ input[type=range]{touch-action:none}
           <button class="rev-dot" onclick="revGoto(4)"></button>
           <button class="rev-dot" onclick="revGoto(5)"></button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="band" style="padding:72px 24px">
+    <div style="max-width:900px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" id="cmp-title">Warum Home Assistant?</h2>
+      <p class="sec-sub sec-center reveal" id="cmp-sub">Ein Vergleich mit den beliebtesten Smart Home Plattformen.</p>
+      <div class="cmp-wrap reveal">
+        <table class="cmp-table">
+          <thead>
+            <tr>
+              <th id="cmp-h-feature">Feature</th>
+              <th class="col-ha">Home Assistant <span class="cmp-ha-badge">⭐ Empfohlen</span></th>
+              <th>Amazon Alexa</th>
+              <th>Google Home</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td id="cmp-r1">100% lokal, keine Cloud</td>         <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-cross">✗</span></td><td><span class="cmp-cross">✗</span></td></tr>
+            <tr><td id="cmp-r2">Kein Abo / kostenlos</td>            <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-partial">teilweise</span></td><td><span class="cmp-partial">teilweise</span></td></tr>
+            <tr><td id="cmp-r3">3000+ Geräte-Integrationen</td>      <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-partial">begrenzt</span></td><td><span class="cmp-partial">begrenzt</span></td></tr>
+            <tr><td id="cmp-r4">Vollständig anpassbar</td>           <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-cross">✗</span></td><td><span class="cmp-cross">✗</span></td></tr>
+            <tr><td id="cmp-r5">Lokale KI / Sprachsteuerung</td>     <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-cross">✗</span></td><td><span class="cmp-cross">✗</span></td></tr>
+            <tr><td id="cmp-r6">Energie-Monitoring</td>              <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-partial">begrenzt</span></td><td><span class="cmp-partial">begrenzt</span></td></tr>
+            <tr><td id="cmp-r7">Datenschutz (DSGVO)</td>             <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-cross">✗</span></td><td><span class="cmp-cross">✗</span></td></tr>
+            <tr><td id="cmp-r8">Offline-Betrieb</td>                 <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-cross">✗</span></td><td><span class="cmp-cross">✗</span></td></tr>
+            <tr><td id="cmp-r9">N8N / API Workflows</td>             <td class="col-ha"><span class="cmp-check">✓</span></td><td><span class="cmp-cross">✗</span></td><td><span class="cmp-cross">✗</span></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -2792,6 +2838,12 @@ const T={
     faq3q:'Wie lange dauert die Lieferung?',faq3a:'Basic: 24–48h · Standard: 3 Tage · Premium mit KI: 5–7 Tage. Express auf Anfrage.',
     faq4q:'Welche Geräte werden unterstützt?',faq4a:'Alle HA-kompatiblen Geräte: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla und 3000+ mehr.',
     faq5q:'Wie funktioniert die Zusammenarbeit?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + Revisionen. 4. Fertige Dateien + Docs. Alles asynchron.',
+    cmpTitle:'Warum Home Assistant?',cmpSub:'Ein Vergleich mit den beliebtesten Smart Home Plattformen.',
+    cmpHFeat:'Feature',
+    cmpR1:'100% lokal, keine Cloud',cmpR2:'Kein Abo / kostenlos',cmpR3:'3000+ Geräte-Integrationen',
+    cmpR4:'Vollständig anpassbar',cmpR5:'Lokale KI / Sprachsteuerung',cmpR6:'Energie-Monitoring',
+    cmpR7:'Datenschutz (DSGVO)',cmpR8:'Offline-Betrieb',cmpR9:'N8N / API Workflows',
+    cmpPartial:'teilweise',cmpHaBadge:'⭐ Empfohlen',
     cfTitle:'Kostenloses Briefing',cfSub:'Beschreib dein Projekt — ich melde mich innerhalb von 24h.',
     cfLblName:'Name',cfLblEmail:'E-Mail',cfLblType:'Projekttyp',cfLblBudget:'Budget',cfLblMsg:'Nachricht',
     cfSubmit:'✉ Anfrage senden',cfSuccess:'Danke! Deine Anfrage wurde gesendet. Ich melde mich bald.',
@@ -2856,6 +2908,12 @@ const T={
     faq3q:'How long does delivery take?',faq3a:'Basic: 24–48h · Standard: 3 days · Premium with AI: 5–7 days. Express available.',
     faq4q:'Which devices are supported?',faq4a:'All HA-compatible devices: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla and 3000+ more.',
     faq5q:'How does collaboration work?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + revisions. 4. Files + docs. All async.',
+    cmpTitle:'Why Home Assistant?',cmpSub:'A comparison with the most popular smart home platforms.',
+    cmpHFeat:'Feature',
+    cmpR1:'100% local, no cloud',cmpR2:'No subscription / free',cmpR3:'3000+ device integrations',
+    cmpR4:'Fully customizable',cmpR5:'Local AI / voice control',cmpR6:'Energy monitoring',
+    cmpR7:'Privacy (GDPR)',cmpR8:'Offline operation',cmpR9:'N8N / API workflows',
+    cmpPartial:'limited',cmpHaBadge:'⭐ Recommended',
     cfTitle:'Free Briefing',cfSub:'Describe your project — I will reply within 24h.',
     cfLblName:'Name',cfLblEmail:'Email',cfLblType:'Project Type',cfLblBudget:'Budget',cfLblMsg:'Message',
     cfSubmit:'✉ Send Request',cfSuccess:'Thank you! Your request was sent. I will be in touch soon.',
@@ -2929,6 +2987,11 @@ function applyLang(){
   setText('faq3q',t.faq3q);setText('faq3a',t.faq3a);setText('faq4q',t.faq4q);setText('faq4a',t.faq4a);setText('faq5q',t.faq5q);setText('faq5a',t.faq5a);
   setText('cta-h2',t.ctaH2);setText('cta-p',t.ctaP);setText('cta-btn',t.ctaBtn);
   setText('ft-tagline',t.ftTagline);
+  // Comparison table i18n
+  setText('cmp-title',t.cmpTitle);setText('cmp-sub',t.cmpSub);
+  setText('cmp-h-feature',t.cmpHFeat);
+  ['1','2','3','4','5','6','7','8','9'].forEach(n=>setText('cmp-r'+n,t['cmpR'+n]));
+  document.querySelectorAll('.cmp-partial').forEach(el=>el.textContent=t.cmpPartial);
   // Contact form i18n
   setText('cf-title',t.cfTitle);setText('cf-sub',t.cfSub);
   setText('cf-lbl-name',t.cfLblName);setText('cf-lbl-email',t.cfLblEmail);
