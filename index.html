@@ -897,23 +897,7 @@ input[type=range]{touch-action:pan-x}
   .mobile-only{display:inline}
 
   /* Slider: taller touch target */
-  input[type=range]{
-    height:32px;
-    -webkit-appearance:none;
-    appearance:none;
-    touch-action:pan-x
-  }
-  input[type=range]::-webkit-slider-thumb{
-    width:28px;height:28px;
-    -webkit-appearance:none;
-    background:var(--accent);
-    border-radius:50%;
-    cursor:pointer
-  }
-  input[type=range]::-webkit-slider-runnable-track{
-    height:6px;border-radius:3px;
-    background:var(--bg3)
-  }
+  input[type=range]{touch-action:pan-x}
 
   /* Floor plan: no text select anywhere in section */
   #fp-section *{
@@ -3232,23 +3216,30 @@ if(_origGetPos){
 
 // ─── Long press on mobile → color picker (replaces right-click) ───
 (function(){
-  var _lpt=null,_lpe=null;
-  function cancelLp(){clearTimeout(_lpt);_lpt=null}
+  var _lpt=null,_lpe=null,_longFired=false;
+  function cancelLp(){clearTimeout(_lpt);_lpt=null;}
+  // passive:true → does NOT block scroll or click events
   document.addEventListener('touchstart',function(e){
     var el=e.target.closest('[oncontextmenu]');
     if(!el)return;
-    e.preventDefault(); // stop text selection
+    _longFired=false;
     _lpe=e;
     _lpt=setTimeout(function(){
-      // simulate contextmenu
+      _longFired=true;
       var cm=el.getAttribute('oncontextmenu');
-      if(cm){
-        try{ eval(cm.replace(/event/g,'_lpe')); }catch(x){}
-      }
-    },500);
-  },{passive:false});
+      if(cm){try{eval(cm.replace(/event/g,'_lpe'));}catch(x){}}
+    },550);
+  },{passive:true});
   document.addEventListener('touchend',cancelLp,{passive:true});
   document.addEventListener('touchmove',cancelLp,{passive:true});
+  // After a real longpress, suppress the spurious click that follows
+  document.addEventListener('click',function(e){
+    if(_longFired){
+      _longFired=false;
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  },true);
 
   // Also fix brightness slider: prevent parent scroll when sliding
   document.addEventListener('DOMContentLoaded',function(){
