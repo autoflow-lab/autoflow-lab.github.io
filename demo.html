@@ -879,8 +879,8 @@ body.hints-off .hint-bubble,body.hints-off .hint-dot,body.hints-off .hint-badge-
 }
 
 /* === TOUCH SCROLLING FIX für Slider === */
-/* Verhindert dass Slider-Bewegung die ganze Seite scrollt */
-input[type=range]{touch-action:none}
+/* Slider: nur horizontal, verhindert vertikales Scrollen */
+input[type=range]{touch-action:pan-x}
 
 
 /* Extra mobile fixes v29b */
@@ -900,7 +900,8 @@ input[type=range]{touch-action:none}
   input[type=range]{
     height:32px;
     -webkit-appearance:none;
-    appearance:none
+    appearance:none;
+    touch-action:pan-x
   }
   input[type=range]::-webkit-slider-thumb{
     width:28px;height:28px;
@@ -3256,10 +3257,7 @@ if(_origGetPos){
       sl.addEventListener('touchstart',function(e){
         e.stopPropagation();
       },{passive:true});
-      sl.addEventListener('touchmove',function(e){
-        e.stopPropagation();
-        // Do NOT preventDefault here — range inputs need it for value change
-      },{passive:true});
+      // No touchmove handler — let browser handle slider natively with touch-action:pan-x
     });
   });
 })();
@@ -3379,7 +3377,7 @@ if(_origGetPos){
   // Prevent page scroll when dragging range sliders on mobile
   document.querySelectorAll('input[type=range]').forEach(sl=>{
     sl.addEventListener('touchstart',e=>{e.stopPropagation()},{passive:true});
-    sl.addEventListener('touchmove',e=>{e.stopPropagation()},{passive:true});
+    // touchmove: let browser handle natively (touch-action:pan-x in CSS)
   });
 
   // Show mobile scroll hint for floor plan once
