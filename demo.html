@@ -654,6 +654,25 @@ audio{display:none}
 .cp-close{width:100%;padding:8px;border-radius:9px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-size:.73rem;font-weight:600}
 
 /* ═══════════════════════════════════════════
+   TECH STACK
+═══════════════════════════════════════════ */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px}
+.tech-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px 20px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;transition:transform .22s,box-shadow .22s,border-color .22s;position:relative;overflow:hidden}
+.tech-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,0));pointer-events:none}
+.tech-card:hover{transform:translateY(-4px);box-shadow:0 14px 42px rgba(0,0,0,.12);border-color:var(--border2)}
+[data-theme="dark"] .tech-card:hover{box-shadow:0 14px 42px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.08)}
+[data-theme="light"] .tech-card{background:rgba(255,255,255,.62);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.82);box-shadow:0 4px 20px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9)}
+[data-theme="light"] .tech-card:hover{background:rgba(255,255,255,.82);box-shadow:0 14px 42px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.96)}
+.tech-icon{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.tech-name{font-size:.92rem;font-weight:700;color:var(--text)}
+.tech-desc{font-size:.73rem;color:var(--text2);line-height:1.45;margin-top:2px}
+.tech-badge{font-size:.6rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 9px;border-radius:20px;align-self:flex-start;margin-top:2px}
+.tech-badge.open{background:rgba(52,199,89,.12);color:var(--green)}
+.tech-badge.proto{background:rgba(0,113,227,.12);color:var(--accent)}
+.tech-badge.hw{background:rgba(255,159,10,.12);color:var(--warm)}
+.tech-badge.local{background:rgba(175,82,222,.12);color:var(--purple)}
+
+/* ═══════════════════════════════════════════
    PORTFOLIO
 ═══════════════════════════════════════════ */
 .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:22px}
@@ -1993,6 +2012,96 @@ input[type=range]{touch-action:pan-x}
     </div>
   </div>
 
+  <!-- TECH STACK -->
+  <div style="padding:72px 24px">
+    <div style="max-width:1060px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="techTitle">Technologie-Stack</h2>
+      <p class="sec-sub sec-center reveal" data-i="techSub">Bewährte Open-Source Tools — lokal, sicher, ohne Cloud-Zwang</p>
+      <div class="tech-grid">
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(24,132,255,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#1884ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="tech-name" data-i="tech1n">Home Assistant</div>
+            <div class="tech-desc" data-i="tech1d">Open-Source Plattform mit 3000+ Integrationen. Das Herzstück jedes Smart Homes.</div>
+          </div>
+          <span class="tech-badge open" data-i="tech1b">Open Source</span>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(255,100,30,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="#ff641e"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke="#ff641e" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="tech-name">N8N</div>
+            <div class="tech-desc" data-i="tech2d">Visueller Workflow-Automator. Verbindet HA mit E-Mail, APIs, Kalender und 400+ Apps.</div>
+          </div>
+          <span class="tech-badge open">Open Source</span>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(0,200,150,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="#00c896" stroke-width="2"/><path d="M8 12h8M12 8v8" stroke="#00c896" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="tech-name">Zigbee / Z-Wave</div>
+            <div class="tech-desc" data-i="tech3d">Lokale Mesh-Protokolle für Sensoren, Lampen & Schalter — kein Cloud-Routing.</div>
+          </div>
+          <span class="tech-badge local" data-i="techLocal">Lokal</span>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(80,160,255,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="#50a0ff" stroke-width="2"/><path d="M7 12h10M12 7l5 5-5 5" stroke="#50a0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="tech-name">Matter / Thread</div>
+            <div class="tech-desc" data-i="tech4d">Neuer offener Smart-Home-Standard — Apple, Google, Amazon und HA kompatibel.</div>
+          </div>
+          <span class="tech-badge proto" data-i="techStd">Standard</span>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(255,200,30,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="12" rx="3" stroke="#ffc81e" stroke-width="2"/><path d="M7 12h2M12 12h2M17 10v4" stroke="#ffc81e" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="tech-name">Shelly</div>
+            <div class="tech-desc" data-i="tech5d">Smarte Relais & Dimmer für bestehende Verkabelung — schnell nachrüstbar.</div>
+          </div>
+          <span class="tech-badge local">Lokal</span>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(200,50,50,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" fill="#c83232"/><circle cx="4" cy="6" r="2.5" fill="#c83232"/><circle cx="20" cy="6" r="2.5" fill="#c83232"/><circle cx="4" cy="18" r="2.5" fill="#c83232"/><circle cx="20" cy="18" r="2.5" fill="#c83232"/><path d="M6 7l4.5 4M17.5 7 13 11M6 17l4.5-4M17.5 17 13 13" stroke="#c83232" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="tech-name">Node-RED</div>
+            <div class="tech-desc" data-i="tech6d">Visueller Automation-Editor. Komplexe Flows per Drag & Drop erstellen.</div>
+          </div>
+          <span class="tech-badge open">Open Source</span>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(100,80,200,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8z" stroke="#6450c8" stroke-width="2" stroke-linejoin="round"/><path d="M3 8l9 5 9-5M12 13v8" stroke="#6450c8" stroke-width="2"/></svg>
+          </div>
+          <div>
+            <div class="tech-name">MQTT</div>
+            <div class="tech-desc" data-i="tech7d">Leichtgewichtiges Echtzeit-Messaging zwischen Geräten — der Klebstoff des IoT.</div>
+          </div>
+          <span class="tech-badge local">Lokal</span>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon" style="background:rgba(180,60,180,.15)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="#b43cb4" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="#b43cb4"/><circle cx="15.5" cy="8.5" r="1.5" fill="#b43cb4"/><path d="M6 14c1.5 2.5 10.5 2.5 12 0" stroke="#b43cb4" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="tech-name">Raspberry Pi</div>
+            <div class="tech-desc" data-i="tech8d">Dedizierter Home Server — stromsparend, leise, 24/7 zuverlässig.</div>
+          </div>
+          <span class="tech-badge hw" data-i="techHw">Hardware</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FAQ -->
   <div class="band" style="padding:72px 24px">
     <div style="max-width:800px;margin:0 auto">
@@ -3114,6 +3223,16 @@ const T={
     t21:'Vollständiges Dashboard',t22:'Interaktiver Grundriss',t23:'Musik, Wetter, Energie',t24:'Szenen & Automationen',t25:'3 Revisionen',t26:'Video-Erklärung',
     t31:'Alles aus Standard',t32:'Lokale KI-Sprachsteuerung',t33:'N8N Workflows',t34:'Unbegrenzte Revisionen',t35:'1 Monat Support',
     orderNow:'Jetzt bestellen',
+    techTitle:'Technologie-Stack',techSub:'Bewährte Open-Source Tools — lokal, sicher, ohne Cloud-Zwang',
+    tech1n:'Home Assistant',tech1d:'Open-Source Plattform mit 3000+ Integrationen. Das Herzstück jedes Smart Homes.',tech1b:'Open Source',
+    tech2d:'Visueller Workflow-Automator. Verbindet HA mit E-Mail, APIs, Kalender und 400+ Apps.',
+    tech3d:'Lokale Mesh-Protokolle für Sensoren, Lampen & Schalter — kein Cloud-Routing.',
+    tech4d:'Neuer offener Smart-Home-Standard — Apple, Google, Amazon und HA kompatibel.',
+    tech5d:'Smarte Relais & Dimmer für bestehende Verkabelung — schnell nachrüstbar.',
+    tech6d:'Visueller Automation-Editor. Komplexe Flows per Drag & Drop erstellen.',
+    tech7d:'Leichtgewichtiges Echtzeit-Messaging zwischen Geräten — der Klebstoff des IoT.',
+    tech8d:'Dedizierter Home Server — stromsparend, leise, 24/7 zuverlässig.',
+    techLocal:'Lokal',techStd:'Standard',techHw:'Hardware',
     faqTtl:'Häufige Fragen',faqSub:'Alles was du wissen musst',
     faq1q:'Was ist Home Assistant?',faq1a:'Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla.',
     faq2q:'Brauche ich technisches Vorwissen?',faq2a:'Nein. Du bekommst fertige Lösungen mit Dokumentation und Einrichtungsanleitung.',
@@ -3184,6 +3303,16 @@ const T={
     t21:'Full Dashboard',t22:'Interactive Floor Plan',t23:'Music, Weather, Energy',t24:'Scenes & Automations',t25:'3 Revisions',t26:'Video Explanation',
     t31:'Everything in Standard',t32:'Local AI Voice Control',t33:'N8N Workflows',t34:'Unlimited Revisions',t35:'1 Month Support',
     orderNow:'Order Now',
+    techTitle:'Technology Stack',techSub:'Proven open-source tools — local, secure, no cloud dependency',
+    tech1n:'Home Assistant',tech1d:'Open-source platform with 3000+ integrations. The heart of every smart home.',tech1b:'Open Source',
+    tech2d:'Visual workflow automator. Connects HA to email, APIs, calendar and 400+ apps.',
+    tech3d:'Local mesh protocols for sensors, lights & switches — no cloud routing.',
+    tech4d:'New open smart home standard — compatible with Apple, Google, Amazon and HA.',
+    tech5d:'Smart relays & dimmers for existing wiring — easy to retrofit.',
+    tech6d:'Visual automation editor. Build complex flows via drag & drop.',
+    tech7d:'Lightweight real-time messaging between devices — the glue of IoT.',
+    tech8d:'Dedicated home server — energy-efficient, quiet, reliable 24/7.',
+    techLocal:'Local',techStd:'Standard',techHw:'Hardware',
     faqTtl:'Frequently Asked Questions',faqSub:'Everything you need to know',
     faq1q:'What is Home Assistant?',faq1a:'Home Assistant is an open-source platform connecting 3000+ smart home devices — from Philips Hue to Tesla.',
     faq2q:'Do I need technical knowledge?',faq2a:'No. You get a ready solution with full documentation and setup guide.',
