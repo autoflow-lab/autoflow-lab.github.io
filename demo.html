@@ -797,6 +797,23 @@ audio{display:none}
 /* Workflow */
 .wf-demo{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:var(--r);padding:32px;border:1px solid var(--border);margin:44px 0;position:relative;overflow:hidden}
 .wf-demo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(112,80,255,.06),transparent 70%);pointer-events:none}
+/* Before / After examples */
+.ba-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:32px}
+.ba-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:var(--card)}
+[data-theme="light"] .ba-card{background:rgba(255,255,255,.65);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.82)}
+.ba-header{padding:14px 18px 12px;font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.ba-before-hdr{background:rgba(255,59,48,.1);color:#ff3b30;border-bottom:1px solid rgba(255,59,48,.15)}
+.ba-after-hdr{background:rgba(52,199,89,.1);color:#30d158;border-bottom:1px solid rgba(52,199,89,.15)}
+.ba-split{display:grid;grid-template-columns:1fr 1fr}
+.ba-col{padding:16px 18px}
+.ba-col-before{border-right:1px solid var(--border)}
+.ba-title{font-size:.82rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.ba-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+.ba-list li{font-size:.72rem;color:var(--text2);line-height:1.4;display:flex;align-items:flex-start;gap:5px}
+.ba-result{font-size:.78rem;font-weight:700;padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.ba-result.bad{color:#ff3b30}
+.ba-result.good{color:#30d158}
+
 .wf-nodes{display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
 .wf-node{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:18px 22px;text-align:center;min-width:115px;position:relative;transition:transform .3s,box-shadow .3s}
 .wf-node:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
@@ -2236,6 +2253,114 @@ input[type=range]{touch-action:pan-x}
       <div class="ai-srv"><span class="ai-srv-icon">🔔</span><div class="ai-srv-title" data-i="ais6t">Smarte Benachrichtigungen</div><div class="ai-srv-desc" data-i="ais6d">KI-gefilterte, kontextrelevante Alerts. Kein Spam, nur was wirklich wichtig ist. Inkl. Kameraerkennung.</div></div>
     </div>
 
+    <!-- Before / After Examples -->
+    <div class="reveal" style="margin-top:64px">
+      <h2 class="sec-title sec-center" data-i="baTitle">Vorher & Nachher</h2>
+      <p class="sec-sub sec-center" data-i="baSub">Echte Alltagssituationen — so verändert KI-Automation dein Leben</p>
+      <div class="ba-grid">
+
+        <!-- Example 1: Morning Routine -->
+        <div class="ba-card">
+          <div class="ba-split">
+            <div class="ba-col ba-col-before">
+              <div class="ba-header ba-before-hdr">😴 Vorher</div>
+              <div style="padding:14px 0 0">
+                <div class="ba-title">☕ Morgen-Routine</div>
+                <ul class="ba-list">
+                  <li>⏰ Wecker klingelt, aufstehen</li>
+                  <li>🌡 Heizung manuell aufdrehen</li>
+                  <li>🪟 Rollladen einzeln hochziehen</li>
+                  <li>☕ Kaffeemaschine einschalten</li>
+                  <li>📱 Wetter-App öffnen</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ba-col">
+              <div class="ba-header ba-after-hdr">✨ Nachher</div>
+              <div style="padding:14px 0 0">
+                <div class="ba-title">⚡ Vollautomatisch</div>
+                <ul class="ba-list">
+                  <li>🌅 6:45 Uhr: Rollladen öffnen</li>
+                  <li>🌡 Zimmer vorgeheizt (21°C)</li>
+                  <li>☕ Kaffee fertig beim Aufwachen</li>
+                  <li>📲 Wetter + Kalender via Telegram</li>
+                  <li>🎵 Lieblingsplaylist startet</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="ba-result bad">⏱ 8 Min manuell → <span class="ba-result good" style="padding:0;border:none">0 Min, alles automatisch ✓</span></div>
+        </div>
+
+        <!-- Example 2: Energy -->
+        <div class="ba-card">
+          <div class="ba-split">
+            <div class="ba-col ba-col-before">
+              <div class="ba-header ba-before-hdr">💸 Vorher</div>
+              <div style="padding:14px 0 0">
+                <div class="ba-title">⚡ Energie-Chaos</div>
+                <ul class="ba-list">
+                  <li>💡 Licht läuft wenn niemand da</li>
+                  <li>🌡 Heizung vergessen abzudrehen</li>
+                  <li>📺 Standby-Verbrauch unkontrolliert</li>
+                  <li>🔌 Laden vergessen / zu lange</li>
+                  <li>📊 Keine Verbrauchsübersicht</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ba-col">
+              <div class="ba-header ba-after-hdr">🌱 Nachher</div>
+              <div style="padding:14px 0 0">
+                <div class="ba-title">🏠 Smart Energie</div>
+                <ul class="ba-list">
+                  <li>📍 Geofencing: alles aus beim Verlassen</li>
+                  <li>🌡 Heizplan nach Kalender</li>
+                  <li>🌙 Standby-Killer um 23 Uhr</li>
+                  <li>☀️ Solar-Überschuss → Waschen</li>
+                  <li>📊 Echtzeit-Dashboard kWh</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="ba-result bad">💶 Ø €185/Monat → <span class="ba-result good" style="padding:0;border:none">€124/Monat (−33%) ✓</span></div>
+        </div>
+
+        <!-- Example 3: Security -->
+        <div class="ba-card">
+          <div class="ba-split">
+            <div class="ba-col ba-col-before">
+              <div class="ba-header ba-before-hdr">😰 Vorher</div>
+              <div style="padding:14px 0 0">
+                <div class="ba-title">🔓 Sicherheit manuell</div>
+                <ul class="ba-list">
+                  <li>📷 Kamera-App manuell checken</li>
+                  <li>🔑 Schlüssel verloren / vergessen</li>
+                  <li>🚪 Tür abzuschließen vergessen</li>
+                  <li>👁 Keine Alerts bei Bewegung</li>
+                  <li>🌙 Nachts kein Überblick</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ba-col">
+              <div class="ba-header ba-after-hdr">🛡 Nachher</div>
+              <div style="padding:14px 0 0">
+                <div class="ba-title">🤖 KI-Sicherheit</div>
+                <ul class="ba-list">
+                  <li>📲 Foto + Alert bei Klingeln</li>
+                  <li>🔒 Automatisch abschließen (22h)</li>
+                  <li>📍 Tür offen? Telegram-Reminder</li>
+                  <li>🚶 Personenerkennung (lokal/offline)</li>
+                  <li>🌙 Nachtlicht bei Bewegung</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="ba-result bad">😰 Manuell, unzuverlässig → <span class="ba-result good" style="padding:0;border:none">24/7 automatisch ✓</span></div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="wf-demo reveal">
       <h3 style="text-align:center;margin-bottom:26px;font-size:1rem;color:var(--text2)" data-i="wfTitle">Beispiel: Automatische E-Mail-Zusammenfassung</h3>
       <div class="wf-nodes">
@@ -3407,6 +3532,7 @@ const T={
     ftTagline:'Handgefertigte Smart Home Dashboards — keine Cloud, kein Abo, ganz deins.',
     aiH1a:'Dein Alltag,',aiH1b:'vollautomatisch.',aiSub:'Lokale KI-Modelle, N8N Workflows, Chatbots — alles ohne Cloud-Abhängigkeit.',
     aiCta1:'🤖 KI-Projekt starten',aiCta2:'✉ Kostenlos anfragen',
+    baTitle:'Vorher & Nachher',baSub:'Echte Alltagssituationen — so verändert KI-Automation dein Leben',
     aiSrvTtl:'Was ich anbiete',aiSrvSub:'Alles lokal — keine Daten in der Cloud, kein Abo',
     ais1t:'Lokale Sprachsteuerung',ais1d:'Whisper + Ollama — komplett lokal, ohne Google/Alexa.',
     ais2t:'N8N Workflows',ais2d:'Automatisiere alles: E-Mails, Kalender, APIs. HA mit der ganzen Welt.',
@@ -3493,6 +3619,7 @@ const T={
     ftTagline:'Handcrafted Smart Home dashboards — no cloud, no subscription, just yours.',
     aiH1a:'Your daily life,',aiH1b:'fully automated.',aiSub:'Local AI models, N8N workflows, chatbots — zero cloud dependency.',
     aiCta1:'🤖 Start AI Project',aiCta2:'✉ Free Consultation',
+    baTitle:'Before & After',baSub:'Real everyday situations — how AI automation changes your life',
     aiSrvTtl:'What I Offer',aiSrvSub:'Everything local — no cloud data, no subscriptions',
     ais1t:'Local Voice Control',ais1d:'Whisper + Ollama — fully local, no Google/Alexa.',
     ais2t:'N8N Workflows',ais2d:'Automate everything: emails, calendar, APIs. Connect HA to the world.',
