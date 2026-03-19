@@ -604,6 +604,23 @@ audio{display:none}
 @media(max-width:840px){.fp-wrap{grid-template-columns:1fr}}
 .fp-outer{position:relative;border-radius:var(--r);overflow:hidden;background:#060610;box-shadow:0 12px 60px rgba(0,0,0,.28);cursor:crosshair}
 .fp-outer img.fp-base{width:100%;display:block;border-radius:var(--r);pointer-events:none;user-select:none}
+
+/* Room Detail Panel */
+.fp-detail{position:absolute;z-index:50;background:rgba(12,12,22,.88);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:18px 20px;min-width:220px;max-width:280px;box-shadow:0 20px 60px rgba(0,0,0,.55);pointer-events:auto;transform:scale(.88) translateY(8px);opacity:0;transition:opacity .22s ease,transform .22s ease;display:none}
+.fp-detail.open{display:block;animation:fpDetailIn .22s ease forwards}
+@keyframes fpDetailIn{from{opacity:0;transform:scale(.88) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.fp-detail-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.fp-detail-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.fp-detail-name{font-size:.88rem;font-weight:700;color:#fff}
+.fp-detail-state{font-size:.65rem;font-weight:600;letter-spacing:.5px;margin-top:2px;opacity:.6}
+.fp-detail-devices{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.fp-detail-dev{display:flex;align-items:center;gap:8px;font-size:.72rem;color:rgba(255,255,255,.7);padding:5px 8px;border-radius:8px;background:rgba(255,255,255,.05)}
+.fp-detail-dev span{font-size:.82rem}
+.fp-detail-toggle{width:100%;margin-top:12px;padding:8px;border-radius:10px;border:none;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.fp-detail-toggle.on{background:rgba(255,163,30,.2);color:#ffaa30;border:1px solid rgba(255,163,30,.3)}
+.fp-detail-toggle.off{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1)}
+.fp-detail-close{position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,.35);font-size:1rem;cursor:pointer;padding:2px 6px;line-height:1;transition:color .15s}
+.fp-detail-close:hover{color:rgba(255,255,255,.8)}
 .fp-hint{font-size:.7rem;color:var(--text3);text-align:center;padding:7px 0 12px;display:flex;align-items:center;justify-content:center;gap:6px}
 .fp-panel{background:var(--card);border-radius:var(--r);padding:16px;border:1px solid var(--border);position:sticky;top:calc(var(--nav) + 16px);max-height:calc(100vh - var(--nav) - 48px);overflow-y:auto}
 .fp-panel-title{font-size:.62rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
@@ -1565,9 +1582,23 @@ input[type=range]{touch-action:pan-x}
       <div class="fp-wrap">
         <div>
           <div class="fp-hint" style="position:relative">
-              <span>👆</span><span data-i="fpHint" class="desktop-only">Klick: Licht an/aus · Rechtsklick: Farbe wählen</span><span class="mobile-only">Tippen: Licht an/aus · Lang drücken: Farbe</span>
+              <span>👆</span><span data-i="fpHint" class="desktop-only">Klick: Licht an/aus · Doppelklick: Details · Rechtsklick: Farbe wählen</span><span class="mobile-only">Tippen: Licht an/aus · 2× Tippen: Details · Lang drücken: Farbe</span>
             </div>
           <div class="fp-outer" style="-webkit-user-select:none;user-select:none;-webkit-touch-callout:none" id="fp-outer" style="position:relative">
+            <!-- Room Detail Panel (dblclick) -->
+            <div class="fp-detail" id="fp-detail">
+              <button class="fp-detail-close" onclick="closeRoomDetail()">✕</button>
+              <div class="fp-detail-header">
+                <div class="fp-detail-icon" id="fpd-icon"></div>
+                <div>
+                  <div class="fp-detail-name" id="fpd-name"></div>
+                  <div class="fp-detail-state" id="fpd-state"></div>
+                </div>
+              </div>
+              <ul class="fp-detail-devices" id="fpd-devices"></ul>
+              <button class="fp-detail-toggle" id="fpd-toggle" onclick="fpDetailToggle()"></button>
+            </div>
+
             <!-- Color Picker -->
             <div class="cp" id="fp-cp">
               <div class="cp-ttl" id="cp-ttl">Raum</div>
@@ -3075,7 +3106,70 @@ function openCp(rid,e){
 }
 function closeCp(){document.getElementById('fp-cp')?.classList.remove('open');cpRoom=null}
 function cpBright(v){if(!cpRoom)return;rooms[cpRoom].brightness=+v;applyRoom(cpRoom)}
-document.addEventListener('click',e=>{if(!e.target.closest('#fp-cp')&&!e.target.closest('#fp-outer svg'))closeCp()});
+document.addEventListener('click',e=>{if(!e.target.closest('#fp-cp')&&!e.target.closest('#fp-outer svg')&&!e.target.closest('#fp-detail'))closeCp()});
+
+// ── Room Detail Panel ──────────────────────────
+const ROOM_DEVICES={
+  bed1: [['🔆','Deckenlampe (×3)'],['🌡','Thermostat'],['🔌','Smart Plug TV'],['📡','Bewegungssensor']],
+  bed2: [['🔆','Deckenlampe (×2)'],['🖥','Schreibtischlampe'],['🌡','Thermostat'],['🔌','Smart Plug']],
+  living:[['🔆','Deckenlampe (×2)'],['🎵','Sonos Play:1'],['🌡','Thermostat Wohnen'],['📺','TV Smart Plug'],['🌤','Wetterstation']],
+  dining:[['💡','Pendelleuchte'],['🌡','Thermostat'],['🔌','Smart Plug Kaffeemaschine']],
+  bath:  [['🔆','Deckenlampe'],['💧','Feuchtigkeitssensor'],['🌡','Thermostat'],['🚿','Duschzeit-Timer']],
+  office:[['🖥','Schreibtischlampe'],['💻','PC Smart Plug'],['🌡','Thermostat'],['📡','Zigbee Coordinator']],
+};
+let detailRoom=null,lastTapTime={},lastTapEl=null;
+function openRoomDetail(rid,px,py){
+  detailRoom=rid;
+  const panel=document.getElementById('fp-detail');
+  const ctr=document.getElementById('fp-outer');
+  if(!panel||!ctr)return;
+  closeCp();
+  const r=rooms[rid];if(!r)return;
+  const col=ROOM_COLS[r.color]||'#0071e3';
+  const name=lang==='de'?r.name:(r.nameEn||r.name);
+  // Position inside fp-outer
+  const cr=ctr.getBoundingClientRect();
+  const panW=280,panH=240;
+  let x=Math.min(Math.max((px||0)-cr.left-panW/2,6),cr.width-panW-6);
+  let y=Math.min(Math.max((py||0)-cr.top-10,6),cr.height-panH-6);
+  panel.style.left=x+'px';panel.style.top=y+'px';
+  // Icon
+  const icon=document.getElementById('fpd-icon');
+  if(icon){icon.textContent=ROOM_ICONS[rid]||'💡';icon.style.background=r.on?col+'33':'rgba(255,255,255,.08)'}
+  // Name + state
+  document.getElementById('fpd-name').textContent=name;
+  const stateEl=document.getElementById('fpd-state');
+  if(stateEl)stateEl.textContent=r.on?(lang==='de'?`EIN · ${r.brightness||80}% · ${r.color}`:`ON · ${r.brightness||80}% · ${r.color}`):(lang==='de'?'AUSGESCHALTET':'OFF');
+  // Devices
+  const devList=document.getElementById('fpd-devices');
+  devList.innerHTML='';
+  (ROOM_DEVICES[rid]||[]).forEach(([em,label])=>{
+    const li=document.createElement('li');li.className='fp-detail-dev';
+    li.innerHTML=`<span>${em}</span>${label}`;devList.appendChild(li);
+  });
+  // Toggle
+  const tog=document.getElementById('fpd-toggle');
+  if(tog){tog.className='fp-detail-toggle '+(r.on?'on':'off');tog.textContent=r.on?(lang==='de'?'⬤ Licht ausschalten':'⬤ Turn Off'):(lang==='de'?'○ Licht einschalten':'○ Turn On')}
+  panel.classList.add('open');
+}
+function closeRoomDetail(){document.getElementById('fp-detail')?.classList.remove('open');detailRoom=null}
+function fpDetailToggle(){if(!detailRoom)return;roomClick(detailRoom);setTimeout(()=>openRoomDetail(detailRoom,null,null),60)}
+// Wire up dblclick on SVG room polygons
+document.addEventListener('DOMContentLoaded',()=>{
+  ['bed1','bed2','living','dining','bath','office'].forEach(rid=>{
+    const poly=document.getElementById('rp-'+rid);if(!poly)return;
+    // Double-click (desktop)
+    poly.addEventListener('dblclick',e=>{e.stopPropagation();openRoomDetail(rid,e.clientX,e.clientY)});
+    // Double-tap (mobile): two taps within 300ms
+    poly.addEventListener('click',e=>{
+      const now=Date.now();
+      if(lastTapEl===rid&&now-lastTapTime[rid]<320){openRoomDetail(rid,e.clientX,e.clientY)}
+      lastTapTime[rid]=now;lastTapEl=rid;
+    });
+  });
+  // Close on outside click
+  document.addEventListener('click',e2=>{if(!e2.target.closest('#fp-detail')&&!['rp-bed1','rp-bed2','rp-living','rp-dining','rp-bath','rp-office'].includes(e2.target.id))closeRoomDetail()});
+});
 
 function setScene(k){
   document.querySelectorAll('.sp').forEach(b=>b.classList.remove('on'));
