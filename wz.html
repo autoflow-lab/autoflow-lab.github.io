@@ -126,6 +126,17 @@ html,body{height:100%;background:#000;
 .ni span{font-size:.5rem;font-weight:500;letter-spacing:.3px}
 .ni.on{color:#fff}
 .ni.on svg{transform:scale(1.1)}
+.ni.on::before{
+  content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:28px;height:3px;border-radius:2px;
+  background:rgba(255,255,255,.85);
+  box-shadow:0 0 8px 2px rgba(255,255,255,.55),0 0 18px 4px rgba(255,255,255,.22);
+  animation:navGlow 2.5s ease-in-out infinite;
+}
+@keyframes navGlow{
+  0%,100%{opacity:.75;width:22px}
+  50%{opacity:1;width:30px}
+}
 /* Mini now-playing bar */
 .mini-np{
   display:flex;align-items:center;gap:10px;
@@ -170,6 +181,7 @@ html,body{height:100%;background:#000;
 .hbg{position:absolute;inset:0;z-index:0;
   background:linear-gradient(160deg,#0d0d1a,#12102a,#0a0a14);
   transition:background 4s ease}
+#wx-hero{transition:background 3s ease}
 /* Glow orbs in hero */
 .hglow{
   position:absolute;top:-80px;left:-60px;width:320px;height:320px;
@@ -223,6 +235,10 @@ html,body{height:100%;background:#000;
 @keyframes colonBlink{0%,49%{opacity:.9}50%,100%{opacity:.15}}
 .hdate{font-size:.58rem;font-weight:400;letter-spacing:1.5px;
   color:rgba(255,255,255,.25);margin-top:8px;text-transform:uppercase}
+.hgreet{font-size:.72rem;font-weight:600;letter-spacing:.2px;
+  color:rgba(255,255,255,.52);margin-top:6px;
+  animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0}
+@keyframes greetFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .hwx{display:flex;flex-direction:column;align-items:flex-end;gap:0;padding-top:6px}
 .hwico{width:64px;height:64px;animation:wxFloat 6s ease-in-out infinite}
 @keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -287,7 +303,7 @@ html,body{height:100%;background:#000;
 .pill.music.on .pd{background:var(--blue);box-shadow:0 0 5px var(--blue)}
 
 /* ───────────── SCENES 2x2 ───────────── */
-.sg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;will-change:transform}
 .sb2{
   border-radius:18px;padding:18px 16px 16px;cursor:pointer;
   display:flex;flex-direction:column;gap:8px;
@@ -431,18 +447,21 @@ html,body{height:100%;background:#000;
 .vi{color:var(--dim2);display:flex;flex-shrink:0}
 .vi svg{width:16px;height:16px}
 .vtrack{
-  flex:1;height:5px;border-radius:4px;background:rgba(255,255,255,.12);
+  flex:1;height:36px;border-radius:18px;background:#2c2c2e;
   position:relative;cursor:pointer;touch-action:pan-y;
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.14);
+  overflow:hidden;
 }
-.vfill{height:100%;border-radius:4px;width:40%;
-  background:linear-gradient(90deg,var(--ind),var(--blue));pointer-events:none}
+.vfill{height:100%;border-radius:18px;width:40%;
+  background:linear-gradient(90deg,rgba(10,132,255,.7),#0a84ff);pointer-events:none;transition:width .1s}
 .vthumb{
   position:absolute;top:50%;transform:translate(-50%,-50%);
-  width:20px;height:20px;border-radius:50%;pointer-events:none;
-  background:#f1f5f9;box-shadow:0 2px 8px rgba(0,0,0,.5),0 0 0 2.5px rgba(56,189,248,.35);
-  left:40%;
+  width:28px;height:28px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 35% 30%,#fff,#c8c8c8);
+  box-shadow:0 2px 10px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.5) inset;
+  left:40%;transition:left .1s;
 }
-.vval{font-size:.62rem;font-weight:700;color:var(--dim);min-width:34px;text-align:right}
+.vval{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6);min-width:36px;text-align:right}
 
 /* Radio */
 .rg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
@@ -511,15 +530,38 @@ html,body{height:100%;background:#000;
 .lt.on .ltgl{opacity:1;animation:glowBreathe 3.5s ease-in-out infinite}
 @keyframes glowBreathe{0%,100%{opacity:.7;transform:scale(.95)}50%{opacity:1;transform:scale(1.08)}}
 .lt.on{/* color set via inline style from HA state */}
+/* CT-Tint overlay: warm amber → cool blue based on --ct-pct (0=warm, 1=cool) */
+.ltct{
+  position:absolute;inset:0;border-radius:18px;pointer-events:none;z-index:0;
+  opacity:0;transition:opacity .8s, background .8s;
+}
+.lt.on .ltct{opacity:1}
+/* Warm tint (--ct-pct near 0) → bottom-right amber glow */
+/* Cool tint (--ct-pct near 1) → bottom-right blue glow */
+/* Handled via inline style from JS */
 .ltico{
   width:40px;height:40px;border-radius:12px;z-index:1;
   display:flex;align-items:center;justify-content:center;
   background:rgba(255,255,255,.08);transition:background .35s;
+  position:relative;
+}
+.ltico::after{
+  content:'';position:absolute;inset:-4px;border-radius:16px;
+  border:1.5px solid rgba(var(--lc,255,159,10),.0);
+  pointer-events:none;transition:border-color .4s;
+}
+.lt.on .ltico::after{
+  border-color:rgba(var(--lc,255,159,10),.55);
+  animation:pulseRing 2.2s ease-in-out infinite;
+}
+@keyframes pulseRing{
+  0%,100%{inset:-3px;opacity:.6;border-radius:15px}
+  50%{inset:-7px;opacity:.15;border-radius:19px}
 }
 .ltico svg{width:20px;height:20px;stroke:var(--dim2);stroke-width:1.8;
   fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke .35s}
 input[type=range].ls-rng{width:100%;height:36px;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
-input[type=range].ls-rng::-webkit-slider-runnable-track{height:36px;border-radius:18px;border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.14)}
+input[type=range].ls-rng::-webkit-slider-runnable-track{height:36px;border-radius:18px;border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.14);background:transparent!important}
 input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#c8c8c8 100%);box-shadow:0 2px 10px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.5) inset;margin-top:3px;cursor:grab}
 .ltnm{font-size:.8rem;font-weight:600;color:var(--txt);z-index:1}
 .ltst{font-size:.58rem;color:var(--dim);margin-top:1px;transition:color .35s;z-index:1}
@@ -624,6 +666,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
             <div>
               <div class="htime" id="htime">--:--</div>
               <div class="hdate" id="hdate">–</div>
+              <div class="hgreet" id="hgreet"></div>
             </div>
             <div class="hwx" id="hwx-tap" style="cursor:pointer" title="Wetterdetails">
               <svg class="hwico" id="hwico" viewBox="0 0 72 72"></svg>
@@ -721,6 +764,16 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <div class="nptitle" id="np-t">Bereit</div>
           <div class="npsub" id="np-s">Almando Wohnzimmer</div>
           <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
+          <!-- Track progress -->
+          <div id="track-prog-wrap" style="margin-top:14px;display:none">
+            <div style="height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;position:relative">
+              <div id="track-prog-fill" style="height:100%;background:linear-gradient(90deg,var(--blue),#38bdf8);border-radius:3px;width:0%;transition:width .5s linear"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:5px">
+              <span id="track-pos" style="font-size:.55rem;color:rgba(255,255,255,.3)">0:00</span>
+              <span id="track-dur" style="font-size:.55rem;color:rgba(255,255,255,.3)">0:00</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="c pctrl">
@@ -745,21 +798,6 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <span class="vval" id="vv">40%</span>
         </div>
       </div>
-      <!-- Nest Lautstärke -->
-      <span class="lbl" style="margin-top:4px">Lautsprecher</span>
-      <div style="background:var(--c2);border-radius:16px;padding:14px 16px;border:1px solid rgba(255,255,255,.055);border-top-color:rgba(255,255,255,.12);margin-bottom:4px">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-          <span style="font-size:.78rem;font-weight:600;color:rgba(255,255,255,.7)">Google Nest Büro</span>
-          <span id="nest-state" style="margin-left:auto;font-size:.65rem;color:rgba(255,255,255,.35)">–</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
-          <input id="nest-vol" type="range" min="0" max="100" value="30" class="ls-rng" style="flex:1;height:32px">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          <span id="nest-vv" style="font-size:.72rem;color:rgba(255,255,255,.5);min-width:28px;text-align:right">30%</span>
-        </div>
-      </div>
       <span class="lbl">Radio</span>
       <div class="rg" id="rg"></div>
       <div class="spotcard" id="spotcard">
@@ -781,32 +819,116 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 
     <!-- ═══ LICHT ═══ -->
     <div class="page" id="pg-licht">
-      <!-- Quick Actions -->
-      <div style="display:flex;gap:8px;margin-bottom:4px">
-        <button id="qa-allon" style="flex:1;padding:9px 6px;border:1px solid rgba(255,159,10,.3);border-radius:12px;background:rgba(255,159,10,.1);color:#ff9f0a;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.3px">☀️ Alle An</button>
-        <button id="qa-alloff" style="flex:1;padding:9px 6px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.3px">🌙 Alle Aus</button>
-        <button id="qa-abend" style="flex:1;padding:9px 6px;border:1px solid rgba(251,146,60,.25);border-radius:12px;background:rgba(251,146,60,.08);color:#fb923c;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.3px">🕯 Abend</button>
-      </div>
       <span class="lbl">Licht</span>
       <div class="lg" id="lg"></div>
       <span class="lbl" style="margin-top:6px">Geräte</span>
       <div class="dg" id="dg"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
-      <div class="sg">
-        <div class="sb" data-s="abend">
-          <div class="si" style="background:rgba(245,158,11,.14)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
-          <span>Abend</span>
+      <div class="sg2">
+        <div class="sb2" data-s="abend" style="background:linear-gradient(135deg,#1a1200,#2d1f00,#1a0e00)">
+          <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+          <div class="sb2-n">Abend</div>
+          <div class="sb2-d">Warm &amp; gemütlich</div>
         </div>
-        <div class="sb" data-s="hell">
-          <div class="si" style="background:rgba(251,191,36,.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amb)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></div>
-          <span>Hell</span>
+        <div class="sb2" data-s="hell" style="background:linear-gradient(135deg,#1a1400,#2a2000,#1a1400)">
+          <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></div>
+          <div class="sb2-n">Hell</div>
+          <div class="sb2-d">Volle Helligkeit</div>
         </div>
-        <div class="sb" data-s="off">
-          <div class="si" style="background:rgba(248,113,113,.11)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg></div>
-          <span>Alles aus</span>
+        <div class="sb2" data-s="film" style="background:linear-gradient(135deg,#000d1a,#001833,#000d1a)">
+          <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg></div>
+          <div class="sb2-n">Film</div>
+          <div class="sb2-d">Kino-Modus</div>
+        </div>
+        <div class="sb2" data-s="off" style="background:linear-gradient(135deg,#180000,#240808,#180000)">
+          <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff453a" stroke-width="2" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg></div>
+          <div class="sb2-n">Alles aus</div>
+          <div class="sb2-d">Alle Geräte aus</div>
         </div>
       </div>
     </div><!-- /licht -->
+
+    <!-- ═══ WETTER ═══ -->
+    <div class="page" id="pg-wetter" style="padding-bottom:4px">
+      <!-- Hero: aktuelle Bedingungen -->
+      <div id="wx-hero" style="background:linear-gradient(145deg,#0d1b2e,#1a2840);border-radius:20px;padding:20px 20px 16px;margin-bottom:10px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.07);border-top-color:rgba(255,255,255,.14)">
+        <div style="position:absolute;inset:0;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.06),transparent 45%);pointer-events:none"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative">
+          <div>
+            <div style="font-size:.62rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:6px">EINSIEDELN · JETZT</div>
+            <div style="display:flex;align-items:baseline;gap:6px">
+              <div style="font-size:3.8rem;font-weight:100;letter-spacing:-2px;color:#fff;line-height:1" id="wx-big-temp">–°</div>
+              <div style="font-size:1rem;color:rgba(255,255,255,.4);align-self:flex-start;margin-top:8px" id="wx-big-feel">Gefühlt –°</div>
+            </div>
+            <div style="font-size:.85rem;color:rgba(255,255,255,.6);margin-top:4px" id="wx-big-desc">–</div>
+            <div style="display:flex;gap:14px;margin-top:12px">
+              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">↑ <span style="color:#fff;font-weight:600" id="wx-hi">–</span>°</div>
+              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">↓ <span style="color:#fff;font-weight:600" id="wx-lo">–</span>°</div>
+              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">💧 <span style="color:#0a84ff;font-weight:600" id="wx-hum">–</span>%</div>
+              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">💨 <span style="color:#fff;font-weight:600" id="wx-wind">–</span> km/h</div>
+            </div>
+          </div>
+          <div id="wx-big-ico" style="font-size:5rem;line-height:1;filter:drop-shadow(0 4px 16px rgba(0,0,0,.4))">🌤</div>
+        </div>
+      </div>
+
+      <!-- Stündlich -->
+      <div style="font-size:.62rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:0 2px 8px">STÜNDLICH</div>
+      <div id="wx-hourly" style="display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
+
+      <!-- 7-Tage -->
+      <div style="font-size:.62rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:0 2px 8px">7 TAGE</div>
+      <div id="wx-daily" style="background:var(--c1);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.1);margin-bottom:12px"></div>
+
+      <!-- Radar -->
+      <div style="font-size:.62rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:0 2px 8px">RADAR · WOLKEN</div>
+      <div style="border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.07);position:relative;height:260px;background:#0d1b2e">
+        <iframe id="wx-radar"
+          src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=km/h&zoom=9&overlay=clouds&product=ecmwf&level=surface&lat=47.128&lon=8.748&detailLat=47.128&detailLon=8.748&marker=true&message=true"
+          style="width:100%;height:100%;border:none;opacity:.95"
+          loading="lazy"
+          allow="fullscreen"></iframe>
+        <div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.6);border-radius:8px;padding:4px 8px;font-size:.58rem;color:rgba(255,255,255,.5);backdrop-filter:blur(8px)">Windy · ECMWF</div>
+      </div>
+    </div><!-- /wetter -->
+
+    <!-- ═══ WETTER ═══ -->
+    <div class="page" id="pg-wetter" style="padding-bottom:4px">
+      <!-- Aktuell -->
+      <div id="wx-hero" style="background:linear-gradient(135deg,#0d1b2e,#1a2840);border-radius:20px;padding:20px;margin-bottom:10px;border:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(10,132,255,.12),transparent 65%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div style="font-size:.58rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:6px">JETZT · EINSIEDELN</div>
+            <div style="font-size:3.4rem;font-weight:100;letter-spacing:-2px;color:#fff;line-height:1" id="wxt-temp">–°</div>
+            <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-top:6px" id="wxt-desc">–</div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.3);margin-top:3px">Gefühlt <span id="wxt-feel">–°</span></div>
+          </div>
+          <svg id="wxt-ico" viewBox="0 0 72 72" width="80" height="80" style="animation:wxFloat 6s ease-in-out infinite"></svg>
+        </div>
+        <div style="display:flex;gap:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)">
+          <div style="font-size:.65rem;color:rgba(255,255,255,.4)">↑ <span style="color:#fff;font-weight:600" id="wxt-hi">–</span></div>
+          <div style="font-size:.65rem;color:rgba(255,255,255,.4)">↓ <span style="color:#fff;font-weight:600" id="wxt-lo">–</span></div>
+          <div style="font-size:.65rem;color:rgba(255,255,255,.4)">💧 <span style="color:#0a84ff;font-weight:600" id="wxt-hum">–</span></div>
+          <div style="font-size:.65rem;color:rgba(255,255,255,.4)">💨 <span style="color:#fff;font-weight:600" id="wxt-wind">–</span></div>
+        </div>
+      </div>
+      <!-- Stündlich -->
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">STÜNDLICH</div>
+      <div id="wx-hourly" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
+      <!-- 7 Tage -->
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">7 TAGE</div>
+      <div id="wx-7days" style="background:var(--c1);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.06);margin-bottom:12px"></div>
+      <!-- Radar -->
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">REGENRADAR · EINSIEDELN</div>
+      <div style="border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.07);position:relative;height:260px;background:#0a0f1a">
+        <iframe id="wx-radar"
+          src="https://www.meteoblue.com/de/wetter/maps/widget/einsiedeln_schweiz_2660513?windAnimation=0&gust=0&satellite=0&cloudsAndPrecipitation=1&temperature=0&sunshine=0&extremeForecastIndex=0&geoloc=fixed&tempunit=C&windunit=kmh&lengthunit=metric&zoom=8&autowidth=auto"
+          style="width:100%;height:100%;border:none;filter:brightness(.9) saturate(1.1)"
+          loading="lazy" scrolling="no" allowtransparency="true"></iframe>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(transparent,var(--bg));pointer-events:none"></div>
+      </div>
+    </div>
 
     <!-- ═══ ÜBERSICHT ═══ -->
     <div class="page" id="pg-plan">
@@ -860,6 +982,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/></svg>
       <span>Licht</span>
     </button>
+    <button class="ni" data-p="wetter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+      <span>Wetter</span>
+    </button>
     <button class="ni" data-p="plan">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       <span>Alle</span>
@@ -882,12 +1008,10 @@ const CFG = {
      svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
     {id:'light.hue_play_l',name:'Büro Hue',  lc:'167,139,250',
      svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
-    {id:'light.gang_og_licht',name:'Gang OG', lc:'255,193,141',
+    {id:'light.gang_og_licht',name:'Gang OG', lc:'255,220,160',nodim:true,
      svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
-    {id:'light.gang_eg_licht',name:'Gang EG', lc:'255,193,141',
+    {id:'light.gang_eg_licht',name:'Gang EG', lc:'255,220,160',nodim:true,
      svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
-    {id:'light.hue_iris',   name:'Hue Iris', lc:'167,139,250',
-     svg:'<circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9" opacity=".3"/>'},
   ],
   devs:[
     {id:'media_player.lg_webos_tv_oled65g49ls_2', name:'LG OLED TV', domain:'media_player',
@@ -1069,16 +1193,29 @@ function wxTxt(c){
 }
 
 // Hero gradient + blob colors based on weather + time
-// Hero gradient — rich but not overwhelming
+// Hero gradient — rich, vivid weather-reactive gradients
 function heroBg(code,h){
   const n=h<6||h>=22, ev=h>=19&&h<22, mo=h>=6&&h<9;
+  // Night / Evening / Morning override
   if(n)  return 'linear-gradient(160deg,#0d0d1a 0%,#12102a 60%,#0a0a14 100%)';
   if(ev) return 'linear-gradient(160deg,#1a0a20 0%,#2d0f35 55%,#0f0818 100%)';
   if(mo) return 'linear-gradient(160deg,#0a1828 0%,#1a2d4a 55%,#080e1c 100%)';
-  if(code===0||code===1) return 'linear-gradient(160deg,#0a1e40 0%,#0e2e6a 55%,#081228 100%)';
-  if(code<=2) return 'linear-gradient(160deg,#101828 0%,#1a2840 55%,#0a1020 100%)';
-  if(code>=95) return 'linear-gradient(160deg,#08080f 0%,#101018 55%,#060608 100%)';
-  if(code>=61) return 'linear-gradient(160deg,#080e18 0%,#0e1828 55%,#060a10 100%)';
+  // Thunderstorm (95–99) → near-black with deep charcoal
+  if(code>=95) return 'linear-gradient(160deg,#060608 0%,#0e0e14 50%,#08080a 100%)';
+  // Heavy rain (61–67, 80–82) → dark blue-navy
+  if((code>=61&&code<=67)||(code>=80&&code<=82)) return 'linear-gradient(160deg,#030d1a 0%,#071428 50%,#020a12 100%)';
+  // Drizzle / light rain (50–57) → muted steel blue
+  if(code>=50&&code<=57) return 'linear-gradient(160deg,#091320 0%,#0f1e2e 50%,#060e18 100%)';
+  // Snow (71–77) → cold pale indigo-white
+  if(code>=71&&code<=77) return 'linear-gradient(160deg,#0e1020 0%,#1a1e32 50%,#0a0c18 100%)';
+  // Fog (45–48) → deep grey-blue
+  if(code>=45&&code<=48) return 'linear-gradient(160deg,#0c0e14 0%,#151820 50%,#090a10 100%)';
+  // Partly cloudy (2–3) → medium blue-grey
+  if(code>=2&&code<=3) return 'linear-gradient(160deg,#0d1520 0%,#182435 50%,#0a1018 100%)';
+  // Mainly clear (1) → deep warm blue
+  if(code===1) return 'linear-gradient(160deg,#0a1e3a 0%,#0f2d5c 55%,#080f22 100%)';
+  // Clear sky (0) → rich warm amber-orange tinted sky
+  if(code===0) return 'linear-gradient(160deg,#1a1000 0%,#2e1e04 40%,#3a1a00 70%,#100800 100%)';
   return 'linear-gradient(160deg,#101018 0%,#1a1a28 55%,#0c0c14 100%)';
 }
 
@@ -1114,6 +1251,13 @@ async function exchange(code){
     const t={access_token:d.access_token,refresh_token:d.refresh_token,expires:Date.now()+(d.expires_in-60)*1e3};
     setTok(t); return t.access_token;
   }catch{return null}
+}
+
+function setRngBg(el,color='#ff9f0a'){
+  if(!el)return;
+  const p=((+el.value-(+el.min||0))/(((+el.max||100)-(+el.min||0))))*100;
+  el.style.background=`linear-gradient(90deg,${color} ${p}%,#2c2c2e ${p}%)`;
+  el.style.borderRadius='18px';
 }
 
 async function boot(){
@@ -1235,7 +1379,23 @@ async function fetchStates(){
     } else {
       toast(`❌ fetchStates ${r.status}`,5000);
     }
-  }catch(e){console.warn('fetchStates err:',e)}
+    _offlineCount=0;showOfflineBanner(false);
+  }catch(e){
+    console.warn('fetchStates err:',e);
+    _offlineCount=(_offlineCount||0)+1;
+    if(_offlineCount>=2)showOfflineBanner(true);
+  }
+}
+let _offlineCount=0;
+function showOfflineBanner(show){
+  let b=document.getElementById('offline-banner');
+  if(!b){
+    b=document.createElement('div');b.id='offline-banner';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:8000;background:rgba(255,69,58,.92);color:#fff;text-align:center;font-size:.75rem;font-weight:700;padding:10px;backdrop-filter:blur(10px);transform:translateY(-100%);transition:transform .35s;letter-spacing:.3px';
+    b.textContent='⚠️ Home Assistant nicht erreichbar — Verbindung wird wiederhergestellt…';
+    document.body.appendChild(b);
+  }
+  b.style.transform=show?'translateY(0)':'translateY(-100%)';
 }
 
 // Service calls via HTTP — doesn't depend on WS auth state
@@ -1271,8 +1431,8 @@ async function fetchWeather(){
     const u=`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CFG.lon}`+
       `&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day`+
       `&hourly=temperature_2m,weather_code,precipitation_probability`+
-      `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset`+
-      `&forecast_days=4&timezone=Europe%2FZurich&models=best_match`;
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max`+
+      `&forecast_days=7&timezone=Europe%2FZurich&models=best_match`;
     const r=await fetch(u,{signal:AbortSignal.timeout(8000)});
     _wx=await r.json();
     renderWeather();
@@ -1288,7 +1448,9 @@ function renderWeather(){
   const bg=heroBg(code,h);
 
   document.getElementById('hbg').style.background=bg;
-  document.getElementById('ab').style.background=bg.replace('145deg','170deg');
+  document.getElementById('ab').style.background=bg.replace('160deg','170deg');
+  // Apply weather-reactive bg to Wetter-Tab hero cards
+  document.querySelectorAll('#wx-hero').forEach(el=>{el.style.background=bg.replace('160deg','145deg');});
   document.getElementById('hwico').innerHTML=wxIco(code,72,night);
   document.getElementById('aw-ico').innerHTML=wxIco(code,44,night);
   document.getElementById('hwtemp').textContent=Math.round(c.temperature_2m)+'°';
@@ -1300,6 +1462,61 @@ function renderWeather(){
   document.getElementById('aw-d').textContent=wxTxt(code);
   document.getElementById('ws-w').textContent=Math.round(c.wind_speed_10m)+' km/h';
   document.getElementById('ws-h').textContent=c.relative_humidity_2m+' %';
+
+  // ── Wetter-Tab befüllen ──────────────────────
+  const wxtT=document.getElementById('wxt-temp');
+  if(wxtT){
+    wxtT.textContent=Math.round(c.temperature_2m)+'°';
+    document.getElementById('wxt-desc').textContent=wxTxt(code);
+    document.getElementById('wxt-feel').textContent=Math.round(c.apparent_temperature)+'°';
+    document.getElementById('wxt-wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
+    document.getElementById('wxt-hum').textContent=c.relative_humidity_2m+'%';
+    document.getElementById('wxt-ico').innerHTML=wxIco(code,72,night);
+    if(_wx.daily){
+      document.getElementById('wxt-hi').textContent=Math.round(_wx.daily.temperature_2m_max[0])+'°';
+      document.getElementById('wxt-lo').textContent=Math.round(_wx.daily.temperature_2m_min[0])+'°';
+    }
+    // Stündlich
+    const nowH=new Date().getHours();
+    const hl=document.getElementById('wx-hourly');
+    if(hl&&_wx.hourly){
+      const hrs=_wx.hourly;
+      hl.innerHTML=Array.from({length:12},(_,i)=>{
+        const idx=nowH+i;
+        const t=hrs.temperature_2m?.[idx]??'–';
+        const hcode=hrs.weather_code?.[idx]??0;
+        const prec=hrs.precipitation_probability?.[idx]??0;
+        const hh=String((nowH+i)%24).padStart(2,'0');
+        return`<div style="flex-shrink:0;width:58px;background:var(--c1);border-radius:14px;border:1px solid rgba(255,255,255,.06);padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.58rem;color:rgba(255,255,255,.35)">${i===0?'Jetzt':hh+':00'}</div>
+          <svg viewBox="0 0 28 28" width="28" height="28">${wxIco(hcode,28,false)}</svg>
+          <div style="font-size:.78rem;font-weight:600;color:#fff">${Math.round(+t)}°</div>
+          ${prec>10?`<div style="font-size:.55rem;color:#0a84ff">${prec}%</div>`:'<div style="height:14px"></div>'}
+        </div>`;
+      }).join('');
+    }
+    // 7 Tage
+    const d7=document.getElementById('wx-7days');
+    if(d7&&_wx.daily){
+      const days=['So','Mo','Di','Mi','Do','Fr','Sa'];
+      const dd=_wx.daily;
+      d7.innerHTML=dd.temperature_2m_max.slice(0,7).map((hi,i)=>{
+        const lo=dd.temperature_2m_min[i];
+        const dcode=dd.weather_code[i]??0;
+        const prec=dd.precipitation_probability_max?.[i]??0;
+        const date=new Date();date.setDate(date.getDate()+i);
+        const lbl=i===0?'Heute':i===1?'Morgen':days[date.getDay()];
+        const bar=`<div style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden"><div style="width:${prec}%;height:100%;background:#0a84ff;border-radius:2px"></div></div>`;
+        return`<div style="display:flex;align-items:center;padding:11px 16px;gap:12px;${i>0?'border-top:1px solid rgba(255,255,255,.05)':''}">
+          <div style="width:44px;font-size:.72rem;color:rgba(255,255,255,.5)">${lbl}</div>
+          <svg viewBox="0 0 28 28" width="26" height="26">${wxIco(dcode,28,false)}</svg>
+          ${prec>5?bar+'<span style="font-size:.6rem;color:#0a84ff;min-width:28px;text-align:right">'+prec+'%</span>':'<div style="flex:1"></div>'}
+          <div style="font-size:.72rem;color:rgba(255,255,255,.4);min-width:28px;text-align:right">${Math.round(lo)}°</div>
+          <div style="font-size:.78rem;font-weight:700;color:#fff;min-width:28px;text-align:right">${Math.round(hi)}°</div>
+        </div>`;
+      }).join('');
+    }
+  }
 
   if(_wx.daily?.sunrise?.[0]){
     const sr=new Date(_wx.daily.sunrise[0]);
@@ -1378,6 +1595,7 @@ function buildUI(){try{
   document.getElementById('lg').innerHTML=CFG.lights.map(l=>`
     <div class="lt" data-id="${l.id}" data-lc="${l.lc}">
       <div class="lt-inner"><div class="ltgl"></div></div>
+      <div class="ltct"></div>
       <div class="ltico" style="z-index:1"><svg viewBox="0 0 24 24">${l.svg}</svg></div>
       <div style="z-index:1">
         <div style="z-index:1">
@@ -1385,10 +1603,10 @@ function buildUI(){try{
           <div class="ltst" data-lst="${l.id}">Aus</div>
         </div>
       </div>
-      <div class="bbar" data-bri="${l.id}" style="z-index:2">
+      ${l.nodim?'':`<div class="bbar" data-bri="${l.id}" style="z-index:2">
         <div class="bfil" data-fill="${l.id}"></div>
         <div class="bthumb" data-thumb="${l.id}"></div>
-      </div>
+      </div>`}
     </div>`).join('');
 
   // Tile tap = toggle (ignore if tapping bar)
@@ -1434,6 +1652,8 @@ function buildUI(){try{
   function openLightSheet(lid,name){
     const s=_S[lid];
     const on=s?.state==='on';
+    const cfg=CFG.lights.find(l=>l.id===lid)||{};
+    const canDim=!cfg.nodim&&s?.attributes?.supported_color_modes?.some(m=>m!=='onoff');
     const bri=Math.round((s?.attributes?.brightness??0)/2.55)||0;
     const rgb=s?.attributes?.rgb_color;
     const ct=s?.attributes?.color_temp_kelvin;
@@ -1458,12 +1678,12 @@ function buildUI(){try{
             ${on?'An ✓':'Aus'}
           </button>
         </div>
-        <!-- Brightness -->
-        <div style="margin-bottom:20px">
-          <div style="font-size:.7rem;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:10px;letter-spacing:.5px">HELLIGKEIT <span id="ls-bv">${bri}%</span></div>
+        <!-- Brightness (nur für dimmbare Lichter) -->
+        ${canDim?`<div style="margin-bottom:20px">
+          <div style="font-size:.7rem;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:10px;letter-spacing:.5px">HELLIGKEIT <span id="ls-bv">${bri||50}%</span></div>
           <input id="ls-range" type="range" min="1" max="100" value="${bri||50}"
             style="width:100%;height:36px;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer">
-        </div>
+        </div>`:''}
         <!-- Color balls -->
         <div style="margin-bottom:16px">
           <div style="font-size:.7rem;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:14px;letter-spacing:.5px">FARBE</div>
@@ -1517,22 +1737,19 @@ function buildUI(){try{
 
     let _bTimer=null;
     const rng=document.getElementById('ls-range');
-    rng.classList.add('ls-rng');
-    function setRngBg(el,color='#ff9f0a'){
-      const p=((+el.value-(+el.min||0))/(((+el.max||100)-(+el.min||0))))*100;
-      el.style.background=`linear-gradient(90deg,${color} ${p}%,#2c2c2e ${p}%)`;
-      el.style.borderRadius='18px';
-    }
-    setRngBg(rng);
-    function onBriChange(){
-      const p=+rng.value;
+    if(rng){
+      rng.classList.add('ls-rng');
       setRngBg(rng);
-      document.getElementById('ls-bv').textContent=p+'%';
-      clearTimeout(_bTimer);
-      _bTimer=setTimeout(()=>svc('light','turn_on',{entity_id:lid,brightness_pct:p}),120);
+      function onBriChange(){
+        const p=+rng.value;
+        setRngBg(rng);
+        document.getElementById('ls-bv').textContent=p+'%';
+        clearTimeout(_bTimer);
+        _bTimer=setTimeout(()=>svc('light','turn_on',{entity_id:lid,brightness_pct:p}),120);
+      }
+      rng.addEventListener('input',onBriChange);
+      rng.addEventListener('change',onBriChange);
     }
-    rng.addEventListener('input',onBriChange);
-    rng.addEventListener('change',onBriChange);
 
     document.getElementById('ls-tog').addEventListener('click',()=>{
       hap();
@@ -1710,37 +1927,7 @@ function buildUI(){try{
     svc(t.dataset.dom,wasOn?'turn_off':'turn_on',{entity_id:t.dataset.id});
   }));
 
-  // Nest Büro Volume
-  (function(){
-    const nestId='media_player.nest';
-    const nestVol=document.getElementById('nest-vol');
-    const nestVv=document.getElementById('nest-vv');
-    const nestSt=document.getElementById('nest-state');
-    if(!nestVol)return;
-    setRngBg(nestVol,'#0a84ff');
-    let _nestTimer=null;
-    function updateNest(){
-      const s=_S[nestId];if(!s)return;
-      const vol=Math.round((s.attributes?.volume_level??0.3)*100);
-      nestVol.value=vol;
-      nestVv.textContent=vol+'%';
-      nestSt.textContent=s.state==='playing'?'Spielt':(s.state==='off'?'Aus':'Bereit');
-      setRngBg(nestVol,'#0a84ff');
-    }
-    nestVol.addEventListener('input',()=>{
-      const v=+nestVol.value;
-      nestVv.textContent=v+'%';
-      setRngBg(nestVol,'#0a84ff');
-      clearTimeout(_nestTimer);
-      _nestTimer=setTimeout(()=>svc('media_player','volume_set',{entity_id:nestId,volume_level:v/100}),150);
-    });
-    // Hook into state updates
-    const _origFetch=fetchStates;
-    const origUpdate=updateAll;
-    // After states load, update nest display
-    setInterval(updateNest,3000);
-    updateNest();
-  })();
+
 
   // Quick actions (Licht Seite)
   document.getElementById('qa-allon')?.addEventListener('click',()=>{
@@ -1758,8 +1945,11 @@ function buildUI(){try{
     hap();doScene('abend');
   });
 
-  // Wetter-Detail
-  document.getElementById('hwx-tap')?.addEventListener('click',()=>{hap();openWeatherSheet();});
+  // Wetter-Widget auf Home → Wetter-Tab öffnen
+  document.getElementById('hwx-tap')?.addEventListener('click',()=>{hap();navTo('wetter');});
+
+  // Wetter-Detail Sheet (Fallback, nicht mehr primary)
+  // document.getElementById('hwx-tap')?.addEventListener('click',()=>{hap();openWeatherSheet();});
   // Nav
   document.querySelectorAll('.ni').forEach(b=>b.addEventListener('click',()=>{hap();navTo(b.dataset.p)}));
   // Scenes
@@ -1917,6 +2107,31 @@ function buildUI(){try{
 
   startClock();
   setTimeout(()=>toast('✓ Bereit'),600);
+
+  // Parallax-Effekt: Szenen-Buttons auf Home scrollen leicht versetzt
+  (function initSzenenParallax(){
+    const pgHome = document.getElementById('pg-home');
+    const sg2 = pgHome ? pgHome.querySelector('.sg2') : null;
+    if(!pgHome || !sg2) return;
+    let ticking = false;
+    pgHome.addEventListener('scroll', function(){
+      if(!ticking){
+        requestAnimationFrame(function(){
+          const scrollY = pgHome.scrollTop;
+          // Parallax: Szenen-Grid bewegt sich mit 28% des Scroll-Wertes zurück (nach oben)
+          // Wirkung: Buttons scheinen „langsamer" zu scrollen als der Rest → Tiefeneffekt
+          const offset = Math.min(scrollY * 0.28, 60); // max 60px offset
+          sg2.style.transform = 'translateY(' + offset + 'px)';
+          // Leichtes scale-down beim Scrollen für 3D-Tiefe
+          const scale = Math.max(0.97, 1 - scrollY * 0.00012);
+          sg2.style.transformOrigin = 'center top';
+          sg2.style.transform = 'translateY(' + offset + 'px) scale(' + scale + ')';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, {passive: true});
+  })();
 }catch(err){
   // Show error visibly so we know what broke
   const msg='UI Fehler: '+err.message;
@@ -1935,6 +2150,13 @@ function buildUI(){try{
 const DW=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
 const DM=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 
+function getGreeting(hour){
+  if(hour>=5&&hour<10) return'☀️ Guten Morgen, Janis';
+  if(hour>=10&&hour<13) return'🌤 Guten Vormittag, Janis';
+  if(hour>=13&&hour<17) return'🌞 Guten Nachmittag, Janis';
+  if(hour>=17&&hour<22) return'🌆 Guten Abend, Janis';
+  return'🌙 Gute Nacht, Janis';
+}
 function updateClock(){
   const n=new Date();
   const h=String(n.getHours()).padStart(2,'0');
@@ -1945,6 +2167,8 @@ function updateClock(){
   const htime=document.getElementById('htime');if(htime)htime.innerHTML=tHtml;
   const at=document.getElementById('at');if(at)at.textContent=tPlain;
   ['hdate','ad'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=d});
+  const hgreet=document.getElementById('hgreet');
+  if(hgreet)hgreet.textContent=getGreeting(n.getHours());
 }
 function startClock(){updateClock();setInterval(updateClock,5000)}
 
@@ -2112,7 +2336,22 @@ function updateAll(){
     titleEl.classList.remove('scroll');
     titleEl.textContent=titleStr;
   }
-  document.getElementById('np-s').textContent=s?.attributes?.media_artist||'Almando Wohnzimmer';
+  document.getElementById('np-s').textContent=s?.attributes?.media_artist||s?.attributes?.media_channel||'Almando Wohnzimmer';
+  // Track-Fortschrittsbalken
+  const pos=s?.attributes?.media_position??null;
+  const dur=s?.attributes?.media_duration??null;
+  const progWrap=document.getElementById('track-prog-wrap');
+  if(progWrap){
+    const hasProgress=playing&&pos!=null&&dur!=null&&dur>0;
+    progWrap.style.display=hasProgress?'block':'none';
+    if(hasProgress){
+      const pct=Math.min((pos/dur)*100,100);
+      document.getElementById('track-prog-fill').style.width=pct+'%';
+      const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+      document.getElementById('track-pos').textContent=fmt(pos);
+      document.getElementById('track-dur').textContent=fmt(dur);
+    }
+  }
   document.getElementById('eq').classList.toggle('on',playing);
   document.getElementById('play-ico').innerHTML=playing
     ?'<rect x="5.5" y="4" width="4" height="16" rx="1.5"/><rect x="14.5" y="4" width="4" height="16" rx="1.5"/>'
@@ -2188,12 +2427,30 @@ function updateAll(){
     if(lc) _lastColor[l.id]=lc; // cache immer, auch wenn aus (HA gibt Farbe auch bei off zurück)
     lc=lc||_lastColor[l.id]||'255,193,141';
     applyTileState(tile,on,lc);
+    // CT Tint: warm amber ↔ cool blue overlay based on color_temp_kelvin
+    const ctEl=tile.querySelector('.ltct');
+    if(ctEl&&on){
+      const ktile=ct||(rgb?null:2700);
+      if(ktile){
+        const pct=Math.min(1,Math.max(0,(ktile-2700)/(6500-2700)));
+        // Warm: rgba(255,140,30,.13) | Neutral: transparent | Cool: rgba(130,190,255,.13)
+        const wr=Math.round(255*(1-pct));
+        const wg=Math.round(140*(1-pct)+190*pct);
+        const wb=Math.round(30*(1-pct)+255*pct);
+        const alpha=(Math.abs(pct-0.5)*2*0.14).toFixed(3); // 0 at neutral, 0.14 at extremes
+        ctEl.style.background=`radial-gradient(ellipse at 85% 85%, rgba(${wr},${wg},${wb},${alpha}) 0%, transparent 65%)`;
+      } else {
+        ctEl.style.background='';
+      }
+    } else if(ctEl){
+      ctEl.style.background='';
+    }
     const se=tile.querySelector('[data-lst]');
     if(se)se.textContent=on?(bri>0?bri+'%':'An'):'Aus';
-    const pct=on?Math.max(bri,8):0;
-    const fi=tile.querySelector('[data-fill]');if(fi)fi.style.width=pct+'%';
+    const pct=on?Math.max(bri,12):0;
+    const fi=tile.querySelector('[data-fill]');if(fi){fi.style.width=pct+'%';fi.style.minWidth=on?'12px':'';}
     const th=tile.querySelector('[data-thumb]');
-    if(th){th.style.left=pct+'%';th.style.opacity=on&&bri>0?'1':'0';}
+    if(th){th.style.left=Math.min(pct,94)+'%';th.style.opacity=on?'1':'0';}
   });
   // Devs
   CFG.devs.forEach(d=>{
