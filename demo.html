@@ -3989,5 +3989,27 @@ if(_origGetPos){
 })();
 
 </script>
+<!-- FLOATING CTA -->
+<div id="float-cta" style="position:fixed;bottom:24px;right:20px;z-index:900;opacity:0;transform:translateY(20px);transition:opacity .4s,transform .4s;pointer-events:none">
+  <a href="#contact-section" style="display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#0071e3,#0098ff);color:#fff;text-decoration:none;padding:13px 20px;border-radius:100px;font-weight:700;font-size:.85rem;box-shadow:0 8px 24px rgba(0,113,227,.4);white-space:nowrap">
+    ✉️ Projekt anfragen
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</div>
+<script>
+(function(){
+  const btn=document.getElementById('float-cta');
+  if(!btn)return;
+  let shown=false;
+  window.addEventListener('scroll',()=>{
+    const show=window.scrollY>400;
+    if(show===shown)return;
+    shown=show;
+    btn.style.opacity=show?'1':'0';
+    btn.style.transform=show?'translateY(0)':'translateY(20px)';
+    btn.style.pointerEvents=show?'auto':'none';
+  },{passive:true});
+})();
+</script>
 </body>
 </html>
