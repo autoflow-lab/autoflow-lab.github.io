@@ -2256,6 +2256,48 @@ input[type=range]{touch-action:pan-x}
   </div>
 </div><!-- /page-ai -->
 
+<!-- ═══ KONTAKT SECTION ═══ -->
+<div id="contact-section" style="padding:72px 24px;max-width:600px;margin:0 auto;text-align:center">
+  <div style="display:inline-block;padding:4px 14px;border-radius:100px;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.25);font-size:.72rem;font-weight:700;color:#0071e3;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px">Kontakt</div>
+  <h2 style="font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin-bottom:14px">Projekt anfragen</h2>
+  <p style="color:var(--text2);margin-bottom:36px;line-height:1.7;font-size:.97rem">Smart Home Dashboard, KI-Automation, Custom Setup — beschreib kurz was du brauchst, ich antworte innerhalb weniger Stunden.</p>
+  <form id="demo-contact-form" action="https://formspree.io/f/xpwzkabd" method="POST"
+    style="display:flex;flex-direction:column;gap:12px;text-align:left">
+    <input type="text" name="name" placeholder="Dein Name" required
+      style="background:var(--surface2,rgba(0,0,0,.04));border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;color:var(--text);font-size:.95rem;outline:none;width:100%;transition:border-color .2s">
+    <input type="email" name="email" placeholder="Deine Email" required
+      style="background:var(--surface2,rgba(0,0,0,.04));border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;color:var(--text);font-size:.95rem;outline:none;width:100%">
+    <select name="package" style="background:var(--surface2,rgba(0,0,0,.04));border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;color:var(--text);font-size:.95rem;outline:none;width:100%">
+      <option value="">Welches Paket interessiert dich?</option>
+      <option>Basic Dashboard (~€49)</option>
+      <option>Standard Dashboard (~€99)</option>
+      <option>Premium + KI (~€149)</option>
+      <option>Nur Beratung (kostenlos)</option>
+      <option>Anderes / Individuell</option>
+    </select>
+    <textarea name="message" placeholder="Kurze Beschreibung: Welche Geräte hast du? Was soll automatisiert werden?" rows="4"
+      style="background:var(--surface2,rgba(0,0,0,.04));border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;color:var(--text);font-size:.95rem;outline:none;width:100%;resize:none"></textarea>
+    <button type="submit" class="btn-p" style="border:none;cursor:pointer;font-size:.97rem;padding:16px;justify-content:center">
+      ✉️ Anfrage senden
+    </button>
+    <p id="demo-form-status" style="text-align:center;font-size:.82rem;color:#0071e3;min-height:22px"></p>
+  </form>
+  <p style="margin-top:20px;font-size:.78rem;color:var(--text3,rgba(0,0,0,.35))">Oder direkt: <a href="mailto:autoflowlab@gmail.com" style="color:#0071e3;text-decoration:none">autoflowlab@gmail.com</a></p>
+</div>
+
+<script>
+document.getElementById('demo-contact-form')?.addEventListener('submit',async function(e){
+  e.preventDefault();
+  const st=document.getElementById('demo-form-status');
+  st.textContent='Wird gesendet…';
+  try{
+    const r=await fetch(this.action,{method:'POST',body:new FormData(this),headers:{Accept:'application/json'}});
+    if(r.ok){st.textContent='✅ Anfrage erhalten! Ich melde mich bald.';st.style.color='#34c759';this.reset();}
+    else{st.textContent='❌ Fehler — bitte direkt an autoflowlab@gmail.com schreiben.';st.style.color='#ff3b30';}
+  }catch{st.textContent='❌ Keine Verbindung — bitte direkt mailen.';st.style.color='#ff3b30';}
+});
+</script>
+
 <footer>
   <!-- Social Icons -->
   <div class="ft-social">
@@ -2316,7 +2358,12 @@ if(localStorage.getItem('alf-hints')==='off'){
   setTimeout(()=>document.body.classList.add('hints-off'),100);
 }
 function toast(msg,d=2200){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
-function openFiverr(){window.open('https://www.fiverr.com/autoflow-lab','_blank')}
+function openFiverr(){
+  // Scroll to contact section
+  const el=document.getElementById('contact-section');
+  if(el){el.scrollIntoView({behavior:'smooth'});return;}
+  window.open('mailto:autoflowlab@gmail.com?subject=Dashboard%20Anfrage','_blank');
+}
 // ── CONTACT FORM ──
 function submitContact(){
   const name=document.getElementById('cf-name').value.trim();
