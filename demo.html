@@ -2115,6 +2115,10 @@ input[type=range]{touch-action:pan-x}
         <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq3q">Wie lange dauert die Lieferung?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq3a">Basic: 24–48h · Standard: 3 Tage · Premium mit KI: 5–7 Tage. Express auf Anfrage möglich.</div></div>
         <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq4q">Welche Geräte werden unterstützt?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq4a">Alle HA-kompatiblen Geräte: Philips Hue, IKEA Tradfri, Shelly, Zigbee, Z-Wave, Sonos, Tesla, Nibe, Viessmann und 3000+ mehr.</div></div>
         <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq5q">Wie funktioniert die Zusammenarbeit?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq5a">1. Briefing via Fiverr-Chat. 2. Ich erstelle das Design. 3. Review + Revisionen. 4. Fertige Dateien + Docs. Alles asynchron — kein Call nötig.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq6q">Was kostet Home Assistant selbst?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq6a">Home Assistant ist kostenlos und Open Source. Du brauchst nur Hardware: ein Raspberry Pi 4 kostet ca. 60–80 €, oder ein alter Mini-PC/NUC tut es auch. Optional: Home Assistant Cloud (Nabu Casa) für ~7 €/Monat für einfachen Fernzugriff — aber nicht nötig.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq7q">Wie lange dauert die Einrichtung bei mir zuhause?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq7a">Das Importieren meiner fertigen Konfiguration dauert 15–30 Minuten. Du folgst einfach der beigelegten Video-Anleitung. Für die Erst-Installation von Home Assistant auf deiner Hardware plane 1–2 Stunden ein — ich erkläre jeden Schritt.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq8q">Kann ich das Dashboard später selbst anpassen?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq8a">Ja, vollständig. Du bekommst den kompletten Quellcode ohne Sperren oder Passwörter. Ich liefere eine Dokumentation die erklärt wo und wie du Änderungen machst — auch ohne Programmierkenntnisse.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i="faq9q">Läuft das auch ohne Internet / bei Stromausfall?</span><span class="faq-icon">+</span></button><div class="faq-a" data-i="faq9a">Ja. Home Assistant läuft komplett lokal im Heimnetzwerk — kein Internet nötig für den Betrieb. Bei Stromausfall hilft eine USV (unterbrechungsfreie Stromversorgung) für den Server. Zigbee/Z-Wave Geräte laufen auch ohne WLAN weiter.</div></div>
       </div>
     </div>
   </div>
@@ -3243,6 +3247,10 @@ const T={
     faq3q:'Wie lange dauert die Lieferung?',faq3a:'Basic: 24–48h · Standard: 3 Tage · Premium mit KI: 5–7 Tage. Express auf Anfrage.',
     faq4q:'Welche Geräte werden unterstützt?',faq4a:'Alle HA-kompatiblen Geräte: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla und 3000+ mehr.',
     faq5q:'Wie funktioniert die Zusammenarbeit?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + Revisionen. 4. Fertige Dateien + Docs. Alles asynchron.',
+    faq6q:'Was kostet Home Assistant selbst?',faq6a:'HA ist kostenlos & Open Source. Hardware: Raspberry Pi 4 ~60–80 € oder alter Mini-PC. Optional: Nabu Casa Cloud ~7 €/Monat für Fernzugriff — nicht nötig.',
+    faq7q:'Wie lange dauert die Einrichtung bei mir zuhause?',faq7a:'Import meiner Konfiguration: 15–30 Minuten per Video-Anleitung. HA-Erst-Installation auf Hardware: 1–2 Stunden — ich erkläre jeden Schritt.',
+    faq8q:'Kann ich das Dashboard später selbst anpassen?',faq8a:'Ja, vollständig. Du bekommst den kompletten Quellcode ohne Sperren. Dokumentation erklärt wie du Änderungen machst — auch ohne Programmierkenntnisse.',
+    faq9q:'Läuft das auch ohne Internet / bei Stromausfall?',faq9a:'Ja. HA läuft komplett lokal — kein Internet nötig. Bei Stromausfall hilft eine USV für den Server. Zigbee/Z-Wave Geräte laufen auch ohne WLAN.',
     cmpTitle:'Warum Home Assistant?',cmpSub:'Ein Vergleich mit den beliebtesten Smart Home Plattformen.',
     cmpHFeat:'Feature',
     cmpR1:'100% lokal, keine Cloud',cmpR2:'Kein Abo / kostenlos',cmpR3:'3000+ Geräte-Integrationen',
@@ -3325,6 +3333,10 @@ const T={
     faq3q:'How long does delivery take?',faq3a:'Basic: 24–48h · Standard: 3 days · Premium with AI: 5–7 days. Express available.',
     faq4q:'Which devices are supported?',faq4a:'All HA-compatible devices: Philips Hue, IKEA, Shelly, Zigbee, Z-Wave, Sonos, Tesla and 3000+ more.',
     faq5q:'How does collaboration work?',faq5a:'1. Briefing via Fiverr. 2. Design. 3. Review + revisions. 4. Files + docs. All async.',
+    faq6q:'How much does Home Assistant itself cost?',faq6a:'HA is free & open source. Hardware: Raspberry Pi 4 ~€60–80 or an old mini-PC. Optional: Nabu Casa Cloud ~€7/month for remote access — not required.',
+    faq7q:'How long does setup take at home?',faq7a:'Importing my configuration: 15–30 minutes with the video guide. HA first-time installation on hardware: 1–2 hours — I explain every step.',
+    faq8q:'Can I customize the dashboard myself later?',faq8a:'Yes, fully. You get the complete source code without locks. The documentation explains how to make changes — even without coding skills.',
+    faq9q:'Does it work without internet / during power outage?',faq9a:'Yes. HA runs fully locally — no internet needed. For outages, a UPS for the server helps. Zigbee/Z-Wave devices also run without Wi-Fi.',
     cmpTitle:'Why Home Assistant?',cmpSub:'A comparison with the most popular smart home platforms.',
     cmpHFeat:'Feature',
     cmpR1:'100% local, no cloud',cmpR2:'No subscription / free',cmpR3:'3000+ device integrations',
@@ -3402,6 +3414,7 @@ function applyLang(){
   setText('faq-ttl',t.faqTtl);setText('faq-sub',t.faqSub);
   setText('faq1q',t.faq1q);setText('faq1a',t.faq1a);setText('faq2q',t.faq2q);setText('faq2a',t.faq2a);
   setText('faq3q',t.faq3q);setText('faq3a',t.faq3a);setText('faq4q',t.faq4q);setText('faq4a',t.faq4a);setText('faq5q',t.faq5q);setText('faq5a',t.faq5a);
+  setText('faq6q',t.faq6q);setText('faq6a',t.faq6a);setText('faq7q',t.faq7q);setText('faq7a',t.faq7a);setText('faq8q',t.faq8q);setText('faq8a',t.faq8a);setText('faq9q',t.faq9q);setText('faq9a',t.faq9a);
   setText('cta-h2',t.ctaH2);setText('cta-p',t.ctaP);setText('cta-btn',t.ctaBtn);
   setText('ft-tagline',t.ftTagline);
   // Comparison table i18n
