@@ -1,0 +1,87 @@
+# 🏠 Ultimate Home Assistant Dashboard
+# Import this as a new dashboard in HA
+
+title: "My Home"
+views:
+  - title: "Overview"
+    icon: mdi:home
+    path: overview
+    cards:
+      - type: markdown
+        content: "## 💡 Lights"
+      - type: grid
+        columns: 3
+        square: false
+        cards:
+          - type: light
+            entity: light.living_room
+            name: Living Room
+          - type: light
+            entity: light.bedroom
+            name: Bedroom
+          - type: light
+            entity: light.kitchen
+            name: Kitchen
+      - type: markdown
+        content: "## 🎵 Media"
+      - type: media-control
+        entity: media_player.spotify
+        name: Spotify
+      - type: entities
+        title: "🔌 Switches"
+        entities:
+          - entity: switch.living_room
+          - entity: switch.garden
+          - entity: switch.garage
+
+  - title: "Scenes"
+    icon: mdi:palette
+    path: scenes
+    cards:
+      - type: grid
+        columns: 3
+        square: true
+        cards:
+          - type: button
+            entity: scene.relax
+            name: Relax
+            icon: mdi:sofa
+          - type: button
+            entity: scene.movie
+            name: Movie
+            icon: mdi:television-play
+          - type: button
+            entity: scene.morning
+            name: Morning
+            icon: mdi:weather-sunny
+          - type: button
+            entity: scene.night
+            name: Night
+            icon: mdi:weather-night
+          - type: button
+            entity: scene.focus
+            name: Focus
+            icon: mdi:brain
+          - type: button
+            entity: scene.dinner
+            name: Dinner
+            icon: mdi:food
+
+  - title: "Status"
+    icon: mdi:information
+    path: status
+    cards:
+      - type: entities
+        title: "📱 Devices"
+        entities:
+          - entity: sensor.phone_battery
+            name: Phone Battery
+          - entity: binary_sensor.internet
+            name: Internet
+      - type: entities
+        title: "🤖 Automations"
+        entities:
+          - entity: input_boolean.wakeup_enabled
+            name: Wake-up Alarm
+          - entity: input_boolean.guest_mode
+            name: Guest Mode

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Büro</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+}
+
+.root {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 20%, #1a1040 0%, #0d1117 50%, #0a1628 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 14px;
+}
+
+/* ── ROW 1 ── */
+.row1 {
+  display: flex;
+  gap: 14px;
+  flex: 0 0 auto;
+}
+
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 20px 24px;
+  backdrop-filter: blur(10px);
+}
+
+.clock-card {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.time {
+  font-size: 80px;
+  font-weight: 100;
+  letter-spacing: -3px;
+  line-height: 1;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-meta { display: flex; flex-direction: column; gap: 6px; }
+.greeting { font-size: 15px; color: #a78bfa; font-weight: 500; }
+.weekday { font-size: 26px; font-weight: 300; color: #e6edf3; }
+.datestr { font-size: 14px; color: #6e7681; }
+
+.weather-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.w-location { font-size: 11px; color: #6e7681; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.w-main { display: flex; align-items: center; gap: 14px; }
+.w-icon { font-size: 52px; }
+.w-temp { font-size: 44px; font-weight: 100; color: #fff; }
+.w-desc { font-size: 13px; color: #8b949e; margin-top: 2px; }
+.w-pills { display: flex; gap: 8px; margin-top: 12px; }
+.w-pill {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.w-pill .val { font-size: 15px; font-weight: 500; color: #e6edf3; display: block; margin-bottom: 2px; }
+.w-pill .lbl { font-size: 10px; color: #6e7681; }
+
+/* ── ROW 2 – QUOTE ── */
+.quote-card {
+  flex: 0 0 auto;
+  position: relative;
+  overflow: hidden;
+  background: rgba(167,139,250,0.06);
+  border-color: rgba(167,139,250,0.15);
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quote-bg {
+  position: absolute;
+  top: -20px; left: 12px;
+  font-size: 140px;
+  color: rgba(167,139,250,0.07);
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.q-text {
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.5;
+  color: #e6edf3;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.4s;
+}
+
+.q-author {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #a78bfa;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── ROW 3 – BOTTOM ── */
+.row3 {
+  display: flex;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.controls-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ctrl-title { font-size: 11px; color: #6e7681; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+
+.ctrl-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #e6edf3;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.2s, transform 0.1s;
+  width: 100%;
+  text-align: left;
+}
+.ctrl-btn:active { background: rgba(167,139,250,0.15); transform: scale(0.98); }
+.ctrl-btn .ic { font-size: 20px; width: 28px; text-align: center; }
+
+.mac-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mac-header { display: flex; align-items: center; gap: 12px; }
+.mac-icon { font-size: 40px; }
+.mac-label { font-size: 12px; color: #6e7681; }
+.mac-pct { font-size: 36px; font-weight: 200; color: #fff; }
+.bat-bar { height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+.bat-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+.bat-fill.hi  { background: linear-gradient(90deg, #34d399, #10b981); }
+.bat-fill.mid { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.bat-fill.low { background: linear-gradient(90deg, #f87171, #ef4444); }
+.mac-state { font-size: 12px; color: #6e7681; margin-top: 6px; }
+
+.pomo-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.pomo-ring {
+  position: relative;
+  width: 110px;
+  height: 110px;
+}
+
+.pomo-ring svg { transform: rotate(-90deg); }
+.pomo-ring circle { fill: none; stroke-width: 6; }
+.ring-bg { stroke: rgba(255,255,255,0.08); }
+.ring-fill { stroke: #a78bfa; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+.pomo-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pomo-time-text { font-size: 24px; font-weight: 200; font-variant-numeric: tabular-nums; }
+.pomo-lbl { font-size: 10px; color: #6e7681; text-transform: uppercase; letter-spacing: 1px; }
+
+.pomo-btns { display: flex; gap: 10px; margin-top: 4px; }
+.pomo-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  color: #e6edf3;
+  transition: background 0.2s;
+}
+.pomo-btn:active { background: rgba(167,139,250,0.2); }
+.pomo-btn.running { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); }
+
+/* Forecast */
+.forecast-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.fc-day { text-align: center; }
+.fc-name { font-size: 11px; color: #6e7681; margin-bottom: 8px; }
+.fc-ico { font-size: 28px; margin-bottom: 6px; }
+.fc-hi { font-size: 16px; font-weight: 500; color: #e6edf3; }
+.fc-lo { font-size: 12px; color: #6e7681; }
+.fc-sep { width: 1px; height: 40px; background: rgba(255,255,255,0.06); }
+</style>
+</head>
+<body>
+<div class="root">
+
+  <!-- ROW 1: Clock + Weather -->
+  <div class="row1">
+    <div class="card clock-card">
+      <div class="time" id="clock">00:00</div>
+      <div class="clock-meta">
+        <div class="greeting" id="greeting">Guten Tag, Janis!</div>
+        <div class="weekday" id="weekday">Sonntag</div>
+        <div class="datestr" id="datestr">1. März 2026</div>
+      </div>
+    </div>
+
+    <div class="card weather-card">
+      <div class="w-location">📍 Egg SZ</div>
+      <div class="w-main">
+        <div class="w-icon" id="w-icon">⛅</div>
+        <div>
+          <div class="w-temp"><span id="w-temp">–</span>°</div>
+          <div class="w-desc" id="w-desc">Lädt...</div>
+        </div>
+      </div>
+      <div class="w-pills">
+        <div class="w-pill"><span class="val" id="w-wind">–</span><span class="lbl">km/h</span></div>
+        <div class="w-pill"><span class="val" id="w-hum">–</span><span class="lbl">% Feuchte</span></div>
+        <div class="w-pill"><span class="val" id="w-feel">–</span><span class="lbl">° Gefühlt</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Quote -->
+  <div class="card quote-card">
+    <div class="quote-bg">"</div>
+    <div class="q-text" id="q-text">Lade Zitat...</div>
+    <div class="q-author" id="q-author">—</div>
+  </div>
+
+  <!-- ROW 3: Controls + Mac + Pomo + Forecast -->
+  <div class="row3">
+
+    <div class="card controls-card">
+      <div class="ctrl-title">💡 Büro Licht</div>
+      <button class="ctrl-btn" onclick="ha('light/turn_on','light.buro',{kelvin:3000,brightness:180})">
+        <span class="ic">☀️</span>Arbeitslicht
+      </button>
+      <button class="ctrl-btn" onclick="ha('light/turn_on','light.buro',{kelvin:2200,brightness:70})">
+        <span class="ic">🕯️</span>Entspannen
+      </button>
+      <button class="ctrl-btn" onclick="ha('light/turn_off','light.buro',{})">
+        <span class="ic">⭕</span>Licht aus
+      </button>
+    </div>
+
+    <div class="card mac-card">
+      <div class="mac-header">
+        <div class="mac-icon">💻</div>
+        <div>
+          <div class="mac-label">MacBook Air · Janis</div>
+          <div class="mac-pct"><span id="mac-pct">–</span>%</div>
+        </div>
+      </div>
+      <div class="bat-bar">
+        <div class="bat-fill hi" id="bat-fill" style="width:0%"></div>
+      </div>
+      <div class="mac-state" id="mac-state">–</div>
+    </div>
+
+    <div class="card pomo-card">
+      <div class="pomo-ring">
+        <svg viewBox="0 0 110 110" width="110" height="110">
+          <circle class="ring-bg" cx="55" cy="55" r="48"/>
+          <circle class="ring-fill" id="ring" cx="55" cy="55" r="48"
+            stroke-dasharray="301.6" stroke-dashoffset="0"/>
+        </svg>
+        <div class="pomo-inner">
+          <div class="pomo-time-text" id="pomo-t">25:00</div>
+          <div class="pomo-lbl" id="pomo-l">Fokus</div>
+        </div>
+      </div>
+      <div class="pomo-btns">
+        <button class="pomo-btn" id="pomo-play" onclick="pomoToggle()">▶</button>
+        <button class="pomo-btn" onclick="pomoReset()">↺</button>
+      </div>
+    </div>
+
+    <div class="card forecast-card" id="forecast">
+      <div style="color:#6e7681;font-size:13px;">Lädt...</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const HA_URL = 'http://192.168.1.123:8123';
+const TOKEN  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlZWEzY2ViZWM2NDM0ZDc3YTUzYmRjZDUxYWQwZmFiMiIsImlhdCI6MTc3MjIzNTkzNywiZXhwIjoyMDg3NTk1OTM3fQ.NWPIQwbtUJlmHzuMwkIIPjzLQcukT997SmL4rW-xQnk';
+
+// ── CLOCK ───────────────────────────────
+const DAYS = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const MON  = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+function tick() {
+  const n = new Date();
+  document.getElementById('clock').textContent =
+    String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('weekday').textContent = DAYS[n.getDay()];
+  document.getElementById('datestr').textContent = n.getDate() + '. ' + MON[n.getMonth()] + ' ' + n.getFullYear();
+  const h = n.getHours();
+  document.getElementById('greeting').textContent =
+    (h<6?'🌙 Gute Nacht':h<10?'🌅 Guten Morgen':h<14?'☀️ Guten Tag':h<18?'🌤 Guten Nachmittag':'🌙 Guten Abend') + ', Janis!';
+}
+setInterval(tick, 1000); tick();
+
+// ── WEATHER ─────────────────────────────
+const WI = {0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',51:'🌦',53:'🌦',61:'🌧',63:'🌧',65:'🌧',71:'🌨',73:'🌨',80:'🌦',95:'⛈'};
+const WD = {0:'Sonnig',1:'Überwiegend sonnig',2:'Teilweise bewölkt',3:'Bedeckt',45:'Nebelig',51:'Leichter Niesel',61:'Leichter Regen',63:'Regen',65:'Starker Regen',71:'Leichter Schnee',73:'Schneefall',80:'Regenschauer',95:'Gewitter'};
+
+async function loadWeather() {
+  try {
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.24&longitude=8.88&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/Zurich&forecast_days=4');
+    const d = await r.json();
+    const c = d.current;
+    document.getElementById('w-temp').textContent = Math.round(c.temperature_2m);
+    document.getElementById('w-icon').textContent = WI[c.weather_code] || '🌡';
+    document.getElementById('w-desc').textContent = WD[c.weather_code] || '';
+    document.getElementById('w-wind').textContent = Math.round(c.wind_speed_10m);
+    document.getElementById('w-hum').textContent  = c.relative_humidity_2m;
+    document.getElementById('w-feel').textContent = Math.round(c.apparent_temperature);
+
+    const dd = d.daily;
+    let html = '';
+    for (let i = 1; i <= 3; i++) {
+      const day = new Date(dd.time[i]);
+      if (i > 1) html += '<div class="fc-sep"></div>';
+      html += `<div class="fc-day">
+        <div class="fc-name">${DAYS[day.getDay()].slice(0,2)}</div>
+        <div class="fc-ico">${WI[dd.weather_code[i]]||'🌡'}</div>
+        <div class="fc-hi">${Math.round(dd.temperature_2m_max[i])}°</div>
+        <div class="fc-lo">${Math.round(dd.temperature_2m_min[i])}°</div>
+      </div>`;
+    }
+    document.getElementById('forecast').innerHTML = html;
+  } catch(e) { console.error(e); }
+}
+loadWeather(); setInterval(loadWeather, 600000);
+
+// ── QUOTES ──────────────────────────────
+const QUOTES = [
+  {t:'Der einzige Weg, grossartige Arbeit zu leisten, ist zu lieben, was man tut.',a:'Steve Jobs'},
+  {t:'Erfolg ist die Summe kleiner Anstrengungen, die jeden Tag wiederholt werden.',a:'Robert Collier'},
+  {t:'Fang an, wo du bist. Nutze, was du hast. Tu, was du kannst.',a:'Arthur Ashe'},
+  {t:'Die beste Zeit, einen Baum zu pflanzen, war vor 20 Jahren. Die zweitbeste Zeit ist jetzt.',a:'Chinesisches Sprichwort'},
+  {t:'Disziplin ist die Brücke zwischen Zielen und Leistung.',a:'Jim Rohn'},
+  {t:'Ob du glaubst, du kannst es, oder nicht – du hast in beiden Fällen recht.',a:'Henry Ford'},
+  {t:'Du musst die Veränderung sein, die du in der Welt sehen möchtest.',a:'Mahatma Gandhi'},
+  {t:'Denke gross und wage es, zu scheitern.',a:'Norman Vaughan'},
+  {t:'Es gibt keine Abkürzung zu einem Ort, der es wert ist zu gehen.',a:'Beverly Sills'},
+];
+let qi = Math.floor(Math.random() * QUOTES.length);
+function nextQuote() {
+  const q = QUOTES[qi % QUOTES.length]; qi++;
+  const el = document.getElementById('q-text');
+  el.style.opacity = 0;
+  setTimeout(() => {
+    el.textContent = q.t;
+    document.getElementById('q-author').textContent = '— ' + q.a;
+    el.style.opacity = 1;
+  }, 350);
+}
+document.getElementById('q-text').style.transition = 'opacity 0.35s';
+nextQuote(); setInterval(nextQuote, 30000);
+
+// ── HA CALL ─────────────────────────────
+async function ha(service, entity, data) {
+  const [d, a] = service.split('/');
+  try {
+    await fetch(`${HA_URL}/api/services/${d}/${a}`, {
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json'},
+      body: JSON.stringify({entity_id: entity, ...data})
+    });
+  } catch(e) {}
+}
+
+// ── MACBOOK ─────────────────────────────
+async function loadMac() {
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch(`${HA_URL}/api/states/sensor.macbook_air_von_janis_internal_battery_level`, {headers:{'Authorization':`Bearer ${TOKEN}`}}),
+      fetch(`${HA_URL}/api/states/sensor.macbook_air_von_janis_internal_battery_state`, {headers:{'Authorization':`Bearer ${TOKEN}`}})
+    ]);
+    const [d1, d2] = await Promise.all([r1.json(), r2.json()]);
+    const pct = parseInt(d1.state);
+    document.getElementById('mac-pct').textContent = pct;
+    const fill = document.getElementById('bat-fill');
+    fill.style.width = pct + '%';
+    fill.className = 'bat-fill ' + (pct >= 60 ? 'hi' : pct >= 30 ? 'mid' : 'low');
+    const st = d2.state;
+    document.getElementById('mac-state').textContent =
+      st === 'Charging' ? '⚡ Lädt gerade' : st === 'Full' ? '✅ Vollständig geladen' : '🔋 Nicht am Laden';
+  } catch(e) {}
+}
+loadMac(); setInterval(loadMac, 60000);
+
+// ── POMODORO ────────────────────────────
+const SESSIONS = [25*60, 5*60, 25*60, 5*60, 25*60, 15*60];
+const SESSION_LABELS = ['Fokus','Pause','Fokus','Pause','Fokus','Lange Pause'];
+let pSec = 25*60, pRun = false, pInt = null, pSess = 0;
+const CIRC = 2 * Math.PI * 48; // 301.6
+
+function pomoRender() {
+  const m = String(Math.floor(pSec/60)).padStart(2,'0');
+  const s = String(pSec%60).padStart(2,'0');
+  document.getElementById('pomo-t').textContent = m + ':' + s;
+  const total = SESSIONS[pSess];
+  const pct = pSec / total;
+  document.getElementById('ring').style.strokeDashoffset = CIRC * (1 - pct);
+}
+
+function pomoToggle() {
+  if (pRun) {
+    clearInterval(pInt); pRun = false;
+    document.getElementById('pomo-play').textContent = '▶';
+    document.getElementById('pomo-play').classList.remove('running');
+  } else {
+    pInt = setInterval(() => {
+      pSec--;
+      if (pSec <= 0) {
+        clearInterval(pInt); pRun = false;
+        document.getElementById('pomo-play').textContent = '▶';
+        document.getElementById('pomo-play').classList.remove('running');
+        pSess = (pSess + 1) % SESSIONS.length;
+        pSec = SESSIONS[pSess];
+        document.getElementById('pomo-l').textContent = SESSION_LABELS[pSess];
+      }
+      pomoRender();
+    }, 1000);
+    pRun = true;
+    document.getElementById('pomo-play').textContent = '⏸';
+    document.getElementById('pomo-play').classList.add('running');
+  }
+}
+
+function pomoReset() {
+  clearInterval(pInt); pRun = false; pSess = 0; pSec = 25*60;
+  document.getElementById('pomo-play').textContent = '▶';
+  document.getElementById('pomo-play').classList.remove('running');
+  document.getElementById('pomo-l').textContent = 'Fokus';
+  pomoRender();
+}
+pomoRender();
+</script>
+</body>
+</html>

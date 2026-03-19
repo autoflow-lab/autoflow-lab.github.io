@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultimate Home Assistant Starter Kit — $9</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; }
+    
+    .hero { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 80px 20px; text-align: center; }
+    .hero h1 { font-size: 48px; font-weight: 800; color: white; margin-bottom: 16px; line-height: 1.1; }
+    .hero h1 span { color: #38bdf8; }
+    .hero p { font-size: 20px; color: #94a3b8; max-width: 600px; margin: 0 auto 40px; }
+    
+    .price-badge { display: inline-block; background: #38bdf8; color: #0f172a; font-size: 32px; font-weight: 800; padding: 12px 32px; border-radius: 50px; margin-bottom: 32px; }
+    
+    .cta-btn { display: inline-block; background: #38bdf8; color: #0f172a; font-size: 20px; font-weight: 700; padding: 18px 48px; border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 8px 32px rgba(56,189,248,0.3); }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(56,189,248,0.4); }
+    
+    .features { max-width: 900px; margin: 80px auto; padding: 0 20px; }
+    .features h2 { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 48px; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 28px; }
+    .card .icon { font-size: 36px; margin-bottom: 16px; }
+    .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: white; }
+    .card p { color: #94a3b8; line-height: 1.6; }
+    
+    .includes { max-width: 700px; margin: 0 auto 80px; padding: 0 20px; }
+    .includes h2 { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 40px; }
+    .item { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; background: #1e293b; border-radius: 12px; padding: 20px; }
+    .item .check { color: #38bdf8; font-size: 24px; flex-shrink: 0; }
+    .item h4 { color: white; font-size: 18px; margin-bottom: 6px; }
+    .item p { color: #94a3b8; font-size: 14px; }
+    
+    .testimonial { background: #1e293b; max-width: 700px; margin: 0 auto 80px; padding: 40px; border-radius: 20px; border: 1px solid #334155; text-align: center; }
+    .testimonial p { font-size: 20px; font-style: italic; color: #e2e8f0; margin-bottom: 16px; line-height: 1.6; }
+    .testimonial span { color: #94a3b8; }
+    
+    .cta-section { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); }
+    .cta-section h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+    .cta-section p { font-size: 18px; color: #94a3b8; margin-bottom: 40px; }
+    
+    .guarantee { font-size: 14px; color: #64748b; margin-top: 20px; }
+    
+    footer { text-align: center; padding: 40px; color: #475569; font-size: 14px; }
+    footer a { color: #38bdf8; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="price-badge">Only $9</div>
+    <h1>The Ultimate<br><span>Home Assistant</span><br>Starter Kit</h1>
+    <p>Stop wasting hours on YAML configs. Get a beautiful, functional smart home setup in minutes — not days.</p>
+    <a href="mailto:clawy.studio@gmail.com?subject=Buy HA Starter Kit&body=Hi! I'd like to purchase the Home Assistant Starter Kit for $9. Please send me the payment details." class="cta-btn">
+      Get Instant Access — $9 →
+    </a>
+    <p style="margin-top:16px; color: #64748b; font-size: 14px;">Instant download · One-time payment · Email delivery</p>
+  </div>
+
+  <div class="features">
+    <h2>Everything you need, nothing you don't</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="icon">📊</div>
+        <h3>Ready Dashboard</h3>
+        <p>A modern, clean Lovelace dashboard with room controls, media player, scenes and status. Just import & customize.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🤖</div>
+        <h3>4 Automations</h3>
+        <p>Smart wake-up, goodnight routine, presence lighting and guest mode — all ready to use.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📖</div>
+        <h3>Setup Guide</h3>
+        <p>Best HACS integrations, naming conventions, automation tips and backup setup explained clearly.</p>
+      </div>
+      <div class="card">
+        <div class="icon">⚡</div>
+        <h3>Save Hours</h3>
+        <p>What took me 3 years to figure out, compressed into one kit you can use today.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="includes">
+    <h2>What's inside the ZIP</h2>
+    <div class="item">
+      <div class="check">✅</div>
+      <div>
+        <h4>dashboard.yaml</h4>
+        <p>Overview, Scenes and Status views — modern grid layout with room controls</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="check">✅</div>
+      <div>
+        <h4>automations.yaml</h4>
+        <p>Wake-up routine, goodnight, presence-based lighting, guest mode toggle</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="check">✅</div>
+      <div>
+        <h4>Setup Guide (Markdown)</h4>
+        <p>Step-by-step setup guide, best integrations for 2025, naming conventions</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="check">✅</div>
+      <div>
+        <h4>Email Support</h4>
+        <p>Questions? Email clawy.studio@gmail.com — we reply within 24h</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="testimonial">
+    <p>"I spent weeks trying to get my Home Assistant looking good. This kit saved me so much time — I had everything running in under an hour."</p>
+    <span>— HA user, r/homeassistant</span>
+  </div>
+
+  <div class="cta-section">
+    <h2>Ready to upgrade your smart home?</h2>
+    <p>One-time payment. Instant download. No subscription.</p>
+    <a href="mailto:clawy.studio@gmail.com?subject=Buy HA Starter Kit&body=Hi! I'd like to purchase the Home Assistant Starter Kit for $9." class="cta-btn">
+      Buy Now for $9 →
+    </a>
+    <p class="guarantee">💳 Pay via PayPal or bank transfer · Kit delivered by email within 1 hour</p>
+  </div>
+
+  <footer>
+    <p>Made with ❤️ by <a href="mailto:clawy.studio@gmail.com">Clawy Studio</a> · clawy.studio@gmail.com</p>
+  </footer>
+
+</body>
+</html>

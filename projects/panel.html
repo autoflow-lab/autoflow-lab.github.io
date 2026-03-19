@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Clawy</title>
+<style>
+:root{
+  --a:#e040fb; --ag:rgba(224,64,251,0.18); --ab:rgba(224,64,251,0.2);
+  --bg:#04050d; --card:rgba(10,13,28,0.95);
+  --txt:#dce8f0; --dim:rgba(200,218,235,0.45);
+  --on:#e040fb; --off:rgba(255,255,255,0.12);
+  --r:20px; --safe:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{
+  width:100%;height:100%;background:var(--bg);
+  color:var(--txt);overflow:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Helvetica,Arial,sans-serif;
+}
+
+/* BG glow orbs */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.g1,.g2{position:absolute;border-radius:50%;}
+.g1{width:400px;height:400px;top:-120px;left:-80px;
+    background:radial-gradient(circle,rgba(224,64,251,0.14) 0%,transparent 70%);
+    animation:g1 20s ease-in-out infinite alternate;}
+.g2{width:300px;height:300px;bottom:-80px;right:-60px;
+    background:radial-gradient(circle,rgba(0,229,255,0.08) 0%,transparent 70%);
+    animation:g2 26s ease-in-out infinite alternate;}
+@keyframes g1{from{transform:translate(0,0)}to{transform:translate(30px,20px)}}
+@keyframes g2{from{transform:translate(0,0)}to{transform:translate(-20px,-15px)}}
+
+/* LAYOUT */
+.app{position:relative;z-index:1;width:100%;height:100%;
+     display:flex;flex-direction:column;}
+
+/* HEADER - just time + date + weather */
+.header{
+  padding:22px 24px 16px;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-shrink:0;
+}
+.time{font-size:52px;font-weight:100;color:#fff;letter-spacing:-1px;line-height:1;}
+.date{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:0.5px;}
+.weather-block{text-align:right;}
+.weather-temp{font-size:32px;font-weight:200;color:#fff;}
+.weather-desc{font-size:11px;color:var(--dim);margin-top:2px;letter-spacing:0.5px;}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--ab),transparent);margin:0 20px;flex-shrink:0;}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:18px 16px calc(18px + var(--safe));-webkit-overflow-scrolling:touch;}
+.content::-webkit-scrollbar{display:none;}
+
+/* SECTION LABEL */
+.sec{font-size:10px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;
+     margin:0 4px 10px;padding-top:4px;}
+
+/* CARD BASE */
+.card{
+  background:var(--card);border:1px solid rgba(255,255,255,0.06);
+  border-radius:var(--r);margin-bottom:10px;
+  transition:transform 0.12s,border-color 0.2s;
+  overflow:hidden;
+}
+.card:active{transform:scale(0.97);}
+.card.glow{border-color:var(--ab);box-shadow:0 0 20px var(--ag);}
+
+/* PRESENCE CARD */
+.presence{display:flex;align-items:center;gap:16px;padding:18px 20px;}
+.presence-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.dot-home{background:#4ade80;box-shadow:0 0 10px rgba(74,222,128,0.6);}
+.dot-away{background:rgba(255,255,255,0.2);}
+.presence-name{font-size:17px;font-weight:300;}
+.presence-status{font-size:12px;color:var(--dim);margin-top:2px;}
+
+/* BIG INFO CARD */
+.info-row{display:flex;padding:18px 20px;align-items:center;gap:16px;}
+.info-icon{font-size:28px;flex-shrink:0;width:40px;text-align:center;}
+.info-label{font-size:12px;color:var(--dim);}
+.info-value{font-size:22px;font-weight:200;color:#fff;}
+
+/* LIGHT CARD - big toggle */
+.light-card{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;cursor:pointer;
+}
+.light-info{display:flex;align-items:center;gap:14px;}
+.light-icon-wrap{
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,0.05);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;transition:all 0.25s;
+}
+.light-on .light-icon-wrap{background:var(--ag);box-shadow:0 0 18px var(--ag);}
+.light-name{font-size:16px;font-weight:300;}
+.light-state{font-size:12px;color:var(--dim);margin-top:2px;}
+/* Toggle pill */
+.pill{
+  width:50px;height:28px;border-radius:14px;
+  background:var(--off);position:relative;
+  transition:background 0.25s;flex-shrink:0;
+}
+.pill::after{
+  content:'';position:absolute;top:3px;left:3px;
+  width:22px;height:22px;border-radius:11px;
+  background:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.4);
+  transition:left 0.25s;
+}
+.light-on .pill{background:var(--on);box-shadow:0 0 14px var(--ag);}
+.light-on .pill::after{left:25px;}
+
+/* MUSIC ROW */
+.music-row{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;}
+.music-row:active{opacity:0.7;}
+.music-icon{font-size:24px;flex-shrink:0;}
+.music-name{font-size:15px;font-weight:300;flex:1;}
+.music-play{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--a),#9c00d4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+  box-shadow:0 0 14px var(--ag);
+}
+
+/* SCENE GRID */
+.scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.scene-btn{
+  background:var(--card);border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;padding:20px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  cursor:pointer;transition:all 0.15s;
+}
+.scene-btn:active{transform:scale(0.95);border-color:var(--ab);}
+.scene-emoji{font-size:28px;}
+.scene-label{font-size:12px;color:var(--dim);text-align:center;font-weight:400;}
+
+/* WECKER */
+.wecker-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;cursor:pointer;
+}
+.wecker-info{display:flex;align-items:center;gap:14px;}
+.wecker-time{font-size:26px;font-weight:200;color:#fff;}
+.wecker-sub{font-size:11px;color:var(--dim);margin-top:2px;}
+
+/* STOP BTN */
+.stop-btn{
+  width:100%;padding:18px;border:none;border-radius:var(--r);
+  background:rgba(255,60,60,0.12);border:1px solid rgba(255,60,60,0.2);
+  color:#ff6b6b;font-size:16px;cursor:pointer;
+  font-family:inherit;font-weight:300;letter-spacing:0.5px;
+  transition:all 0.15s;
+}
+.stop-btn:active{transform:scale(0.97);background:rgba(255,60,60,0.22);}
+
+/* STATUS ROWS */
+.status-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 20px;
+}
+.status-item+.status-item{border-top:1px solid rgba(255,255,255,0.04);}
+.s-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.s-dot.on{background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,0.5);}
+.s-dot.off{background:rgba(255,255,255,0.15);}
+.s-dot.warn{background:#ff6b6b;box-shadow:0 0 8px rgba(255,107,107,0.5);}
+.s-label{font-size:14px;font-weight:300;flex:1;}
+.s-val{font-size:12px;color:var(--dim);}
+
+/* TAB BAR */
+.tabbar{
+  display:flex;background:rgba(4,5,13,0.98);
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding:10px 0 calc(14px + var(--safe));
+  flex-shrink:0;
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:8px 0;cursor:pointer;border:none;background:none;
+  color:var(--dim);transition:color 0.2s;
+}
+.tab-icon{font-size:22px;line-height:1;}
+.tab-label{font-size:9px;letter-spacing:0.5px;text-transform:uppercase;}
+.tab.active{color:var(--a);}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:85px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:rgba(10,13,28,0.96);border:1px solid var(--ab);
+  border-radius:12px;padding:10px 22px;font-size:13px;color:var(--a);
+  z-index:500;opacity:0;transition:all 0.25s;pointer-events:none;
+  white-space:nowrap;backdrop-filter:blur(20px);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Fluent emoji sizing */
+img.em{width:1.2em;height:1.2em;vertical-align:-0.2em;}
+</style>
+</head>
+<body>
+<div class="bg"><div class="g1"></div><div class="g2"></div></div>
+<div class="toast" id="toast"></div>
+
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="time" id="htime">--:--</div>
+      <div class="date" id="hdate">--</div>
+    </div>
+    <div class="weather-block">
+      <div class="weather-temp" id="wtemp">--°</div>
+      <div class="weather-desc" id="wdesc">--</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="content" id="content"></div>
+
+  <div class="tabbar">
+    <button class="tab active" id="tab-home"    onclick="go('home')">
+      <span class="tab-icon">🏠</span><span class="tab-label">Home</span>
+    </button>
+    <button class="tab" id="tab-lights"  onclick="go('lights')">
+      <span class="tab-icon">💡</span><span class="tab-label">Lichter</span>
+    </button>
+    <button class="tab" id="tab-music"   onclick="go('music')">
+      <span class="tab-icon">🎵</span><span class="tab-label">Musik</span>
+    </button>
+    <button class="tab" id="tab-scenes"  onclick="go('scenes')">
+      <span class="tab-icon">✨</span><span class="tab-label">Szenen</span>
+    </button>
+    <button class="tab" id="tab-status"  onclick="go('status')">
+      <span class="tab-icon">📊</span><span class="tab-label">Status</span>
+    </button>
+  </div>
+</div>
+
+<script>
+const HA='http://192.168.1.123:8123';
+const T='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlZWEzY2ViZWM2NDM0ZDc3YTUzYmRjZDUxYWQwZmFiMiIsImlhdCI6MTc3MjIzNTkzNywiZXhwIjoyMDg3NTk1OTM3fQ.NWPIQwbtUJlmHzuMwkIIPjzLQcukT997SmL4rW-xQnk';
+const H={'Authorization':'Bearer '+T,'Content-Type':'application/json'};
+
+let tab='home', st={};
+
+function api(p,m,b){return fetch(HA+p,{method:m||'GET',headers:H,body:b?JSON.stringify(b):null}).then(r=>r.json()).catch(()=>({}));}
+function svc(d,s,b){return api('/api/services/'+d+'/'+s,'POST',b);}
+function S(e){return st[e]||{state:'unknown',attributes:{}};}
+function A(e,a,d){return (st[e]?.attributes||{})[a]??d;}
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+// Clock
+function clock(){
+  const n=new Date();
+  document.getElementById('htime').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  const days=['So','Mo','Di','Mi','Do','Fr','Sa'],months=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  document.getElementById('hdate').textContent=days[n.getDay()]+', '+n.getDate()+'. '+months[n.getMonth()];
+}
+clock();setInterval(clock,15000);
+
+// Weather
+function weather(){
+  api('/api/states/weather.forecast_home').then(s=>{
+    if(!s.state)return;
+    const icons={sunny:'☀️',cloudy:'☁️',rainy:'🌧️',partlycloudy:'⛅',snowy:'❄️',windy:'💨',fog:'🌫️','clear-night':'🌙','lightning-rainy':'⛈️'};
+    document.getElementById('wtemp').textContent=(s.attributes?.temperature??'--')+'°';
+    document.getElementById('wdesc').textContent=(icons[s.state]||'🌤️')+' '+s.state.replace(/-/g,' ');
+  });
+}
+weather();setInterval(weather,120000);
+
+// Load states then render
+function load(){
+  return api('/api/states').then(arr=>{arr.forEach(s=>st[s.entity_id]=s);});
+}
+
+function go(t){
+  tab=t;
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+  document.getElementById('tab-'+t)?.classList.add('active');
+  load().then(render);
+}
+
+function render(){
+  const c=document.getElementById('content');
+  if(tab==='home')   c.innerHTML=home();
+  if(tab==='lights') c.innerHTML=lights();
+  if(tab==='music')  c.innerHTML=music();
+  if(tab==='scenes') c.innerHTML=scenes();
+  if(tab==='status') c.innerHTML=status();
+}
+
+// ── HOME ──────────────────────────────────────────
+function home(){
+  const home=S('person.janis').state==='home';
+  const wecker=S('input_boolean.wecker_aktiv').state==='on';
+  const bat=S('sensor.macbook_air_von_janis_internal_battery_level').state;
+  const buro=S('light.hue_play_l').state==='on';
+
+  return `
+  <div class="card glow presence">
+    <div class="presence-dot ${home?'dot-home':'dot-away'}"></div>
+    <div>
+      <div class="presence-name">Janis</div>
+      <div class="presence-status">${home?'Zuhause':'Unterwegs'}</div>
+    </div>
+  </div>
+
+  <div class="card light-card ${buro?'light-on':''}" onclick="tgl('light.hue_play_l')">
+    <div class="light-info">
+      <div class="light-icon-wrap">💡</div>
+      <div>
+        <div class="light-name">Büro Licht</div>
+        <div class="light-state">${buro?'An':'Aus'}</div>
+      </div>
+    </div>
+    <div class="pill"></div>
+  </div>
+
+  <div class="card" style="cursor:pointer" onclick="tglWecker()">
+    <div class="wecker-row">
+      <div class="wecker-info">
+        <div style="font-size:26px">⏰</div>
+        <div>
+          <div class="wecker-time">06:25</div>
+          <div class="wecker-sub">Mo–Fr · ${wecker?'Aktiv':'Inaktiv'}</div>
+        </div>
+      </div>
+      <div class="pill ${wecker?'light-on':''}"></div>
+    </div>
+  </div>
+
+  ${bat!=='unavailable'?`
+  <div class="card info-row">
+    <div class="info-icon">💻</div>
+    <div>
+      <div class="info-label">MacBook Akku</div>
+      <div class="info-value">${bat}%</div>
+    </div>
+  </div>`:''}
+  `;
+}
+
+// ── LIGHTS ────────────────────────────────────────
+function lights(){
+  const ls=[
+    {id:'light.hue_play_l',name:'Büro',icon:'🟣'},
+    {id:'light.deckenlampe',name:'Deckenlampe SZ',icon:'💡'},
+    {id:'light.hue_iris',name:'Hue Iris',icon:'🔵'},
+    {id:'light.h61e1',name:'Govee Wand',icon:'🟩'},
+    {id:'light.h618a',name:'Govee Sofa',icon:'🟩'},
+    {id:'light.gang_eg_licht',name:'Gang EG',icon:'🏠'},
+    {id:'light.gang_og_licht',name:'Gang OG',icon:'🏠'},
+    {id:'light.gaste_wc_licht',name:'Bad',icon:'🚿'},
+    {id:'light.garten_licht',name:'Garten',icon:'🌿'},
+  ];
+  return ls.map(l=>{
+    const on=S(l.id).state==='on';
+    const unavail=S(l.id).state==='unavailable';
+    return `<div class="card light-card ${on?'light-on':''} ${unavail?'':''}" onclick="tgl('${l.id}')">
+      <div class="light-info">
+        <div class="light-icon-wrap">${l.icon}</div>
+        <div>
+          <div class="light-name">${l.name}</div>
+          <div class="light-state">${unavail?'N/A':on?'An':'Aus'}</div>
+        </div>
+      </div>
+      <div class="pill"></div>
+    </div>`;
+  }).join('');
+}
+
+// ── MUSIC ─────────────────────────────────────────
+function music(){
+  const playing=S('media_player.wohnzimmer_alm').state==='playing';
+  const title=A('media_player.wohnzimmer_alm','media_title','');
+  const radios=[
+    {n:'Swiss Pop',u:'http://stream.srg-ssr.ch/m/rsp/mp3_128',i:'🇨🇭'},
+    {n:'SRF 3',u:'http://stream.srg-ssr.ch/m/drs3/mp3_128',i:'📻'},
+    {n:'Melody',u:'https://stream.radio-melody.ch/melody128.mp3',i:'🎵'},
+    {n:'Eviva',u:'https://stream.eviva.ch/eviva128.mp3',i:'🎶'},
+    {n:'SRF 1',u:'http://stream.srg-ssr.ch/m/drs1/mp3_128',i:'📡'},
+    {n:'Central',u:'https://stream.radiocentral.ch/radiocentral-aac',i:'🏔️'},
+  ];
+
+  return `
+  ${playing?`<div class="card info-row">
+    <div class="info-icon">🔊</div>
+    <div><div class="info-label">Spielt gerade</div><div class="info-value" style="font-size:16px">${title||'Läuft...'}</div></div>
+  </div>`:''}
+
+  ${radios.map(r=>`
+  <div class="card music-row" onclick="playRadio('${r.u}','${r.n}')">
+    <div class="music-icon">${r.i}</div>
+    <div class="music-name">${r.n}</div>
+    <div class="music-play">▶</div>
+  </div>`).join('')}
+
+  <button class="stop-btn" onclick="stopAll()" style="margin-top:4px">⏹ &nbsp; Alles stoppen</button>
+  `;
+}
+
+// ── SCENES ────────────────────────────────────────
+function scenes(){
+  const sc=[
+    {i:'🌙',n:'Gute Nacht',a:()=>{tgl2('light.hue_play_l','off');tgl2('light.deckenlampe','off');svc('media_player','media_stop',{entity_id:'media_player.wohnzimmer_alm'});}},
+    {i:'☀️',n:'Guten Morgen',a:()=>{svc('light','turn_on',{entity_id:'light.hue_play_l',brightness_pct:60,color_temp:3000});}},
+    {i:'🎯',n:'Focus',a:()=>{svc('light','turn_on',{entity_id:'light.hue_play_l',brightness_pct:100,color_temp:4000});}},
+    {i:'🕯️',n:'Kerzenschein',a:()=>{svc('light','turn_on',{entity_id:'light.deckenlampe',effect:'candle'});}},
+    {i:'🔴',n:'LED Rot',a:()=>{setLED([220,0,80]);}},
+    {i:'🟢',n:'LED Grün',a:()=>{setLED([0,220,80]);}},
+    {i:'🔵',n:'LED Blau',a:()=>{setLED([0,100,255]);}},
+    {i:'🟣',n:'LED Lila',a:()=>{setLED([150,0,255]);}},
+  ];
+  // Register callbacks
+  window._scenes=sc;
+  return `
+  <div class="scene-grid">
+  ${sc.map((s,i)=>`
+    <div class="scene-btn" onclick="window._scenes[${i}].a();toast('${s.i} ${s.n}')">
+      <div class="scene-emoji">${s.i}</div>
+      <div class="scene-label">${s.n}</div>
+    </div>`).join('')}
+  </div>
+  <button class="stop-btn" onclick="allOff()">🌑 &nbsp; Alle Lichter aus</button>
+  `;
+}
+
+// ── STATUS ────────────────────────────────────────
+function status(){
+  const rows=[
+    {l:'Janis',v:S('person.janis').state==='home'?'Zuhause':'Unterwegs',d:S('person.janis').state==='home'?'on':'off'},
+    {l:'Büro Licht',v:S('light.hue_play_l').state==='on'?'An':'Aus',d:S('light.hue_play_l').state==='on'?'on':'off'},
+    {l:'Wecker',v:S('input_boolean.wecker_aktiv').state==='on'?'06:25 · Aktiv':'Inaktiv',d:S('input_boolean.wecker_aktiv').state==='on'?'on':'off'},
+    {l:'MacBook',v:S('sensor.macbook_air_von_janis_internal_battery_level').state+'%',d:'on'},
+    {l:'Govee Wand LED',v:S('light.h61e1').state,d:S('light.h61e1').state==='unavailable'?'warn':S('light.h61e1').state==='on'?'on':'off'},
+    {l:'HA',v:'2025.10.3',d:'on'},
+    {l:'NS Panel Pro',v:'Online',d:'on'},
+  ];
+  return `<div class="card">${rows.map(r=>`
+    <div class="status-item">
+      <div class="s-dot ${r.d}"></div>
+      <div class="s-label">${r.l}</div>
+      <div class="s-val">${r.v}</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── ACTIONS ───────────────────────────────────────
+function tgl(eid){
+  const on=S(eid).state==='on';
+  svc('light',on?'turn_off':'turn_on',{entity_id:eid})
+    .then(()=>{toast(on?'💡 Aus':'💡 An');setTimeout(()=>load().then(render),600);});
+}
+function tgl2(eid,s){svc('light',s==='on'?'turn_on':'turn_off',{entity_id:eid});}
+function tglWecker(){
+  const on=S('input_boolean.wecker_aktiv').state==='on';
+  svc('input_boolean',on?'turn_off':'turn_on',{entity_id:'input_boolean.wecker_aktiv'})
+    .then(()=>{toast(on?'⏰ Aus':'⏰ An');setTimeout(()=>load().then(render),400);});
+}
+function allOff(){
+  ['light.hue_play_l','light.deckenlampe','light.hue_iris','light.gang_eg_licht','light.gang_og_licht','light.gaste_wc_licht','light.garten_licht','light.h618a','light.h618a_2'].forEach(e=>svc('light','turn_off',{entity_id:e}));
+  toast('🌑 Alles aus');
+}
+function playRadio(url,name){
+  svc('media_player','play_media',{entity_id:'media_player.wohnzimmer_alm',media_content_id:url,media_content_type:'music'});
+  toast('📻 '+name);
+}
+function stopAll(){
+  ['media_player.wohnzimmer_alm','media_player.nestmini3793','media_player.nestmini1153','media_player.nestmini7548','media_player.nest'].forEach(e=>svc('media_player','media_stop',{entity_id:e}));
+  toast('⏹ Gestoppt');
+}
+function setLED(rgb){
+  ['light.h61e1','light.h618a','light.h618a_2'].forEach(e=>svc('light','turn_on',{entity_id:e,rgb_color:rgb}));
+  toast('🎨 LED Farbe gesetzt');
+}
+
+// Init
+load().then(render);
+setInterval(()=>{if(tab==='home'||tab==='status')load().then(render);},25000);
+</script>
+</body>
+</html>

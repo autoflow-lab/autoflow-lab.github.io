@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Clawy · Zugang</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#04050d;font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#c8d4e0;}
+/* bg canvas handled by three.js */
+
+/* CARD */
+.card{position:relative;z-index:1;background:rgba(5,7,15,0.9);border:1px solid rgba(224,64,251,0.25);border-radius:24px;padding:44px 48px;width:420px;text-align:center;box-shadow:0 0 60px rgba(224,64,251,0.2);animation:fadeIn 0.5s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.shake{animation:shake 0.4s ease;}
+
+/* 3D CRAB */
+.crab-scene{width:100px;height:100px;perspective:300px;margin:0 auto 8px;cursor:pointer;position:relative;}
+.crab-3d{
+  width:100%;height:100%;
+  transform-style:preserve-3d;
+  animation:crab3d 4s ease-in-out infinite;
+  position:relative;
+}
+@keyframes crab3d{
+  0%{transform:rotateY(-15deg) rotateX(8deg) translateY(0);}
+  25%{transform:rotateY(15deg) rotateX(-5deg) translateY(-8px);}
+  50%{transform:rotateY(-10deg) rotateX(8deg) translateY(-4px);}
+  75%{transform:rotateY(18deg) rotateX(-8deg) translateY(-10px);}
+  100%{transform:rotateY(-15deg) rotateX(8deg) translateY(0);}
+}
+.crab-emoji{
+  font-size:72px;line-height:100px;display:block;text-align:center;
+  filter:drop-shadow(0 0 12px rgba(224,64,251,0.6)) drop-shadow(0 8px 20px rgba(0,0,0,0.8));
+  transition:filter 0.3s;
+  user-select:none;
+}
+.crab-shadow{
+  position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  width:60px;height:12px;border-radius:50%;
+  background:rgba(224,64,251,0.25);
+  filter:blur(6px);
+  animation:shadow3d 4s ease-in-out infinite;
+}
+@keyframes shadow3d{
+  0%,100%{width:55px;opacity:0.4;}
+  25%,75%{width:70px;opacity:0.2;}
+  50%{width:60px;opacity:0.3;}
+}
+/* crab states */
+.crab-3d.angry{animation:angry3d 0.3s ease infinite;}
+@keyframes angry3d{0%{transform:rotateZ(-12deg) scale(1.05)}50%{transform:rotateZ(12deg) scale(1.1)}100%{transform:rotateZ(-12deg) scale(1.05)}}
+.crab-3d.happy{animation:happy3d 0.35s ease-in-out infinite alternate;}
+@keyframes happy3d{from{transform:rotateY(-20deg) rotateX(-10deg) translateY(-5px) scale(1.1)}to{transform:rotateY(20deg) rotateX(10deg) translateY(-18px) scale(1.2)}}
+.crab-3d.disco{animation:disco3d 0.15s linear infinite;}
+@keyframes disco3d{from{transform:rotateY(0) rotateX(15deg) rotateZ(-5deg)}to{transform:rotateY(360deg) rotateX(-15deg) rotateZ(5deg)}}
+.crab-3d.rage{animation:rage3d 0.1s linear infinite;}
+@keyframes rage3d{0%{transform:rotateZ(-20deg) scale(1.2) translateY(-5px)}50%{transform:rotateZ(20deg) scale(1.3) translateY(-10px)}100%{transform:rotateZ(-20deg) scale(1.2) translateY(-5px)}}
+
+/* BUBBLE */
+.bubble{display:block;background:rgba(224,64,251,0.1);border:1px solid rgba(224,64,251,0.22);border-radius:14px;padding:7px 16px;font-size:12px;color:#e040fb;margin-bottom:20px;min-height:30px;transition:all 0.4s;}
+
+h1{font-size:22px;font-weight:300;color:#fff;margin-bottom:5px;}
+.sub{font-size:13px;color:rgba(255,255,255,0.32);margin-bottom:26px;}
+
+input{display:block;width:100%;padding:14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(224,64,251,0.3);border-radius:12px;color:#fff;font-size:20px;letter-spacing:4px;text-align:center;outline:none;margin-bottom:14px;transition:border-color 0.2s,box-shadow 0.2s;}
+input:focus{border-color:#e040fb;box-shadow:0 0 20px rgba(224,64,251,0.3);}
+input::placeholder{font-size:13px;letter-spacing:1px;color:rgba(255,255,255,0.2);}
+
+.btn{display:block;width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#e040fb,#9c00d4);color:#fff;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 0 25px rgba(224,64,251,0.4);transition:transform 0.1s,box-shadow 0.2s;}
+.btn:hover{box-shadow:0 0 40px rgba(224,64,251,0.6);transform:translateY(-1px);}
+.btn:active{transform:scale(0.97);}
+
+.msg{margin-top:14px;font-size:13px;min-height:20px;color:#ff6b6b;transition:all 0.3s;}
+.msg.ok{color:#4ade80;}
+.msg.hint{color:rgba(255,255,255,0.35);font-style:italic;}
+
+.footer{font-size:10px;color:rgba(255,255,255,0.12);margin-top:20px;letter-spacing:1px;}
+.click-count{font-size:9px;color:rgba(255,255,255,0.08);margin-top:4px;}
+
+/* CONFETTI */
+.cf{position:fixed;inset:0;pointer-events:none;z-index:100;}
+/* DISCO FLASH */
+.disco-flash{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;mix-blend-mode:screen;}
+
+/* SECRET PANEL */
+.secret-panel{display:none;position:fixed;inset:0;z-index:300;background:rgba(4,5,13,0.95);align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;}
+.secret-panel.show{display:flex;}
+.secret-text{font-size:28px;color:#fff;font-weight:200;}
+.secret-sub{font-size:15px;color:#e040fb;}
+.secret-close{font-size:12px;color:rgba(255,255,255,0.3);cursor:pointer;margin-top:10px;}
+</style>
+</head>
+<body>
+<!-- THREE.JS STARFIELD BACKGROUND -->
+<canvas id="bg-canvas" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></canvas>
+<div class="cf" id="cf"></div>
+<div class="disco-flash" id="disco-flash"></div>
+
+<!-- SECRET PANEL -->
+<div class="secret-panel" id="secret-panel">
+  <div style="font-size:80px" id="secret-icon">🥚</div>
+  <div class="secret-text" id="secret-text">Easter Egg!</div>
+  <div class="secret-sub" id="secret-sub">Du hast es gefunden!</div>
+  <div class="secret-close" onclick="closeSecret()">[ Schliessen ]</div>
+</div>
+
+<div class="card" id="card">
+  <div class="crab-scene" id="crab-scene">
+    <div class="crab-3d" id="crab3d">
+      <span class="crab-emoji" id="crab-emoji">🦀</span>
+    </div>
+    <div class="crab-shadow"></div>
+  </div>
+
+  <span class="bubble" id="bubble">Ich beobachte dich...</span>
+  <h1>Wer bist du eigentlich?</h1>
+  <p class="sub">Beweise dass du kein Roboter bist.</p>
+  <input type="password" id="pw" placeholder="Passwort tippen..." autocomplete="off" autofocus>
+  <button class="btn" id="btn">Einloggen</button>
+  <div class="msg" id="msg">&nbsp;</div>
+  <div class="click-count" id="click-count"></div>
+  <div class="footer">Clawy · Privat · Schlapphome</div>
+</div>
+
+<script>
+// ── NEON STARFIELD (2 cycling colors) ──────────────
+(function(){
+  var canvas=document.getElementById('bg-canvas');
+  var ctx=canvas.getContext('2d');
+  var W,H,stars=[];
+
+  // 2 accent colors cycling like dashboards
+  var palettes=[
+    ['#e040fb','rgba(224,64,251,'],   // pink
+    ['#00e5ff','rgba(0,229,255,'],    // cyan
+    ['#76ff03','rgba(118,255,3,'],    // green
+    ['#ff6d00','rgba(255,109,0,'],    // orange
+    ['#7c4dff','rgba(124,77,255,'],   // purple
+    ['#ff4081','rgba(255,64,129,'],   // red-pink
+  ];
+  var palIdx=0, palTarget=1, palBlend=0;
+  setInterval(function(){palIdx=palTarget;palTarget=(palTarget+1)%palettes.length;palBlend=0;},8000);
+
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+    stars=[];
+    // Fewer, bigger, glowier stars — only 2 colors
+    var N=Math.floor((W*H)/6000);
+    for(var i=0;i<N;i++){
+      stars.push({
+        x:Math.random()*W, y:Math.random()*H,
+        r:0.5+Math.random()*2.5,
+        twinkle:Math.random()*Math.PI*2,
+        speed:0.01+Math.random()*0.02,
+        colorA:Math.random()<0.5?0:1,  // which of the 2 current colors
+        bright:0.4+Math.random()*0.6,
+      });
+    }
+    // A few big bright ones
+    for(var j=0;j<15;j++){
+      stars.push({x:Math.random()*W,y:Math.random()*H,r:3+Math.random()*3,twinkle:Math.random()*Math.PI*2,speed:0.008,colorA:j%2,bright:0.8,big:true});
+    }
+  }
+  resize();
+  window.addEventListener('resize',resize);
+
+  // Shooting stars
+  var shoots=[];
+  function addShoot(){
+    var p=palettes[palIdx];
+    shoots.push({x:Math.random()*W*0.7,y:Math.random()*H*0.4,vx:6+Math.random()*8,vy:2+Math.random()*4,life:1,color:p[0]});
+  }
+  setInterval(addShoot,3000+Math.random()*4000);
+
+  var t=0;
+  var mx=0.5,my=0.5;
+  document.addEventListener('mousemove',function(e){mx=e.clientX/W;my=e.clientY/H;});
+
+  function loop(){
+    requestAnimationFrame(loop);
+    t+=0.012;
+    palBlend=Math.min(1,palBlend+0.002);
+
+    ctx.clearRect(0,0,W,H);
+
+    // Subtle orb bg
+    var cx=W*(0.3+mx*0.4),cy=H*(0.3+my*0.4);
+    var p=palettes[palIdx];
+    var grad=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.7);
+    grad.addColorStop(0,p[1]+'0.06)');
+    grad.addColorStop(1,'transparent');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,H);
+
+    // Stars
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i];
+      s.twinkle+=s.speed;
+      var alpha=s.bright*(0.5+0.5*Math.sin(s.twinkle));
+      var col=s.colorA===0?palettes[palIdx]:palettes[palTarget];
+      // Big stars get glow
+      if(s.big){
+        var grd=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*4);
+        grd.addColorStop(0,col[1]+alpha*0.8+')');
+        grd.addColorStop(1,'transparent');
+        ctx.fillStyle=grd;
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r*4,0,Math.PI*2);ctx.fill();
+      }
+      ctx.fillStyle=col[1]+alpha+')';
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+    }
+
+    // Shooting stars
+    for(var j=shoots.length-1;j>=0;j--){
+      var sh=shoots[j];
+      sh.x+=sh.vx;sh.y+=sh.vy;sh.life-=0.025;
+      if(sh.life<=0){shoots.splice(j,1);continue;}
+      ctx.save();
+      ctx.globalAlpha=sh.life*0.8;
+      ctx.strokeStyle=sh.color;
+      ctx.lineWidth=2;
+      ctx.shadowBlur=8;ctx.shadowColor=sh.color;
+      ctx.beginPath();ctx.moveTo(sh.x,sh.y);ctx.lineTo(sh.x-sh.vx*5,sh.y-sh.vy*5);ctx.stroke();
+      ctx.restore();
+    }
+  }
+  loop();
+})();
+
+var PW='clawy2025';
+var KEY='clawy_gate_auth';
+var p=new URLSearchParams(window.location.search);
+var redir=p.get('r')||'/local/ambient.html';
+if(redir&&!redir.startsWith('/')&&!redir.startsWith('http'))redir='/local/'+redir;
+if(sessionStorage.getItem(KEY)==='ok')window.location.href=redir;
+
+var crab3d=document.getElementById('crab3d');
+var crabEmoji=document.getElementById('crab-emoji');
+var bubble=document.getElementById('bubble');
+var msg=document.getElementById('msg');
+var card=document.getElementById('card');
+var pw=document.getElementById('pw');
+var btn=document.getElementById('btn');
+var attempts=0;
+var crabClicks=0;
+var idleTimer;
+var discoMode=false;
+
+var wrongMsgs=[
+  '😤 Hau ab! Das ist Privatbesitz!',
+  '🕵️ Spion erkannt! Nochmal versuchen.',
+  '🦀 Krabben-Radar sagt: NEIN!',
+  '😂 Ha! Schön probiert. Aber nein.',
+  '😴 Gähn... schon wieder falsch.',
+  '🚨 ALARM! Das Krabben-Protokoll läuft!',
+  '💀 Wow. Einfach wow. Nein.',
+  '🤖 Bist du ein Roboter? Klingt nach Roboter.',
+];
+var bubbleMsgs=[
+  'Ich beobachte dich...','Wer bist du?','Krabben-Scan läuft...','Du wirkst verdächtig.',
+  'Schreib schon! 👀','Meine Augen sind überall.','Tippe das Passwort...','Ich hab Zeit. Du auch?'
+];
+var impatient=[
+  'Tick tock... 🕐','Ich warte noch. Aber nicht ewig.','Hallo? Jemand zuhause?',
+  '*gähn* ...','Sollte ich mir Sorgen machen?','Ich habe ein Leben, weisst du.','🦀 ...',
+];
+
+// Bubble rotation
+setInterval(function(){
+  if(!discoMode)bubble.textContent=bubbleMsgs[Math.floor(Math.random()*bubbleMsgs.length)];
+},4500);
+
+// Idle detection
+function resetIdle(){
+  clearTimeout(idleTimer);
+  idleTimer=setTimeout(function(){
+    var i=Math.floor(Math.random()*impatient.length);
+    bubble.textContent=impatient[i];
+    crab3d.className='crab-3d angry';
+    setTimeout(function(){crab3d.className='crab-3d';},1200);
+  },20000);
+}
+document.addEventListener('mousemove',resetIdle);
+document.addEventListener('keydown',resetIdle);
+resetIdle();
+
+// INPUT EVENTS
+pw.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+pw.addEventListener('input',function(){
+  var v=pw.value.toLowerCase();
+  // Easter egg: typing "robot"
+  if(v==='robot'){
+    showSecret('🤖','Du hast "robot" eingegeben!','Das dachte ich mir. Tschüss, Roboter! 🦀');
+  }
+  // Easter egg: typing "clawy" (wrong pw but funny)
+  if(v==='clawy'){
+    crab3d.className='crab-3d happy';
+    bubble.textContent='Awww 🥺 Danke! Aber das ist nicht das Passwort.';
+    setTimeout(function(){crab3d.className='crab-3d';},2000);
+  }
+  // Easter egg: typing "janis"
+  if(v==='janis'){
+    bubble.textContent='Oh! Janis? Dann solltest du das Passwort kennen 😏';
+  }
+});
+
+btn.addEventListener('click',function(e){e.preventDefault();doLogin();});
+
+// CRAB CLICKS (Easter egg: 5x klicken)
+document.getElementById('crab-scene').addEventListener('click',function(){
+  crabClicks++;
+  document.getElementById('click-count').textContent=crabClicks>=3?'Klicks: '+crabClicks+'/5':'';
+  if(crabClicks===3){bubble.textContent='Hey! Hör auf mich zu klicken! 😠';}
+  if(crabClicks===4){bubble.textContent='Ich warne dich... 🦀';}
+  if(crabClicks>=5){
+    crabClicks=0;
+    crab3d.className='crab-3d rage';
+    crabEmoji.textContent='😡';
+    document.getElementById('click-count').textContent='';
+    bubble.textContent='DAS WAR MEIN LETZTES WORT!!!';
+    card.classList.add('shake');
+    setTimeout(function(){
+      crab3d.className='crab-3d';
+      crabEmoji.textContent='🦀';
+      bubble.textContent='...okay ich hab mich wieder.';
+      card.classList.remove('shake');
+    },2000);
+  }
+});
+
+// KONAMI CODE
+var konami=[38,38,40,40,37,39,37,39,66,65],ki=0;
+document.addEventListener('keydown',function(e){
+  if(e.keyCode===konami[ki]){ki++;if(ki===konami.length){triggerDisco();ki=0;}}
+  else ki=0;
+});
+
+// DISCO MODE (Konami easter egg)
+var discoColors=['#e040fb','#00e5ff','#76ff03','#ff6d00','#ff4081','#ffeb3b','#fff'];
+var discoInterval;
+function triggerDisco(){
+  discoMode=true;
+  crab3d.className='crab-3d disco';
+  bubble.textContent='🕺 DISCO MODUS AKTIVIERT! 🕺';
+  var df=document.getElementById('disco-flash');
+  var di=0;
+  discoInterval=setInterval(function(){
+    df.style.background=discoColors[di%discoColors.length];
+    df.style.opacity='0.08';
+    document.documentElement.style.setProperty('--a',discoColors[di%discoColors.length]);
+    di++;
+  },120);
+  setTimeout(function(){
+    clearInterval(discoInterval);
+    discoMode=false;
+    df.style.opacity='0';
+    crab3d.className='crab-3d';
+    bubble.textContent='Okay, genug davon. Passwort eingeben.';
+  },6000);
+}
+
+// LONG PRESS on button (Easter egg)
+var btnHold;
+btn.addEventListener('mousedown',function(){btnHold=setTimeout(function(){
+  showSecret('🔓','Du bist geduldig!','Leider hilft das nicht. Passwort brauchst du trotzdem. 😂');
+},2000);});
+btn.addEventListener('mouseup',function(){clearTimeout(btnHold);});
+
+function doLogin(){
+  var val=pw.value.trim();
+  if(!val){bubble.textContent='...du musst auch was eingeben 🙄';return;}
+  if(val===PW){
+    crab3d.className='crab-3d happy';
+    crabEmoji.textContent='🦀';
+    bubble.textContent='Jap, das bist du! ✅';
+    msg.className='msg ok';
+    msg.textContent='🎉 Willkommen! Einen Moment...';
+    btn.textContent='✅ Zugang gewährt!';
+    btn.style.background='linear-gradient(135deg,#4ade80,#22c55e)';
+    btn.style.boxShadow='0 0 30px rgba(74,222,128,0.5)';
+    launchConfetti();
+    sessionStorage.setItem(KEY,'ok');
+    setTimeout(function(){window.location.href=redir;},1800);
+  } else {
+    attempts++;
+    var m=wrongMsgs[(attempts-1)%wrongMsgs.length];
+    crab3d.className='crab-3d angry';
+    setTimeout(function(){crab3d.className='crab-3d';},800);
+    card.classList.add('shake');
+    setTimeout(function(){card.classList.remove('shake');},400);
+    msg.className='msg';
+    msg.textContent=m;
+    bubble.textContent=attempts>=3?'🦀 Willst du einen Tipp? Ich gebe keinen.':'Hmm... nochmal?';
+    if(attempts===5)showSecret('🦀','5 Fehlversuche!','Ich fange an dir zu misstrauen. Ernsthaft.');
+    pw.value='';pw.focus();
+  }
+}
+
+// SECRET PANEL
+function showSecret(icon,title,sub){
+  document.getElementById('secret-icon').textContent=icon;
+  document.getElementById('secret-text').textContent=title;
+  document.getElementById('secret-sub').textContent=sub;
+  document.getElementById('secret-panel').classList.add('show');
+  launchConfetti();
+}
+function closeSecret(){document.getElementById('secret-panel').classList.remove('show');}
+
+// CONFETTI
+function launchConfetti(){
+  var colors=['#e040fb','#00e5ff','#76ff03','#ff6d00','#ff4081','#ffeb3b'];
+  var cf=document.getElementById('cf');
+  for(var i=0;i<65;i++){
+    var el=document.createElement('div');
+    var s=6+Math.random()*10;
+    el.style.cssText='position:absolute;width:'+s+'px;height:'+s+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';left:'+(Math.random()*100)+'%;top:-20px;';
+    cf.appendChild(el);
+    var tx=(Math.random()-0.5)*260,ty=500+Math.random()*400,rot=Math.random()*720,dur=900+Math.random()*1100,delay=Math.random()*500;
+    (function(el,tx,ty,rot,dur,delay){
+      setTimeout(function(){
+        var st=Date.now();
+        function f(){
+          var t=(Date.now()-st)/dur;
+          if(t>1){el.remove();return;}
+          el.style.transform='translate('+tx*t+'px,'+ty*t*t+'px) rotate('+rot*t+'deg)';
+          el.style.opacity=1-t;
+          requestAnimationFrame(f);
+        }
+        requestAnimationFrame(f);
+      },delay);
+    })(el,tx,ty,rot,dur,delay);
+  }
+}
+</script>
+</body>
+</html>

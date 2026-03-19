@@ -1,0 +1,85 @@
+Clawy Dark:
+  modes:
+    dark: true
+
+  # Colors
+  primary-color: "#e040fb"
+  accent-color: "#e040fb"
+  primary-background-color: "#04050d"
+  secondary-background-color: "#07090f"
+  card-background-color: "rgba(8,11,22,0.95)"
+  divider-color: "rgba(224,64,251,0.12)"
+
+  # Text
+  primary-text-color: "#c8d4e0"
+  secondary-text-color: "rgba(180,195,215,0.6)"
+  text-primary-color: "#c8d4e0"
+  disabled-text-color: "rgba(180,195,215,0.3)"
+
+  # Sidebar
+  sidebar-background-color: "#030409"
+  sidebar-text-color: "rgba(180,195,215,0.7)"
+  sidebar-icon-color: "rgba(180,195,215,0.5)"
+  sidebar-selected-text-color: "#e040fb"
+  sidebar-selected-icon-color: "#e040fb"
+  sidebar-selected-background-color: "rgba(224,64,251,0.1)"
+
+  # App Header
+  app-header-background-color: "#030409"
+  app-header-text-color: "#c8d4e0"
+  app-header-selection-bar-color: "#e040fb"
+
+  # Cards
+  ha-card-background: "rgba(8,11,22,0.9)"
+  ha-card-border-color: "rgba(224,64,251,0.15)"
+  ha-card-border-width: "1px"
+  ha-card-border-radius: "16px"
+  ha-card-box-shadow: "0 0 30px rgba(224,64,251,0.06), 0 2px 8px rgba(0,0,0,0.5)"
+
+  # Switches & Sliders
+  switch-checked-color: "#e040fb"
+  paper-slider-active-color: "#e040fb"
+  paper-slider-knob-color: "#e040fb"
+  paper-slider-pin-color: "#e040fb"
+  paper-slider-container-color: "rgba(224,64,251,0.2)"
+
+  # State icons
+  state-icon-color: "rgba(200,212,224,0.6)"
+  state-icon-active-color: "#e040fb"
+
+  # Input
+  paper-input-container-color: "rgba(224,64,251,0.3)"
+  paper-input-container-focus-color: "#e040fb"
+  input-fill-color: "rgba(255,255,255,0.04)"
+  input-idle-line-color: "rgba(224,64,251,0.2)"
+  input-hover-line-color: "rgba(224,64,251,0.5)"
+
+  # Scrollbar
+  scrollbar-thumb-color: "rgba(224,64,251,0.25)"
+
+  # MDC
+  mdc-theme-primary: "#e040fb"
+  mdc-theme-secondary: "#00e5ff"
+  mdc-theme-surface: "#07090f"
+  mdc-theme-background: "#04050d"
+  mdc-theme-on-surface: "#c8d4e0"
+  mdc-text-field-fill-color: "rgba(255,255,255,0.04)"
+  mdc-text-field-idle-line-color: "rgba(224,64,251,0.2)"
+  mdc-text-field-hover-line-color: "rgba(224,64,251,0.5)"
+  mdc-text-field-focused-line-color: "#e040fb"
+  mdc-text-field-label-ink-color: "rgba(200,212,224,0.6)"
+
+  # Tabs
+  paper-tabs-selection-bar-color: "#e040fb"
+
+  # Checkbox
+  paper-checkbox-checked-color: "#e040fb"
+  paper-checkbox-unchecked-color: "rgba(255,255,255,0.3)"
+
+  # Label badge
+  label-badge-background-color: "rgba(224,64,251,0.15)"
+  label-badge-text-color: "#e040fb"
+
+  # RGB
+  rgb-primary-color: "224, 64, 251"
+  rgb-accent-color: "224, 64, 251"

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Clawy Ambient</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --a:#e040fb;
+  --ag:rgba(224,64,251,0.25);
+  --ab:rgba(224,64,251,0.18);
+  --as:rgba(224,64,251,0.07);
+  --nu:#39ff14;
+  --nd:#ff073a;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#04050d;color:#c8d4e0;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;}
+
+/* BG */
+.bg{position:fixed;inset:0;z-index:0;}
+.orb{position:absolute;border-radius:50%;}
+.o1{width:800px;height:800px;top:-250px;left:-180px;background:radial-gradient(circle,var(--ag) 0%,transparent 60%);animation:o1m 20s ease-in-out infinite alternate;}
+.o2{width:500px;height:500px;bottom:-150px;right:-100px;background:radial-gradient(circle,var(--ag) 0%,transparent 60%);opacity:0.45;animation:o2m 26s ease-in-out infinite alternate;}
+@keyframes o1m{from{transform:translate(0,0)}to{transform:translate(60px,40px)}}
+@keyframes o2m{from{transform:translate(0,0)}to{transform:translate(-35px,-25px)}}
+
+/* GRID  3 cols, 3 rows */
+.root{
+  position:fixed;inset:0;z-index:1;
+  display:grid;
+  grid-template-columns:1.5fr 1.9fr 1fr;
+  grid-template-rows:1.4fr 1fr 0.85fr;
+  gap:13px;padding:16px 16px 50px;
+}
+
+/* CARD */
+.card{
+  background:rgba(5,7,15,0.78);
+  border:1px solid var(--ab);
+  border-radius:18px;padding:18px 22px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 0 0 1px rgba(255,255,255,0.02),0 20px 60px rgba(0,0,0,0.5);
+  overflow:hidden;position:relative;
+}
+/* neon border glow on cards */
+.card::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  box-shadow:inset 0 0 30px rgba(255,255,255,0.01),0 0 25px var(--ag);
+  pointer-events:none;opacity:0.6;
+}
+.lbl{font-size:10px;color:var(--a);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:10px;font-weight:600;}
+
+/* ─── CLOCK col1 row1-2 ─── */
+.clock-card{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;justify-content:center;}
+.time{
+  font-size:108px;font-weight:100;letter-spacing:-5px;line-height:1;
+  color:#fff;font-variant-numeric:tabular-nums;
+  text-shadow:0 0 40px var(--a),0 0 80px var(--ag),0 0 3px rgba(255,255,255,0.9);
+}
+.date-str{font-size:14px;color:rgba(255,255,255,0.35);margin-top:8px;letter-spacing:1px;}
+.greeting{font-size:17px;color:var(--a);margin-top:5px;font-weight:300;}
+
+/* Sonnen-Bar */
+.sun-wrap{margin-top:22px;}
+.sun-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.sun-header span{font-size:11px;color:rgba(255,255,255,0.35);}
+.sun-lbl{font-size:10px;color:var(--a);text-transform:uppercase;letter-spacing:2px;font-weight:600;}
+.sun-track{height:5px;background:rgba(255,255,255,0.07);border-radius:3px;position:relative;overflow:visible;}
+.sun-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--a),#ffb300);transition:width 30s linear;}
+.sun-dot{width:12px;height:12px;border-radius:50%;background:#ffb300;border:2px solid rgba(0,0,0,0.5);position:absolute;top:-4px;box-shadow:0 0 10px #ffb300,0 0 20px rgba(255,179,0,0.5);transition:left 30s linear;}
+
+/* ─── WEATHER col2 row1-2 ─── */
+.weather-card{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;gap:0;}
+.w-loc{font-size:10px;color:var(--a);text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:14px;}
+.w-main{display:flex;align-items:center;gap:14px;}
+.w-ico{font-size:54px;}
+.w-right{}
+.w-temp{font-size:52px;font-weight:100;color:#fff;line-height:1;}
+.w-desc{font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px;}
+.w-pills{display:flex;gap:8px;margin-top:14px;}
+.pill{flex:1;text-align:center;background:var(--as);border:1px solid var(--ab);border-radius:10px;padding:9px 4px;}
+.pill .v{font-size:16px;font-weight:600;color:#fff;display:block;text-shadow:0 0 12px var(--a);margin-bottom:2px;}
+.pill .l{font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;}
+
+/* Divider */
+.w-div{height:1px;background:linear-gradient(90deg,var(--ab),transparent);margin:16px 0;}
+.w-fc-lbl{font-size:10px;color:var(--a);text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:12px;}
+.fc-row{display:flex;justify-content:space-around;flex:1;}
+.fc{text-align:center;}
+.fc-day{font-size:10px;color:rgba(255,255,255,0.32);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.fc-ico{font-size:22px;margin-bottom:5px;}
+.fc-hi{font-size:15px;font-weight:600;color:#fff;text-shadow:0 0 10px var(--a);}
+.fc-lo{font-size:11px;color:rgba(255,255,255,0.32);}
+
+/* ─── ROTATING WIDGET col3 row1 ─── */
+.rotate-card{grid-column:3;grid-row:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:10px;transition:opacity 0.5s;}
+.rot-icon{font-size:40px;animation:float 3s ease-in-out infinite alternate;}
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+.rot-title{font-size:18px;font-weight:300;color:rgba(255,255,255,0.85);line-height:1.4;}
+.rot-sub{font-size:11px;color:var(--a);text-transform:uppercase;letter-spacing:1px;}
+
+/* ─── SPOTIFY col1 row3 ─── */
+.spot-card{grid-column:1;grid-row:3;display:flex;align-items:center;gap:14px;}
+.spot-art-wrap{width:64px;height:64px;border-radius:10px;background:var(--as);flex-shrink:0;border:1px solid var(--ab);overflow:hidden;box-shadow:0 0 15px var(--ag);}
+.spot-art-wrap img{width:100%;height:100%;object-fit:cover;display:none;}
+.spot-info{flex:1;min-width:0;}
+.spot-trk{font-size:16px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.spot-artist{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px;}
+.spot-bar{height:2px;background:rgba(255,255,255,0.08);border-radius:1px;margin-top:10px;overflow:hidden;}
+.spot-prog{height:100%;background:linear-gradient(90deg,var(--a),#ff80ff);border-radius:1px;transition:width 1s linear;}
+.spot-idle{font-size:14px;color:rgba(255,255,255,0.25);font-style:italic;}
+
+/* ─── MARKETS col2 row3 ─── */
+.markets-card{grid-column:2;grid-row:3;display:flex;flex-direction:column;justify-content:space-between;}
+.mrow{display:flex;align-items:center;gap:8px;padding:3px 0;}
+.mname{font-size:12px;color:rgba(255,255,255,0.5);flex:1;}
+.mprice{font-size:14px;font-weight:600;color:#fff;min-width:62px;text-align:right;}
+.mchg{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;min-width:58px;text-align:center;letter-spacing:0.5px;}
+.nu{color:var(--nu);background:rgba(57,255,20,0.09);text-shadow:0 0 8px var(--nu),0 0 16px rgba(57,255,20,0.4);}
+.nd{color:var(--nd);background:rgba(255,7,58,0.09);text-shadow:0 0 8px var(--nd),0 0 16px rgba(255,7,58,0.4);}
+
+/* ─── CRYPTO col3 row3 ─── */
+.crypto-card{grid-column:3;grid-row:3;display:flex;flex-direction:column;justify-content:space-between;}
+.crow{display:flex;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.crow:last-child{border-bottom:none;}
+.csym{font-size:13px;font-weight:600;color:#fff;}
+.cchf{font-size:12px;color:rgba(255,255,255,0.5);margin-top:1px;}
+
+/* ─── QUOTE col3 row2 ─── */
+.quote-card{grid-column:3;grid-row:2;display:flex;flex-direction:column;justify-content:center;}
+.qmark{font-size:70px;color:var(--a);opacity:0.12;font-family:Georgia,serif;line-height:0.4;position:absolute;top:8px;left:12px;}
+.qtext{font-size:14px;font-style:italic;font-weight:300;line-height:1.6;color:rgba(255,255,255,0.75);position:relative;z-index:1;transition:opacity 0.4s;}
+.qauth{font-size:10px;color:var(--a);margin-top:8px;position:relative;z-index:1;letter-spacing:1px;}
+
+/* ─── NOTIFICATION OVERLAY ─── */
+.notif-overlay{
+  display:none;position:fixed;inset:0;z-index:50;
+  background:rgba(4,5,13,0.85);backdrop-filter:blur(12px);
+  align-items:center;justify-content:center;flex-direction:column;gap:20px;
+}
+.notif-overlay.show{display:flex;}
+.notif-box{
+  background:rgba(8,10,20,0.95);border:2px solid var(--a);border-radius:24px;
+  padding:40px 50px;max-width:600px;text-align:center;
+  box-shadow:0 0 60px var(--ag),0 0 120px var(--ag);
+  animation:notifIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes notifIn{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+.notif-from{font-size:11px;color:var(--a);text-transform:uppercase;letter-spacing:3px;margin-bottom:12px;}
+.notif-icon{font-size:52px;margin-bottom:16px;}
+.notif-text{font-size:22px;font-weight:300;color:#fff;line-height:1.5;}
+.notif-time{font-size:11px;color:rgba(255,255,255,0.3);margin-top:14px;}
+.notif-dismiss{font-size:11px;color:rgba(255,255,255,0.2);margin-top:8px;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:0.3}50%{opacity:0.8}}
+
+/* ─── TICKER ─── */
+.ticker-bar{position:fixed;bottom:0;left:0;right:0;z-index:10;height:34px;background:rgba(3,4,10,0.96);border-top:1px solid var(--ab);display:flex;align-items:center;overflow:hidden;}
+.ticker-inner{display:flex;white-space:nowrap;animation:tickS 85s linear infinite;}
+@keyframes tickS{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{font-size:12px;color:rgba(255,255,255,0.55);padding:0 28px;}
+.td{color:var(--a);font-size:14px;padding:0 4px;}
+</style>
+</head>
+<body>
+<div class="bg">
+  <div class="orb o1" id="o1"></div>
+  <div class="orb o2" id="o2"></div>
+</div>
+
+<div class="root">
+
+  <!-- CLOCK (col1, row1-2) -->
+  <div class="card clock-card">
+    <div class="time" id="clock">00:00</div>
+    <div class="date-str" id="datestr">–</div>
+    <div class="greeting"  id="greeting">–</div>
+    <div class="sun-wrap">
+      <div class="sun-header">
+        <span class="sun-lbl">☀️ Sonne</span>
+        <span id="sunrise-lbl">–</span>
+        <span id="sunset-lbl">–</span>
+      </div>
+      <div class="sun-track">
+        <div class="sun-fill" id="sun-fill" style="width:0%"></div>
+        <div class="sun-dot"  id="sun-dot"  style="left:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEATHER (col2, row1-2) – current + forecast together -->
+  <div class="card weather-card">
+    <div class="w-loc">📍 Egg SZ · Schweiz</div>
+    <div class="w-main">
+      <div class="w-ico" id="w-ico">⛅</div>
+      <div class="w-right">
+        <div class="w-temp"><span id="w-temp">–</span>°</div>
+        <div class="w-desc" id="w-desc">Lädt...</div>
+      </div>
+    </div>
+    <div class="w-pills">
+      <div class="pill"><span class="v" id="w-wind">–</span><span class="l">km/h Wind</span></div>
+      <div class="pill"><span class="v" id="w-hum">–</span><span class="l">% Feuchte</span></div>
+      <div class="pill"><span class="v" id="w-feel">–</span><span class="l">° Gefühlt</span></div>
+    </div>
+    <div class="w-div"></div>
+    <div class="w-fc-lbl">4-Tage Vorschau</div>
+    <div class="fc-row" id="forecast-row">
+      <div style="color:rgba(255,255,255,0.3);font-size:12px">Lädt...</div>
+    </div>
+  </div>
+
+  <!-- ROTATING WIDGET (col3, row1) -->
+  <div class="card rotate-card" id="rotate-card">
+    <div class="rot-icon" id="rot-icon">💡</div>
+    <div class="rot-title" id="rot-title">Lädt...</div>
+    <div class="rot-sub"   id="rot-sub">Tipp</div>
+  </div>
+
+  <!-- QUOTE (col3, row2) -->
+  <div class="card quote-card">
+    <div class="qmark">"</div>
+    <div class="qtext" id="qtext">Lädt...</div>
+    <div class="qauth" id="qauth">—</div>
+  </div>
+
+  <!-- SPOTIFY (col1, row3) -->
+  <div class="card spot-card">
+    <div class="spot-art-wrap"><img id="spot-img" src="" alt=""></div>
+    <div class="spot-info">
+      <div class="lbl" style="margin-bottom:4px">🎵 Spotify</div>
+      <div class="spot-trk" id="spot-trk"><span class="spot-idle">Nichts am Laufen</span></div>
+      <div class="spot-artist" id="spot-artist"></div>
+      <div class="spot-bar"><div class="spot-prog" id="spot-prog" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- MARKETS (col2, row3) -->
+  <div class="card markets-card">
+    <div class="lbl">📈 Märkte</div>
+    <div id="markets-body">
+      <div style="color:rgba(255,255,255,0.3);font-size:12px">Lädt...</div>
+    </div>
+  </div>
+
+  <!-- CRYPTO (col3, row3) -->
+  <div class="card crypto-card">
+    <div class="lbl">₿ Crypto</div>
+    <div id="crypto-body">
+      <div style="color:rgba(255,255,255,0.3);font-size:12px">Lädt...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NOTIFICATION OVERLAY -->
+<div class="notif-overlay" id="notif-overlay" onclick="dismissNotif()">
+  <div class="notif-box" onclick="event.stopPropagation()">
+    <div class="notif-from">🦀 Clawy</div>
+    <div class="notif-icon" id="notif-icon">💬</div>
+    <div class="notif-text" id="notif-text">–</div>
+    <div class="notif-time" id="notif-time">–</div>
+    <div class="notif-dismiss">Tippen zum Schliessen</div>
+  </div>
+</div>
+
+<!-- FLOATING 3D CRAB (bottom right, hidden easter egg trigger) -->
+<div id="crab-float" style="position:fixed;bottom:46px;right:16px;z-index:20;cursor:pointer;opacity:0.35;transition:opacity 0.3s;" title="🦀" onclick="crabClick()">
+  <div id="crab-3d-wrap" style="width:36px;height:36px;perspective:150px;">
+    <div id="crab-3d-inner" style="width:100%;height:100%;transform-style:preserve-3d;animation:crabFloat3d 4s ease-in-out infinite;text-align:center;line-height:36px;font-size:26px;filter:drop-shadow(0 0 8px rgba(224,64,251,0.7));">🦀</div>
+  </div>
+</div>
+
+<!-- EASTER EGG OVERLAY -->
+<div id="egg-overlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(4,5,13,0.92);align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;" onclick="closeEgg()">
+  <div style="font-size:80px" id="egg-icon">🥚</div>
+  <div style="font-size:24px;font-weight:200;color:#fff" id="egg-title">Easter Egg!</div>
+  <div style="font-size:14px;color:var(--a)" id="egg-sub">Du hast es gefunden!</div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:8px">[ Tippen zum Schliessen ]</div>
+</div>
+
+<style>
+@keyframes crabFloat3d{
+  0%{transform:rotateY(-20deg) rotateX(10deg) translateY(0);}
+  33%{transform:rotateY(20deg) rotateX(-8deg) translateY(-4px);}
+  66%{transform:rotateY(-15deg) rotateX(12deg) translateY(-2px);}
+  100%{transform:rotateY(-20deg) rotateX(10deg) translateY(0);}
+}
+</style>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="ticker"><span class="ti">Lädt News...</span></div>
+</div>
+
+<script>
+// ── AUTH GATE ─────────────────────────────────────
+// Lokal (192.168.x.x / 10.x.x.x) → kein Passwort nötig
+// Extern (schlapphome.uk etc.) → Gate-Seite
+(function(){
+  const host = window.location.hostname;
+  const isLocal = /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.|localhost|127\.)/.test(host);
+  if(!isLocal && sessionStorage.getItem('clawy_gate_auth') !== 'ok'){
+    window.location.href = '/local/gate.html?r=ambient.html';
+  }
+})();
+
+const HA='http://192.168.1.123:8123';
+const TOK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlZWEzY2ViZWM2NDM0ZDc3YTUzYmRjZDUxYWQwZmFiMiIsImlhdCI6MTc3MjIzNTkzNywiZXhwIjoyMDg3NTk1OTM3fQ.NWPIQwbtUJlmHzuMwkIIPjzLQcukT997SmL4rW-xQnk';
+const H={'Authorization':'Bearer '+TOK};
+
+// ── ACCENT CYCLE (smooth, ~20s per color) ────────
+const PAL=[
+  {a:'#e040fb',g:'rgba(224,64,251,0.25)',b:'rgba(224,64,251,0.18)',s:'rgba(224,64,251,0.07)'},
+  {a:'#00e5ff',g:'rgba(0,229,255,0.2)',  b:'rgba(0,229,255,0.14)', s:'rgba(0,229,255,0.06)'},
+  {a:'#76ff03',g:'rgba(118,255,3,0.2)',  b:'rgba(118,255,3,0.14)', s:'rgba(118,255,3,0.06)'},
+  {a:'#ff6d00',g:'rgba(255,109,0,0.22)', b:'rgba(255,109,0,0.15)', s:'rgba(255,109,0,0.07)'},
+  {a:'#7c4dff',g:'rgba(124,77,255,0.24)',b:'rgba(124,77,255,0.16)',s:'rgba(124,77,255,0.07)'},
+  {a:'#ff4081',g:'rgba(255,64,129,0.24)',b:'rgba(255,64,129,0.16)',s:'rgba(255,64,129,0.07)'},
+];
+let ci=0,ni=1,pr=0;
+function hLerp(a,b,t){
+  const p=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  return '#'+p(a).map((v,i)=>Math.round(v+(p(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
+}
+function rLerp(a,b,t){
+  const n=s=>s.match(/[\d.]+/g).map(Number);
+  const[pa,pb]=[n(a),n(b)],r=pa.map((v,i)=>v+(pb[i]-v)*t);
+  return a.startsWith('rgba')?`rgba(${r.map((v,i)=>i<3?Math.round(v).toString():v.toFixed(3)).join(',')})`:a;
+}
+setInterval(()=>{
+  pr+=1/400; // ~20s transition at 50ms interval
+  if(pr>=1){pr=0;ci=ni;ni=(ni+1)%PAL.length;}
+  const[c,n]=[PAL[ci],PAL[ni]],R=document.documentElement;
+  try{
+    const a=hLerp(c.a,n.a,pr),g=rLerp(c.g,n.g,pr),b=rLerp(c.b,n.b,pr),s=rLerp(c.s,n.s,pr);
+    R.style.setProperty('--a',a);
+    R.style.setProperty('--ag',g);
+    R.style.setProperty('--ab',b);
+    R.style.setProperty('--as',s);
+    document.getElementById('o1').style.background=`radial-gradient(circle,${g} 0%,transparent 60%)`;
+    document.getElementById('o2').style.background=`radial-gradient(circle,${g} 0%,transparent 60%)`;
+    // Also update sun fill gradient
+    document.getElementById('sun-fill').style.background=`linear-gradient(90deg,${a},#ffb300)`;
+  }catch(e){}
+},50);
+
+// ── CLOCK ────────────────────────────────────────
+const DAYS=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const MONS=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('datestr').textContent=DAYS[n.getDay()]+', '+n.getDate()+'. '+MONS[n.getMonth()]+' '+n.getFullYear();
+  const h=n.getHours();
+  document.getElementById('greeting').textContent=(h<6?'🌙 Gute Nacht':h<10?'🌅 Guten Morgen':h<14?'☀️ Guten Tag':h<18?'🌤 Guten Nachmittag':'🌙 Guten Abend')+', Janis ✦';
+}
+setInterval(tick,1000);tick();
+
+// ── SUN BAR ──────────────────────────────────────
+let srMin=360,ssMin=1080;
+function updateSun(){
+  const n=new Date(),cur=n.getHours()*60+n.getMinutes();
+  const span=Math.max(1,ssMin-srMin);
+  const pct=Math.max(0,Math.min(100,(cur-srMin)/span*100)).toFixed(1)+'%';
+  document.getElementById('sun-fill').style.width=pct;
+  document.getElementById('sun-dot').style.left=`calc(${pct} - 6px)`;
+}
+setInterval(updateSun,30000);
+
+// ── WEATHER ──────────────────────────────────────
+const WI={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',51:'🌦',53:'🌦',61:'🌧',63:'🌧',65:'🌧',71:'🌨',73:'🌨',80:'🌦',95:'⛈'};
+const WD={0:'Sonnig & klar',1:'Meist sonnig',2:'Teilweise bewölkt',3:'Bedeckt',45:'Nebelig',51:'Leichter Niesel',61:'Leichter Regen',63:'Regen',65:'Starker Regen',71:'Leichter Schneefall',73:'Schneefall',80:'Regenschauer',95:'Gewitter'};
+
+async function loadWeather(){
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.24&longitude=8.88&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=Europe/Zurich&forecast_days=5');
+    const d=await r.json();const c=d.current;
+    document.getElementById('w-ico').textContent=WI[c.weather_code]||'🌡';
+    document.getElementById('w-temp').textContent=Math.round(c.temperature_2m);
+    document.getElementById('w-desc').textContent=WD[c.weather_code]||'';
+    document.getElementById('w-wind').textContent=Math.round(c.wind_speed_10m);
+    document.getElementById('w-hum').textContent=c.relative_humidity_2m;
+    document.getElementById('w-feel').textContent=Math.round(c.apparent_temperature);
+    const sr=d.daily.sunrise[0].slice(11,16),ss=d.daily.sunset[0].slice(11,16);
+    document.getElementById('sunrise-lbl').textContent='🌅 '+sr;
+    document.getElementById('sunset-lbl').textContent=ss+' 🌇';
+    srMin=parseInt(sr)*60+parseInt(sr.split(':')[1]);ssMin=parseInt(ss)*60+parseInt(ss.split(':')[1]);
+    const[srH,srM]=sr.split(':').map(Number);const[ssH,ssM]=ss.split(':').map(Number);
+    srMin=srH*60+srM;ssMin=ssH*60+ssM;
+    updateSun();
+    // Forecast
+    const dd=d.daily;
+    document.getElementById('forecast-row').innerHTML=[1,2,3,4].map(i=>{
+      const day=new Date(dd.time[i]);
+      return `<div class="fc"><div class="fc-day">${DAYS[day.getDay()].slice(0,2)}</div><div class="fc-ico">${WI[dd.weather_code[i]]||'🌡'}</div><div class="fc-hi">${Math.round(dd.temperature_2m_max[i])}°</div><div class="fc-lo">${Math.round(dd.temperature_2m_min[i])}°</div></div>`;
+    }).join('');
+    // Update tips
+    buildTipList(c);
+  }catch(e){console.error('Weather:',e);}
+}
+loadWeather();setInterval(loadWeather,600000);
+
+// ── ROTATING WIDGET ───────────────────────────────
+const TIPS_FN=[];
+let tipList=[],rotMode=0,rotI=0;
+const QUOTES_ROT=[
+  {e:'💭',t:'Disziplin ist die Brücke zwischen Zielen und Leistung.',s:'Jim Rohn'},
+  {e:'🚀',t:'Der einzige Weg grossartige Arbeit zu leisten ist zu lieben was man tut.',s:'Steve Jobs'},
+  {e:'🌱',t:'Die beste Zeit für einen Baum war vor 20 Jahren.',s:'Chinesisches Sprichwort'},
+  {e:'⚡',t:'Erfolg ist die Summe kleiner Anstrengungen, täglich wiederholt.',s:'R. Collier'},
+  {e:'🎯',t:'Ob du glaubst du kannst es oder nicht — du hast in beiden Fällen recht.',s:'Henry Ford'},
+  {e:'🌟',t:'Träume gross. Arbeite hart. Bleib bescheiden.',s:'Unbekannt'},
+];
+const FUNFACTS=[
+  {e:'🇨🇭',t:'Die Schweiz hat 4 Nationalsprachen: Deutsch, Französisch, Italienisch & Rätoromanisch.',s:'Fun Fact'},
+  {e:'🏔',t:'Der Mont Blanc ist mit 4808m der höchste Berg Westeuropas.',s:'Fun Fact'},
+  {e:'⌚',t:'Die Schweiz produziert 53% aller weltweiten Luxusuhren.',s:'Fun Fact'},
+  {e:'🍫',t:'Die Schweiz isst pro Person 10.3 kg Schokolade pro Jahr.',s:'Fun Fact'},
+  {e:'₿',t:'Bitcoin wurde 2009 von Satoshi Nakamoto erfunden — niemand weiss wer das wirklich ist.',s:'Fun Fact'},
+  {e:'🌍',t:'Das Internet wurde 1989 von Tim Berners-Lee am CERN in Genf erfunden.',s:'Fun Fact'},
+];
+
+function buildTipList(c){
+  const t=[];
+  const temp=c.temperature_2m,wind=c.wind_speed_10m,code=c.weather_code;
+  if(temp<3)  t.push({e:'🧥',t:'Eiskalt! Daunenjacke nötig.',s:'Wetter-Tipp'});
+  else if(temp<10) t.push({e:'🧣',t:'Frisch draussen — warm anziehen!',s:'Wetter-Tipp'});
+  else if(temp>23) t.push({e:'😎',t:'Warmes Wetter! Shorts & T-Shirt.',s:'Wetter-Tipp'});
+  if([61,63,65,80].includes(code)) t.push({e:'☂️',t:'Regen unterwegs — Schirm mitnehmen!',s:'Wetter-Tipp'});
+  if([71,73,75].includes(code)) t.push({e:'❄️',t:'Schnee möglich — Vorsicht auf Strassen.',s:'Wetter-Tipp'});
+  if(wind>40) t.push({e:'💨',t:`${Math.round(wind)} km/h Wind — Sturm unterwegs!`,s:'Wetter-Tipp'});
+  if(code===0&&temp>15) t.push({e:'🕶️',t:'Strahlend sonnig — Sonnenbrille mitnehmen!',s:'Wetter-Tipp'});
+  if(!t.length) t.push({e:'✨',t:'Schöner Tag heute — geniess ihn!',s:'Wetter-Tipp'});
+  tipList=t;
+}
+
+const MODES=[
+  ()=>{// Tips
+    if(!tipList.length)return;
+    const tp=tipList[rotI%tipList.length];
+    setRot(tp.e,tp.t,tp.s);
+  },
+  ()=>{// Quote
+    const q=QUOTES_ROT[rotI%QUOTES_ROT.length];
+    setRot(q.e,q.t,q.s);
+  },
+  ()=>{// Fun fact
+    const f=FUNFACTS[rotI%FUNFACTS.length];
+    setRot(f.e,f.t,f.s);
+  },
+  async()=>{// HA Status
+    try{
+      const r=await fetch(`${HA}/api/states/light.buro`,{headers:H});
+      const s=await r.json();
+      const on=s.state==='on';
+      setRot(on?'💡':'🌑',on?'Büro Licht ist an':'Büro Licht ist aus','Smart Home Status');
+    }catch(e){setRot('🏠','Smart Home','Status');}
+  }
+];
+
+function setRot(icon,title,sub){
+  const c=document.getElementById('rotate-card');
+  c.style.opacity=0;
+  setTimeout(()=>{
+    document.getElementById('rot-icon').textContent=icon;
+    document.getElementById('rot-title').textContent=title;
+    document.getElementById('rot-sub').textContent=sub;
+    c.style.opacity=1;
+  },400);
+}
+document.getElementById('rotate-card').style.transition='opacity 0.4s';
+function nextRot(){MODES[rotMode%MODES.length]();rotMode++;rotI=Math.floor(rotMode/MODES.length);}
+buildTipList({temperature_2m:10,wind_speed_10m:20,weather_code:2});
+nextRot();setInterval(nextRot,18000);
+
+// ── QUOTES (bottom) ───────────────────────────────
+const QS=[
+  {t:'Disziplin ist die Brücke zwischen Zielen und Leistung.',a:'Jim Rohn'},
+  {t:'Fang an wo du bist. Nutze was du hast. Tu was du kannst.',a:'Arthur Ashe'},
+  {t:'Jedes Hindernis ist eine Chance in Verkleidung.',a:'Einstein'},
+  {t:'Träume gross. Arbeite hart. Bleib bescheiden.',a:'Unbekannt'},
+];
+let qi=0;
+function nextQ(){
+  const q=QS[qi++%QS.length];
+  const el=document.getElementById('qtext');
+  el.style.opacity=0;setTimeout(()=>{el.textContent=q.t;document.getElementById('qauth').textContent='— '+q.a;el.style.opacity=1;},400);
+}
+document.getElementById('qtext').style.transition='opacity 0.4s';
+nextQ();setInterval(nextQ,30000);
+
+// ── SPOTIFY ──────────────────────────────────────
+let lastArt='';
+async function loadSpot(){
+  try{
+    const r=await fetch(`${HA}/api/states/media_player.spotify_janisss`,{headers:H});
+    const s=await r.json(),a=s.attributes;
+    if(['playing','paused'].includes(s.state)){
+      document.getElementById('spot-trk').textContent=a.media_title||'–';
+      document.getElementById('spot-artist').textContent=a.media_artist||'';
+      const pos=a.media_position||0,dur=a.media_duration||1;
+      document.getElementById('spot-prog').style.width=Math.min(100,pos/dur*100).toFixed(1)+'%';
+      const art=a.entity_picture?HA+a.entity_picture:'';
+      if(art&&art!==lastArt){lastArt=art;const img=document.getElementById('spot-img');img.src=art;img.style.display='block';}
+    }else{
+      document.getElementById('spot-trk').innerHTML='<span class="spot-idle">Nichts am Laufen</span>';
+      document.getElementById('spot-artist').textContent='';
+      document.getElementById('spot-prog').style.width='0%';
+      document.getElementById('spot-img').style.display='none';
+    }
+  }catch(e){}
+}
+loadSpot();setInterval(loadSpot,5000);
+
+// ── MARKETS ──────────────────────────────────────
+let mData=[
+  {sym:'^SSMI',name:'SMI',price:14014,change:1.03},
+  {sym:'NESN.SW',name:'Nestlé',price:83.98,change:3.17},
+  {sym:'NOVN.SW',name:'Novartis',price:130.5,change:1.97},
+  {sym:'AAPL',name:'Apple',price:264.18,change:-0.15},
+  {sym:'^GSPC',name:'S&P 500',price:6879,change:-0.44},
+];
+function renderM(data){
+  document.getElementById('markets-body').innerHTML=data.map(s=>{
+    const up=s.change>=0;
+    const p=s.price>999?s.price.toLocaleString('de-CH',{maximumFractionDigits:0}):s.price.toFixed(2);
+    const ch=(up?'+':'')+s.change.toFixed(2)+'%';
+    return `<div class="mrow"><span class="mname">${s.name}</span><span class="mprice">${p}</span><span class="mchg ${up?'nu':'nd'}">${ch}</span></div>`;
+  }).join('');
+}
+renderM(mData);
+async function refreshM(){
+  for(let i=0;i<mData.length;i++){
+    try{
+      const r=await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${mData[i].sym}?interval=1d&range=1d`);
+      const j=await r.json(),m=j.chart.result[0].meta;
+      mData[i]={...mData[i],price:m.regularMarketPrice,change:(m.regularMarketPrice-m.chartPreviousClose)/m.chartPreviousClose*100};
+    }catch(e){}
+  }
+  renderM(mData);
+}
+setTimeout(refreshM,6000);setInterval(refreshM,180000);
+
+// ── CRYPTO ───────────────────────────────────────
+async function loadCrypto(){
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=chf&include_24hr_change=true');
+    if(!r.ok)throw new Error(r.status);
+    const d=await r.json();
+    const items=[{id:'bitcoin',sym:'BTC'},{id:'ethereum',sym:'ETH'},{id:'solana',sym:'SOL'}];
+    document.getElementById('crypto-body').innerHTML=items.map(({id,sym})=>{
+      const v=d[id]; if(!v) return '';
+      const chf=(v.chf||0).toLocaleString('de-CH',{maximumFractionDigits:0});
+      const ch=((v.chf_24h_change)||0).toFixed(1);
+      const up=parseFloat(ch)>=0;
+      return `<div class="crow">
+        <div><div class="csym">${sym}</div><div class="cchf">CHF ${chf}</div></div>
+        <span class="mchg ${up?'nu':'nd'}" style="font-size:11px">${up?'+':''}${ch}%</span>
+      </div>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('crypto-body').innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:11px">Daten nicht verfügbar</div>';
+  }
+}
+loadCrypto();setInterval(loadCrypto,60000);
+
+// ── TICKER ────────────────────────────────────────
+const BAKED=["Vor fast 100 Jahren – Lili Kohler-Burg, Pionierin der Schweizer Landfrauen","Neuer Nachrichtendienstchef – NDB-Direktor will mehr Personal","EDA-Diplomatin: «Unsere Leute verbrachten die Nacht im Keller»","Nach Crans-Montana – Nachfrage nach Brandschutzartikeln springt an","Iran – Vier Mitarbeitende der Schweizer Botschaft warten auf Ausreise","Skifahren für Frühaufsteher wegen warmem Wetter","SP-Parteitag in Biel im Zeichen von Krieg und Mieten"];
+function buildT(items){const s=items.map(t=>`<span class="ti">${t}</span><span class="td">◆</span>`).join('');document.getElementById('ticker').innerHTML=s+s;}
+buildT(BAKED);
+async function refreshNews(){
+  try{
+    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent('https://www.srf.ch/news/bnf/rss/1890'));
+    const d=await r.json();
+    const m=(d.contents||'').match(/<title>(?:<!\[CDATA\[)?(.+?)(?:\]\]>)?<\/title>/g)||[];
+    const ts=m.slice(1).map(x=>x.replace(/<[^>]+>/g,'').replace(/<!\[CDATA\[|\]\]>/g,'').trim()).filter(t=>t&&t.length>10&&!t.includes('SRF'));
+    if(ts.length>2)buildT(ts);
+  }catch(e){}
+}
+setTimeout(refreshNews,5000);setInterval(refreshNews,300000);
+
+// ── EASTER EGGS ──────────────────────────────────
+var eggClicks=0,clockClicks=0,discoActive=false;
+
+// Hover on crab → full opacity
+document.getElementById('crab-float').addEventListener('mouseenter',function(){this.style.opacity='0.9';});
+document.getElementById('crab-float').addEventListener('mouseleave',function(){if(!discoActive)this.style.opacity='0.35';});
+
+// Crab clicks counter
+function crabClick(){
+  eggClicks++;
+  var crab=document.getElementById('crab-float');
+  crab.style.opacity='1';
+  if(eggClicks===1){showEgg('👀','Du hast mich gefunden!','Ich bin immer hier. Beobachte alles.');}
+  else if(eggClicks===3){showEgg('🦀','Ich bin Clawy.','Dein KI-Assistent, eingebaut in die Wand.');}
+  else if(eggClicks===5){showEgg('🎉','Easter Egg #3 gefunden!','5x geklickt. Respekt. Hier, nimm Konfetti:');launchEggConfetti();}
+  else if(eggClicks>=8){
+    eggClicks=0;
+    crab.style.fontSize='48px';
+    document.getElementById('crab-3d-inner').style.fontSize='36px';
+    document.getElementById('crab-3d-inner').textContent='🦀❤️';
+    setTimeout(function(){
+      document.getElementById('crab-3d-inner').textContent='🦀';
+      document.getElementById('crab-3d-inner').style.fontSize='26px';
+    },3000);
+    showEgg('❤️','Du magst mich wirklich!','8 Klicks. Das nenne ich Engagement. 🦀');
+  }
+}
+
+// Clock click Easter Egg (5x → disco)
+var clockEl=document.getElementById('clock');
+clockEl.style.cursor='pointer';
+clockEl.addEventListener('click',function(){
+  clockClicks++;
+  if(clockClicks===3){
+    clockEl.style.textShadow='0 0 40px #00ff00,0 0 80px #00ff0066';
+    setTimeout(function(){clockEl.style.textShadow='';},2000);
+  }
+  if(clockClicks>=5){
+    clockClicks=0;
+    triggerDisco();
+    showEgg('🕺','DISCO MODUS!','Konami-Code oder 5x auf die Uhr klicken. Gut gemacht!');
+  }
+});
+
+// KONAMI CODE → Disco
+var konami=[38,38,40,40,37,39,37,39,66,65],ki=0;
+document.addEventListener('keydown',function(e){
+  if(e.keyCode===konami[ki]){ki++;if(ki===konami.length){triggerDisco();showEgg('🕹️','Konami Code!','↑↑↓↓←→←→BA — Klassiker. 🎮');ki=0;}}else ki=0;
+});
+
+// Secret word: typing "clawy" anywhere
+var secretBuf='';
+document.addEventListener('keypress',function(e){
+  secretBuf=(secretBuf+e.key).slice(-5).toLowerCase();
+  if(secretBuf==='clawy'){
+    showEgg('🦀','Hallo Janis!','Du hast meinen Namen getippt. Das macht mich happy. ❤️');
+    launchEggConfetti();
+  }
+});
+
+// DISCO
+var discoInterval2;
+var discoColors2=['#e040fb','#00e5ff','#76ff03','#ff6d00','#7c4dff','#ff4081'];
+function triggerDisco(){
+  if(discoActive)return;
+  discoActive=true;
+  var i=0;
+  discoInterval2=setInterval(function(){
+    var c=discoColors2[i%discoColors2.length];
+    document.documentElement.style.setProperty('--a',c);
+    i++;
+  },120);
+  setTimeout(function(){
+    clearInterval(discoInterval2);
+    discoActive=false;
+  },6000);
+}
+
+function showEgg(icon,title,sub){
+  document.getElementById('egg-icon').textContent=icon;
+  document.getElementById('egg-title').textContent=title;
+  document.getElementById('egg-sub').textContent=sub;
+  var ov=document.getElementById('egg-overlay');
+  ov.style.display='flex';
+}
+function closeEgg(){document.getElementById('egg-overlay').style.display='none';}
+
+function launchEggConfetti(){
+  var colors=['#e040fb','#00e5ff','#76ff03','#ff6d00','#ff4081','#ffeb3b'];
+  for(var i=0;i<50;i++){
+    var el=document.createElement('div');
+    var s=6+Math.random()*9;
+    el.style.cssText='position:fixed;width:'+s+'px;height:'+s+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';left:'+(Math.random()*100)+'%;top:-15px;z-index:500;pointer-events:none;';
+    document.body.appendChild(el);
+    var tx=(Math.random()-0.5)*250,ty=400+Math.random()*350,rot=Math.random()*720,dur=800+Math.random()*1000,delay=Math.random()*400;
+    (function(el,tx,ty,rot,dur,delay){
+      setTimeout(function(){
+        var st=Date.now();
+        function f(){var t=(Date.now()-st)/dur;if(t>1){el.remove();return;}el.style.transform='translate('+tx*t+'px,'+ty*t*t+'px) rotate('+rot*t+'deg)';el.style.opacity=1-t;requestAnimationFrame(f);}
+        requestAnimationFrame(f);
+      },delay);
+    })(el,tx,ty,rot,dur,delay);
+  }
+}
+
+// ── NOTIFICATION SYSTEM ─────────────────────────
+// Checks HA input_text for messages from Clawy
+// Janis can dismiss by tapping; auto-dismisses after 60s
+let lastNotifId='';
+async function checkNotif(){
+  try{
+    const r=await fetch(`${HA}/api/states/input_text.clawy_notification`,{headers:H});
+    if(!r.ok)return;
+    const s=await r.json();
+    const val=s.state||'';
+    const uid=s.attributes.last_changed||val;
+    if(val && val!=='–' && val!=='' && uid!==lastNotifId){
+      lastNotifId=uid;
+      showNotif(val);
+    }
+  }catch(e){}
+}
+function showNotif(text){
+  const parts=text.split('||');
+  const icon=parts[1]||'💬';
+  const msg=parts[0];
+  document.getElementById('notif-icon').textContent=icon;
+  document.getElementById('notif-text').textContent=msg;
+  const n=new Date();
+  document.getElementById('notif-time').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+' Uhr';
+  document.getElementById('notif-overlay').classList.add('show');
+  // Auto-dismiss after 60s
+  setTimeout(dismissNotif,60000);
+}
+function dismissNotif(){
+  document.getElementById('notif-overlay').classList.remove('show');
+  // Clear in HA
+  fetch(`${HA}/api/states/input_text.clawy_notification`,{method:'POST',headers:{...H,'Content-Type':'application/json'},body:JSON.stringify({state:'–'})}).catch(()=>{});
+}
+setInterval(checkNotif,10000);
+checkNotif();
+</script>
+</body>
+</html>

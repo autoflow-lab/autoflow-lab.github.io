@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Clawy 3D Crab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#04050d;overflow:hidden;}
+canvas{display:block;}
+#ui{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:10;}
+button{
+  background:rgba(224,64,251,0.15);border:1px solid rgba(224,64,251,0.4);
+  color:#e040fb;padding:10px 22px;border-radius:20px;cursor:pointer;
+  font-size:13px;letter-spacing:1px;transition:all 0.2s;font-family:inherit;
+}
+button:hover{background:rgba(224,64,251,0.3);box-shadow:0 0 20px rgba(224,64,251,0.4);}
+#mood{position:fixed;top:20px;left:50%;transform:translateX(-50%);font-family:-apple-system,sans-serif;font-size:13px;color:rgba(224,64,251,0.6);letter-spacing:2px;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div id="mood">🦀 Clawy · 3D</div>
+<div id="ui">
+  <button onclick="wave()">Winken 👋</button>
+  <button onclick="dance()">Tanzen 🕺</button>
+  <button onclick="angry()">Böse 😤</button>
+  <button onclick="happy()">Happy 🎉</button>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ── SCENE SETUP ────────────────────────────────────────────────
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(0, 2, 7);
+camera.lookAt(0, 0.5, 0);
+
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.appendChild(renderer.domElement);
+
+// Orbit Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.minDistance = 3;
+controls.maxDistance = 15;
+controls.maxPolarAngle = Math.PI * 0.75;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.8;
+
+// ── LIGHTS ─────────────────────────────────────────────────────
+// Ambient
+scene.add(new THREE.AmbientLight(0x1a0a2e, 3));
+
+// Key light — neon pink
+const keyLight = new THREE.PointLight(0xe040fb, 80, 20);
+keyLight.position.set(3, 5, 3);
+keyLight.castShadow = true;
+scene.add(keyLight);
+
+// Fill light — cyan
+const fillLight = new THREE.PointLight(0x00e5ff, 40, 20);
+fillLight.position.set(-4, 3, -2);
+scene.add(fillLight);
+
+// Rim light — green
+const rimLight = new THREE.PointLight(0x76ff03, 25, 15);
+rimLight.position.set(0, -1, -5);
+scene.add(rimLight);
+
+// Floor light glow
+const floorLight = new THREE.PointLight(0xe040fb, 15, 8);
+floorLight.position.set(0, -1.5, 0);
+scene.add(floorLight);
+
+// ── BACKGROUND STARS ───────────────────────────────────────────
+const starGeo = new THREE.BufferGeometry();
+const starCount = 3000;
+const starPos = new Float32Array(starCount * 3);
+const starColors = new Float32Array(starCount * 3);
+const neonCols = [
+  [1.0, 0.25, 0.98], // pink
+  [0.0, 0.90, 1.0],  // cyan
+  [0.46, 1.0, 0.01], // green
+  [1.0, 1.0, 1.0],   // white
+  [1.0, 0.43, 0.0],  // orange
+];
+for(let i=0;i<starCount;i++){
+  starPos[i*3]=(Math.random()-0.5)*100;
+  starPos[i*3+1]=(Math.random()-0.5)*100;
+  starPos[i*3+2]=(Math.random()-0.5)*100;
+  const c = neonCols[Math.floor(Math.random()*neonCols.length)];
+  const bright = 0.3+Math.random()*0.7;
+  starColors[i*3]=c[0]*bright; starColors[i*3+1]=c[1]*bright; starColors[i*3+2]=c[2]*bright;
+}
+starGeo.setAttribute('position',new THREE.BufferAttribute(starPos,3));
+starGeo.setAttribute('color',new THREE.BufferAttribute(starColors,3));
+const starMat = new THREE.PointsMaterial({size:0.08,vertexColors:true,transparent:true,opacity:0.85});
+scene.add(new THREE.Points(starGeo,starMat));
+
+// Nebula clouds
+function addNebula(x,y,z,color,size){
+  const geo = new THREE.SphereGeometry(size,8,8);
+  const mat = new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.03,wireframe:false});
+  const mesh = new THREE.Mesh(geo,mat);
+  mesh.position.set(x,y,z);
+  scene.add(mesh);
+}
+addNebula(-8, 4,-12,0xe040fb,8);
+addNebula(10,-3,-15,0x00e5ff,7);
+addNebula(2, 8,-10,0x7c4dff,6);
+
+// ── GROUND PLANE ───────────────────────────────────────────────
+const groundGeo = new THREE.CircleGeometry(6, 64);
+const groundMat = new THREE.MeshStandardMaterial({
+  color:0x04050d, metalness:0.8, roughness:0.2,
+  transparent:true, opacity:0.7,
+});
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI/2;
+ground.position.y = -1.8;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Glow ring on ground
+const ringGeo = new THREE.RingGeometry(1.2,1.5,64);
+const ringMat = new THREE.MeshBasicMaterial({color:0xe040fb,transparent:true,opacity:0.2,side:THREE.DoubleSide});
+const ring = new THREE.Mesh(ringGeo,ringMat);
+ring.rotation.x = -Math.PI/2;
+ring.position.y = -1.79;
+scene.add(ring);
+
+// ── MATERIALS ──────────────────────────────────────────────────
+const shellMat = new THREE.MeshStandardMaterial({
+  color: 0xcc2200, metalness:0.3, roughness:0.4,
+  emissive: 0x440011, emissiveIntensity:0.3,
+});
+const clawMat = new THREE.MeshStandardMaterial({
+  color: 0xdd3300, metalness:0.4, roughness:0.3,
+  emissive: 0x550011, emissiveIntensity:0.4,
+});
+const legMat = new THREE.MeshStandardMaterial({
+  color: 0xbb2200, metalness:0.2, roughness:0.5,
+  emissive: 0x330000, emissiveIntensity:0.2,
+});
+const eyeMat = new THREE.MeshStandardMaterial({
+  color: 0x000000, metalness:0.9, roughness:0.1,
+  emissive: 0xe040fb, emissiveIntensity:1.5,
+});
+const eyeWhiteMat = new THREE.MeshStandardMaterial({color:0xffeeff,emissive:0xe040fb,emissiveIntensity:0.5});
+const stalkMat = new THREE.MeshStandardMaterial({color:0xdd2200,emissive:0x330000,emissiveIntensity:0.3});
+
+// ── CRAB ROOT ──────────────────────────────────────────────────
+const crab = new THREE.Group();
+crab.position.y = -0.3;
+scene.add(crab);
+
+// ── BODY (CARAPACE) ────────────────────────────────────────────
+const bodyGeo = new THREE.SphereGeometry(1, 32, 24);
+// Flatten it
+bodyGeo.scale(1.4, 0.65, 1.1);
+const body = new THREE.Mesh(bodyGeo, shellMat);
+body.castShadow = true;
+body.position.y = 0.3;
+crab.add(body);
+
+// Carapace ridge lines (decorative)
+for(let i=0;i<3;i++){
+  const ridgeGeo = new THREE.TorusGeometry(0.5-i*0.12, 0.03, 8, 32, Math.PI);
+  const ridge = new THREE.Mesh(ridgeGeo, clawMat);
+  ridge.position.set(0, 0.45+i*0.02, 0.1);
+  ridge.rotation.x = -Math.PI/2;
+  crab.add(ridge);
+}
+
+// ── BELLY ──────────────────────────────────────────────────────
+const bellyGeo = new THREE.SphereGeometry(0.9, 16, 12);
+bellyGeo.scale(1.35, 0.4, 1.0);
+const bellyMat = new THREE.MeshStandardMaterial({color:0xffaa88,metalness:0.1,roughness:0.7});
+const belly = new THREE.Mesh(bellyGeo, bellyMat);
+belly.position.y = -0.05;
+crab.add(belly);
+
+// ── EYES ON STALKS ─────────────────────────────────────────────
+function makeEye(side){
+  const g = new THREE.Group();
+  // Stalk
+  const stalkGeo = new THREE.CylinderGeometry(0.06,0.08,0.4,8);
+  const stalk = new THREE.Mesh(stalkGeo, stalkMat);
+  stalk.position.y = 0.2;
+  stalk.rotation.z = side * -0.3;
+  g.add(stalk);
+  // Eye socket
+  const sockGeo = new THREE.SphereGeometry(0.18,16,12);
+  const sock = new THREE.Mesh(sockGeo, eyeWhiteMat);
+  sock.position.set(side*0.08, 0.45, 0.0);
+  g.add(sock);
+  // Pupil
+  const pupGeo = new THREE.SphereGeometry(0.10,12,10);
+  const pup = new THREE.Mesh(pupGeo, eyeMat);
+  pup.position.set(side*0.08, 0.45, 0.12);
+  g.add(pup);
+  // Glow
+  const glowLight = new THREE.PointLight(0xe040fb, 2, 1.5);
+  glowLight.position.copy(pup.position);
+  g.add(glowLight);
+  return g;
+}
+const eyeL = makeEye(-1);
+eyeL.position.set(-0.55, 0.55, 0.75);
+crab.add(eyeL);
+const eyeR = makeEye(1);
+eyeR.position.set(0.55, 0.55, 0.75);
+crab.add(eyeR);
+
+// ── MOUTH LINE ─────────────────────────────────────────────────
+const mouthMat = new THREE.MeshBasicMaterial({color:0x222222});
+const mouthGeo = new THREE.TorusGeometry(0.25, 0.03, 6, 20, Math.PI*0.6);
+const mouth = new THREE.Mesh(mouthGeo, mouthMat);
+mouth.position.set(0, 0.1, 1.0);
+mouth.rotation.x = 0.4;
+crab.add(mouth);
+
+// ── CLAWS ──────────────────────────────────────────────────────
+function makeClaw(side){
+  const g = new THREE.Group();
+
+  // Upper arm
+  const armGeo = new THREE.CylinderGeometry(0.12,0.09,0.7,10);
+  const arm = new THREE.Mesh(armGeo, clawMat);
+  arm.rotation.z = side * 0.4;
+  arm.position.set(side*0.35, 0, 0);
+  g.add(arm);
+
+  // Forearm
+  const foreG = new THREE.Group();
+  const foreGeo = new THREE.CylinderGeometry(0.09,0.07,0.6,10);
+  const fore = new THREE.Mesh(foreGeo, clawMat);
+  fore.position.y = 0.6;
+  foreG.add(fore);
+  foreG.position.set(side*0.35,0,0);
+  g.add(foreG);
+
+  // Claw body
+  const clawBodyGeo = new THREE.SphereGeometry(0.28, 16, 12);
+  clawBodyGeo.scale(1.4, 1.0, 0.8);
+  const clawBody = new THREE.Mesh(clawBodyGeo, clawMat);
+  clawBody.position.set(side*0.5, 1.0, 0.0);
+  g.add(clawBody);
+
+  // Upper pincer
+  const pincer1Geo = new THREE.ConeGeometry(0.1, 0.45, 8);
+  const p1 = new THREE.Mesh(pincer1Geo, clawMat);
+  p1.position.set(side*0.5, 1.4, 0.12);
+  p1.rotation.x = 0.5;
+  g.add(p1);
+
+  // Lower pincer
+  const pincer2Geo = new THREE.ConeGeometry(0.08, 0.35, 8);
+  const p2 = new THREE.Mesh(pincer2Geo, shellMat);
+  p2.position.set(side*0.5, 1.35, -0.1);
+  p2.rotation.x = -0.6;
+  g.add(p2);
+
+  g.castShadow = true;
+  return {group:g, foreG, p1, p2};
+}
+
+const clawLData = makeClaw(-1);
+const clawL = clawLData.group;
+clawL.position.set(-1.1, 0, 0.3);
+clawL.rotation.y = 0.4;
+crab.add(clawL);
+
+const clawRData = makeClaw(1);
+const clawR = clawRData.group;
+clawR.position.set(1.1, 0, 0.3);
+clawR.rotation.y = -0.4;
+crab.add(clawR);
+
+// ── LEGS (3 per side) ──────────────────────────────────────────
+const legs = [];
+function makeLeg(side, index){
+  const g = new THREE.Group();
+  const segCount = 3;
+  const colors = [legMat, clawMat, legMat];
+  let prev = g;
+  for(let s=0;s<segCount;s++){
+    const geo = new THREE.CylinderGeometry(0.065-s*0.015, 0.05-s*0.01, 0.55, 8);
+    const seg = new THREE.Mesh(geo, colors[s]);
+    seg.castShadow = true;
+    seg.position.y = -0.27;
+    const joint = new THREE.Group();
+    joint.add(seg);
+    joint.rotation.z = side * (0.2 + s*0.15);
+    joint.rotation.x = 0.1 * (s%2 ? 1:-1);
+    if(s===0){prev.add(joint);}
+    else{
+      const prevSeg = prev.children[0];
+      prevSeg.add(joint);
+      joint.position.y = -0.27;
+    }
+    prev = joint;
+  }
+  // Foot tip
+  const footGeo = new THREE.SphereGeometry(0.05,8,6);
+  const foot = new THREE.Mesh(footGeo, new THREE.MeshStandardMaterial({color:0x222222,metalness:0.8,roughness:0.2}));
+  foot.position.y = -0.3;
+  prev.children[0].add(foot);
+
+  const zSpread = (index-1) * 0.5;
+  g.position.set(side*1.2, 0, zSpread);
+  g.rotation.y = side * (index*0.15);
+  crab.add(g);
+  return g;
+}
+
+for(let i=0;i<3;i++){
+  legs.push(makeLeg(-1, i));
+  legs.push(makeLeg(1, i));
+}
+
+// ── PARTICLE GLOW AURA ─────────────────────────────────────────
+const auraGeo = new THREE.BufferGeometry();
+const auraCount = 200;
+const auraPos = new Float32Array(auraCount*3);
+for(let i=0;i<auraCount;i++){
+  const theta = Math.random()*Math.PI*2;
+  const r = 1.5+Math.random()*1;
+  auraPos[i*3]=Math.cos(theta)*r*(0.8+Math.random()*0.4);
+  auraPos[i*3+1]=(Math.random()-0.5)*2;
+  auraPos[i*3+2]=Math.sin(theta)*r*(0.8+Math.random()*0.4);
+}
+auraGeo.setAttribute('position',new THREE.BufferAttribute(auraPos,3));
+const auraMat = new THREE.PointsMaterial({size:0.04,color:0xe040fb,transparent:true,opacity:0.5});
+const aura = new THREE.Points(auraGeo,auraMat);
+crab.add(aura);
+
+// ── ANIMATION STATE ────────────────────────────────────────────
+let mode = 'idle';
+let modeTimer = 0;
+const clock = new THREE.Clock();
+let legPhase = 0;
+let clawWave = 0;
+
+function wave(){ mode='wave'; modeTimer=0; controls.autoRotate=false; setTimeout(()=>{mode='idle';controls.autoRotate=true;},3000); }
+function dance(){ mode='dance'; modeTimer=0; controls.autoRotate=true; controls.autoRotateSpeed=3; setTimeout(()=>{mode='idle';controls.autoRotateSpeed=0.8;},4000); }
+function angry(){ mode='angry'; modeTimer=0; controls.autoRotate=false; setTimeout(()=>{mode='idle';controls.autoRotate=true;},3000); }
+function happy(){ mode='happy'; modeTimer=0; controls.autoRotate=true; setTimeout(()=>{mode='idle';},3500); }
+window.wave=wave; window.dance=dance; window.angry=angry; window.happy=happy;
+
+// ── ANIMATE ────────────────────────────────────────────────────
+const animate = () => {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  const dt = clock.getDelta();
+  modeTimer += dt;
+  legPhase += dt;
+  clawWave += dt;
+
+  // BASE IDLE FLOAT
+  crab.position.y = -0.3 + Math.sin(t*1.2)*0.12;
+  body.rotation.y = Math.sin(t*0.7)*0.08;
+
+  // EYE STALK WOBBLE
+  eyeL.rotation.z = Math.sin(t*1.8)*0.1;
+  eyeR.rotation.z = Math.sin(t*1.8+0.5)*0.1;
+
+  // LEG WALK CYCLE
+  legs.forEach((leg,i)=>{
+    const phase = legPhase * (mode==='dance'?4:1.5) + i * 0.8;
+    leg.rotation.z = Math.sin(phase) * (mode==='dance'?0.5:0.2) * (i%2===0?1:-1);
+    leg.rotation.x = Math.cos(phase*0.7) * 0.1;
+  });
+
+  // AURA ROTATION
+  aura.rotation.y = t * 0.4;
+  auraMat.opacity = 0.3 + Math.sin(t*2)*0.2;
+
+  // CLAW IDLE GENTLE
+  clawL.rotation.x = Math.sin(t*0.9)*0.05;
+  clawR.rotation.x = Math.sin(t*0.9+1)*0.05;
+
+  // PULSING LIGHTS
+  keyLight.intensity = 80 + Math.sin(t*1.5)*15;
+  fillLight.intensity = 40 + Math.sin(t*2.1)*8;
+  ringMat.opacity = 0.15 + Math.sin(t*1.2)*0.1;
+  floorLight.intensity = 15 + Math.sin(t*2)*5;
+
+  // MODE ANIMATIONS
+  if(mode==='wave'){
+    clawL.rotation.y = 0.4 + Math.sin(modeTimer*4)*0.8;
+    clawL.rotation.z = Math.sin(modeTimer*4)*0.4;
+    clawRData.p1.rotation.x = 0.5+Math.sin(modeTimer*6)*0.4;
+  }
+  if(mode==='dance'){
+    crab.rotation.y = Math.sin(modeTimer*3)*0.6;
+    crab.position.y = -0.3 + Math.abs(Math.sin(modeTimer*3))*0.5;
+    clawL.rotation.z = Math.sin(modeTimer*3)*0.8;
+    clawR.rotation.z = Math.sin(modeTimer*3+Math.PI)*0.8;
+    body.rotation.z = Math.sin(modeTimer*3)*0.15;
+  }
+  if(mode==='angry'){
+    crab.rotation.y += 0.03;
+    clawL.rotation.z = -0.4+Math.sin(modeTimer*8)*0.3;
+    clawR.rotation.z = 0.4+Math.sin(modeTimer*8)*0.3;
+    body.rotation.z = Math.sin(modeTimer*10)*0.08;
+    crab.position.y = -0.3 + Math.sin(modeTimer*8)*0.08;
+  }
+  if(mode==='happy'){
+    clawL.rotation.y = 0.4+Math.sin(modeTimer*5)*1.0;
+    clawR.rotation.y = -0.4+Math.sin(modeTimer*5+Math.PI)*1.0;
+    crab.position.y = -0.3+Math.abs(Math.sin(modeTimer*4))*0.4;
+    crab.rotation.y = Math.sin(modeTimer*2)*0.3;
+    // Launch particles
+    if(Math.random()<0.1){
+      const sp = new THREE.Mesh(
+        new THREE.SphereGeometry(0.05,6,6),
+        new THREE.MeshBasicMaterial({color:[0xe040fb,0x00e5ff,0x76ff03,0xffeb3b][Math.floor(Math.random()*4)]})
+      );
+      sp.position.set((Math.random()-0.5)*2,0,(Math.random()-0.5)*2);
+      scene.add(sp);
+      const vel = {x:(Math.random()-0.5)*0.1,y:0.08+Math.random()*0.05};
+      const ticker = setInterval(()=>{sp.position.y+=vel.y;sp.position.x+=vel.x;vel.y-=0.003;sp.material.opacity-=0.03;if(sp.material.opacity<=0){scene.remove(sp);clearInterval(ticker);}},16);
+    }
+  }
+
+  controls.update();
+  renderer.render(scene, camera);
+};
+animate();
+
+// Resize
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+// Mouse interaction
+let mouseX=0, mouseY=0;
+document.addEventListener('mousemove',e=>{
+  mouseX=(e.clientX/window.innerWidth-0.5)*2;
+  mouseY=(e.clientY/window.innerHeight-0.5)*2;
+  keyLight.position.x=mouseX*5;
+  keyLight.position.z=3+mouseY*3;
+});
+</script>
+</body>
+</html>

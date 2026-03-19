@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin:0;padding:0;box-sizing:border-box; }
+  body {
+    background:#0d1b2e;
+    color:white;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    height:100vh;overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 390px;
+    grid-template-rows:1fr 44px;
+  }
+
+  /* MAP */
+  #map-wrap { position:relative;overflow:hidden;grid-row:1;grid-column:1; }
+  #map-canvas { width:100%;height:100%; }
+  .mbadge {
+    position:absolute;top:14px;left:14px;z-index:10;
+    background:rgba(13,27,46,0.88);backdrop-filter:blur(8px);
+    border:1px solid rgba(56,189,248,0.3);border-radius:10px;
+    padding:7px 14px;font-size:15px;font-weight:700;color:#38bdf8;
+  }
+  .pin { position:absolute;z-index:10;transform:translate(-50%,-50%);pointer-events:none; }
+  .pin-dot { width:14px;height:14px;border-radius:50%;background:#fb923c;border:2px solid white;box-shadow:0 0 14px rgba(251,146,60,1);animation:pp 2s infinite; }
+  .pin-lbl { position:absolute;left:18px;top:-6px;background:rgba(13,27,46,0.9);border-radius:6px;padding:3px 9px;font-size:13px;color:#fb923c;font-weight:700;white-space:nowrap; }
+  @keyframes pp{0%,100%{box-shadow:0 0 8px rgba(251,146,60,.8)}50%{box-shadow:0 0 22px rgba(251,146,60,1)}}
+  .fdots { position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10; }
+  #live-wrap {
+    position:absolute;bottom:40px;left:14px;z-index:20;
+    width:560px;height:315px;
+    border-radius:16px;overflow:hidden;
+    border:2px solid rgba(239,68,68,0.6);
+    box-shadow:0 0 40px rgba(239,68,68,0.4);
+  }
+  #live-wrap iframe { width:100%;height:100%;border:none; }
+  .live-badge {
+    position:absolute;bottom:364px;left:14px;z-index:20;
+    background:rgba(239,68,68,0.9);border-radius:8px;
+    padding:5px 12px;font-size:13px;font-weight:800;color:white;
+    display:flex;align-items:center;gap:6px;
+  }
+  .live-dot { width:8px;height:8px;border-radius:50%;background:white;animation:pp 1s infinite; }
+  .fdot { width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);transition:background .3s; }
+
+  /* PANEL */
+  .panel {
+    grid-row:1;grid-column:2;
+    display:grid;grid-template-rows:auto auto 1fr;
+    padding:24px 20px 16px;gap:14px;
+    background:#080f1c;border-left:1px solid rgba(255,255,255,0.05);
+    overflow:hidden;
+  }
+  #clock { font-size:66px;font-weight:100;letter-spacing:3px;text-align:center;line-height:1; }
+  #dateline { font-size:14px;color:#475569;text-align:center;margin-top:4px; }
+  .logo { font-size:13px;color:#1e3a5f;text-align:center;margin-top:3px; }
+  .logo span { color:#fb923c; }
+
+  .wcards { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+  .wcard {
+    background:rgba(30,58,95,0.3);border:1px solid rgba(59,130,246,0.1);
+    border-radius:14px;padding:14px;text-align:center;
+  }
+  .wcard.big { grid-column:1/-1;display:flex;align-items:center;gap:16px;text-align:left;padding:16px 20px; }
+  #w-icon { font-size:52px;animation:fl 4s ease-in-out infinite; }
+  @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  #w-temp { font-size:50px;font-weight:800;line-height:1.1; }
+  #w-desc { font-size:16px;color:#93c5fd;margin-top:2px; }
+  .wlabel { font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:1px; }
+  .wval { font-size:19px;font-weight:700;margin-top:4px; }
+  .sun-wrap { padding:0 2px;margin-top:6px; }
+  .sun-label { font-size:10px;color:#334155;display:flex;justify-content:space-between;margin-bottom:4px; }
+  .sun-bar { height:4px;background:rgba(255,255,255,0.06);border-radius:4px;position:relative; }
+  .sun-prog { height:100%;background:linear-gradient(90deg,#f59e0b,#fbbf24);border-radius:4px; }
+  .sun-dot { position:absolute;top:-6px;font-size:14px;transform:translateX(-50%); }
+
+  /* SKI */
+  .ski-section { overflow:hidden;display:flex;flex-direction:column; }
+  .ski-section h3 { font-size:11px;color:#334155;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px; }
+  .ski-item {
+    padding:7px 10px;border-radius:8px;margin-bottom:5px;
+    background:rgba(30,41,59,0.4);border:1px solid rgba(255,255,255,0.03);
+    flex-shrink:0;
+  }
+  .ski-item.swiss { background:rgba(220,20,20,0.08);border-color:rgba(255,50,50,0.15); }
+  .ski-top { display:flex;align-items:flex-start;gap:5px; }
+  .ski-title { font-size:13px;color:#e2e8f0;line-height:1.35;flex:1; }
+  .ski-meta { font-size:10px;color:#334155;margin-top:3px; }
+  .medal { font-size:16px;flex-shrink:0;line-height:1.2; }
+  .ch-flag { font-size:13px;flex-shrink:0; }
+
+  /* TICKER */
+  #ticker { grid-row:2;grid-column:1/-1;background:rgba(251,146,60,0.07);border-top:1px solid rgba(251,146,60,0.15);display:flex;align-items:center;overflow:hidden;padding:0 14px;gap:14px; }
+  .tklbl { font-size:12px;font-weight:800;color:#fb923c;text-transform:uppercase;letter-spacing:2px;white-space:nowrap;padding-right:14px;border-right:1px solid rgba(251,146,60,0.25);flex-shrink:0; }
+  #tktrack { display:flex;gap:50px;animation:sc linear infinite;white-space:nowrap;font-size:13px;color:#94a3b8; }
+  @keyframes sc{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+</style>
+</head>
+<body>
+
+<div id="map-wrap">
+  <canvas id="map-canvas"></canvas>
+  <div class="mbadge">📡 Regenradar · <span id="r-time">laden…</span></div>
+  <div class="fdots" id="fdots"></div>
+  <div class="pin" id="pin"><div class="pin-dot"></div><div class="pin-lbl">🏠 Egg SZ</div></div>
+  <div class="live-badge"><div class="live-dot"></div> LIVE · SRF Ski Ergebnisse</div>
+  <div id="live-wrap">
+    <iframe src="https://www.srf.ch/sport/resultcenter/live/ski/1833614" scrolling="no" style="transform:scale(0.6);transform-origin:top left;width:167%;height:167%;border:none;"></iframe>
+  </div>
+</div>
+
+<div class="panel">
+  <div>
+    <div id="clock">--:--</div>
+    <div id="dateline">--</div>
+    <div class="logo">🦀 <span>Clawy</span> HQ</div>
+  </div>
+
+  <div>
+    <div class="wcard big">
+      <div id="w-icon">⛅</div>
+      <div><div id="w-temp">--°</div><div id="w-desc">Laden…</div></div>
+    </div>
+    <div class="wcards" style="margin-top:8px">
+      <div class="wcard"><div class="wlabel">🌡 Hoch/Tief</div><div class="wval" id="whilo">--</div></div>
+      <div class="wcard"><div class="wlabel">🌬 Wind</div><div class="wval" id="wwind">--</div></div>
+      <div class="wcard"><div class="wlabel">💧 Regen</div><div class="wval" id="wrain">--</div></div>
+      <div class="wcard"><div class="wlabel">☀️ Auf/Unter</div><div class="wval" id="wsun" style="font-size:15px">--</div></div>
+    </div>
+    <div class="sun-wrap">
+      <div class="sun-label"><span id="sunrise-t">--</span><span>Sonnenstand</span><span id="sunset-t">--</span></div>
+      <div class="sun-bar"><div class="sun-prog" id="sun-prog" style="width:0%"></div><div class="sun-dot" id="sun-dot" style="left:0%">☀️</div></div>
+    </div>
+  </div>
+
+  <div class="ski-section">
+    <h3>⛷️ Ski Weltcup · Aktuell</h3>
+    <div id="ski-list"></div>
+  </div>
+</div>
+
+<div id="ticker"><div class="tklbl">⛷️ Ski</div><div id="tktrack"><span>Lade…</span></div></div>
+
+<script>
+// ── CLOCK ──
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('dateline').textContent=n.toLocaleDateString('de-CH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+setInterval(tick,1000);tick();
+
+// ── SKI DATA (pre-loaded server-side) ──
+const SKI=[{"t": "Ski alpin Weltcup der Herren in Garmisch-Partenkirchen: Wer holt sich am Sonntag den Sieg im Super-G?", "s": "News.de", "d": "1. Mar", "m": "🥇", "ch": false}, {"t": "Ski LIVE - Slalom in Wengen: Das Ergebnis", "s": "Ski1", "d": "18. Jan", "m": "", "ch": false}, {"t": "Ski Alpin Weltcup-Auftakt: Marco Odermatt gewinnt zum dritten Mal den Riesenslalom in Sölden", "s": "Milano Cortina 2026", "d": "26. Oct", "m": "🥇", "ch": true}, {"t": "Skifliegen der Herren am Kulm: Erste Entscheidung nach Olympia - wer siegt heute beim Weltcup in Österreich?", "s": "News.de", "d": "1. Mar", "m": "🥇", "ch": false}, {"t": "Weltcup-Abfahrt: Jubiläumssieg von Marco Odermatt von schwerem Sturz überschattet", "s": "sportschau.de", "d": "19. Dec", "m": "🥇", "ch": true}, {"t": "Ski LIVE - Abfahrt in Wengen: das Ergebnis", "s": "LAOLA1", "d": "17. Jan", "m": "", "ch": false}, {"t": "Ski LIVE - Slalom in Val d'Isere: Das Ergebnis", "s": "Ski1", "d": "14. Dec", "m": "", "ch": false}, {"t": "Ski-Weltcup: Schweizer Doppelsieg in Gröden, Schlappe für ÖSV-Team", "s": "Kleine Zeitung", "d": "20. Dec", "m": "🥇", "ch": true}, {"t": "SKI LIVE - Das aktuelle Ergebnis der Abfahrt in Beaver Creek", "s": "LAOLA1", "d": "4. Dec", "m": "", "ch": false}, {"t": "Ski LIVE: RTL in Adelboden - das Ergebnis", "s": "Ski1", "d": "10. Jan", "m": "", "ch": false}];
+function renderSki(){
+  let html='';
+  SKI.forEach(item=>{
+    const chTag=item.ch?'<span class="ch-flag">🇨🇭</span>':'';
+    const medal=item.m?`<span class="medal">${item.m}</span>`:'';
+    html+=`<div class="ski-item ${item.ch?'swiss':''}">
+      <div class="ski-top">${medal}${chTag}<span class="ski-title">${item.t}</span></div>
+      <div class="ski-meta">${item.s} · ${item.d}</div>
+    </div>`;
+  });
+  document.getElementById('ski-list').innerHTML=html;
+  // Ticker
+  const titles=SKI.map(i=>(i.m?i.m+' ':'')+i.t).join(' &nbsp;·&nbsp; ');
+  const track=document.getElementById('tktrack');
+  track.innerHTML=`<span>${titles} &nbsp;·&nbsp; ${titles}</span>`;
+  track.style.animationDuration=Math.max(40,SKI.length*6)+'s';
+}
+renderSki();
+
+// ── WEATHER ──
+function wCode(c){
+  if(c===0)return['☀️','Sonnig'];if(c<=2)return['⛅','Teilweise bewölkt'];
+  if(c===3)return['☁️','Bedeckt'];if(c<=49)return['🌫️','Nebel'];
+  if(c<=59)return['🌦️','Nieselregen'];if(c<=69)return['🌧️','Regen'];
+  if(c<=79)return['❄️','Schnee'];if(c<=82)return['🌦️','Schauer'];
+  if(c<=86)return['🌨️','Schneeschauer'];if(c<=99)return['⛈️','Gewitter'];
+  return['🌈','--'];
+}
+function wdir(d){return['N','NO','O','SO','S','SW','W','NW'][Math.round(d/45)%8];}
+function hhmm(s){return new Date(s).toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});}
+async function loadWeather(){
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.24&longitude=8.88&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode,sunrise,sunset&current_weather=true&timezone=Europe%2FZurich&forecast_days=3');
+    const d=await r.json();const cw=d.current_weather;
+    const[icon,desc]=wCode(cw.weathercode);
+    document.getElementById('w-icon').textContent=icon;
+    document.getElementById('w-temp').textContent=Math.round(cw.temperature)+'°';
+    document.getElementById('w-desc').textContent=desc;
+    document.getElementById('whilo').textContent=d.daily.temperature_2m_max[0]+'° / '+d.daily.temperature_2m_min[0]+'°';
+    document.getElementById('wwind').textContent=cw.windspeed+' '+wdir(cw.winddirection);
+    document.getElementById('wrain').textContent=(d.daily.precipitation_sum[0]||0).toFixed(1)+' mm';
+    const sr=hhmm(d.daily.sunrise[0]),ss=hhmm(d.daily.sunset[0]);
+    document.getElementById('wsun').textContent=sr+' / '+ss;
+    document.getElementById('sunrise-t').textContent=sr;document.getElementById('sunset-t').textContent=ss;
+    const rise=new Date(d.daily.sunrise[0]),set=new Date(d.daily.sunset[0]),now=new Date();
+    const pct=Math.max(0,Math.min(100,((now-rise)/(set-rise))*100));
+    document.getElementById('sun-prog').style.width=pct+'%';
+    document.getElementById('sun-dot').style.left=pct+'%';
+  }catch(e){console.error(e);}
+}
+loadWeather();setInterval(loadWeather,10*60*1000);
+
+// ── RADAR CANVAS ──
+const Z=7;
+const TX=[63,64,65,66,67,68,69];
+const TY=[43,44,45,46,47];
+const TSIZE=256;
+const canvas=document.getElementById('map-canvas');
+const ctx=canvas.getContext('2d');
+
+function loadImg(src){
+  return new Promise(res=>{
+    const img=new Image();img.crossOrigin='anonymous';
+    img.onload=()=>res(img);img.onerror=()=>res(null);
+    img.src=src;
+  });
+}
+
+let radarFrames=[],frameIdx=0,animTimer=null;
+
+async function init(){
+  const w=canvas.parentElement.clientWidth,h=canvas.parentElement.clientHeight;
+  canvas.width=w;canvas.height=h;
+  const sx=w/(TX.length*TSIZE),sy=h/(TY.length*TSIZE);
+
+  ctx.fillStyle='#1a2535';ctx.fillRect(0,0,w,h);
+
+  // Load base tiles — CartoDB Voyager (nicer colors!)
+  window._base=[];
+  for(let xi=0;xi<TX.length;xi++){
+    for(let yi=0;yi<TY.length;yi++){
+      const s=['a','b','c'][(xi+yi)%3];
+      const img=await loadImg(`https://${s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/${Z}/${TX[xi]}/${TY[yi]}.png`);
+      window._base.push({img,xi,yi});
+      if(img)ctx.drawImage(img,xi*TSIZE*sx,yi*TSIZE*sy,TSIZE*sx,TSIZE*sy);
+    }
+  }
+
+  // Pin position
+  const lat_r=47.24*Math.PI/180;
+  const px=((8.88+180)/360*Math.pow(2,Z)-TX[0])*TSIZE*sx;
+  const py=((1-Math.log(Math.tan(lat_r)+1/Math.cos(lat_r))/Math.PI)/2*Math.pow(2,Z)-TY[0])*TSIZE*sy;
+  const pin=document.getElementById('pin');
+  pin.style.left=px+'px';pin.style.top=py+'px';
+
+  await loadRadar({sx,sy});
+  setInterval(()=>loadRadar({sx,sy}),5*60*1000);
+}
+
+async function loadRadar(scale){
+  try{
+    const r=await fetch('https://api.rainviewer.com/public/weather-maps.json');
+    const data=await r.json();
+    const frames=[...data.radar.past.slice(-6),...(data.radar.nowcast||[]).slice(0,2)];
+
+    const dots=document.getElementById('fdots');
+    dots.innerHTML=frames.map((_,i)=>`<div class="fdot" id="fd${i}"></div>`).join('');
+
+    radarFrames=[];
+    for(const f of frames){
+      const tiles=[];
+      for(let xi=0;xi<TX.length;xi++){
+        for(let yi=0;yi<TY.length;yi++){
+          const img=await loadImg(`https://tilecache.rainviewer.com${f.path}/256/${Z}/${TX[xi]}/${TY[yi]}/4/1_1.png`);
+          tiles.push({img,xi,yi});
+        }
+      }
+      radarFrames.push({tiles,time:f.time,fc:f.time>Date.now()/1000});
+    }
+
+    if(animTimer)clearInterval(animTimer);
+    frameIdx=0;
+    animTimer=setInterval(()=>drawFrame(scale),750);
+  }catch(e){console.error(e);}
+}
+
+function drawFrame({sx,sy}){
+  if(!radarFrames.length)return;
+  const frame=radarFrames[frameIdx];
+  const w=canvas.width,h=canvas.height;
+  ctx.fillStyle='#1a2535';ctx.fillRect(0,0,w,h);
+  window._base.forEach(({img,xi,yi})=>{if(img)ctx.drawImage(img,xi*TSIZE*sx,yi*TSIZE*sy,TSIZE*sx,TSIZE*sy);});
+  ctx.globalAlpha=0.8;
+  frame.tiles.forEach(({img,xi,yi})=>{if(img)ctx.drawImage(img,xi*TSIZE*sx,yi*TSIZE*sy,TSIZE*sx,TSIZE*sy);});
+  ctx.globalAlpha=1;
+  const t=new Date(frame.time*1000);
+  document.getElementById('r-time').textContent=frame.fc?'+'+Math.round((frame.time*1000-Date.now())/60000)+'min':t.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});
+  document.querySelectorAll('.fdot').forEach((d,i)=>{d.style.background=i===frameIdx?'#38bdf8':'rgba(255,255,255,0.15)';});
+  frameIdx=(frameIdx+1)%radarFrames.length;
+}
+
+init();
+</script>
+</body>
+</html>

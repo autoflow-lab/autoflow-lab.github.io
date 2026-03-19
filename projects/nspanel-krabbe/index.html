@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Clawy 🦀</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, #0a1628 0%, #0d2444 50%, #0a1628 100%);
+      color: white;
+      font-family: 'SF Pro Display', -apple-system, sans-serif;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    /* ── Header ── */
+    .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .time {
+      font-size: 48px;
+      font-weight: 200;
+      letter-spacing: -1px;
+    }
+
+    .date {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    .weather {
+      text-align: right;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .weather .temp {
+      font-size: 28px;
+      font-weight: 200;
+      color: white;
+    }
+
+    /* ── Krabbe ── */
+    .crab-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .crab-wrapper {
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .crab-wrapper.talking {
+      animation: wiggle 0.3s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg) translateY(-6px); }
+      50% { transform: rotate(3deg) translateY(-6px); }
+    }
+
+    svg.crab {
+      width: 140px;
+      height: 120px;
+      filter: drop-shadow(0 8px 24px rgba(220,60,30,0.4));
+    }
+
+    /* Eyes blinking */
+    .eye-pupil {
+      animation: blink 4s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes blink {
+      0%, 90%, 100% { transform: scaleY(1); }
+      95% { transform: scaleY(0.05); }
+    }
+
+    /* Claws waving */
+    .claw-left {
+      transform-origin: right center;
+      animation: wave-l 2s ease-in-out infinite;
+    }
+
+    .claw-right {
+      transform-origin: left center;
+      animation: wave-r 2s ease-in-out infinite 0.3s;
+    }
+
+    @keyframes wave-l {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-15deg); }
+    }
+
+    @keyframes wave-r {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(15deg); }
+    }
+
+    .crab-name {
+      font-size: 22px;
+      font-weight: 300;
+      margin-top: 12px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .crab-status {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+      min-height: 18px;
+      transition: opacity 0.3s;
+    }
+
+    /* ── Status Grid ── */
+    .status-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .status-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px 10px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .status-card:active { transform: scale(0.95); background: rgba(255,255,255,0.12); }
+
+    .status-card .icon { font-size: 22px; margin-bottom: 4px; }
+    .status-card .label { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.5px; }
+    .status-card .value { font-size: 14px; font-weight: 500; margin-top: 2px; }
+
+    .status-card.active { background: rgba(255,160,50,0.15); border-color: rgba(255,160,50,0.3); }
+    .status-card.on .value { color: #ffa032; }
+
+    /* ── Music Bar ── */
+    .music-bar {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .music-icon { font-size: 20px; }
+    .music-info { flex: 1; overflow: hidden; }
+    .music-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .music-sub { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .music-controls { display: flex; gap: 12px; font-size: 20px; cursor: pointer; }
+
+    /* ── Bubble ── */
+    .bubble {
+      position: fixed;
+      bottom: 180px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(30,40,60,0.95);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 14px 20px;
+      max-width: 85%;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 100;
+    }
+
+    .bubble.show { opacity: 1; }
+
+    /* ── Sleeping ── */
+    body.sleeping .crab-wrapper { animation: float-slow 5s ease-in-out infinite; opacity: 0.6; }
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-6px) rotate(-5deg); }
+    }
+    body.sleeping .status-grid, body.sleeping .music-bar { opacity: 0.3; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <div class="time" id="clock">00:00</div>
+      <div class="date" id="dateStr">Wird geladen...</div>
+    </div>
+    <div class="weather">
+      <div class="temp" id="weatherTemp">--°</div>
+      <div id="weatherDesc">Wetter</div>
+    </div>
+  </div>
+
+  <div class="crab-container" onclick="crabbTapped()">
+    <div class="crab-wrapper" id="crabWrapper">
+      <svg class="crab" viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg">
+        <!-- Legs left -->
+        <g class="claw-left">
+          <line x1="55" y1="100" x2="20" y2="130" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+          <line x1="60" y1="115" x2="18" y2="145" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>
+          <line x1="65" y1="128" x2="25" y2="155" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <!-- Legs right -->
+        <g class="claw-right">
+          <line x1="145" y1="100" x2="180" y2="130" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+          <line x1="140" y1="115" x2="182" y2="145" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>
+          <line x1="135" y1="128" x2="175" y2="155" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <!-- Left claw arm -->
+        <g class="claw-left">
+          <ellipse cx="28" cy="72" rx="22" ry="14" fill="#e74c3c"/>
+          <ellipse cx="14" cy="62" rx="12" ry="9" fill="#e74c3c"/>
+          <ellipse cx="14" cy="80" rx="12" ry="9" fill="#c0392b"/>
+          <line x1="50" y1="85" x2="32" y2="75" stroke="#c0392b" stroke-width="8" stroke-linecap="round"/>
+        </g>
+        <!-- Right claw arm -->
+        <g class="claw-right">
+          <ellipse cx="172" cy="72" rx="22" ry="14" fill="#e74c3c"/>
+          <ellipse cx="186" cy="62" rx="12" ry="9" fill="#e74c3c"/>
+          <ellipse cx="186" cy="80" rx="12" ry="9" fill="#c0392b"/>
+          <line x1="150" y1="85" x2="168" y2="75" stroke="#c0392b" stroke-width="8" stroke-linecap="round"/>
+        </g>
+        <!-- Body -->
+        <ellipse cx="100" cy="110" rx="60" ry="45" fill="#e74c3c"/>
+        <ellipse cx="100" cy="105" rx="55" ry="40" fill="#e84040"/>
+        <!-- Shell pattern -->
+        <ellipse cx="100" cy="100" rx="40" ry="28" fill="none" stroke="#c0392b" stroke-width="2" opacity="0.5"/>
+        <ellipse cx="100" cy="100" rx="25" ry="17" fill="none" stroke="#c0392b" stroke-width="1.5" opacity="0.4"/>
+        <!-- Eyes stalks -->
+        <rect x="72" y="68" width="6" height="14" rx="3" fill="#c0392b"/>
+        <rect x="122" y="68" width="6" height="14" rx="3" fill="#c0392b"/>
+        <!-- Eyes -->
+        <circle cx="75" cy="62" r="14" fill="white"/>
+        <circle cx="125" cy="62" r="14" fill="white"/>
+        <circle class="eye-pupil" cx="76" cy="63" r="9" fill="#1a1a2e"/>
+        <circle class="eye-pupil" cx="126" cy="63" r="9" fill="#1a1a2e"/>
+        <circle cx="79" cy="60" r="3" fill="white"/>
+        <circle cx="129" cy="60" r="3" fill="white"/>
+        <!-- Smile -->
+        <path d="M 85 82 Q 100 94 115 82" fill="none" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="crab-name">CLAWY</div>
+    <div class="crab-status" id="crabStatus">Tippe mich an 👋</div>
+  </div>
+
+  <div class="status-grid" id="statusGrid">
+    <div class="status-card" id="card-buro" onclick="toggleLight('light.buro', 'switch.shelly1_98cdac0ca9b2')">
+      <div class="icon">💡</div>
+      <div class="label">BÜRO</div>
+      <div class="value" id="val-buro">--</div>
+    </div>
+    <div class="status-card" id="card-music" onclick="openMusic()">
+      <div class="icon">🎵</div>
+      <div class="label">MUSIK</div>
+      <div class="value" id="val-music">--</div>
+    </div>
+    <div class="status-card" id="card-temp" >
+      <div class="icon">🌡️</div>
+      <div class="label">AUSSEN</div>
+      <div class="value" id="val-temp">--</div>
+    </div>
+    <div class="status-card" id="card-garage" onclick="triggerGarage()">
+      <div class="icon">🚗</div>
+      <div class="label">GARAGE</div>
+      <div class="value" id="val-garage">--</div>
+    </div>
+  </div>
+
+  <div class="music-bar" id="musicBar">
+    <div class="music-icon">🎵</div>
+    <div class="music-info">
+      <div class="music-title" id="musicTitle">Nichts läuft</div>
+      <div class="music-sub" id="musicSub">Spotify · Kein Lautsprecher</div>
+    </div>
+    <div class="music-controls">
+      <span onclick="mediaCommand('media_previous_track')">⏮</span>
+      <span onclick="mediaCommand('media_play_pause')" id="playBtn">▶</span>
+      <span onclick="mediaCommand('media_next_track')">⏭</span>
+    </div>
+  </div>
+
+  <div class="bubble" id="bubble"></div>
+
+<script>
+  const HA = 'http://192.168.1.123:8123';
+  const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlZWEzY2ViZWM2NDM0ZDc3YTUzYmRjZDUxYWQwZmFiMiIsImlhdCI6MTc3MjIzNTkzNywiZXhwIjoyMDg3NTk1OTM3fQ.NWPIQwbtUJlmHzuMwkIIPjzLQcukT997SmL4rW-xQnk';
+  const HEADERS = { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' };
+
+  const SAYINGS = [
+    "Alles unter Kontrolle! 🦀",
+    "Was kann ich für dich tun?",
+    "Bereit für neue Aufgaben!",
+    "Zuhause läuft rund 🏠",
+    "Ich pass auf alles auf 👀",
+    "Krabbe on duty! 🦀",
+    "Brauchst du was?",
+    "Alles tip-top!",
+  ];
+
+  // ── Clock ──
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('clock').textContent = `${h}:${m}`;
+    const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+    const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    document.getElementById('dateStr').textContent =
+      `${days[now.getDay()]}, ${now.getDate()}. ${months[now.getMonth()]}`;
+
+    // Sleep mode 23:00–07:00
+    const sleeping = now.getHours() >= 23 || now.getHours() < 7;
+    document.body.classList.toggle('sleeping', sleeping);
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // ── HA API ──
+  async function haGet(entity) {
+    const r = await fetch(`${HA}/api/states/${entity}`, { headers: HEADERS });
+    return r.json();
+  }
+
+  async function haPost(domain, service, data) {
+    await fetch(`${HA}/api/services/${domain}/${service}`, {
+      method: 'POST', headers: HEADERS, body: JSON.stringify(data)
+    });
+  }
+
+  // ── Status Updates ──
+  async function updateStatus() {
+    try {
+      // Büro light
+      const buro = await haGet('light.buro');
+      const buroOn = buro.state === 'on';
+      document.getElementById('val-buro').textContent = buroOn ? 'An' : 'Aus';
+      document.getElementById('card-buro').classList.toggle('on', buroOn);
+
+      // Spotify
+      const spot = await haGet('media_player.spotify_janisss');
+      const playing = spot.state === 'playing';
+      const title = spot.attributes?.media_title || 'Nichts läuft';
+      const artist = spot.attributes?.media_artist || '';
+      document.getElementById('val-music').textContent = playing ? '▶' : '⏸';
+      document.getElementById('card-music').classList.toggle('on', playing);
+      document.getElementById('musicTitle').textContent = title;
+      document.getElementById('musicSub').textContent = artist + ' · ' + (spot.attributes?.source || 'Spotify');
+      document.getElementById('playBtn').textContent = playing ? '⏸' : '▶';
+
+    } catch(e) { console.log('Status update error', e); }
+  }
+
+  // ── Crab tapped ──
+  let sayIdx = 0;
+  function crabbTapped() {
+    const wrapper = document.getElementById('crabWrapper');
+    const status = document.getElementById('crabStatus');
+    wrapper.classList.add('talking');
+    status.textContent = SAYINGS[sayIdx % SAYINGS.length];
+    sayIdx++;
+    setTimeout(() => wrapper.classList.remove('talking'), 1500);
+  }
+
+  // ── Show bubble ──
+  function showBubble(text, ms = 3000) {
+    const b = document.getElementById('bubble');
+    b.textContent = text;
+    b.classList.add('show');
+    setTimeout(() => b.classList.remove('show'), ms);
+  }
+
+  // ── Toggle light ──
+  async function toggleLight(lightEntity, switchEntity) {
+    const state = await haGet(lightEntity);
+    const service = state.state === 'on' ? 'turn_off' : 'turn_on';
+    await haPost('light', service, { entity_id: lightEntity });
+    if (switchEntity) await haPost('switch', service, { entity_id: switchEntity });
+    showBubble(service === 'turn_on' ? '💡 Bürolicht an!' : '💡 Bürolicht aus!');
+    setTimeout(updateStatus, 800);
+  }
+
+  function openMusic() {
+    window.location.href = `${HA}/hassio/ingress/d5369777_music_assistant`;
+  }
+
+  async function triggerGarage() {
+    showBubble('🚗 Garage wird nicht automatisch gesteuert');
+  }
+
+  async function mediaCommand(service) {
+    await haPost('media_player', service, { entity_id: 'media_player.spotify_janisss' });
+    setTimeout(updateStatus, 500);
+  }
+
+  // ── Weather ──
+  async function updateWeather() {
+    try {
+      const w = await haGet('weather.forecast_home') || await haGet('weather.home');
+      if (w && w.attributes) {
+        document.getElementById('weatherTemp').textContent = Math.round(w.attributes.temperature) + '°';
+        document.getElementById('weatherDesc').textContent = w.state || '';
+      }
+    } catch(e) {}
+  }
+
+  // ── Init ──
+  updateStatus();
+  updateWeather();
+  setInterval(updateStatus, 15000);
+  setInterval(updateWeather, 300000);
+</script>
+</body>
+</html>
