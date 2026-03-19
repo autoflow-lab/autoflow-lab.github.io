@@ -377,7 +377,9 @@ html,body{height:100%;background:#000;
 .album{
   border-radius:18px;overflow:hidden;margin-bottom:10px;
   background:var(--c1);position:relative;
+  transition:background 2s ease;
 }
+.album::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.7) 100%);pointer-events:none;z-index:0}
 .album-orb1,.album-orb2{display:none}
 .np{padding:22px 20px 20px;position:relative;z-index:1}
 .nplbl{font-size:.52rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;
@@ -779,6 +781,12 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 
     <!-- ═══ LICHT ═══ -->
     <div class="page" id="pg-licht">
+      <!-- Quick Actions -->
+      <div style="display:flex;gap:8px;margin-bottom:4px">
+        <button id="qa-allon" style="flex:1;padding:9px 6px;border:1px solid rgba(255,159,10,.3);border-radius:12px;background:rgba(255,159,10,.1);color:#ff9f0a;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.3px">☀️ Alle An</button>
+        <button id="qa-alloff" style="flex:1;padding:9px 6px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.3px">🌙 Alle Aus</button>
+        <button id="qa-abend" style="flex:1;padding:9px 6px;border:1px solid rgba(251,146,60,.25);border-radius:12px;background:rgba(251,146,60,.08);color:#fb923c;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.3px">🕯 Abend</button>
+      </div>
       <span class="lbl">Licht</span>
       <div class="lg" id="lg"></div>
       <span class="lbl" style="margin-top:6px">Geräte</span>
@@ -1404,14 +1412,19 @@ function buildUI(){try{
     const sv=ico?.querySelector('svg');
     if(on&&c){
       tile.style.borderTopColor=`rgba(${c},.35)`;
-      tile.style.boxShadow=`0 0 18px rgba(${c},.15),0 1px 0 rgba(255,255,255,.06) inset`;
-      if(ico)ico.style.background=`rgba(${c},.18)`;
+      tile.style.boxShadow=`0 0 22px rgba(${c},.18),0 1px 0 rgba(255,255,255,.06) inset`;
+      if(ico)ico.style.background=`rgba(${c},.2)`;
       if(sv)sv.style.stroke=`rgb(${c})`;
+      // Farbbalken unten
+      const fill=tile.querySelector('.bfil');
+      if(fill)fill.style.background=`linear-gradient(90deg,rgba(${c},.6),rgb(${c}))`;
     } else {
       tile.style.borderTopColor='';
       tile.style.boxShadow='';
       if(ico)ico.style.background='rgba(255,255,255,.08)';
       if(sv)sv.style.stroke='rgba(255,255,255,.4)';
+      const fill=tile.querySelector('.bfil');
+      if(fill)fill.style.background='';
     }
     const se=tile.querySelector('[data-lst]');
     if(se)se.style.color=on&&c?`rgb(${c})`:'rgba(255,255,255,.5)';
@@ -1729,6 +1742,22 @@ function buildUI(){try{
     updateNest();
   })();
 
+  // Quick actions (Licht Seite)
+  document.getElementById('qa-allon')?.addEventListener('click',()=>{
+    hap();
+    CFG.lights.forEach(l=>svc('light','turn_on',{entity_id:l.id,brightness_pct:80}));
+    showToast('Alle Lichter an');quickRefresh();
+  });
+  document.getElementById('qa-alloff')?.addEventListener('click',()=>{
+    hap();
+    CFG.lights.forEach(l=>svc('light','turn_off',{entity_id:l.id}));
+    svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    showToast('Alle Lichter aus');quickRefresh();
+  });
+  document.getElementById('qa-abend')?.addEventListener('click',()=>{
+    hap();doScene('abend');
+  });
+
   // Wetter-Detail
   document.getElementById('hwx-tap')?.addEventListener('click',()=>{hap();openWeatherSheet();});
   // Nav
@@ -1979,6 +2008,7 @@ function doScene(s){
     svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
     svc('media_player','turn_off',{entity_id:CFG.alm});
     svc('media_player','turn_off',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});
+    svc('media_player','turn_off',{entity_id:'media_player.nest'});
     toast('Alles aus ✓');
   }
 }
@@ -2215,6 +2245,22 @@ function updateRadio(){
 }
 
 boot();
+
+// ── Tageszeit Hintergrund ────────────────────────────────────
+(function(){
+  function applyTimeOfDay(){
+    const h=new Date().getHours();
+    const album=document.querySelector('.album');
+    if(!album)return;
+    if(h>=22||h<6)       album.style.background='linear-gradient(145deg,#0a0a1e,#1c1c2e)';
+    else if(h<9)          album.style.background='linear-gradient(145deg,#1a1200,#2d1a0e)';
+    else if(h<17)         album.style.background='linear-gradient(145deg,#0d1b2e,#1a2840)';
+    else if(h<20)         album.style.background='linear-gradient(145deg,#1f0d00,#2a1505)';
+    else                  album.style.background='linear-gradient(145deg,#0f0818,#1a0f26)';
+  }
+  applyTimeOfDay();
+  setInterval(applyTimeOfDay,300000);
+})();
 
 // ── Standby Screen ───────────────────────────────────────────
 (function(){
