@@ -202,17 +202,17 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
         </defs>
         <!-- Floor plan rooms -->
         <!-- Wohnzimmer (large, left) -->
-        <rect x="10" y="10" width="240" height="180" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <rect data-room="wz" x="10" y="10" width="240" height="180" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
         <circle id="glow-wz" cx="130" cy="100" r="90" fill="url(#rg-wz)" opacity="0" style="transition:opacity 1s"/>
         <text x="130" y="96" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">WOHNZIMMER</text>
         <text id="fp-wz-st" x="130" y="110" text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
         <!-- Küche (top right) -->
-        <rect x="260" y="10" width="150" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <rect data-room="kue" x="260" y="10" width="150" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
         <circle id="glow-kue" cx="335" cy="70" r="60" fill="url(#rg-kue)" opacity="0" style="transition:opacity 1s"/>
         <text x="335" y="66" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">KÜCHE</text>
         <text id="fp-kue-st" x="335" y="80" text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
         <!-- Bad (mid right) -->
-        <rect x="420" y="10" width="90" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <rect data-room="bad" x="420" y="10" width="90" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
         <circle id="glow-bad" cx="465" cy="70" r="44" fill="url(#rg-bad)" opacity="0" style="transition:opacity 1s"/>
         <text x="465" y="66" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">BAD</text>
         <text id="fp-bad-st" x="465" y="79" text-anchor="middle" fill="rgba(10,132,255,0)" font-size="7" font-family="-apple-system,sans-serif">Aus</text>
@@ -220,7 +220,7 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
         <rect x="10" y="200" width="240" height="50" rx="4" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/>
         <text x="130" y="230" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="8" font-family="-apple-system,sans-serif">GANG</text>
         <!-- Büro (bottom left) -->
-        <rect x="10" y="260" width="160" height="110" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <rect data-room="buro" x="10" y="260" width="160" height="110" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
         <circle id="glow-buro" cx="90" cy="315" r="55" fill="url(#rg-buro)" opacity="0" style="transition:opacity 1s"/>
         <text x="90" y="311" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">BÜRO</text>
         <text id="fp-buro-st" x="90" y="325" text-anchor="middle" fill="rgba(48,209,88,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
@@ -420,6 +420,28 @@ function updateSystem(count){
   if(sl)sl.textContent='Live';
   updateFloorplan();
 }
+
+// Floorplan click → toggle light
+(function(){
+  const ROOM_LIGHTS={
+    wz:  'light.h618a',
+    kue: 'light.h618a_2',
+    bad: 'light.color_temperature_light_1',
+    buro:'light.hue_play_l',
+  };
+  document.getElementById('fp-svg')?.addEventListener('click',e=>{
+    const room=e.target.closest('[data-room]')?.dataset?.room;
+    if(!room||!ROOM_LIGHTS[room])return;
+    const id=ROOM_LIGHTS[room];
+    const on=_S[id]?.state==='on';
+    svc('light',on?'turn_off':'turn_on',{entity_id:id});
+    // Optimistic flash
+    const dot=document.getElementById('fp-dot-'+room);
+    if(dot){dot.setAttribute('r','9');setTimeout(()=>dot.setAttribute('r',on?'5':'7'),300);}
+    toast((on?'💡 Aus: ':'💡 An: ')+(e.target.closest('[data-room]')?.nextElementSibling?.textContent?.trim()||room));
+    setTimeout(()=>fetchStates(),600);
+  });
+})();
 
 // Floorplan glow
 function updateFloorplan(){
