@@ -1670,7 +1670,7 @@ input[type=range]{touch-action:pan-x}
       <div class="fp-wrap">
         <div>
           <div class="fp-hint" style="position:relative">
-              <span>👆</span><span data-i="fpHint" class="desktop-only">Klick: Licht an/aus · Doppelklick: Details · Rechtsklick: Farbe wählen</span><span class="mobile-only">Tippen: Licht an/aus · 2× Tippen: Details · Lang drücken: Farbe</span>
+              <span>👆</span><span data-i="fpHint" class="desktop-only">Klick: Licht an/aus · Doppelklick: Details · Rechtsklick: Farbe wählen</span><span class="mobile-only">Tippen: an/aus · 2× Tippen: Details · Pinch: Zoom · 2× Tap Reset</span>
             </div>
           <div class="fp-outer" style="-webkit-user-select:none;user-select:none;-webkit-touch-callout:none" id="fp-outer" style="position:relative">
             <!-- Room Detail Panel (dblclick) -->
@@ -3501,6 +3501,82 @@ function openCp(rid,e){
 function closeCp(){document.getElementById('fp-cp')?.classList.remove('open');cpRoom=null}
 function cpBright(v){if(!cpRoom)return;rooms[cpRoom].brightness=+v;applyRoom(cpRoom)}
 document.addEventListener('click',e=>{if(!e.target.closest('#fp-cp')&&!e.target.closest('#fp-outer svg')&&!e.target.closest('#fp-detail'))closeCp()});
+
+// ── FLOOR PLAN PINCH-ZOOM (mobile) ──
+(()=>{
+  const outer=document.getElementById('fp-outer');if(!outer)return;
+  // Wrap all children in a zoom layer
+  const zl=document.createElement('div');
+  zl.id='fp-zoom-layer';
+  zl.style.cssText='position:absolute;inset:0;transform-origin:0 0;will-change:transform;touch-action:none';
+  while(outer.firstChild)zl.appendChild(outer.firstChild);
+  outer.appendChild(zl);
+  outer.style.touchAction='none';
+  outer.style.overflow='hidden';
+
+  let scale=1,minScale=1,maxScale=4;
+  let panX=0,panY=0;
+  let lastDist=0,lastPanX=0,lastPanY=0;
+  let pinching=false,panning=false;
+
+  function clampPan(s,x,y){
+    const rect=outer.getBoundingClientRect();
+    const W=rect.width,H=rect.height;
+    const maxX=0,minX=W-(W*s);
+    const maxY=0,minY=H-(H*s);
+    return{x:Math.min(maxX,Math.max(minX,x)),y:Math.min(maxY,Math.max(minY,y))};
+  }
+  function applyTransform(){
+    const c=clampPan(scale,panX,panY);
+    panX=c.x;panY=c.y;
+    zl.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`;
+  }
+  function dist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY)}
+  function midpoint(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2}}
+
+  outer.addEventListener('touchstart',e=>{
+    if(e.touches.length===2){pinching=true;panning=false;lastDist=dist(e.touches);e.preventDefault()}
+    else if(e.touches.length===1&&scale>1){panning=true;pinching=false;lastPanX=e.touches[0].clientX-panX;lastPanY=e.touches[0].clientY-panY}
+  },{passive:false});
+
+  outer.addEventListener('touchmove',e=>{
+    if(pinching&&e.touches.length===2){
+      e.preventDefault();
+      const d=dist(e.touches);
+      const factor=d/lastDist;
+      const mid=midpoint(e.touches);
+      const rect=outer.getBoundingClientRect();
+      const ox=mid.x-rect.left,oy=mid.y-rect.top;
+      const newScale=Math.min(maxScale,Math.max(minScale,scale*factor));
+      panX=ox-(ox-panX)*(newScale/scale);
+      panY=oy-(oy-panY)*(newScale/scale);
+      scale=newScale;lastDist=d;applyTransform();
+    } else if(panning&&e.touches.length===1&&scale>1){
+      e.preventDefault();
+      panX=e.touches[0].clientX-lastPanX;
+      panY=e.touches[0].clientY-lastPanY;
+      applyTransform();
+    }
+  },{passive:false});
+
+  outer.addEventListener('touchend',e=>{
+    if(e.touches.length<2)pinching=false;
+    if(e.touches.length===0){
+      panning=false;
+      // Snap back if scale near 1
+      if(scale<1.08){scale=1;panX=0;panY=0;zl.style.transition='transform .3s ease';applyTransform();setTimeout(()=>zl.style.transition='',310)}
+    }
+  });
+
+  // Double-tap to reset zoom
+  let lastTap=0;
+  outer.addEventListener('touchend',e=>{
+    if(e.changedTouches.length!==1)return;
+    const now=Date.now();
+    if(now-lastTap<280&&scale>1.1){scale=1;panX=0;panY=0;zl.style.transition='transform .35s ease';applyTransform();setTimeout(()=>zl.style.transition='',360)}
+    lastTap=now;
+  });
+})();
 
 // ── Room Detail Panel ──────────────────────────
 const ROOM_DEVICES={
