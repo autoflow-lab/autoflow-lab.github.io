@@ -3913,16 +3913,37 @@ function applyLang(){
 // ── INIT ──
 buildRoomList();buildEnergyBars();renderTrack();
 loadWeather();
-// Animate stats on load
-setTimeout(()=>{
-  const run=(el,target,suffix,dur)=>{let s=0;const step=()=>{s=Math.min(s+1,target);el.textContent=s+suffix;if(s<target)requestAnimationFrame(step)};requestAnimationFrame(step)};
-  const sp=$('s-proj');if(sp)run(sp,47,'+',1200);
-  const ss=$('s-stars');if(ss)run(ss,98,'%',1000);
-  const sd=$('s-del');if(sd)run(sd,48,'h',800);
-  const sp2=$('s-price');if(sp2)run(sp2,49,'€',600);
-  // Fix price display: show €49
-  setTimeout(()=>{const e=$('s-price');if(e)e.textContent='€49'},700);
-},400);
+// Animate stats — fires when scrolled into view (Intersection Observer)
+(()=>{
+  const STATS=[
+    {id:'s-proj', target:47, prefix:'',  suffix:'+', dur:1400},
+    {id:'s-stars',target:98, prefix:'',  suffix:'%', dur:1200},
+    {id:'s-del',  target:48, prefix:'',  suffix:'h', dur:900},
+    {id:'s-price',target:49, prefix:'€', suffix:'',  dur:800},
+  ];
+  function easeOut(t){return 1-Math.pow(1-t,3)}
+  function animateStat({id,target,prefix,suffix,dur}){
+    const el=$(id);if(!el||el._counted)return;el._counted=true;
+    const start=performance.now();
+    function step(now){
+      const p=Math.min((now-start)/dur,1);
+      const val=Math.round(easeOut(p)*target);
+      el.textContent=prefix+val+suffix;
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  const statsWrap=$('s-proj')?.closest('.hero-stats');
+  if(statsWrap&&'IntersectionObserver'in window){
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){STATS.forEach(animateStat);obs.disconnect()}});
+    },{threshold:0.4});
+    obs.observe(statsWrap);
+  } else {
+    // Fallback: fire after short delay
+    setTimeout(()=>STATS.forEach(animateStat),400);
+  }
+})();
 // ── LIVE CLOCK ──
 function updateClock(){
   const now=new Date();
