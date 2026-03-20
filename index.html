@@ -797,6 +797,10 @@ audio{display:none}
 /* Workflow */
 .wf-demo{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:var(--r);padding:32px;border:1px solid var(--border);margin:44px 0;position:relative;overflow:hidden}
 .wf-demo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(112,80,255,.06),transparent 70%);pointer-events:none}
+/* Air Quality Widget */
+.aq-metric{background:var(--bg2);border-radius:10px;padding:8px 10px;font-size:.62rem;color:var(--text3)}
+.aq-val{font-size:.82rem;font-weight:700;color:var(--text);margin-top:3px}
+
 /* Calendar Widget */
 .cal-event{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:10px;margin-bottom:6px;background:var(--bg2);transition:background .2s}
 .cal-event:hover{background:var(--bg3)}
@@ -1584,6 +1588,36 @@ input[type=range]{touch-action:pan-x}
     <div style="font-size:.65rem;color:var(--text3)" id="alarm-hint-txt">Tipp: 1234</div>
   </div>
 </div>
+
+      <!-- AIR QUALITY / CO2 -->
+      <div class="dash-card reveal" id="aq-card">
+        <div class="dash-card-tag" id="aq-tag">🌿 Luftqualität</div>
+        <div class="dash-card-title" id="aq-ttl">CO₂ & Raumklima</div>
+        <div style="display:flex;align-items:center;gap:18px;margin-bottom:16px">
+          <div style="position:relative;width:80px;height:80px;flex-shrink:0">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="7"/>
+              <circle id="aq-ring" cx="40" cy="40" r="32" fill="none" stroke="#34c759" stroke-width="7"
+                stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="80"
+                transform="rotate(-90 40 40)" style="transition:stroke-dashoffset 1.2s ease,stroke 1.2s ease"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <div style="font-size:1.1rem;font-weight:800;letter-spacing:-.03em" id="aq-co2-val">742</div>
+              <div style="font-size:.52rem;color:var(--text3);font-weight:600">ppm</div>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:.72rem;font-weight:700;margin-bottom:4px" id="aq-status-txt">😊 Gut</div>
+            <div style="font-size:.65rem;color:var(--text2);line-height:1.5" id="aq-hint">Optimale Luftqualität. Kein Lüften nötig.</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="aq-metric"><span>💧</span> <span id="aq-hum-lbl">Feuchte</span><div class="aq-val" id="aq-hum">48%</div></div>
+          <div class="aq-metric"><span>🌡</span> <span id="aq-temp-lbl">Temperatur</span><div class="aq-val" id="aq-temp">21.4°C</div></div>
+          <div class="aq-metric"><span>💨</span> <span id="aq-voc-lbl">VOC</span><div class="aq-val" id="aq-voc">Niedrig</div></div>
+          <div class="aq-metric"><span>🔔</span> <span id="aq-alert-lbl">Auto-Lüftung</span><div class="aq-val" id="aq-auto" style="color:var(--green)">Aktiv</div></div>
+        </div>
+      </div>
 
     </div><!-- dash-grid -->
   </div>
@@ -3853,6 +3887,9 @@ function applyLang(){
   setText('cl-target-lbl',t.climTarget);setText('mode-heat-lbl',t.modeHeat);setText('mode-cool-lbl',t.modeCool);setText('c-room-lbl',t.cRoomLbl);
   setText('card-lights-tag',t.cardLightsTag);setText('card-lights-ttl',t.cardLightsTtl);
   setText('cal-tag',t.cardCalTag);setText('cal-ttl',t.cardCalTtl);
+  const aqTag=document.getElementById('aq-tag');const aqTtl=document.getElementById('aq-ttl');
+  if(aqTag)aqTag.textContent='🌿 '+(lang==='de'?'Luftqualität':'Air Quality');
+  if(aqTtl)aqTtl.textContent=lang==='de'?'CO₂ & Raumklima':'CO₂ & Room Climate';
   document.dispatchEvent(new Event('langChange'));
   setText('ml-living',t.mlLiving);setText('ml-bed1',t.mlBed1);setText('ml-kitchen',t.mlKitchen);
   setText('ml-bath',t.mlBath);setText('ml-office',t.mlOffice);setText('ml-hall',t.mlHall);
@@ -3934,6 +3971,47 @@ function applyLang(){
   // Reload news in correct lang
   loadNews();
 }
+
+// ── AIR QUALITY WIDGET ──
+(()=>{
+  // CO2 levels: 400-700 good, 700-1000 moderate, 1000-1500 poor, >1500 bad
+  const LEVELS=[
+    {max:700, col:'#34c759', emoji:'😊', de:'Gut',         en:'Good',        hintDE:'Optimale Luftqualität. Kein Lüften nötig.',       hintEN:'Optimal air quality. No ventilation needed.'},
+    {max:1000,col:'#ff9f0a', emoji:'😐', de:'Mittel',      en:'Moderate',    hintDE:'Leicht erhöhter CO₂-Wert. Kurz lüften empfohlen.',hintEN:'Slightly elevated CO₂. Brief ventilation recommended.'},
+    {max:1500,col:'#ff6b00', emoji:'😷', de:'Mäßig',       en:'Poor',        hintDE:'Fenster öffnen! Automation startet Lüftung.',       hintEN:'Open windows! Automation starting ventilation.'},
+    {max:9999,col:'#ff3b30', emoji:'🚨', de:'Schlecht',     en:'Bad',         hintDE:'Lüftung läuft. Raum verlassen empfohlen.',          hintEN:'Ventilation running. Leaving room recommended.'},
+  ];
+  let co2=742;
+  function updateAQ(){
+    const isDE=lang==='de';
+    const lvl=LEVELS.find(l=>co2<=l.max)||LEVELS[LEVELS.length-1];
+    const ring=document.getElementById('aq-ring');
+    const circ=2*Math.PI*32; // ~201
+    const pct=Math.min((co2-400)/1600,1); // 400=0%, 2000=100%
+    if(ring){ring.style.strokeDashoffset=circ*(1-pct);ring.style.stroke=lvl.col}
+    setText('aq-co2-val',co2);
+    const st=document.getElementById('aq-status-txt');
+    if(st){st.textContent=lvl.emoji+' '+(isDE?lvl.de:lvl.en);st.style.color=lvl.col}
+    const hint=document.getElementById('aq-hint');
+    if(hint)hint.textContent=isDE?lvl.hintDE:lvl.hintEN;
+    setText('aq-hum-lbl',isDE?'Feuchte':'Humidity');
+    setText('aq-temp-lbl',isDE?'Temperatur':'Temperature');
+    setText('aq-voc-lbl','VOC');
+    setText('aq-alert-lbl',isDE?'Auto-Lüftung':'Auto-Vent');
+    const autoEl=document.getElementById('aq-auto');
+    if(autoEl){autoEl.textContent=co2>1000?(isDE?'Läuft':'Running'):(isDE?'Aktiv':'Active');autoEl.style.color=co2>1000?'var(--warm)':'var(--green)'}
+    // Drift CO2 slowly up then back
+    co2+=Math.round((Math.random()-.42)*8);
+    co2=Math.max(430,Math.min(1350,co2));
+  }
+  document.addEventListener('langChange',updateAQ);
+  setTimeout(()=>{updateAQ();setInterval(updateAQ,7000)},600);
+  if(document.getElementById('aq-tag')){
+    const tag=document.getElementById('aq-tag');const ttl=document.getElementById('aq-ttl');
+    if(tag)tag.textContent='🌿 '+(lang==='de'?'Luftqualität':'Air Quality');
+    if(ttl)ttl.textContent=lang==='de'?'CO₂ & Raumklima':'CO₂ & Room Climate';
+  }
+})();
 
 // ── CALENDAR WIDGET ──
 (()=>{
