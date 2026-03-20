@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<!-- iPad Kiosk · autoflow-lab · v1 -->
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Cache-Control" content="no-cache">
+<title>Home · Kiosk</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+:root{--bg:#000;--c1:#1c1c1e;--c2:#2c2c2e;--c3:#3a3a3c;--acc:#ff9f0a;--blue:#0a84ff;--grn:#30d158;--red:#ff453a;--txt:#fff;--dim:rgba(255,255,255,.5);--dim2:rgba(255,255,255,.25)}
+html,body{width:100vw;height:100vh;background:var(--bg);color:var(--txt);font-family:-apple-system,sans-serif;overflow:hidden}
+
+/* ── GRID ─────────────────────────────────── */
+.root{display:grid;grid-template-rows:auto 1fr auto;height:100vh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+
+/* ── HEADER ───────────────────────────────── */
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-left{}
+.clock{font-size:2.6rem;font-weight:100;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;line-height:1}
+.hdr-date{font-size:.8rem;color:var(--dim2);margin-top:4px;letter-spacing:.5px}
+.hdr-right{display:flex;align-items:center;gap:20px}
+.wx-badge{display:flex;flex-direction:column;align-items:flex-end;gap:2px;cursor:pointer}
+.wx-ico{font-size:2rem}
+.wx-temp{font-size:1.1rem;font-weight:300;color:rgba(255,255,255,.8)}
+.wx-desc{font-size:.65rem;color:var(--dim2);text-align:right}
+.status-row{display:flex;gap:8px;align-items:center}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--grn)}
+.status-dot.offline{background:var(--red)}
+
+/* ── MAIN ─────────────────────────────────── */
+main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:16px 24px;overflow:hidden}
+
+/* ── PANEL ────────────────────────────────── */
+.panel{background:var(--c1);border-radius:20px;border:1px solid rgba(255,255,255,.055);border-top-color:rgba(255,255,255,.13);padding:18px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.panel::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.06) 0%,transparent 45%);pointer-events:none}
+.panel-title{font-size:.62rem;font-weight:700;color:var(--dim2);letter-spacing:1px;text-transform:uppercase}
+
+/* ── LIGHT TILES (in panel) ───────────────── */
+.lt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
+.lt{border-radius:14px;background:var(--c2);border:1px solid rgba(255,255,255,.055);border-top-color:rgba(255,255,255,.12);padding:12px 10px;cursor:pointer;transition:background .3s,transform .12s;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.lt:active{transform:scale(.91)}
+.lt::before{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(160deg,rgba(255,255,255,.07) 0%,transparent 45%);pointer-events:none}
+.lt-ico{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
+.lt-ico svg{width:18px;height:18px;stroke:rgba(255,255,255,.4);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lt-name{font-size:.68rem;font-weight:600;color:rgba(255,255,255,.75);line-height:1.2}
+.lt-st{font-size:.55rem;color:rgba(255,255,255,.35)}
+
+/* ── MEDIA PANEL ──────────────────────────── */
+.media-now{display:flex;align-items:center;gap:12px;background:var(--c2);border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.055)}
+.media-art{width:52px;height:52px;border-radius:10px;background:linear-gradient(145deg,#1a1a2e,#0d0d1e);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.media-info{flex:1;min-width:0}
+.media-title{font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.media-sub{font-size:.62rem;color:var(--dim2);margin-top:2px}
+.media-ctrl{display:flex;gap:8px;margin-top:4px}
+.mc-btn{width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.mc-btn:active{background:rgba(255,255,255,.2)}
+.mc-btn svg{width:14px;height:14px;fill:currentColor}
+.mc-play{background:var(--blue)!important;width:38px;height:38px}
+.vol-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.vol-lbl{font-size:.6rem;color:var(--dim2)}
+.vol-bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.12);position:relative;cursor:pointer}
+.vol-fill{height:100%;border-radius:2px;background:var(--blue);width:40%}
+.vol-pct{font-size:.6rem;color:var(--dim2);min-width:24px;text-align:right}
+
+/* ── WETTER PANEL ─────────────────────────── */
+.forecast-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:1}
+.fc-day{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--c2);border-radius:10px;padding:8px 4px}
+.fc-lbl{font-size:.55rem;color:var(--dim2)}
+.fc-ico{font-size:1rem}
+.fc-hi{font-size:.72rem;font-weight:700;color:#fff}
+.fc-lo{font-size:.6rem;color:var(--dim2)}
+.fc-prec{font-size:.5rem;color:var(--blue)}
+.hourly-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.hh-item{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:44px;background:var(--c2);border-radius:10px;padding:8px 4px}
+.hh-t{font-size:.55rem;color:var(--dim2)}
+.hh-ico{font-size:.9rem}
+.hh-temp{font-size:.68rem;font-weight:600;color:#fff}
+
+/* ── SZENEN PANEL ─────────────────────────── */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
+.sc{border-radius:14px;border:none;cursor:pointer;padding:14px 12px;display:flex;flex-direction:column;gap:8px;text-align:left;transition:transform .12s,opacity .2s;position:relative;overflow:hidden}
+.sc:active{transform:scale(.93)}
+.sc span{font-size:.72rem;font-weight:700;color:#fff}
+.sc small{font-size:.58rem;color:rgba(255,255,255,.45)}
+
+/* ── FOOTER ───────────────────────────────── */
+footer{display:flex;align-items:center;justify-content:space-between;padding:10px 28px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.06)}
+.ft-info{font-size:.65rem;color:rgba(255,255,255,.2)}
+.ft-btns{display:flex;gap:8px}
+.ft-btn{padding:7px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-size:.65rem;font-weight:600;cursor:pointer;transition:background .2s}
+.ft-btn:active{background:rgba(255,255,255,.1)}
+.ft-btn.danger{border-color:rgba(255,69,58,.3);color:var(--red)}
+
+/* Toast */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(28,28,30,.95);color:#fff;padding:10px 22px;border-radius:100px;font-size:.8rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1)}
+#toast.show{opacity:1}
+
+/* Standby */
+#standby{position:fixed;inset:0;z-index:9999;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+#standby.show{display:flex}
+#sb-clock{font-size:min(22vw,150px);font-weight:100;color:rgba(255,255,255,.85);letter-spacing:-4px;font-variant-numeric:tabular-nums}
+#sb-date{font-size:1rem;color:rgba(255,255,255,.28);margin-top:6px;letter-spacing:1px;text-transform:uppercase}
+#sb-wx{font-size:1rem;color:rgba(255,255,255,.18);margin-top:20px}
+</style>
+</head>
+<body>
+<div class="root">
+  <header>
+    <div class="hdr-left">
+      <div class="clock" id="clock">--:--</div>
+      <div class="hdr-date" id="hdr-date">–</div>
+    </div>
+    <div class="hdr-right">
+      <div class="status-row">
+        <div class="status-dot" id="status-dot"></div>
+        <span style="font-size:.65rem;color:rgba(255,255,255,.3)" id="status-lbl">Verbinden…</span>
+      </div>
+      <div class="wx-badge" id="wx-badge">
+        <div class="wx-ico" id="wx-ico">🌤</div>
+        <div class="wx-temp" id="wx-temp">–°</div>
+        <div class="wx-desc" id="wx-desc">–</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Lichter Panel -->
+    <div class="panel">
+      <div class="panel-title">💡 Lichter</div>
+      <div class="lt-grid" id="lt-grid"></div>
+    </div>
+
+    <!-- Musik Panel -->
+    <div class="panel">
+      <div class="panel-title">🎵 Musik</div>
+      <div class="media-now">
+        <div class="media-art" id="media-art">🎵</div>
+        <div class="media-info">
+          <div class="media-title" id="media-title">Bereit</div>
+          <div class="media-sub" id="media-sub">Almando Wohnzimmer</div>
+          <div class="media-ctrl">
+            <button class="mc-btn" id="mc-prev" title="Zurück"><svg viewBox="0 0 24 24"><path d="M19 20 9 12l10-8v16z"/><rect x="5" y="4" width="2" height="16"/></svg></button>
+            <button class="mc-btn mc-play" id="mc-play" title="Play/Pause"><svg id="mc-play-ico" viewBox="0 0 24 24"><path d="M8 5.5v13L19 12z"/></svg></button>
+            <button class="mc-btn" id="mc-stop" title="Stop"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <!-- Almando Volume -->
+      <div>
+        <div class="vol-lbl" style="margin-bottom:5px">Almando Lautstärke</div>
+        <div class="vol-row">
+          <span style="font-size:.8rem">🔈</span>
+          <div class="vol-bar" id="alm-vol-bar">
+            <div class="vol-fill" id="alm-vol-fill"></div>
+          </div>
+          <span class="vol-pct" id="alm-vol-pct">–%</span>
+        </div>
+      </div>
+      <!-- Radio Buttons -->
+      <div class="panel-title" style="margin-top:4px">📻 Radio</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="radio-btns"></div>
+    </div>
+
+    <!-- Wetter Panel -->
+    <div class="panel">
+      <div class="panel-title">🌤 Wetter</div>
+      <div class="hourly-strip" id="hourly-strip"></div>
+      <div class="forecast-grid" id="forecast-grid"></div>
+    </div>
+
+    <!-- Szenen Panel -->
+    <div class="panel" style="grid-column:1/3">
+      <div class="panel-title">⚡ Szenen</div>
+      <div class="sc-grid" id="sc-grid"></div>
+    </div>
+
+    <!-- Grundriss Panel -->
+    <div class="panel" style="padding:14px">
+      <div class="panel-title">🏠 Grundriss</div>
+      <svg id="fp-svg" viewBox="0 0 520 380" style="width:100%;flex:1;min-height:0" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Room glow gradients -->
+          <radialGradient id="rg-wz" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse" fx="50%" fy="50%">
+            <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="rg-kue" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="rg-bad" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#0a84ff" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#0a84ff" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="rg-buro" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#30d158" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#30d158" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- Floor plan rooms -->
+        <!-- Wohnzimmer (large, left) -->
+        <rect x="10" y="10" width="240" height="180" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <circle id="glow-wz" cx="130" cy="100" r="90" fill="url(#rg-wz)" opacity="0" style="transition:opacity 1s"/>
+        <text x="130" y="96" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">WOHNZIMMER</text>
+        <text id="fp-wz-st" x="130" y="110" text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
+        <!-- Küche (top right) -->
+        <rect x="260" y="10" width="150" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <circle id="glow-kue" cx="335" cy="70" r="60" fill="url(#rg-kue)" opacity="0" style="transition:opacity 1s"/>
+        <text x="335" y="66" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">KÜCHE</text>
+        <text id="fp-kue-st" x="335" y="80" text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
+        <!-- Bad (mid right) -->
+        <rect x="420" y="10" width="90" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <circle id="glow-bad" cx="465" cy="70" r="44" fill="url(#rg-bad)" opacity="0" style="transition:opacity 1s"/>
+        <text x="465" y="66" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">BAD</text>
+        <text id="fp-bad-st" x="465" y="79" text-anchor="middle" fill="rgba(10,132,255,0)" font-size="7" font-family="-apple-system,sans-serif">Aus</text>
+        <!-- Gang (horizontal) -->
+        <rect x="10" y="200" width="240" height="50" rx="4" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/>
+        <text x="130" y="230" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="8" font-family="-apple-system,sans-serif">GANG</text>
+        <!-- Büro (bottom left) -->
+        <rect x="10" y="260" width="160" height="110" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <circle id="glow-buro" cx="90" cy="315" r="55" fill="url(#rg-buro)" opacity="0" style="transition:opacity 1s"/>
+        <text x="90" y="311" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">BÜRO</text>
+        <text id="fp-buro-st" x="90" y="325" text-anchor="middle" fill="rgba(48,209,88,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
+        <!-- Schlafzimmer (bottom right) -->
+        <rect x="260" y="140" width="250" height="230" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <text x="385" y="258" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">SCHLAFZIMMER</text>
+        <!-- Light dots -->
+        <circle id="fp-dot-wz"   cx="130" cy="80"  r="5" fill="rgba(255,159,10,.2)" stroke="rgba(255,159,10,.4)" stroke-width="1" style="transition:all .5s"/>
+        <circle id="fp-dot-kue"  cx="335" cy="50"  r="5" fill="rgba(255,159,10,.2)" stroke="rgba(255,159,10,.4)" stroke-width="1" style="transition:all .5s"/>
+        <circle id="fp-dot-bad"  cx="465" cy="50"  r="4" fill="rgba(10,132,255,.2)" stroke="rgba(10,132,255,.4)"  stroke-width="1" style="transition:all .5s"/>
+        <circle id="fp-dot-buro" cx="90"  cy="295" r="4" fill="rgba(48,209,88,.2)"  stroke="rgba(48,209,88,.4)"  stroke-width="1" style="transition:all .5s"/>
+      </svg>
+    </div>
+  </main>
+
+  <footer>
+    <div class="ft-info" id="ft-info">autoflow-lab · Home</div>
+    <div class="ft-btns">
+      <button class="ft-btn" id="ft-reload">↻ Reload</button>
+      <button class="ft-btn" id="ft-fullscreen">⛶ Vollbild</button>
+      <button class="ft-btn danger" id="ft-alloff">🌙 Alles aus</button>
+    </div>
+  </footer>
+</div>
+
+<div id="standby">
+  <div id="sb-clock">--:--</div>
+  <div id="sb-date"></div>
+  <div id="sb-wx"></div>
+</div>
+<div id="toast"></div>
+
+<script>
+const HA='http://192.168.1.123:8123';
+const LS_KEY='wz4';
+const WC={'0':'☀️','1':'🌤','2':'⛅','3':'☁️','45':'🌫','48':'🌫','51':'🌦','53':'🌦','55':'🌧','61':'🌧','63':'🌧','65':'🌧','71':'❄️','73':'❄️','75':'❄️','80':'🌦','81':'🌧','82':'🌩','95':'⛈','99':'⛈'};
+const DAYS=['So','Mo','Di','Mi','Do','Fr','Sa'];
+const MONTHS=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+
+let _S={}, _wx=null;
+
+const LIGHTS=[
+  {id:'light.h618a',     name:'Sofa', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'light.h618a_2',   name:'Küche', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'light.hue_play_l',name:'Büro', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'light.hue_iris',  name:'Iris', svg:'<circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9" opacity=".3"/>'},
+  {id:'light.gang_og_licht',name:'Gang OG', svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'},
+  {id:'light.gang_eg_licht',name:'Gang EG', svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'},
+  {id:'switch.shelly1_98cdac0ca9b2',name:'Wand', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'light.h61e1',     name:'WZ Wand', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+];
+
+const SCENES=[
+  {id:'abend',label:'Abend',sub:'Warm & gemütlich',bg:'linear-gradient(135deg,#1a1200,#2d1f00)',action:()=>{
+    svc('light','turn_on',{entity_id:'light.h618a',brightness_pct:40,rgb_color:[255,128,30]});
+    svc('light','turn_on',{entity_id:'light.h618a_2',brightness_pct:22,rgb_color:[255,70,15]});
+    toast('🌙 Abend-Modus');
+  }},
+  {id:'hell',label:'Hell',sub:'100% Tageslicht',bg:'linear-gradient(135deg,#1a1400,#2a2000)',action:()=>{
+    LIGHTS.filter(l=>l.id.startsWith('light')).forEach(l=>svc('light','turn_on',{entity_id:l.id,brightness_pct:100,color_temp_kelvin:3500}));
+    toast('☀️ Volle Helligkeit');
+  }},
+  {id:'film',label:'Film',sub:'Kino-Modus',bg:'linear-gradient(135deg,#000d1a,#001833)',action:()=>{
+    LIGHTS.filter(l=>l.id.startsWith('light')).forEach(l=>svc('light','turn_off',{entity_id:l.id}));
+    svc('media_player','turn_on',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});
+    toast('🎬 Film-Modus');
+  }},
+  {id:'off',label:'Alles aus',sub:'Alle Geräte aus',bg:'linear-gradient(135deg,#180000,#240808)',action:()=>{
+    LIGHTS.forEach(l=>svc(l.id.split('.')[0],'turn_off',{entity_id:l.id}));
+    svc('media_player','turn_off',{entity_id:'media_player.wohnzimmer_alm'});
+    svc('media_player','turn_off',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});
+    svc('media_player','turn_off',{entity_id:'media_player.nest'});
+    toast('🌙 Alles aus');
+  }},
+];
+
+const RADIO=[
+  {n:'SRF 1', u:'http://stream.srg-ssr.ch/m/drs1/mp3_128'},
+  {n:'SRF 3', u:'http://stream.srg-ssr.ch/m/drs3/mp3_128'},
+  {n:'Energy', u:'https://energyzurich.ice.infomaniak.ch/energyzurich-high.mp3'},
+  {n:'Radio24', u:'https://radio24.ice.infomaniak.ch/radio24-high.mp3'},
+];
+
+function getTok(){try{const r=localStorage.getItem(LS_KEY);if(!r)return null;const p=JSON.parse(r);return p?.access_token||p;}catch{return null;}}
+function svc(domain,service,data){const tok=getTok();if(!tok)return;fetch(HA+`/api/services/${domain}/${service}`,{method:'POST',headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify(data)}).then(()=>setTimeout(fetchStates,600));}
+function st(id){return _S[id]?.state||'off';}
+function at(id,k){return _S[id]?.attributes?.[k];}
+
+function toast(msg,ms=2500){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),ms);}
+
+// Build lights
+function buildLights(){
+  const g=document.getElementById('lt-grid');
+  g.innerHTML=LIGHTS.map((l,i)=>`
+    <div class="lt" id="ip-lt-${i}" data-id="${l.id}">
+      <div class="lt-ico" id="ip-ico-${i}">
+        <svg viewBox="0 0 24 24">${l.svg}</svg>
+      </div>
+      <div class="lt-name">${l.name}</div>
+      <div class="lt-st" id="ip-st-${i}">Aus</div>
+    </div>`).join('');
+  LIGHTS.forEach((l,i)=>{
+    document.getElementById('ip-lt-'+i).addEventListener('click',()=>{
+      const on=st(l.id)==='on';
+      const domain=l.id.split('.')[0];
+      svc(domain,on?'turn_off':'turn_on',{entity_id:l.id});
+      // Optimistic
+      applyLight(i,!on,null);
+      toast((on?'Aus: ':'An: ')+l.name);
+    });
+  });
+}
+
+function applyLight(i,on,lc){
+  const el=document.getElementById('ip-lt-'+i);
+  const ico=document.getElementById('ip-ico-'+i);
+  const st=document.getElementById('ip-st-'+i);
+  if(!el)return;
+  const c=lc||'255,159,10';
+  el.style.background=on?`linear-gradient(145deg,rgb(${c.split(',').map(v=>Math.round(+v*.12)).join(',')}),rgb(${c.split(',').map(v=>Math.round(+v*.2)).join(',')}))`:'';
+  el.style.borderTopColor=on?`rgba(${c},.3)`:'';
+  el.style.boxShadow=on?`0 0 18px rgba(${c},.15)`:''
+  const sv=ico?.querySelector('svg');
+  if(sv)sv.style.stroke=on?`rgb(${c})`:'rgba(255,255,255,.4)';
+  if(ico)ico.style.background=on?`rgba(${c},.18)`:'rgba(255,255,255,.08)';
+  if(st){
+    const s=_S[LIGHTS[i].id];
+    const bri=s?Math.round((s.attributes?.brightness||0)/2.55):0;
+    st.textContent=on?(bri>0?bri+'%':'An'):'Aus';
+    st.style.color=on?`rgba(${c},.8)`:'rgba(255,255,255,.35)';
+  }
+}
+
+// Build scenes
+function buildScenes(){
+  const g=document.getElementById('sc-grid');
+  g.innerHTML=SCENES.map((s,i)=>`
+    <button class="sc" id="sc-${i}" style="background:${s.bg}">
+      <span>${s.label}</span>
+      <small>${s.sub}</small>
+    </button>`).join('');
+  SCENES.forEach((s,i)=>{
+    document.getElementById('sc-'+i).addEventListener('click',()=>{s.action();});
+  });
+}
+
+// Build radio
+function buildRadio(){
+  const g=document.getElementById('radio-btns');
+  g.innerHTML=RADIO.map((r,i)=>`
+    <button id="rb-${i}" style="padding:6px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);font-size:.65rem;font-weight:600;cursor:pointer;transition:background .2s">${r.n}</button>
+  `).join('');
+  RADIO.forEach((r,i)=>{
+    document.getElementById('rb-'+i).addEventListener('click',()=>{
+      svc('media_player','play_media',{entity_id:'media_player.wohnzimmer_alm',media_content_id:r.u,media_content_type:'audio/mpeg'});
+      toast('📻 '+r.n);
+      RADIO.forEach((_,j)=>{
+        const b=document.getElementById('rb-'+j);
+        if(b){b.style.background=j===i?'rgba(10,132,255,.2)':'rgba(255,255,255,.05)';b.style.color=j===i?'#0a84ff':'rgba(255,255,255,.6)';b.style.borderColor=j===i?'rgba(10,132,255,.4)':'rgba(255,255,255,.1)';}
+      });
+    });
+  });
+}
+
+// Update media
+function updateMedia(){
+  const alm=_S['media_player.wohnzimmer_alm'];
+  if(!alm)return;
+  const title=alm.attributes?.media_title||alm.attributes?.app_name||'–';
+  const sub=alm.attributes?.media_artist||alm.state;
+  document.getElementById('media-title').textContent=title;
+  document.getElementById('media-sub').textContent=sub;
+  const vol=Math.round((alm.attributes?.volume_level||0.4)*100);
+  document.getElementById('alm-vol-fill').style.width=vol+'%';
+  document.getElementById('alm-vol-pct').textContent=vol+'%';
+  const ico=document.getElementById('mc-play-ico');
+  if(ico)ico.innerHTML=alm.state==='playing'?'<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>':'<path d="M8 5.5v13L19 12z"/>';
+}
+
+// Update lights
+function updateLights(){
+  LIGHTS.forEach((l,i)=>{
+    const s=_S[l.id];if(!s)return;
+    const on=s.state==='on';
+    const rgb=s.attributes?.rgb_color;
+    const lc=rgb?rgb.join(','):null;
+    applyLight(i,on,lc);
+  });
+}
+
+// Update system
+function updateSystem(count){
+  // sys elements may no longer exist (replaced by floorplan)
+  const sd=document.getElementById('status-dot');
+  const sl=document.getElementById('status-lbl');
+  if(sd)sd.className='status-dot';
+  if(sl)sl.textContent='Live';
+  updateFloorplan();
+}
+
+// Floorplan glow
+function updateFloorplan(){
+  const ROOMS=[
+    {glow:'rg-wz',  dot:'fp-dot-wz',  st:'fp-wz-st',  ids:['light.h618a'],           col:'255,159,10', tcol:'rgba(255,159,10,1)'},
+    {glow:'rg-kue', dot:'fp-dot-kue', st:'fp-kue-st', ids:['light.h618a_2'],          col:'255,159,10', tcol:'rgba(255,159,10,1)'},
+    {glow:'rg-bad', dot:'fp-dot-bad', st:'fp-bad-st', ids:['light.color_temperature_light_1'], col:'10,132,255', tcol:'rgba(10,132,255,1)'},
+    {glow:'rg-buro',dot:'fp-dot-buro',st:'fp-buro-st',ids:['light.hue_play_l'],        col:'48,209,88',  tcol:'rgba(48,209,88,1)'},
+  ];
+  ROOMS.forEach(room=>{
+    const on=room.ids.some(id=>_S[id]?.state==='on');
+    // Gradient glow
+    const rg=document.getElementById(room.glow);
+    if(rg){
+      rg.querySelectorAll('stop')[0].setAttribute('stop-opacity',on?'0.55':'0');
+      rg.querySelectorAll('stop')[1].setAttribute('stop-opacity','0');
+    }
+    // Glow circle opacity
+    const gc=document.getElementById('glow-'+room.glow.replace('rg-',''));
+    if(gc)gc.setAttribute('opacity',on?'1':'0');
+    // Dot
+    const dot=document.getElementById(room.dot);
+    if(dot){
+      dot.setAttribute('fill',on?`rgba(${room.col},.7)`:`rgba(${room.col},.15)`);
+      dot.setAttribute('stroke',on?`rgba(${room.col},1)`:`rgba(${room.col},.3)`);
+      dot.setAttribute('r',on?'7':'5');
+    }
+    // Status text
+    const stEl=document.getElementById(room.st);
+    if(stEl){
+      const bri=room.ids.map(id=>Math.round((_S[id]?.attributes?.brightness||0)/2.55)).find(b=>b>0)||0;
+      stEl.textContent=on?(bri>0?bri+'%':'An'):'Aus';
+      stEl.setAttribute('fill',on?room.tcol:'rgba(255,255,255,0.2)');
+    }
+  });
+}
+
+// Fetch states
+async function fetchStates(){
+  const tok=getTok();if(!tok)return;
+  try{
+    const r=await fetch(HA+'/api/states',{headers:{'Authorization':'Bearer '+tok}});
+    if(r.ok){
+      const arr=await r.json();
+      arr.forEach(s=>{_S[s.entity_id]=s;});
+      updateLights();
+      updateMedia();
+      updateSystem(arr.length);
+    }
+  }catch(e){
+    document.getElementById('status-dot').className='status-dot offline';
+    document.getElementById('status-lbl').textContent='Offline';
+  }
+}
+
+// Almando volume bar click
+document.getElementById('alm-vol-bar')?.addEventListener('click',e=>{
+  const bar=e.currentTarget;
+  const pct=Math.round((e.offsetX/bar.offsetWidth)*100);
+  svc('media_player','volume_set',{entity_id:'media_player.wohnzimmer_alm',volume_level:pct/100});
+  document.getElementById('alm-vol-fill').style.width=pct+'%';
+  document.getElementById('alm-vol-pct').textContent=pct+'%';
+});
+
+// Media controls
+document.getElementById('mc-play')?.addEventListener('click',()=>svc('media_player','media_play_pause',{entity_id:'media_player.wohnzimmer_alm'}));
+document.getElementById('mc-stop')?.addEventListener('click',()=>svc('media_player','media_stop',{entity_id:'media_player.wohnzimmer_alm'}));
+document.getElementById('mc-prev')?.addEventListener('click',()=>svc('media_player','media_previous_track',{entity_id:'media_player.wohnzimmer_alm'}));
+
+// Footer
+document.getElementById('ft-reload')?.addEventListener('click',()=>location.reload());
+document.getElementById('ft-fullscreen')?.addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen();});
+document.getElementById('ft-alloff')?.addEventListener('click',()=>{SCENES.find(s=>s.id==='off')?.action();});
+
+// Clock
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('hdr-date').textContent=DAYS[now.getDay()]+', '+now.getDate()+'. '+MONTHS[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('sb-clock').textContent=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('sb-date').textContent=DAYS[now.getDay()]+' · '+now.getDate()+'. '+MONTHS[now.getMonth()];
+}
+
+// Weather
+const WTX={'0':'Klar','1':'Leicht bewölkt','2':'Bewölkt','3':'Bedeckt','45':'Nebel','51':'Leichter Sprühregen','61':'Leichter Regen','63':'Regen','80':'Regenschauer','95':'Gewitter'};
+async function fetchWeather(){
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.170&longitude=8.783&current=temperature_2m,apparent_temperature,weather_code,is_day&hourly=temperature_2m,weather_code,precipitation_probability&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max&timezone=Europe%2FZurich&forecast_days=7&models=best_match');
+    const d=await r.json();
+    _wx=d;
+    const c=d.current;
+    const t=Math.round(c.temperature_2m);
+    const code=c.weather_code;
+    const ico=WC[String(code)]||'🌡';
+    document.getElementById('wx-ico').textContent=ico;
+    document.getElementById('wx-temp').textContent=t+'°';
+    document.getElementById('wx-desc').textContent=WTX[String(code)]||'–';
+    document.getElementById('sb-wx').textContent=t+'° · '+(WTX[String(code)]||'');
+    // Hourly
+    const nowH=new Date().getHours();
+    const hs=document.getElementById('hourly-strip');
+    hs.innerHTML=d.hourly.temperature_2m.slice(nowH,nowH+6).map((temp,i)=>{
+      const h=(nowH+i)%24;
+      const hcode=d.hourly.weather_code[nowH+i]??0;
+      return`<div class="hh-item"><div class="hh-t">${String(h).padStart(2,'0')}:00</div><div class="hh-ico">${WC[String(hcode)]||'🌡'}</div><div class="hh-temp">${Math.round(temp)}°</div></div>`;
+    }).join('');
+    // Forecast
+    const fg=document.getElementById('forecast-grid');
+    fg.innerHTML=d.daily.temperature_2m_max.slice(0,7).map((hi,i)=>{
+      const lo=d.daily.temperature_2m_min[i];
+      const dcode=d.daily.weather_code[i]??0;
+      const date=new Date();date.setDate(date.getDate()+i);
+      const lbl=i===0?'Heute':i===1?'Morgen':DAYS[date.getDay()];
+      const prec=d.daily.precipitation_probability_max[i]??0;
+      return`<div class="fc-day"><div class="fc-lbl">${lbl}</div><div class="fc-ico">${WC[String(dcode)]||'🌡'}</div><div class="fc-hi">${Math.round(hi)}°</div><div class="fc-lo">${Math.round(lo)}°</div>${prec>10?`<div class="fc-prec">${prec}%</div>`:''}</div>`;
+    }).join('');
+  }catch(e){console.warn('Weather error',e);}
+}
+
+// Auth check
+function getTok(){try{const r=localStorage.getItem(LS_KEY);if(!r)return null;const p=JSON.parse(r);return p?.access_token||p;}catch{return null;}}
+async function handleCallback(){
+  const params=new URLSearchParams(location.search);
+  const code=params.get('code');
+  if(code){
+    try{
+      const r=await fetch(HA+'/auth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'grant_type=authorization_code&code='+code+'&client_id='+encodeURIComponent(location.origin+'/')+'&redirect_uri='+encodeURIComponent(location.origin+location.pathname)});
+      if(r.ok){const tok=await r.json();localStorage.setItem(LS_KEY,JSON.stringify(tok));history.replaceState({},'',location.pathname);}
+    }catch(e){console.error(e);}
+  }
+}
+function checkAuth(){
+  if(!getTok()){
+    window.location.href=HA+'/auth/authorize?response_type=code&client_id='+encodeURIComponent(location.origin+'/')+'&redirect_uri='+encodeURIComponent(location.href);
+    return false;
+  }
+  return true;
+}
+
+// Standby
+(function(){
+  const sb=document.getElementById('standby');
+  let _idle=null;
+  const IDLE_MS=4*60*1000;
+  function resetIdle(){clearTimeout(_idle);if(sb.classList.contains('show')){sb.classList.remove('show');return;}_idle=setTimeout(()=>sb.classList.add('show'),IDLE_MS);}
+  ['touchstart','pointerdown','click'].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
+  sb.addEventListener('click',()=>{sb.classList.remove('show');resetIdle();});
+  resetIdle();
+})();
+
+async function boot(){
+  await handleCallback();
+  if(!checkAuth())return;
+  buildLights();
+  buildScenes();
+  buildRadio();
+  updateClock();
+  setInterval(updateClock,30000);
+  fetchStates();
+  setInterval(fetchStates,5000);
+  fetchWeather();
+  setInterval(fetchWeather,600000);
+}
+boot();
+</script>
+</body>
+</html>
