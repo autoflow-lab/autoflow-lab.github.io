@@ -797,6 +797,15 @@ audio{display:none}
 /* Workflow */
 .wf-demo{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:var(--r);padding:32px;border:1px solid var(--border);margin:44px 0;position:relative;overflow:hidden}
 .wf-demo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(112,80,255,.06),transparent 70%);pointer-events:none}
+/* Calendar Widget */
+.cal-event{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:10px;margin-bottom:6px;background:var(--bg2);transition:background .2s}
+.cal-event:hover{background:var(--bg3)}
+.cal-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.cal-info{flex:1;min-width:0}
+.cal-title{font-size:.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-time{font-size:.63rem;color:var(--text3);margin-top:2px}
+.cal-badge{font-size:.58rem;font-weight:800;padding:2px 7px;border-radius:8px;flex-shrink:0;align-self:center}
+
 /* Freelancer Comparison Table */
 .fc-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.82rem;min-width:520px}
 .fc-table th,.fc-table td{padding:11px 16px;text-align:center;border-bottom:1px solid var(--border)}
@@ -1508,6 +1517,18 @@ input[type=range]{touch-action:pan-x}
           <div class="en-source solar on" id="en-src-solar" onclick="toggleEnSource('solar')">☀️ <span id="solar-lbl">Solar: 1.8 kWh</span></div>
           <div class="en-source grid on" id="en-src-grid" onclick="toggleEnSource('grid')">🔌 <span id="grid-lbl">Netz: 0.6 kWh</span></div>
           <div class="en-source" id="en-src-bat" onclick="toggleEnSource('bat')" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid transparent;text-align:center;cursor:pointer;font-size:.68rem;font-weight:600;transition:all .2s;opacity:.4">🔋 Akku</div>
+        </div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="dash-card reveal reveal-delay-3" id="cal-card">
+        <div class="dash-card-tag" id="cal-tag">📅 Kalender</div>
+        <div class="dash-card-title" id="cal-ttl">Nächste Termine</div>
+        <div id="cal-events"></div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px">
+          <div id="cal-today-dot" style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0"></div>
+          <span style="font-size:.68rem;color:var(--text3)" id="cal-today-lbl">Heute</span>
+          <span style="font-size:.72rem;font-weight:600;color:var(--text2);margin-left:auto" id="cal-today-date"></span>
         </div>
       </div>
 
@@ -3637,6 +3658,7 @@ const T={
     wHum:'Luftfeuchtigkeit',wWind:'Wind',wFeels:'Gefühlt',wRain:'Regenwahrsch.',
     cardNewsTag:'News · Deine Region',cardNewsTtl:'Aktuelle Nachrichten',
     cardClimateTag:'🌡 Klima',cardClimateTtl:'Thermostat',climTarget:'Sollwert',modeHeat:'Heizen',modeCool:'Kühlen',cRoomLbl:'Raumtemp.:',
+    cardCalTag:'📅 Kalender',cardCalTtl:'Nächste Termine',
     cardLightsTag:'💡 Beleuchtung',cardLightsTtl:'Lichtsteuerung',
     mlLiving:'Wohnzimmer',mlBed1:'Schlafzimmer',mlKitchen:'Küche',mlBath:'Bad',mlOffice:'Büro',mlHall:'Flur',
     cardEnergyTag:'⚡ Energie',cardEnergyTtl:'Verbrauchsübersicht',solarLbl:'Solar: 1.8 kWh',gridLbl:'Netz: 0.6 kWh',
@@ -3729,6 +3751,7 @@ const T={
     wHum:'Humidity',wWind:'Wind',wFeels:'Feels like',wRain:'Rain chance',
     cardNewsTag:'News · Your Region',cardNewsTtl:'Latest News',
     cardClimateTag:'🌡 Climate',cardClimateTtl:'Thermostat',climTarget:'Target',modeHeat:'Heat',modeCool:'Cool',cRoomLbl:'Room temp.:',
+    cardCalTag:'📅 Calendar',cardCalTtl:'Upcoming Events',
     cardLightsTag:'💡 Lighting',cardLightsTtl:'Light Control',
     mlLiving:'Living Room',mlBed1:'Bedroom',mlKitchen:'Kitchen',mlBath:'Bathroom',mlOffice:'Office',mlHall:'Hallway',
     cardEnergyTag:'⚡ Energy',cardEnergyTtl:'Usage Overview',solarLbl:'Solar: 1.8 kWh',gridLbl:'Grid: 0.6 kWh',
@@ -3829,6 +3852,8 @@ function applyLang(){
   setText('card-climate-tag',t.cardClimateTag);setText('card-climate-ttl',t.cardClimateTtl);
   setText('cl-target-lbl',t.climTarget);setText('mode-heat-lbl',t.modeHeat);setText('mode-cool-lbl',t.modeCool);setText('c-room-lbl',t.cRoomLbl);
   setText('card-lights-tag',t.cardLightsTag);setText('card-lights-ttl',t.cardLightsTtl);
+  setText('cal-tag',t.cardCalTag);setText('cal-ttl',t.cardCalTtl);
+  document.dispatchEvent(new Event('langChange'));
   setText('ml-living',t.mlLiving);setText('ml-bed1',t.mlBed1);setText('ml-kitchen',t.mlKitchen);
   setText('ml-bath',t.mlBath);setText('ml-office',t.mlOffice);setText('ml-hall',t.mlHall);
   setText('card-energy-tag',t.cardEnergyTag);setText('card-energy-ttl',t.cardEnergyTtl);
@@ -3909,6 +3934,43 @@ function applyLang(){
   // Reload news in correct lang
   loadNews();
 }
+
+// ── CALENDAR WIDGET ──
+(()=>{
+  const COLORS_CAL=['#0071e3','#34c759','#ff9f0a','#af52de','#ff3b30','#5ac8fa'];
+  function buildCalEvents(){
+    const cont=document.getElementById('cal-events');
+    const todayLbl=document.getElementById('cal-today-lbl');
+    const todayDate=document.getElementById('cal-today-date');
+    if(!cont)return;
+    const now=new Date();
+    const isDE=lang==='de';
+    if(todayDate)todayDate.textContent=now.toLocaleDateString(isDE?'de-DE':'en-GB',{weekday:'short',day:'numeric',month:'short'});
+    if(todayLbl)todayLbl.textContent=isDE?'Heute':'Today';
+    // Simulated upcoming events (offsets in hours from now)
+    const events=[
+      {title:isDE?'Mülltonne rausstellen':'Put out trash',     offsetH:3,   dur:isDE?'In 3h':'In 3h',    cat:'home',   col:'#ff9f0a'},
+      {title:isDE?'Team-Meeting':'Team Meeting',               offsetH:18,  dur:isDE?'Morgen 9:00':'Tomorrow 9:00',cat:'work',   col:'#0071e3'},
+      {title:isDE?'Smart Home Update':'Smart Home Update',     offsetH:26,  dur:isDE?'Morgen 17:00':'Tomorrow 17:00',cat:'ha', col:'#34c759'},
+      {title:isDE?'Wochenmarkt':'Farmers Market',              offsetH:50,  dur:isDE?'Sa 10:00':'Sat 10:00',cat:'leisure',col:'#af52de'},
+    ];
+    const BADGE={home:isDE?'Zuhause':'Home',work:isDE?'Arbeit':'Work',ha:'Home Assistant',leisure:isDE?'Freizeit':'Leisure'};
+    cont.innerHTML='';
+    events.forEach(ev=>{
+      const el=document.createElement('div');el.className='cal-event';
+      el.innerHTML=`<div class="cal-dot" style="background:${ev.col}"></div>
+        <div class="cal-info">
+          <div class="cal-title">${ev.title}</div>
+          <div class="cal-time">🕐 ${ev.dur}</div>
+        </div>
+        <div class="cal-badge" style="background:${ev.col}22;color:${ev.col}">${BADGE[ev.cat]||ev.cat}</div>`;
+      cont.appendChild(el);
+    });
+  }
+  buildCalEvents();
+  // Rebuild on language change
+  document.addEventListener('langChange',buildCalEvents);
+})();
 
 // ── INIT ──
 buildRoomList();buildEnergyBars();renderTrack();
