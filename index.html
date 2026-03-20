@@ -2043,18 +2043,29 @@ input[type=range]{touch-action:pan-x}
       <div class="tier-grid reveal">
         <div class="tier">
           <div class="tier-name" data-i="tierBasic">Basic</div>
-          <div class="tier-price"><span class="tier-price-val" id="p1-val" data-one="49" data-mo="29">€49</span> <small id="p1-unit" data-i="perProject">/ Projekt</small></div>
+          <div class="tier-price">
+            <span style="font-size:.8rem;color:var(--text2);text-decoration:line-through;margin-right:4px">€79</span>
+            <span class="tier-price-val" id="p1-val" data-one="49" data-mo="29">€49</span>
+            <small id="p1-unit" data-i="perProject">/ Projekt</small>
+            <span style="margin-left:6px;background:#ff3b30;color:#fff;font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:100px;vertical-align:middle">-38%</span>
+          </div>
           <div class="tier-desc" data-i="t1desc">Perfekt für den Einstieg</div>
           <ul class="tier-list">
             <li data-i="t1-1">Custom Lovelace Dashboard</li><li data-i="t1-2">Bis zu 5 Karten / Views</li>
             <li data-i="t1-3">Basis-Automationen</li><li data-i="t1-4">1 Revision</li><li data-i="t1-5">Lieferung in 48h</li>
           </ul>
           <button class="btn-tier" onclick="openFiverr()" data-i="orderNow">Jetzt bestellen</button>
+          <a href="/premium_template.html" target="_blank" style="display:block;text-align:center;margin-top:10px;font-size:.75rem;color:var(--accent);text-decoration:none;opacity:.8">👁 Live-Vorschau ansehen →</a>
         </div>
         <div class="tier featured">
           <div class="tier-pop" data-i="popular">Beliebt</div>
           <div class="tier-name" data-i="tierStd">Standard</div>
-          <div class="tier-price"><span class="tier-price-val" id="p2-val" data-one="99" data-mo="59">€99</span> <small id="p2-unit" data-i="perProject">/ Projekt</small></div>
+          <div class="tier-price">
+            <span style="font-size:.8rem;color:var(--text2);text-decoration:line-through;margin-right:4px">€149</span>
+            <span class="tier-price-val" id="p2-val" data-one="99" data-mo="59">€99</span>
+            <small id="p2-unit" data-i="perProject">/ Projekt</small>
+            <span style="margin-left:6px;background:#ff9f0a;color:#000;font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:100px;vertical-align:middle">BELIEBT</span>
+          </div>
           <div class="tier-desc" data-i="t2desc">Die vollständige Experience</div>
           <ul class="tier-list">
             <li data-i="t2-1">Vollständiges Dashboard</li><li data-i="t2-2">Interaktiver Grundriss</li>
@@ -2506,7 +2517,15 @@ input[type=range]{touch-action:pan-x}
     </button>
     <p id="demo-form-status" style="text-align:center;font-size:.82rem;color:#0071e3;min-height:22px"></p>
   </form>
-  <p style="margin-top:20px;font-size:.78rem;color:var(--text3,rgba(0,0,0,.35))">Oder direkt: <a href="mailto:autoflowlab@gmail.com" style="color:#0071e3;text-decoration:none">autoflowlab@gmail.com</a></p>
+  <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+    <a href="mailto:autoflowlab@gmail.com" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:100px;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.2);color:#0071e3;text-decoration:none;font-size:.8rem;font-weight:600">
+      ✉️ autoflowlab@gmail.com
+    </a>
+    <a href="https://wa.me/?text=Hallo!%20Ich%20habe%20euer%20Home%20Assistant%20Dashboard%20gesehen%20und%20bin%20interessiert." target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:100px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.25);color:#25d166;text-decoration:none;font-size:.8rem;font-weight:600">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+  </div>
 </div>
 
 <script>
@@ -2545,6 +2564,11 @@ document.getElementById('demo-contact-form')?.addEventListener('submit',async fu
   </div>
   <p class="ft-tagline" id="ft-tagline" data-i="ftTagline">Handcrafted Smart Home dashboards — no cloud, no subscription, just yours.</p>
   <div class="ft-copy" id="ft-copy">© 2026 autoflow-lab · Smart Home & KI Automation</div>
+  <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <a href="/demo.html" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;background:rgba(0,113,227,.12);border:1px solid rgba(0,113,227,.2);color:#0071e3;text-decoration:none;font-size:.72rem;font-weight:600">🏠 Live Demo</a>
+    <a href="/premium_template.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.2);color:#34c759;text-decoration:none;font-size:.72rem;font-weight:600">📦 Template Vorschau</a>
+    <a href="/ipad.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.2);color:#ff9f0a;text-decoration:none;font-size:.72rem;font-weight:600">📱 iPad Demo</a>
+  </div>
 </footer>
 
 <!-- GLOBAL MODE BANNER -->
@@ -2649,6 +2673,50 @@ function toggleTheme(){
   d.dataset.theme=dk?'light':'dark';
   document.getElementById('theme-btn').textContent=dk?'🌙':'☀️';
 }
+// ── Auto-scroll review carousel ────────────────────────────────────────────
+(function(){
+  const track=document.querySelector('.rev-track');
+  if(!track)return;
+  const items=track.querySelectorAll('.rev');
+  if(items.length<2)return;
+  let cur=0,timer=null,paused=false;
+  function goTo(i){
+    cur=(i+items.length)%items.length;
+    track.style.transform=`translateX(-${cur*100}%)`;
+    dots?.querySelectorAll('.rdot').forEach((d,j)=>d.classList.toggle('active',j===cur));
+  }
+  // Dots
+  const outer=document.querySelector('.rev-carousel-outer');
+  if(outer){
+    const dotWrap=document.createElement('div');
+    dotWrap.style.cssText='display:flex;justify-content:center;gap:8px;margin-top:16px';
+    items.forEach((_,i)=>{
+      const d=document.createElement('div');
+      d.className='rdot';
+      d.style.cssText=`width:6px;height:6px;border-radius:50%;background:var(--border2,rgba(0,0,0,.15));cursor:pointer;transition:all .3s;${i===0?'background:#0071e3;transform:scale(1.3)':''}`;
+      d.addEventListener('click',()=>{goTo(i);resetTimer();});
+      dotWrap.appendChild(d);
+    });
+    outer.appendChild(dotWrap);
+    var dots=dotWrap;
+    dotWrap.querySelectorAll('.rdot')[0].style.background='#0071e3';
+  }
+  // Set each item to 100% width
+  items.forEach(item=>{item.style.minWidth='100%';item.style.flex='0 0 100%';});
+  function resetTimer(){clearInterval(timer);if(!paused)timer=setInterval(()=>goTo(cur+1),4500);}
+  track.addEventListener('mouseenter',()=>{paused=true;clearInterval(timer);});
+  track.addEventListener('mouseleave',()=>{paused=false;resetTimer();});
+  // Touch swipe
+  let tx=0;
+  track.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;paused=true;clearInterval(timer);},{passive:true});
+  track.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>40)goTo(dx<0?cur+1:cur-1);
+    paused=false;resetTimer();
+  },{passive:true});
+  resetTimer();
+})();
+
 function toggleFaq(btn){
   const a=btn.closest('.faq-item').querySelector('.faq-a'),was=btn.classList.contains('open');
   document.querySelectorAll('.faq-q.open').forEach(b=>{b.classList.remove('open');b.closest('.faq-item').querySelector('.faq-a').classList.remove('open')});
@@ -3845,16 +3913,37 @@ function applyLang(){
 // ── INIT ──
 buildRoomList();buildEnergyBars();renderTrack();
 loadWeather();
-// Animate stats on load
-setTimeout(()=>{
-  const run=(el,target,suffix,dur)=>{let s=0;const step=()=>{s=Math.min(s+1,target);el.textContent=s+suffix;if(s<target)requestAnimationFrame(step)};requestAnimationFrame(step)};
-  const sp=$('s-proj');if(sp)run(sp,47,'+',1200);
-  const ss=$('s-stars');if(ss)run(ss,98,'%',1000);
-  const sd=$('s-del');if(sd)run(sd,48,'h',800);
-  const sp2=$('s-price');if(sp2)run(sp2,49,'€',600);
-  // Fix price display: show €49
-  setTimeout(()=>{const e=$('s-price');if(e)e.textContent='€49'},700);
-},400);
+// Animate stats — fires when scrolled into view (Intersection Observer)
+(()=>{
+  const STATS=[
+    {id:'s-proj', target:47, prefix:'',  suffix:'+', dur:1400},
+    {id:'s-stars',target:98, prefix:'',  suffix:'%', dur:1200},
+    {id:'s-del',  target:48, prefix:'',  suffix:'h', dur:900},
+    {id:'s-price',target:49, prefix:'€', suffix:'',  dur:800},
+  ];
+  function easeOut(t){return 1-Math.pow(1-t,3)}
+  function animateStat({id,target,prefix,suffix,dur}){
+    const el=$(id);if(!el||el._counted)return;el._counted=true;
+    const start=performance.now();
+    function step(now){
+      const p=Math.min((now-start)/dur,1);
+      const val=Math.round(easeOut(p)*target);
+      el.textContent=prefix+val+suffix;
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  const statsWrap=$('s-proj')?.closest('.hero-stats');
+  if(statsWrap&&'IntersectionObserver'in window){
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){STATS.forEach(animateStat);obs.disconnect()}});
+    },{threshold:0.4});
+    obs.observe(statsWrap);
+  } else {
+    // Fallback: fire after short delay
+    setTimeout(()=>STATS.forEach(animateStat),400);
+  }
+})();
 // ── LIVE CLOCK ──
 function updateClock(){
   const now=new Date();
