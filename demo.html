@@ -797,6 +797,22 @@ audio{display:none}
 /* Workflow */
 .wf-demo{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:var(--r);padding:32px;border:1px solid var(--border);margin:44px 0;position:relative;overflow:hidden}
 .wf-demo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(112,80,255,.06),transparent 70%);pointer-events:none}
+/* Freelancer Comparison Table */
+.fc-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.82rem;min-width:520px}
+.fc-table th,.fc-table td{padding:11px 16px;text-align:center;border-bottom:1px solid var(--border)}
+.fc-table th{font-size:.68rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);padding-bottom:14px}
+.fc-feature-col{text-align:left!important;color:var(--text2)!important;font-weight:500!important;text-transform:none!important;letter-spacing:0!important;font-size:.82rem!important}
+.fc-table td.fc-feature-col{color:var(--text);font-weight:500}
+.fc-us{background:rgba(0,113,227,.05);border-left:2px solid rgba(0,113,227,.25);border-right:2px solid rgba(0,113,227,.25)}
+.fc-table thead .fc-us{border-top:2px solid rgba(0,113,227,.3);border-radius:var(--rs) var(--rs) 0 0}
+.fc-table tbody tr:last-child .fc-us{border-bottom:2px solid rgba(0,113,227,.3)}
+.fc-badge{display:inline-block;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;padding:5px 14px;border-radius:20px;font-size:.72rem;font-weight:800;letter-spacing:.3px;margin-bottom:4px}
+.fc-check{color:var(--green);font-weight:800}
+.fc-cross{color:var(--text3);font-size:.78rem}
+.fc-val{font-size:.85rem}
+.fc-neutral{color:var(--text2);font-size:.78rem}
+[data-theme="dark"] .fc-us{background:rgba(0,113,227,.08)}
+
 /* Before / After examples */
 .ba-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:32px}
 .ba-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:var(--card)}
@@ -2059,6 +2075,39 @@ input[type=range]{touch-action:pan-x}
           <button class="btn-tier" onclick="openFiverr()" data-i="orderNow">Jetzt bestellen</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- FREELANCER COMPARISON -->
+  <div class="band" style="padding:72px 24px">
+    <div style="max-width:860px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="fcTitle">Alles inklusive — ehrlicher Vergleich</h2>
+      <p class="sec-sub sec-center reveal" data-i="fcSub">Was bekommst du wirklich für dein Geld?</p>
+      <div class="reveal" style="overflow-x:auto;margin-top:32px">
+        <table class="fc-table">
+          <thead>
+            <tr>
+              <th class="fc-feature-col" data-i="fcFeature">Leistung</th>
+              <th class="fc-us"><div class="fc-badge" data-i="fcUs">autoflow-lab</div></th>
+              <th data-i="fcFreelancer">Typischer<br>Freelancer</th>
+              <th data-i="fcAgency">Agentur /<br>Studio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td data-i="fcR1">Preis Dashboard</td>        <td class="fc-us fc-val">ab <strong>€49</strong></td><td class="fc-neutral">€80–200+</td><td class="fc-neutral">€500–2000+</td></tr>
+            <tr><td data-i="fcR2">Lieferzeit</td>             <td class="fc-us fc-val"><strong>24–48h</strong></td><td class="fc-neutral">1–3 Wochen</td><td class="fc-neutral">4–12 Wochen</td></tr>
+            <tr><td data-i="fcR3">Interaktiver Grundriss</td> <td class="fc-us"><span class="fc-check">✓</span></td><td><span class="fc-cross">✗</span></td><td class="fc-neutral">✓ <small>(teuer)</small></td></tr>
+            <tr><td data-i="fcR4">KI / N8N Integration</td>  <td class="fc-us"><span class="fc-check">✓</span></td><td><span class="fc-cross">selten</span></td><td class="fc-neutral">✓ <small>(teuer)</small></td></tr>
+            <tr><td data-i="fcR5">Video-Erklärung</td>        <td class="fc-us"><span class="fc-check">✓</span></td><td><span class="fc-cross">✗</span></td><td><span class="fc-cross">✗</span></td></tr>
+            <tr><td data-i="fcR6">Vollständiger Quellcode</td><td class="fc-us"><span class="fc-check">✓</span></td><td class="fc-neutral">teilweise</td><td><span class="fc-cross">✗</span></td></tr>
+            <tr><td data-i="fcR7">Revisionen</td>             <td class="fc-us fc-val"><strong>unbegrenzt</strong></td><td class="fc-neutral">1–2</td><td class="fc-neutral">2–3</td></tr>
+            <tr><td data-i="fcR8">Offline / Lokal</td>        <td class="fc-us"><span class="fc-check">✓ immer</span></td><td class="fc-neutral">teilweise</td><td class="fc-neutral">teilweise</td></tr>
+            <tr><td data-i="fcR9">5★ Bewertungen</td>         <td class="fc-us fc-val"><strong>47+</strong></td><td class="fc-neutral">variiert</td><td class="fc-neutral">n/a</td></tr>
+            <tr><td data-i="fcR10">Dokumentation</td>         <td class="fc-us"><span class="fc-check">✓ immer</span></td><td><span class="fc-cross">selten</span></td><td class="fc-neutral">manchmal</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="sec-sub sec-center reveal" style="margin-top:20px;font-size:.78rem" data-i="fcNote">* Alle Angaben Schätzwerte basierend auf Marktrecherche (Fiverr, Upwork, Agenturen DE/CH/AT)</p>
     </div>
   </div>
 
@@ -3582,6 +3631,11 @@ const T={
     ftTagline:'Handgefertigte Smart Home Dashboards — keine Cloud, kein Abo, ganz deins.',
     aiH1a:'Dein Alltag,',aiH1b:'vollautomatisch.',aiSub:'Lokale KI-Modelle, N8N Workflows, Chatbots — alles ohne Cloud-Abhängigkeit.',
     aiCta1:'🤖 KI-Projekt starten',aiCta2:'✉ Kostenlos anfragen',
+    fcTitle:'Alles inklusive — ehrlicher Vergleich',fcSub:'Was bekommst du wirklich für dein Geld?',
+    fcFeature:'Leistung',fcUs:'autoflow-lab',fcFreelancer:'Typischer Freelancer',fcAgency:'Agentur / Studio',
+    fcR1:'Preis Dashboard',fcR2:'Lieferzeit',fcR3:'Interaktiver Grundriss',fcR4:'KI / N8N Integration',
+    fcR5:'Video-Erklärung',fcR6:'Vollständiger Quellcode',fcR7:'Revisionen',fcR8:'Offline / Lokal',
+    fcR9:'5★ Bewertungen',fcR10:'Dokumentation',fcNote:'* Schätzwerte basierend auf Marktrecherche (Fiverr, Upwork, Agenturen DE/CH/AT)',
     baTitle:'Vorher & Nachher',baSub:'Echte Alltagssituationen — so verändert KI-Automation dein Leben',
     aiSrvTtl:'Was ich anbiete',aiSrvSub:'Alles lokal — keine Daten in der Cloud, kein Abo',
     ais1t:'Lokale Sprachsteuerung',ais1d:'Whisper + Ollama — komplett lokal, ohne Google/Alexa.',
@@ -3669,6 +3723,11 @@ const T={
     ftTagline:'Handcrafted Smart Home dashboards — no cloud, no subscription, just yours.',
     aiH1a:'Your daily life,',aiH1b:'fully automated.',aiSub:'Local AI models, N8N workflows, chatbots — zero cloud dependency.',
     aiCta1:'🤖 Start AI Project',aiCta2:'✉ Free Consultation',
+    fcTitle:'All-Inclusive — Honest Comparison',fcSub:'What do you really get for your money?',
+    fcFeature:'Feature',fcUs:'autoflow-lab',fcFreelancer:'Typical Freelancer',fcAgency:'Agency / Studio',
+    fcR1:'Dashboard Price',fcR2:'Delivery Time',fcR3:'Interactive Floor Plan',fcR4:'AI / N8N Integration',
+    fcR5:'Video Explanation',fcR6:'Full Source Code',fcR7:'Revisions',fcR8:'Offline / Local',
+    fcR9:'5★ Reviews',fcR10:'Documentation',fcNote:'* Estimates based on market research (Fiverr, Upwork, agencies DE/CH/AT)',
     baTitle:'Before & After',baSub:'Real everyday situations — how AI automation changes your life',
     aiSrvTtl:'What I Offer',aiSrvSub:'Everything local — no cloud data, no subscriptions',
     ais1t:'Local Voice Control',ais1d:'Whisper + Ollama — fully local, no Google/Alexa.',
