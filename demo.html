@@ -1192,6 +1192,32 @@ input[type=range]{touch-action:pan-x}
 </head>
 <body>
 
+<!-- SCARCITY BANNER -->
+<div id="scarcity-banner" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#ff6b00,#ff9f0a);color:#fff;text-align:center;padding:10px 40px 10px 16px;font-size:.82rem;font-weight:600;letter-spacing:.02em;box-shadow:0 2px 12px rgba(255,107,0,.35);transform:translateY(-100%);transition:transform .5s cubic-bezier(.34,1.56,.64,1)">
+  🔥 <span data-i18n="scarcity_text">Nur noch <strong>3 Plätze</strong> diese Woche verfügbar — jetzt sichern!</span>
+  <a href="#contact-section" style="margin-left:12px;background:rgba(0,0,0,.25);color:#fff;text-decoration:none;padding:3px 10px;border-radius:20px;font-size:.78rem">Anfragen →</a>
+  <button onclick="document.getElementById('scarcity-banner').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.8);font-size:1.1rem;cursor:pointer;line-height:1" aria-label="Schließen">×</button>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('scarcity-banner');
+  if(!b)return;
+  setTimeout(function(){ b.style.transform='translateY(0)'; }, 1800);
+  // push body down so content isn't hidden under banner
+  b.addEventListener('transitionend',function(){
+    if(b.style.transform==='translateY(0px)'||b.style.transform==='translateY(0)'){
+      document.body.style.paddingTop=(b.offsetHeight)+'px';
+    }
+  },{once:true});
+  // i18n: English
+  var lang=document.documentElement.lang||'de';
+  if(lang==='en'){
+    var el=b.querySelector('[data-i18n="scarcity_text"]');
+    if(el) el.innerHTML='Only <strong>3 slots</strong> left this week — grab yours now!';
+  }
+})();
+</script>
+
 <!-- PARTICLES -->
 <div class="hero-neon-grid" id="heroNeonGrid">
   <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
