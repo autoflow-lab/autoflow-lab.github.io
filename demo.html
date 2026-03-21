@@ -629,6 +629,7 @@ audio{display:none}
 .room-card:hover{background:var(--bg3);transform:translateY(-1px)}
 .room-card.on{border-color:var(--room-col,var(--accent));background:var(--bg2)}
 .room-card.on::before{content:'';position:absolute;inset:0;background:var(--room-col,var(--accent));opacity:.06;pointer-events:none}
+.room-card.on::after{content:'';position:absolute;inset:0;background:var(--ct-tint,transparent);pointer-events:none;border-radius:inherit;transition:background .4s ease}
 .rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .rc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .3s;background:var(--bg3)}
 .room-card.on .rc-icon{background:var(--room-col,var(--accent));box-shadow:0 2px 10px rgba(0,0,0,.15)}
@@ -3702,6 +3703,19 @@ function setScene(k){
 // Room icon + color helpers
 const ROOM_ICONS={bed1:'🛏',bed2:'🛏',living:'🛋',dining:'🍽',bath:'🚿',office:'💻'};
 const ROOM_COLS={warm:'#ffaa30',amber:'#ffc040',cool:'#60aaff',white:'#d8ecff',cyan:'#40ffee',blue:'#4080ff',purple:'#c060ff',pink:'#ff70cc',red:'#ff5040',green:'#60ee40'};
+// Color-temperature tints for room cards (subtle gradient when ON)
+const CT_TINT={
+  warm:  'linear-gradient(135deg,rgba(255,175,60,.10),rgba(255,140,20,.05))',
+  amber: 'linear-gradient(135deg,rgba(255,200,50,.12),rgba(255,160,30,.06))',
+  cool:  'linear-gradient(135deg,rgba(80,160,255,.10),rgba(60,140,255,.05))',
+  white: 'linear-gradient(135deg,rgba(220,240,255,.08),rgba(200,230,255,.04))',
+  cyan:  'linear-gradient(135deg,rgba(40,240,220,.10),rgba(20,200,200,.05))',
+  blue:  'linear-gradient(135deg,rgba(40,100,255,.12),rgba(20,80,220,.06))',
+  purple:'linear-gradient(135deg,rgba(180,80,255,.10),rgba(150,60,240,.05))',
+  pink:  'linear-gradient(135deg,rgba(255,100,200,.10),rgba(220,70,180,.05))',
+  red:   'linear-gradient(135deg,rgba(255,60,50,.10),rgba(220,40,30,.05))',
+  green: 'linear-gradient(135deg,rgba(80,240,80,.10),rgba(50,200,60,.05))',
+};
 function buildRoomList(){
   const cont=document.getElementById('room-list');if(!cont)return;cont.innerHTML='';
   Object.entries(rooms).forEach(([rid,r])=>{
@@ -3710,6 +3724,7 @@ function buildRoomList(){
     div.className='room-card'+(r.on?' on':'');
     div.id='rl-'+rid;
     div.style.setProperty('--room-col',r.on?col:'#0071e3');
+    div.style.setProperty('--ct-tint',r.on?(CT_TINT[r.color]||CT_TINT.warm):'transparent');
     const name=lang==='de'?r.name:(r.nameEn||r.name);
     const state=r.on?(lang==='de'?'Ein':'On'):(lang==='de'?'Aus':'Off');
     div.innerHTML=`<div class="rc-top">
@@ -3747,6 +3762,7 @@ applyRoom=function(rid){
   const col=ROOM_COLS[r.color]||'#0071e3';
   const card=document.getElementById('rl-'+rid);if(!card)return;
   card.style.setProperty('--room-col',r.on?col:'#0071e3');
+  card.style.setProperty('--ct-tint',r.on?(CT_TINT[r.color]||CT_TINT.warm):'transparent');
   card.className='room-card'+(r.on?' on':'');
   const s=document.getElementById('rcs-'+rid);
   if(s)s.textContent=r.on?(lang==='de'?'Ein':'On'):(lang==='de'?'Aus':'Off');
