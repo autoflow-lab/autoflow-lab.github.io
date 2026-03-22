@@ -1048,6 +1048,49 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 /* Smooth number transitions */
 .wsv,.hwtemp{transition:opacity .3s ease}
 
+
+/* Szenen-Karten im Light Mode */
+:root.light .sb2[data-s="abend"]{background:linear-gradient(135deg,#fff8e7,#fef0c7)!important}
+:root.light .sb2[data-s="hell"]{background:linear-gradient(135deg,#fffbf0,#fff3d0)!important}
+:root.light .sb2[data-s="film"]{background:linear-gradient(135deg,#f0f0f8,#e8e8f0)!important}
+:root.light .sb2[data-s="nacht"]{background:linear-gradient(135deg,#e8f0f8,#d8e8f4)!important}
+:root.light .sb2-n{color:#1c1c1e!important}
+:root.light .sb2-d{color:rgba(0,0,0,.45)!important}
+/* sb2 active-highlight in light mode */
+:root.light .sb2[style*="box-shadow"]{box-shadow:0 0 0 2px rgba(255,149,0,.5)!important}
+
+/* Licht-Tiles im Light Mode */
+:root.light .lt{background:#ffffff!important;box-shadow:0 1px 6px rgba(0,0,0,.08)!important}
+:root.light .lt.on .ltnm{color:rgba(0,0,0,.85)!important}
+:root.light .lt.on .ltv{color:rgba(0,0,0,.5)!important}
+:root.light .lt:not(.on) .ltnm{color:rgba(0,0,0,.55)!important}
+:root.light .lt:not(.on) .ltv{color:rgba(0,0,0,.3)!important}
+/* Light-Tile Schatten im Light Mode anders */
+:root.light .lt.on{box-shadow:0 4px 20px rgba(255,149,0,.2)!important}
+
+/* Nav im Light Mode */
+:root.light nav{
+  background:rgba(248,248,248,.95)!important;
+  border-top:1px solid rgba(0,0,0,.12)!important;
+  box-shadow:0 -4px 20px rgba(0,0,0,.06);
+}
+:root.light #conn-dot{background:var(--grn)!important}
+/* Theme toggle in light mode besser sichtbar */
+:root.light #theme-toggle{background:rgba(0,0,0,.15)!important}
+
+/* Musik Tab Light Mode */
+:root.light .np-t{color:#1c1c1e!important}
+:root.light .np-a{color:rgba(0,0,0,.5)!important}
+:root.light .bplay{
+  background:rgba(0,0,0,.08)!important;color:#1c1c1e;
+  box-shadow:0 4px 20px rgba(0,0,0,.12)!important;
+}
+:root.light .bsml{background:rgba(0,0,0,.06)!important;color:rgba(0,0,0,.55)!important}
+:root.light #sp-t{color:#1c1c1e!important}
+:root.light .sp-pl-item{background:rgba(0,0,0,.05)!important;border-color:rgba(0,0,0,.06)!important}
+:root.light .sp-pl-item span{color:#1c1c1e!important}
+:root.light #sp-dev{background:rgba(0,0,0,.07)!important;color:#1c1c1e!important}
+
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -4665,9 +4708,16 @@ function applyTheme(theme,save=false){
   if(ticksG){
     ticksG.querySelectorAll('line').forEach(l=>{
       const isMaj=parseFloat(l.getAttribute('stroke-width'))>=2;
-      l.setAttribute('stroke',isMaj?(theme==='light'?'rgba(0,0,0,.2)':'rgba(255,255,255,.25)'):(theme==='light'?'rgba(0,0,0,.07)':'rgba(255,255,255,.08)'));
+      l.setAttribute('stroke',isMaj?(theme==='light'?'rgba(0,0,0,.18)':'rgba(255,255,255,.25)'):(theme==='light'?'rgba(0,0,0,.06)':'rgba(255,255,255,.08)'));
     });
   }
+  // Clock ring colors
+  const secR=document.getElementById('sec-ring');
+  const minR=document.getElementById('min-ring');
+  const secD=document.getElementById('sec-dot');
+  if(secR)secR.setAttribute('stroke',theme==='light'?'rgba(255,149,0,.85)':'url(#secGrad)');
+  if(minR)minR.setAttribute('stroke',theme==='light'?'rgba(0,122,255,.65)':'url(#minGrad)');
+  if(secD)secD.setAttribute('fill',theme==='light'?'#ff9500':'#ff9f0a');
 }
 
 function checkAutoTheme(){
