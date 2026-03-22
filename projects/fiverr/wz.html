@@ -211,7 +211,7 @@ html,body{height:100%;background:var(--bg);
 .mini-eq.on i:nth-child(1){animation:eq .8s ease-in-out infinite}
 .mini-eq.on i:nth-child(2){animation:eq 1.1s .12s ease-in-out infinite}
 .mini-eq.on i:nth-child(3){animation:eq .9s .25s ease-in-out infinite}
-.mini-t{font-size:.72rem;font-weight:600;color:var(--on-txt);
+.mini-t{font-size:.73rem;font-weight:600;letter-spacing:.1px;color:var(--on-txt);
   flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mini-pause{color:var(--dim2);flex-shrink:0}
 .mini-pause svg{width:16px;height:16px}
@@ -369,7 +369,7 @@ html,body{height:100%;background:var(--bg);
 .hr.now .hrp{color:var(--on-txt)}
 
 /* ───────────── WEATHER STATS ───────────── */
-.wg{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.wg{display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden}
 .ws{
   display:flex;align-items:center;gap:10px;padding:12px 16px;
   border-right:1px solid var(--sep-line);
@@ -380,7 +380,7 @@ html,body{height:100%;background:var(--bg);
   width:36px;height:36px;border-radius:12px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
 }
-.wsv{font-size:.92rem;font-weight:700;color:var(--txt);letter-spacing:-.4px}
+.wsv{font-size:.95rem;font-weight:700;color:var(--txt);letter-spacing:-.5px}
 .wsl{font-size:.54rem;font-weight:500;color:var(--on-dim2);margin-top:2px;letter-spacing:.3px;text-transform:uppercase}
 .ws:nth-child(1) .wsi{background:rgba(251,191,36,.1)}
 .ws:nth-child(2) .wsi{background:rgba(56,189,248,.09)}
@@ -424,8 +424,8 @@ html,body{height:100%;background:var(--bg);
 .sb2:nth-child(2) .sb2-ico{animation-delay:.8s}
 .sb2:nth-child(3) .sb2-ico{animation-delay:1.6s}
 .sb2:nth-child(4) .sb2-ico{animation-delay:2.4s}
-.sb2-n{font-size:.88rem;font-weight:600;color:#fff;margin-top:auto}
-.sb2-d{font-size:.6rem;color:var(--on-dim);margin-top:1px}
+.sb2-n{font-size:.9rem;font-weight:700;color:#fff;margin-top:auto;letter-spacing:-.2px}
+.sb2-d{font-size:.62rem;color:var(--on-dim2);margin-top:2px;letter-spacing:.1px}
 /* old .sg/.sb for licht page */
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .sb{
@@ -444,11 +444,11 @@ html,body{height:100%;background:var(--bg);
 
 /* ── Ambient Clock Widget ── */
 .ambient-clock{
-  border-radius:22px;padding:22px 20px;margin-bottom:12px;
-  background:linear-gradient(145deg,var(--c2),var(--c1));
-  border:1px solid rgba(255,255,255,.07);
-  border-top-color:rgba(255,255,255,.12);
-  box-shadow:0 4px 24px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.06) inset;
+  border-radius:22px;padding:20px 20px;margin-bottom:12px;
+  background:linear-gradient(145deg,rgba(44,44,46,.95),rgba(28,28,30,.98));
+  border:1px solid rgba(255,255,255,.09);
+  border-top-color:rgba(255,255,255,.14);
+  box-shadow:0 6px 32px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.07) inset;
   display:flex;align-items:center;gap:20px;
   overflow:hidden;position:relative;
 }
@@ -482,7 +482,7 @@ html,body{height:100%;background:var(--bg);
 .rqb-ico{width:28px;height:28px;border-radius:9px;background:var(--c2);
   display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rqb.on .rqb-ico{background:rgba(10,132,255,.3)}
-.rqb-n{font-size:.72rem;font-weight:600;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rqb-n{font-size:.72rem;font-weight:600;color:var(--on-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rqb.on .rqb-n{color:var(--blue)}
 
 /* ───────────── STATUS PILLS ROW ───────────── */
@@ -606,7 +606,7 @@ html,body{height:100%;background:var(--bg);
 .fc3row{display:flex;align-items:center;gap:14px;padding:13px 18px;
   border-bottom:1px solid rgba(255,255,255,.05)}
 .fc3row:last-child{border-bottom:none}
-.fc3-day{font-size:.72rem;font-weight:500;color:var(--dim);width:44px;flex-shrink:0}
+.fc3-day{font-size:.74rem;font-weight:600;color:var(--on-dim);width:48px;flex-shrink:0;letter-spacing:.2px}
 .fc3row:first-child .fc3-day{color:var(--txt);font-weight:600}
 .fc3-ico{width:22px;height:22px;flex-shrink:0}
 .fc3-lo{font-size:.68rem;color:var(--dim2);flex-shrink:0;min-width:22px;text-align:right}
@@ -968,6 +968,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
   text-shadow:0 0 80px rgba(255,159,10,.25),0 0 30px rgba(255,159,10,.12);
   animation:sbPulse 4s ease-in-out infinite;
 }
+@keyframes sbSep{0%,100%{opacity:.2}50%{opacity:.65}}
 @keyframes sbPulse{0%,100%{opacity:.88;text-shadow:0 0 60px rgba(255,159,10,.2)}50%{opacity:1;text-shadow:0 0 100px rgba(255,159,10,.35),0 0 40px rgba(255,159,10,.2)}}
 #standby-date{font-size:1rem;font-weight:300;color:rgba(255,255,255,.35);margin-top:10px;letter-spacing:3px;text-transform:uppercase}
 #standby-wx{font-size:1.2rem;color:rgba(255,255,255,.3);margin-top:32px;letter-spacing:1px}
@@ -4675,7 +4676,7 @@ boot();
     const now=new Date();
     const hh=String(now.getHours()).padStart(2,'0');
     const mm=String(now.getMinutes()).padStart(2,'0');
-    document.getElementById('standby-clock').textContent=hh+':'+mm;
+    document.getElementById('standby-clock').innerHTML=hh+'<span style="opacity:.4;animation:sbSep .9s ease-in-out infinite">:</span>'+mm;
     const days=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
     const months=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
     document.getElementById('standby-date').textContent=days[now.getDay()]+', '+now.getDate()+'. '+months[now.getMonth()];
@@ -4687,6 +4688,7 @@ boot();
     document.getElementById('standby-wx').textContent=ico+' '+t+'°C';
   }
   }
+
   setInterval(updateSbClock,30000);updateSbClock();
   ['touchstart','pointerdown','click','keydown'].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
   sb.addEventListener('click',()=>{sb.classList.remove('show');resetIdle();});
