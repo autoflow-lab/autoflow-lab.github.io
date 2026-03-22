@@ -166,6 +166,7 @@ body{padding-bottom:32px}
   <div>
     <div class="header-title">🏠 Schlappe Home</div>
     <div class="header-sub" id="header-sub">Verbinde…</div>
+    <div id="garage-pill" style="display:none;font-size:.62rem;margin-top:3px;font-weight:600;color:var(--grn)">🚪 Garage: Geschlossen</div>
   </div>
   <div class="status-dot off" id="status-dot"></div>
 </div>
@@ -260,6 +261,10 @@ body{padding-bottom:32px}
   </div>
 </div>
 
+<div class="section">
+  <div class="section-title">Nächste Stunden</div>
+  <div id="wx-hourly" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:4px"></div>
+</div>
 <div class="footer">Schlappe Home · Nur für Familienmitglieder · <span id="last-update">–</span></div>
 
 <script>
@@ -393,12 +398,14 @@ function updateGarage(){
   const card=document.getElementById('garage-card');
   const stEl=document.getElementById('garage-state');
   card.className='garage-card';
-  let label='Unbekannt';
-  if(state==='open'){card.classList.add('open');label='🟢 Geöffnet';}
-  else if(state==='closed'){label='🔴 Geschlossen';}
-  else if(state==='opening'){card.classList.add('moving');label='⬆️ Öffnet…';}
-  else if(state==='closing'){card.classList.add('moving');label='⬇️ Schließt…';}
+  let label='Unbekannt'; let pillTxt=''; let pillColor='var(--dim)';
+  if(state==='open'){card.classList.add('open');label='🟢 Geöffnet';pillTxt='⚠️ OFFEN';pillColor='var(--red)';}
+  else if(state==='closed'){label='🔴 Geschlossen';pillTxt='Garage: Zu ✓';pillColor='var(--grn)';}
+  else if(state==='opening'){card.classList.add('moving');label='⬆️ Öffnet…';pillTxt='Öffnet…';pillColor='var(--acc)';}
+  else if(state==='closing'){card.classList.add('moving');label='⬇️ Schließt…';pillTxt='Schließt…';pillColor='var(--acc)';}
   stEl.textContent=label;
+  const pill=document.getElementById('garage-pill');
+  if(pill){pill.style.display='';pill.textContent='🚪 '+pillTxt;pill.style.color=pillColor;}
 }
 
 function updateLights(){
@@ -461,6 +468,29 @@ function wxIco(cond,sz=56){
   if(cond?.includes('rain')||cond?.includes('pouring')||cond?.includes('lightning')) return `<svg viewBox="0 0 ${sz} ${sz}">${cloud}${rain}</svg>`;
   if(cond?.includes('snow')) return `<svg viewBox="0 0 ${sz} ${sz}">${cloud}${snow}</svg>`;
   return `<svg viewBox="0 0 ${sz} ${sz}">${cloud}</svg>`;
+}
+async function loadHourly(){
+  const tok=getTok();if(!tok)return;
+  try{
+    const r=await fetch(`${HA}/api/services/weather/get_forecasts`,{method:'POST',
+      headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},
+      body:JSON.stringify({entity_id:'weather.forecast_home',type:'hourly'})});
+    if(!r.ok)return;
+    const d=await r.json();
+    const fc=(d?.['weather.forecast_home']?.forecast||[]).slice(0,8);
+    const hl=document.getElementById('wx-hourly');
+    if(!hl)return;
+    hl.innerHTML=fc.map(f=>{
+      const dt=new Date(f.datetime);
+      const hStr=String(dt.getHours()).padStart(2,'0')+':00';
+      const rain=f.precipitation>0.1;
+      return`<div style="flex-shrink:0;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 10px;text-align:center;min-width:52px;border:1px solid rgba(255,255,255,.06)">
+        <div style="font-size:.52rem;color:rgba(255,255,255,.4)">${hStr}</div>
+        <div style="font-size:.78rem;font-weight:700;margin:4px 0">${Math.round(f.temperature)}°</div>
+        <div style="font-size:.52rem;color:${rain?'#60a5fa':'rgba(255,255,255,.25)'}">${rain?Math.round(f.precipitation)+'mm':'–'}</div>
+      </div>`;
+    }).join('');
+  }catch(e){}
 }
 function updateWeather(){
   const s=_S['weather.forecast_home'];if(!s)return;
@@ -589,7 +619,17 @@ function init(){
   document.getElementById('login-screen').style.display='none';
   buildLights();
   fetchAndUpdate();
+  loadHourly();
   setInterval(fetchAndUpdate,20000);
+  setInterval(loadHourly,300000); // alle 5min
+// Schnelleres Garage-Polling: alle 8s nur Garage-State
+setInterval(async()=>{
+  const tok=getTok();if(!tok)return;
+  try{
+    const r=await fetch(`${HA}/api/states/${GARAGE_ID}`,{headers:{'Authorization':'Bearer '+tok}});
+    if(r.ok){const s=await r.json();_S[GARAGE_ID]=s;updateGarage();}
+  }catch(e){}
+},8000);
 }
 checkLogin();
 </script>

@@ -1200,6 +1200,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
                 <div class="hdate-day" id="hdate-day"></div>
               </div>
               <div class="hgreet" id="hgreet"></div>
+              <div id="scene-hint" style="font-size:.6rem;font-weight:600;color:var(--acc);margin-top:4px;opacity:0;transition:opacity .4s;letter-spacing:.2px"></div>
               <div id="presence-pill" style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 10px 4px 8px;border-radius:100px;background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.25);font-size:.58rem;font-weight:600;letter-spacing:.3px;opacity:0;transition:opacity .5s,background .4s,border-color .4s;color:#30d158">
                 <span style="width:5px;height:5px;border-radius:50%;background:#30d158;flex-shrink:0;transition:background .4s"></span>
                 <span id="presence-txt">Daheim</span>
@@ -1481,6 +1482,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
     <div class="page" id="pg-licht">
       <span class="lbl">Licht</span>
       <div class="lg" id="lg"></div>
+    <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
       <span class="lbl" style="margin-top:6px">Geräte</span>
       <div class="dg" id="dg"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
@@ -2160,7 +2162,16 @@ function wsConnect(tok){
       if(s){_S[s.entity_id]=s;updateAll()}
     }
   };
-  _ws.onclose=()=>{conn(false);_wsOk=false;const cd2=document.getElementById('conn-dot');if(cd2){cd2.style.background='#ff453a';cd2.style.opacity='1';cd2.title='Verbindung getrennt'}setTimeout(()=>wsConnect(_tok),5000)};
+  _ws.onclose=(ev)=>{
+    conn(false);_wsOk=false;
+    const cd2=document.getElementById('conn-dot');
+    if(cd2){cd2.style.background='#ff453a';cd2.style.opacity='1';cd2.title='Verbindung getrennt';}
+    // Exponential backoff: 3s→6s→12s→30s max
+    if(!wsConnect._delay)wsConnect._delay=3000;
+    else wsConnect._delay=Math.min(wsConnect._delay*1.6,30000);
+    setTimeout(()=>wsConnect(_tok),wsConnect._delay);
+  };
+  _ws.onopen=()=>{wsConnect._delay=3000;};
   _ws.onerror=()=>conn(false);
 }
 
@@ -3162,8 +3173,9 @@ function buildUI(){try{
                 transform:translate(-50%,-50%);pointer-events:none;left:${ct?((ct-2700)/(6500-2700)*100)+'%':'5%'}"></div>
             </div>
             <div style="display:flex;justify-content:space-between;margin-top:6px;padding:0 6px">
-              <span style="font-size:.62rem;color:rgba(255,255,255,.35)">2700K Warm</span>
-              <span style="font-size:.62rem;color:rgba(255,255,255,.35)">6500K Kalt</span>
+              <span style="font-size:.62rem;color:rgba(255,255,255,.35)">🕯 2700K Warm</span>
+              <span id="ls-ct-live" style="font-size:.62rem;font-weight:600;color:rgba(255,159,10,.8)">${ct?ct+'K':''}</span>
+              <span style="font-size:.62rem;color:rgba(255,255,255,.35)">6500K Kalt ☀️</span>
             </div>
           </div>`:''}
         </div>`:''}
@@ -3259,6 +3271,8 @@ function buildUI(){try{
           const p=Math.min(1,Math.max(0,(px-r.left)/r.width));
           cur.style.left=(p*100)+'%';
           const k=Math.round(2700+p*(6500-2700));
+          const liveEl=document.getElementById('ls-ct-live');
+          if(liveEl)liveEl.textContent=k+'K';
           clearTimeout(_ctT);
           _ctT=setTimeout(()=>svc('light','turn_on',{entity_id:lid,color_temp_kelvin:k,brightness_pct:Math.max(bri||80,20)}),150);
         }
@@ -3633,6 +3647,23 @@ function buildUI(){try{
     });
     // Live state: update active classes in updateAll
     window._updateQaBar = function(lightsOnCount, musicPlaying){
+    // Szenen-Erkennung: Check welche Szene ungefähr aktiv ist
+    (function(){
+      const wand=_S['light.h61e1'], sofa=_S['light.h618a'], kuche=_S['light.h618a_2'];
+      const wandOn=wand?.state==='on', sofaOn=sofa?.state==='on', kucheOn=kuche?.state==='on';
+      const wandBri=Math.round((wand?.attributes?.brightness||0)/2.55);
+      const sofaBri=Math.round((sofa?.attributes?.brightness||0)/2.55);
+      const tvOn=_S['media_player.lg_webos_tv_oled65g49ls_2']?.state==='on'||
+        _S['remote.harmony']?.attributes?.current_activity==='SunriseTV';
+      let activeScene='';
+      if(!wandOn&&!sofaOn&&!kucheOn) activeScene='';
+      else if(tvOn&&sofaBri<=35) activeScene='🎬 Film';
+      else if(sofaBri>0&&sofaBri<=10&&!wandOn) activeScene='🌙 Nacht';
+      else if(wandBri>=80&&sofaBri>=80) activeScene='☀️ Hell';
+      else if(wandOn&&sofaOn) activeScene='🌆 Abend';
+      const sc=document.getElementById('scene-hint');
+      if(sc){sc.textContent=activeScene;sc.style.opacity=activeScene?'1':'0';}
+    })();
       const offBtn = qaBar.querySelector('[data-qa="off"]');
       const musBtn = qaBar.querySelector('[data-qa="musik"]');
       if(offBtn) offBtn.classList.toggle('qa-active', lightsOnCount > 0);
@@ -4417,12 +4448,16 @@ const DM=['Januar','Februar','März','April','Mai','Juni','Juli','August','Septe
 
 function getGreeting(hour){
   const min=new Date().getMinutes();
+  const home=_S['person.janis']?.state==='home';
+  const wx=_S['weather.forecast_home']?.state;
+  const rainy=wx?.includes('rain')||wx?.includes('pouring')||wx?.includes('lightning');
+  const sunny=wx==='sunny'||wx==='clear';
   const greetings={
-    morning:['Guten Morgen, Janis ☀️','Rise & shine, Janis ✨','Schönen Morgen! 🌅'],
-    forenoon:['Guten Vormittag, Janis 🌤','Na wie läuft es? 😊','Noch Kaffee? ☕'],
-    afternoon:['Guten Nachmittag, Janis 🌞','Schöner Nachmittag! 🌿','Hey Janis 👋'],
-    evening:['Guten Abend, Janis 🌆','Feierabend! 🥂','Chill time, Janis 🛋️'],
-    night:['Gute Nacht, Janis 🌙','Noch wach? 🦉','Schöne Nacht 💫'],
+    morning:home?['Guten Morgen, Janis ☀️','Rise & shine! ✨','Schönen Morgen! 🌅']:['Jemand zu Hause? 🏠','Alle schlafen noch? 😴'],
+    forenoon:home?(rainy?['Gemütliches Wetter heute ☔','Regentag — Kaffee? ☕']:sunny?['Schöner Tag! ☀️','Toller Vormittag! 🌤']:['Guten Vormittag, Janis 🌤','Noch Kaffee? ☕']):['Haus allein 🏠','Auf dich gewartet… 👀'],
+    afternoon:home?['Guten Nachmittag, Janis 🌞','Schöner Nachmittag! 🌿','Hey Janis 👋']:['Noch niemand da 🏃'],
+    evening:home?['Guten Abend, Janis 🌆','Feierabend! 🥂','Chill time 🛋️']:['Noch unterwegs? 🚗','Haus wartet auf dich 🏠'],
+    night:['Gute Nacht 🌙','Noch wach? 🦉','Schöne Nacht 💫'],
   };
   let key;
   if(hour>=5&&hour<10) key='morning';
@@ -4431,7 +4466,6 @@ function getGreeting(hour){
   else if(hour>=17&&hour<22) key='evening';
   else key='night';
   const arr=greetings[key];
-  // Rotate greeting every 10 minutes
   return arr[Math.floor(min/10)%arr.length];
 }
 function updateHeroGradient(h, m) {
@@ -5061,6 +5095,20 @@ function updateAll(){
   })();
   // FAB visibility
   window._updateFab&&window._updateFab(on);
+  // Lichter-Summary unter Grid
+  (function(){
+    const total=CFG.lights.length;
+    const sum=document.getElementById('lights-summary');
+    if(!sum)return;
+    if(on>0){
+      const names=CFG.lights.filter(l=>effOn(l.id)).map(l=>l.name).join(', ');
+      sum.textContent=`${on} von ${total} an · ${names}`;
+      sum.style.opacity='1';
+    } else {
+      sum.textContent='Alle Lichter aus';
+      sum.style.opacity='.5';
+    }
+  })();
   window._updateDevCards&&window._updateDevCards();
   // Quick-Actions Bar state
   window._updateQaBar&&window._updateQaBar(on, playing);
@@ -5285,7 +5333,9 @@ function updateAll(){
     else if(ct) lc=ct<2800?'255,140,30':ct<4000?'255,193,141':'200,220,255';
     if(lc) _lastColor[l.id]=lc; // cache immer, auch wenn aus (HA gibt Farbe auch bei off zurück)
     lc=lc||_lastColor[l.id]||'255,193,141';
-    applyTileState(tile,on,lc);
+    // Nodim-Tiles (onoff only): grüne Farbe statt amber
+    const tileColor = (isNodim && on) ? '48,209,88' : lc;
+    applyTileState(tile,on,tileColor);
     // CT Tint: warm amber ↔ cool blue overlay based on color_temp_kelvin
     const ctEl=tile.querySelector('.ltct');
     if(ctEl&&on){
