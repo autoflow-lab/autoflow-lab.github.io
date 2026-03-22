@@ -230,8 +230,10 @@ html,body{height:100%;background:var(--bg);
 
 /* ───────────── CARDS ───────────── */
 .c{
-  background:var(--c1);border-radius:18px;
-  overflow:hidden;position:relative;margin-bottom:10px;
+  background:var(--c1);border-radius:20px;
+  overflow:hidden;position:relative;margin-bottom:12px;
+  border:1px solid var(--sep);
+  box-shadow:0 2px 16px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.04) inset;
   transition:box-shadow .3s ease;
 }
 .c:hover{box-shadow:0 4px 24px rgba(0,0,0,.35)}
@@ -375,11 +377,11 @@ html,body{height:100%;background:var(--bg);
 .ws:nth-child(even){border-right:none}
 .ws:nth-child(1),.ws:nth-child(2){border-bottom:1px solid var(--sep-line)}
 .wsi{
-  width:34px;height:34px;border-radius:11px;flex-shrink:0;
+  width:36px;height:36px;border-radius:12px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
 }
-.wsv{font-size:.9rem;font-weight:600;color:var(--txt);letter-spacing:-.3px}
-.wsl{font-size:.53rem;color:var(--on-dim2);margin-top:2px;letter-spacing:.2px;text-transform:lowercase}
+.wsv{font-size:.92rem;font-weight:700;color:var(--txt);letter-spacing:-.4px}
+.wsl{font-size:.54rem;font-weight:500;color:var(--on-dim2);margin-top:2px;letter-spacing:.3px;text-transform:uppercase}
 .ws:nth-child(1) .wsi{background:rgba(251,191,36,.1)}
 .ws:nth-child(2) .wsi{background:rgba(56,189,248,.09)}
 .ws:nth-child(3) .wsi{background:rgba(251,191,36,.1)}
@@ -388,25 +390,27 @@ html,body{height:100%;background:var(--bg);
 /* ───────────── STATUS ───────────── */
 .pill{
   display:flex;align-items:center;gap:6px;
-  padding:5px 11px 5px 8px;border-radius:100px;
-  background:var(--c2);
-  font-size:.66rem;font-weight:500;color:var(--dim2);
+  padding:6px 12px 6px 9px;border-radius:100px;
+  background:var(--c1);border:1px solid var(--sep);
+  font-size:.67rem;font-weight:600;color:var(--dim2);
   transition:all .3s;
+  box-shadow:0 1px 6px rgba(0,0,0,.2);
 }
-.pill.on{background:var(--c3);color:var(--on-txt)}
-.pd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .4s;flex-shrink:0}
-.pill.on .pd{background:var(--grn);box-shadow:0 0 5px var(--grn)}
-.pill.music.on .pd{background:var(--blue);box-shadow:0 0 5px var(--blue)}
+.pill.on{background:var(--c2);color:var(--on-txt);border-color:rgba(255,255,255,.12)}
+.pd{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .4s;flex-shrink:0}
+.pill.on .pd{background:var(--grn);box-shadow:0 0 6px var(--grn)}
+.pill.music.on .pd{background:var(--blue);box-shadow:0 0 6px var(--blue)}
 
 /* ───────────── SCENES 2x2 ───────────── */
 .sg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;will-change:transform}
 .sb2{
-  border-radius:18px;padding:18px 16px 16px;cursor:pointer;
+  border-radius:20px;padding:20px 16px 16px;cursor:pointer;
   display:flex;flex-direction:column;gap:8px;
-  border:1px solid rgba(255,255,255,.06);
-  border-top-color:var(--on-dim3);
-  transition:transform .18s cubic-bezier(.34,1.56,.64,1);
-  min-height:116px;position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.07);
+  border-top-color:rgba(255,255,255,.12);
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+  min-height:120px;position:relative;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.06) inset;
 }
 .sb2::after{content:'';position:absolute;inset:0;border-radius:18px;
   background:rgba(255,255,255,.1);opacity:0;transition:opacity .15s}
@@ -438,9 +442,10 @@ html,body{height:100%;background:var(--bg);
 .rqrow{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}
 .rqrow::-webkit-scrollbar{display:none}
 .rqb{
-  flex:1;min-width:0;border-radius:14px;padding:12px 10px;cursor:pointer;
-  display:flex;align-items:center;gap:9px;
-  background:var(--c1);border:1px solid rgba(255,255,255,.06);
+  flex:1;min-width:0;border-radius:16px;padding:13px 12px;cursor:pointer;
+  display:flex;align-items:center;gap:10px;
+  background:var(--c1);border:1px solid var(--sep);
+  box-shadow:0 2px 12px rgba(0,0,0,.25),0 1px 0 rgba(255,255,255,.05) inset;
   transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s;
 }
 .rqb:active{transform:scale(.92)}
@@ -456,10 +461,12 @@ html,body{height:100%;background:var(--bg);
 .home-scenes{display:flex;gap:7px;margin:0 0 10px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
 .home-scenes::-webkit-scrollbar{display:none}
 .hs-btn{
-  flex-shrink:0;padding:9px 16px;border-radius:100px;border:none;cursor:pointer;
-  background:var(--c2);color:var(--txt);font-size:.72rem;font-weight:600;
+  flex-shrink:0;padding:9px 17px;border-radius:100px;border:none;cursor:pointer;
+  background:var(--c1);color:var(--txt);font-size:.72rem;font-weight:600;
+  border:1px solid var(--sep);
   letter-spacing:.2px;transition:all .18s cubic-bezier(.34,1.56,.64,1);
   display:flex;align-items:center;gap:6px;touch-action:manipulation;
+  box-shadow:0 2px 8px rgba(0,0,0,.25),0 1px 0 rgba(255,255,255,.05) inset;
 }
 .hs-btn:active{transform:scale(.93)}
 .hs-btn.active{background:rgba(255,159,10,.25);color:#ff9f0a;outline:1.5px solid rgba(255,159,10,.5)}
@@ -468,15 +475,16 @@ html,body{height:100%;background:var(--bg);
 #qa-bar{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;padding-bottom:2px}
 #qa-bar::-webkit-scrollbar{display:none}
-.qa-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:5px;
-  width:68px;padding:10px 6px 9px;border-radius:16px;border:none;cursor:pointer;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);
-  touch-action:manipulation;transition:transform .16s,background .2s,box-shadow .2s;
-  color:#fff;-webkit-tap-highlight-color:transparent}
-.qa-btn:active{transform:scale(.88);background:rgba(255,255,255,.12)}
-.qa-btn .qa-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-size:1.1rem;transition:background .25s,box-shadow .25s}
-.qa-btn .qa-lbl{font-size:.58rem;font-weight:600;letter-spacing:.3px;
+.qa-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;
+  width:72px;padding:13px 6px 11px;border-radius:18px;border:none;cursor:pointer;
+  background:var(--c1);border:1px solid var(--sep);
+  touch-action:manipulation;transition:transform .16s cubic-bezier(.34,1.56,.64,1),background .2s,box-shadow .2s;
+  color:#fff;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 2px 12px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.05) inset}
+.qa-btn:active{transform:scale(.88)}
+.qa-btn .qa-ico{width:38px;height:38px;border-radius:13px;display:flex;align-items:center;
+  justify-content:center;transition:background .25s,box-shadow .25s}
+.qa-btn .qa-lbl{font-size:.57rem;font-weight:600;letter-spacing:.2px;
   color:var(--on-dim);white-space:nowrap}
 /* Alle aus */
 .qa-btn[data-qa="off"] .qa-ico{background:rgba(255,69,58,.15)}
@@ -500,7 +508,7 @@ html,body{height:100%;background:var(--bg);
 .qa-btn.qa-tap{animation:qaBounce .28s ease-out}
 
 /* ───────────── TAGES-ZUSAMMENFASSUNG ───────────── */
-.tagsum{display:flex;gap:8px;margin:0 0 10px;padding:12px 14px;
+.tagsum{display:flex;gap:10px;margin:0 0 12px;padding:14px 16px;
   background:rgba(255,255,255,.04);border-radius:14px;
   border:1px solid rgba(255,255,255,.07);align-items:center;
   animation:greetFade .8s ease both}
@@ -566,7 +574,7 @@ html,body{height:100%;background:var(--bg);
 
 /* ───────────── COMPACT 3-DAY FORECAST ───────────── */
 .fc3{padding:0;overflow:hidden}
-.fc3row{display:flex;align-items:center;gap:12px;padding:11px 16px;
+.fc3row{display:flex;align-items:center;gap:14px;padding:13px 18px;
   border-bottom:1px solid rgba(255,255,255,.05)}
 .fc3row:last-child{border-bottom:none}
 .fc3-day{font-size:.72rem;font-weight:500;color:var(--dim);width:44px;flex-shrink:0}
@@ -741,13 +749,13 @@ html,body{height:100%;background:var(--bg);
 /* ───────────── LIGHTS PAGE ───────────── */
 .lg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .lt{
-  padding:16px 14px 13px;border-radius:18px;cursor:pointer;
+  padding:16px 14px 13px;border-radius:20px;cursor:pointer;
   background:var(--c2);
   display:flex;flex-direction:column;gap:12px;
   position:relative;overflow:hidden;
-  border:1px solid rgba(255,255,255,.055);
-  border-top-color:var(--on-dim3);
-  box-shadow:0 1px 0 rgba(255,255,255,.06) inset;
+  border:1px solid rgba(255,255,255,.07);
+  border-top-color:rgba(255,255,255,.1);
+  box-shadow:0 3px 16px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.06) inset;
   transition:background .4s,transform .15s,box-shadow .4s;
 }
 .lt::before{
@@ -1122,19 +1130,19 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <!-- Quick-Actions Bar -->
       <div id="qa-bar">
         <button class="qa-btn" data-qa="off" aria-label="Alle Lichter aus">
-          <div class="qa-ico">⏻</div>
+          <div class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,80,70,.85)" stroke-width="2.2" stroke-linecap="round"><path d="M9.5 8C7 9.2 5 11.9 5 15C5 19.4 8.1 22 12 22C15.9 22 19 19.4 19 15C19 11.9 17 9.2 14.5 8"/><line x1="12" y1="3" x2="12" y2="13"/></svg></div>
           <div class="qa-lbl">Alle aus</div>
         </button>
         <button class="qa-btn" data-qa="szene" aria-label="Szene wählen">
-          <div class="qa-ico">🎬</div>
+          <div class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,159,10,.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
           <div class="qa-lbl">Szene</div>
         </button>
         <button class="qa-btn" data-qa="musik" aria-label="Musik Tab">
-          <div class="qa-ico">🎵</div>
+          <div class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(10,132,255,.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="18" r="2.5"/><circle cx="18" cy="16" r="2.5"/><path d="M10.5 18V7.5l10-2.5V16"/></svg></div>
           <div class="qa-lbl">Musik</div>
         </button>
         <button class="qa-btn" data-qa="heiz" aria-label="Heizung">
-          <div class="qa-ico">🌡️</div>
+          <div class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,120,50,.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.5 22 2 17.5 2 12C2 7.3 5.1 3.3 9.4 2.1"/><path d="M20 12C20 9.2 18.5 6.7 16.1 5.3"/><circle cx="12" cy="12" r="3"/></svg></div>
           <div class="qa-lbl">Heizung</div>
         </button>
       </div>
