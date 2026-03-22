@@ -1815,7 +1815,7 @@ const CFG = {
     {n:'U1 Tirol',  c:'#f472b6', r:'244,114,182',   u:'https://livestream.u1.at/u1tirol',     blocked:true},
     {n:'Melody',    c:'#c084fc', r:'192,132,252',   u:'https://cdn.melodyfm.at/melodyfm.mp3', blocked:true},
   ],
-  janis_home_entities:['person.janis','person.janis_s','device_tracker.janiss_iphone','device_tracker.janis'],
+  janis_home_entities:['device_tracker.iphone_von_janis_2','device_tracker.iphone_von_janis'],
   // Spotify Favoriten — Playlist-URI von Spotify (spotify:playlist:xxx oder Link)
   spotPlaylists:[
     {n:'Chill',          u:'spotify:playlist:4ox4J73dGqzBCDCw2Id8cp', img:'https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da846eff98fbf822240fa4a156ff'},
@@ -2163,10 +2163,13 @@ function wsConnect(tok){
 
 function wsend(obj){_wsId++;_ws?.readyState===1&&_ws.send(JSON.stringify({id:_wsId,...obj}))}
 function isJanisHome(){
-  // Primary: network-based — internal IP = home network = home
+  // Primary: network-based — internes Netz = zuhause
   const h=location.hostname;
   if(h==='192.168.1.123'||h==='homeassistant.local'||h.startsWith('192.168.')) return true;
-  // Fallback: HA person entity
+  // GPS-Tracker (Mobile App) — zuverlässiger als smarthome_display
+  const gps=_S['device_tracker.iphone_von_janis_2']?.state;
+  if(gps) return gps==='home';
+  // Fallback: andere Tracker
   return CFG.janis_home_entities.some(e=>_S[e]?.state==='home');
 }
 // Play radio station — ensures playback starts reliably
@@ -2178,19 +2181,36 @@ function playRadio(r){
   setTimeout(()=>svc('media_player','media_play',{entity_id:CFG.alm}),3000);
   toast(r.n+' ♫');
   quickRefresh();
-  // Presence Pill
-  const pPill=document.getElementById('presence-pill');
-  const pTxt=document.getElementById('presence-txt');
-  const personState=_S['person.janis']?.state;
-  if(pPill&&pTxt){
-    const home=personState==='home';
+  // Presence Pill — GPS-Tracker (Mobile App), NICHT smarthome_display
+  (function updatePresencePill(){
+    const pPill=document.getElementById('presence-pill');
+    const pTxt=document.getElementById('presence-txt');
+    if(!pPill||!pTxt)return;
+    // Nutze GPS-basierten Tracker, nicht person.janis (der nutzt smarthome_display)
+    const gps=_S['device_tracker.iphone_von_janis_2']?.state
+      ||_S['device_tracker.iphone_von_janis']?.state;
+    const home=gps==='home';
+    const away=gps==='not_home';
     pPill.style.opacity='1';
-    pPill.style.background=home?'rgba(48,209,88,.12)':'rgba(255,69,58,.1)';
-    pPill.style.borderColor=home?'rgba(48,209,88,.25)':'rgba(255,69,58,.25)';
-    pPill.querySelector('span').style.background=home?'#30d158':'#ff453a';
-    pTxt.textContent=home?'Daheim':'Unterwegs';
-    pTxt.style.color=home?'#30d158':'#ff453a';
-  }
+    if(home){
+      pPill.style.background='rgba(48,209,88,.12)';
+      pPill.style.borderColor='rgba(48,209,88,.25)';
+      pPill.querySelector('span').style.background='#30d158';
+      pTxt.textContent='🏠 Janis daheim';
+      pTxt.style.color='#30d158';
+    } else if(away){
+      pPill.style.background='rgba(255,159,10,.1)';
+      pPill.style.borderColor='rgba(255,159,10,.22)';
+      pPill.querySelector('span').style.background='#ff9f0a';
+      pTxt.textContent='🚗 Janis unterwegs';
+      pTxt.style.color='rgba(255,159,10,.85)';
+    } else {
+      // Unbekannt
+      pPill.style.opacity='.5';
+      pTxt.textContent='Anwesenheit unbekannt';
+      pTxt.style.color='rgba(255,255,255,.3)';
+    }
+  })();
   updateRadio();updateRadioQuick();
 }
 
