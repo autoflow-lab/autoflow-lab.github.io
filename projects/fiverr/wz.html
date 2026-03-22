@@ -2757,15 +2757,15 @@ function buildUI(){try{
     const rgb=s?.attributes?.rgb_color;
     const ct=s?.attributes?.color_temp_kelvin;
     const COLORS=[
-      {rgb:[255,175,60], ct:2700},  // Warm
-      {rgb:[255,235,180],ct:4000},  // Neutral
-      {rgb:[200,218,255],ct:6000},  // Kalt
-      {rgb:[255,40,20]},            // Rot
-      {rgb:[255,110,15]},           // Orange
-      {rgb:[30,210,80]},            // Grün
-      {rgb:[0,200,210]},            // Cyan
-      {rgb:[30,100,255]},           // Blau
-      {rgb:[160,30,255]},           // Lila
+      {rgb:[255,167,87], ct:2700},  // 🕯️ Wohnzimmer-Wand (Lieblingsfarbe)
+      {rgb:[255,210,130],ct:3200},  // 🌅 Kerzenschein
+      {rgb:[255,225,175],ct:4000},  // ☀️ Warm Neutral
+      {rgb:[205,225,255],ct:6000},  // 💎 Tageslicht
+      {rgb:[255,55,35]},            // 🔴 Deep Red
+      {rgb:[255,25,80]},            // 🌹 Rosé
+      {rgb:[15,160,110]},           // 🌿 Smaragd
+      {rgb:[10,90,255]},            // 🌊 Deep Ocean
+      {rgb:[130,30,230]},           // 🔮 Violett
     ];
     const ov=document.createElement('div');
     ov.style.cssText='position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;flex-direction:column;justify-content:flex-end;-webkit-backdrop-filter:blur(4px)';
