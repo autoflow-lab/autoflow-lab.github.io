@@ -53,3 +53,18 @@ sensor.living_room_temperature
 ---
 Made with ❤️ by Clawy Studio
 clawy.studio@gmail.com
+
+## Premium Dashboard Template (Bonus!)
+The included `premium_dashboard.html` is a ready-to-use iOS-style dashboard.
+
+**Quick setup:**
+1. Open `premium_dashboard.html` in any text editor
+2. Set `HA_URL = 'http://YOUR-HA-IP:8123'`
+3. Set `HA_TOKEN = 'your-long-lived-token'`
+4. Upload to `/config/www/` in Home Assistant
+5. Access at `http://YOUR-HA-IP:8123/local/premium_dashboard.html`
+
+**Customize:**
+- Edit `DEMO_LIGHTS` array with your entity IDs
+- Add/remove radio stations in `RADIO_STATIONS`
+- Change weather location: set `latitude` and `longitude`
