@@ -1668,6 +1668,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
       <span>Wetter</span>
     </button>
+    <button class="ni" data-p="geraete">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2.5"/><path d="M8 20h8M12 18v2"/></svg>
+      <span>Geräte</span>
+    </button>
 
   </nav>
   <div id="conn-dot" style="position:absolute;bottom:calc(env(safe-area-inset-bottom)+6px);right:10px;width:6px;height:6px;border-radius:50%;background:#32d74b;opacity:.6;transition:background .5s,opacity .5s" title="Verbunden"></div>
@@ -1697,7 +1701,11 @@ const CFG = {
   ],
   devs:[
     {id:'media_player.lg_webos_tv_oled65g49ls_2', name:'LG OLED TV', domain:'media_player',
-     svg:'<rect x="2" y="4" width="20" height="14" rx="2.5"/><path d="M8 20h8M12 18v2"/>'},
+     svg:'<rect x="2" y="4" width="20" height="14" rx="2.5"/><path d="M8 20h8M12 18v2"/>',
+     remote:'lgtv'},
+    {id:'remote.harmony', name:'Sunrise TV', domain:'remote', harmonyActivity:'SunriseTV',
+     svg:'<rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="17" r="1.5"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11" x2="15" y2="11"/>',
+     remote:'sunrise'},
   ],
   radio:[
     {n:'SRF 1',     c:'#38bdf8', r:'56,189,248',   u:'http://stream.srg-ssr.ch/m/drs1/mp3_128'},
@@ -3324,19 +3332,30 @@ function buildUI(){try{
   document.querySelectorAll('.dt').forEach(t=>t.addEventListener('click',()=>{
     hap();
     const id=t.dataset.id;
-    const wasOn=_S[id]?.state==='on';
-    // Optimistic update
+    const d=CFG.devs.find(x=>x.id===id);
+    // Harmony remote activity toggle
+    if(d?.harmonyActivity){
+      const cur=_S[id]?.attributes?.current_activity;
+      const isOn=cur===d.harmonyActivity;
+      t.classList.toggle('on',!isOn);
+      const se=t.querySelector('[data-dst]');
+      if(se){se.textContent=isOn?'Aus':'läuft';se.style.color=isOn?'rgba(255,255,255,.5)':'#ff9f0a';}
+      if(isOn) svc('remote','turn_off',{entity_id:id});
+      else svcHarmonyActivity(d.harmonyActivity);
+      return;
+    }
+    const wasOn=_S[id]?.state==='on'||_S[id]?.state==='playing';
     t.classList.toggle('on',!wasOn);
     t.style.background=wasOn?'':'rgba(255,159,10,.45)';
     t.style.outline=wasOn?'':'1.5px solid rgba(255,159,10,.8)';
     const se=t.querySelector('[data-dst]');
     if(se){se.textContent=wasOn?'Aus':'An';se.style.color=wasOn?'rgba(255,255,255,.5)':'#ff9f0a';}
     if(!wasOn && t.dataset.dom==='media_player'){
-      // LG TV: turn_on via broadcast (WoL nicht nötig, webOS unterstützt direkt)
       svc('media_player','turn_on',{entity_id:id});
     } else {
       svc(t.dataset.dom,wasOn?'turn_off':'turn_on',{entity_id:id});
     }
+    quickRefresh();
   }));
 
 
@@ -4019,7 +4038,7 @@ function initAmbient(){
 // ═══════════════════════════════════════════════
 // NAV
 // ═══════════════════════════════════════════════
-const PORD=['home','musik','licht','plan'];
+const PORD=['home','musik','licht','geraete','plan'];
 function navTo(page){
   if(page===_page)return;
   const cur=document.getElementById('pg-'+_page);
@@ -4438,6 +4457,7 @@ function updateOverview(){
 })();
 
 function updateAll(){
+  updateGeraeteCards();
   // ── Radio-Erkennung am Anfang, damit alle nachfolgenden Stellen _radActive korrekt haben ──
   const playing=st(CFG.alm)==='playing';
   if(!_radActive&&playing){
@@ -4727,7 +4747,9 @@ function updateAll(){
   // Devs
   CFG.devs.forEach(d=>{
     const s=_S[d.id];
-    const on=s?.state==='on';
+    const on=d.harmonyActivity
+      ? s?.attributes?.current_activity===d.harmonyActivity
+      : (s?.state==='on'||s?.state==='playing');
     const t=document.querySelector(`.dt[data-id="${d.id}"]`);if(!t)return;
     t.classList.toggle('on',on);
     t.style.background=on?'rgba(255,159,10,.45)':'';
@@ -4838,6 +4860,198 @@ function updateRadio(){
   let _sx=0,_sy=0;
   // Swipe-Navigation entfernt — nur Nav-Buttons zum Tab-Wechsel
 })();
+
+// ═══════════════════════════════════════════════
+// GERÄTE TAB
+// ═══════════════════════════════════════════════
+function buildGeraeteTab(){
+  const grid = document.getElementById('geraete-grid');
+  if(!grid) return;
+  grid.innerHTML = CFG.devs.map(d=>`
+  <div class="g-card" data-gid="${d.id}" style="background:var(--c1);border-radius:20px;padding:20px;border:1px solid var(--sep)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="g-ico" style="width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--on-bg)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--dim)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d.svg}</svg>
+        </div>
+        <div>
+          <div class="g-name" style="font-size:.92rem;font-weight:700;color:var(--txt)">${d.name}</div>
+          <div class="g-status" data-gst="${d.id}" style="font-size:.68rem;color:var(--dim2);margin-top:2px">–</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="g-remote-btn" data-remote="${d.remote||''}" data-gid="${d.id}" style="padding:8px 16px;border-radius:100px;border:1.5px solid var(--on-border);background:transparent;color:var(--dim);font-size:.76rem;font-weight:600;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:5px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><path d="m4.93 4.93 2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg>
+          Remote
+        </button>
+        <button class="g-tog" data-gid="${d.id}" data-domain="${d.domain}" data-act="${d.harmonyActivity||''}" style="width:50px;height:30px;border-radius:15px;border:none;cursor:pointer;touch-action:manipulation;background:var(--on-bg);position:relative;transition:background .25s">
+          <div class="g-tog-knob" style="width:24px;height:24px;border-radius:12px;background:#fff;position:absolute;top:3px;left:3px;transition:transform .25s;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>
+        </button>
+      </div>
+    </div>
+    ${d.remote==='lgtv'?`
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${[['⏮','REWIND'],['⏯','PLAY'],['⏭','FASTFORWARD'],['🏠','HOME'],['◀','BACK']].map(([ico,cmd])=>`
+      <button onclick="svcLGBtn('${cmd}')" style="flex:1;min-width:44px;padding:10px 4px;border-radius:12px;border:none;background:var(--on-bg);color:var(--txt);font-size:1rem;cursor:pointer;touch-action:manipulation">${ico}</button>`).join('')}
+    </div>`:d.remote==='sunrise'?`
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${[['📺','SunriseTV',true],['⏸','Pause',false],['⏹','Stop',false],['📋','Guide',false],['↩','Back',false]].map(([ico,cmd,isAct])=>`
+      <button onclick="${isAct?`svcHarmonyActivity('${cmd}')`:`svcHarmonyBtn('${cmd}')`}" style="flex:1;min-width:44px;padding:10px 4px;border-radius:12px;border:none;background:var(--on-bg);color:var(--txt);font-size:${isAct?'.7rem':'1rem'};font-weight:${isAct?'700':'400'};cursor:pointer;touch-action:manipulation">${ico}</button>`).join('')}
+    </div>`:''}
+  </div>`).join('');
+
+  // Remote buttons
+  grid.querySelectorAll('.g-remote-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      hap();
+      const remote=btn.dataset.remote;
+      if(remote==='lgtv') showLGRemote();
+      else if(remote==='sunrise') showSunriseRemote();
+    });
+  });
+
+  // Toggle buttons
+  grid.querySelectorAll('.g-tog').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      hap();
+      const id=btn.dataset.gid;
+      const domain=btn.dataset.domain;
+      const act=btn.dataset.act;
+      const s=_S[id];
+      const isOn=s?.state==='on'||s?.state==='playing';
+      if(domain==='remote'&&act){
+        if(isOn) svc('remote','turn_off',{entity_id:id});
+        else svcHarmonyActivity(act);
+      } else {
+        svc(domain,isOn?'turn_off':'turn_on',{entity_id:id});
+      }
+      quickRefresh();
+    });
+  });
+}
+
+function svcLGBtn(cmd){
+  svc('webostv','button',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2',button:cmd});
+}
+function svcHarmonyActivity(act){
+  svc('remote','turn_on',{entity_id:'remote.harmony',activity:act});
+  quickRefresh();
+}
+function svcHarmonyBtn(cmd){
+  svc('remote','send_command',{entity_id:'remote.harmony',device:'82979199',command:cmd});
+}
+
+function updateGeraeteCards(){
+  CFG.devs.forEach(d=>{
+    const s=_S[d.id];
+    const card=document.querySelector(`.g-card[data-gid="${d.id}"]`);
+    if(!card) return;
+    let isOn=false;
+    if(d.harmonyActivity){
+      isOn=s?.attributes?.current_activity===d.harmonyActivity;
+    } else {
+      isOn=s?.state==='on'||s?.state==='playing';
+    }
+    // Toggle styling
+    const tog=card.querySelector('.g-tog');
+    const knob=card.querySelector('.g-tog-knob');
+    if(tog){
+      tog.style.background=isOn?'var(--grn)':'var(--on-bg)';
+      if(knob) knob.style.transform=isOn?'translateX(20px)':'translateX(0)';
+    }
+    // Icon color
+    const ico=card.querySelector('.g-ico');
+    if(ico) ico.style.background=isOn?'rgba(48,209,88,.15)':'var(--on-bg)';
+    const icoSvg=ico?.querySelector('svg');
+    if(icoSvg) icoSvg.setAttribute('stroke',isOn?'var(--grn)':'var(--dim)');
+    // Status text
+    const stEl=card.querySelector(`[data-gst="${d.id}"]`);
+    if(stEl){
+      if(d.harmonyActivity){
+        const cur=s?.attributes?.current_activity||'–';
+        stEl.textContent=isOn?'Läuft · '+d.harmonyActivity:(cur==='PowerOff'?'Aus':cur);
+      } else {
+        const title=s?.attributes?.media_title||s?.attributes?.friendly_name||'';
+        stEl.textContent=isOn?(title||'An'):'Aus';
+      }
+    }
+  });
+}
+
+function showLGRemote(){
+  const btns=[
+    [{ico:'🔴',cmd:'RED',lbl:''},{ico:'🟢',cmd:'GREEN',lbl:''},{ico:'🟡',cmd:'YELLOW',lbl:''},{ico:'🔵',cmd:'BLUE',lbl:''}],
+    [{ico:'⬅',cmd:'BACK',lbl:'Zurück'},{ico:'🏠',cmd:'HOME',lbl:'Home'},{ico:'⚙',cmd:'MENU',lbl:'Menü'},{ico:'ℹ',cmd:'INFO',lbl:'Info'}],
+    [null,{ico:'▲',cmd:'UP',lbl:''},null,null],
+    [{ico:'◀',cmd:'LEFT',lbl:''},{ico:'OK',cmd:'ENTER',lbl:'',center:true},{ico:'▶',cmd:'RIGHT',lbl:''},null],
+    [null,{ico:'▼',cmd:'DOWN',lbl:''},null,null],
+    [{ico:'🔇',cmd:'MUTE',lbl:'Mute'},{ico:'🔉',cmd:'VOLUMEDOWN',lbl:'Vol –'},{ico:'🔊',cmd:'VOLUMEUP',lbl:'Vol +'},{ico:'✖',cmd:'EXIT',lbl:'Exit'}],
+    [{ico:'⏮',cmd:'REWIND',lbl:''},{ico:'⏯',cmd:'PLAY',lbl:''},{ico:'⏩',cmd:'FASTFORWARD',lbl:''},{ico:'⏹',cmd:'STOP',lbl:''}],
+    [{ico:'📺',cmd:'CHANNELDOWN',lbl:'CH –'},{ico:'📡',cmd:'CHANNELUP',lbl:'CH +'},null,null],
+  ];
+  showRemoteOverlay('LG OLED TV 📺', btns, (cmd)=>svcLGBtn(cmd));
+}
+
+function showSunriseRemote(){
+  const btns=[
+    [{ico:'📋',cmd:'Guide',lbl:'Guide'},{ico:'ℹ',cmd:'Info',lbl:'Info'},{ico:'📱',cmd:'Menu',lbl:'Menü'},{ico:'↩',cmd:'Back',lbl:'Zurück'}],
+    [null,{ico:'▲',cmd:'DirectionUp',lbl:''},null,null],
+    [{ico:'◀',cmd:'DirectionLeft',lbl:''},{ico:'OK',cmd:'Select',lbl:'',center:true},{ico:'▶',cmd:'DirectionRight',lbl:''},null],
+    [null,{ico:'▼',cmd:'DirectionDown',lbl:''},null,null],
+    [{ico:'⏮',cmd:'Rewind',lbl:''},{ico:'⏸',cmd:'Pause',lbl:''},{ico:'▶',cmd:'Play',lbl:''},{ico:'⏭',cmd:'FastForward',lbl:''}],
+    [{ico:'⏺',cmd:'Record',lbl:'Rec'},{ico:'⏹',cmd:'Stop',lbl:'Stop'},{ico:'📁',cmd:'MyShows',lbl:'Aufn.'},{ico:'🎬',cmd:'OnDemand',lbl:'OnDem.'}],
+    [{ico:'CH–',cmd:'ChannelDown',lbl:''},{ico:'CH+',cmd:'ChannelUp',lbl:''},{ico:'🔇',cmd:'Mute',lbl:'Mute'},{ico:'✖',cmd:'Exit',lbl:'Exit'}],
+    [{ico:'🔴',cmd:'Red',lbl:''},{ico:'🟢',cmd:'Green',lbl:''},{ico:'🟡',cmd:'Yellow',lbl:''},{ico:'🔵',cmd:'Blue',lbl:''}],
+  ];
+  const numpad=[[1,2,3],[4,5,6],[7,8,9],[null,0,null]];
+  showRemoteOverlay('Sunrise TV 📡', btns, (cmd)=>svcHarmonyBtn(cmd), numpad);
+}
+
+function showRemoteOverlay(title, rows, onCmd, numpad=null){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease';
+
+  const btnStyle=(b)=>`
+    height:46px;border-radius:13px;border:none;cursor:pointer;touch-action:manipulation;font-size:${b?.center?'.78rem':'1.1rem'};font-weight:${b?.center?'700':'400'};
+    background:${b?.center?'var(--blue)':'var(--c2)'};color:${b?.center?'#fff':'var(--txt)'};
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;
+    ${b?.lbl?'':''}`;
+
+  const renderRows=rows.map(row=>`
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
+      ${row.map(b=>b?`
+      <button onclick="(${(cmd=>onCmd(cmd)).toString()})('${b.cmd}')" style="${btnStyle(b)}">
+        <span>${b.ico}</span>${b.lbl?`<span style="font-size:.54rem;opacity:.6">${b.lbl}</span>`:''}
+      </button>`:`<div></div>`).join('')}
+    </div>`).join('');
+
+  const renderNumpad=numpad?`
+    <div style="height:1px;background:var(--sep);margin:4px 0 8px"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
+      ${numpad.flat().map(n=>n!==null?`<button onclick="svcHarmonyBtn('Number${n}')" style="height:46px;border-radius:13px;border:none;cursor:pointer;touch-action:manipulation;background:var(--c2);color:var(--txt);font-size:1.1rem;font-weight:600">${n}</button>`:`<div></div>`).join('')}
+    </div>`:'';
+
+  ov.innerHTML=`
+  <div style="width:100%;max-width:360px;background:var(--c1);border-radius:26px 26px 0 0;padding:16px 14px 38px;border-top:1px solid var(--sep);max-height:88vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="font-size:.92rem;font-weight:700;color:var(--txt)">${title}</div>
+      <button id="rem-close" style="width:32px;height:32px;border-radius:50%;border:none;background:var(--on-bg);color:var(--dim);font-size:1rem;cursor:pointer;touch-action:manipulation">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      ${renderRows}
+      ${renderNumpad}
+    </div>
+  </div>`;
+
+  ov.querySelector('#rem-close').addEventListener('click',()=>{
+    ov.style.animation='slideDown .2s ease forwards';
+    setTimeout(()=>ov.remove(),200);
+  });
+  ov.querySelector('#rem-close').addEventListener('click',()=>ov.remove());
+  document.body.appendChild(ov);
+}
+
+buildGeraeteTab();
 
 /* ══════════════════════════════
    AUTO LIGHT / DARK THEME
