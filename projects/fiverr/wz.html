@@ -330,7 +330,7 @@ html,body{height:100%;background:var(--bg);
   animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0}
 @keyframes greetFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .hwx{display:flex;flex-direction:column;align-items:flex-end;gap:0;padding-top:6px;cursor:pointer}
-.hwico{width:68px;height:68px;animation:wxFloat 6s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3))}
+.hwico{width:68px;height:68px;animation:wxFloat 6s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));overflow:visible}
 @keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .hwtemp{
   font-family:'Oxanium',sans-serif;
@@ -934,34 +934,35 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 
 /* ── CSS-Variablen (überschreiben :root dark) ── */
 :root.light{
-  --bg:#f2f2f7;
+  /* Gleiches Design-System wie Dark, nur Karten/BG invertiert */
+  --bg:#f0f0f5;
   --c1:#ffffff;
-  --c2:#f2f2f7;
-  --c3:#e5e5ea;
-  --sep:rgba(60,60,67,.15);
+  --c2:#e8e8ed;
+  --c3:#dddde2;
+  --sep:rgba(0,0,0,.1);
   --txt:#1c1c1e;
-  --dim:rgba(60,60,67,.6);
-  --dim2:rgba(60,60,67,.38);
-  --acc:#ff9500;
-  --blue:#007aff;
-  --grn:#34c759;
-  --red:#ff3b30;
-  --g1:rgba(0,0,0,.03);
-  --g2:rgba(0,0,0,.015);
-  --b:rgba(0,0,0,.05);
-  --b2:rgba(0,0,0,.03);
-  --lbl-color:rgba(60,60,67,.4);
-  --sep-line:rgba(60,60,67,.1);
-  /* Theme-sensitive overrides */
+  --dim:rgba(0,0,0,.55);
+  --dim2:rgba(0,0,0,.38);
+  /* Akzentfarben bleiben identisch zum Dark Mode */
+  --acc:#ff9f0a;
+  --blue:#0a84ff;
+  --grn:#30d158;
+  --red:#ff453a;
+  --g1:rgba(0,0,0,.04);
+  --g2:rgba(0,0,0,.02);
+  --b:rgba(0,0,0,.07);
+  --b2:rgba(0,0,0,.04);
+  --lbl-color:rgba(0,0,0,.3);
+  --sep-line:rgba(0,0,0,.08);
   --on-bg:rgba(0,0,0,.05);
   --on-border:rgba(0,0,0,.1);
-  --on-txt:rgba(0,0,0,.85);
-  --on-dim:rgba(60,60,67,.5);
-  --on-dim2:rgba(60,60,67,.32);
-  --on-dim3:rgba(60,60,67,.22);
-  --card-bg:#fff;
-  --nav-bg:rgba(249,249,249,.94);
-  --nav-border:rgba(60,60,67,.12);
+  --on-txt:#1c1c1e;
+  --on-dim:rgba(0,0,0,.5);
+  --on-dim2:rgba(0,0,0,.32);
+  --on-dim3:rgba(0,0,0,.2);
+  --card-bg:#ffffff;
+  --nav-bg:rgba(240,240,245,.96);
+  --nav-border:rgba(0,0,0,.1);
 }
 
 /* ── Basis ── */
@@ -970,7 +971,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 /* ── Hero ── */
 :root.light .hero { box-shadow:0 2px 20px rgba(0,0,0,.08); }
 :root.light .hbg  {
-  background:linear-gradient(160deg,#daeef9 0%,#c8e3f5 50%,#bad8f0 100%) !important;
+  /* Hero bleibt dunkel — gleiche Stimmung wie dark mode */
   transition:background 8s ease;
 }
 :root.light #star-cv { opacity:0 !important; }
@@ -987,29 +988,29 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 
 /* Wetter rechts oben */
 :root.light .hwtemp {
-  background:linear-gradient(170deg,#1c1c1e 30%,rgba(0,0,0,.5) 100%) !important;
+  background:linear-gradient(170deg,#fff 0%,rgba(255,255,255,.65) 100%) !important;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   background-clip:text;
 }
-:root.light .hwdesc  { color:rgba(60,60,67,.5); }
-:root.light .hwfeel  { color:rgba(60,60,67,.35); }
-:root.light .hwico   { filter:drop-shadow(0 2px 6px rgba(0,0,0,.12)); }
+:root.light .hwdesc  { color:rgba(255,255,255,.45); }
+:root.light .hwfeel  { color:rgba(255,255,255,.28); }
+:root.light .hwico   { filter:drop-shadow(0 4px 12px rgba(0,0,0,.3)); }
 
 /* Day-Arc */
-:root.light #day-arc-track { stroke:rgba(0,0,0,.1); }
+:root.light #day-arc-track { stroke:rgba(255,255,255,.12); }
 :root.light #day-arc-lbl   { color:rgba(0,0,0,.3); }
 :root.light #day-arc-fill  { /* bleibt farbig */ }
 
 /* Now-Playing Strip */
-:root.light .hnp-txt { color:rgba(60,60,67,.6); }
+:root.light .hnp-txt { color:rgba(255,255,255,.6); }
 :root.light .hnp-eq i { background:var(--blue); }
 
 /* Stunden-Streifen */
-:root.light .hr      { background:rgba(60,60,67,.07); }
+:root.light .hr      { background:rgba(255,255,255,.1); }
 :root.light .hr.now  { background:var(--blue); }
-:root.light .hrt     { color:rgba(60,60,67,.5); }
-:root.light .hrtemp  { color:#1c1c1e; }
+:root.light .hrt     { color:rgba(255,255,255,.55); }
+:root.light .hrtemp  { color:rgba(255,255,255,.9); }
 :root.light .hrp     { color:rgba(0,100,200,.75); }
 :root.light .hr.now .hrt,
 :root.light .hr.now .hrtemp,
@@ -1274,7 +1275,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
               <div class="hgreet" id="hgreet"></div>
             </div>
             <div class="hwx" id="hwx-tap" title="Wetterdetails">
-              <svg class="hwico" id="hwico" viewBox="0 0 72 72"></svg>
+              <svg class="hwico" id="hwico" viewBox="-6 -6 84 84" style="overflow:visible"></svg>
               <div class="hwtemp" id="hwtemp">–°</div>
               <div class="hwdesc" id="hwdesc">–</div>
               <div class="hwfeel" id="hwfeel">Gefühlt –°</div>
@@ -1668,7 +1669,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
             <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-top:6px" id="wxt-desc">–</div>
             <div style="font-size:.62rem;color:rgba(255,255,255,.25);margin-top:2px">Tatsächlich / Gefühlt</div>
           </div>
-          <svg id="wxt-ico" viewBox="0 0 72 72" width="80" height="80" style="animation:wxFloat 6s ease-in-out infinite"></svg>
+          <svg id="wxt-ico" viewBox="-6 -6 84 84" width="80" height="80" style="animation:wxFloat 6s ease-in-out infinite;overflow:visible"></svg>
         </div>
         <div style="display:flex;gap:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)">
           <div style="font-size:.65rem;color:rgba(255,255,255,.4)">↑ <span style="color:#fff;font-weight:600" id="wxt-hi">–</span></div>
@@ -2348,10 +2349,10 @@ function renderWeather(){
     // Light mode: heller Himmel, passt zur Tageszeit
     const h2=new Date().getHours();
     let lightBg;
-    if(h2<8||h2>=20) lightBg='linear-gradient(160deg,#1a2840,#0d1e38)';
-    else if(h2<10)   lightBg='linear-gradient(160deg,#fde8cc,#f5d4a8)';       // Morgen
-    else if(h2<17)   lightBg='linear-gradient(160deg,#daeef9,#c4dff5)';       // Tag
-    else             lightBg='linear-gradient(160deg,#f5d4a8,#e89060)';       // Abend
+    if(h2<8||h2>=20) lightBg='linear-gradient(160deg,#000005,#04040e,#060616)';
+    else if(h2<10)   lightBg='linear-gradient(160deg,#1a1428,#2d2040,#1e1830)';
+    else if(h2<17)   lightBg='linear-gradient(160deg,#0d1e38,#122850,#0d2040)';
+    else             lightBg='linear-gradient(160deg,#1e1020,#2d1628,#1a0e18)';
     document.getElementById('hbg').style.background=lightBg;
     document.getElementById('ab').style.background=lightBg;
     // Wetter-Karten: Glas-Effekt
