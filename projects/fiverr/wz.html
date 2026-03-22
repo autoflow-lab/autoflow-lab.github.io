@@ -925,226 +925,268 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 
 
 /* ╔══════════════════════════════════════════════════════╗
-   ║   LIGHT THEME  ·  iOS Settings Style                ║
-   ║   Aktiv: 08:00–20:00 Uhr (auto) oder manuell        ║
+   ║   LIGHT THEME  ·  komplett neu · Apple iOS Style    ║
    ╚══════════════════════════════════════════════════════╝ */
 
-:root.light {
+/* ── CSS-Variablen (überschreiben :root dark) ── */
+:root.light{
   --bg:#f2f2f7;
   --c1:#ffffff;
   --c2:#f2f2f7;
   --c3:#e5e5ea;
-  --sep:rgba(0,0,0,.08);
-  --txt:#1c1c1e;
-  --dim:rgba(0,0,0,.5);
-  --dim2:rgba(0,0,0,.35);
+  --sep:rgba(60,60,67,.18);
+  --txt:#000;
+  --dim:rgba(60,60,67,.6);
+  --dim2:rgba(60,60,67,.35);
   --acc:#ff9500;
   --blue:#007aff;
   --grn:#34c759;
   --red:#ff3b30;
   --g1:rgba(0,0,0,.03);
   --g2:rgba(0,0,0,.02);
-  --b:rgba(0,0,0,.07);
-  --b2:rgba(0,0,0,.05);
-  --amb:#ff9500;
-  --ind:#007aff;
-  --lbl-color:rgba(60,60,67,.45);
+  --b:rgba(0,0,0,.05);
+  --b2:rgba(0,0,0,.03);
+  --lbl-color:rgba(60,60,67,.4);
   --sep-line:rgba(60,60,67,.12);
-  --card-shadow:0 1px 3px rgba(0,0,0,.1),0 1px 8px rgba(0,0,0,.06);
 }
 
 /* ── Basis ── */
-:root.light html,:root.light body{background:var(--bg)}
-:root.light #app{background:var(--bg)}
-:root.light .page{color:var(--txt)}
+:root.light body,:root.light #app { background:#f2f2f7; }
 
-/* ── Hero / Clock ── */
-:root.light .hero{overflow:visible}
-:root.light .hbg{
-  background:linear-gradient(160deg,#cce4f6,#b8d8f0,#a8cceb)!important;
-  transition:background 1.4s ease;
+/* ── Hero ── */
+:root.light .hero { box-shadow:0 2px 20px rgba(0,0,0,.08); }
+:root.light .hbg  {
+  background:linear-gradient(160deg,#daeef9 0%,#c8e3f5 50%,#bad8f0 100%) !important;
+  transition:background 8s ease;
 }
-:root.light #star-cv{opacity:0!important;pointer-events:none}
-:root.light .hglow{opacity:0}
-:root.light .htime-h,:root.light .htime-m{color:#1c1c1e}
-:root.light .htime-sep{color:rgba(0,0,0,.3)}
-:root.light .hdate{color:rgba(0,0,0,.75);font-weight:600}
-:root.light .hdate-day{color:rgba(0,0,0,.4)}
-:root.light .hgreet{color:rgba(0,0,0,.5)}
-:root.light #clock-ring-svg #sec-ring{stroke:rgba(255,149,0,.85)}
-:root.light #clock-ring-svg #min-ring{stroke:rgba(0,122,255,.6)}
-:root.light #clock-ring-svg circle[cx="120"][r="108"]{stroke:rgba(0,0,0,.06)}
-:root.light #clock-ring-svg circle[cx="120"][r="116"]{stroke:rgba(0,0,0,.05)}
-:root.light #sec-dot{fill:#ff9500}
+:root.light #star-cv { opacity:0 !important; }
+:root.light #wave-cv { opacity:.12; }
+:root.light .hglow   { opacity:.1; }
 
-/* Wetter-Pill */
-:root.light .hwx-pill{
-  background:rgba(255,255,255,.75);
-  border-color:rgba(0,0,0,.12);
-  box-shadow:0 2px 12px rgba(0,0,0,.1);
+/* Uhr */
+:root.light .htime-h,
+:root.light .htime-m { color:#1c1c1e; }
+:root.light .htime-sep i { background:rgba(0,0,0,.22); }
+:root.light .hdate     { color:rgba(0,0,0,.65); font-weight:600; letter-spacing:.3px; }
+:root.light .hdate-day { color:rgba(60,60,67,.4); }
+:root.light .hgreet    { color:rgba(60,60,67,.55); }
+
+/* Wetter rechts oben */
+:root.light .hwtemp {
+  background:linear-gradient(170deg,#1c1c1e 30%,rgba(0,0,0,.5) 100%) !important;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
 }
-:root.light .hwtemp{
-  background:linear-gradient(170deg,#1c1c1e,rgba(0,0,0,.65));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-:root.light .hwdesc{color:rgba(0,0,0,.45)}
-:root.light .hwfeel{color:rgba(0,0,0,.3)}
+:root.light .hwdesc  { color:rgba(60,60,67,.5); }
+:root.light .hwfeel  { color:rgba(60,60,67,.35); }
+:root.light .hwico   { filter:drop-shadow(0 2px 6px rgba(0,0,0,.12)); }
 
-/* Sonnen-Arc */
-:root.light #day-arc-track{stroke:rgba(0,0,0,.1)!important}
-:root.light #day-arc-lbl{color:rgba(0,0,0,.35)!important}
+/* Day-Arc */
+:root.light #day-arc-track { stroke:rgba(0,0,0,.1); }
+:root.light #day-arc-lbl   { color:rgba(0,0,0,.3); }
+:root.light #day-arc-fill  { /* bleibt farbig */ }
 
-/* Now-playing strip */
-:root.light .hnp-txt{color:rgba(0,0,0,.55)}
-:root.light .hnp-eq i{background:var(--blue)}
+/* Now-Playing Strip */
+:root.light .hnp-txt { color:rgba(60,60,67,.6); }
+:root.light .hnp-eq i { background:var(--blue); }
 
-/* Home-Tab scene shortcuts */
-:root.light .hs-btn{
-  background:rgba(255,255,255,.9);
-  color:rgba(0,0,0,.7);
-  border:1px solid rgba(0,0,0,.1);
-  box-shadow:0 1px 4px rgba(0,0,0,.08);
-}
-:root.light .hs-btn.active{background:rgba(0,122,255,.12);color:var(--blue);border-color:rgba(0,122,255,.25)}
+/* Stunden-Streifen */
+:root.light .hr      { background:rgba(60,60,67,.07); }
+:root.light .hr.now  { background:var(--blue); }
+:root.light .hrt     { color:rgba(60,60,67,.5); }
+:root.light .hrtemp  { color:#1c1c1e; }
+:root.light .hrp     { color:rgba(0,100,200,.75); }
+:root.light .hr.now .hrt,
+:root.light .hr.now .hrtemp,
+:root.light .hr.now .hrp { color:rgba(255,255,255,.9); }
 
-/* ── Stündliche Vorhersage ── */
-:root.light .hr{background:rgba(0,0,0,.06)}
-:root.light .hr.now{background:var(--blue)}
-:root.light .hrt{color:rgba(0,0,0,.45)}
-:root.light .hrtemp{color:#1c1c1e}
-:root.light .hr.now .hrt,:root.light .hr.now .hrtemp{color:#fff}
-
-/* ── Status Pills ── */
-:root.light .pill{background:rgba(0,0,0,.07);color:rgba(0,0,0,.5)}
-:root.light .pill.on{background:rgba(0,0,0,.1);color:#1c1c1e}
-:root.light .pill.on .pd{background:#34c759;box-shadow:0 0 5px #34c759}
-:root.light .pill.music.on .pd{background:var(--blue);box-shadow:0 0 5px var(--blue)}
-
-/* ── Wetter-Stats ── */
-:root.light .wg .ws{border-color:rgba(0,0,0,.07)}
-:root.light .wsv{color:#1c1c1e}
-:root.light .wsl{color:rgba(60,60,67,.45)}
-
-/* ── Karten (.c) ── */
-:root.light .c{
-  background:var(--c1);
-  box-shadow:0 1px 3px rgba(0,0,0,.09),0 1px 8px rgba(0,0,0,.06);
+/* ── Karten (universell) ── */
+:root.light .c {
+  background:#fff;
+  box-shadow:0 1px 0 rgba(0,0,0,.04),0 2px 10px rgba(0,0,0,.06);
   border:none;
 }
 
 /* ── Szenen-Karten ── */
-:root.light .sb2[data-s="abend"]{background:linear-gradient(135deg,#fff8e8,#fef0c0)!important}
-:root.light .sb2[data-s="hell"]{background:linear-gradient(135deg,#fffff0,#fff8d0)!important}
-:root.light .sb2[data-s="film"]{background:linear-gradient(135deg,#f0f0f8,#e8e8f4)!important}
-:root.light .sb2[data-s="nacht"]{background:linear-gradient(135deg,#e8f4fe,#d0e8fa)!important}
-:root.light .sb2-n{color:#1c1c1e!important}
-:root.light .sb2-d{color:rgba(0,0,0,.4)!important}
-:root.light .sb2{border-color:rgba(0,0,0,.08)!important;border-top-color:rgba(0,0,0,.15)!important}
-
-/* ── Radio Quick-Launch ── */
-:root.light .rqb{background:#fff;border-color:rgba(0,0,0,.08);box-shadow:0 1px 4px rgba(0,0,0,.06)}
-:root.light .rqn{color:#1c1c1e!important}
-:root.light .rqv{color:rgba(0,0,0,.4)!important}
-:root.light .rqb.on{background:rgba(0,122,255,.1)!important;border-color:rgba(0,122,255,.3)!important}
-
-/* ── Licht-Tab ── */
-:root.light #qa-bar button{background:#fff;border:1px solid rgba(0,0,0,.1);color:#1c1c1e;box-shadow:0 1px 4px rgba(0,0,0,.07)}
-:root.light .lt{
-  background:#fff!important;
-  border:1px solid rgba(0,0,0,.07)!important;
-  box-shadow:0 1px 6px rgba(0,0,0,.07)!important;
+:root.light .sb2 {
+  box-shadow:0 2px 10px rgba(0,0,0,.07);
+  border:1px solid rgba(0,0,0,.06) !important;
 }
-:root.light .lt.on{
-  box-shadow:0 2px 16px rgba(255,149,0,.18),0 1px 4px rgba(0,0,0,.08)!important;
-  border-color:rgba(255,149,0,.2)!important;
+:root.light .sb2[data-s="abend"] { background:linear-gradient(145deg,#fff8e6,#fff1c8) !important; }
+:root.light .sb2[data-s="hell"]  { background:linear-gradient(145deg,#fefff0,#fffbd4) !important; }
+:root.light .sb2[data-s="film"]  { background:linear-gradient(145deg,#eef2ff,#e4eaff) !important; }
+:root.light .sb2[data-s="nacht"] { background:linear-gradient(145deg,#edf5ff,#dceeff) !important; }
+:root.light .sb2-n   { color:#1c1c1e !important; }
+:root.light .sb2-d   { color:rgba(60,60,67,.45) !important; }
+:root.light .sb2-ico { background:rgba(0,0,0,.06) !important; }
+
+/* ── Home: Szenen-Shortcuts ── */
+:root.light .hs-btn {
+  background:rgba(60,60,67,.07);
+  color:rgba(60,60,67,.7);
+  border:1px solid rgba(60,60,67,.1);
 }
-:root.light .ltnm{color:#1c1c1e!important}
-:root.light .ltv{color:rgba(0,0,0,.4)!important}
-:root.light .lt:not(.on) .ltnm{color:rgba(0,0,0,.55)!important}
-/* Brightness bar on light tiles */
-:root.light .bfil{background:linear-gradient(90deg,rgba(255,149,0,.4),rgba(255,149,0,.8))!important}
+:root.light .hs-btn.active { background:rgba(0,122,255,.1); color:#007aff; }
+
+/* ── Status Pills ── */
+:root.light .pill          { background:rgba(60,60,67,.07); color:rgba(60,60,67,.55); }
+:root.light .pill.on       { background:rgba(52,199,89,.1);  color:#1a5c30; }
+:root.light .pill.on .pd   { background:#34c759; box-shadow:0 0 5px rgba(52,199,89,.4); }
+:root.light .pill.music.on { background:rgba(0,122,255,.09); color:#003a8c; }
+:root.light .pill.music.on .pd { background:#007aff; }
+:root.light .pd            { background:rgba(60,60,67,.18); }
+
+/* ── Radio Quick Row ── */
+:root.light .rqb     { background:#fff; border:1px solid rgba(60,60,67,.1); box-shadow:0 1px 4px rgba(0,0,0,.05); }
+:root.light .rqn     { color:#1c1c1e; }
+:root.light .rqb.on  { background:rgba(0,122,255,.07) !important; border-color:rgba(0,122,255,.22) !important; }
+
+/* ── Labels / Sektionstitel ── */
+:root.light .lbl    { color:rgba(60,60,67,.4) !important; }
+:root.light .sec-head { color:rgba(60,60,67,.4); }
+
+/* ── Wetter Stats ── */
+:root.light .wsv   { color:#1c1c1e; }
+:root.light .wsl   { color:rgba(60,60,67,.38); }
+:root.light .wg    { }
+:root.light .wg .ws { border-color:rgba(60,60,67,.1); }
+:root.light .wsi   { background:rgba(0,0,0,.04) !important; }
+:root.light .fd-d  { color:rgba(60,60,67,.55); }
+:root.light .fd-hi { color:#1c1c1e; }
+:root.light .fd-lo { color:rgba(60,60,67,.4); }
+:root.light #wx-hero {
+  background:rgba(255,255,255,.7) !important;
+  border:1px solid rgba(255,255,255,.8) !important;
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  box-shadow:0 4px 20px rgba(0,0,0,.07);
+}
+
+/* ── Licht Tab ── */
+:root.light .lt {
+  background:#fff !important;
+  border:1px solid rgba(60,60,67,.08) !important;
+  box-shadow:0 1px 6px rgba(0,0,0,.06) !important;
+}
+:root.light .lt.on {
+  box-shadow:0 2px 18px rgba(255,149,0,.15),0 0 0 1.5px rgba(255,149,0,.22) !important;
+}
+:root.light .ltnm { color:#1c1c1e !important; }
+:root.light .ltv  { color:rgba(60,60,67,.45) !important; }
+:root.light .lt:not(.on) .ltnm { color:rgba(60,60,67,.55) !important; }
+:root.light .lt:not(.on) .ltv  { color:rgba(60,60,67,.35) !important; }
 
 /* Szenen Licht-Tab */
-:root.light .sb{background:#fff;border:1px solid rgba(0,0,0,.08)}
-:root.light .sb span{color:rgba(0,0,0,.6)!important}
+:root.light .sb  { background:#fff; border:1px solid rgba(60,60,67,.08); box-shadow:0 1px 4px rgba(0,0,0,.05); }
+:root.light .sb span { color:rgba(60,60,67,.6); }
 
-/* ── Geräte (TV etc.) ── */
-:root.light .dt{background:#fff!important;border-color:rgba(0,0,0,.08)!important}
-:root.light .dt.on{background:rgba(255,149,0,.06)!important;border-color:rgba(255,149,0,.2)!important}
-:root.light .dtnm{color:#1c1c1e!important}
-:root.light .dtsub{color:rgba(0,0,0,.4)!important}
-
-/* ── Musik-Tab ── */
-:root.light .album-wrap{
-  background:rgba(255,255,255,.6)!important;
-  border-color:rgba(0,0,0,.08)!important;
-  box-shadow:0 4px 20px rgba(0,0,0,.1)!important;
-}
-:root.light .np-t{color:#1c1c1e!important}
-:root.light .np-a{color:rgba(0,0,0,.5)!important}
-:root.light .pctrl{background:rgba(255,255,255,.7)!important;border-color:rgba(0,0,0,.08)!important}
-:root.light .bplay{background:rgba(0,0,0,.08)!important;color:#1c1c1e!important;box-shadow:0 4px 20px rgba(0,0,0,.1)!important}
-:root.light .bsml{background:rgba(0,0,0,.06)!important;color:rgba(0,0,0,.55)!important}
-:root.light .np-prog{background:rgba(0,0,0,.1)!important}
-:root.light .pfil{background:var(--blue)!important}
-:root.light .spotcard{
-  background:rgba(0,150,70,.06)!important;
-  border-color:rgba(0,150,70,.18)!important;
-  box-shadow:0 2px 12px rgba(0,150,70,.06)!important;
-}
-:root.light #sp-t{color:#1c1c1e!important}
-:root.light .sp-pl-item{background:rgba(0,0,0,.05)!important;border-color:rgba(0,0,0,.07)!important}
-:root.light .sp-pl-item span{color:#1c1c1e!important}
-:root.light #sp-dev{background:rgba(0,0,0,.07)!important;color:#1c1c1e!important;border-color:rgba(0,0,0,.12)!important}
-:root.light .rb{background:#fff!important;border:1px solid rgba(0,0,0,.08)!important}
-:root.light .rb.on{background:rgba(0,122,255,.1)!important;border-color:rgba(0,122,255,.3)!important;box-shadow:0 0 16px rgba(0,122,255,.1)!important}
-:root.light .rn{color:#1c1c1e!important}
-:root.light .rv{color:rgba(0,0,0,.45)!important}
-:root.light .vrow label{color:rgba(0,0,0,.45)!important}
-
-/* ── Labels / Section headers ── */
-:root.light .lbl{color:rgba(60,60,67,.45)!important;font-weight:600}
-:root.light .sec-head{color:rgba(60,60,67,.45)!important}
-
-/* ── Nav ── */
-:root.light nav{
-  background:rgba(248,248,248,.96)!important;
-  border-top:1px solid rgba(0,0,0,.12)!important;
-  box-shadow:0 -2px 16px rgba(0,0,0,.06);
-}
-:root.light .ni{color:rgba(0,0,0,.3)}
-:root.light .ni.on{color:var(--blue);filter:none}
-:root.light .ni::after{background:var(--blue);box-shadow:0 0 8px 2px rgba(0,122,255,.35),0 0 0 4px rgba(0,122,255,.1)}
-
-/* ── Toast ── */
-:root.light .toast{
-  background:rgba(255,255,255,.96)!important;color:#1c1c1e!important;
-  border-color:rgba(0,0,0,.1)!important;
-  box-shadow:0 8px 24px rgba(0,0,0,.15)!important;
+/* Quick-Action Buttons */
+:root.light .qa-btn {
+  background:#fff;
+  color:#1c1c1e;
+  border:1px solid rgba(60,60,67,.1);
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
 }
 
-/* ── Wetter-Tab 7-Tage ── */
-:root.light .fd-d{color:rgba(0,0,0,.5)!important}
-:root.light .fd-hi{color:#1c1c1e!important}
-:root.light .fd-lo{color:rgba(0,0,0,.35)!important}
-:root.light .fd-r{opacity:.8}
+/* Geräte-Tiles */
+:root.light .dt {
+  background:#fff !important;
+  border:1px solid rgba(60,60,67,.08) !important;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+:root.light .dt.on { background:rgba(255,149,0,.05) !important; border-color:rgba(255,149,0,.2) !important; }
+:root.light .dtnm  { color:#1c1c1e; }
+:root.light .dtsub { color:rgba(60,60,67,.45); }
+:root.light .dtst  { color:rgba(60,60,67,.35); }
+
+/* ── Musik Tab ── */
+:root.light .album-wrap {
+  background:rgba(255,255,255,.75) !important;
+  border:1px solid rgba(255,255,255,.9) !important;
+  backdrop-filter:blur(24px);
+  box-shadow:0 4px 24px rgba(0,0,0,.08) !important;
+}
+:root.light #album-page-bg-img { opacity:.06 !important; filter:blur(55px) saturate(1.5) !important; }
+:root.light .np-t { color:#1c1c1e !important; }
+:root.light .np-a { color:rgba(60,60,67,.5) !important; }
+:root.light .pctrl {
+  background:rgba(255,255,255,.8) !important;
+  border:1px solid rgba(255,255,255,.9) !important;
+  backdrop-filter:blur(20px);
+  box-shadow:0 2px 16px rgba(0,0,0,.07);
+}
+:root.light .bplay {
+  background:rgba(60,60,67,.08) !important;
+  color:#1c1c1e !important;
+  box-shadow:0 2px 10px rgba(0,0,0,.08) !important;
+}
+:root.light .bsml    { background:rgba(60,60,67,.06) !important; color:rgba(60,60,67,.6) !important; }
+:root.light .vv      { color:rgba(60,60,67,.4); }
+:root.light #sp-t    { color:#1c1c1e !important; }
+:root.light .spotcard {
+  background:linear-gradient(135deg,rgba(0,160,80,.06),rgba(0,180,80,.04)) !important;
+  border:1px solid rgba(0,150,70,.18) !important;
+}
+:root.light .sp-pl-item  { background:rgba(60,60,67,.05) !important; border:1px solid rgba(60,60,67,.08) !important; }
+:root.light .sp-pl-item span { color:#1c1c1e !important; }
+:root.light #sp-dev {
+  background:rgba(60,60,67,.07) !important;
+  color:#1c1c1e !important;
+  border:1px solid rgba(60,60,67,.12) !important;
+  border-radius:10px;
+}
+:root.light .rb {
+  background:#fff !important;
+  border:1px solid rgba(60,60,67,.1) !important;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+:root.light .rn  { color:#1c1c1e !important; }
+:root.light .rv  { color:rgba(60,60,67,.45) !important; }
+:root.light .rb.on {
+  background:rgba(0,122,255,.06) !important;
+  border-color:rgba(0,122,255,.25) !important;
+  box-shadow:0 0 14px rgba(0,122,255,.1) !important;
+}
+:root.light .np-prog { background:rgba(60,60,67,.1) !important; }
+:root.light .pfil    { background:var(--blue) !important; }
+:root.light .vfil    { background:rgba(60,60,67,.2) !important; }
+
+/* ── Nav Bar ── */
+:root.light nav {
+  background:rgba(249,249,249,.94) !important;
+  border-top:1px solid rgba(60,60,67,.12) !important;
+  box-shadow:0 -1px 0 rgba(60,60,67,.1),0 -8px 24px rgba(0,0,0,.04);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+}
+:root.light .ni        { color:rgba(60,60,67,.35); }
+:root.light .ni.on     { color:#007aff; filter:none; }
+:root.light .ni.on svg { filter:none; }
+:root.light .ni::after {
+  background:#007aff !important;
+  box-shadow:0 0 6px 2px rgba(0,122,255,.25) !important;
+  animation:none !important;
+}
+:root.light #conn-dot  { background:#34c759 !important; box-shadow:0 0 5px rgba(52,199,89,.5) !important; }
 
 /* ── Offline Banner ── */
-:root.light #offline-banner{background:linear-gradient(90deg,rgba(255,59,48,.9),rgba(200,30,20,.9))!important}
+:root.light #offline-banner { background:linear-gradient(90deg,rgba(255,59,48,.92),rgba(200,30,20,.92)) !important; }
 
-/* ── Conn dot ── */
-:root.light #conn-dot{box-shadow:none}
+/* ── Rain Banner ── */
+:root.light #rain-warn-banner { background:linear-gradient(90deg,rgba(0,100,220,.9),rgba(0,70,180,.9)) !important; }
 
-/* ── Grundriss / Plan ── */
-:root.light #pg-plan{background:var(--bg)}
-:root.light .fp-wrap{background:#fff!important;border-color:rgba(0,0,0,.1)!important}
-
-/* ── Wetter Seite ── */
-:root.light #wx-hero{
-  background:rgba(255,255,255,.7)!important;
-  border-color:rgba(0,0,0,.08)!important;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+/* ── Toast ── */
+:root.light .toast {
+  background:rgba(255,255,255,.97) !important;
+  color:#1c1c1e !important;
+  border:1px solid rgba(60,60,67,.1) !important;
+  box-shadow:0 8px 28px rgba(0,0,0,.12) !important;
 }
+
+/* ── Grundriss ── */
+:root.light #pg-plan  { background:#f2f2f7; }
+:root.light .fp-wrap  { background:#fff !important; border-color:rgba(0,0,0,.08) !important; }
 
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
