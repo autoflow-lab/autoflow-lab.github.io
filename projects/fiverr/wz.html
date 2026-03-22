@@ -3713,7 +3713,7 @@ function buildUI(){try{
         // UI already shows new value — send it
       } else {
         // Snap back to current HA volume
-        const cur=Math.round((_S[CFG.alm]?.attributes?.volume_level??0.4)*100);
+        const cur=Math.min(100,Math.round((_S[CFG.alm]?.attributes?.volume_level??0.4)/0.6*100));
         document.getElementById('vfill').style.width=cur+'%';
         document.getElementById('vthumb').style.left=cur+'%';
         document.getElementById('vv').textContent=cur+'%';
@@ -4358,7 +4358,8 @@ function updateAll(){
     const volSrc=isSpotPlaying?sp:s;
     const volRaw=volSrc?.attributes?.volume_level;
     if(volRaw==null)return; // don't overwrite until real value arrives
-    const vol=Math.round(volRaw*100);
+    // Cap: 0.6 HA = 100% Display → display = raw/0.6*100, capped at 100
+    const vol=Math.min(100,Math.round(volRaw/0.6*100));
     syncVolUI(vol);
   }
   // Album Mood-Gradient — 3-Farben aus Album-Art extrahieren
