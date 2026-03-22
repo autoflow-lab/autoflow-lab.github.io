@@ -1878,7 +1878,7 @@ let _tok,_ws,_wsId=1,_S={},_page='home',_radActive=null,_connected=false;
 const _lastColor={}; // cache last known color per entity
 const _pending={}; // {id:{on,until}} — optimistic state, overrides _S for 4s
 function effOn(id){const p=_pending[id];return(p&&p.until>Date.now())?p.on:_S[id]?.state==='on';}
-function quickRefresh(){if(window._authFailed)return;[400,900,2000].forEach(ms=>setTimeout(fetchStates,ms));}
+function quickRefresh(){if(window._authFailed)return;[500,1500].forEach(ms=>setTimeout(fetchStates,ms));}
 
 function conn(show){
   _connected=show;
@@ -1970,19 +1970,19 @@ async function fetchStates(){
       console.log(`fetchStates: ${arr.length} states, h618a=${h618}, alm=${alm}`);
       updateAll();
     } else if(r.status===401){
-      // Token ungültig — einmal refresh versuchen, dann stop
-      console.warn('fetchStates: 401');
-      if(window._authFailed){return;} // bereits gehandelt
-      window._authFailed=true;
+      // Token ungültig — Refresh versuchen
+      console.warn('fetchStates: 401, attempting refresh');
       const s=getTok();
       if(s?.refresh_token){
         const newTok=await refresh(s.refresh_token);
-        if(newTok){window._authFailed=false;setTimeout(fetchStates,1000);return;}
+        if(newTok){setTimeout(fetchStates,1000);return;}
       }
-      // Token komplett ungültig → Login
-      localStorage.removeItem(TK);
-      toast('⚠️ Session abgelaufen — bitte neu einloggen',8000);
-      setTimeout(()=>{window._authFailed=false;doOAuth();},2000);
+      // Refresh fehlgeschlagen → langsamer retry (kein Ban-Risiko)
+      if(!window._authFailed){
+        window._authFailed=true;
+        toast('⚠️ Verbindungsfehler — bitte Seite neu laden',6000);
+        setTimeout(()=>{window._authFailed=false;fetchStates();},30000);
+      }
       return;
     } else {
       toast(`❌ fetchStates ${r.status}`,5000);
@@ -2104,7 +2104,7 @@ function renderWeather(){
   const bg=heroBg(code,h);
   // Trigger particle effect
   let wxMode=null;
-  if(!isDay){wxMode=null}  // night - no particles
+  if(night){wxMode=null}  // night - no particles
   else if(code>=61&&code<=67||code>=80&&code<=82){wxMode='rain'}
   else if(code>=71&&code<=77||code>=85&&code<=86){wxMode='snow'}
   setWxMode(wxMode);
