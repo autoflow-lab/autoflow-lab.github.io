@@ -1854,7 +1854,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 // Also refresh on window focus  
 window.addEventListener('focus',()=>{
-  setTimeout(fetchStates,200);
+  if(getTok()){setTimeout(fetchStates,200);}
 });
 
 function schedRefresh(){
@@ -1870,7 +1870,7 @@ let _tok,_ws,_wsId=1,_S={},_page='home',_radActive=null,_connected=false;
 const _lastColor={}; // cache last known color per entity
 const _pending={}; // {id:{on,until}} — optimistic state, overrides _S for 4s
 function effOn(id){const p=_pending[id];return(p&&p.until>Date.now())?p.on:_S[id]?.state==='on';}
-function quickRefresh(){[400,900,2000].forEach(ms=>setTimeout(fetchStates,ms));}
+function quickRefresh(){if(window._authFailed)return;[400,900,2000].forEach(ms=>setTimeout(fetchStates,ms));}
 
 function conn(show){
   _connected=show;
@@ -1962,14 +1962,20 @@ async function fetchStates(){
       console.log(`fetchStates: ${arr.length} states, h618a=${h618}, alm=${alm}`);
       updateAll();
     } else if(r.status===401){
-      // Token abgelaufen → automatisch refreshen
-      console.warn('fetchStates: 401, trying token refresh');
+      // Token ungültig — einmal refresh versuchen, dann stop
+      console.warn('fetchStates: 401');
+      if(window._authFailed){return;} // bereits gehandelt
+      window._authFailed=true;
       const s=getTok();
       if(s?.refresh_token){
         const newTok=await refresh(s.refresh_token);
-        if(newTok){setTimeout(fetchStates,500);return;}
+        if(newTok){window._authFailed=false;setTimeout(fetchStates,1000);return;}
       }
-      toast('⚠️ Session abgelaufen — bitte neu einloggen',6000);
+      // Token komplett ungültig → Login
+      localStorage.removeItem(TK);
+      toast('⚠️ Session abgelaufen — bitte neu einloggen',8000);
+      setTimeout(()=>{window._authFailed=false;doOAuth();},2000);
+      return;
     } else {
       toast(`❌ fetchStates ${r.status}`,5000);
     }
