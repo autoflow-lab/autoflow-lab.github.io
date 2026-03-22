@@ -1722,129 +1722,129 @@ function wxIco(code, sz, night=false) {
   if(code>=95)       return thunderIco(sz,id);
   return sunIco(sz,id);
 }
-
 function sunIco(s,id){
-  const cx=s/2,cy=s/2,R=s*.27,rays=8;
-  const rlines=Array.from({length:rays},(_,i)=>{
+  const cx=s/2,cy=s/2,R=s*.265,rays=8;
+  const rls=Array.from({length:rays},(_,i)=>{
     const a=(i/rays)*Math.PI*2-Math.PI/2;
-    const x1=(cx+Math.cos(a)*R*1.55).toFixed(1),y1=(cy+Math.sin(a)*R*1.55).toFixed(1);
-    const x2=(cx+Math.cos(a)*R*2.0).toFixed(1),y2=(cy+Math.sin(a)*R*2.0).toFixed(1);
-    return`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="url(#${id}rg)" stroke-width="${(s*.055).toFixed(1)}" stroke-linecap="round" opacity=".82"/>`;
+    const x1=(cx+Math.cos(a)*R*1.52).toFixed(1),y1=(cy+Math.sin(a)*R*1.52).toFixed(1);
+    const x2=(cx+Math.cos(a)*R*1.98).toFixed(1),y2=(cy+Math.sin(a)*R*1.98).toFixed(1);
+    return`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="url(#${id}rg)" stroke-width="${(s*.054).toFixed(1)}" stroke-linecap="round"/>`;
   }).join('');
   return`<defs>
-    <radialGradient id="${id}g" cx="36%" cy="26%"><stop offset="0%" stop-color="#FFF59D"/><stop offset="45%" stop-color="#FFD600"/><stop offset="100%" stop-color="#E65100"/></radialGradient>
-    <radialGradient id="${id}gl" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFD600" stop-opacity=".4"/><stop offset="100%" stop-color="#FF6F00" stop-opacity="0"/></radialGradient>
-    <linearGradient id="${id}rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFEE58"/><stop offset="100%" stop-color="#FFA000"/></linearGradient>
+    <radialGradient id="${id}g" cx="38%" cy="30%"><stop offset="0%" stop-color="#FFFA8A"/><stop offset="40%" stop-color="#FFD000"/><stop offset="100%" stop-color="#FF8C00"/></radialGradient>
+    <radialGradient id="${id}o" cx="50%" cy="50%"><stop offset="40%" stop-color="#FFD000" stop-opacity=".35"/><stop offset="100%" stop-color="#FF6000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="${id}rg" x1="0%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#FFE87A"/><stop offset="100%" stop-color="#FF9800"/></linearGradient>
   </defs>
-  <circle cx="${cx}" cy="${cy}" r="${(R*1.6).toFixed(1)}" fill="url(#${id}gl)"/>
-  <g style="transform-origin:${cx}px ${cy}px;animation:_spin 18s linear infinite">${rlines}</g>
-  <circle cx="${cx}" cy="${cy}" r="${(R*1.05).toFixed(1)}" fill="url(#${id}g)" style="animation:_glow 3s ease-in-out infinite"/>
-  <ellipse cx="${(cx-R*.2).toFixed(1)}" cy="${(cy-R*.24).toFixed(1)}" rx="${(R*.35).toFixed(1)}" ry="${(R*.22).toFixed(1)}" fill="#FFF9C4" opacity=".55"/>`;
+  <circle cx="${cx}" cy="${cy}" r="${(R*1.7).toFixed(1)}" fill="url(#${id}o)"/>
+  <g style="transform-origin:${cx}px ${cy}px;animation:_spin 18s linear infinite">${rls}</g>
+  <circle cx="${cx}" cy="${cy}" r="${(R*1.06).toFixed(1)}" fill="url(#${id}g)" style="animation:_glow 3s ease-in-out infinite"/>
+  <ellipse cx="${(cx-R*.18).toFixed(1)}" cy="${(cy-R*.26).toFixed(1)}" rx="${(R*.38).toFixed(1)}" ry="${(R*.22).toFixed(1)}" fill="#FFFDE7" opacity=".5" style="transform:rotate(-25deg);transform-origin:${cx}px ${cy}px"/>`;
 }
-
 function moonIco(s,id){
   const cx=s/2,cy=s/2;
   return`<defs>
-    <radialGradient id="${id}g" cx="33%" cy="24%"><stop offset="0%" stop-color="#EEF1FF"/><stop offset="55%" stop-color="#B0BCD8"/><stop offset="100%" stop-color="#6B7FA0"/></radialGradient>
-    <radialGradient id="${id}gl" cx="50%" cy="50%"><stop offset="0%" stop-color="#7B8FBB" stop-opacity=".3"/><stop offset="100%" stop-color="#334466" stop-opacity="0"/></radialGradient>
+    <radialGradient id="${id}g" cx="34%" cy="26%"><stop offset="0%" stop-color="#F5F7FF"/><stop offset="50%" stop-color="#B8C8E8"/><stop offset="100%" stop-color="#7080A8"/></radialGradient>
+    <radialGradient id="${id}o" cx="50%" cy="50%"><stop offset="30%" stop-color="#6070A0" stop-opacity=".25"/><stop offset="100%" stop-color="#203060" stop-opacity="0"/></radialGradient>
   </defs>
-  <circle cx="${cx}" cy="${cy}" r="${(s*.32).toFixed(1)}" fill="url(#${id}gl)"/>
+  <circle cx="${cx}" cy="${cy}" r="${(s*.34).toFixed(1)}" fill="url(#${id}o)"/>
   <g style="animation:_float 5s ease-in-out infinite">
-    <path d="M${(s*.61).toFixed(1)} ${(s*.14).toFixed(1)} A${(s*.3).toFixed(1)} ${(s*.3).toFixed(1)} 0 1 0 ${(s*.61).toFixed(1)} ${(s*.86).toFixed(1)} A${(s*.21).toFixed(1)} ${(s*.21).toFixed(1)} 0 1 1 ${(s*.61).toFixed(1)} ${(s*.14).toFixed(1)}Z" fill="url(#${id}g)"/>
-    <ellipse cx="${(s*.33).toFixed(1)}" cy="${(s*.38).toFixed(1)}" rx="${(s*.046).toFixed(1)}" ry="${(s*.036).toFixed(1)}" fill="#E8EDF8" opacity=".5"/>
-    <ellipse cx="${(s*.43).toFixed(1)}" cy="${(s*.56).toFixed(1)}" rx="${(s*.032).toFixed(1)}" ry="${(s*.024).toFixed(1)}" fill="#D8E0F0" opacity=".38"/>
+    <path d="M${(s*.60).toFixed(1)} ${(s*.13).toFixed(1)} A${(s*.31).toFixed(1)} ${(s*.31).toFixed(1)} 0 1 0 ${(s*.60).toFixed(1)} ${(s*.87).toFixed(1)} A${(s*.22).toFixed(1)} ${(s*.22).toFixed(1)} 0 1 1 ${(s*.60).toFixed(1)} ${(s*.13).toFixed(1)}Z" fill="url(#${id}g)"/>
+    <ellipse cx="${(s*.32).toFixed(1)}" cy="${(s*.36).toFixed(1)}" rx="${(s*.05).toFixed(1)}" ry="${(s*.038).toFixed(1)}" fill="#E8F0FF" opacity=".48"/>
+    <ellipse cx="${(s*.44).toFixed(1)}" cy="${(s*.55).toFixed(1)}" rx="${(s*.034).toFixed(1)}" ry="${(s*.026).toFixed(1)}" fill="#D0DCF4" opacity=".36"/>
   </g>
-  <circle cx="${(s*.19).toFixed(1)}" cy="${(s*.22).toFixed(1)}" r="${(s*.027).toFixed(1)}" fill="#DDE4FF" style="animation:_twinkle 2.1s ease-in-out infinite;--r0:${(s*.027).toFixed(1)}px;--r1:${(s*.042).toFixed(1)}px"/>
-  <circle cx="${(s*.79).toFixed(1)}" cy="${(s*.19).toFixed(1)}" r="${(s*.021).toFixed(1)}" fill="#CCD4FF" style="animation:_twinkle 2.8s ease-in-out .4s infinite;--r0:${(s*.021).toFixed(1)}px;--r1:${(s*.034).toFixed(1)}px"/>`;
+  <circle cx="${(s*.18).toFixed(1)}" cy="${(s*.2).toFixed(1)}"  r="${(s*.028).toFixed(1)}" fill="#E0E8FF" style="animation:_twinkle 2.2s ease-in-out infinite;--r0:${(s*.028).toFixed(1)}px;--r1:${(s*.044).toFixed(1)}px"/>
+  <circle cx="${(s*.8).toFixed(1)}"  cy="${(s*.18).toFixed(1)}" r="${(s*.02).toFixed(1)}"  fill="#C8D4F8" style="animation:_twinkle 2.7s .3s ease-in-out infinite;--r0:${(s*.02).toFixed(1)}px;--r1:${(s*.032).toFixed(1)}px"/>`;
 }
-
 function _cloud(s,id,c1,c2,ox=0,oy=0){
-  return`<defs>
-    <linearGradient id="${id}c" x1=".08" y1="0" x2=".18" y2="1"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient>
-  </defs>
-  <g style="animation:_cld 5s ease-in-out infinite;transform:translate(${ox}px,${oy}px)">
-    <ellipse cx="${s*.52}" cy="${s*.46}" rx="${s*.27}" ry="${s*.185}" fill="url(#${id}c)"/>
-    <ellipse cx="${s*.32}" cy="${s*.54}" rx="${s*.2}" ry="${s*.165}" fill="url(#${id}c)"/>
-    <ellipse cx="${s*.7}"  cy="${s*.52}" rx="${s*.185}" ry="${s*.15}" fill="url(#${id}c)"/>
-    <rect x="${s*.12}" y="${s*.455}" width="${s*.7}" height="${s*.185}" rx="${s*.092}" fill="url(#${id}c)"/>
-    <ellipse cx="${s*.5}" cy="${s*.46}" rx="${s*.22}" ry="${s*.068}" fill="${c1}" opacity=".42"/>
+  const g=id+'c';
+  return`<defs><radialGradient id="${g}t" cx="45%" cy="20%"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></radialGradient>
+    <linearGradient id="${g}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs>
+  <g style="animation:_cld 5.5s ease-in-out infinite;transform:translate(${ox}px,${oy}px)">
+    <ellipse cx="${(s*.5).toFixed(1)}"  cy="${(s*.47).toFixed(1)}" rx="${(s*.27).toFixed(1)}" ry="${(s*.19).toFixed(1)}" fill="url(#${g}t)"/>
+    <ellipse cx="${(s*.31).toFixed(1)}" cy="${(s*.55).toFixed(1)}" rx="${(s*.2).toFixed(1)}"  ry="${(s*.16).toFixed(1)}" fill="url(#${g}b)"/>
+    <ellipse cx="${(s*.69).toFixed(1)}" cy="${(s*.54).toFixed(1)}" rx="${(s*.185).toFixed(1)}" ry="${(s*.15).toFixed(1)}" fill="url(#${g}b)"/>
+    <rect x="${(s*.11).toFixed(1)}" y="${(s*.47).toFixed(1)}" width="${(s*.71).toFixed(1)}" height="${(s*.19).toFixed(1)}" rx="${(s*.095).toFixed(1)}" fill="url(#${g}b)"/>
+    <ellipse cx="${(s*.5).toFixed(1)}" cy="${(s*.472).toFixed(1)}" rx="${(s*.2).toFixed(1)}" ry="${(s*.066).toFixed(1)}" fill="${c1}" opacity=".4"/>
   </g>`;
 }
-
 function cloudBase(s,id,c1,c2,ox=0,oy=0){return _cloud(s,id,c1,c2,ox,oy);}
-
 function cldSunIco(s,id){
-  const scx=s*.3,scy=s*.31,sr=s*.175,rays=6;
-  const rlines=Array.from({length:rays},(_,i)=>{
+  const scx=s*.29,scy=s*.3,sr=s*.175,rays=6;
+  const rls=Array.from({length:rays},(_,i)=>{
     const a=(i/rays)*Math.PI*2-Math.PI/2;
-    return`<line x1="${(scx+Math.cos(a)*sr*.82).toFixed(1)}" y1="${(scy+Math.sin(a)*sr*.82).toFixed(1)}" x2="${(scx+Math.cos(a)*sr*1.45).toFixed(1)}" y2="${(scy+Math.sin(a)*sr*1.45).toFixed(1)}" stroke="#FFD54F" stroke-width="${(s*.05).toFixed(1)}" stroke-linecap="round" opacity=".88"/>`;
+    return`<line x1="${(scx+Math.cos(a)*sr*.82).toFixed(1)}" y1="${(scy+Math.sin(a)*sr*.82).toFixed(1)}" x2="${(scx+Math.cos(a)*sr*1.48).toFixed(1)}" y2="${(scy+Math.sin(a)*sr*1.48).toFixed(1)}" stroke="#FFD54F" stroke-width="${(s*.05).toFixed(1)}" stroke-linecap="round" opacity=".9"/>`;
   }).join('');
   return`<defs>
-    <radialGradient id="${id}sg" cx="35%" cy="28%"><stop offset="0%" stop-color="#FFF59D"/><stop offset="55%" stop-color="#FFD600"/><stop offset="100%" stop-color="#E65100"/></radialGradient>
-    <linearGradient id="${id}cg" x1=".08" y1="0" x2=".18" y2="1"><stop offset="0%" stop-color="#ECEFF1"/><stop offset="100%" stop-color="#90A4AE"/></linearGradient>
+    <radialGradient id="${id}sg" cx="36%" cy="28%"><stop offset="0%" stop-color="#FFF176"/><stop offset="50%" stop-color="#FFD000"/><stop offset="100%" stop-color="#FF8C00"/></radialGradient>
+    <radialGradient id="${id}ct" cx="45%" cy="20%"><stop offset="0%" stop-color="#F4F8FB"/><stop offset="100%" stop-color="#B0C0CC"/></radialGradient>
+    <linearGradient id="${id}cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8EEF2"/><stop offset="100%" stop-color="#8FA8B8"/></linearGradient>
   </defs>
-  <g style="transform-origin:${scx}px ${scy}px;animation:_spin 20s linear infinite">${rlines}</g>
+  <g style="transform-origin:${scx}px ${scy}px;animation:_spin 20s linear infinite">${rls}</g>
   <circle cx="${scx}" cy="${scy}" r="${(sr*.92).toFixed(1)}" fill="url(#${id}sg)"/>
-  <ellipse cx="${(scx-sr*.18).toFixed(1)}" cy="${(scy-sr*.24).toFixed(1)}" rx="${(sr*.3).toFixed(1)}" ry="${(sr*.2).toFixed(1)}" fill="#FFF9C4" opacity=".55"/>
-  <g style="animation:_cld 5s ease-in-out infinite">
-    <ellipse cx="${s*.56}" cy="${s*.64}" rx="${s*.27}" ry="${s*.165}" fill="url(#${id}cg)"/>
-    <ellipse cx="${s*.37}" cy="${s*.71}" rx="${s*.2}"  ry="${s*.155}" fill="url(#${id}cg)"/>
-    <ellipse cx="${s*.73}" cy="${s*.7}" rx="${s*.175}" ry="${s*.14}" fill="url(#${id}cg)"/>
-    <rect x="${s*.17}" y="${s*.63}" width="${s*.58}" height="${s*.165}" rx="${s*.082}" fill="url(#${id}cg)"/>
-    <ellipse cx="${s*.52}" cy="${s*.635}" rx="${s*.2}" ry="${s*.06}" fill="#ECEFF1" opacity=".45"/>
+  <ellipse cx="${(scx-sr*.16).toFixed(1)}" cy="${(scy-sr*.26).toFixed(1)}" rx="${(sr*.3).toFixed(1)}" ry="${(sr*.18).toFixed(1)}" fill="#FFFDE7" opacity=".52"/>
+  <g style="animation:_cld 5.5s ease-in-out infinite">
+    <ellipse cx="${s*.55}" cy="${s*.645}" rx="${s*.265}" ry="${s*.175}" fill="url(#${id}ct)"/>
+    <ellipse cx="${s*.36}" cy="${s*.71}"  rx="${s*.196}" ry="${s*.155}" fill="url(#${id}cb)"/>
+    <ellipse cx="${s*.72}" cy="${s*.70}"  rx="${s*.175}" ry="${s*.145}" fill="url(#${id}cb)"/>
+    <rect x="${s*.16}" y="${s*.635}" width="${s*.58}" height="${s*.17}" rx="${s*.085}" fill="url(#${id}cb)"/>
+    <ellipse cx="${s*.52}" cy="${s*.64}" rx="${s*.2}" ry="${s*.06}" fill="#F0F4F8" opacity=".5"/>
   </g>`;
 }
-
 function cldMoonIco(s,id){
   return`<defs>
-    <radialGradient id="${id}mg" cx="32%" cy="25%"><stop offset="0%" stop-color="#E8EDF8"/><stop offset="70%" stop-color="#9AAAC8"/><stop offset="100%" stop-color="#6B7FA0"/></radialGradient>
-    <linearGradient id="${id}cg" x1=".08" y1="0" x2=".18" y2="1"><stop offset="0%" stop-color="#37415A"/><stop offset="100%" stop-color="#1E2636"/></linearGradient>
+    <radialGradient id="${id}mg" cx="33%" cy="26%"><stop offset="0%" stop-color="#EBF0FF"/><stop offset="65%" stop-color="#8A9CC0"/><stop offset="100%" stop-color="#5C6E90"/></radialGradient>
+    <radialGradient id="${id}ct" cx="45%" cy="20%"><stop offset="0%" stop-color="#2A3348"/><stop offset="100%" stop-color="#161E2C"/></radialGradient>
+    <linearGradient id="${id}cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#242E42"/><stop offset="100%" stop-color="#111826"/></linearGradient>
   </defs>
-  <g style="animation:_float 4s ease-in-out infinite">
-    <path d="M${(s*.5).toFixed(1)} ${(s*.11).toFixed(1)} A${(s*.24).toFixed(1)} ${(s*.24).toFixed(1)} 0 1 0 ${(s*.5).toFixed(1)} ${(s*.59).toFixed(1)} A${(s*.17).toFixed(1)} ${(s*.17).toFixed(1)} 0 1 1 ${(s*.5).toFixed(1)} ${(s*.11).toFixed(1)}Z" fill="url(#${id}mg)"/>
+  <g style="animation:_float 4.5s ease-in-out infinite">
+    <path d="M${(s*.5).toFixed(1)} ${(s*.1).toFixed(1)} A${(s*.25).toFixed(1)} ${(s*.25).toFixed(1)} 0 1 0 ${(s*.5).toFixed(1)} ${(s*.6).toFixed(1)} A${(s*.175).toFixed(1)} ${(s*.175).toFixed(1)} 0 1 1 ${(s*.5).toFixed(1)} ${(s*.1).toFixed(1)}Z" fill="url(#${id}mg)"/>
   </g>
-  <g style="animation:_cld 5s ease-in-out infinite">
-    <ellipse cx="${s*.56}" cy="${s*.7}" rx="${s*.28}" ry="${s*.165}" fill="url(#${id}cg)"/>
-    <ellipse cx="${s*.37}" cy="${s*.76}" rx="${s*.21}" ry="${s*.15}" fill="url(#${id}cg)"/>
-    <ellipse cx="${s*.73}" cy="${s*.75}" rx="${s*.175}" ry="${s*.14}" fill="url(#${id}cg)"/>
-    <rect x="${s*.16}" y="${s*.68}" width="${s*.6}" height="${s*.165}" rx="${s*.082}" fill="url(#${id}cg)"/>
-    <ellipse cx="${s*.53}" cy="${s*.685}" rx="${s*.2}" ry="${s*.055}" fill="#2D3650" opacity=".55"/>
+  <g style="animation:_cld 5.5s ease-in-out infinite">
+    <ellipse cx="${s*.55}" cy="${s*.7}"  rx="${s*.27}" ry="${s*.17}" fill="url(#${id}ct)"/>
+    <ellipse cx="${s*.36}" cy="${s*.765}" rx="${s*.2}"  ry="${s*.155}" fill="url(#${id}cb)"/>
+    <ellipse cx="${s*.72}" cy="${s*.756}" rx="${s*.175}" ry="${s*.145}" fill="url(#${id}cb)"/>
+    <rect x="${s*.15}" y="${s*.692}" width="${s*.6}" height="${s*.17}" rx="${s*.085}" fill="url(#${id}cb)"/>
   </g>`;
 }
-
-function cldIco(s,id){return _cloud(s,id,'#CFD8DC','#78909C');}
-
-function fogIco(s,id){
-  return[s*.28,s*.41,s*.54,s*.67].map((y,i)=>`<rect x="${(s*(i%2?.16:.1)).toFixed(1)}" y="${y.toFixed(1)}" width="${(s*(i%2?.72:.8)).toFixed(1)}" height="${(s*.065).toFixed(1)}" rx="${(s*.032).toFixed(1)}" fill="url(#${id}fg${i})" style="animation:_fog ${2.2+i*.35}s ease-in-out ${i*.2}s infinite"/>`).join('')+
-  `<defs>${[0,1,2,3].map(i=>`<linearGradient id="${id}fg${i}" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#90A4AE" stop-opacity="0"/><stop offset="${25+i*5}%" stop-color="#B0BEC5" stop-opacity="${.6-i*.1}"/><stop offset="${75-i*5}%" stop-color="#90A4AE" stop-opacity="${.55-i*.1}"/><stop offset="100%" stop-color="#78909C" stop-opacity="0"/></linearGradient>`).join('')}</defs>`;
-}
-
-function rainIco(s,id){
-  const dlines=Array.from({length:5},(_,i)=>`<line x1="${(s*(.2+i*.155)).toFixed(1)}" y1="${(s*.64).toFixed(1)}" x2="${(s*(.16+i*.155)).toFixed(1)}" y2="${(s*.82).toFixed(1)}" stroke="url(#${id}dg)" stroke-width="${(s*.042).toFixed(1)}" stroke-linecap="round" style="animation:_rain 1.1s ${i*.12}s ease-in infinite"/>`).join('');
-  return`<defs><linearGradient id="${id}dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#64B5F6"/><stop offset="100%" stop-color="#0D47A1"/></linearGradient></defs>
-  ${_cloud(s,id,'#CFD8DC','#90A4AE',0,-s*.08)}${dlines}`;
-}
-
-function snowIco(s,id){
-  const flines=Array.from({length:5},(_,i)=>{
-    const x=s*(.18+i*.16),delay=i*.15,cy=s*.68+s*.08;
-    return`<g style="animation:_snow 1.4s ${delay}s ease-in infinite"><line x1="${x.toFixed(1)}" y1="${(s*.64).toFixed(1)}" x2="${x.toFixed(1)}" y2="${(cy).toFixed(1)}" stroke="#90CAF9" stroke-width="${(s*.04).toFixed(1)}" stroke-linecap="round"/><line x1="${(x-s*.055).toFixed(1)}" y1="${((s*.64+cy)/2).toFixed(1)}" x2="${(x+s*.055).toFixed(1)}" y2="${((s*.64+cy)/2).toFixed(1)}" stroke="#90CAF9" stroke-width="${(s*.03).toFixed(1)}" stroke-linecap="round"/></g>`;
-  }).join('');
-  return`${_cloud(s,id,'#E3F2FD','#90CAF9',0,-s*.08)}${flines}`;
-}
-
-function thunderIco(s,id){
-  const bolt=`M${(s*.49).toFixed(1)},${(s*.58).toFixed(1)} L${(s*.36).toFixed(1)},${(s*.75).toFixed(1)} L${(s*.47).toFixed(1)},${(s*.75).toFixed(1)} L${(s*.38).toFixed(1)},${(s*.92).toFixed(1)} L${(s*.59).toFixed(1)},${(s*.7).toFixed(1)} L${(s*.47).toFixed(1)},${(s*.7).toFixed(1)}Z`;
+function cldIco(s,id){
   return`<defs>
-    <linearGradient id="${id}bg" x1="0" y1="0" x2=".3" y2="1"><stop offset="0%" stop-color="#FFF176"/><stop offset="100%" stop-color="#FF6F00"/></linearGradient>
+    <radialGradient id="${id}t" cx="44%" cy="18%"><stop offset="0%" stop-color="#E8EEF4"/><stop offset="100%" stop-color="#A0B4C0"/></radialGradient>
+    <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D4DDE4"/><stop offset="100%" stop-color="#7A94A0"/></linearGradient>
+  </defs>
+  <g style="animation:_cld 5.5s ease-in-out infinite">
+    <ellipse cx="${s*.5}"  cy="${s*.42}" rx="${s*.28}" ry="${s*.2}"  fill="url(#${id}t)"/>
+    <ellipse cx="${s*.3}"  cy="${s*.52}" rx="${s*.21}" ry="${s*.17}" fill="url(#${id}b)"/>
+    <ellipse cx="${s*.7}"  cy="${s*.51}" rx="${s*.19}" ry="${s*.155}" fill="url(#${id}b)"/>
+    <rect x="${s*.09}" y="${s*.43}" width="${s*.73}" height="${s*.2}" rx="${s*.1}" fill="url(#${id}b)"/>
+    <ellipse cx="${s*.5}" cy="${s*.43}" rx="${s*.22}" ry="${s*.068}" fill="#EEF4F8" opacity=".45"/>
+  </g>`;
+}
+function fogIco(s,id){
+  return[.28,.41,.53,.65].map((y,i)=>`<rect x="${(s*(i%2?.15:.08)).toFixed(1)}" y="${(s*y).toFixed(1)}" width="${(s*(i%2?.72:.8)).toFixed(1)}" height="${(s*.065).toFixed(1)}" rx="${(s*.033).toFixed(1)}" fill="url(#${id}f${i})" style="animation:_fog ${2.1+i*.38}s ${i*.22}s ease-in-out infinite"/>`).join('')+
+  `<defs>${[0,1,2,3].map(i=>`<linearGradient id="${id}f${i}" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#90A4AE" stop-opacity="0"/><stop offset="30%" stop-color="#B0C4CC" stop-opacity="${.62-i*.1}"/><stop offset="70%" stop-color="#90A4AE" stop-opacity="${.55-i*.08}"/><stop offset="100%" stop-color="#78909C" stop-opacity="0"/></linearGradient>`).join('')}</defs>`;
+}
+function rainIco(s,id){
+  const dls=Array.from({length:5},(_,i)=>`<line x1="${(s*(.19+i*.155)).toFixed(1)}" y1="${(s*.63).toFixed(1)}" x2="${(s*(.15+i*.155)).toFixed(1)}" y2="${(s*.83).toFixed(1)}" stroke="url(#${id}dg)" stroke-width="${(s*.044).toFixed(1)}" stroke-linecap="round" style="animation:_rain 1.05s ${i*.13}s ease-in infinite"/>`).join('');
+  return`<defs><linearGradient id="${id}dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#64B5F6"/><stop offset="100%" stop-color="#0D47A1" stop-opacity=".8"/></linearGradient></defs>
+  ${_cloud(s,id,'#D4DDE4','#7A94A0',0,-s*.09)}${dls}`;
+}
+function snowIco(s,id){
+  const fls=Array.from({length:5},(_,i)=>{
+    const x=s*(.17+i*.165),y0=s*.62,y1=s*.82;
+    return`<g style="animation:_snow 1.35s ${i*.14}s ease-in infinite"><line x1="${x.toFixed(1)}" y1="${y0.toFixed(1)}" x2="${x.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="#64B5F6" stroke-width="${(s*.042).toFixed(1)}" stroke-linecap="round"/><line x1="${(x-s*.058).toFixed(1)}" y1="${((y0+y1)/2).toFixed(1)}" x2="${(x+s*.058).toFixed(1)}" y2="${((y0+y1)/2).toFixed(1)}" stroke="#90CAF9" stroke-width="${(s*.032).toFixed(1)}" stroke-linecap="round"/></g>`;
+  }).join('');
+  return`${_cloud(s,id,'#DCE8F0','#90C0D8',0,-s*.09)}${fls}`;
+}
+function thunderIco(s,id){
+  const bp=`M${(s*.49).toFixed(1)},${(s*.57).toFixed(1)} L${(s*.35).toFixed(1)},${(s*.76).toFixed(1)} L${(s*.46).toFixed(1)},${(s*.76).toFixed(1)} L${(s*.37).toFixed(1)},${(s*.93).toFixed(1)} L${(s*.59).toFixed(1)},${(s*.71).toFixed(1)} L${(s*.47).toFixed(1)},${(s*.71).toFixed(1)}Z`;
+  return`<defs>
+    <linearGradient id="${id}bg" x1="0" y1="0" x2=".2" y2="1"><stop offset="0%" stop-color="#FFF176"/><stop offset="100%" stop-color="#FF8F00"/></linearGradient>
     <filter id="${id}gf"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
-  ${_cloud(s,id,'#78909C','#455A64',0,-s*.08)}
-  <path d="${bolt}" fill="url(#${id}bg)" filter="url(#${id}gf)" opacity=".7" style="animation:_bolt 2.5s ease-in-out infinite"/>
-  <path d="${bolt}" fill="url(#${id}bg)" style="animation:_bolt 2.5s ease-in-out infinite"/>`;
+  ${_cloud(s,id,'#6E8494','#3E5060',0,-s*.09)}
+  <path d="${bp}" fill="url(#${id}bg)" filter="url(#${id}gf)" opacity=".65" style="animation:_bolt 2.4s ease-in-out infinite"/>
+  <path d="${bp}" fill="url(#${id}bg)" style="animation:_bolt 2.4s ease-in-out infinite"/>`;
 }
-
-
 
 // WMO text
 function wxTxt(c){
@@ -1969,9 +1969,10 @@ function schedRefresh(){
 // ═══════════════════════════════════════════════
 let _tok,_ws,_wsId=1,_S={},_page='home',_radActive=null,_connected=false;
 const _lastColor={}; // cache last known color per entity
+const _lastBri={}; // cache last known brightness per entity (for optimistic feedback)
 const _pending={}; // {id:{on,until}} — optimistic state, overrides _S for 4s
 function effOn(id){const p=_pending[id];return(p&&p.until>Date.now())?p.on:_S[id]?.state==='on';}
-function quickRefresh(){if(window._authFailed)return;[500,1500].forEach(ms=>setTimeout(fetchStates,ms));}
+function quickRefresh(){if(window._authFailed)return;[500,1200,2500].forEach(ms=>setTimeout(fetchStates,ms));}
 
 function conn(show){
   _connected=show;
@@ -3175,7 +3176,7 @@ function buildUI(){try{
       el.addEventListener('mouseenter',()=>el.style.transform='scale(1.12)');
       el.addEventListener('mouseleave',()=>el.style.transform='scale(1)');
     });
-    ov.addEventListener('click',e=>{if(e.target===ov)ov.remove()});
+    // Kein Backdrop-Click-Close — nur X-Button oder expliziter Schliessen-Button
     // Swipe-Down zum Schliessen
     const sheet=ov.querySelector('div');
     let _sy=0,_dragging=false;
@@ -3720,7 +3721,7 @@ function buildUI(){try{
     };
     document.getElementById('vol-yes').addEventListener('click',()=>close(true));
     document.getElementById('vol-no').addEventListener('click',()=>close(false));
-    ov.addEventListener('click',e=>{if(e.target===ov)close(false)});
+    // Backdrop-Click deaktiviert
   }
   function setVol(clientX){
     const r=vtrack.getBoundingClientRect();
@@ -4495,7 +4496,10 @@ function updateAll(){
     const tile=document.querySelector(`.lt[data-id="${l.id}"]`);
     if(!tile)return;
     const on=effOn(l.id); // respects pending optimistic state for 4s
-    const bri=Math.round((s?.attributes?.brightness||0)/2.55);
+    const rawBri=Math.round((s?.attributes?.brightness||0)/2.55);
+    if(rawBri>0) _lastBri[l.id]=rawBri; // Cache immer wenn HA echten Wert hat
+    // Beim pending-on: nutze gecachte Helligkeit (mindestens 75%)
+    const bri=(!rawBri && on && _pending[l.id]?.on) ? (_lastBri[l.id]||75) : rawBri;
     // Color
     const rgb=s?.attributes?.rgb_color;
     const ct=s?.attributes?.color_temp_kelvin;
@@ -4531,7 +4535,7 @@ function updateAll(){
         const diff=Math.round((Date.now()-new Date(lc).getTime())/60000);
         age=diff<1?' · gerade':diff<60?` · vor ${diff} Min`:diff<1440?` · vor ${Math.round(diff/60)} h`:'';
       }
-      se.textContent=(on?(bri>0?bri+'%':'An'):'Aus')+age;
+      se.textContent=(on?(bri>0?bri+'%':'An'):'Aus')+(on?'':age);
     }
     const pct=on?Math.max(bri,12):0;
     const fi=tile.querySelector('[data-fill]');if(fi){fi.style.width=pct+'%';fi.style.minWidth=on?'12px':'';}
@@ -4544,9 +4548,9 @@ function updateAll(){
       arc.style.strokeDashoffset=CIRC*(1-briPct/100);
       arc.style.stroke=lc?`rgba(${lc},0.9)`:'rgba(255,193,141,0.9)';
     }
-    // Brightness bar sync
-    const bfill=tile.querySelector('.tile-dim-bar div');
-    if(bfill)bfill.style.width=(on?Math.max(bri,5):0)+'%';
+    // Brightness bar sync — fill uses .bfil[data-fill]
+    const bfill2=tile.querySelector('[data-fill]');
+    if(bfill2){bfill2.style.width=(on?Math.max(bri,5):0)+'%';}
   });
   // Devs
   CFG.devs.forEach(d=>{
@@ -4660,28 +4664,7 @@ function updateRadio(){
 // ── Swipe-to-change-tab ──
 (function(){
   let _sx=0,_sy=0;
-  let _swipeBlocked=false;
-  document.getElementById('app')?.addEventListener('touchstart',e=>{
-    _sx=e.touches[0].clientX;_sy=e.touches[0].clientY;
-    // Block tab swipe if touch starts on interactive/scrollable element
-    _swipeBlocked=!!e.target.closest(
-      'input,canvas,select,textarea,.bbar,.vtck,.ls-rng,[data-bri],[data-vol],'+
-      '#ls-wheel,#ls-ct-strip,.overlay,.album-wrap,.hourly,.rqrow,.sg2,.ltg'
-    ) || document.querySelector('.ls-sheet-open') !== null;
-  },{passive:true});
-  document.getElementById('app')?.addEventListener('touchend',e=>{
-    if(_swipeBlocked){_swipeBlocked=false;return;}
-    const dx=e.changedTouches[0].clientX-_sx;
-    const dy=e.changedTouches[0].clientY-_sy;
-    // Nur swipe wenn klar horizontal UND kein Overlay offen
-    const anyOverlay=document.querySelector('[style*="position:fixed"][style*="z-index:9"]')||
-                     document.querySelector('[style*="position:fixed"][style*="z-index:2"]');
-    if(!anyOverlay&&Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*2){
-      const idx=PORD.indexOf(_page);
-      if(dx<0&&idx<PORD.length-1)navTo(PORD[idx+1]);
-      else if(dx>0&&idx>0)navTo(PORD[idx-1]);
-    }
-  },{passive:true});
+  // Swipe-Navigation entfernt — nur Nav-Buttons zum Tab-Wechsel
 })();
 
 /* ══════════════════════════════
@@ -4852,7 +4835,7 @@ function openWeatherSheet(){
   </div>`;
   document.body.appendChild(ov);
   ov.querySelector('#wx-close').addEventListener('click',()=>ov.remove());
-  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+  // Backdrop-Click deaktiviert
 }
 
 // ── Debug Panel ──────────────────────────────────────────────
