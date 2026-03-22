@@ -847,18 +847,24 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 .ltst{font-size:.58rem;color:var(--dim);margin-top:1px;transition:color .35s;z-index:1}
 .lt.on .ltst{color:rgba(255,159,10,.8)}
 .bbar{
-  width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.12);
-  position:relative;z-index:2;cursor:pointer;
+  width:100%;height:6px;border-radius:6px;background:rgba(255,255,255,.1);
+  position:relative;z-index:2;cursor:pointer;overflow:hidden;
 }
-.bfil{height:100%;border-radius:4px;width:0%;
-  background:linear-gradient(90deg,rgba(255,159,10,.7),#ff9f0a)}
-.bthumb{
-  position:absolute;top:50%;transform:translate(-50%,-50%);
-  width:18px;height:18px;border-radius:50%;pointer-events:none;
-  background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.5);
-  opacity:0;z-index:3;transition:opacity .3s;
+.bfil{
+  height:100%;border-radius:6px;width:0%;
+  background:linear-gradient(90deg,rgba(255,159,10,.7),#ff9f0a);
+  transition:width .3s cubic-bezier(.4,0,.2,1);
+  position:relative;
 }
-.lt.on .bthumb{opacity:1}
+.bfil::after{
+  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:10px;height:10px;border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 6px rgba(255,159,10,.8),0 1px 3px rgba(0,0,0,.4);
+  opacity:0;transition:opacity .3s;
+}
+.lt.on .bfil::after{opacity:1}
+.bthumb{display:none}
 .bsl{display:none}
 /* Tile on-state ambient pulse */
 @keyframes tileBreath{0%,100%{box-shadow:var(--lt-shadow,none)}50%{box-shadow:var(--lt-shadow-hi,none)}}
@@ -3019,7 +3025,7 @@ function buildUI(){try{
     const bthumb=t.querySelector('.bthumb');
     function updateBriBar(pct){
       if(bfill)bfill.style.width=pct+'%';
-      if(bthumb)bthumb.style.left=Math.min(pct,96)+'%';
+      // bthumb is now handled via CSS ::after on bfil
     }
     function getBri(){return Math.round((_S[lid]?.attributes?.brightness??0)/2.55)||1;}
 
@@ -4349,8 +4355,7 @@ function updateAll(){
     }
     const pct=on?Math.max(bri,12):0;
     const fi=tile.querySelector('[data-fill]');if(fi){fi.style.width=pct+'%';fi.style.minWidth=on?'12px':'';}
-    const th=tile.querySelector('[data-thumb]');
-    if(th){th.style.left=Math.min(pct,94)+'%';th.style.opacity=on?'1':'0';}
+    // bthumb now via CSS ::after on bfil — no JS needed
     // Brightness arc ring
     const arc=tile.querySelector('[data-bri-arc]');
     if(arc){
