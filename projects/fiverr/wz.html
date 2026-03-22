@@ -190,6 +190,19 @@ html,body{height:100%;background:var(--bg);
 .ni span{font-size:.5rem;font-weight:500;letter-spacing:.3px}
 .ni.on{color:#fff;filter:none}
 .ni.on svg{transform:scale(1.12)}
+/* ── Nav-Tab Light-Count Badge ── */
+.ni-badge{
+  position:absolute;top:1px;right:calc(50% - 18px);
+  min-width:15px;height:15px;border-radius:8px;
+  background:var(--amber);color:#000;
+  font-size:.48rem;font-weight:700;line-height:15px;text-align:center;
+  padding:0 3px;box-sizing:border-box;
+  opacity:0;transform:scale(.5);
+  transition:opacity .22s cubic-bezier(.34,1.56,.64,1),transform .22s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;box-shadow:0 0 6px rgba(255,159,10,.55)}
+.ni-badge.show{opacity:1;transform:scale(1)}
+@keyframes badgePop{0%{transform:scale(1.6)}100%{transform:scale(1)}}
+.ni-badge.pop{animation:badgePop .28s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes navGlow{
   0%,100%{opacity:.8;width:18px}
   50%{opacity:1;width:28px}
@@ -1646,7 +1659,8 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="18" r="2.5"/><circle cx="18" cy="16" r="2.5"/><path d="M10.5 18V7.5l10-2.5V16"/></svg>
       <span>Musik</span>
     </button>
-    <button class="ni" data-p="licht">
+    <button class="ni" data-p="licht" style="position:relative">
+      <span id="licht-nav-badge" class="ni-badge" aria-label="Lichter an">0</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/></svg>
       <span>Licht</span>
     </button>
@@ -4194,9 +4208,15 @@ function showFilmPicker(){
     if(selMood!==null){
       const m=MOODS[selMood];
       if(m.rgb){
+        // Sofort setzen + nochmal nach 2.5s (überschreibt HA-Automation die bei TV-on feuert)
         GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:m.bri,rgb_color:m.rgb}));
+        setTimeout(()=>GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:m.bri,rgb_color:m.rgb})),2500);
+      } else {
+        // "Aus lassen" — aber HA-Automationen feuern wenn TV angeht (warn delay)
+        // Nochmal nach 3.5s ausschalten um Automation-Override zu verhindern
+        GOVEES.forEach(id=>svc('light','turn_off',{entity_id:id}));
+        setTimeout(()=>GOVEES.forEach(id=>svc('light','turn_off',{entity_id:id})),3500);
       }
-      // else leave off
     } else {
       // default: warm amber
       GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:35,rgb_color:[255,185,100]}));
@@ -4435,6 +4455,19 @@ function updateAll(){
     const onIds=CFG.lights.filter(l=>st(l.id)==='on').map(l=>l.id);
     window._tagsumUpdate(onIds, playing);
   }
+  // Nav-Tab Licht-Badge
+  (function(){
+    const bdg=document.getElementById('licht-nav-badge');
+    if(!bdg)return;
+    const prev=parseInt(bdg.textContent)||0;
+    bdg.textContent=on;
+    if(on>0){
+      if(!bdg.classList.contains('show')){bdg.classList.add('show');}
+      if(on!==prev){bdg.classList.remove('pop');void bdg.offsetWidth;bdg.classList.add('pop');}
+    } else {
+      bdg.classList.remove('show','pop');
+    }
+  })();
   // FAB visibility
   window._updateFab&&window._updateFab(on);
   // Quick-Actions Bar state
