@@ -517,12 +517,13 @@ html,body{height:100%;background:var(--bg);
 #qa-bar{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;padding-bottom:2px}
 #qa-bar::-webkit-scrollbar{display:none}
-.qa-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;
-  width:72px;padding:13px 6px 11px;border-radius:18px;border:none;cursor:pointer;
-  background:var(--c1);border:1px solid var(--sep);
+.qa-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:7px;
+  width:74px;padding:14px 6px 12px;border-radius:20px;border:none;cursor:pointer;
+  background:var(--c1);border:1px solid rgba(255,255,255,.07);
+  border-top-color:rgba(255,255,255,.13);
   touch-action:manipulation;transition:transform .16s cubic-bezier(.34,1.56,.64,1),background .2s,box-shadow .2s;
   color:#fff;-webkit-tap-highlight-color:transparent;
-  box-shadow:0 2px 12px rgba(0,0,0,.3),0 1px 0 rgba(255,255,255,.05) inset}
+  box-shadow:0 3px 16px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.06) inset}
 .qa-btn:active{transform:scale(.88)}
 .qa-btn .qa-ico{width:38px;height:38px;border-radius:13px;display:flex;align-items:center;
   justify-content:center;transition:background .25s,box-shadow .25s}
@@ -625,7 +626,7 @@ html,body{height:100%;background:var(--bg);
 .fc3-lo{font-size:.68rem;color:var(--dim2);flex-shrink:0;min-width:22px;text-align:right}
 .fc3-bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.1);position:relative}
 .fc3-fill{position:absolute;height:100%;border-radius:2px;
-  background:linear-gradient(90deg,#60a5fa,#fbbf24)}
+  background:linear-gradient(90deg,#60a5fa,#ff9f0a)}
 .fc3-hi{font-size:.72rem;font-weight:600;color:var(--txt);flex-shrink:0;min-width:22px}
 
 /* ───────────── DAILY FORECAST ───────────── */
@@ -641,7 +642,7 @@ html,body{height:100%;background:var(--bg);
 .dr-lo{font-size:.76rem;font-weight:400;color:var(--dim);min-width:26px;text-align:right;flex-shrink:0}
 .dr-bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.1);position:relative}
 .dr-range{position:absolute;height:100%;border-radius:2px;
-  background:linear-gradient(90deg,#60a5fa,#fbbf24)}
+  background:linear-gradient(90deg,#60a5fa,#ff9f0a)}
 .dr-hi{font-size:.76rem;font-weight:600;color:var(--txt);min-width:26px;text-align:right;flex-shrink:0}
 .dr-prec{font-size:.58rem;font-weight:600;color:rgba(96,165,250,.6);min-width:26px;text-align:center;flex-shrink:0}
 
@@ -658,8 +659,8 @@ html,body{height:100%;background:var(--bg);
 .album::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.7) 100%);pointer-events:none;z-index:0}
 .album-orb1,.album-orb2{display:none}
 .np{padding:6px 20px 20px;position:relative;z-index:1;text-align:center;width:100%}
-.nplbl{font-size:.52rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;
-  color:var(--dim2);margin-bottom:10px}
+.nplbl{font-size:.52rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--dim2);margin-bottom:8px}
 .nptitle{font-size:1.22rem;font-weight:700;color:var(--txt);
   white-space:nowrap;overflow:hidden;letter-spacing:-.3px;position:relative}
 .nptitle.scroll span{
@@ -930,7 +931,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 .bsl{display:none}
 /* Tile on-state ambient pulse */
 @keyframes tileBreath{0%,100%{box-shadow:var(--lt-shadow,none)}50%{box-shadow:var(--lt-shadow-hi,none)}}
-.lt.on{animation:tileBreath 3.5s ease-in-out infinite}
+.lt.on{animation:tileBreath 4s ease-in-out infinite}
 
 /* ── All-Off FAB ── */
 #all-off-fab{display:flex!important}
@@ -1107,7 +1108,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
   
 /* ── GERÄTE TAB ── */
 .dev-card{background:var(--c1);border-radius:20px;padding:18px 16px;border:1px solid var(--sep);box-shadow:0 4px 20px rgba(0,0,0,.18);transition:all .2s}
-.dev-card.on{border-color:rgba(10,132,255,.3)}
+.dev-card.on{border-color:rgba(10,132,255,.35);box-shadow:0 0 20px rgba(10,132,255,.1),0 4px 20px rgba(0,0,0,.18)}
 .dev-card-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .dev-card-ico{width:48px;height:48px;border-radius:14px;background:var(--c2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s}
 .dev-card.on .dev-card-ico{background:rgba(10,132,255,.18)}
@@ -1210,7 +1211,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
                 <div class="hdate-day" id="hdate-day"></div>
               </div>
               <div class="hgreet" id="hgreet"></div>
-              <div id="scene-hint" style="font-size:.6rem;font-weight:600;color:var(--acc);margin-top:4px;opacity:0;transition:opacity .4s;letter-spacing:.2px"></div>
+              <div id="scene-hint" style="font-size:.6rem;font-weight:600;color:var(--acc);margin-top:4px;opacity:0;transition:opacity .5s;letter-spacing:.4px;text-transform:uppercase"></div>
               <div id="presence-pill" style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 10px 4px 8px;border-radius:100px;background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.25);font-size:.58rem;font-weight:600;letter-spacing:.3px;opacity:0;transition:opacity .5s,background .4s,border-color .4s;color:#30d158">
                 <span style="width:5px;height:5px;border-radius:50%;background:#30d158;flex-shrink:0;transition:background .4s"></span>
                 <span id="presence-txt">Daheim</span>
@@ -1295,6 +1296,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Nacht</button>
       </div>
       <!-- Radio quick-launch -->
+      <span class="lbl" style="margin:8px 2px 6px;display:block">Radio</span>
       <div class="rqrow" id="rq"></div>
 
 
@@ -1728,10 +1730,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
   </div><!-- /pages -->
 
   <!-- Mini now playing (above nav) -->
-  <div class="mini-np" id="mini-np">
+  <div class="mini-np" id="mini-np" style="cursor:pointer">
     <div class="mini-eq" id="mini-eq"><i></i><i></i><i></i></div>
     <div class="mini-t" id="mini-t">–</div>
-    <span class="mini-pause">
+    <span class="mini-pause" id="mini-pause">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
     </span>
   </div>
@@ -2433,6 +2435,19 @@ function renderWeather(){
     document.getElementById('wxt-wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
     document.getElementById('wxt-hum').textContent=c.relative_humidity_2m+'%';
     document.getElementById('wxt-ico').innerHTML=wxIco(code,72,night);
+    // Hero-BG dynamisch nach Wetterlage
+    const wxHero=document.getElementById('wx-hero');
+    if(wxHero){
+      const isRain=[51,53,55,61,63,65,71,73,75,80,81,82,95,96,99].includes(code);
+      const isSnow=[71,73,75,77,85,86].includes(code);
+      const isClear=code<=1;
+      const isCloud=[2,3,45,48].includes(code)||code===2;
+      if(isRain)wxHero.style.background='linear-gradient(145deg,#0a1828,#0d2035,#122040)';
+      else if(isSnow)wxHero.style.background='linear-gradient(145deg,#0d1520,#151e30,#1a2840)';
+      else if(isClear&&!night)wxHero.style.background='linear-gradient(145deg,#0a1e3a,#1040a0,#0020a0)';
+      else if(isClear&&night)wxHero.style.background='linear-gradient(145deg,#030510,#060d1e,#080f2a)';
+      else wxHero.style.background='linear-gradient(145deg,#0d1828,#182035,#14202e)';
+    }
     if(_wx.daily){
       document.getElementById('wxt-hi').textContent=Math.round(_wx.daily.temperature_2m_max[0])+'°';
       document.getElementById('wxt-lo').textContent=Math.round(_wx.daily.temperature_2m_min[0])+'°';
@@ -3662,6 +3677,14 @@ function buildUI(){try{
   // Wetter-Detail Sheet (Fallback, nicht mehr primary)
   // document.getElementById('hwx-tap')?.addEventListener('click',()=>{hap();openWeatherSheet();});
   // Nav
+  // Mini NP: tap = go to Musik tab, play/pause button
+  document.getElementById('mini-np')?.addEventListener('click',e=>{
+    if(e.target.closest('#mini-pause')){
+      hap();svc('media_player','media_play_pause',{entity_id:CFG.alm});
+    } else {
+      hap();navTo('musik');
+    }
+  });
   document.querySelectorAll('.ni').forEach(b=>b.addEventListener('click',()=>{hap();navTo(b.dataset.p)}));
   // Scenes
   document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{hap();doScene(b.dataset.s)}));
