@@ -415,7 +415,7 @@ function buildLichterGrid(){
     });
   });
   document.getElementById('l-all-on').addEventListener('click',()=>{CFG_LIGHTS.filter(l=>!l.nodim).forEach(l=>svc(l.dom||'light','turn_on',{entity_id:l.id,brightness_pct:80}));setTimeout(fetchStates,800);});
-  document.getElementById('l-all-off').addEventListener('click',()=>{CFG_LIGHTS.forEach(l=>svc(l.dom||'light','turn_off',{entity_id:l.id}));setTimeout(fetchStates,800);});
+  document.getElementById('l-all-off').addEventListener('click',()=>{CFG_LIGHTS.forEach(l=>svc(l.dom||'light','turn_off',{entity_id:l.id,transition:2}));svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});setTimeout(fetchStates,800);});
 }
 
 function buildHomeControls(){
@@ -479,6 +479,14 @@ function updateAll(){
     hr.value=hueBri;
     hr.style.background=hueSt?`linear-gradient(90deg,rgba(255,159,10,.7) ${hueBri}%,rgba(255,255,255,.1) ${hueBri}%)`:'rgba(255,255,255,.1)';
     document.getElementById('hue-pct').textContent=hueSt?hueBri+'%':'–';
+  }
+  // Anwesenheit
+  const janisHome=st('person.janis')==='home';
+  const nhPres=document.getElementById('nh-presence');
+  if(nhPres){
+    nhPres.textContent=janisHome?'🏠 Daheim':'🚗 Weg';
+    nhPres.style.background=janisHome?'rgba(48,209,88,.12)':'rgba(255,159,10,.12)';
+    nhPres.style.color=janisHome?'#30d158':'#ff9f0a';
   }
   // Wandlampe
   const wandOn=st('switch.shelly1_98cdac0ca9b2')==='on';

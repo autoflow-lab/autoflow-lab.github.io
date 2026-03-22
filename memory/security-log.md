@@ -250,6 +250,13 @@ Keine Telegram-Benachrichtigung gesendet.
 
 ---
 
+## 2026-03-22 21:30 UTC — Security Check
+
+**Keine neuen Security-Events.** HA-Log zeigt nur Music Assistant Versionsmismatch (Schema 28). Keine Login-Versuche, gebannte IPs oder unauthorized-Einträge.
+Keine Telegram-Benachrichtigung gesendet.
+
+---
+
 ## Security Check — 2026-03-22 21:07 UTC
 
 **Status:** Security OK
