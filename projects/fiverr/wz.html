@@ -285,30 +285,33 @@ html,body{height:100%;background:var(--bg);
 .htop{
   display:grid;grid-template-columns:1fr auto;
   align-items:flex-start;padding:26px 22px 0;gap:12px;
-  position:relative;
 }
-/* Wave Canvas hinter der Uhr */
+/* Wave Canvas — volle Hero-Höhe, hinter allem */
 #wave-cv{
-  position:absolute;bottom:0;left:0;right:0;height:56px;
-  pointer-events:none;opacity:.55;
-  border-radius:0 0 4px 4px;
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;opacity:.4;border-radius:18px;
+  z-index:1;
 }
-:root.light #wave-cv{opacity:.35}
+:root.light #wave-cv{opacity:.18}
 .htime{
-  display:flex;align-items:flex-end;gap:4px;line-height:1;
+  display:flex;align-items:center;gap:6px;line-height:1;
   font-variant-numeric:tabular-nums;
 }
 .htime-h,.htime-m{
-  font-family:'Oxanium',sans-serif;
-  font-size:clamp(5rem,21vw,7.6rem);font-weight:200;letter-spacing:-4px;color:#fff;line-height:1;
+  font-size:clamp(5rem,21vw,7.6rem);font-weight:100;letter-spacing:-4px;color:#fff;line-height:1;
 }
+/* Zwei gestapelte Punkte statt Doppelpunkt — Apple-Style */
 .htime-sep{
-  font-family:'Oxanium',sans-serif;
-  font-size:clamp(2.2rem,9vw,3.2rem);font-weight:200;color:rgba(255,255,255,.22);
-  margin-bottom:.5rem;letter-spacing:0;
-  animation:colonBlink 1s step-end infinite;
+  display:flex;flex-direction:column;gap:clamp(4px,1.4vw,8px);
+  margin-bottom:clamp(.2rem,.8vw,.4rem);
 }
-@keyframes colonBlink{0%,49%{opacity:.9}50%,100%{opacity:.15}}
+.htime-sep i{
+  display:block;width:clamp(5px,1.5vw,7px);height:clamp(5px,1.5vw,7px);
+  border-radius:50%;background:rgba(255,255,255,.45);
+  animation:dotPulse 1s ease-in-out infinite;
+}
+.htime-sep i:nth-child(2){animation-delay:.5s}
+@keyframes dotPulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.9;transform:scale(1.15)}}
 .hdate-wrap{display:flex;flex-direction:column;gap:2px;margin-top:6px}
 .hdate{
   font-size:.75rem;font-weight:600;letter-spacing:.2px;
@@ -337,17 +340,7 @@ html,body{height:100%;background:var(--bg);
 #day-arc-lbl{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
   font-size:.46rem;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;
   color:rgba(255,255,255,.3);white-space:nowrap;pointer-events:none;text-align:center}
-.hwx{display:flex;flex-direction:column;align-items:flex-end;gap:0;padding-top:6px}
-.hwico{width:70px;height:70px;animation:wxFloat 6s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3))}
-@keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 /* Wetter-Animationen via _rain, _cld in wxIco functions */
-.hwtemp{
-  font-size:2.8rem;font-weight:100;letter-spacing:-2px;line-height:1;text-align:right;
-  background:linear-gradient(170deg,#fff 0%,rgba(255,255,255,.6) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.hwdesc{font-size:.58rem;font-weight:400;color:rgba(255,255,255,.35);text-align:right;margin-top:5px;letter-spacing:.3px}
-.hwfeel{font-size:.54rem;color:rgba(255,255,255,.2);text-align:right;margin-top:2px}
 
 /* Hourly strip */
 .hourly{
@@ -1209,6 +1202,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <!-- Hero -->
       <div class="hero">
         <div class="hbg" id="hbg"></div>
+        <canvas id="wave-cv"></canvas>
         <canvas id="star-cv"></canvas>
           <canvas id="wx-particles"></canvas>
         <div class="hglow"></div>
@@ -1216,7 +1210,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <div class="htop">
             <div>
               <div class="htime" id="htime">
-                <span class="htime-h">--</span><span class="htime-sep">:</span><span class="htime-m">--</span>
+                <span class="htime-h">--</span><span class="htime-sep"><i></i><i></i></span><span class="htime-m">--</span>
               </div>
               <div class="hdate-wrap">
                 <div class="hdate" id="hdate">–</div>
@@ -1230,8 +1224,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
               <div class="hwdesc" id="hwdesc">–</div>
               <div class="hwfeel" id="hwfeel">Gefühlt –°</div>
             </div>
-            <canvas id="wave-cv"></canvas>
-          </div>
+            </div>
           <!-- Day Arc Progress -->
           <div id="day-arc-wrap">
             <svg id="day-arc-svg" viewBox="0 -14 220 42" width="100%" height="42" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
@@ -3958,7 +3951,7 @@ function updateClock(){
   const h=String(n.getHours()).padStart(2,'0');
   const m=String(n.getMinutes()).padStart(2,'0');
   const s=n.getSeconds();
-  const tHtml=`<span class="htime-h">${h}</span><span class="htime-sep">:</span><span class="htime-m">${m}</span>`;
+  const tHtml=`<span class="htime-h">${h}</span><span class="htime-sep"><i></i><i></i></span><span class="htime-m">${m}</span>`;
   const tPlain=`${h}:${m}`;
   const d=`${n.getDate()}. ${DM[n.getMonth()]} ${n.getFullYear()}`;
   const dayName=DW[n.getDay()];
@@ -3992,13 +3985,15 @@ function initWaveClock(){
 
   // Drei Wellen mit verschiedenen Frequenzen und Phasen
   const WAVES=[
-    {freq:1.8, amp:.38, speed:.018, phase:0,    alpha:.7},
-    {freq:2.6, amp:.28, speed:.026, phase:2.1,  alpha:.5},
-    {freq:1.2, amp:.20, speed:.012, phase:4.2,  alpha:.35},
+    {freq:1.4, amp:.22, speed:.004, phase:0,     alpha:.55},
+    {freq:2.2, amp:.14, speed:.006, phase:2.09,  alpha:.35},
+    {freq:0.9, amp:.18, speed:.003, phase:4.19,  alpha:.25},
   ];
 
   function resize(){
-    W=cv.offsetWidth; H=cv.offsetHeight;
+    const parent=cv.parentElement;
+    W=parent?parent.offsetWidth:window.innerWidth;
+    H=parent?parent.offsetHeight:160;
     cv.width=W*devicePixelRatio; cv.height=H*devicePixelRatio;
     ctx.scale(devicePixelRatio,devicePixelRatio);
   }
@@ -4022,7 +4017,7 @@ function initWaveClock(){
 
     WAVES.forEach(w=>{
       ctx.beginPath();
-      const baseline=H*0.72;
+      const baseline=H*0.55;
       for(let x=0;x<=W;x+=2){
         const y=baseline
           - Math.sin((x/W)*Math.PI*2*w.freq + t*w.speed*60 + w.phase) * H*w.amp
@@ -4031,7 +4026,9 @@ function initWaveClock(){
       }
       ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
       const grad=ctx.createLinearGradient(0,0,0,H);
-      grad.addColorStop(0,`rgba(${rgb},${w.alpha})`);
+      grad.addColorStop(0,`rgba(${rgb},0)`);
+      grad.addColorStop(0.3,`rgba(${rgb},${w.alpha})`);
+      grad.addColorStop(0.7,`rgba(${rgb},${w.alpha*0.6})`);
       grad.addColorStop(1,`rgba(${rgb},0)`);
       ctx.fillStyle=grad;
       ctx.fill();
