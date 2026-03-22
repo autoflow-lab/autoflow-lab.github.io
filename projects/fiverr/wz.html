@@ -1070,12 +1070,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 :root.light .fd-d  { color:rgba(60,60,67,.55); }
 :root.light .fd-hi { color:#1c1c1e; }
 :root.light .fd-lo { color:rgba(60,60,67,.4); }
+/* wx-hero im light mode: dunkles gradient via JS, gleich wie dark */
 :root.light #wx-hero {
-  background:rgba(255,255,255,.7) !important;
-  border:1px solid rgba(255,255,255,.8) !important;
-  backdrop-filter:blur(20px) saturate(1.4);
-  -webkit-backdrop-filter:blur(20px) saturate(1.4);
-  box-shadow:0 4px 20px rgba(0,0,0,.07);
+  border:1px solid rgba(255,255,255,.1) !important;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
 }
 
 /* ── Licht Tab ── */
@@ -2355,10 +2353,10 @@ function renderWeather(){
     else             lightBg='linear-gradient(160deg,#1e1020,#2d1628,#1a0e18)';
     document.getElementById('hbg').style.background=lightBg;
     document.getElementById('ab').style.background=lightBg;
-    // Wetter-Karten: Glas-Effekt
+    // Wetter-Karten: gleicher dunkler Stil wie main hero
     document.querySelectorAll('#wx-hero').forEach(el=>{
-      el.style.background='rgba(255,255,255,0.6)';
-      el.style.backdropFilter='blur(20px)';
+      el.style.background=lightBg.replace('160deg','145deg');
+      el.style.backdropFilter='';
     });
   }
   document.getElementById('hwico').innerHTML=wxIco(code,72,night);
