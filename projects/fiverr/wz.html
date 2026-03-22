@@ -67,7 +67,7 @@
   -webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;
   touch-action:manipulation}
 html,body{height:100%;background:var(--bg);
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',sans-serif;
+  font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif;
   -webkit-font-smoothing:antialiased;color:var(--txt);overflow:hidden;
   transition:var(--theme-transition);}
 
@@ -79,8 +79,8 @@ html,body{height:100%;background:var(--bg);
 }
 #amb.show{display:flex}
 .ab{position:absolute;inset:0;transition:background 5s ease}
-.at{position:relative;z-index:1;
-  font-size:clamp(7rem,28vw,11rem);font-weight:100;
+.at{position:relative;z-index:1;font-family:'Oxanium',sans-serif;
+  font-size:clamp(7rem,28vw,11rem);font-weight:300;
   letter-spacing:-8px;color:#fff;line-height:1;font-variant-numeric:tabular-nums;
   text-shadow:0 0 60px rgba(56,189,248,.2)}
 .ad{position:relative;z-index:1;margin-top:10px;
@@ -117,116 +117,6 @@ html,body{height:100%;background:var(--bg);
 }
 .auth-btn:active{transform:scale(.92);background:rgba(56,189,248,.25)}
 .hidden{display:none!important}
-
-/* ══════════════════════════════════════
-   LIGHT THEME OVERRIDES
-   ══════════════════════════════════════ */
-:root.light #app{background:var(--bg)}
-:root.light .hero{background:linear-gradient(160deg,var(--hero-bg-a),var(--hero-bg-b))!important}
-:root.light .hbg{background:linear-gradient(160deg,#d4e9f7,#c8e0f0)!important}
-:root.light .htime-h,:root.light .htime-m{color:#1c1c1e}
-:root.light .htime-sep{color:rgba(0,0,0,.25)}
-:root.light .hdate{color:rgba(0,0,0,.7)}
-:root.light .hdate-day{color:rgba(0,0,0,.35)}
-:root.light .hgreet{color:rgba(0,0,0,.5)}
-:root.light .hwtemp{
-  background:linear-gradient(170deg,#1c1c1e 0%,rgba(0,0,0,.7) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-:root.light .hwdesc,:root.light .hwfeel{color:rgba(0,0,0,.4)}
-:root.light .hwx-pill{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.1)}
-:root.light .c{background:var(--c1);box-shadow:0 1px 8px rgba(0,0,0,.08)}
-:root.light .lt{background:#fff;border-color:rgba(0,0,0,.06)}
-:root.light .lt .ltnm{color:rgba(0,0,0,.85)}
-:root.light .lt .ltv{color:rgba(0,0,0,.4)}
-:root.light .sb2{background:linear-gradient(145deg,#fff,#f5f5f7);border-color:rgba(0,0,0,.08)}
-:root.light .sb2-n{color:#1c1c1e}
-:root.light .sb2-d{color:rgba(0,0,0,.4)}
-:root.light .rb{background:#fff;border-color:rgba(0,0,0,.08)}
-:root.light .rb.on{background:rgba(0,122,255,.1);border-color:rgba(0,122,255,.3)}
-:root.light .rn{color:#1c1c1e}
-:root.light .rv{color:rgba(0,0,0,.4)}
-:root.light .lbl{color:rgba(0,0,0,.3)}
-:root.light .ni{color:rgba(0,0,0,.35)}
-:root.light .ni.on{color:var(--blue);filter:none}
-:root.light nav{background:rgba(255,255,255,.92);border-top:1px solid rgba(0,0,0,.1)}
-:root.light .ni::after{background:var(--blue);box-shadow:0 0 8px 3px rgba(0,122,255,.3)}
-:root.light .dt{background:#fff;border-color:rgba(0,0,0,.06)}
-:root.light .dt .dtnm{color:#1c1c1e}
-:root.light .dt .dtsub{color:rgba(0,0,0,.4)}
-:root.light .pill{background:rgba(0,0,0,.06);color:rgba(0,0,0,.5)}
-:root.light .pill.on{background:rgba(52,199,89,.15);color:rgba(0,0,0,.8)}
-:root.light .spotcard{background:rgba(0,150,70,.08);border-color:rgba(0,150,70,.2)}
-:root.light .np-t{color:#1c1c1e}
-:root.light .np-a{color:rgba(0,0,0,.5)}
-:root.light .toast{background:rgba(255,255,255,.96);color:#1c1c1e;border-color:rgba(0,0,0,.1);box-shadow:0 8px 24px rgba(0,0,0,.15)}
-:root.light .wg .ws{border-color:rgba(0,0,0,.06)}
-:root.light .wsv{color:#1c1c1e}
-:root.light .wsl{color:rgba(0,0,0,.35)}
-:root.light .hr{background:rgba(0,0,0,.06)}
-:root.light .hr.now{background:var(--blue)}
-:root.light .hrt{color:rgba(0,0,0,.5)}
-:root.light .hrtemp{color:#1c1c1e}
-:root.light .fd-d{color:rgba(0,0,0,.5)}
-:root.light .fd-hi{color:#1c1c1e}
-:root.light .fd-lo{color:rgba(0,0,0,.35)}
-:root.light .hs-btn{background:rgba(0,0,0,.07);color:rgba(0,0,0,.7);border-color:rgba(0,0,0,.1)}
-:root.light .hs-btn.active{background:rgba(0,122,255,.12);color:var(--blue)}
-:root.light .rqb{background:#fff;border-color:rgba(0,0,0,.07)}
-:root.light .rqb .rqn{color:#1c1c1e}
-:root.light #offline-banner{background:linear-gradient(90deg,rgba(200,0,0,.9),rgba(160,0,0,.9))}
-:root.light .star-cv{opacity:0!important}
-/* Hero clock rings adapt to light */
-:root.light #sec-ring{stroke:rgba(255,149,0,.9)}
-:root.light #min-ring{stroke:rgba(0,122,255,.7)}
-:root.light #sec-dot{fill:#ff9500}
-:root.light .clock-ticks circle{fill:rgba(0,0,0,.15)}
-
-/* Hero glass card in light mode */
-:root.light #wx-hero{
-  background:rgba(255,255,255,.5)!important;
-  border-color:rgba(0,0,0,.1)!important;
-  backdrop-filter:blur(20px);
-}
-:root.light .album-wrap{background:rgba(255,255,255,.4)!important;border-color:rgba(0,0,0,.08)!important}
-:root.light .pctrl{background:rgba(255,255,255,.5)!important;border-color:rgba(0,0,0,.08)!important}
-:root.light .bplay{background:rgba(0,0,0,.1)!important;color:#1c1c1e}
-:root.light .bsml{background:rgba(0,0,0,.07)!important;color:rgba(0,0,0,.6)}
-:root.light .vrow input[type=range]{background:transparent}
-:root.light .np-prog{background:rgba(0,0,0,.1)!important}
-:root.light .pfil{background:var(--blue)!important}
-/* Licht tab in light */
-:root.light .lt.on{box-shadow:0 2px 16px rgba(0,0,0,.12),0 0 0 1px rgba(255,149,0,.2)!important}
-/* Status pills light */
-:root.light .pill{background:rgba(0,0,0,.06)}
-:root.light .pill.on{background:rgba(0,0,0,.1);color:#1c1c1e}
-:root.light .pill.on .pd{background:#34c759}
-/* Quick-launch radio buttons */
-:root.light .rqb.on{background:rgba(0,122,255,.1)!important;border-color:rgba(0,122,255,.3)!important}
-/* Grundriss / plan page */
-:root.light #pg-plan{background:var(--bg)}
-
-/* Theme toggle button */
-#theme-toggle{
-  position:fixed;top:max(env(safe-area-inset-top),14px);left:16px;
-  width:34px;height:20px;border-radius:10px;border:none;cursor:pointer;
-  background:rgba(120,120,128,.25);padding:2px;
-  display:flex;align-items:center;transition:background .4s;z-index:200;
-}
-:root.light #theme-toggle{background:rgba(0,0,0,.18)}
-#theme-toggle-dot{
-  width:16px;height:16px;border-radius:50%;background:#fff;
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:0 1px 4px rgba(0,0,0,.3);
-  pointer-events:none;
-}
-:root.light #theme-toggle-dot{transform:translateX(14px);background:#fff}
-#theme-toggle-ico{
-  position:absolute;right:4px;font-size:.62rem;pointer-events:none;
-  transition:opacity .3s;
-}
-:root.light #theme-toggle-ico{right:auto;left:4px}
-
 
 /* ───────────── APP SHELL ───────────── */
 #app{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
@@ -412,10 +302,12 @@ html,body{height:100%;background:var(--bg);
   font-variant-numeric:tabular-nums;
 }
 .htime-h,.htime-m{
-  font-size:clamp(3.4rem,16vw,5.8rem);font-weight:100;letter-spacing:-3px;color:#fff;line-height:1;
+  font-family:'Oxanium',sans-serif;
+  font-size:clamp(3.4rem,16vw,5.8rem);font-weight:300;letter-spacing:-2px;color:#fff;line-height:1;
 }
 .htime-sep{
-  font-size:clamp(1.8rem,8vw,3rem);font-weight:100;color:rgba(255,255,255,.3);
+  font-family:'Oxanium',sans-serif;
+  font-size:clamp(1.8rem,8vw,3rem);font-weight:300;color:rgba(255,255,255,.3);
   margin:0 1px 4px;letter-spacing:0;
   animation:colonBlink 1s step-end infinite;
 }
@@ -449,7 +341,8 @@ html,body{height:100%;background:var(--bg);
   filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
 @keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .hwtemp{
-  font-size:1.5rem;font-weight:200;letter-spacing:-1px;line-height:1;text-align:center;
+  font-family:'Oxanium',sans-serif;
+  font-size:1.5rem;font-weight:300;letter-spacing:-1px;line-height:1;text-align:center;
   background:linear-gradient(170deg,#fff 0%,rgba(255,255,255,.6) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
@@ -1049,47 +942,231 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 .wsv,.hwtemp{transition:opacity .3s ease}
 
 
-/* Szenen-Karten im Light Mode */
-:root.light .sb2[data-s="abend"]{background:linear-gradient(135deg,#fff8e7,#fef0c7)!important}
-:root.light .sb2[data-s="hell"]{background:linear-gradient(135deg,#fffbf0,#fff3d0)!important}
-:root.light .sb2[data-s="film"]{background:linear-gradient(135deg,#f0f0f8,#e8e8f0)!important}
-:root.light .sb2[data-s="nacht"]{background:linear-gradient(135deg,#e8f0f8,#d8e8f4)!important}
-:root.light .sb2-n{color:#1c1c1e!important}
-:root.light .sb2-d{color:rgba(0,0,0,.45)!important}
-/* sb2 active-highlight in light mode */
-:root.light .sb2[style*="box-shadow"]{box-shadow:0 0 0 2px rgba(255,149,0,.5)!important}
-
-/* Licht-Tiles im Light Mode */
-:root.light .lt{background:#ffffff!important;box-shadow:0 1px 6px rgba(0,0,0,.08)!important}
-:root.light .lt.on .ltnm{color:rgba(0,0,0,.85)!important}
-:root.light .lt.on .ltv{color:rgba(0,0,0,.5)!important}
-:root.light .lt:not(.on) .ltnm{color:rgba(0,0,0,.55)!important}
-:root.light .lt:not(.on) .ltv{color:rgba(0,0,0,.3)!important}
-/* Light-Tile Schatten im Light Mode anders */
-:root.light .lt.on{box-shadow:0 4px 20px rgba(255,149,0,.2)!important}
-
-/* Nav im Light Mode */
-:root.light nav{
-  background:rgba(248,248,248,.95)!important;
-  border-top:1px solid rgba(0,0,0,.12)!important;
-  box-shadow:0 -4px 20px rgba(0,0,0,.06);
-}
-:root.light #conn-dot{background:var(--grn)!important}
 /* Theme toggle in light mode besser sichtbar */
 :root.light #theme-toggle{background:rgba(0,0,0,.15)!important}
 
-/* Musik Tab Light Mode */
+
+/* ╔══════════════════════════════════════════════════════╗
+   ║   LIGHT THEME  ·  iOS Settings Style                ║
+   ║   Aktiv: 08:00–20:00 Uhr (auto) oder manuell        ║
+   ╚══════════════════════════════════════════════════════╝ */
+
+:root.light {
+  --bg:#f2f2f7;
+  --c1:#ffffff;
+  --c2:#f2f2f7;
+  --c3:#e5e5ea;
+  --sep:rgba(0,0,0,.08);
+  --txt:#1c1c1e;
+  --dim:rgba(0,0,0,.5);
+  --dim2:rgba(0,0,0,.35);
+  --acc:#ff9500;
+  --blue:#007aff;
+  --grn:#34c759;
+  --red:#ff3b30;
+  --g1:rgba(0,0,0,.03);
+  --g2:rgba(0,0,0,.02);
+  --b:rgba(0,0,0,.07);
+  --b2:rgba(0,0,0,.05);
+  --amb:#ff9500;
+  --ind:#007aff;
+  --lbl-color:rgba(60,60,67,.45);
+  --sep-line:rgba(60,60,67,.12);
+  --card-shadow:0 1px 3px rgba(0,0,0,.1),0 1px 8px rgba(0,0,0,.06);
+}
+
+/* ── Basis ── */
+:root.light html,:root.light body{background:var(--bg)}
+:root.light #app{background:var(--bg)}
+:root.light .page{color:var(--txt)}
+
+/* ── Hero / Clock ── */
+:root.light .hero{overflow:visible}
+:root.light .hbg{
+  background:linear-gradient(160deg,#cce4f6,#b8d8f0,#a8cceb)!important;
+  transition:background 1.4s ease;
+}
+:root.light #star-cv{opacity:0!important;pointer-events:none}
+:root.light .hglow{opacity:0}
+:root.light .htime-h,:root.light .htime-m{color:#1c1c1e}
+:root.light .htime-sep{color:rgba(0,0,0,.3)}
+:root.light .hdate{color:rgba(0,0,0,.75);font-weight:600}
+:root.light .hdate-day{color:rgba(0,0,0,.4)}
+:root.light .hgreet{color:rgba(0,0,0,.5)}
+:root.light #clock-ring-svg #sec-ring{stroke:rgba(255,149,0,.85)}
+:root.light #clock-ring-svg #min-ring{stroke:rgba(0,122,255,.6)}
+:root.light #clock-ring-svg circle[cx="120"][r="108"]{stroke:rgba(0,0,0,.06)}
+:root.light #clock-ring-svg circle[cx="120"][r="116"]{stroke:rgba(0,0,0,.05)}
+:root.light #sec-dot{fill:#ff9500}
+
+/* Wetter-Pill */
+:root.light .hwx-pill{
+  background:rgba(255,255,255,.75);
+  border-color:rgba(0,0,0,.12);
+  box-shadow:0 2px 12px rgba(0,0,0,.1);
+}
+:root.light .hwtemp{
+  background:linear-gradient(170deg,#1c1c1e,rgba(0,0,0,.65));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+:root.light .hwdesc{color:rgba(0,0,0,.45)}
+:root.light .hwfeel{color:rgba(0,0,0,.3)}
+
+/* Sonnen-Arc */
+:root.light #day-arc-track{stroke:rgba(0,0,0,.1)!important}
+:root.light #day-arc-lbl{color:rgba(0,0,0,.35)!important}
+
+/* Now-playing strip */
+:root.light .hnp-txt{color:rgba(0,0,0,.55)}
+:root.light .hnp-eq i{background:var(--blue)}
+
+/* Home-Tab scene shortcuts */
+:root.light .hs-btn{
+  background:rgba(255,255,255,.9);
+  color:rgba(0,0,0,.7);
+  border:1px solid rgba(0,0,0,.1);
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+:root.light .hs-btn.active{background:rgba(0,122,255,.12);color:var(--blue);border-color:rgba(0,122,255,.25)}
+
+/* ── Stündliche Vorhersage ── */
+:root.light .hr{background:rgba(0,0,0,.06)}
+:root.light .hr.now{background:var(--blue)}
+:root.light .hrt{color:rgba(0,0,0,.45)}
+:root.light .hrtemp{color:#1c1c1e}
+:root.light .hr.now .hrt,:root.light .hr.now .hrtemp{color:#fff}
+
+/* ── Status Pills ── */
+:root.light .pill{background:rgba(0,0,0,.07);color:rgba(0,0,0,.5)}
+:root.light .pill.on{background:rgba(0,0,0,.1);color:#1c1c1e}
+:root.light .pill.on .pd{background:#34c759;box-shadow:0 0 5px #34c759}
+:root.light .pill.music.on .pd{background:var(--blue);box-shadow:0 0 5px var(--blue)}
+
+/* ── Wetter-Stats ── */
+:root.light .wg .ws{border-color:rgba(0,0,0,.07)}
+:root.light .wsv{color:#1c1c1e}
+:root.light .wsl{color:rgba(60,60,67,.45)}
+
+/* ── Karten (.c) ── */
+:root.light .c{
+  background:var(--c1);
+  box-shadow:0 1px 3px rgba(0,0,0,.09),0 1px 8px rgba(0,0,0,.06);
+  border:none;
+}
+
+/* ── Szenen-Karten ── */
+:root.light .sb2[data-s="abend"]{background:linear-gradient(135deg,#fff8e8,#fef0c0)!important}
+:root.light .sb2[data-s="hell"]{background:linear-gradient(135deg,#fffff0,#fff8d0)!important}
+:root.light .sb2[data-s="film"]{background:linear-gradient(135deg,#f0f0f8,#e8e8f4)!important}
+:root.light .sb2[data-s="nacht"]{background:linear-gradient(135deg,#e8f4fe,#d0e8fa)!important}
+:root.light .sb2-n{color:#1c1c1e!important}
+:root.light .sb2-d{color:rgba(0,0,0,.4)!important}
+:root.light .sb2{border-color:rgba(0,0,0,.08)!important;border-top-color:rgba(0,0,0,.15)!important}
+
+/* ── Radio Quick-Launch ── */
+:root.light .rqb{background:#fff;border-color:rgba(0,0,0,.08);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+:root.light .rqn{color:#1c1c1e!important}
+:root.light .rqv{color:rgba(0,0,0,.4)!important}
+:root.light .rqb.on{background:rgba(0,122,255,.1)!important;border-color:rgba(0,122,255,.3)!important}
+
+/* ── Licht-Tab ── */
+:root.light #qa-bar button{background:#fff;border:1px solid rgba(0,0,0,.1);color:#1c1c1e;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+:root.light .lt{
+  background:#fff!important;
+  border:1px solid rgba(0,0,0,.07)!important;
+  box-shadow:0 1px 6px rgba(0,0,0,.07)!important;
+}
+:root.light .lt.on{
+  box-shadow:0 2px 16px rgba(255,149,0,.18),0 1px 4px rgba(0,0,0,.08)!important;
+  border-color:rgba(255,149,0,.2)!important;
+}
+:root.light .ltnm{color:#1c1c1e!important}
+:root.light .ltv{color:rgba(0,0,0,.4)!important}
+:root.light .lt:not(.on) .ltnm{color:rgba(0,0,0,.55)!important}
+/* Brightness bar on light tiles */
+:root.light .bfil{background:linear-gradient(90deg,rgba(255,149,0,.4),rgba(255,149,0,.8))!important}
+
+/* Szenen Licht-Tab */
+:root.light .sb{background:#fff;border:1px solid rgba(0,0,0,.08)}
+:root.light .sb span{color:rgba(0,0,0,.6)!important}
+
+/* ── Geräte (TV etc.) ── */
+:root.light .dt{background:#fff!important;border-color:rgba(0,0,0,.08)!important}
+:root.light .dt.on{background:rgba(255,149,0,.06)!important;border-color:rgba(255,149,0,.2)!important}
+:root.light .dtnm{color:#1c1c1e!important}
+:root.light .dtsub{color:rgba(0,0,0,.4)!important}
+
+/* ── Musik-Tab ── */
+:root.light .album-wrap{
+  background:rgba(255,255,255,.6)!important;
+  border-color:rgba(0,0,0,.08)!important;
+  box-shadow:0 4px 20px rgba(0,0,0,.1)!important;
+}
 :root.light .np-t{color:#1c1c1e!important}
 :root.light .np-a{color:rgba(0,0,0,.5)!important}
-:root.light .bplay{
-  background:rgba(0,0,0,.08)!important;color:#1c1c1e;
-  box-shadow:0 4px 20px rgba(0,0,0,.12)!important;
-}
+:root.light .pctrl{background:rgba(255,255,255,.7)!important;border-color:rgba(0,0,0,.08)!important}
+:root.light .bplay{background:rgba(0,0,0,.08)!important;color:#1c1c1e!important;box-shadow:0 4px 20px rgba(0,0,0,.1)!important}
 :root.light .bsml{background:rgba(0,0,0,.06)!important;color:rgba(0,0,0,.55)!important}
+:root.light .np-prog{background:rgba(0,0,0,.1)!important}
+:root.light .pfil{background:var(--blue)!important}
+:root.light .spotcard{
+  background:rgba(0,150,70,.06)!important;
+  border-color:rgba(0,150,70,.18)!important;
+  box-shadow:0 2px 12px rgba(0,150,70,.06)!important;
+}
 :root.light #sp-t{color:#1c1c1e!important}
-:root.light .sp-pl-item{background:rgba(0,0,0,.05)!important;border-color:rgba(0,0,0,.06)!important}
+:root.light .sp-pl-item{background:rgba(0,0,0,.05)!important;border-color:rgba(0,0,0,.07)!important}
 :root.light .sp-pl-item span{color:#1c1c1e!important}
-:root.light #sp-dev{background:rgba(0,0,0,.07)!important;color:#1c1c1e!important}
+:root.light #sp-dev{background:rgba(0,0,0,.07)!important;color:#1c1c1e!important;border-color:rgba(0,0,0,.12)!important}
+:root.light .rb{background:#fff!important;border:1px solid rgba(0,0,0,.08)!important}
+:root.light .rb.on{background:rgba(0,122,255,.1)!important;border-color:rgba(0,122,255,.3)!important;box-shadow:0 0 16px rgba(0,122,255,.1)!important}
+:root.light .rn{color:#1c1c1e!important}
+:root.light .rv{color:rgba(0,0,0,.45)!important}
+:root.light .vrow label{color:rgba(0,0,0,.45)!important}
+
+/* ── Labels / Section headers ── */
+:root.light .lbl{color:rgba(60,60,67,.45)!important;font-weight:600}
+:root.light .sec-head{color:rgba(60,60,67,.45)!important}
+
+/* ── Nav ── */
+:root.light nav{
+  background:rgba(248,248,248,.96)!important;
+  border-top:1px solid rgba(0,0,0,.12)!important;
+  box-shadow:0 -2px 16px rgba(0,0,0,.06);
+}
+:root.light .ni{color:rgba(0,0,0,.3)}
+:root.light .ni.on{color:var(--blue);filter:none}
+:root.light .ni::after{background:var(--blue);box-shadow:0 0 8px 2px rgba(0,122,255,.35),0 0 0 4px rgba(0,122,255,.1)}
+
+/* ── Toast ── */
+:root.light .toast{
+  background:rgba(255,255,255,.96)!important;color:#1c1c1e!important;
+  border-color:rgba(0,0,0,.1)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.15)!important;
+}
+
+/* ── Wetter-Tab 7-Tage ── */
+:root.light .fd-d{color:rgba(0,0,0,.5)!important}
+:root.light .fd-hi{color:#1c1c1e!important}
+:root.light .fd-lo{color:rgba(0,0,0,.35)!important}
+:root.light .fd-r{opacity:.8}
+
+/* ── Offline Banner ── */
+:root.light #offline-banner{background:linear-gradient(90deg,rgba(255,59,48,.9),rgba(200,30,20,.9))!important}
+
+/* ── Conn dot ── */
+:root.light #conn-dot{box-shadow:none}
+
+/* ── Grundriss / Plan ── */
+:root.light #pg-plan{background:var(--bg)}
+:root.light .fp-wrap{background:#fff!important;border-color:rgba(0,0,0,.1)!important}
+
+/* ── Wetter Seite ── */
+:root.light #wx-hero{
+  background:rgba(255,255,255,.7)!important;
+  border-color:rgba(0,0,0,.08)!important;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
 
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
@@ -1101,7 +1178,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
     .leaflet-control-zoom a:hover{background:rgba(44,44,46,.95)!important}
     .leaflet-tile-pane{filter:brightness(.85) saturate(0.8) hue-rotate(200deg)}
   </style>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Oxanium:wght@200;300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -4731,15 +4808,33 @@ applyTheme(_themeOverride||getAutoTheme());
 // Check every minute for sunrise/sunset switch
 setInterval(checkAutoTheme, 60_000);
 
-// Manual toggle
-document.getElementById('theme-toggle')?.addEventListener('click',()=>{
-  const current=document.documentElement.classList.contains('light')?'light':'dark';
-  const next=current==='light'?'dark':'light';
-  applyTheme(next,true);
-  hap();
-  showToast(next==='light'?'☀️ Helles Design':'🌙 Dunkles Design');
-  // Auto-reset override after 2h
-  setTimeout(()=>{_themeOverride=null;localStorage.removeItem(THEME_KEY);checkAutoTheme();},7_200_000);
+// 5-Tap Easter Egg auf die Uhr → Theme toggle
+let _tapCount=0,_tapTimer=null;
+document.addEventListener('DOMContentLoaded',()=>{
+  const tapTarget=document.getElementById('htime')||document.querySelector('.clock-center');
+  if(!tapTarget)return;
+  tapTarget.addEventListener('click',()=>{
+    _tapCount++;
+    clearTimeout(_tapTimer);
+    if(_tapCount>=5){
+      _tapCount=0;
+      const current=document.documentElement.classList.contains('light')?'light':'dark';
+      const next=current==='light'?'dark':'light';
+      applyTheme(next,true);
+      hap();
+      showToast(next==='light'?'☀️ Helles Design':'🌙 Dunkles Design',2500);
+      // Flash-Animation auf der Uhr
+      const cc=document.querySelector('.clock-center');
+      if(cc){cc.style.transform='scale(1.06)';setTimeout(()=>cc.style.transform='',300);}
+      // Auto-reset override nach 2h
+      setTimeout(()=>{_themeOverride=null;localStorage.removeItem(THEME_KEY);checkAutoTheme();},7_200_000);
+    } else if(_tapCount===1){
+      // Subtle feedback: kurzer Glow
+      const sd=document.getElementById('sec-dot');
+      if(sd){const orig=sd.getAttribute('fill');sd.setAttribute('fill','#fff');setTimeout(()=>sd.setAttribute('fill',orig),150);}
+    }
+    _tapTimer=setTimeout(()=>_tapCount=0,800);
+  });
 });
 
 
