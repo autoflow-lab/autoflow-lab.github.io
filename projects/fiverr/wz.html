@@ -11,6 +11,7 @@
 <title>Home</title>
 <style>
 :root{
+  /* ── DARK (default / Nacht) ── */
   --bg:#000;
   --c1:#1c1c1e;
   --c2:#2c2c2e;
@@ -23,20 +24,52 @@
   --blue:#0a84ff;
   --grn:#32d74b;
   --red:#ff453a;
-  /* compat aliases */
   --g1:rgba(255,255,255,.04);
   --g2:rgba(255,255,255,.02);
   --b:rgba(255,255,255,.08);
   --b2:rgba(255,255,255,.06);
   --amb:#ff9f0a;
   --ind:#0a84ff;
+  --hero-bg-a:#0d1520;
+  --hero-bg-b:#151e2e;
+  --card-shadow:0 2px 12px rgba(0,0,0,.4);
+  --lbl-color:rgba(255,255,255,.28);
+  --sep-line:rgba(255,255,255,.07);
+  --theme-transition:background 1.4s ease, color 1.4s ease, border-color 1.4s ease, box-shadow 1.4s ease;
+}
+/* ── LIGHT THEME — tagsüber ── */
+:root.light{
+  --bg:#f2f2f7;
+  --c1:#ffffff;
+  --c2:#f2f2f7;
+  --c3:#e5e5ea;
+  --sep:rgba(0,0,0,.07);
+  --txt:#1c1c1e;
+  --dim:rgba(0,0,0,.5);
+  --dim2:rgba(0,0,0,.35);
+  --acc:#ff9500;
+  --blue:#007aff;
+  --grn:#34c759;
+  --red:#ff3b30;
+  --g1:rgba(0,0,0,.03);
+  --g2:rgba(0,0,0,.02);
+  --b:rgba(0,0,0,.06);
+  --b2:rgba(0,0,0,.04);
+  --amb:#ff9500;
+  --ind:#007aff;
+  --hero-bg-a:#e8f4fd;
+  --hero-bg-b:#ddeef8;
+  --card-shadow:0 2px 12px rgba(0,0,0,.1);
+  --lbl-color:rgba(0,0,0,.3);
+  --sep-line:rgba(0,0,0,.07);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;
   -webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;
   touch-action:manipulation}
-html,body{height:100%;background:#000;
+html,body{height:100%;background:var(--bg);
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',sans-serif;
-  -webkit-font-smoothing:antialiased;color:var(--txt);overflow:hidden}
+  -webkit-font-smoothing:antialiased;color:var(--txt);overflow:hidden;
+  transition:var(--theme-transition);}
 
 /* ───────────── AMBIENT ───────────── */
 #amb{
@@ -84,6 +117,116 @@ html,body{height:100%;background:#000;
 }
 .auth-btn:active{transform:scale(.92);background:rgba(56,189,248,.25)}
 .hidden{display:none!important}
+
+/* ══════════════════════════════════════
+   LIGHT THEME OVERRIDES
+   ══════════════════════════════════════ */
+:root.light #app{background:var(--bg)}
+:root.light .hero{background:linear-gradient(160deg,var(--hero-bg-a),var(--hero-bg-b))!important}
+:root.light .hbg{background:linear-gradient(160deg,#d4e9f7,#c8e0f0)!important}
+:root.light .htime-h,:root.light .htime-m{color:#1c1c1e}
+:root.light .htime-sep{color:rgba(0,0,0,.25)}
+:root.light .hdate{color:rgba(0,0,0,.7)}
+:root.light .hdate-day{color:rgba(0,0,0,.35)}
+:root.light .hgreet{color:rgba(0,0,0,.5)}
+:root.light .hwtemp{
+  background:linear-gradient(170deg,#1c1c1e 0%,rgba(0,0,0,.7) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+:root.light .hwdesc,:root.light .hwfeel{color:rgba(0,0,0,.4)}
+:root.light .hwx-pill{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.1)}
+:root.light .c{background:var(--c1);box-shadow:0 1px 8px rgba(0,0,0,.08)}
+:root.light .lt{background:#fff;border-color:rgba(0,0,0,.06)}
+:root.light .lt .ltnm{color:rgba(0,0,0,.85)}
+:root.light .lt .ltv{color:rgba(0,0,0,.4)}
+:root.light .sb2{background:linear-gradient(145deg,#fff,#f5f5f7);border-color:rgba(0,0,0,.08)}
+:root.light .sb2-n{color:#1c1c1e}
+:root.light .sb2-d{color:rgba(0,0,0,.4)}
+:root.light .rb{background:#fff;border-color:rgba(0,0,0,.08)}
+:root.light .rb.on{background:rgba(0,122,255,.1);border-color:rgba(0,122,255,.3)}
+:root.light .rn{color:#1c1c1e}
+:root.light .rv{color:rgba(0,0,0,.4)}
+:root.light .lbl{color:rgba(0,0,0,.3)}
+:root.light .ni{color:rgba(0,0,0,.35)}
+:root.light .ni.on{color:var(--blue);filter:none}
+:root.light nav{background:rgba(255,255,255,.92);border-top:1px solid rgba(0,0,0,.1)}
+:root.light .ni::after{background:var(--blue);box-shadow:0 0 8px 3px rgba(0,122,255,.3)}
+:root.light .dt{background:#fff;border-color:rgba(0,0,0,.06)}
+:root.light .dt .dtnm{color:#1c1c1e}
+:root.light .dt .dtsub{color:rgba(0,0,0,.4)}
+:root.light .pill{background:rgba(0,0,0,.06);color:rgba(0,0,0,.5)}
+:root.light .pill.on{background:rgba(52,199,89,.15);color:rgba(0,0,0,.8)}
+:root.light .spotcard{background:rgba(0,150,70,.08);border-color:rgba(0,150,70,.2)}
+:root.light .np-t{color:#1c1c1e}
+:root.light .np-a{color:rgba(0,0,0,.5)}
+:root.light .toast{background:rgba(255,255,255,.96);color:#1c1c1e;border-color:rgba(0,0,0,.1);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+:root.light .wg .ws{border-color:rgba(0,0,0,.06)}
+:root.light .wsv{color:#1c1c1e}
+:root.light .wsl{color:rgba(0,0,0,.35)}
+:root.light .hr{background:rgba(0,0,0,.06)}
+:root.light .hr.now{background:var(--blue)}
+:root.light .hrt{color:rgba(0,0,0,.5)}
+:root.light .hrtemp{color:#1c1c1e}
+:root.light .fd-d{color:rgba(0,0,0,.5)}
+:root.light .fd-hi{color:#1c1c1e}
+:root.light .fd-lo{color:rgba(0,0,0,.35)}
+:root.light .hs-btn{background:rgba(0,0,0,.07);color:rgba(0,0,0,.7);border-color:rgba(0,0,0,.1)}
+:root.light .hs-btn.active{background:rgba(0,122,255,.12);color:var(--blue)}
+:root.light .rqb{background:#fff;border-color:rgba(0,0,0,.07)}
+:root.light .rqb .rqn{color:#1c1c1e}
+:root.light #offline-banner{background:linear-gradient(90deg,rgba(200,0,0,.9),rgba(160,0,0,.9))}
+:root.light .star-cv{opacity:0!important}
+/* Hero clock rings adapt to light */
+:root.light #sec-ring{stroke:rgba(255,149,0,.9)}
+:root.light #min-ring{stroke:rgba(0,122,255,.7)}
+:root.light #sec-dot{fill:#ff9500}
+:root.light .clock-ticks circle{fill:rgba(0,0,0,.15)}
+
+/* Hero glass card in light mode */
+:root.light #wx-hero{
+  background:rgba(255,255,255,.5)!important;
+  border-color:rgba(0,0,0,.1)!important;
+  backdrop-filter:blur(20px);
+}
+:root.light .album-wrap{background:rgba(255,255,255,.4)!important;border-color:rgba(0,0,0,.08)!important}
+:root.light .pctrl{background:rgba(255,255,255,.5)!important;border-color:rgba(0,0,0,.08)!important}
+:root.light .bplay{background:rgba(0,0,0,.1)!important;color:#1c1c1e}
+:root.light .bsml{background:rgba(0,0,0,.07)!important;color:rgba(0,0,0,.6)}
+:root.light .vrow input[type=range]{background:transparent}
+:root.light .np-prog{background:rgba(0,0,0,.1)!important}
+:root.light .pfil{background:var(--blue)!important}
+/* Licht tab in light */
+:root.light .lt.on{box-shadow:0 2px 16px rgba(0,0,0,.12),0 0 0 1px rgba(255,149,0,.2)!important}
+/* Status pills light */
+:root.light .pill{background:rgba(0,0,0,.06)}
+:root.light .pill.on{background:rgba(0,0,0,.1);color:#1c1c1e}
+:root.light .pill.on .pd{background:#34c759}
+/* Quick-launch radio buttons */
+:root.light .rqb.on{background:rgba(0,122,255,.1)!important;border-color:rgba(0,122,255,.3)!important}
+/* Grundriss / plan page */
+:root.light #pg-plan{background:var(--bg)}
+
+/* Theme toggle button */
+#theme-toggle{
+  position:fixed;top:max(env(safe-area-inset-top),14px);left:16px;
+  width:34px;height:20px;border-radius:10px;border:none;cursor:pointer;
+  background:rgba(120,120,128,.25);padding:2px;
+  display:flex;align-items:center;transition:background .4s;z-index:200;
+}
+:root.light #theme-toggle{background:rgba(0,0,0,.18)}
+#theme-toggle-dot{
+  width:16px;height:16px;border-radius:50%;background:#fff;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+  pointer-events:none;
+}
+:root.light #theme-toggle-dot{transform:translateX(14px);background:#fff}
+#theme-toggle-ico{
+  position:absolute;right:4px;font-size:.62rem;pointer-events:none;
+  transition:opacity .3s;
+}
+:root.light #theme-toggle-ico{right:auto;left:4px}
+
 
 /* ───────────── APP SHELL ───────────── */
 #app{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
@@ -208,6 +351,13 @@ html,body{height:100%;background:#000;
   opacity:0;transition:opacity 2.5s ease;
 }
 #star-cv.show{opacity:1}
+/* Weather particle canvas */
+#wx-particles{
+  position:absolute;inset:0;z-index:1;
+  pointer-events:none;border-radius:18px;
+  opacity:0;transition:opacity 2s ease;
+}
+#wx-particles.show{opacity:1}
 
 /* Glow orbs in hero */
 .hglow{
@@ -243,29 +393,68 @@ html,body{height:100%;background:#000;
 
 /* Clock + Weather row */
 .htop{
-  display:grid;grid-template-columns:1fr auto;
-  align-items:flex-start;padding:26px 22px 0;gap:12px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:22px 16px 8px;gap:0;position:relative;
 }
-/* ─── CLOCK — Split-line, gradient fill ─── */
+/* ─── BIG DESIGNER CLOCK ─── */
+.clock-ring-wrap{
+  position:relative;width:min(240px,66vw);height:min(240px,66vw);
+  margin:0 auto 0;
+}
+#clock-ring-svg{position:absolute;inset:0;width:100%;height:100%}
+.clock-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0;
+}
 .htime{
-  display:flex;align-items:flex-end;gap:4px;line-height:1;
+  display:flex;align-items:center;gap:0;line-height:1;
   font-variant-numeric:tabular-nums;
 }
 .htime-h,.htime-m{
-  font-size:clamp(5rem,21vw,7.6rem);font-weight:200;letter-spacing:-4px;color:#fff;line-height:1;
+  font-size:clamp(3.4rem,16vw,5.8rem);font-weight:100;letter-spacing:-3px;color:#fff;line-height:1;
 }
 .htime-sep{
-  font-size:clamp(2.2rem,9vw,3.2rem);font-weight:200;color:rgba(255,255,255,.22);
-  margin-bottom:.5rem;letter-spacing:0;
+  font-size:clamp(1.8rem,8vw,3rem);font-weight:100;color:rgba(255,255,255,.3);
+  margin:0 1px 4px;letter-spacing:0;
   animation:colonBlink 1s step-end infinite;
 }
-@keyframes colonBlink{0%,49%{opacity:.9}50%,100%{opacity:.15}}
-.hdate{font-size:.58rem;font-weight:400;letter-spacing:1.5px;
-  color:rgba(255,255,255,.25);margin-top:8px;text-transform:uppercase}
-.hgreet{font-size:.72rem;font-weight:600;letter-spacing:.2px;
-  color:rgba(255,255,255,.52);margin-top:6px;
-  animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0}
-@keyframes greetFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes colonBlink{0%,49%{opacity:.9}50%,100%{opacity:.18}}
+.hdate-wrap{display:flex;flex-direction:column;align-items:center;margin-top:4px;gap:2px}
+.hdate{
+  font-size:.7rem;font-weight:600;letter-spacing:.5px;
+  color:rgba(255,255,255,.75);text-transform:none;margin:0;
+}
+.hdate-day{
+  font-size:.54rem;font-weight:400;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.28);
+}
+.hgreet{
+  font-size:.68rem;font-weight:500;letter-spacing:.2px;
+  color:rgba(255,255,255,.45);margin-top:2px;text-align:center;
+  animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0;
+}
+@keyframes greetFade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+/* Weather pill floated to the right of the clock ring */
+.hwx-pill{
+  position:absolute;right:-8px;top:50%;transform:translateY(-60%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:10px 8px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);border-radius:16px;
+  backdrop-filter:blur(12px);cursor:pointer;min-width:58px;
+  transition:background .2s;
+}
+.hwx-pill:active{background:rgba(255,255,255,.12)}
+.hwico{width:44px;height:44px;animation:wxFloat 6s ease-in-out infinite;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+@keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.hwtemp{
+  font-size:1.5rem;font-weight:200;letter-spacing:-1px;line-height:1;text-align:center;
+  background:linear-gradient(170deg,#fff 0%,rgba(255,255,255,.6) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hwdesc{font-size:.52rem;font-weight:400;color:rgba(255,255,255,.35);text-align:center;margin-top:2px;letter-spacing:.2px}
+.hwfeel{font-size:.5rem;color:rgba(255,255,255,.2);text-align:center;margin-top:1px}
 #day-arc-wrap{position:relative;width:100%;height:42px;margin:4px 0 2px;overflow:visible}
 #day-arc-lbl{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
   font-size:.46rem;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;
@@ -916,19 +1105,59 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <div class="hero">
         <div class="hbg" id="hbg"></div>
         <canvas id="star-cv"></canvas>
+          <canvas id="wx-particles"></canvas>
         <div class="hglow"></div>
         <div class="hcont">
           <div class="htop">
-            <div>
-              <div class="htime" id="htime">--:--</div>
-              <div class="hdate" id="hdate">–</div>
-              <div class="hgreet" id="hgreet"></div>
-            </div>
-            <div class="hwx" id="hwx-tap" style="cursor:pointer" title="Wetterdetails">
-              <svg class="hwico" id="hwico" viewBox="0 0 72 72"></svg>
-              <div class="hwtemp" id="hwtemp">–°</div>
-              <div class="hwdesc" id="hwdesc">–</div>
-              <div class="hwfeel" id="hwfeel">Gefühlt –°</div>
+            <!-- ── MEGA RING CLOCK ── -->
+            <div class="clock-ring-wrap">
+              <svg id="clock-ring-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="secGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffcc44"/>
+                    <stop offset="100%" stop-color="#ff9f0a"/>
+                  </linearGradient>
+                  <linearGradient id="minGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="rgba(10,132,255,.5)"/>
+                    <stop offset="100%" stop-color="#0a84ff"/>
+                  </linearGradient>
+                </defs>
+                <!-- Tick marks for 12 hours -->
+                <g id="clock-ticks"></g>
+                <!-- Minutes track -->
+                <circle cx="120" cy="120" r="108" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="2"/>
+                <!-- Minutes fill -->
+                <circle id="min-ring" cx="120" cy="120" r="108" fill="none"
+                  stroke="url(#minGrad)" stroke-width="2"
+                  stroke-dasharray="679 679" stroke-dashoffset="679"
+                  stroke-linecap="round" transform="rotate(-90 120 120)"/>
+                <!-- Seconds track -->
+                <circle cx="120" cy="120" r="116" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="5"/>
+                <!-- Seconds fill -->
+                <circle id="sec-ring" cx="120" cy="120" r="116" fill="none"
+                  stroke="url(#secGrad)" stroke-width="5"
+                  stroke-dasharray="729 729" stroke-dashoffset="729"
+                  stroke-linecap="round" transform="rotate(-90 120 120)"/>
+                <!-- Seconds leading dot -->
+                <circle id="sec-dot" cx="120" cy="4" r="5" fill="#ff9f0a" filter="drop-shadow(0 0 4px #ff9f0a)"/>
+              </svg>
+              <div class="clock-center">
+                <div class="htime" id="htime">
+                  <span class="htime-h">--</span><span class="htime-sep">:</span><span class="htime-m">--</span>
+                </div>
+                <div class="hdate-wrap">
+                  <div class="hdate" id="hdate">–</div>
+                  <div class="hdate-day" id="hdate-day"></div>
+                </div>
+                <div class="hgreet" id="hgreet"></div>
+              </div>
+              <!-- Weather pill floating to the right -->
+              <div class="hwx-pill" id="hwx-tap" title="Wetterdetails">
+                <svg class="hwico" id="hwico" viewBox="0 0 72 72"></svg>
+                <div class="hwtemp" id="hwtemp">–°</div>
+                <div class="hwdesc" id="hwdesc">–</div>
+                <div class="hwfeel" id="hwfeel"></div>
+              </div>
             </div>
           </div>
           <!-- Day Arc Progress -->
@@ -1980,6 +2209,12 @@ function renderWeather(){
   const c=_wx.current;
   const night=c.is_day===0, code=c.weather_code, h=new Date().getHours();
   const bg=heroBg(code,h);
+  // Trigger particle effect
+  let wxMode=null;
+  if(!isDay){wxMode=null}  // night - no particles
+  else if(code>=61&&code<=67||code>=80&&code<=82){wxMode='rain'}
+  else if(code>=71&&code<=77||code>=85&&code<=86){wxMode='snow'}
+  setWxMode(wxMode);
 
   // Stars only at actual night (is_day===0) + clear/few clouds (code<=1)
   if(window.updateStarParallax) updateStarParallax(night && code<=1);
@@ -3596,11 +3831,25 @@ function updateHeroGradient(h, m) {
     grad = 'linear-gradient(160deg,#04040c,#08081a,#0a0a1e,#06060e)';
     glowColor = 'rgba(30,30,100,.28)';
   }
-  hbg.style.background = grad;
-  if (hglow) hglow.style.setProperty('--hglc', glowColor);
-  // Star canvas: show at night/dawn
+  // Light theme overrides hero gradient with CSS — only apply in dark mode
+  if(!document.documentElement.classList.contains('light')){
+    hbg.style.background = grad;
+    if(hglow) hglow.style.setProperty('--hglc', glowColor);
+  } else {
+    // Light theme: use time-aware pastel sky
+    const lt = h + 0/60;
+    let lightGrad;
+    if(lt < 7 || lt >= 21) lightGrad='linear-gradient(160deg,#1a2840,#0d1e38)'; // light theme at night = still slightly dark
+    else if(lt < 9) lightGrad='linear-gradient(160deg,#fde8cc,#f5d4a8,#f0c880)'; // sunrise warm
+    else if(lt < 17) lightGrad='linear-gradient(160deg,#d4ebf8,#bfd9f0,#c8e3f5)'; // bright day sky
+    else if(lt < 20) lightGrad='linear-gradient(160deg,#f5d4a8,#f0b880,#e89060)'; // golden afternoon
+    else lightGrad='linear-gradient(160deg,#1a2840,#0d1e38)';
+    hbg.style.background = lightGrad;
+  }
+  // Star canvas: show at night/dawn, never in light theme
   const stars = document.getElementById('star-cv');
-  if (stars) stars.classList.toggle('show', h < 7 || h >= 21);
+  const isLight=document.documentElement.classList.contains('light');
+  if (stars) stars.classList.toggle('show', !isLight && (h < 7 || h >= 21));
 }
 
 function updateDayArc(){
@@ -3635,19 +3884,70 @@ function updateClock(){
   const n=new Date();
   const h=String(n.getHours()).padStart(2,'0');
   const m=String(n.getMinutes()).padStart(2,'0');
+  const s=n.getSeconds();
   const tHtml=`<span class="htime-h">${h}</span><span class="htime-sep">:</span><span class="htime-m">${m}</span>`;
   const tPlain=`${h}:${m}`;
-  const d=`${DW[n.getDay()]}, ${n.getDate()}. ${DM[n.getMonth()]}`;
+  const d=`${n.getDate()}. ${DM[n.getMonth()]} ${n.getFullYear()}`;
+  const dayName=DW[n.getDay()];
   const htime=document.getElementById('htime');if(htime)htime.innerHTML=tHtml;
   const at=document.getElementById('at');if(at)at.textContent=tPlain;
-  ['hdate','ad'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=d});
+  // Full date display
+  const hdEl=document.getElementById('hdate');if(hdEl)hdEl.textContent=d;
+  const hdDay=document.getElementById('hdate-day');if(hdDay)hdDay.textContent=dayName;
+  // Ambient clock date
+  const adEl=document.getElementById('ad');if(adEl)adEl.textContent=`${dayName}, ${n.getDate()}. ${DM[n.getMonth()]}`;
+  // ── Seconds ring (updates every second) ──
+  const secRing=document.getElementById('sec-ring');
+  const secDot=document.getElementById('sec-dot');
+  if(secRing){
+    const circ=729; // 2*PI*116
+    const pct=s/60;
+    secRing.style.strokeDashoffset=circ*(1-pct);
+    // Rotate dot around the edge
+    if(secDot){
+      const ang=(pct*360-90)*(Math.PI/180);
+      const r=116,cx=120,cy=120;
+      secDot.setAttribute('cx',(cx+r*Math.cos(ang)).toFixed(2));
+      secDot.setAttribute('cy',(cy+r*Math.sin(ang)).toFixed(2));
+    }
+  }
+  // ── Minutes ring ──
+  const minRing=document.getElementById('min-ring');
+  if(minRing){
+    const circ2=679; // 2*PI*108
+    const minPct=(n.getMinutes()+s/60)/60;
+    minRing.style.strokeDashoffset=circ2*(1-minPct);
+  }
   // ── Time-of-day hero gradient ──
   updateHeroGradient(n.getHours(), n.getMinutes());
   const hgreet=document.getElementById('hgreet');
   if(hgreet)hgreet.textContent=getGreeting(n.getHours());
   updateDayArc();
 }
-function startClock(){updateClock();setInterval(updateClock,5000)}
+function startClock(){
+  // Draw 12 hour tick marks on the clock ring SVG
+  const ticksG=document.getElementById('clock-ticks');
+  if(ticksG){
+    ticksG.innerHTML='';
+    for(let i=0;i<60;i++){
+      const ang=(i/60)*2*Math.PI - Math.PI/2;
+      const isMaj=i%5===0;
+      const r1=isMaj?100:103, r2=isMaj?107:105;
+      const x1=(120+r1*Math.cos(ang)).toFixed(2), y1=(120+r1*Math.sin(ang)).toFixed(2);
+      const x2=(120+r2*Math.cos(ang)).toFixed(2), y2=(120+r2*Math.sin(ang)).toFixed(2);
+      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1',x1);line.setAttribute('y1',y1);
+      line.setAttribute('x2',x2);line.setAttribute('y2',y2);
+      const isLight=document.documentElement.classList.contains('light');
+      line.setAttribute('stroke',isMaj?(isLight?'rgba(0,0,0,.2)':'rgba(255,255,255,.25)'):(isLight?'rgba(0,0,0,.07)':'rgba(255,255,255,.08)'));
+      line.setAttribute('stroke-width',isMaj?'2':'1');
+      line.setAttribute('stroke-linecap','round');
+      ticksG.appendChild(line);
+    }
+  }
+  updateClock();
+  setInterval(updateClock,1000); // Every second for live rings
+}
 
 // ═══════════════════════════════════════════════
 // AMBIENT
@@ -4302,6 +4602,25 @@ function updateRadio(){
   });
 }
 
+// ── Draw clock tick marks ──
+(function(){
+  const g=document.getElementById('clock-ticks');if(!g)return;
+  for(let i=0;i<60;i++){
+    const a=(i/60)*2*Math.PI-Math.PI/2;
+    const isMaj=i%5===0;
+    const r1=isMaj?105:107,r2=isMaj?112:110;
+    const x1=120+r1*Math.cos(a),y1=120+r1*Math.sin(a);
+    const x2=120+r2*Math.cos(a),y2=120+r2*Math.sin(a);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',x1.toFixed(2));l.setAttribute('y1',y1.toFixed(2));
+    l.setAttribute('x2',x2.toFixed(2));l.setAttribute('y2',y2.toFixed(2));
+    l.setAttribute('stroke',isMaj?'rgba(255,255,255,.25)':'rgba(255,255,255,.08)');
+    l.setAttribute('stroke-width',isMaj?'2':'1');
+    l.setAttribute('stroke-linecap','round');
+    g.appendChild(l);
+  }
+})();
+
 // ── Swipe-to-change-tab ──
 (function(){
   let _sx=0,_sy=0;
@@ -4318,6 +4637,61 @@ function updateRadio(){
     }
   },{passive:true});
 })();
+
+/* ══════════════════════════════
+   AUTO LIGHT / DARK THEME
+   08:00-20:00 → hell
+   20:00-08:00 → dunkel
+   Manual override saved to localStorage key 'wz4-theme'
+   ══════════════════════════════ */
+const THEME_KEY='wz4-theme';
+let _themeOverride=localStorage.getItem(THEME_KEY); // 'light'|'dark'|null
+
+function getAutoTheme(){
+  const h=new Date().getHours();
+  return(h>=8&&h<20)?'light':'dark';
+}
+
+function applyTheme(theme,save=false){
+  document.documentElement.classList.toggle('light',theme==='light');
+  if(save){_themeOverride=theme;localStorage.setItem(THEME_KEY,theme);}
+  const btn=document.getElementById('theme-toggle');
+  if(btn)btn.title=theme==='light'?'Zum dunklen Design':'Zum hellen Design';
+  // Update nav bar style
+  const nav=document.querySelector('nav');
+  if(nav)nav.style.transition='background 1.4s ease';
+  // Redraw clock ticks
+  const ticksG=document.getElementById('clock-ticks');
+  if(ticksG){
+    ticksG.querySelectorAll('line').forEach(l=>{
+      const isMaj=parseFloat(l.getAttribute('stroke-width'))>=2;
+      l.setAttribute('stroke',isMaj?(theme==='light'?'rgba(0,0,0,.2)':'rgba(255,255,255,.25)'):(theme==='light'?'rgba(0,0,0,.07)':'rgba(255,255,255,.08)'));
+    });
+  }
+}
+
+function checkAutoTheme(){
+  // Only auto-switch if no manual override
+  if(!_themeOverride) applyTheme(getAutoTheme());
+}
+
+// Apply immediately on load (before first render)
+applyTheme(_themeOverride||getAutoTheme());
+
+// Check every minute for sunrise/sunset switch
+setInterval(checkAutoTheme, 60_000);
+
+// Manual toggle
+document.getElementById('theme-toggle')?.addEventListener('click',()=>{
+  const current=document.documentElement.classList.contains('light')?'light':'dark';
+  const next=current==='light'?'dark':'light';
+  applyTheme(next,true);
+  hap();
+  showToast(next==='light'?'☀️ Helles Design':'🌙 Dunkles Design');
+  // Auto-reset override after 2h
+  setTimeout(()=>{_themeOverride=null;localStorage.removeItem(THEME_KEY);checkAutoTheme();},7_200_000);
+});
+
 
 boot();
 
@@ -4695,6 +5069,81 @@ function launchKonfetti(){
 // ═══════════════════════════════════════════════
 // WX-HERO: Animated precipitation canvas overlay
 // Rain drops or snow flakes over the weather hero
+// ── WEATHER PARTICLE ENGINE ──
+let _wxPart={canvas:null,ctx:null,drops:[],flakes:[],rays:[],mode:null,raf:null};
+function initWxParticles(){
+  const cv=document.getElementById('wx-particles');
+  if(!cv)return;
+  const hero=document.querySelector('.hero');
+  cv.width=hero?.offsetWidth||window.innerWidth;
+  cv.height=hero?.offsetHeight||220;
+  _wxPart.canvas=cv;
+  _wxPart.ctx=cv.getContext('2d');
+}
+function setWxMode(mode){
+  if(_wxPart.mode===mode)return;
+  _wxPart.mode=mode;
+  const cv=_wxPart.canvas;
+  if(!cv){initWxParticles();}
+  const pcv=document.getElementById('wx-particles');
+  // Clear old particles
+  _wxPart.drops=[];_wxPart.flakes=[];_wxPart.rays=[];
+  if(_wxPart.raf){cancelAnimationFrame(_wxPart.raf);_wxPart.raf=null;}
+  if(!mode||!pcv){pcv?.classList.remove('show');return;}
+  const W=_wxPart.canvas?.width||320, H=_wxPart.canvas?.height||200;
+  if(mode==='rain'){
+    pcv.classList.add('show');
+    for(let i=0;i<60;i++){
+      _wxPart.drops.push({
+        x:Math.random()*W,y:Math.random()*H,
+        len:Math.random()*15+8,
+        spd:Math.random()*4+4,
+        op:Math.random()*.4+.1,
+        w:Math.random()*.8+.4
+      });
+    }
+    (function animRain(){
+      const ctx=_wxPart.ctx;ctx.clearRect(0,0,W,H);
+      ctx.strokeStyle='rgba(150,200,255,1)';
+      _wxPart.drops.forEach(d=>{
+        ctx.globalAlpha=d.op;ctx.lineWidth=d.w;
+        ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-2,d.y+d.len);ctx.stroke();
+        d.y+=d.spd;d.x-=.8;
+        if(d.y>H){d.y=-d.len;d.x=Math.random()*W;}
+      });
+      ctx.globalAlpha=1;
+      _wxPart.raf=requestAnimationFrame(animRain);
+    })();
+  } else if(mode==='snow'){
+    pcv.classList.add('show');
+    for(let i=0;i<50;i++){
+      _wxPart.flakes.push({
+        x:Math.random()*W,y:Math.random()*H,
+        r:Math.random()*2.5+.8,
+        spd:Math.random()*.6+.2,
+        drift:Math.random()*.4-.2,
+        op:Math.random()*.5+.2,
+        t:Math.random()*Math.PI*2
+      });
+    }
+    (function animSnow(){
+      const ctx=_wxPart.ctx;ctx.clearRect(0,0,W,H);
+      _wxPart.flakes.forEach(f=>{
+        ctx.globalAlpha=f.op;ctx.fillStyle='#fff';
+        ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();
+        f.y+=f.spd;f.x+=f.drift+Math.sin(f.t)*0.3;f.t+=.02;
+        if(f.y>H+4){f.y=-4;f.x=Math.random()*W;}
+        if(f.x<0)f.x=W;if(f.x>W)f.x=0;
+      });
+      ctx.globalAlpha=1;
+      _wxPart.raf=requestAnimationFrame(animSnow);
+    })();
+  } else {
+    pcv.classList.remove('show');
+  }
+}
+// Hook into weather update
+const _origSetWxMode=setWxMode;
 // ═══════════════════════════════════════════════
 (function(){
   let raf=null, particles=[], W=0, H=0, mode=null; // 'rain'|'snow'|null
