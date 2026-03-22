@@ -283,71 +283,48 @@ html,body{height:100%;background:var(--bg);
 
 /* Clock + Weather row */
 .htop{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:22px 16px 8px;gap:0;position:relative;
-}
-/* ─── BIG DESIGNER CLOCK ─── */
-.clock-ring-wrap{
-  position:relative;width:min(240px,66vw);height:min(240px,66vw);
-  margin:0 auto 0;
-}
-#clock-ring-svg{position:absolute;inset:0;width:100%;height:100%}
-.clock-center{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:0;
+  display:grid;grid-template-columns:1fr auto;
+  align-items:flex-start;padding:26px 22px 0;gap:12px;
 }
 .htime{
-  display:flex;align-items:center;gap:0;line-height:1;
+  display:flex;align-items:flex-end;gap:4px;line-height:1;
   font-variant-numeric:tabular-nums;
 }
 .htime-h,.htime-m{
   font-family:'Oxanium',sans-serif;
-  font-size:clamp(3.4rem,16vw,5.8rem);font-weight:300;letter-spacing:-2px;color:#fff;line-height:1;
+  font-size:clamp(5rem,21vw,7.6rem);font-weight:200;letter-spacing:-4px;color:#fff;line-height:1;
 }
 .htime-sep{
   font-family:'Oxanium',sans-serif;
-  font-size:clamp(1.8rem,8vw,3rem);font-weight:300;color:rgba(255,255,255,.3);
-  margin:0 1px 4px;letter-spacing:0;
+  font-size:clamp(2.2rem,9vw,3.2rem);font-weight:200;color:rgba(255,255,255,.22);
+  margin-bottom:.5rem;letter-spacing:0;
   animation:colonBlink 1s step-end infinite;
 }
-@keyframes colonBlink{0%,49%{opacity:.9}50%,100%{opacity:.18}}
-.hdate-wrap{display:flex;flex-direction:column;align-items:center;margin-top:4px;gap:2px}
+@keyframes colonBlink{0%,49%{opacity:.9}50%,100%{opacity:.15}}
+.hdate-wrap{display:flex;flex-direction:column;gap:2px;margin-top:6px}
 .hdate{
-  font-size:.7rem;font-weight:600;letter-spacing:.5px;
-  color:rgba(255,255,255,.75);text-transform:none;margin:0;
+  font-size:.75rem;font-weight:600;letter-spacing:.2px;
+  color:rgba(255,255,255,.7);
 }
 .hdate-day{
-  font-size:.54rem;font-weight:400;letter-spacing:2px;text-transform:uppercase;
+  font-size:.56rem;font-weight:400;letter-spacing:2px;text-transform:uppercase;
   color:rgba(255,255,255,.28);
 }
-.hgreet{
-  font-size:.68rem;font-weight:500;letter-spacing:.2px;
-  color:rgba(255,255,255,.45);margin-top:2px;text-align:center;
-  animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0;
-}
-@keyframes greetFade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-/* Weather pill floated to the right of the clock ring */
-.hwx-pill{
-  position:absolute;right:-8px;top:50%;transform:translateY(-60%);
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:10px 8px;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);border-radius:16px;
-  backdrop-filter:blur(12px);cursor:pointer;min-width:58px;
-  transition:background .2s;
-}
-.hwx-pill:active{background:rgba(255,255,255,.12)}
-.hwico{width:44px;height:44px;animation:wxFloat 6s ease-in-out infinite;
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
-@keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.hgreet{font-size:.72rem;font-weight:500;letter-spacing:.2px;
+  color:rgba(255,255,255,.45);margin-top:4px;
+  animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0}
+@keyframes greetFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hwx{display:flex;flex-direction:column;align-items:flex-end;gap:0;padding-top:6px;cursor:pointer}
+.hwico{width:68px;height:68px;animation:wxFloat 6s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3))}
+@keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .hwtemp{
   font-family:'Oxanium',sans-serif;
-  font-size:1.5rem;font-weight:300;letter-spacing:-1px;line-height:1;text-align:center;
+  font-size:2.6rem;font-weight:200;letter-spacing:-2px;line-height:1;text-align:right;
   background:linear-gradient(170deg,#fff 0%,rgba(255,255,255,.6) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.hwdesc{font-size:.52rem;font-weight:400;color:rgba(255,255,255,.35);text-align:center;margin-top:2px;letter-spacing:.2px}
-.hwfeel{font-size:.5rem;color:rgba(255,255,255,.2);text-align:center;margin-top:1px}
+.hwdesc{font-size:.58rem;font-weight:400;color:rgba(255,255,255,.35);text-align:right;margin-top:5px;letter-spacing:.3px}
+.hwfeel{font-size:.54rem;color:rgba(255,255,255,.2);text-align:right;margin-top:2px}
 #day-arc-wrap{position:relative;width:100%;height:42px;margin:4px 0 2px;overflow:visible}
 #day-arc-lbl{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
   font-size:.46rem;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;
@@ -1229,55 +1206,21 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
         <div class="hglow"></div>
         <div class="hcont">
           <div class="htop">
-            <!-- ── MEGA RING CLOCK ── -->
-            <div class="clock-ring-wrap">
-              <svg id="clock-ring-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="secGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#ffcc44"/>
-                    <stop offset="100%" stop-color="#ff9f0a"/>
-                  </linearGradient>
-                  <linearGradient id="minGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="rgba(10,132,255,.5)"/>
-                    <stop offset="100%" stop-color="#0a84ff"/>
-                  </linearGradient>
-                </defs>
-                <!-- Tick marks for 12 hours -->
-                <g id="clock-ticks"></g>
-                <!-- Minutes track -->
-                <circle cx="120" cy="120" r="108" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="2"/>
-                <!-- Minutes fill -->
-                <circle id="min-ring" cx="120" cy="120" r="108" fill="none"
-                  stroke="url(#minGrad)" stroke-width="2"
-                  stroke-dasharray="679 679" stroke-dashoffset="679"
-                  stroke-linecap="round" transform="rotate(-90 120 120)"/>
-                <!-- Seconds track -->
-                <circle cx="120" cy="120" r="116" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="5"/>
-                <!-- Seconds fill -->
-                <circle id="sec-ring" cx="120" cy="120" r="116" fill="none"
-                  stroke="url(#secGrad)" stroke-width="5"
-                  stroke-dasharray="729 729" stroke-dashoffset="729"
-                  stroke-linecap="round" transform="rotate(-90 120 120)"/>
-                <!-- Seconds leading dot -->
-                <circle id="sec-dot" cx="120" cy="4" r="5" fill="#ff9f0a" filter="drop-shadow(0 0 4px #ff9f0a)"/>
-              </svg>
-              <div class="clock-center">
-                <div class="htime" id="htime">
-                  <span class="htime-h">--</span><span class="htime-sep">:</span><span class="htime-m">--</span>
-                </div>
-                <div class="hdate-wrap">
-                  <div class="hdate" id="hdate">–</div>
-                  <div class="hdate-day" id="hdate-day"></div>
-                </div>
-                <div class="hgreet" id="hgreet"></div>
+            <div>
+              <div class="htime" id="htime">
+                <span class="htime-h">--</span><span class="htime-sep">:</span><span class="htime-m">--</span>
               </div>
-              <!-- Weather pill floating to the right -->
-              <div class="hwx-pill" id="hwx-tap" title="Wetterdetails">
-                <svg class="hwico" id="hwico" viewBox="0 0 72 72"></svg>
-                <div class="hwtemp" id="hwtemp">–°</div>
-                <div class="hwdesc" id="hwdesc">–</div>
-                <div class="hwfeel" id="hwfeel"></div>
+              <div class="hdate-wrap">
+                <div class="hdate" id="hdate">–</div>
+                <div class="hdate-day" id="hdate-day"></div>
               </div>
+              <div class="hgreet" id="hgreet"></div>
+            </div>
+            <div class="hwx" id="hwx-tap" title="Wetterdetails">
+              <svg class="hwico" id="hwico" viewBox="0 0 72 72"></svg>
+              <div class="hwtemp" id="hwtemp">–°</div>
+              <div class="hwdesc" id="hwdesc">–</div>
+              <div class="hwfeel" id="hwfeel">Gefühlt –°</div>
             </div>
           </div>
           <!-- Day Arc Progress -->
@@ -4016,28 +3959,7 @@ function updateClock(){
   const hdDay=document.getElementById('hdate-day');if(hdDay)hdDay.textContent=dayName;
   // Ambient clock date
   const adEl=document.getElementById('ad');if(adEl)adEl.textContent=`${dayName}, ${n.getDate()}. ${DM[n.getMonth()]}`;
-  // ── Seconds ring (updates every second) ──
-  const secRing=document.getElementById('sec-ring');
-  const secDot=document.getElementById('sec-dot');
-  if(secRing){
-    const circ=729; // 2*PI*116
-    const pct=s/60;
-    secRing.style.strokeDashoffset=circ*(1-pct);
-    // Rotate dot around the edge
-    if(secDot){
-      const ang=(pct*360-90)*(Math.PI/180);
-      const r=116,cx=120,cy=120;
-      secDot.setAttribute('cx',(cx+r*Math.cos(ang)).toFixed(2));
-      secDot.setAttribute('cy',(cy+r*Math.sin(ang)).toFixed(2));
-    }
-  }
-  // ── Minutes ring ──
-  const minRing=document.getElementById('min-ring');
-  if(minRing){
-    const circ2=679; // 2*PI*108
-    const minPct=(n.getMinutes()+s/60)/60;
-    minRing.style.strokeDashoffset=circ2*(1-minPct);
-  }
+
   // ── Time-of-day hero gradient ──
   updateHeroGradient(n.getHours(), n.getMinutes());
   const hgreet=document.getElementById('hgreet');
@@ -4045,28 +3967,8 @@ function updateClock(){
   updateDayArc();
 }
 function startClock(){
-  // Draw 12 hour tick marks on the clock ring SVG
-  const ticksG=document.getElementById('clock-ticks');
-  if(ticksG){
-    ticksG.innerHTML='';
-    for(let i=0;i<60;i++){
-      const ang=(i/60)*2*Math.PI - Math.PI/2;
-      const isMaj=i%5===0;
-      const r1=isMaj?100:103, r2=isMaj?107:105;
-      const x1=(120+r1*Math.cos(ang)).toFixed(2), y1=(120+r1*Math.sin(ang)).toFixed(2);
-      const x2=(120+r2*Math.cos(ang)).toFixed(2), y2=(120+r2*Math.sin(ang)).toFixed(2);
-      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-      line.setAttribute('x1',x1);line.setAttribute('y1',y1);
-      line.setAttribute('x2',x2);line.setAttribute('y2',y2);
-      const isLight=document.documentElement.classList.contains('light');
-      line.setAttribute('stroke',isMaj?(isLight?'rgba(0,0,0,.2)':'rgba(255,255,255,.25)'):(isLight?'rgba(0,0,0,.07)':'rgba(255,255,255,.08)'));
-      line.setAttribute('stroke-width',isMaj?'2':'1');
-      line.setAttribute('stroke-linecap','round');
-      ticksG.appendChild(line);
-    }
-  }
   updateClock();
-  setInterval(updateClock,1000); // Every second for live rings
+  setInterval(updateClock,1000);
 }
 
 // ═══════════════════════════════════════════════
@@ -4780,21 +4682,8 @@ function applyTheme(theme,save=false){
   // Update nav bar style
   const nav=document.querySelector('nav');
   if(nav)nav.style.transition='background 1.4s ease';
-  // Redraw clock ticks
-  const ticksG=document.getElementById('clock-ticks');
-  if(ticksG){
-    ticksG.querySelectorAll('line').forEach(l=>{
-      const isMaj=parseFloat(l.getAttribute('stroke-width'))>=2;
-      l.setAttribute('stroke',isMaj?(theme==='light'?'rgba(0,0,0,.18)':'rgba(255,255,255,.25)'):(theme==='light'?'rgba(0,0,0,.06)':'rgba(255,255,255,.08)'));
-    });
-  }
-  // Clock ring colors
-  const secR=document.getElementById('sec-ring');
-  const minR=document.getElementById('min-ring');
-  const secD=document.getElementById('sec-dot');
-  if(secR)secR.setAttribute('stroke',theme==='light'?'rgba(255,149,0,.85)':'url(#secGrad)');
-  if(minR)minR.setAttribute('stroke',theme==='light'?'rgba(0,122,255,.65)':'url(#minGrad)');
-  if(secD)secD.setAttribute('fill',theme==='light'?'#ff9500':'#ff9f0a');
+
+
 }
 
 function checkAutoTheme(){
@@ -4811,7 +4700,7 @@ setInterval(checkAutoTheme, 60_000);
 // 5-Tap Easter Egg auf die Uhr → Theme toggle
 let _tapCount=0,_tapTimer=null;
 document.addEventListener('DOMContentLoaded',()=>{
-  const tapTarget=document.getElementById('htime')||document.querySelector('.clock-center');
+  const tapTarget=document.getElementById('htime');
   if(!tapTarget)return;
   tapTarget.addEventListener('click',()=>{
     _tapCount++;
@@ -4824,14 +4713,10 @@ document.addEventListener('DOMContentLoaded',()=>{
       hap();
       showToast(next==='light'?'☀️ Helles Design':'🌙 Dunkles Design',2500);
       // Flash-Animation auf der Uhr
-      const cc=document.querySelector('.clock-center');
-      if(cc){cc.style.transform='scale(1.06)';setTimeout(()=>cc.style.transform='',300);}
+      const cc=document.getElementById('htime');
+      if(cc){cc.style.transform='scale(1.04)';setTimeout(()=>cc.style.transform='',300);}
       // Auto-reset override nach 2h
       setTimeout(()=>{_themeOverride=null;localStorage.removeItem(THEME_KEY);checkAutoTheme();},7_200_000);
-    } else if(_tapCount===1){
-      // Subtle feedback: kurzer Glow
-      const sd=document.getElementById('sec-dot');
-      if(sd){const orig=sd.getAttribute('fill');sd.setAttribute('fill','#fff');setTimeout(()=>sd.setAttribute('fill',orig),150);}
     }
     _tapTimer=setTimeout(()=>_tapCount=0,800);
   });
