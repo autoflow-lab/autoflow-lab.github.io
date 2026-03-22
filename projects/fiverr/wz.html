@@ -355,7 +355,7 @@ html,body{height:100%;background:var(--bg);
 .hr{
   flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;
   padding:10px 12px;min-width:54px;border-radius:14px;
-  background:var(--c2);
+  background:var(--on-bg);
   transition:transform .15s;
 }
 .hr:active{transform:scale(.92)}
@@ -511,7 +511,7 @@ html,body{height:100%;background:var(--bg);
 .tagsum-stats{display:flex;gap:10px;flex-wrap:wrap}
 .tagsum-stat{display:flex;align-items:center;gap:5px;
   font-size:.72rem;font-weight:500;color:var(--on-txt)}
-.tagsum-stat .ts-val{font-weight:700;color:#fff}
+.tagsum-stat .ts-val{font-weight:700;color:var(--txt)}
 .tagsum-stat .ts-ico{font-size:.9rem}
 
 /* ───────────── ENERGIE-WIDGET ───────────── */
@@ -1425,22 +1425,22 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <!-- Scenes 2x2 -->
       <span class="lbl">Szenen</span>
       <div class="sg2">
-        <div class="sb2" data-s="abend" style="background:linear-gradient(135deg,#1a1200,#2d1f00,#1a0e00)">
+        <div class="sb2" data-s="abend" >
           <div class="sb2-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
           <div class="sb2-n">Abend</div>
           <div class="sb2-d">Gedimmtes Licht</div>
         </div>
-        <div class="sb2" data-s="film" style="background:linear-gradient(135deg,#000d1a,#001833,#000d1a)">
+        <div class="sb2" data-s="film" >
           <div class="sb2-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M7 4v16M17 4v16M2 9h5M17 9h5M2 15h5M17 15h5"/></svg></div>
           <div class="sb2-n">Film</div>
           <div class="sb2-d">TV + Licht aus</div>
         </div>
-        <div class="sb2" data-s="hell" style="background:linear-gradient(135deg,#1a1400,#2a2000,#1a1400)">
+        <div class="sb2" data-s="hell" >
           <div class="sb2-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffd60a" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></div>
           <div class="sb2-n">Hell</div>
           <div class="sb2-d">Volle Helligkeit</div>
         </div>
-        <div class="sb2" data-s="off" style="background:linear-gradient(135deg,#180000,#240808,#180000)">
+        <div class="sb2" data-s="off" >
           <div class="sb2-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff453a" stroke-width="1.8" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg></div>
           <div class="sb2-n">Alles aus</div>
           <div class="sb2-d">Alle Geräte</div>
@@ -1551,22 +1551,22 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <div class="dg" id="dg"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
       <div class="sg2">
-        <div class="sb2" data-s="abend" style="background:linear-gradient(135deg,#1a1200,#2d1f00,#1a0e00)">
+        <div class="sb2" data-s="abend" >
           <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
           <div class="sb2-n">Abend</div>
           <div class="sb2-d">Warm &amp; gemütlich</div>
         </div>
-        <div class="sb2" data-s="hell" style="background:linear-gradient(135deg,#1a1400,#2a2000,#1a1400)">
+        <div class="sb2" data-s="hell" >
           <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></div>
           <div class="sb2-n">Hell</div>
           <div class="sb2-d">Volle Helligkeit</div>
         </div>
-        <div class="sb2" data-s="film" style="background:linear-gradient(135deg,#000d1a,#001833,#000d1a)">
+        <div class="sb2" data-s="film" >
           <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg></div>
           <div class="sb2-n">Film</div>
           <div class="sb2-d">Kino-Modus</div>
         </div>
-        <div class="sb2" data-s="off" style="background:linear-gradient(135deg,#180000,#240808,#180000)">
+        <div class="sb2" data-s="off" >
           <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff453a" stroke-width="2" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg></div>
           <div class="sb2-n">Alles aus</div>
           <div class="sb2-d">Alle Geräte aus</div>
@@ -2339,10 +2339,27 @@ function renderWeather(){
   // Stars only at actual night (is_day===0) + clear/few clouds (code<=1)
   if(window.updateStarParallax) updateStarParallax(night && code<=1);
 
-  document.getElementById('hbg').style.background=bg;
-  document.getElementById('ab').style.background=bg.replace('160deg','170deg');
-  // Apply weather-reactive bg to Wetter-Tab hero cards
-  document.querySelectorAll('#wx-hero').forEach(el=>{el.style.background=bg.replace('160deg','145deg');});
+  const isLightMode=document.documentElement.classList.contains('light');
+  if(!isLightMode){
+    document.getElementById('hbg').style.background=bg;
+    document.getElementById('ab').style.background=bg.replace('160deg','170deg');
+    document.querySelectorAll('#wx-hero').forEach(el=>{el.style.background=bg.replace('160deg','145deg');});
+  } else {
+    // Light mode: heller Himmel, passt zur Tageszeit
+    const h2=new Date().getHours();
+    let lightBg;
+    if(h2<8||h2>=20) lightBg='linear-gradient(160deg,#1a2840,#0d1e38)';
+    else if(h2<10)   lightBg='linear-gradient(160deg,#fde8cc,#f5d4a8)';       // Morgen
+    else if(h2<17)   lightBg='linear-gradient(160deg,#daeef9,#c4dff5)';       // Tag
+    else             lightBg='linear-gradient(160deg,#f5d4a8,#e89060)';       // Abend
+    document.getElementById('hbg').style.background=lightBg;
+    document.getElementById('ab').style.background=lightBg;
+    // Wetter-Karten: Glas-Effekt
+    document.querySelectorAll('#wx-hero').forEach(el=>{
+      el.style.background='rgba(255,255,255,0.6)';
+      el.style.backdropFilter='blur(20px)';
+    });
+  }
   document.getElementById('hwico').innerHTML=wxIco(code,72,night);
   document.getElementById('aw-ico').innerHTML=wxIco(code,44,night);
   document.getElementById('hwtemp').textContent=Math.round(c.temperature_2m)+'°';
