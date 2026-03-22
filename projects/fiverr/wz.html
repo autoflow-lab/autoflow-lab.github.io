@@ -1080,6 +1080,15 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 .rem-sep{height:1px;background:rgba(255,255,255,.08);margin:10px 0}
 .rem-num{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .rem-num .rem-btn{font-size:1rem;font-weight:700;padding:14px 6px}
+
+.rem-btn-red{background:rgba(255,69,58,.18)!important;border-color:rgba(255,69,58,.45)!important;color:#ff453a!important}
+.rem-btn-play{background:rgba(255,255,255,.09)!important}
+.rem-btn-vol{padding:10px 6px!important;font-size:.72rem!important;font-weight:700!important}
+.rem-btn-rec{background:rgba(255,69,58,.2)!important;border-color:rgba(255,69,58,.4)!important;color:#ff453a!important}
+.rem-btn-num{font-size:1.1rem!important;font-weight:700!important;padding:14px 6px!important}
+.rem-dpad-arrow{background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.15)!important}
+.rem-dpad-arrow svg{width:20px!important;height:20px!important}
+.rem-dpad-ok{grid-column:2;grid-row:2;border-radius:50%!important;background:rgba(255,159,10,.22)!important;border-color:rgba(255,159,10,.45)!important;color:#ff9f0a!important;aspect-ratio:1;font-size:.88rem!important;font-weight:800!important}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Oxanium:wght@200;300;400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -3916,75 +3925,115 @@ function showSunriseRemote(){
   ov.className='rem-ov';
   ov.innerHTML=`<div class="rem-sheet">
     <div class="rem-head">
-      <div class="rem-title">📺 Sunrise TV</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(10,132,255,.18);display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="17" r="1.5"/><line x1="9" y1="8" x2="15" y2="8"/></svg>
+        </div>
+        <div>
+          <div class="rem-title">Sunrise TV</div>
+          <div style="font-size:.62rem;color:rgba(255,255,255,.35);margin-top:1px">UPC DVR · Harmony</div>
+        </div>
+      </div>
       <button class="rem-close">✕</button>
     </div>
-    <!-- Power + Top -->
-    <div class="rem-row" style="grid-template-columns:1fr 1fr 1fr">
-      <button class="rem-btn danger" data-c="PowerToggle"><svg viewBox="0 0 24 24"><path d="M18.36 6.64A9 9 0 1 1 5.64 6.64"/><line x1="12" y1="2" x2="12" y2="12"/></svg>Power</button>
-      <button class="rem-btn" data-c="Guide"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="13" y2="13"/></svg>Guide</button>
-      <button class="rem-btn" data-c="Info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Info</button>
+
+    <!-- Power + Guide + Info -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <button class="rem-btn rem-btn-red" data-c="PowerToggle">
+        <svg viewBox="0 0 24 24"><path d="M18.36 6.64A9 9 0 1 1 5.64 6.64"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+        Power
+      </button>
+      <button class="rem-btn" data-c="Guide">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="13" y2="13"/></svg>
+        Guide
+      </button>
+      <button class="rem-btn" data-c="Info">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Info
+      </button>
     </div>
-    <!-- D-Pad -->
-    <div class="rem-dpad">
-      <div></div>
-      <button class="rem-btn" data-c="DirectionUp"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
-      <div></div>
-      <button class="rem-btn" data-c="DirectionLeft"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-      <button class="rem-btn rem-dpad-ok" data-c="Select">OK</button>
-      <button class="rem-btn" data-c="DirectionRight"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
-      <div></div>
-      <button class="rem-btn" data-c="DirectionDown"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
-      <div></div>
+
+    <!-- D-PAD mit Lautstärke seitlich -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <!-- Vol LG links -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="rem-btn rem-btn-vol" data-lg-btn="VOLUMEUP">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          Vol＋
+        </button>
+        <button class="rem-btn rem-btn-vol" data-lg-btn="VOLUMEDOWN">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          Vol－
+        </button>
+        <button class="rem-btn rem-btn-vol" data-lg-btn="MUTE">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          Mute
+        </button>
+      </div>
+      <!-- D-Pad Mitte -->
+      <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:5px">
+        <div></div>
+        <button class="rem-btn rem-dpad-arrow" data-c="DirectionUp"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+        <div></div>
+        <button class="rem-btn rem-dpad-arrow" data-c="DirectionLeft"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="rem-btn rem-dpad-ok" data-c="Select">OK</button>
+        <button class="rem-btn rem-dpad-arrow" data-c="DirectionRight"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+        <div></div>
+        <button class="rem-btn rem-dpad-arrow" data-c="DirectionDown"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div></div>
+      </div>
+      <!-- Kanal rechts -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="rem-btn rem-btn-vol" data-c="ChannelUp">CH＋</button>
+        <button class="rem-btn rem-btn-vol" data-c="ChannelDown">CH－</button>
+        <button class="rem-btn rem-btn-vol" data-c="Back">Back</button>
+      </div>
     </div>
-    <!-- Back + Exit + Menu -->
-    <div class="rem-row" style="grid-template-columns:1fr 1fr 1fr">
-      <button class="rem-btn" data-c="Back">← Back</button>
-      <button class="rem-btn" data-c="Exit">Exit</button>
-      <button class="rem-btn" data-c="Menu">Menu</button>
-    </div>
-    <div class="rem-sep"></div>
+
     <!-- Transport -->
-    <div class="rem-row" style="grid-template-columns:repeat(5,1fr)">
-      <button class="rem-btn" data-c="Rewind"><svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
-      <button class="rem-btn" data-c="Play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
-      <button class="rem-btn" data-c="Pause"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></button>
-      <button class="rem-btn" data-c="Stop"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></button>
-      <button class="rem-btn" data-c="FastForward"><svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><polygon points="15 4 23 12 15 20 15 4"/></svg></button>
+    <div style="background:rgba(255,255,255,.04);border-radius:16px;padding:10px;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+        <button class="rem-btn" data-c="Rewind"><svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
+        <button class="rem-btn rem-btn-play" data-c="Play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+        <button class="rem-btn rem-btn-play" data-c="Pause"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></button>
+        <button class="rem-btn rem-btn-play" data-c="Stop"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></button>
+        <button class="rem-btn" data-c="FastForward"><svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><polygon points="15 4 23 12 15 20 15 4"/></svg></button>
+      </div>
     </div>
-    <!-- Kanal + Vol -->
-    <div class="rem-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
-      <button class="rem-btn big" data-c="ChannelUp">CH＋</button>
-      <button class="rem-btn big" data-c="ChannelDown">CH－</button>
-      <button class="rem-btn big" data-c="VolumeUp">Vol＋</button>
-      <button class="rem-btn big" data-c="VolumeDown">Vol－</button>
+
+    <!-- Extras + Record -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+      <button class="rem-btn" data-c="OnDemand"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polygon points="10 8 16 12 10 16 10 8"/></svg>On Demand</button>
+      <button class="rem-btn" data-c="MyShows"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><line x1="8" y1="20" x2="16" y2="20"/><line x1="12" y1="18" x2="12" y2="20"/></svg>My Shows</button>
+      <button class="rem-btn rem-btn-rec" data-c="Record"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="currentColor"/></svg>Record</button>
     </div>
-    <div class="rem-sep"></div>
-    <!-- On Demand + MyShows -->
-    <div class="rem-row" style="grid-template-columns:1fr 1fr 1fr">
-      <button class="rem-btn" data-c="OnDemand">On<br>Demand</button>
-      <button class="rem-btn" data-c="MyShows">My<br>Shows</button>
-      <button class="rem-btn" data-c="Record"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="currentColor" opacity=".8"/></svg>Rec</button>
-    </div>
+
     <!-- Farbtasten -->
-    <div class="rem-row" style="grid-template-columns:repeat(4,1fr)">
-      <button class="rem-btn" data-c="Red" style="color:#ff453a;border-color:#ff453a44;background:#ff453a18">●Red</button>
-      <button class="rem-btn" data-c="Green" style="color:#30d158;border-color:#30d15844;background:#30d15818">●Green</button>
-      <button class="rem-btn" data-c="Yellow" style="color:#ffd60a;border-color:#ffd60a44;background:#ffd60a18">●Yellow</button>
-      <button class="rem-btn" data-c="Blue" style="color:#0a84ff;border-color:#0a84ff44;background:#0a84ff18">●Blue</button>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px">
+      <button class="rem-btn" data-c="Red"   style="background:rgba(255,69,58,.2);border-color:rgba(255,69,58,.5);color:#ff453a;font-weight:800">●</button>
+      <button class="rem-btn" data-c="Green" style="background:rgba(48,209,88,.2);border-color:rgba(48,209,88,.5);color:#30d158;font-weight:800">●</button>
+      <button class="rem-btn" data-c="Yellow"style="background:rgba(255,214,10,.2);border-color:rgba(255,214,10,.5);color:#ffd60a;font-weight:800">●</button>
+      <button class="rem-btn" data-c="Blue"  style="background:rgba(10,132,255,.2);border-color:rgba(10,132,255,.5);color:#0a84ff;font-weight:800">●</button>
     </div>
-    <div class="rem-sep"></div>
-    <!-- Nummern -->
-    <div class="rem-num">
-      ${[1,2,3,4,5,6,7,8,9,'Teletext',0,'Back'].map(n=>
-        `<button class="rem-btn" data-c="${typeof n==='number'?'Number'+n:n}">${n}</button>`
-      ).join('')}
+
+    <!-- Zahlen -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+      ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="rem-btn rem-btn-num" data-c="Number${n}">${n}</button>`).join('')}
+      <button class="rem-btn rem-btn-num" data-c="Teletext" style="font-size:.65rem">TXT</button>
+      <button class="rem-btn rem-btn-num" data-c="Number0">0</button>
+      <button class="rem-btn rem-btn-num" data-c="Exit" style="font-size:.65rem">EXIT</button>
     </div>
   </div>`;
+
   ov.querySelector('.rem-close').addEventListener('click',()=>ov.remove());
   ov.querySelectorAll('[data-c]').forEach(btn=>btn.addEventListener('click',()=>{
     hap(); svcHarmony(btn.dataset.c);
-    btn.style.transform='scale(.88)'; setTimeout(()=>btn.style.transform='',150);
+    btn.style.opacity='.5'; setTimeout(()=>btn.style.opacity='',120);
+  }));
+  // Vol/Mute → LG TV!
+  ov.querySelectorAll('[data-lg-btn]').forEach(btn=>btn.addEventListener('click',()=>{
+    hap(); svcLG(btn.dataset.lgBtn);
+    btn.style.opacity='.5'; setTimeout(()=>btn.style.opacity='',120);
   }));
   document.body.appendChild(ov);
 }
@@ -3995,56 +4044,91 @@ function showLGRemote(){
   ov.className='rem-ov';
   ov.innerHTML=`<div class="rem-sheet">
     <div class="rem-head">
-      <div class="rem-title">🖥 LG OLED TV</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(48,209,88,.15);display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 20h8M12 18v2"/></svg>
+        </div>
+        <div>
+          <div class="rem-title">LG OLED TV</div>
+          <div style="font-size:.62rem;color:rgba(255,255,255,.35);margin-top:1px">webOS · OLED65G4</div>
+        </div>
+      </div>
       <button class="rem-close">✕</button>
     </div>
-    <!-- Power -->
-    <div class="rem-row" style="grid-template-columns:1fr 1fr 1fr">
-      <button class="rem-btn danger" data-lg-svc="turn_off">Power</button>
-      <button class="rem-btn" data-lg-btn="HOME">Home</button>
-      <button class="rem-btn" data-lg-btn="BACK">← Back</button>
+
+    <!-- Power + Home + Back -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <button class="rem-btn rem-btn-red" data-lg-svc="turn_off">
+        <svg viewBox="0 0 24 24"><path d="M18.36 6.64A9 9 0 1 1 5.64 6.64"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+        Power
+      </button>
+      <button class="rem-btn" data-lg-btn="HOME">
+        <svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/></svg>
+        Home
+      </button>
+      <button class="rem-btn" data-lg-btn="BACK">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
     </div>
-    <!-- D-Pad -->
-    <div class="rem-dpad">
-      <div></div>
-      <button class="rem-btn" data-lg-btn="UP"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
-      <div></div>
-      <button class="rem-btn" data-lg-btn="LEFT"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-      <button class="rem-btn rem-dpad-ok" data-lg-btn="ENTER">OK</button>
-      <button class="rem-btn" data-lg-btn="RIGHT"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
-      <div></div>
-      <button class="rem-btn" data-lg-btn="DOWN"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
-      <div></div>
+
+    <!-- D-PAD mit Vol seitlich -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <!-- Vol links -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="rem-btn rem-btn-vol" data-lg-btn="VOLUMEUP">Vol＋</button>
+        <button class="rem-btn rem-btn-vol" data-lg-btn="MUTE">🔇</button>
+        <button class="rem-btn rem-btn-vol" data-lg-btn="VOLUMEDOWN">Vol－</button>
+      </div>
+      <!-- D-Pad -->
+      <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:5px">
+        <div></div>
+        <button class="rem-btn rem-dpad-arrow" data-lg-btn="UP"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+        <div></div>
+        <button class="rem-btn rem-dpad-arrow" data-lg-btn="LEFT"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="rem-btn rem-dpad-ok" data-lg-btn="ENTER">OK</button>
+        <button class="rem-btn rem-dpad-arrow" data-lg-btn="RIGHT"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+        <div></div>
+        <button class="rem-btn rem-dpad-arrow" data-lg-btn="DOWN"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div></div>
+      </div>
+      <!-- CH rechts -->
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="rem-btn rem-btn-vol" data-lg-btn="CHANNELUP">CH＋</button>
+        <button class="rem-btn rem-btn-vol" data-lg-btn="INFO">ℹ</button>
+        <button class="rem-btn rem-btn-vol" data-lg-btn="CHANNELDOWN">CH－</button>
+      </div>
     </div>
-    <!-- Vol + Ch -->
-    <div class="rem-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
-      <button class="rem-btn big" data-lg-btn="VOLUMEUP">Vol＋</button>
-      <button class="rem-btn big" data-lg-btn="VOLUMEDOWN">Vol－</button>
-      <button class="rem-btn big" data-lg-btn="CHANNELUP">CH＋</button>
-      <button class="rem-btn big" data-lg-btn="CHANNELDOWN">CH－</button>
-    </div>
-    <div class="rem-sep"></div>
+
     <!-- Apps -->
-    <div style="font-size:.6rem;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.3);margin-bottom:8px">APPS</div>
-    <div class="rem-row" style="grid-template-columns:repeat(3,1fr)">
-      <button class="rem-btn accent" data-lg-src="Netflix">Netflix</button>
-      <button class="rem-btn accent" data-lg-src="Disney+">Disney+</button>
-      <button class="rem-btn accent" data-lg-src="YouTube">YouTube</button>
-      <button class="rem-btn" data-lg-src="Apple TV">Apple TV</button>
-      <button class="rem-btn" data-lg-src="Spotify">Spotify</button>
-      <button class="rem-btn" data-lg-btn="MENU">Einstellungen</button>
+    <div style="background:rgba(255,255,255,.04);border-radius:16px;padding:10px;margin-bottom:10px">
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.3);margin-bottom:8px">APPS</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <button class="rem-btn" style="background:rgba(229,9,20,.18);border-color:rgba(229,9,20,.4);color:#ff453a" data-lg-src="Netflix">Netflix</button>
+        <button class="rem-btn" style="background:rgba(17,51,204,.18);border-color:rgba(17,51,204,.4);color:#4f8ef7" data-lg-src="Disney+">Disney+</button>
+        <button class="rem-btn" style="background:rgba(255,0,0,.15);border-color:rgba(255,0,0,.35);color:#ff6b6b" data-lg-src="YouTube">YouTube</button>
+        <button class="rem-btn" data-lg-src="Apple TV">Apple TV</button>
+        <button class="rem-btn" data-lg-src="Spotify" style="color:#1db954;border-color:#1db95440;background:#1db95418">Spotify</button>
+        <button class="rem-btn" data-lg-btn="MENU">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          Settings
+        </button>
+      </div>
     </div>
-    <div class="rem-sep"></div>
-    <!-- Mute + Info -->
-    <div class="rem-row" style="grid-template-columns:1fr 1fr">
-      <button class="rem-btn" data-lg-btn="MUTE">🔇 Mute</button>
-      <button class="rem-btn" data-lg-btn="INFO">ℹ Info</button>
+
+    <!-- Transport -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+      <button class="rem-btn rem-btn-play" data-lg-btn="REWIND"><svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
+      <button class="rem-btn rem-btn-play" data-lg-btn="PLAY"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+      <button class="rem-btn rem-btn-play" data-lg-btn="PAUSE"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></button>
+      <button class="rem-btn rem-btn-play" data-lg-btn="FASTFORWARD"><svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><polygon points="15 4 23 12 15 20 15 4"/></svg></button>
     </div>
   </div>`;
+
   ov.querySelector('.rem-close').addEventListener('click',()=>ov.remove());
   ov.querySelectorAll('[data-lg-btn]').forEach(btn=>btn.addEventListener('click',()=>{
     hap(); svc('webostv','button',{entity_id:lgId,button:btn.dataset.lgBtn});
-    btn.style.transform='scale(.88)'; setTimeout(()=>btn.style.transform='',150);
+    btn.style.opacity='.5'; setTimeout(()=>btn.style.opacity='',120);
   }));
   ov.querySelectorAll('[data-lg-src]').forEach(btn=>btn.addEventListener('click',()=>{
     hap(); svc('media_player','select_source',{entity_id:lgId,source:btn.dataset.lgSrc});
