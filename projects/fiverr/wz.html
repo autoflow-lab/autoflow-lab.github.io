@@ -285,7 +285,15 @@ html,body{height:100%;background:var(--bg);
 .htop{
   display:grid;grid-template-columns:1fr auto;
   align-items:flex-start;padding:26px 22px 0;gap:12px;
+  position:relative;
 }
+/* Wave Canvas hinter der Uhr */
+#wave-cv{
+  position:absolute;bottom:0;left:0;right:0;height:56px;
+  pointer-events:none;opacity:.55;
+  border-radius:0 0 4px 4px;
+}
+:root.light #wave-cv{opacity:.35}
 .htime{
   display:flex;align-items:flex-end;gap:4px;line-height:1;
   font-variant-numeric:tabular-nums;
@@ -1222,6 +1230,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
               <div class="hwdesc" id="hwdesc">–</div>
               <div class="hwfeel" id="hwfeel">Gefühlt –°</div>
             </div>
+            <canvas id="wave-cv"></canvas>
           </div>
           <!-- Day Arc Progress -->
           <div id="day-arc-wrap">
@@ -3732,6 +3741,7 @@ function buildUI(){try{
   // vtrack events replaced by vol-range input above
 
   startClock();
+  initWaveClock();
   setTimeout(()=>toast('✓ Bereit'),600);
 
   // ═══ Regenradar (RainViewer + Leaflet) ═══
@@ -3969,6 +3979,67 @@ function updateClock(){
 function startClock(){
   updateClock();
   setInterval(updateClock,1000);
+}
+
+// ══════════════════════════════════════
+// WAVE CLOCK ANIMATION
+// ══════════════════════════════════════
+function initWaveClock(){
+  const cv=document.getElementById('wave-cv');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  let W=0,H=0,t=0;
+
+  // Drei Wellen mit verschiedenen Frequenzen und Phasen
+  const WAVES=[
+    {freq:1.8, amp:.38, speed:.018, phase:0,    alpha:.7},
+    {freq:2.6, amp:.28, speed:.026, phase:2.1,  alpha:.5},
+    {freq:1.2, amp:.20, speed:.012, phase:4.2,  alpha:.35},
+  ];
+
+  function resize(){
+    W=cv.offsetWidth; H=cv.offsetHeight;
+    cv.width=W*devicePixelRatio; cv.height=H*devicePixelRatio;
+    ctx.scale(devicePixelRatio,devicePixelRatio);
+  }
+  resize();
+  window.addEventListener('resize',resize,{passive:true});
+
+  function getWaveColor(){
+    const isLight=document.documentElement.classList.contains('light');
+    const h=new Date().getHours();
+    if(isLight) return h>=8&&h<20?'0,122,255':'30,100,200';
+    if(h<5||h>=21) return '80,120,255';
+    if(h<9)  return '255,140,50';
+    if(h<17) return '10,132,255';
+    if(h<20) return '255,100,30';
+    return '80,120,255';
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const rgb=getWaveColor();
+
+    WAVES.forEach(w=>{
+      ctx.beginPath();
+      const baseline=H*0.72;
+      for(let x=0;x<=W;x+=2){
+        const y=baseline
+          - Math.sin((x/W)*Math.PI*2*w.freq + t*w.speed*60 + w.phase) * H*w.amp
+          - Math.sin((x/W)*Math.PI*w.freq*0.7 + t*w.speed*40) * H*w.amp*0.4;
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+      const grad=ctx.createLinearGradient(0,0,0,H);
+      grad.addColorStop(0,`rgba(${rgb},${w.alpha})`);
+      grad.addColorStop(1,`rgba(${rgb},0)`);
+      ctx.fillStyle=grad;
+      ctx.fill();
+    });
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
 }
 
 // ═══════════════════════════════════════════════
