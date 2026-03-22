@@ -2998,10 +2998,10 @@ function buildUI(){try{
       if(ico)ico.style.background='rgba(255,255,255,.08)';
       if(sv)sv.style.stroke='rgba(255,255,255,.4)';
       const fill=tile.querySelector('.bfil');
-      if(fill)fill.style.background='';
+      if(fill){fill.style.background='';fill.style.width='0%';fill.style.opacity='0';}
     }
     const se=tile.querySelector('[data-lst]');
-    if(se)se.style.color=on&&c?`rgb(${c})`:'rgba(255,255,255,.5)';
+    if(se)se.style.color=on&&c?`rgb(${c})`:'rgba(255,255,255,.35)';
   }
 
   // Light control bottom sheet
@@ -3373,6 +3373,20 @@ function buildUI(){try{
     function syncBriBar(){
       const pct=effOn(lid)?getBri():0;
       updateBriBar(pct);
+      // Sofortiger visueller Feedback auf dem Tile
+      const tileNow=document.querySelector(`.lt[data-id="${lid}"]`);
+      if(tileNow){
+        const arcNow=tileNow.querySelector('[data-bri-arc]');
+        if(arcNow){
+          const CIRC=138.23;
+          const bp=newOn?Math.max(pct,8):0;
+          arcNow.style.strokeDasharray=CIRC.toString();
+          arcNow.style.strokeDashoffset=(CIRC*(1-bp/100)).toString();
+          arcNow.style.opacity=newOn?'1':'0';
+        }
+        const barNow=tileNow.querySelector('.bfil');
+        if(barNow){barNow.style.width=(newOn?Math.max(pct,8):0)+'%';barNow.style.opacity=newOn?'1':'0';}
+      }
     }
     // Sync once on mount, then every time updateAll fires it re-syncs via [data-fill]/[data-thumb]
     setTimeout(syncBriBar,400);
@@ -4141,10 +4155,56 @@ function showLGRemote(){
 }
 
 // Initial render + in updateAll einhängen
-window._updateDevCards=renderDevCards;
+// Einmalig rendern (bei boot), dann nur noch patchen
+let _devCardsReady=false;
+function patchDevCards(){
+  const wrap=document.getElementById('dev-cards');
+  if(!wrap||!_devCardsReady){renderDevCards();_devCardsReady=true;return;}
+  CFG.devs.forEach(d=>{
+    const card=wrap.querySelector(`.dev-card[data-dev-id="${d.id}"]`);
+    if(!card)return;
+    const s=_S[d.id];
+    // LG TV: auch "on" wenn Harmony SunriseTV läuft
+    let on;
+    if(d.id==='media_player.lg_webos_tv_oled65g49ls_2'){
+      const harmonyOn=_S['remote.harmony']?.attributes?.current_activity==='SunriseTV';
+      on=harmonyOn||(s?.state==='on'||s?.state==='playing');
+    } else if(d.harmonyActivity){
+      on=s?.attributes?.current_activity===d.harmonyActivity;
+    } else {
+      on=s?.state==='on'||s?.state==='playing';
+    }
+    // State Label
+    let label='Aus';
+    if(on){
+      if(d.harmonyActivity) label=d.harmonyActivity+' läuft';
+      else if(s?.state==='playing') label=s?.attributes?.media_title||'Läuft';
+      else label='Ein';
+    }
+    // DOM patchen
+    card.classList.toggle('on',on);
+    const stEl=card.querySelector('.dev-card-state');
+    if(stEl) stEl.textContent=label;
+    const togBtn=card.querySelector('[data-dev-tog]');
+    if(togBtn){
+      togBtn.textContent=on?'An':'Aus';
+      togBtn.style.background=on?'rgba(10,132,255,.25)':'';
+      togBtn.style.color=on?'#0a84ff':'';
+    }
+    // Karten-Icon Farbe
+    const ico=card.querySelector('.dev-card-ico');
+    if(ico){
+      ico.style.background=on?'rgba(10,132,255,.2)':'var(--c2)';
+      const svg=ico.querySelector('svg');
+      if(svg) svg.style.stroke=on?'#0a84ff':'var(--dim)';
+    }
+  });
+}
+window._updateDevCards=patchDevCards;
 
   startClock();
   setTimeout(()=>toast('✓ Bereit'),600);
+  setTimeout(()=>{renderDevCards();_devCardsReady=true;},800);
 
   // ═══ Regenradar (RainViewer + Leaflet) ═══
   let _radarMaps={}, _radarFrames=[], _radarIdx=0, _radarTimer=null;
@@ -5103,12 +5163,18 @@ function updateAll(){
     if(arc){
       const CIRC=138.23;
       const briPct=on?Math.max(bri,5):0;
-      arc.style.strokeDashoffset=CIRC*(1-briPct/100);
+      arc.style.strokeDasharray=CIRC.toString();
+      arc.style.strokeDashoffset=(CIRC*(1-briPct/100)).toString();
       arc.style.stroke=lc?`rgba(${lc},0.9)`:'rgba(255,193,141,0.9)';
+      arc.style.opacity=on?'1':'0';
     }
-    // Brightness bar sync — fill uses .bfil[data-fill]
-    const bfill2=tile.querySelector('[data-fill]');
-    if(bfill2){bfill2.style.width=(on?Math.max(bri,5):0)+'%';}
+    // Brightness bar sync
+    const bfill2=tile.querySelector('.bfil');
+    if(bfill2){
+      bfill2.style.width=(on?Math.max(bri,8):0)+'%';
+      bfill2.style.minWidth=on?'10px':'0';
+      bfill2.style.opacity=on?'1':'0';
+    }
   });
   // Devs
   CFG.devs.forEach(d=>{
@@ -5118,10 +5184,19 @@ function updateAll(){
       : (s?.state==='on'||s?.state==='playing');
     const t=document.querySelector(`.dt[data-id="${d.id}"]`);if(!t)return;
     t.classList.toggle('on',on);
-    t.style.background=on?'rgba(255,159,10,.45)':'';
-    t.style.outline=on?'1.5px solid rgba(255,159,10,.8)':'';
-    const se=t.querySelector(`[data-dst="${d.id}"]`);
-    if(se){se.textContent=on?'An':'Aus';se.style.color=on?'#ff9f0a':'rgba(255,255,255,.5)';}
+    // LG TV: auch "on" wenn Harmony SunriseTV läuft
+    const lgOn=d.id==='media_player.lg_webos_tv_oled65g49ls_2'&&
+      _S['remote.harmony']?.attributes?.current_activity==='SunriseTV';
+    const effOn2=on||lgOn;
+    t.classList.toggle('on',effOn2);
+    t.style.background=effOn2?'rgba(10,132,255,.2)':'';
+    t.style.outline=effOn2?'1.5px solid rgba(10,132,255,.5)':'';
+    const se=t.querySelector(`[data-dst]`);
+    if(se){
+      const label=d.harmonyActivity&&effOn2?(d.harmonyActivity+' läuft'):effOn2?'Ein':'Aus';
+      se.textContent=label;
+      se.style.color=effOn2?'#0a84ff':'rgba(255,255,255,.4)';
+    }
   });
 
   // ── Energie-Widget ──
