@@ -807,8 +807,8 @@ html,body{height:100%;background:var(--bg);
 }
 .lt:active{transform:scale(.93)}
 .lt-inner{position:absolute;inset:0;border-radius:18px;overflow:hidden;pointer-events:none;z-index:0}
-.ltgl{position:absolute;inset:-40%;border-radius:50%;
-  background:radial-gradient(circle,rgba(var(--lc,255,159,10),.45) 0%,transparent 65%);
+.ltgl{position:absolute;inset:-120%;border-radius:50%;z-index:0;
+  background:radial-gradient(circle,rgba(var(--lc,255,159,10),.55) 0%,transparent 60%);
   opacity:0;transition:opacity .6s;pointer-events:none}
 .lt.on .ltgl{opacity:1;animation:glowBreathe 3.5s ease-in-out infinite}
 @keyframes glowBreathe{0%,100%{opacity:.7;transform:scale(.95)}50%{opacity:1;transform:scale(1.08)}}
@@ -828,7 +828,7 @@ html,body{height:100%;background:var(--bg);
   width:40px;height:40px;border-radius:12px;z-index:1;
   display:flex;align-items:center;justify-content:center;
   background:rgba(255,255,255,.08);transition:background .35s;
-  position:relative;
+  position:relative;overflow:visible;
 }
 .ltico::after{
   content:'';position:absolute;inset:-4px;border-radius:16px;
@@ -2946,9 +2946,10 @@ function buildUI(){try{
   // Lights
   document.getElementById('lg').innerHTML=CFG.lights.map(l=>`
     <div class="lt" data-id="${l.id}" data-lc="${l.lc}" ${l.unavail?'style="opacity:.5;pointer-events:none"':''} >
-      <div class="lt-inner"><div class="ltgl"></div></div>
+      <div class="lt-inner"></div>
       <div class="ltct"></div>
       <div class="ltico" style="z-index:1">
+        <div class="ltgl"></div>
         <svg viewBox="0 0 24 24">${l.svg}</svg>
         <svg class="lt-bri-arc" viewBox="0 0 50 50">
           <circle class="bri-track" cx="25" cy="25" r="22"/>
