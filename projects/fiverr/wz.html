@@ -1386,7 +1386,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
         <div class="sb2" data-s="film" >
           <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg></div>
           <div class="sb2-n">Film</div>
-          <div class="sb2-d">Kino-Modus</div>
+          <div class="sb2-d">Govees + TV</div>
         </div>
         <div class="sb2" data-s="off" >
           <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff453a" stroke-width="2" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg></div>
@@ -3391,7 +3391,7 @@ function buildUI(){try{
         overlay.innerHTML = `<div style="width:100%;max-width:430px;background:#1c1c1e;border-radius:22px 22px 0 0;padding:20px 16px 32px;border-top:1px solid rgba(255,255,255,.10)">
           <div style="font-size:.68rem;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.45);margin-bottom:14px">SZENE WÄHLEN</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
-            ${[{s:'abend',ico:'🌙',lbl:'Abend',col:'#2d1f00'},{s:'film',ico:'🎬',lbl:'Film',col:'#0d0d1e'},{s:'hell',ico:'☀️',lbl:'Hell',col:'#1e1a00'},{s:'aus',ico:'🌑',lbl:'Alles aus',col:'#111'}].map(sc=>`
+            ${[{s:'abend',ico:'🌆',lbl:'Abend',col:'#2d1f00'},{s:'film',ico:'🎬',lbl:'Film',col:'#0d0d1e'},{s:'nacht',ico:'🌙',lbl:'Nacht',col:'#050516'},{s:'hell',ico:'☀️',lbl:'Hell',col:'#1e1a00'},{s:'off',ico:'🌑',lbl:'Alles aus',col:'#111'}].map(sc=>`
             <button style="background:${sc.col};border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px 10px;color:#fff;font-size:.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:8px" data-qs="${sc.s}">
               <span style="font-size:1.3rem">${sc.ico}</span> ${sc.lbl}
             </button>`).join('')}
@@ -4091,27 +4091,160 @@ function setActiveScene(s){
 }
 function doScene(s){
   setActiveScene(s);
+  const GOVEES=['light.h61e1','light.h618a','light.h618a_2'];
+  const TV='media_player.lg_webos_tv_oled65g49ls_2';
+
   if(s==='abend'){
-    svc('light','turn_on',{entity_id:'light.h618a',brightness_pct:40,rgb_color:[255,128,30]});
-    svc('light','turn_on',{entity_id:'light.h618a_2',brightness_pct:22,rgb_color:[255,70,15]});
+    // Abend: Govees warm amber, Wandlampe an (gedimmt), Rest aus
+    svc('light','turn_on',{entity_id:'light.h61e1',  brightness_pct:55,rgb_color:[255,130,30]});
+    svc('light','turn_on',{entity_id:'light.h618a',  brightness_pct:40,rgb_color:[255,110,20]});
+    svc('light','turn_on',{entity_id:'light.h618a_2',brightness_pct:25,rgb_color:[255,75,12]});
     svc('light','turn_off',{entity_id:'light.hue_play_l'});
+    svc('light','turn_off',{entity_id:'light.deckenlampe'});
+    svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    CFG.lights.filter(l=>!GOVEES.includes(l.id)&&l.id!=='light.hue_play_l'&&l.id!=='light.deckenlampe').forEach(l=>svc('light','turn_off',{entity_id:l.id}));
     toast('Abend-Modus 🌙');
     launchKonfetti();
-  } else if(s==='film'){
+  }
+  else if(s==='film'){
+    // Film: Alle aus außer Govees, TV an → dann Farb-Picker
     CFG.lights.forEach(l=>svc('light','turn_off',{entity_id:l.id}));
-    svc('media_player','turn_on',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});
-    toast('Film-Modus 🎬');
-  } else if(s==='hell'){
-    CFG.lights.forEach(l=>svc('light','turn_on',{entity_id:l.id,brightness_pct:100,color_temp_kelvin:3508}));
+    svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    svc('media_player','turn_on',{entity_id:TV});
+    setTimeout(()=>showFilmPicker(),350);
+  }
+  else if(s==='hell'){
+    // Hell: alles an, Tageslicht 4000K
+    CFG.lights.forEach(l=>svc('light','turn_on',{entity_id:l.id,brightness_pct:100,color_temp_kelvin:4000}));
+    svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});
     toast('Volle Helligkeit ☀️');
-  } else if(s==='off'){
+  }
+  else if(s==='nacht'){
+    // Nacht: nur Govees minimal warm, Wandlampe aus
+    svc('light','turn_on',{entity_id:'light.h618a',  brightness_pct:8,rgb_color:[255,80,10]});
+    svc('light','turn_off',{entity_id:'light.h61e1'});
+    svc('light','turn_off',{entity_id:'light.h618a_2'});
+    svc('light','turn_off',{entity_id:'light.hue_play_l'});
+    svc('light','turn_off',{entity_id:'light.deckenlampe'});
+    svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    CFG.lights.filter(l=>!GOVEES.includes(l.id)).forEach(l=>svc('light','turn_off',{entity_id:l.id}));
+    toast('Gute Nacht 🌙');
+  }
+  else if(s==='off'){
     CFG.lights.forEach(l=>svc('light','turn_off',{entity_id:l.id}));
     svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
     svc('media_player','turn_off',{entity_id:CFG.alm});
-    svc('media_player','turn_off',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});
+    svc('media_player','turn_off',{entity_id:TV});
     svc('media_player','turn_off',{entity_id:'media_player.nest'});
     toast('Alles aus ✓');
   }
+  quickRefresh();
+}
+
+function showFilmPicker(){
+  const GOVEES=['light.h61e1','light.h618a','light.h618a_2'];
+  const MOODS=[
+    {lbl:'Warm Weiß',   ico:'🕯️', rgb:[255,185,100], bri:35, grad:'linear-gradient(135deg,#3d2200,#5a3300)'},
+    {lbl:'Kino Rot',    ico:'🔴', rgb:[200,15,15],   bri:50, grad:'linear-gradient(135deg,#2d0000,#450000)'},
+    {lbl:'Violett',     ico:'💜', rgb:[120,20,220],  bri:60, grad:'linear-gradient(135deg,#150030,#220048)'},
+    {lbl:'Blau',        ico:'💙', rgb:[10,60,255],   bri:55, grad:'linear-gradient(135deg,#00112d,#001f48)'},
+    {lbl:'Smaragd',     ico:'💚', rgb:[10,180,100],  bri:50, grad:'linear-gradient(135deg,#001a0e,#002e1a)'},
+    {lbl:'Aus lassen',  ico:'⚫', rgb:null, bri:0,  grad:'linear-gradient(135deg,#111,#1c1c1e)'},
+  ];
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease';
+  ov.innerHTML=`
+  <div style="width:100%;max-width:430px;background:#111114;border-radius:24px 24px 0 0;padding:20px 16px 40px;border-top:1px solid rgba(255,255,255,.1)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div>
+        <div style="font-size:1rem;font-weight:700;color:#fff;letter-spacing:-.3px">🎬 Film-Stimmung</div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.4);margin-top:2px">Welche Farbe soll die Atmosphäre haben?</div>
+      </div>
+      <button id="fp-close" style="width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:1rem;cursor:pointer;touch-action:manipulation">✕</button>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,.08);margin:14px 0"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px">
+      ${MOODS.map((m,i)=>`
+      <button data-mi="${i}" style="${m.grad};border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:14px 8px;color:#fff;font-size:.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <span style="font-size:1.6rem">${m.ico}</span>
+        <span style="font-size:.74rem;opacity:.9">${m.lbl}</span>
+      </button>`).join('')}
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,.07);margin-bottom:14px"></div>
+    <div style="font-size:.65rem;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.3);margin-bottom:10px">APP WÄHLEN (TV)</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="fp-apps">
+      ${[
+        {lbl:'Netflix',  ico:'🅽', col:'#e50914', app:'Netflix'},
+        {lbl:'Disney+',  ico:'✦',  col:'#1133cc', app:'Disney+'},
+        {lbl:'YouTube',  ico:'▶',  col:'#ff0000', app:'YouTube'},
+        {lbl:'TV (HDMI)',ico:'📺', col:'#333',    app:'com.webos.app.livetv'},
+        {lbl:'Kein Start',ico:'—', col:'#222',   app:null},
+      ].map(a=>`
+      <button data-app="${a.app||''}" style="background:${a.col}22;border:1px solid ${a.col}44;border-radius:12px;padding:11px 6px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;touch-action:manipulation;display:flex;flex-direction:column;align-items:center;gap:5px">
+        <span style="font-size:1.2rem">${a.ico}</span>
+        <span style="font-size:.68rem">${a.lbl}</span>
+      </button>`).join('')}
+    </div>
+    <div style="font-size:.6rem;color:rgba(255,255,255,.2);text-align:center;margin-top:12px">App-Steuerung via webOS. SunriseTV kommt mit Harmony Hub.</div>
+  </div>`;
+
+  let selMood=null, selApp=null;
+
+  const applyScene=()=>{
+    if(selMood!==null){
+      const m=MOODS[selMood];
+      if(m.rgb){
+        GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:m.bri,rgb_color:m.rgb}));
+      }
+      // else leave off
+    } else {
+      // default: warm amber
+      GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:35,rgb_color:[255,185,100]}));
+    }
+    if(selApp){
+      setTimeout(()=>{
+        if(selApp.startsWith('com.')||selApp==='Netflix'||selApp==='Disney+'||selApp==='YouTube'){
+          svc('media_player','select_source',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2',source:selApp});
+        }
+      },2500); // TV braucht ~2s zum Hochfahren
+    }
+    ov.style.animation='slideDown .22s ease forwards';
+    setTimeout(()=>{ov.remove();toast('Film-Modus 🎬');quickRefresh();},220);
+  };
+
+  document.getElementById('fp-close')?.addEventListener('click',()=>{
+    ov.style.animation='slideDown .22s ease forwards';
+    setTimeout(()=>{ov.remove();toast('Film-Modus 🎬');quickRefresh();},220);
+  });
+
+  ov.querySelectorAll('[data-mi]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      selMood=+btn.dataset.mi;
+      ov.querySelectorAll('[data-mi]').forEach(b=>b.style.outline='');
+      btn.style.outline='2px solid rgba(255,255,255,.7)';
+      btn.style.outlineOffset='2px';
+      hap();
+      // Auto-apply after app selection OR after 2s if no app selected
+      clearTimeout(ov._autoApply);
+      ov._autoApply=setTimeout(()=>{if(selMood!==null)applyScene();},selApp===null?2200:0);
+    });
+  });
+
+  ov.querySelectorAll('[data-app]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      selApp=btn.dataset.app||null;
+      ov.querySelectorAll('[data-app]').forEach(b=>b.style.outline='');
+      btn.style.outline='2px solid rgba(255,255,255,.6)';
+      btn.style.outlineOffset='2px';
+      hap();
+      if(selMood!==null){
+        clearTimeout(ov._autoApply);
+        applyScene();
+      }
+    });
+  });
+
+  document.body.appendChild(ov);
 }
 
 // ═══════════════════════════════════════════════
