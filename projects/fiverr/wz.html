@@ -422,7 +422,7 @@ html,body{height:100%;background:var(--bg);
   border:1px solid rgba(255,255,255,.07);
   border-top-color:rgba(255,255,255,.12);
   transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
-  min-height:120px;position:relative;overflow:hidden;
+  min-height:100px;position:relative;overflow:hidden;
   box-shadow:0 4px 20px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.06) inset;
 }
 .sb2::after{content:'';position:absolute;inset:0;border-radius:18px;
@@ -538,8 +538,8 @@ html,body{height:100%;background:var(--bg);
 .qa-btn[data-qa="musik"] .qa-ico{background:rgba(10,132,255,.15)}
 .qa-btn[data-qa="musik"]:active .qa-ico{background:rgba(10,132,255,.3)}
 /* Heizung */
-.qa-btn[data-qa="heiz"] .qa-ico{background:rgba(255,100,50,.15)}
-.qa-btn[data-qa="heiz"]:active .qa-ico{background:rgba(255,100,50,.3)}
+.qa-btn[data-qa="nacht2"] .qa-ico{background:rgba(94,92,230,.15)}
+.qa-btn[data-qa="nacht2"]:active .qa-ico{background:rgba(94,92,230,.3)}
 /* Active state (light on / music playing) */
 .qa-btn.qa-active .qa-ico{box-shadow:0 0 10px 2px rgba(255,255,255,.18)}
 .qa-btn[data-qa="off"].qa-active .qa-ico{background:rgba(255,69,58,.35);box-shadow:0 0 10px 2px rgba(255,69,58,.4)}
@@ -657,7 +657,7 @@ html,body{height:100%;background:var(--bg);
 }
 .album::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.7) 100%);pointer-events:none;z-index:0}
 .album-orb1,.album-orb2{display:none}
-.np{padding:22px 20px 20px;position:relative;z-index:1}
+.np{padding:6px 20px 20px;position:relative;z-index:1;text-align:center;width:100%}
 .nplbl{font-size:.52rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;
   color:var(--dim2);margin-bottom:10px}
 .nptitle{font-size:1.22rem;font-weight:700;color:var(--txt);
@@ -682,6 +682,11 @@ html,body{height:100%;background:var(--bg);
 
 /* Speaker wave animation */
 .spk-wrap{position:absolute;top:18px;right:18px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;z-index:2}
+#alb-disc{transition:transform .3s ease}
+@keyframes discSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+#alb-disc.playing{animation:discSpin 8s linear infinite}
+#alb-disc.playing #alb-glow{opacity:1}
+#alb-img{border-radius:50%}
 .spk-ico{position:relative;z-index:3;color:var(--on-dim);transition:color .4s}
 .spk-wrap.playing .spk-ico{color:var(--blue)}
 .spk-ring{position:absolute;border-radius:50%;border:2px solid var(--blue);opacity:0;transform:scale(1);pointer-events:none}
@@ -1178,9 +1183,9 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
     <div class="page cur" id="pg-home">
       <!-- Alles-aus FAB -->
       <button id="all-off-fab" aria-label="Alle Lichter aus" style="display:none;position:absolute;bottom:22px;right:18px;z-index:50;width:56px;height:56px;border-radius:50%;border:none;background:rgba(255,69,58,.18);border:1.5px solid rgba(255,69,58,.35);box-shadow:0 4px 24px rgba(255,69,58,.2),0 2px 12px rgba(0,0,0,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;transition:transform .18s,box-shadow .18s,opacity .35s;opacity:0;pointer-events:none;backdrop-filter:blur(12px)">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(255,80,80,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3H15M12 3V8M9.5 8C7 9.2 5 11.9 5 15C5 19.4 8.1 22 12 22C15.9 22 19 19.4 19 15C19 11.9 17 9.2 14.5 8"/>
-          <line x1="12" y1="12" x2="12" y2="16"/>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="rgba(255,80,80,.9)" stroke-width="2.2" stroke-linecap="round">
+          <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
+          <line x1="12" y1="2" x2="12" y2="12"/>
         </svg>
       </button>
       <!-- Hero -->
@@ -1309,9 +1314,9 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <div class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(10,132,255,.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="18" r="2.5"/><circle cx="18" cy="16" r="2.5"/><path d="M10.5 18V7.5l10-2.5V16"/></svg></div>
           <div class="qa-lbl">Musik</div>
         </button>
-        <button class="qa-btn" data-qa="heiz" aria-label="Heizung">
-          <div class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,120,50,.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.5 22 2 17.5 2 12C2 7.3 5.1 3.3 9.4 2.1"/><path d="M20 12C20 9.2 18.5 6.7 16.1 5.3"/><circle cx="12" cy="12" r="3"/></svg></div>
-          <div class="qa-lbl">Heizung</div>
+        <button class="qa-btn" data-qa="nacht2" aria-label="Gute Nacht">
+          <div class="qa-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(94,92,230,.9)" stroke-width="2.2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+          <div class="qa-lbl">Gute Nacht</div>
         </button>
       </div>
 
@@ -1393,7 +1398,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <div class="album" style="position:relative;z-index:1">
         <div class="album-orb1"></div>
         <div class="album-orb2"></div>
-        <!-- Speaker icon with wave rings -->
+        <!-- Album Art Disc -->
         <div class="spk-wrap" id="spk-wrap">
           <div class="spk-ring"></div>
           <div class="spk-ring"></div>
@@ -1401,6 +1406,44 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <svg class="spk-ico" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
           </svg>
+        </div>
+        <!-- Rotating Album Disc -->
+        <div id="alb-disc" style="position:relative;width:clamp(130px,38vw,160px);height:clamp(130px,38vw,160px);margin:14px auto 10px;flex-shrink:0">
+          <!-- Outer glow ring -->
+          <div id="alb-glow" style="position:absolute;inset:-12px;border-radius:50%;opacity:0;transition:opacity 1.5s ease;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(255,159,10,.35) 30%,transparent 70%)"></div>
+          <!-- Shadow -->
+          <div style="position:absolute;inset:0;border-radius:50%;box-shadow:0 20px 60px rgba(0,0,0,.6),0 8px 24px rgba(0,0,0,.4);z-index:1;pointer-events:none;border-radius:50%"></div>
+          <!-- Disc SVG (vinyl ring) -->
+          <svg viewBox="0 0 160 160" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none">
+            <defs>
+              <radialGradient id="vinylGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#2a2a2a"/>
+                <stop offset="20%" stop-color="#1a1a1a"/>
+                <stop offset="35%" stop-color="#222"/>
+                <stop offset="50%" stop-color="#181818"/>
+                <stop offset="65%" stop-color="#222"/>
+                <stop offset="80%" stop-color="#181818"/>
+                <stop offset="100%" stop-color="#111"/>
+              </radialGradient>
+              <clipPath id="discClip"><circle cx="80" cy="80" r="80"/></clipPath>
+            </defs>
+            <circle cx="80" cy="80" r="80" fill="url(#vinylGrad)"/>
+            <!-- Vinyl grooves -->
+            <circle cx="80" cy="80" r="72" fill="none" stroke="rgba(255,255,255,.04)" stroke-width=".5"/>
+            <circle cx="80" cy="80" r="64" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".5"/>
+            <circle cx="80" cy="80" r="55" fill="none" stroke="rgba(255,255,255,.04)" stroke-width=".5"/>
+            <circle cx="80" cy="80" r="45" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".5"/>
+          </svg>
+          <!-- Album Art Image (inner disc) -->
+          <div id="alb-img-wrap" style="position:absolute;inset:22px;border-radius:50%;overflow:hidden;z-index:3;background:#1c1c1e;transition:opacity .6s">
+            <img id="alb-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease;border-radius:50%">
+            <!-- Fallback icon when no art -->
+            <div id="alb-fallback" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.15)">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+          </div>
+          <!-- Center spindle dot -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#3a3a3a,#111);border:2px solid rgba(255,255,255,.15);z-index:4;pointer-events:none"></div>
         </div>
         <div class="np">
           <div class="nplbl">Jetzt läuft</div>
@@ -1507,86 +1550,20 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <div class="sb2-n">Alles aus</div>
           <div class="sb2-d">Alle Geräte aus</div>
         </div>
+        <div class="sb2" data-s="morgen">
+          <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round"><path d="M12 3v1M5.05 5.05l.7.7M3 12h1M5.75 18.25l.7-.7M12 21v-1M18.25 18.25l-.7-.7M21 12h-1M18.95 5.05l-.7.7"/><circle cx="12" cy="12" r="4"/></svg></div>
+          <div class="sb2-n">Morgen</div>
+          <div class="sb2-d">Sanfter Weckstart</div>
+        </div>
+        <div class="sb2" data-s="nacht2">
+          <div class="sb2-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5e5ce6" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><path d="M17 17l1 1M7 7l-1-1"/></svg></div>
+          <div class="sb2-n">Gute Nacht</div>
+          <div class="sb2-d">Alles aus + TV off</div>
+        </div>
       </div>
     </div><!-- /licht -->
 
     <!-- ═══ WETTER ═══ -->
-    <div class="page" id="pg-wetter" style="padding-bottom:4px">
-      <!-- Hero: aktuelle Bedingungen -->
-      <div id="wx-hero" style="background:linear-gradient(145deg,#0d1b2e,#1a2840);border-radius:20px;padding:20px 20px 16px;margin-bottom:10px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.07);border-top-color:rgba(255,255,255,.14)">
-        <div style="position:absolute;inset:0;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.06),transparent 45%);pointer-events:none"></div>
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;position:relative">
-          <div>
-            <div style="font-size:.62rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:6px">EINSIEDELN · JETZT</div>
-            <div style="display:flex;align-items:baseline;gap:6px">
-              <div style="font-size:3.8rem;font-weight:100;letter-spacing:-2px;color:#fff;line-height:1" id="wx-big-temp">–°</div>
-              <div style="font-size:1rem;color:rgba(255,255,255,.4);align-self:flex-start;margin-top:8px" id="wx-big-feel">Gefühlt –°</div>
-            </div>
-            <div style="font-size:.85rem;color:rgba(255,255,255,.6);margin-top:4px" id="wx-big-desc">–</div>
-            <div style="display:flex;gap:14px;margin-top:12px">
-              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">↑ <span style="color:#fff;font-weight:600" id="wx-hi">–</span>°</div>
-              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">↓ <span style="color:#fff;font-weight:600" id="wx-lo">–</span>°</div>
-              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">💧 <span style="color:#0a84ff;font-weight:600" id="wx-hum">–</span>%</div>
-              <div style="font-size:.7rem;color:rgba(255,255,255,.4)">💨 <span style="color:#fff;font-weight:600" id="wx-wind">–</span> km/h</div>
-              <div style="display:flex;align-items:center;gap:4px" id="wx-compass-wrap">
-                <svg id="wx-compass-svg" viewBox="0 0 20 20" width="18" height="18" style="flex-shrink:0;transition:none">
-                  <circle cx="10" cy="10" r="9" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
-                  <text x="10" y="4" text-anchor="middle" font-size="3.2" fill="rgba(255,255,255,.35)" font-family="system-ui">N</text>
-                  <text x="10" y="18.5" text-anchor="middle" font-size="3.2" fill="rgba(255,255,255,.25)" font-family="system-ui">S</text>
-                  <text x="2" y="11.5" text-anchor="middle" font-size="3.2" fill="rgba(255,255,255,.25)" font-family="system-ui">W</text>
-                  <text x="18" y="11.5" text-anchor="middle" font-size="3.2" fill="rgba(255,255,255,.25)" font-family="system-ui">O</text>
-                  <g id="wx-compass-needle" style="transform-origin:10px 10px;transform:rotate(0deg);transition:transform 1.2s cubic-bezier(.34,1.28,.64,1)">
-                    <polygon points="10,3 8.5,10 10,11.5 11.5,10" fill="#ff9f0a" opacity="0.95"/>
-                    <polygon points="10,17 8.5,10 10,11.5 11.5,10" fill="rgba(255,255,255,.35)"/>
-                  </g>
-                </svg>
-                <span style="font-size:.62rem;color:rgba(255,255,255,.5)" id="wx-winddir-lbl">–</span>
-              </div>
-              <div style="font-size:.7rem;color:rgba(255,255,255,.4)" id="wx-uv-wrap" style="display:none">☀️ UV <span style="font-weight:600" id="wx-uv">–</span></div>
-            </div>
-          </div>
-          <svg id="wx-big-ico" viewBox="0 0 80 80" width="88" height="88" style="filter:drop-shadow(0 4px 20px rgba(0,0,0,.5));flex-shrink:0"></svg>
-        </div>
-      </div>
-
-      <!-- Temperaturkurve 24h -->
-      <div style="font-size:.62rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:0 2px 6px">TEMPERATUR · 24H</div>
-      <div class="c temp-curve-card" id="temp-curve-card" style="margin-bottom:12px;padding:14px 16px 10px;overflow:hidden">
-        <svg id="temp-curve-svg" viewBox="0 0 320 72" preserveAspectRatio="none" width="100%" height="72" style="display:block;overflow:visible">
-          <defs>
-            <linearGradient id="tcGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0.02"/>
-            </linearGradient>
-          </defs>
-          <path id="tc-area" fill="url(#tcGrad)" d=""/>
-          <path id="tc-line" fill="none" stroke="rgba(255,159,10,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d=""/>
-          <g id="tc-labels"></g>
-          <circle id="tc-now-dot" cx="0" cy="0" r="4" fill="#ff9f0a" stroke="#1c1c1e" stroke-width="2" opacity="0"/>
-        </svg>
-        <div style="display:flex;justify-content:space-between;margin-top:4px" id="tc-time-labels"></div>
-      </div>
-
-      <!-- Stündlich -->
-      <div style="font-size:.62rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:0 2px 8px">STÜNDLICH</div>
-      <div id="wx-hourly" style="display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
-
-      <!-- 7-Tage -->
-      <div style="font-size:.62rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:0 2px 8px">7 TAGE</div>
-      <div id="wx-daily" style="background:var(--c1);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.1);margin-bottom:12px"></div>
-
-      <!-- Radar -->
-      <div style="border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);position:relative;background:#060e18;box-shadow:0 8px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07)">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(0,0,0,.5);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:7px;height:7px;border-radius:50%;background:#30d158;box-shadow:0 0 6px #30d158;animation:pulse 2s ease-in-out infinite"></div>
-            <span style="font-size:.65rem;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.8);text-transform:uppercase">Regenradar · Live</span>
-          </div>
-          <span id="radar-ts" style="font-size:.58rem;color:rgba(255,255,255,.3);font-weight:500">RainViewer</span>
-        </div>
-        <div id="radar-map" style="height:250px;width:100%"></div>
-      </div>
-    </div><!-- /wetter -->
 
     <!-- ═══ WETTER ═══ -->
     <div class="page" id="pg-wetter" style="padding-bottom:4px">
@@ -3634,16 +3611,10 @@ function buildUI(){try{
       hap(); qaTap(this); navTo('musik');
     });
     // Heizung → show toast (placeholder; HA climate entities if available)
-    qaBar.querySelector('[data-qa="heiz"]')?.addEventListener('click',function(){
+    qaBar.querySelector('[data-qa="nacht2"]')?.addEventListener('click',function(){
       hap(); qaTap(this);
-      // Try to toggle climate entity if present
-      const climateId = 'climate.wohnzimmer';
-      if(window._states && window._states[climateId]){
-        navTo('home'); // Already here; show toast
-        showToast('🌡️ Heizung: ' + (window._states[climateId].attributes?.current_temperature ?? '–') + '°C');
-      } else {
-        showToast('🌡️ Keine Heizungs-Entity gefunden');
-      }
+      doScene('nacht2');
+      showToast('🌙 Gute Nacht!');
     });
     // Live state: update active classes in updateAll
     window._updateQaBar = function(lightsOnCount, musicPlaying){
@@ -5188,7 +5159,8 @@ function updateAll(){
   // Album Mood-Gradient — 3-Farben aus Album-Art extrahieren
   // Animate album art when playing
   const albImg=document.getElementById('alb-img');
-  if(albImg)albImg.classList.toggle('playing',playing);
+  const albDisc=document.getElementById('alb-disc');
+  if(albDisc)albDisc.classList.toggle('playing',playing);
   const almPic=at(CFG.alm,'entity_picture')||at(CFG.spot,'entity_picture');
   if(almPic){
     const imgUrl=almPic.startsWith('http')?almPic:(location.origin+almPic);
@@ -5238,6 +5210,14 @@ function updateAll(){
         bgImg.onload=()=>{bgImg.style.opacity='1';};
         bgImg.src=imgUrl;
       }
+      // Update album disc image
+      const discImg=document.getElementById('alb-img');
+      const fallback=document.getElementById('alb-fallback');
+      if(discImg){
+        discImg.onload=()=>{discImg.style.opacity='1';if(fallback)fallback.style.display='none';};
+        discImg.onerror=()=>{discImg.style.opacity='0';if(fallback)fallback.style.display='flex';};
+        discImg.src=imgUrl;
+      }
       img.src=imgUrl;
     }
   } else {
@@ -5246,6 +5226,11 @@ function updateAll(){
     if(al){al.style.background='';al.classList.remove('mood-active');}
     const bgImg=document.getElementById('album-page-bg-img');
     if(bgImg){bgImg.style.opacity='0';}
+    // Reset disc
+    const discImg=document.getElementById('alb-img');
+    const fallback=document.getElementById('alb-fallback');
+    if(discImg){discImg.style.opacity='0';}
+    if(fallback)fallback.style.display='flex';
   }
   const sp=_S[CFG.spot];
   const spSrc=sp?.attributes?.source;
