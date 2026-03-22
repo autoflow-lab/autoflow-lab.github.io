@@ -1738,20 +1738,24 @@ const CFG = {
   alm:  'media_player.wohnzimmer_alm',
   spot: 'media_player.spotify_janisss',
   lights:[
+    // nodim:true = kein Dimmer/Farbe (onoff only)
+    // norgb:true = kein RGB Farbrad (nur color_temp)
     {id:'light.h61e1',     name:'Wand',       lc:'251,191,36',
      svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
     {id:'light.h618a',     name:'Sofa',       lc:'245,158,11',
      svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
     {id:'light.h618a_2',   name:'Küche',      lc:'251,146,60',
      svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
-    {id:'light.garten_licht',name:'Fassade',  lc:'255,230,120',nodim:false,
+    {id:'light.garten_licht',name:'Fassade',  lc:'255,230,120',nodim:true,
      svg:'<path d="M12 2v4M4.93 4.93l2.83 2.83M2 12h4M4.93 19.07l2.83-2.83M12 22v-4M19.07 19.07l-2.83-2.83M22 12h-4M19.07 4.93l-2.83 2.83"/><circle cx="12" cy="12" r="4"/>'},
     {id:'light.gang_eg_licht',name:'Gang EG', lc:'255,220,160',nodim:true,
      svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
     {id:'light.gang_og_licht',name:'Gang OG', lc:'255,220,160',nodim:true,
      svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
-    {id:'light.hue_play_l',name:'Büro Hue',  lc:'167,139,250',
+    {id:'light.hue_play_l',name:'Büro Hue',  lc:'167,139,250',norgb:true,
      svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+    {id:'switch.shelly1_98cdac0ca9b2',name:'Wandlampe',lc:'255,200,120',nodim:true,domain:'switch',
+     svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/><line x1="12" y1="17" x2="12" y2="21"/>'},
   ],
   devs:[
     {id:'media_player.lg_webos_tv_oled65g49ls_2', name:'LG OLED TV', domain:'media_player',
@@ -3009,7 +3013,10 @@ function buildUI(){try{
     const s=_S[lid];
     const on=s?.state==='on';
     const cfg=CFG.lights.find(l=>l.id===lid)||{};
-    const canDim=!cfg.nodim&&s?.attributes?.supported_color_modes?.some(m=>m!=='onoff');
+    const modes=s?.attributes?.supported_color_modes||[];
+    const canDim=!cfg.nodim&&modes.some(m=>m!=='onoff');
+    const canRgb=!cfg.nodim&&!cfg.norgb&&modes.some(m=>m==='rgb'||m==='hs'||m==='xy');
+    const canCt =!cfg.nodim&&modes.some(m=>m==='color_temp');
     const bri=Math.round((s?.attributes?.brightness??0)/2.55)||0;
     const rgb=s?.attributes?.rgb_color;
     const ct=s?.attributes?.color_temp_kelvin;
@@ -3056,9 +3063,11 @@ function buildUI(){try{
             <div id="ls-bthumb" style="position:absolute;left:${bri||50}%;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.5);transform:translateX(-50%);pointer-events:none;transition:left .08s"></div>
           </div>
         </div>`:''}
-        <!-- Color presets -->
+        <!-- Color presets: nur wenn Farbe/Dimmen möglich -->
+        ${canRgb||canCt?`
         <div style="margin-bottom:18px">
-          <div style="font-size:.65rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">Farbe & Weißton</div>
+          <div style="font-size:.65rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px">${canRgb&&canCt?'Farbe & Weißton':canRgb?'Farbe':'Weißton'}</div>
+          ${canRgb?`<div>
           <div style="font-size:.7rem;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:14px;letter-spacing:.5px">FARBE</div>
           <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;justify-items:center">
             ${COLORS.map((c,i)=>{
@@ -3068,16 +3077,28 @@ function buildUI(){try{
                 background:radial-gradient(circle at 32% 30%,rgb(${Math.min(r+80,255)},${Math.min(g+80,255)},${Math.min(b+80,255)}) 0%,rgb(${r},${g},${b}) 50%,rgb(${Math.round(r*.5)},${Math.round(g*.5)},${Math.round(b*.5)}) 100%);
                 box-shadow:${sel?`0 0 0 3px #fff,0 0 0 5.5px rgba(${r},${g},${b},.65),0 6px 20px rgba(${r},${g},${b},.5)`:`0 4px 16px rgba(${r},${g},${b},.4),inset 0 2px 0 rgba(255,255,255,.3),inset 0 -2px 4px rgba(0,0,0,.3)`};
                 transition:box-shadow .2s,transform .18s cubic-bezier(.34,1.56,.64,1)"></div>`;}).join('')}
-            <!-- Rainbow custom ball -->
             <div id="ls-custom-btn" style="width:52px;height:52px;border-radius:50%;cursor:pointer;position:relative;overflow:hidden;
               background:conic-gradient(from 0deg,#ff0000,#ff8c00,#ffff00,#00cc00,#00ccff,#0055ff,#cc00ff,#ff0000);
-              box-shadow:0 4px 16px rgba(255,255,255,.15),inset 0 2px 0 rgba(255,255,255,.3);
-              transition:transform .18s cubic-bezier(.34,1.56,.64,1)">
+              box-shadow:0 4px 16px rgba(255,255,255,.15),inset 0 2px 0 rgba(255,255,255,.3)">
               <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.45) 0%,transparent 55%)"></div>
               <div style="position:absolute;inset:8px;border-radius:50%;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:18px">✦</div>
             </div>
-          </div>
-        </div>
+          </div></div>`:''}
+          ${!canRgb&&canCt?`<div id="ls-ct-direct" style="margin-top:4px">
+            <div style="position:relative;height:44px;border-radius:22px;cursor:pointer;touch-action:none;
+              background:linear-gradient(90deg,#ff8c00,#ffd080,#fff9f0,#e8f0ff,#7eb0ff);
+              box-shadow:0 4px 16px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12)">
+              <div id="ls-ct-cur" style="position:absolute;top:50%;width:32px;height:32px;border-radius:50%;
+                background:radial-gradient(circle at 38% 35%,#fff,#d0d0d0);
+                box-shadow:0 2px 10px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.5) inset;
+                transform:translate(-50%,-50%);pointer-events:none;left:${ct?((ct-2700)/(6500-2700)*100)+'%':'5%'}"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;padding:0 6px">
+              <span style="font-size:.62rem;color:rgba(255,255,255,.35)">2700K Warm</span>
+              <span style="font-size:.62rem;color:rgba(255,255,255,.35)">6500K Kalt</span>
+            </div>
+          </div>`:''}
+        </div>`:''}
         <!-- Custom picker (hidden, opens on rainbow tap) -->
         <div id="ls-custom-wrap" style="display:none;background:#1c1c1e;border-radius:16px;padding:14px;margin-bottom:4px;border:1px solid rgba(255,255,255,.07)">
           <div style="display:flex;gap:6px;margin-bottom:14px;background:#2c2c2e;border-radius:10px;padding:3px">
@@ -3131,11 +3152,11 @@ function buildUI(){try{
     });
     document.getElementById('ls-tog').addEventListener('click',()=>{
       hap();
-      svc('light','toggle',{entity_id:lid});
+      const dom2=CFG.lights.find(l=>l.id===lid)?.domain||'light'; svc(dom2,'toggle',{entity_id:lid});
       ov.remove();
     });
     // Rainbow ball opens custom picker
-    document.getElementById('ls-custom-btn').addEventListener('click',()=>{
+    document.getElementById('ls-custom-btn')?.addEventListener('click',()=>{
       const w=document.getElementById('ls-custom-wrap');
       const open=w.style.display==='none';
       w.style.display=open?'block':'none';
@@ -3157,7 +3178,27 @@ function buildUI(){try{
     document.getElementById('ls-mode-col').addEventListener('click',()=>setMode('col'));
     document.getElementById('ls-mode-wht').addEventListener('click',()=>setMode('wht'));
 
-    // Warm/cool strip
+    // CT-direct strip (für norgb-Lampen wie Hue)
+    (()=>{
+      const directStrip=document.getElementById('ls-ct-direct');
+      if(directStrip){
+        const strip=directStrip.querySelector('div');
+        const cur=document.getElementById('ls-ct-cur');
+        if(!strip||!cur)return;
+        let _ctT=null;
+        function pickCtDirect(px){
+          const r=strip.getBoundingClientRect();
+          const p=Math.min(1,Math.max(0,(px-r.left)/r.width));
+          cur.style.left=(p*100)+'%';
+          const k=Math.round(2700+p*(6500-2700));
+          clearTimeout(_ctT);
+          _ctT=setTimeout(()=>svc('light','turn_on',{entity_id:lid,color_temp_kelvin:k,brightness_pct:Math.max(bri||80,20)}),150);
+        }
+        strip.addEventListener('pointerdown',e=>{strip.setPointerCapture(e.pointerId);pickCtDirect(e.clientX);});
+        strip.addEventListener('pointermove',e=>{if(e.buttons)pickCtDirect(e.clientX);});
+      }
+    })();
+    // Warm/cool strip (in custom popup)
     (()=>{
       const strip=document.getElementById('ls-picker-wht').querySelector('div');
       const cur=document.getElementById('ls-ct-cur');
@@ -3366,7 +3407,7 @@ function buildUI(){try{
       const se=t.querySelector('[data-lst]');
       if(se)se.textContent=newOn?'An':'Aus';
       updateBriBar(newOn?getBri():0);
-      svc('light','toggle',{entity_id:lid});
+      const dom2=CFG.lights.find(l=>l.id===lid)?.domain||'light'; svc(dom2,'toggle',{entity_id:lid});
     });
 
     // Brightness bar initial sync
