@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<title>Schlappe Home</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:root{
+  --bg:#000;--c1:#1c1c1e;--c2:#2c2c2e;--c3:#3a3a3c;
+  --txt:#fff;--dim:rgba(255,255,255,.5);--dim2:rgba(255,255,255,.25);
+  --sep:rgba(255,255,255,.08);
+  --acc:#ff9f0a;--blue:#0a84ff;--grn:#30d158;--red:#ff453a;--teal:#5ac8fa;
+}
+html,body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;min-height:100vh;overflow-x:hidden}
+body{padding-bottom:32px}
+
+/* ─── HEADER ─── */
+.header{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
+.header-title{font-size:1.5rem;font-weight:700;letter-spacing:-.5px}
+.header-sub{font-size:.7rem;color:var(--dim);margin-top:2px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--grn);flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.6)}}
+.status-dot{animation:pulse 2.5s ease-in-out infinite}
+.status-dot.off{background:var(--dim2);animation:none}
+
+/* ─── SECTIONS ─── */
+.section{padding:20px 16px 0}
+.section-title{font-size:.6rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim2);margin-bottom:10px;padding-left:4px}
+
+/* ─── CARDS ─── */
+.card{background:var(--c1);border-radius:20px;padding:18px 16px;border:1px solid var(--sep);margin-bottom:10px}
+.card-row{display:flex;align-items:center;gap:14px}
+.card-ico{width:46px;height:46px;border-radius:14px;background:var(--c2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s}
+.card-ico svg{width:22px;height:22px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
+.card-info{flex:1;min-width:0}
+.card-name{font-size:.95rem;font-weight:600;color:var(--txt)}
+.card-state{font-size:.72rem;color:var(--dim2);margin-top:2px}
+.card-action{margin-left:auto;flex-shrink:0}
+
+/* Toggle Switch */
+.toggle{width:52px;height:32px;border-radius:16px;background:var(--c3);border:none;cursor:pointer;position:relative;transition:background .3s;flex-shrink:0}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.toggle.on{background:var(--grn)}
+.toggle.on::after{transform:translateX(20px)}
+.toggle.blue.on{background:var(--blue)}
+.toggle.amber.on{background:var(--acc)}
+
+/* ─── GARAGE ─── */
+.garage-card{background:var(--c1);border-radius:20px;padding:0;overflow:hidden;margin-bottom:10px;border:1px solid var(--sep)}
+.garage-top{padding:18px 16px;display:flex;align-items:center;gap:14px}
+.garage-ico{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s;background:var(--c2)}
+.garage-ico svg{width:24px;height:24px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;transition:stroke .3s}
+.garage-info{flex:1}
+.garage-name{font-size:.95rem;font-weight:600}
+.garage-state{font-size:.72rem;margin-top:2px;transition:color .3s;color:var(--dim2)}
+.garage-btns{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--sep)}
+.garage-btn{padding:16px;border:none;background:var(--c2);cursor:pointer;font-size:.85rem;font-weight:700;color:var(--dim);display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,color .2s;touch-action:manipulation}
+.garage-btn:active{background:var(--c3)}
+.garage-btn.open{color:var(--grn)}
+.garage-btn.close{color:var(--red)}
+.garage-btn.stop{color:var(--acc)}
+.garage-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+/* OPEN state */
+.garage-card.open .garage-ico{background:rgba(48,209,88,.15)}
+.garage-card.open .garage-ico svg{stroke:var(--grn)}
+.garage-card.open .garage-state{color:var(--grn)}
+/* MOVING */
+.garage-card.moving .garage-ico{background:rgba(255,159,10,.15)}
+.garage-card.moving .garage-ico svg{stroke:var(--acc)}
+.garage-card.moving .garage-state{color:var(--acc)}
+
+/* ─── PRESENCE ─── */
+.presence-card{background:linear-gradient(135deg,rgba(48,209,88,.08),rgba(10,132,255,.06));border:1px solid rgba(48,209,88,.2)}
+.presence-away{background:linear-gradient(135deg,rgba(255,159,10,.08),rgba(255,69,58,.06));border-color:rgba(255,159,10,.2)}
+
+/* ─── SIMULATION ─── */
+.sim-card{background:linear-gradient(135deg,rgba(94,92,230,.1),rgba(10,132,255,.07));border-color:rgba(94,92,230,.2)}
+.sim-active{background:linear-gradient(135deg,rgba(94,92,230,.18),rgba(10,132,255,.12));border-color:rgba(94,92,230,.4)}
+.sim-badge{font-size:.58rem;padding:3px 8px;border-radius:100px;background:rgba(94,92,230,.25);color:#a78bfa;font-weight:700;letter-spacing:.3px}
+
+/* ─── LIGHTS ─── */
+.lights-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.lt-tile{background:var(--c1);border-radius:16px;padding:14px 12px;border:1px solid var(--sep);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:8px;touch-action:manipulation}
+.lt-tile:active{transform:scale(.95)}
+.lt-tile.on{background:rgba(255,159,10,.09);border-color:rgba(255,159,10,.3)}
+.lt-ico{width:34px;height:34px;border-radius:10px;background:var(--c2);display:flex;align-items:center;justify-content:center;transition:background .3s}
+.lt-tile.on .lt-ico{background:rgba(255,159,10,.22)}
+.lt-ico svg{width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;transition:stroke .3s}
+.lt-tile.on .lt-ico svg{stroke:var(--acc)}
+.lt-name{font-size:.7rem;font-weight:600;color:var(--dim)}
+.lt-tile.on .lt-name{color:#fff}
+.lt-state{font-size:.58rem;color:var(--dim2)}
+.lt-tile.on .lt-state{color:rgba(255,159,10,.7)}
+
+/* ─── WEATHER ─── */
+.wx-card{background:linear-gradient(135deg,#0c1826,#162236);border:1px solid rgba(255,255,255,.06)}
+.wx-main{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.wx-temp{font-size:2.8rem;font-weight:100;letter-spacing:-2px;line-height:1}
+.wx-right{flex:1}
+.wx-cond{font-size:.75rem;color:var(--dim);margin-top:2px}
+.wx-feel{font-size:.62rem;color:var(--dim2);margin-top:3px}
+.wx-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.wx-stat{background:rgba(255,255,255,.05);border-radius:12px;padding:10px 8px;text-align:center}
+.wx-sv{font-size:.78rem;font-weight:700}
+.wx-sl{font-size:.5rem;color:var(--dim2);margin-top:2px}
+
+/* ─── CONFIRM MODAL ─── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-bg.show{opacity:1;pointer-events:all}
+.modal{background:var(--c1);border-radius:22px;padding:22px 20px 28px;width:100%;max-width:400px;border:1px solid var(--sep)}
+.modal-title{font-size:1rem;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:.75rem;color:var(--dim);margin-bottom:20px}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-btn{padding:14px;border-radius:14px;border:none;font-size:.88rem;font-weight:700;cursor:pointer;touch-action:manipulation;transition:opacity .15s}
+.modal-btn:active{opacity:.7}
+.modal-cancel{background:var(--c3);color:var(--dim)}
+.modal-confirm{background:var(--grn);color:#fff}
+.modal-confirm.red{background:var(--red)}
+.modal-confirm.amber{background:var(--acc);color:#000}
+
+/* ─── LOGIN ─── */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center;display:none}
+.login-ico{font-size:3rem;margin-bottom:8px}
+.login-title{font-size:1.3rem;font-weight:700}
+.login-sub{font-size:.78rem;color:var(--dim);max-width:260px;line-height:1.5}
+.login-btn{background:var(--blue);border:none;border-radius:16px;padding:16px 36px;color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;touch-action:manipulation;margin-top:8px}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(30,30,32,.95);border:1px solid var(--sep);color:#fff;padding:10px 20px;border-radius:100px;font-size:.8rem;font-weight:600;z-index:300;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;white-space:nowrap;backdrop-filter:blur(10px)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ─── FOOTER ─── */
+.footer{padding:24px 16px 0;text-align:center;font-size:.58rem;color:var(--dim2)}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-screen">
+  <div class="login-ico">🏠</div>
+  <div class="login-title">Schlappe Home</div>
+  <div class="login-sub">Melde dich mit deinem Home Assistant Konto an, um fortzufahren.</div>
+  <button class="login-btn" id="login-btn">Mit Home Assistant verbinden</button>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Bist du sicher?</div>
+    <div class="modal-sub" id="modal-sub">Diese Aktion kann nicht rückgängig gemacht werden.</div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-cancel" id="modal-cancel">Abbrechen</button>
+      <button class="modal-btn modal-confirm" id="modal-confirm">Bestätigen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">🏠 Schlappe Home</div>
+    <div class="header-sub" id="header-sub">Verbinde…</div>
+  </div>
+  <div class="status-dot off" id="status-dot"></div>
+</div>
+
+<!-- ANWESENHEIT -->
+<div class="section">
+  <div class="section-title">Anwesenheit</div>
+  <div class="card presence-card" id="person-card">
+    <div class="card-row">
+      <div class="card-ico" id="person-ico">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Janis</div>
+        <div class="card-state" id="person-state">Lade…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GARAGENTOR -->
+<div class="section">
+  <div class="section-title">Garagentor</div>
+  <div class="garage-card" id="garage-card">
+    <div class="garage-top">
+      <div class="garage-ico" id="garage-ico">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 7l2-4h16l2 4"/><line x1="6" y1="11" x2="18" y2="11"/><line x1="6" y1="14" x2="18" y2="14"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
+      </div>
+      <div class="garage-info">
+        <div class="garage-name">Garagentor</div>
+        <div class="garage-state" id="garage-state">Lade…</div>
+      </div>
+    </div>
+    <div class="garage-btns">
+      <button class="garage-btn open" id="btn-garage-open">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        Öffnen
+      </button>
+      <button class="garage-btn close" id="btn-garage-close">
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        Schließen
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ANWESENHEITSSIMULATION -->
+<div class="section">
+  <div class="section-title">Sicherheit</div>
+  <div class="card sim-card" id="sim-card">
+    <div class="card-row">
+      <div class="card-ico" id="sim-ico">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name" style="display:flex;align-items:center;gap:8px">
+          Anwesenheitssimulation
+          <span class="sim-badge" id="sim-badge" style="display:none">AKTIV</span>
+        </div>
+        <div class="card-state" id="sim-state">Lichter aus/ein als wärst du da</div>
+      </div>
+      <button class="toggle" id="sim-toggle" aria-label="Simulation"></button>
+    </div>
+  </div>
+</div>
+
+<!-- LICHTER -->
+<div class="section">
+  <div class="section-title">Lichter</div>
+  <div class="lights-grid" id="lights-grid">
+    <!-- wird dynamisch befüllt -->
+  </div>
+</div>
+
+<!-- WETTER -->
+<div class="section">
+  <div class="section-title">Wetter</div>
+  <div class="card wx-card">
+    <div class="wx-main">
+      <svg id="wx-ico" viewBox="0 0 56 56" width="56" height="56"></svg>
+      <div class="wx-right">
+        <div class="wx-temp" id="wx-temp">–°</div>
+        <div class="wx-cond" id="wx-cond">–</div>
+        <div class="wx-feel" id="wx-feel"></div>
+      </div>
+    </div>
+    <div class="wx-stats">
+      <div class="wx-stat"><div class="wx-sv" id="wx-hum">–</div><div class="wx-sl">Feuchte</div></div>
+      <div class="wx-stat"><div class="wx-sv" id="wx-wind">–</div><div class="wx-sl">Wind km/h</div></div>
+      <div class="wx-stat"><div class="wx-sv" id="wx-vis">–</div><div class="wx-sl">UV / Sicht</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Schlappe Home · Nur für Familienmitglieder · <span id="last-update">–</span></div>
+
+<script>
+const HA = 'https://schlapphome.uk';
+const GARAGE_ID = 'cover.smart_garage_door_2207188115870761070148e1e99a76de_garage_1';
+const LIGHTS = [
+  {id:'light.h61e1',    name:'Wohnzimmer Wand', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'light.h618a',    name:'Sofa LED',         svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
+  {id:'light.h618a_2',  name:'Küche LED',        svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
+  {id:'switch.shelly1_98cdac0ca9b2',name:'Wandlampe Büro', dom:'switch',
+   svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/><line x1="12" y1="17" x2="12" y2="21"/>'},
+  {id:'light.gang_eg_licht',name:'Gang Erdgeschoss', svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
+  {id:'light.garten_licht', name:'Fassade',          svg:'<circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>'},
+];
+
+let _S = {};
+let _simActive = false;
+let _simTimer = null;
+let _simStep = 0;
+
+// ─── AUTH ───
+function getTok(){
+  try{const d=JSON.parse(localStorage.getItem('wz4'));return d?.access_token||'';}catch{return '';}
+}
+function saveTok(data){
+  localStorage.setItem('wz4',JSON.stringify(data));
+}
+
+async function refreshTok(){
+  try{
+    const d=JSON.parse(localStorage.getItem('wz4'));
+    if(!d?.refresh_token) return false;
+    const r=await fetch(`${HA}/auth/token`,{method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:`grant_type=refresh_token&refresh_token=${d.refresh_token}&client_id=${encodeURIComponent(location.origin+'/')}`
+    });
+    if(r.ok){const nd=await r.json();saveTok({...d,...nd});return true;}
+  }catch(e){}
+  return false;
+}
+
+function checkLogin(){
+  const params=new URLSearchParams(location.search);
+  const code=params.get('code');
+  if(code){
+    history.replaceState({},'',location.pathname);
+    fetch(`${HA}/auth/token`,{method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:`grant_type=authorization_code&code=${code}&client_id=${encodeURIComponent(location.origin+'/')}&redirect_uri=${encodeURIComponent(location.origin+location.pathname)}`
+    }).then(r=>r.json()).then(d=>{
+      if(d.access_token){saveTok(d);init();}
+      else showLogin();
+    }).catch(showLogin);
+    return;
+  }
+  if(getTok()) init();
+  else showLogin();
+}
+
+function showLogin(){
+  document.getElementById('login-screen').style.display='flex';
+}
+document.getElementById('login-btn').addEventListener('click',()=>{
+  location.href=`${HA}/auth/authorize?client_id=${encodeURIComponent(location.origin+'/')}&redirect_uri=${encodeURIComponent(location.origin+location.pathname)}&response_type=code`;
+});
+
+// ─── API ───
+async function api(method,path,body){
+  let tok=getTok();
+  if(!tok) return null;
+  try{
+    const opts={method,headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'}};
+    if(body) opts.body=JSON.stringify(body);
+    let r=await fetch(HA+path,opts);
+    if(r.status===401){
+      const ok=await refreshTok();
+      if(!ok){showLogin();return null;}
+      tok=getTok();
+      opts.headers['Authorization']='Bearer '+tok;
+      r=await fetch(HA+path,opts);
+    }
+    if(r.ok) return r.json().catch(()=>({}));
+  }catch(e){}
+  return null;
+}
+function svc(domain,service,data){
+  api('POST',`/api/services/${domain}/${service}`,data||{})
+    .then(()=>setTimeout(fetchAndUpdate,900));
+}
+
+// ─── FETCH ───
+async function fetchAndUpdate(){
+  const arr=await api('GET','/api/states');
+  if(!arr){setDot(false);return;}
+  arr.forEach(s=>{_S[s.entity_id]=s;});
+  setDot(true);
+  document.getElementById('header-sub').textContent='Zuletzt: '+new Date().toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('last-update').textContent=new Date().toLocaleString('de-CH',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'});
+  updateAll();
+}
+
+function setDot(on){
+  const d=document.getElementById('status-dot');
+  d.className='status-dot'+(on?'':' off');
+}
+
+// ─── UPDATE UI ───
+function updateAll(){
+  updatePerson();
+  updateGarage();
+  updateLights();
+  updateWeather();
+}
+
+function updatePerson(){
+  const s=_S['person.janis'];
+  const home=s?.state==='home';
+  const card=document.getElementById('person-card');
+  const ico=document.getElementById('person-ico');
+  const stEl=document.getElementById('person-state');
+  card.className='card presence-card'+(home?'':' presence-away');
+  ico.style.background=home?'rgba(48,209,88,.15)':'rgba(255,159,10,.12)';
+  ico.querySelector('svg').style.stroke=home?'var(--grn)':'var(--acc)';
+  stEl.textContent=home?'🏠 Daheim':'🚗 Unterwegs';
+  stEl.style.color=home?'var(--grn)':'var(--acc)';
+}
+
+function updateGarage(){
+  const s=_S[GARAGE_ID];
+  const state=s?.state||'unknown';
+  const card=document.getElementById('garage-card');
+  const stEl=document.getElementById('garage-state');
+  card.className='garage-card';
+  let label='Unbekannt';
+  if(state==='open'){card.classList.add('open');label='🟢 Geöffnet';}
+  else if(state==='closed'){label='🔴 Geschlossen';}
+  else if(state==='opening'){card.classList.add('moving');label='⬆️ Öffnet…';}
+  else if(state==='closing'){card.classList.add('moving');label='⬇️ Schließt…';}
+  stEl.textContent=label;
+}
+
+function updateLights(){
+  const grid=document.getElementById('lights-grid');
+  if(!grid.children.length) buildLights();
+  LIGHTS.forEach(l=>{
+    const s=_S[l.id];
+    const on=s?.state==='on';
+    const bri=Math.round((s?.attributes?.brightness||0)/2.55);
+    const tile=grid.querySelector(`[data-id="${l.id}"]`);
+    if(!tile)return;
+    tile.classList.toggle('on',on);
+    const stEl=tile.querySelector('.lt-state');
+    if(stEl)stEl.textContent=on&&bri>0?bri+'% Hell':'Aus';
+  });
+}
+
+function buildLights(){
+  const grid=document.getElementById('lights-grid');
+  grid.innerHTML=LIGHTS.map(l=>`
+    <div class="lt-tile" data-id="${l.id}" data-dom="${l.dom||'light'}">
+      <div class="lt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${l.svg}</svg></div>
+      <div>
+        <div class="lt-name">${l.name}</div>
+        <div class="lt-state">Aus</div>
+      </div>
+    </div>`).join('');
+  grid.querySelectorAll('.lt-tile').forEach(t=>{
+    t.addEventListener('click',()=>{
+      const on=t.classList.contains('on');
+      const dom=t.dataset.dom;
+      svc(dom,on?'turn_off':'turn_on',{entity_id:t.dataset.id});
+      t.classList.toggle('on',!on);
+      const stEl=t.querySelector('.lt-state');
+      if(stEl)stEl.textContent=!on?'Ein':'Aus';
+    });
+  });
+}
+
+// ─── WEATHER ───
+const WX_LABELS={
+  'clear-night':'Klare Nacht','cloudy':'Bewölkt','exceptional':'Außergewöhnlich',
+  'fog':'Nebel','hail':'Hagel','lightning':'Gewitter','lightning-rainy':'Gewitterregen',
+  'partlycloudy':'Teilweise bewölkt','pouring':'Starker Regen','rainy':'Regen',
+  'snowy':'Schnee','snowy-rainy':'Schneeregen','sunny':'Sonnig','windy':'Windig',
+  'windy-variant':'Windig','clear':'Klar',
+};
+function wxIco(cond,sz=56){
+  const h=sz/2;
+  const sunBody=`<defs><radialGradient id="sg" cx="40%" cy="35%" r="65%"><stop offset="0%" stop-color="#FFE566"/><stop offset="100%" stop-color="#FF9500"/></radialGradient></defs><circle cx="${h}" cy="${h}" r="${sz*.32}" fill="url(#sg)"/><g stroke="#FFB300" stroke-width="${sz*.05}" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>{const r=a*Math.PI/180,r1=sz*.42,r2=sz*.5,x1=h+r1*Math.cos(r),y1=h+r1*Math.sin(r),x2=h+r2*Math.cos(r),y2=h+r2*Math.sin(r);return`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`;}).join('')}</g>`;
+  const moonBody=`<defs><radialGradient id="mg" cx="45%" cy="35%" r="60%"><stop offset="0%" stop-color="#E8EEFF"/><stop offset="100%" stop-color="#7090C8"/></radialGradient></defs><circle cx="${h}" cy="${h}" r="${sz*.35}" fill="url(#mg)"/><circle cx="${h*1.35}" cy="${h*.65}" r="${sz*.28}" fill="${'#000'}"/>`;
+  const cloud=`<defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B0B8C8"/><stop offset="100%" stop-color="#8898A8"/></linearGradient></defs><ellipse cx="${sz*.55}" cy="${sz*.45}" rx="${sz*.28}" ry="${sz*.2}" fill="url(#cg)"/><ellipse cx="${sz*.35}" cy="${sz*.54}" rx="${sz*.22}" ry="${sz*.18}" fill="url(#cg)"/><ellipse cx="${sz*.65}" cy="${sz*.54}" rx="${sz*.2}" ry="${sz*.17}" fill="url(#cg)"/><rect x="${sz*.12}" y="${sz*.48}" width="${sz*.72}" height="${sz*.2}" rx="${sz*.1}" fill="url(#cg)"/>`;
+  const rain=`<line x1="${sz*.3}" y1="${sz*.7}" x2="${sz*.24}" y2="${sz*.88}" stroke="#60A5FA" stroke-width="${sz*.055}" stroke-linecap="round"/><line x1="${sz*.48}" y1="${sz*.72}" x2="${sz*.42}" y2="${sz*.9}" stroke="#60A5FA" stroke-width="${sz*.055}" stroke-linecap="round"/><line x1="${sz*.66}" y1="${sz*.7}" x2="${sz*.6}" y2="${sz*.88}" stroke="#60A5FA" stroke-width="${sz*.055}" stroke-linecap="round"/>`;
+  const snow=`<text x="${sz*.22}" y="${sz*.9}" font-size="${sz*.38}">❄️</text>`;
+  const night=cond?.includes('night')||cond==='clear-night';
+  if(cond==='sunny'||cond==='clear') return `<svg viewBox="0 0 ${sz} ${sz}">${sunBody}</svg>`;
+  if(night) return `<svg viewBox="0 0 ${sz} ${sz}">${moonBody}</svg>`;
+  if(cond==='partlycloudy') return `<svg viewBox="0 0 ${sz} ${sz}">${sunBody}${cloud}</svg>`;
+  if(cond==='cloudy'||cond==='fog') return `<svg viewBox="0 0 ${sz} ${sz}">${cloud}</svg>`;
+  if(cond?.includes('rain')||cond?.includes('pouring')||cond?.includes('lightning')) return `<svg viewBox="0 0 ${sz} ${sz}">${cloud}${rain}</svg>`;
+  if(cond?.includes('snow')) return `<svg viewBox="0 0 ${sz} ${sz}">${cloud}${snow}</svg>`;
+  return `<svg viewBox="0 0 ${sz} ${sz}">${cloud}</svg>`;
+}
+function updateWeather(){
+  const s=_S['weather.forecast_home'];if(!s)return;
+  const a=s.attributes||{};
+  document.getElementById('wx-ico').outerHTML=wxIco(s.state,56).replace('<svg ','<svg id="wx-ico" ');
+  document.getElementById('wx-temp').textContent=Math.round(a.temperature||0)+'°C';
+  document.getElementById('wx-cond').textContent=WX_LABELS[s.state]||s.state||'–';
+  document.getElementById('wx-feel').textContent=a.apparent_temperature?`Gefühlt ${Math.round(a.apparent_temperature)}°`:'';
+  document.getElementById('wx-hum').textContent=(a.humidity||'–')+'%';
+  document.getElementById('wx-wind').textContent=Math.round(a.wind_speed||0);
+  document.getElementById('wx-vis').textContent=Math.round(a.visibility||0)+'km';
+}
+
+// ─── GARAGE BUTTONS ───
+function confirm(title,sub,label,cls,fn){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-sub').textContent=sub;
+  const btn=document.getElementById('modal-confirm');
+  btn.textContent=label;
+  btn.className='modal-btn modal-confirm '+cls;
+  _confirmFn=fn;
+  document.getElementById('modal-bg').classList.add('show');
+}
+let _confirmFn=null;
+document.getElementById('modal-confirm').addEventListener('click',()=>{
+  document.getElementById('modal-bg').classList.remove('show');
+  if(_confirmFn){_confirmFn();_confirmFn=null;}
+});
+document.getElementById('modal-cancel').addEventListener('click',()=>{
+  document.getElementById('modal-bg').classList.remove('show');
+  _confirmFn=null;
+});
+document.getElementById('modal-bg').addEventListener('click',e=>{
+  if(e.target===e.currentTarget){document.getElementById('modal-bg').classList.remove('show');_confirmFn=null;}
+});
+
+document.getElementById('btn-garage-open').addEventListener('click',()=>{
+  const s=_S[GARAGE_ID]?.state;
+  if(s==='open'){toast('Garagentor ist bereits offen ✓');return;}
+  confirm('🚪 Garagentor öffnen?',`Aktuell: ${s==='closed'?'Geschlossen':'Unbekannt'}. Wirklich öffnen?`,'Öffnen','',()=>{
+    svc('cover','open_cover',{entity_id:GARAGE_ID});
+    toast('⬆️ Garagentor öffnet…');
+  });
+});
+document.getElementById('btn-garage-close').addEventListener('click',()=>{
+  const s=_S[GARAGE_ID]?.state;
+  if(s==='closed'){toast('Garagentor ist bereits geschlossen ✓');return;}
+  confirm('🔒 Garagentor schließen?',`Aktuell: ${s==='open'?'Geöffnet':'In Bewegung'}. Wirklich schließen?`,'Schließen','red',()=>{
+    svc('cover','close_cover',{entity_id:GARAGE_ID});
+    toast('⬇️ Garagentor schließt…');
+  });
+});
+
+// ─── ANWESENHEITSSIMULATION ───
+const SIM_LIGHTS = ['light.h61e1','light.h618a','light.h618a_2','switch.shelly1_98cdac0ca9b2'];
+const SIM_DELAY_MIN = 4 * 60 * 1000;   // min 4 min zwischen Aktionen
+const SIM_DELAY_MAX = 18 * 60 * 1000;  // max 18 min
+function rnd(min,max){return Math.floor(Math.random()*(max-min)+min);}
+
+function simTick(){
+  if(!_simActive) return;
+  // Zufällig 1-3 Lichter togglen
+  const shuffled=[...SIM_LIGHTS].sort(()=>Math.random()-.5).slice(0,rnd(1,3));
+  shuffled.forEach(id=>{
+    const on=_S[id]?.state==='on';
+    const dom=id.startsWith('switch.')?'switch':'light';
+    if(!on){
+      if(dom==='light'){
+        svc('light','turn_on',{entity_id:id,brightness_pct:rnd(20,80),color_temp_kelvin:rnd(2700,4000),transition:rnd(2,6)});
+      } else {
+        svc('switch','turn_on',{entity_id:id});
+      }
+    } else {
+      svc(dom,'turn_off',{entity_id:id,transition:dom==='light'?rnd(2,5):undefined});
+    }
+  });
+  _simStep++;
+  const nextDelay=rnd(SIM_DELAY_MIN,SIM_DELAY_MAX);
+  _simTimer=setTimeout(simTick,nextDelay);
+  document.getElementById('sim-state').textContent=`Schritt ${_simStep} · Nächste Änderung ~${Math.round(nextDelay/60000)} Min`;
+}
+
+function startSim(){
+  if(_simActive) return;
+  _simActive=true; _simStep=0;
+  const toggle=document.getElementById('sim-toggle');
+  const card=document.getElementById('sim-card');
+  const badge=document.getElementById('sim-badge');
+  toggle.classList.add('on');
+  card.classList.add('sim-active');
+  badge.style.display='';
+  // Sofort loslegen
+  const firstDelay=rnd(10000,60000); // 10s-1min Wartezeit vor erstem Schritt
+  _simTimer=setTimeout(simTick,firstDelay);
+  document.getElementById('sim-state').textContent=`Startet in ${Math.round(firstDelay/1000)} Sek…`;
+  toast('🛡️ Simulation gestartet');
+}
+function stopSim(){
+  _simActive=false;
+  clearTimeout(_simTimer);
+  const toggle=document.getElementById('sim-toggle');
+  const card=document.getElementById('sim-card');
+  const badge=document.getElementById('sim-badge');
+  toggle.classList.remove('on');
+  card.classList.remove('sim-active');
+  badge.style.display='none';
+  document.getElementById('sim-state').textContent='Lichter aus/ein als wärst du da';
+  toast('Simulation gestoppt');
+}
+document.getElementById('sim-toggle').addEventListener('click',()=>{
+  if(_simActive) stopSim();
+  else confirm('🛡️ Simulation starten?','Lichter gehen in zufälligen Abständen an und aus — so als ob jemand daheim wäre.','Starten','',startSim);
+});
+
+// ─── TOAST ───
+let _toastTimer;
+function toast(msg,dur=2800){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>el.classList.remove('show'),dur);
+}
+
+// ─── INIT ───
+function init(){
+  document.getElementById('login-screen').style.display='none';
+  buildLights();
+  fetchAndUpdate();
+  setInterval(fetchAndUpdate,20000);
+}
+checkLogin();
+</script>
+</body>
+</html>

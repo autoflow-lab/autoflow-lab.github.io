@@ -806,7 +806,7 @@ html,body{height:100%;background:var(--bg);
   z-index:1;
 }
 .lt:active{transform:scale(.93)}
-.lt-inner{position:absolute;inset:0;border-radius:18px;overflow:hidden;pointer-events:none;z-index:0}
+.lt-inner{position:absolute;inset:0;border-radius:18px;pointer-events:none;z-index:0}
 .ltgl{position:absolute;inset:-120%;border-radius:50%;z-index:0;
   background:radial-gradient(circle,rgba(var(--lc,255,159,10),.55) 0%,transparent 60%);
   opacity:0;transition:opacity .6s;pointer-events:none}
@@ -814,7 +814,8 @@ html,body{height:100%;background:var(--bg);
 @keyframes glowBreathe{0%,100%{opacity:.7;transform:scale(.95)}50%{opacity:1;transform:scale(1.08)}}
 @keyframes tileFlash{0%{opacity:1}30%{opacity:.5;transform:scale(.97)}70%{opacity:.85;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
 .tile-flash{animation:tileFlash .35s ease-out}
-.lt.on{/* color set via inline style from HA state */}
+.lt.on{/* on-state: controlled via applyTileState inline styles */}
+.lt.on[data-nodim]{border-top-color:rgba(48,209,88,.35)!important;box-shadow:0 0 16px rgba(48,209,88,.12),0 1px 0 rgba(255,255,255,.06) inset!important}
 /* CT-Tint overlay: warm amber → cool blue based on --ct-pct (0=warm, 1=cool) */
 .ltct{
   position:absolute;inset:0;border-radius:18px;pointer-events:none;z-index:0;
@@ -954,6 +955,55 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 .dtst{font-size:.59rem;color:var(--dim);margin-top:2px;transition:color .3s}
 .dt.on .dtst{color:rgba(56,189,248,.7)}
 
+/* Now-Playing Rich Notification */
+#np-notify{
+  position:fixed;top:calc(env(safe-area-inset-top)+10px);left:50%;
+  transform:translateX(-50%) translateY(-110%);
+  width:min(320px,88vw);
+  background:rgba(28,28,30,.92);border:1px solid rgba(255,255,255,.13);
+  border-radius:20px;padding:10px 14px;
+  backdrop-filter:blur(32px) saturate(1.8);
+  -webkit-backdrop-filter:blur(32px) saturate(1.8);
+  display:flex;align-items:center;gap:11px;
+  z-index:2000;pointer-events:none;
+  transition:transform .45s cubic-bezier(.34,1.28,.64,1),opacity .3s ease;
+  opacity:0;
+}
+#np-notify.show{
+  transform:translateX(-50%) translateY(0);opacity:1;
+}
+#np-notify-art{
+  width:42px;height:42px;border-radius:8px;flex-shrink:0;
+  background:rgba(255,255,255,.06);object-fit:cover;
+  box-shadow:0 2px 12px rgba(0,0,0,.45);
+}
+#np-notify-texts{flex:1;min-width:0;}
+#np-notify-label{
+  font-size:.6rem;font-weight:600;letter-spacing:.06em;
+  color:var(--amber);text-transform:uppercase;margin-bottom:2px;
+}
+#np-notify-title{
+  font-size:.8rem;font-weight:600;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#np-notify-artist{
+  font-size:.7rem;color:rgba(255,255,255,.5);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#np-notify-wave{
+  display:flex;align-items:flex-end;gap:2px;flex-shrink:0;height:18px;
+}
+#np-notify-wave span{
+  display:block;width:3px;border-radius:2px;background:var(--amber);
+}
+#np-notify-wave span:nth-child(1){animation:npWave .9s ease-in-out infinite alternate; height:10px;}
+#np-notify-wave span:nth-child(2){animation:npWave .9s ease-in-out .2s infinite alternate; height:16px;}
+#np-notify-wave span:nth-child(3){animation:npWave .9s ease-in-out .4s infinite alternate; height:8px;}
+#np-notify-wave span:nth-child(4){animation:npWave .9s ease-in-out .1s infinite alternate; height:14px;}
+@keyframes npWave{
+  from{transform:scaleY(.4);}
+  to{transform:scaleY(1);}
+}
 /* Toast */
 #toast{
   position:fixed;bottom:calc(env(safe-area-inset-bottom)+80px);left:50%;
@@ -1150,6 +1200,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
                 <div class="hdate-day" id="hdate-day"></div>
               </div>
               <div class="hgreet" id="hgreet"></div>
+              <div id="presence-pill" style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 10px 4px 8px;border-radius:100px;background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.25);font-size:.58rem;font-weight:600;letter-spacing:.3px;opacity:0;transition:opacity .5s,background .4s,border-color .4s;color:#30d158">
+                <span style="width:5px;height:5px;border-radius:50%;background:#30d158;flex-shrink:0;transition:background .4s"></span>
+                <span id="presence-txt">Daheim</span>
+              </div>
             </div>
             <div class="hwx" id="hwx-tap" title="Wetterdetails">
               <svg class="hwico" id="hwico" viewBox="-6 -6 84 84" style="overflow:visible"><circle cx="36" cy="36" r="22" fill="rgba(255,159,10,.15)" /><circle cx="36" cy="36" r="12" fill="rgba(255,159,10,.25)" /></svg>
@@ -2127,6 +2181,19 @@ function playRadio(r){
   setTimeout(()=>svc('media_player','media_play',{entity_id:CFG.alm}),3000);
   toast(r.n+' ♫');
   quickRefresh();
+  // Presence Pill
+  const pPill=document.getElementById('presence-pill');
+  const pTxt=document.getElementById('presence-txt');
+  const personState=_S['person.janis']?.state;
+  if(pPill&&pTxt){
+    const home=personState==='home';
+    pPill.style.opacity='1';
+    pPill.style.background=home?'rgba(48,209,88,.12)':'rgba(255,69,58,.1)';
+    pPill.style.borderColor=home?'rgba(48,209,88,.25)':'rgba(255,69,58,.25)';
+    pPill.querySelector('span').style.background=home?'#30d158':'#ff453a';
+    pTxt.textContent=home?'Daheim':'Unterwegs';
+    pTxt.style.color=home?'#30d158':'#ff453a';
+  }
   updateRadio();updateRadioQuick();
 }
 
@@ -2945,7 +3012,7 @@ function buildUI(){try{
 
   // Lights
   document.getElementById('lg').innerHTML=CFG.lights.map(l=>`
-    <div class="lt" data-id="${l.id}" data-lc="${l.lc}" ${l.unavail?'style="opacity:.5;pointer-events:none"':''} >
+    <div class="lt" data-id="${l.id}"${l.nodim?' data-nodim':''} data-lc="${l.lc}" ${l.unavail?'style="opacity:.5;pointer-events:none"':''} >
       <div class="lt-inner"></div>
       <div class="ltct"></div>
       <div class="ltico" style="z-index:1">
@@ -3116,7 +3183,7 @@ function buildUI(){try{
             <div id="ls-ct-strip" style="position:relative;height:44px;border-radius:22px;cursor:pointer;touch-action:none;
               background:linear-gradient(90deg,#ff8c00,#ffd080,#fff9f0,#e8f0ff,#7eb0ff);
               box-shadow:0 4px 16px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12)">
-              <div id="ls-ct-cur" style="position:absolute;top:50%;width:32px;height:32px;border-radius:50%;
+              <div id="ls-ct-cur2" style="position:absolute;top:50%;width:32px;height:32px;border-radius:50%;
                 background:radial-gradient(circle at 38% 35%,#fff,#d0d0d0);
                 box-shadow:0 2px 10px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.5) inset;
                 transform:translate(-50%,-50%);pointer-events:none;left:5%"></div>
@@ -3202,7 +3269,7 @@ function buildUI(){try{
     // Warm/cool strip (in custom popup)
     (()=>{
       const strip=document.getElementById('ls-picker-wht').querySelector('div');
-      const cur=document.getElementById('ls-ct-cur');
+      const cur=document.getElementById('ls-ct-cur2');
       let _ctTimer=null;
       function pickCt(px){
         const r=strip.getBoundingClientRect();
@@ -3535,7 +3602,7 @@ function buildUI(){try{
         overlay.innerHTML = `<div style="width:100%;max-width:430px;background:#1c1c1e;border-radius:22px 22px 0 0;padding:20px 16px 32px;border-top:1px solid rgba(255,255,255,.10)">
           <div style="font-size:.68rem;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.45);margin-bottom:14px">SZENE WÄHLEN</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
-            ${[{s:'abend',ico:'🌆',lbl:'Abend',col:'#2d1f00'},{s:'film',ico:'🎬',lbl:'Film',col:'#0d0d1e'},{s:'nacht',ico:'🌙',lbl:'Nacht',col:'#050516'},{s:'hell',ico:'☀️',lbl:'Hell',col:'#1e1a00'},{s:'off',ico:'🌑',lbl:'Alles aus',col:'#111'}].map(sc=>`
+            ${[{s:'abend',ico:'🌆',lbl:'Abend',col:'#2d1f00'},{s:'film',ico:'🎬',lbl:'Film',col:'#0d0d1e'},{s:'nacht',ico:'🌙',lbl:'Nacht',col:'#050516'},{s:'hell',ico:'☀️',lbl:'Hell',col:'#1e1a00'},{s:'off',ico:'🌑',lbl:'Alles aus',col:'#111'},{s:'morgen',ico:'🌅',lbl:'Guten Morgen',col:'#1a1000'},{s:'nacht2',ico:'🌙✨',lbl:'Gute Nacht',col:'#05050e'}].map(sc=>`
             <button style="background:${sc.col};border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px 10px;color:#fff;font-size:.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:8px" data-qs="${sc.s}">
               <span style="font-size:1.3rem">${sc.ico}</span> ${sc.lbl}
             </button>`).join('')}
@@ -4590,6 +4657,38 @@ function setActiveScene(s){
   });
 }
 function doScene(s){
+  if(s==='morgen'){
+    hap();
+    toast('🌅 Guten Morgen, Janis!',3500);
+    // Warmes Licht sanft einblenden
+    ['light.h61e1','light.h618a','light.h618a_2'].forEach(id=>
+      svc('light','turn_on',{entity_id:id,brightness_pct:65,color_temp_kelvin:3000,transition:4}));
+    svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    // TTS Morgengruss
+    setTimeout(()=>{
+      const h=new Date().getHours(),m=new Date().getMinutes();
+      const mStr=m>0?` ${m<10?'0'+m:m}`:'';
+      svc('tts','speak',{entity_id:'tts.google_translate',media_player_entity_id:'media_player.nestmini3793',
+        message:`Guten Morgen. Es ist ${h}${mStr} Uhr.`,language:'de'});
+    },2000);
+    quickRefresh();
+    return;
+  }
+  if(s==='nacht2'){
+    hap();
+    toast('🌙 Gute Nacht!',3000);
+    // Alle Lichter sanft aus
+    CFG.lights.forEach(l=>svc(l.domain||'light','turn_off',{entity_id:l.id,transition:3}));
+    svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    // TV + Harmony aus
+    setTimeout(()=>{svc('remote','turn_off',{entity_id:'remote.harmony'});},500);
+    setTimeout(()=>{svc('media_player','turn_off',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});},800);
+    // Musik aus
+    svc('media_player','media_stop',{entity_id:CFG.alm});
+    quickRefresh();
+    return;
+  }
+
   setActiveScene(s);
   const GOVEES=['light.h61e1','light.h618a','light.h618a_2'];
   const TV='media_player.lg_webos_tv_oled65g49ls_2';
@@ -4977,9 +5076,26 @@ function updateAll(){
   const s=_S[CFG.alm];
   const titleEl=document.getElementById('np-t');
   const titleStr=s?.attributes?.media_title||(playing?'Läuft…':'Bereit');
-  // Toast on track change (not on first load)
+  // Rich Now-Playing notification on track change (not on first load)
   if(playing&&titleStr!=='Läuft…'&&_lastTrackTitle&&_lastTrackTitle!==titleStr){
-    showToast('♫ '+titleStr.substring(0,30)+(titleStr.length>30?'…':''),3000);
+    (function(){
+      const nn=document.getElementById('np-notify');
+      if(!nn)return;
+      const nt=document.getElementById('np-notify-title');
+      const na=document.getElementById('np-notify-artist');
+      const nart=document.getElementById('np-notify-art');
+      if(nt)nt.textContent=titleStr;
+      const artist=s?.attributes?.media_artist||s?.attributes?.media_channel||'Almando';
+      if(na)na.textContent=artist;
+      const pic=at(CFG.alm,'entity_picture')||at(CFG.spot,'entity_picture');
+      if(nart&&pic)nart.src=pic.startsWith('http')?pic:(location.origin+pic);
+      else if(nart)nart.src='';
+      nn.classList.remove('show');
+      void nn.offsetWidth;
+      nn.classList.add('show');
+      clearTimeout(nn._hideT);
+      nn._hideT=setTimeout(()=>nn.classList.remove('show'),4200);
+    })();
   }
   if(playing&&titleStr!=='Läuft…')_lastTrackTitle=titleStr;
   else if(!playing)_lastTrackTitle=null;
@@ -5156,6 +5272,7 @@ function updateAll(){
     const tile=document.querySelector(`.lt[data-id="${l.id}"]`);
     if(!tile)return;
     const on=effOn(l.id); // respects pending optimistic state for 4s
+    const isNodim=l.nodim||false;
     const rawBri=Math.round((s?.attributes?.brightness||0)/2.55);
     if(rawBri>0) _lastBri[l.id]=rawBri; // Cache immer wenn HA echten Wert hat
     // Beim pending-on: nutze gecachte Helligkeit (mindestens 75%)
@@ -5195,11 +5312,13 @@ function updateAll(){
         const diff=Math.round((Date.now()-new Date(lc).getTime())/60000);
         age=diff<1?' · gerade':diff<60?` · vor ${diff} Min`:diff<1440?` · vor ${Math.round(diff/60)} h`:'';
       }
-      se.textContent=(on?(bri>0?bri+'%':'An'):'Aus')+(on?'':age);
+      if(on){
+        const modeTxt=isNodim?'Ein':bri>0?bri+'%':'Ein';
+        se.textContent=modeTxt+age;
+      } else {
+        se.textContent='Aus'+age;
+      }
     }
-    const pct=on?Math.max(bri,12):0;
-    const fi=tile.querySelector('[data-fill]');if(fi){fi.style.width=pct+'%';fi.style.minWidth=on?'12px':'';}
-    // bthumb now via CSS ::after on bfil — no JS needed
     // Brightness arc ring
     const arc=tile.querySelector('[data-bri-arc]');
     if(arc){
@@ -5213,9 +5332,10 @@ function updateAll(){
     // Brightness bar sync
     const bfill2=tile.querySelector('.bfil');
     if(bfill2){
-      bfill2.style.width=(on?Math.max(bri,8):0)+'%';
-      bfill2.style.minWidth=on?'10px':'0';
-      bfill2.style.opacity=on?'1':'0';
+      const wPct=(on?Math.max(bri,8):0)+'%';
+      bfill2.style.width=wPct;
+      bfill2.style.opacity='1'; // immer sichtbar — width 0 versteckt effektiv
+      if(lc) bfill2.style.background=`linear-gradient(90deg,rgba(${lc},.6),rgb(${lc}))`;
     }
   });
   // Devs
@@ -6173,5 +6293,18 @@ const _origSetWxMode=setWxMode;
   };
 })();
 </script>
+
+<!-- Now-Playing Rich Notification -->
+<div id="np-notify" aria-live="polite" aria-label="Now Playing">
+  <img id="np-notify-art" src="" alt="">
+  <div id="np-notify-texts">
+    <div id="np-notify-label">♫ Jetzt läuft</div>
+    <div id="np-notify-title">–</div>
+    <div id="np-notify-artist">–</div>
+  </div>
+  <div id="np-notify-wave">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</div>
 </body>
 </html>

@@ -1,100 +1,130 @@
-# AUTOWORK.md — Autonomer Verbesserungs-Agent für autoflow-lab.github.io
+# AUTOWORK.md — Autonome Verbesserungs-Aufgaben
+# Clawy arbeitet diese Liste selbständig ab
 
-## Deine Aufgabe
-Du bist ein autonomer Code-Agent. Du verbesserst die Fiverr-Portfolio-Website von autoflow-lab selbstständig.
-Du bekommst diese Datei als Kontext + hast Zugriff auf alle Tools.
+## Wie es funktioniert
+- Jeder Cron-Run liest diese Datei
+- Wählt eine [ ] Aufgabe aus
+- Implementiert sie in wz.html
+- Deployed zu HA SSH
+- Markiert als [x] + schreibt Eintrag in PROGRESS.md
 
-## Kontext
-- **Live URL**: https://autoflow-lab.github.io/
-- **Lokale Datei**: /home/node/.openclaw/workspace/projects/fiverr/demo.html
-- **GitHub Repo**: autoflow-lab/autoflow-lab.github.io
-- **GitHub Token**: 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
-- **E-Mail**: clawy.studio@gmail.com
-- **Fiverr**: https://www.fiverr.com/autoflow-lab
+## Regeln
+- IMMER: `node --check /tmp/test_js.js` vor Deploy
+- IMMER: JS aus <script> extrahieren vor Check
+- NIEMALS: filter="url(#roomBloom)" auf SVG Polygon
+- NIEMALS: duplicate IDs erstellen (z.B. wx-big-desc existiert 2x → Fehler)
+- Deploy: SSH nach 192.168.1.123, sudo cp /tmp/wz.html /config/www/wz.html
+- Nach Deploy: PROGRESS.md updaten mit Timestamp + was gemacht wurde
 
-## Deploy-Snippet (Python)
-```python
-import requests, base64
-T='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'
-H={'Authorization':f'token {T}','Accept':'application/vnd.github.v3+json'}
-R='autoflow-lab/autoflow-lab.github.io'
-with open('/home/node/.openclaw/workspace/projects/fiverr/demo.html','rb') as f:
-    c=base64.b64encode(f.read()).decode()
-for fn in ['demo.html','index.html']:
-    r=requests.get(f'https://api.github.com/repos/{R}/contents/{fn}',headers=H)
-    sha=r.json().get('sha')
-    r2=requests.put(f'https://api.github.com/repos/{R}/contents/{fn}',headers=H,json={
-        'message':'auto-improve: <beschreibung>','content':c,'sha':sha})
-    print(f"{'OK' if r2.status_code==200 else 'FAIL'} {fn}")
-```
+## Design-Regeln (nicht brechen!)
+- iOS Dark Palette: #000 bg, #1c1c1e/#2c2c2e/#3a3a3c cards
+- Akzentfarben: amber #ff9f0a (Licht), blau #0a84ff (Media), grün #30d158 (aktiv)
+- Kein Lila/Indigo irgendwo
+- Alle Touch: addEventListener, nie onclick=
+- touch-action:manipulation auf * global
 
-## Floor Plan — Kritische Info
-- Technik: SVG Radial-Gradient Overlay mit mix-blend-mode:screen
-- **KEIN filter="url(#roomBloom)"** auf Polygon-Elementen — führt zu Licht-Bleeding außerhalb der Räume
-- Raum-Polygone (viewBox 0 0 1376 768):
-  - bed1:   688,148 992,193 992,328 688,283
-  - bath:   993,215 1148,258 1148,428 993,388
-  - living: 530,245 688,283 992,328 992,515 530,415 (5-Punkte)
-  - dining: 812,422 1080,492 1080,608 812,548
-  - bed2:   225,328 482,388 482,528 225,468
-  - office: 482,452 658,498 658,608 482,562
-- Lampen-Positionen: L1(840,178)bed1, L2(800,222)bed1, L3(895,240)bed1, L4(380,393)bed2-Stehlampe, L5(302,360)bed2, L6(678,285)living, L7(760,348)living, L8(580,520)office, L9(1072,268)bath, L11(900,478)dining
+## Ideen-Liste ([ ] = offen, [x] = erledigt)
 
-## Ideen-Liste (Priorität: oben = wichtiger)
-Wähle bei jedem Run eine Aufgabe aus dieser Liste, implementiere sie, hake sie ab (ersetze [ ] mit [x]) und deploye.
-
-### UI / Design
-- [ ] Grundriss-Polygone feiner abstimmen — isometrische Wände sollen exakt gefüllt werden
-- [x] Dark Mode: animierte Neon-Linien/Grid-Hintergrund im Hero
-- [x] Light Mode: subtile Glasmorphism-Cards mit echtem backdrop-filter blur
-- [x] Floating Labels auf den Lampen-Dots (Raumnamen einblenden beim Hover)
-- [ ] Mobile: Grundriss vertikal zoombarer mit Pinch-Zoom (CSS touch-action)
-- [x] Scroll-to-top Button mit smooth animation
-- [x] Hero: animierte Typing-Effekt für den Subtitle-Text
-- [x] Portfolio-Cards: 3D tilt-effect mit Maus-Tracking (transform perspective)
-- [x] Pricing-Section: Toggle Monatlich/Einmalig mit Preisanimation
-- [x] Footer: Social Links (GitHub, LinkedIn) hinzufügen
+### Design & Animation
+- [x] Wetter-Hero Hintergrundfarbe wechselt je nach Wetter (Regen=dunkelblau, Sonne=warmorange)
+- [x] Szenen-Buttons auf Home: leichter Parallax-Effekt beim Scrollen
+- [x] Tile-Icons: bei "An" subtle pulse-ring um den Icon-Kreis
+- [x] Nav-Bar: aktiver Tab hat sanften Glow unter dem Icon
+- [x] Wetter-Tab: Sonnenauf/Untergang Visualisierung als Bogen
+- [x] Album-Cover: wenn Spotify spielt, generiere Gradient aus Track-Farben (Mood-Gradient)
+- [x] Licht-Tiles: Farbtemperatur als warme/kühle Tile-Tönung
 
 ### Features
-- [ ] Grundriss: Doppelklick auf Raum öffnet Detail-Panel mit Geräteliste
-- [ ] Grundriss: Räume haben "Aktive Geräte" Zähler-Badge
-- [x] Dashboard: Live-Uhr Widget (lokale Zeit des Besuchers)
-- [ ] Dashboard: CO2 / Luftqualität Widget
-- [ ] Dashboard: Kalender-Integration Widget (nächste 3 Termine als Platzhalter)
-- [x] "How it works" Section mit 3-Step-Prozess und Animations
-- [x] Vergleichstabelle: HA vs Alexa vs Google Home (Vorteile zeigen)
-- [x] Testimonial-Carousel mit Auto-Scroll
-- [ ] Zurück-zum-Anfang nach Tab-Wechsel smooth animieren
-- [x] Contact-Formular (mailto-basiert, kein Backend)
+- [x] Wetter-Tab: Gefühlte Temperatur als grosse Nebenzahl
+- [x] Schnell-Szene via Long-Press auf Home-Hero: Popup mit 4 Szenen
+- [x] Musik-Tab: Fortschrittsbalken für aktuellen Track (media_position/media_duration)
+- [x] Wetter: Pollen-Warnung für Schweiz (wenn API verfügbar)
+- [x] Home-Screen: "Willkommen zurück, Janis" mit Tageszeit-Greeting
+- [x] Szenen auf Home: zeige welche gerade aktiv ist (basierend auf Lichtzustand)
+- [x] Wetter-Tab: Regenmenge nächste 24h als Mini-Balkendiagramm
+- [x] Debug-Panel: Textarea statt div (kopierbar)
 
-### SEO & Performance
-- [x] Meta OG-Tags (og:image, og:title, og:description) für Social Sharing
-- [x] Structured Data JSON-LD (LocalBusiness/Service Schema)
-- [ ] Loading Skeleton für Weather/News statt einfachem Spinner
-- [ ] Lazy-load für Floor Plan Bild (loading="lazy" ist schon da, aber intersection observer trigger)
-- [ ] Service Worker für Offline-Grundriss (nur Floor Plan cachen)
+### Stabilität
+- [x] fetchStates: Retry nach 3x Fehler mit Backoff
+- [x] Token-Refresh: automatisch wenn 401 zurückkommt
+- [x] Offline-Banner: wenn HA nicht erreichbar → Toast "Offline – Verbinde..."
+- [x] Light-Sheet: schliessen wenn man ausserhalb tippt (overlay-click)
 
-### Content
-- [x] Mehr Bewertungen (6 statt 4, mit spezifischeren Projektreferenzen)
-- [x] "Technologie-Stack" Section: Icons für HA, N8N, Zigbee, Matter, etc.
-- [ ] FAQ erweitern: Was kostet HA selbst? Wie lange dauert Einrichtung?
-- [ ] AI-Page: Konkrete Beispiele mit Before/After Automation
-- [ ] Pricing: "Alles inklusive" Vergleich mit anderen Freelancern
+### Neue Seiten
+- [x] nsscreen.html verbessern: Szenen-Buttons hinzufügen, gleiche Farblogik
+- [x] ipad.html: Vollbild-Ansicht für Floorplan mit Licht-Glow
 
-## Arbeitsweise
-1. Lies AUTOWORK.md und PLAN.md (falls vorhanden)
-2. Wähle eine [ ] Aufgabe die du in einem Run erledigen kannst
-3. Lies die aktuelle demo.html
-4. Implementiere die Verbesserung sauber
-5. Deploye zu GitHub (beide Dateien: demo.html + index.html)
-6. Markiere die Aufgabe als [x] in dieser Datei
-7. Schreibe einen kurzen Bericht in PROGRESS.md
-8. Fertig — kein weiterer Input nötig
+## Gesperrte Entities (nicht in Dashboard)
+- light.hue_iris — Schlafzimmer, nicht Wohnzimmer
+- light.h61e1 — Govee Wand, offline (sobald online: Wohnzimmer)
+- light.gang_og_licht / light.gang_eg_licht — nodim:true, Template-Entity, oft unavailable
 
-## Qualitäts-Regeln
-- Kein Framework, kein Build-Step — reines HTML/CSS/JS
-- Alle neuen Texte müssen in BEIDEN Sprachen (de/en) in den T-Objekt
-- Dark Mode muss immer mitberücksichtigt werden
-- Mobile-First — alles muss auf 375px funktionieren
-- Grundriss: NIEMALS filter="url(#roomBloom)" auf Polygon-Elementen
-- Vor dem Deploy: Prüfen ob HTML valide (öffnende/schließende Tags balanced)
+## Neue Ideen (2026-03-20)
+- [x] wz.html: Sunrise/Sunset Anzeige im Wetter-Tab (☀️ 06:32 · 🌅 19:14)
+- [x] wz.html: Licht-Tiles pulsieren wenn gerade geschaltet wird (kurze Pulse-Animation)
+- [x] wz.html: "Zuletzt geändert" unter jedem Licht-Tile (last_changed aus HA)
+- [x] demo.html: Testimonial-Karussell (auto-scrollend, 3 Reviews)
+- [x] demo.html: "Powered by autoflow-lab" Badge im Footer mit Link zur Demo
+- [x] ipad.html: Klick auf Raum im Grundriss → Licht toggle
+- [x] wz.html: Energie-Widget auf Home (if sensor.stromverbrauch available)
+- [x] nsscreen.html: Wetter-Tab mit stündlicher Vorschau
+- [x] premium_template.html: auf GitHub Pages verlinken von demo.html Preissektion
+
+## Neue Ideen (2026-03-20 Morgen)
+- [x] wz.html: Konfetti-Animation wenn Szene "Abend" aktiviert wird (Easter Egg)
+- [x] wz.html: Wetter-Icon animiert (CSS keyframes je nach Wettercode: Regen fällt, Sonne dreht)
+- [x] wz.html: Hero-Hintergrund: Sterne-Parallax nachts (CSS particles)
+- [x] demo.html: Preise mit Durchstreichpreis (~~€99~~ €49) + "Begrenzte Aktion" Badge
+- [x] demo.html: Animated counter für Stats beim Einblenden (Intersection Observer)
+- [x] demo.html: WhatsApp-Button zum Direktkontakt (wa.me Link)
+- [x] wz.html: Musik-Tab: Almando Speaker-Icon mit Wellen-Animation wenn spielt
+- [x] wz.html: Tages-Zusammenfassung auf Home ("5 Lichter heute genutzt, 3h Musik")
+- [x] wz.html: Wetter-Tab: UV-Index Anzeige (Open-Meteo liefert uv_index)
+- [x] MARKETING: Reddit-Post auf r/homeassistant schreiben (Entwurf fertigstellen)
+
+## Neue Ideen (2026-03-21 Morgen)
+- [x] wz.html: Musik-Tab: Lautstärke per vertikalen Swipe auf Album-Art (swipe up/down = vol +/-, iOS-Style Overlay)
+
+## Neue Ideen (2026-03-21)
+- [x] wz.html: Musik-Tab: Blurred Album-Cover als dynamischer Seiten-Hintergrund (wie Spotify iOS)
+- [x] wz.html: Musik-Tab: Swipe Left/Right für Track-Skip (next/prev) mit Hint-Animation
+- [x] wz.html: Wetter-Tab: Temperaturkurve 24h als glatte SVG-Area-Chart (gradient-filled, Jetzt-Punkt, Stunden-Labels)
+- [x] wz.html: Home-Tab: Floating "Alle Lichter aus" FAB-Button (erscheint wenn ≥1 Licht an, 2-Tap Bestätigung)
+- [x] wz.html: Home-Hero: Tageszeit-Fortschritts-Arc (flacher SVG-Bogen zeigt % des Tages, Farbe+Glow-Dot je Tageszeit)
+
+## Neue Ideen (2026-03-21 Abend)
+- [x] wz.html: Licht-Tiles — Tap-Ripple Effekt (Kreisförmige Welle vom Touch-Punkt, in Tile-Farbe)
+- [x] wz.html: Wetter-Hero — Animiertes Niederschlags-Canvas (Regen-Tropfen / Schneeflocken über dem Hero)
+
+## Neue Ideen (2026-03-22 Morgen)
+- [x] wz.html: Tab-Wechsel — Staggered Card-Entrance Animation (Kinder-Elemente blenden beim Tab-Wechsel gestaffelt ein, fade+translateY, 0.04s–0.46s Delays)
+
+## Neue Ideen (2026-03-22)
+- [x] wz.html: Wetter-Tab — Windrichtungs-Kompass (animierter SVG-Kompass neben Wind-km/h, dreht sich mit wind_direction_10m, N/NO/O/SO/S/SW/W/NW Label)
+- [x] wz.html: Licht-Tiles — Helligkeits-Arc Ring (dünner SVG-Kreisbogen um .ltico zeigt brightness_pct als animierten Arc)
+
+## Neue Ideen (2026-03-21 Morgen)
+- [x] demo.html: Scarcity-Banner oben ("🔥 Nur noch 3 Plätze diese Woche") — erscheint nach 1.8s, schliessbar
+- [x] demo.html: Vorher/Nachher Slider (Standard HA vs. Custom Dashboard) als visueller Beweis
+- [x] demo.html: Exit-Intent Popup (Mouse-Richtung erkennen) mit 10% Rabatt-Angebot
+- [x] wz.html: Kalender-Widget auf Home-Tab (nächste 2 Events aus calendar.* Entities)
+- [x] demo.html: Video-Embed-Placeholder (YouTube-ähnlich) mit Thumbnail + Play-Button (öffnet Fiverr GIG)
+
+## Neue Ideen (2026-03-22 Morgen)
+- [x] wz.html: Wetter-Tab — Mondphase-Card (astronomische Berechnung, animierter SVG-Mond, Phasenname + Beleuchtungs-Balken)
+
+## Neue Ideen (2026-03-22 Nachmittag)
+- [x] wz.html: Wetter-Tab — Luftdruck-Barometer Card (surface_pressure von Open-Meteo, animierter SVG-Arc 960–1040 hPa, Trend-Pfeil ↑↓→, Beschreibung je Drucklage)
+
+## Neue Ideen (2026-03-22 Abend)
+- [x] wz.html: Nav-Bar — Licht-Tab Badge (amber Zahl-Badge über Licht-Icon zeigt Anzahl aktiver Lichter, animate-in/out, Pop-Animation bei Änderung)
+
+## Neue Ideen (2026-03-22 Nacht)
+- [x] wz.html: Musik-Tab — "Now Playing" Rich Notification (Apple-Style Pill erscheint oben beim Track-Wechsel: Mini Album-Art + Track-Titel + Artist + animierte Equalizer-Wellen, 4.2s sichtbar, spring-in Animation)
+
+## Neue Ideen (2026-03-22 Morgen 2)
+- [x] demo.html: Social Proof Toast — zufällige "Jemand hat bestellt" Notification-Einblendungen (Conversion-Booster)
+- [x] demo.html: FAQ Accordion-Section (5 häufige Fragen, smooth expand/collapse Animation)
+- [x] demo.html: "Wie es funktioniert" Timeline-Section (3 Schritte: Anfragen → Konfigurieren → Genießen, animated icons)
+- [x] wz.html: Home-Tab — Quick-Actions Bar (4 kleine Icon-Buttons: Alle aus / Szene / Musik / Heizung, horizontal scrollbar)
+- [x] demo.html: Trust-Badge-Row unter dem CTA-Button (🔒 Sicher bezahlen · ⭐ 5 Sterne · ⚡ 24h Lieferung · 💬 24/7 Support)

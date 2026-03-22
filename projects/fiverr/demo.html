@@ -446,6 +446,17 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
 .hero-sub{font-size:1.08rem;color:var(--text2);max-width:520px;margin:0 auto 34px;line-height:1.7;animation:fadeInUp .8s .2s ease both;min-height:3.4em}
 .typed-cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:2px;vertical-align:text-bottom;border-radius:1px;animation:cursorBlink 1s step-end infinite}
 @keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes hiwIconBounce{0%{transform:scale(1) translateY(0)}30%{transform:scale(1.15) translateY(-7px)}55%{transform:scale(.95) translateY(2px)}75%{transform:scale(1.06) translateY(-3px)}100%{transform:scale(1) translateY(0)}}
+@keyframes hiwIconGlow1{0%,100%{box-shadow:0 4px 16px rgba(0,113,227,.35)}50%{box-shadow:0 4px 32px rgba(0,113,227,.72),0 0 0 8px rgba(0,113,227,.12)}}
+@keyframes hiwIconGlow2{0%,100%{box-shadow:0 4px 16px rgba(112,80,255,.35)}50%{box-shadow:0 4px 32px rgba(112,80,255,.72),0 0 0 8px rgba(112,80,255,.12)}}
+@keyframes hiwIconGlow3{0%,100%{box-shadow:0 4px 16px rgba(52,199,89,.35)}50%{box-shadow:0 4px 32px rgba(52,199,89,.72),0 0 0 8px rgba(52,199,89,.12)}}
+@keyframes hiwIconIn{0%{opacity:0;transform:scale(.55) translateY(18px)}60%{transform:scale(1.1) translateY(-4px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.hiw-ico{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;opacity:0;transform:scale(.55) translateY(18px)}
+.hiw-ico.hiw-in{animation:hiwIconIn .55s cubic-bezier(.34,1.28,.64,1) forwards}
+.hiw-ico-1.hiw-in{animation:hiwIconIn .55s .05s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow1 3s 1s ease-in-out infinite}
+.hiw-ico-2.hiw-in{animation:hiwIconIn .55s .18s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow2 3s 1.18s ease-in-out infinite}
+.hiw-ico-3.hiw-in{animation:hiwIconIn .55s .31s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow3 3s 1.31s ease-in-out infinite}
+.hiw-ico:hover{animation:hiwIconBounce .6s ease forwards!important}
 .hero-actions{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-bottom:50px;animation:fadeInUp .9s .3s ease both}
 .btn-p{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:28px;border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.95rem;font-weight:700;transition:all .25s;box-shadow:0 4px 18px rgba(0,113,227,.4)}
 .btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,113,227,.5)}
@@ -461,6 +472,15 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
    TRUST BADGES
 ═══════════════════════════════════════════ */
 .trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:28px 24px 0}
+.cta-trust-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08)}
+.cta-trust-badge{display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.55);transition:color .2s,transform .2s;cursor:default;animation:ctaTrustIn .5s cubic-bezier(.34,1.28,.64,1) both}
+.cta-trust-badge:hover{color:rgba(255,255,255,.85);transform:translateY(-2px)}
+.cta-trust-ico{font-size:1rem;opacity:.8}
+.cta-trust-badge:nth-child(1){animation-delay:.05s}
+.cta-trust-badge:nth-child(2){animation-delay:.12s}
+.cta-trust-badge:nth-child(3){animation-delay:.19s}
+.cta-trust-badge:nth-child(4){animation-delay:.26s}
+@keyframes ctaTrustIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .badge{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:24px;background:var(--bg2);border:1px solid var(--border);font-size:.79rem;font-weight:600;color:var(--text2);transition:all .2s}
 .badge:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
 
@@ -1690,19 +1710,19 @@ input[type=range]{touch-action:pan-x}
         <!-- Connector line -->
         <div style="position:absolute;top:40px;left:calc(16.67% + 20px);right:calc(16.67% + 20px);height:2px;background:linear-gradient(90deg,var(--accent),#af52de);opacity:.3;z-index:0" class="hiw-line"></div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#34aadc);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
+          <div class="hiw-ico hiw-ico-1" style="background:linear-gradient(135deg,var(--accent),#34aadc);box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
           <div style="font-size:.65rem;font-weight:800;color:var(--accent);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw1-step">Schritt 1</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw1-ttl">Briefing</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw1-desc">Du beschreibst dein Projekt via Fiverr-Chat. Geräte, Wünsche, Stil — ich frage alles was ich brauche.</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7050ff,#e040fb);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(112,80,255,.35)">⚡</div>
+          <div class="hiw-ico hiw-ico-2" style="background:linear-gradient(135deg,#7050ff,#e040fb);box-shadow:0 4px 16px rgba(112,80,255,.35)">⚡</div>
           <div style="font-size:.65rem;font-weight:800;color:#9060ff;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw2-step">Schritt 2</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw2-ttl">Umsetzung</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw2-desc">Ich baue dein Dashboard in 24–72h. Du bekommst Updates und kannst Revisionen anfragen.</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--green),#30d068);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(52,199,89,.35)">🚀</div>
+          <div class="hiw-ico hiw-ico-3" style="background:linear-gradient(135deg,var(--green),#30d068);box-shadow:0 4px 16px rgba(52,199,89,.35)">🚀</div>
           <div style="font-size:.65rem;font-weight:800;color:var(--green);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw3-step">Schritt 3</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw3-ttl">Launch</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw3-desc">Du bekommst fertige Dateien + Video-Erklärung + Docs. Importieren, fertig. Los geht's!</div>
@@ -2506,6 +2526,12 @@ input[type=range]{touch-action:pan-x}
       <h2 data-i="ctaH2">Bereit für dein Smart Home?</h2>
       <p data-i="ctaP">Kostenloses Briefing — ich zeige dir was möglich ist.</p>
       <button class="btn-p" onclick="openFiverr()" data-i="ctaBtn">🛒 Auf Fiverr bestellen</button>
+      <div class="cta-trust-row">
+        <div class="cta-trust-badge"><span class="cta-trust-ico">🔒</span><span data-i="ctaTrust1">Sicher bezahlen</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">⭐</span><span data-i="ctaTrust2">5 Sterne bewertet</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">⚡</span><span data-i="ctaTrust3">24h Lieferung</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">💬</span><span data-i="ctaTrust4">24/7 Support</span></div>
+      </div>
     </div>
   </div>
 
@@ -2988,6 +3014,16 @@ document.addEventListener('click',e=>{if(!e.target.closest('#mob-menu')&&!e.targ
 // ── SCROLL REVEAL ──
 const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── HIW Animated Icons ──
+(function(){
+  const icos=document.querySelectorAll('.hiw-ico');
+  if(!icos.length)return;
+  const ob=new IntersectionObserver(entries=>entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('hiw-in');ob.unobserve(e.target);}
+  }),{threshold:.4});
+  icos.forEach(el=>ob.observe(el));
+})();
 
 // ── MUSIC / RADIO ──
 const tracks=[{t:'Midnight City',a:'M83',d:214},{t:'Blinding Lights',a:'The Weeknd',d:202},{t:'As It Was',a:'Harry Styles',d:167},{t:'Levitating',a:'Dua Lipa',d:194}];
@@ -4049,7 +4085,7 @@ const T={
     cfLblName:'Name',cfLblEmail:'E-Mail',cfLblType:'Projekttyp',cfLblBudget:'Budget',cfLblMsg:'Nachricht',
     cfSubmit:'✉ Anfrage senden',cfSuccess:'Danke! Deine Anfrage wurde gesendet. Ich melde mich bald.',
     cfPh1:'Max Mustermann',cfPh2:'max@beispiel.de',cfPh3:'Kurze Beschreibung deines Smart Home Setups und was du dir vorstellst...',
-    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',
+    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',ctaTrust1:'Sicher bezahlen',ctaTrust2:'5 Sterne bewertet',ctaTrust3:'24h Lieferung',ctaTrust4:'24/7 Support',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ KI Automation',ftLinkOrder:'🛒 Bestellen',
     ftTagline:'Handgefertigte Smart Home Dashboards — keine Cloud, kein Abo, ganz deins.',
     aiH1a:'Dein Alltag,',aiH1b:'vollautomatisch.',aiSub:'Lokale KI-Modelle, N8N Workflows, Chatbots — alles ohne Cloud-Abhängigkeit.',
@@ -4144,7 +4180,7 @@ const T={
     cfLblName:'Name',cfLblEmail:'Email',cfLblType:'Project Type',cfLblBudget:'Budget',cfLblMsg:'Message',
     cfSubmit:'✉ Send Request',cfSuccess:'Thank you! Your request was sent. I will be in touch soon.',
     cfPh1:'John Smith',cfPh2:'john@example.com',cfPh3:'Brief description of your smart home setup and what you have in mind...',
-    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I will show you what is possible.',ctaBtn:'🛒 Order on Fiverr',
+    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I will show you what is possible.',ctaBtn:'🛒 Order on Fiverr',ctaTrust1:'Secure payment',ctaTrust2:'5-star rated',ctaTrust3:'24h delivery',ctaTrust4:'24/7 Support',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ AI Automation',ftLinkOrder:'🛒 Order',
     ftTagline:'Handcrafted Smart Home dashboards — no cloud, no subscription, just yours.',
     aiH1a:'Your daily life,',aiH1b:'fully automated.',aiSub:'Local AI models, N8N workflows, chatbots — zero cloud dependency.',

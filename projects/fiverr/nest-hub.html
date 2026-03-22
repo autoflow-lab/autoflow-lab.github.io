@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Büro · Nest Hub</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:root{--bg:#000;--c1:#1c1c1e;--c2:#2c2c2e;--c3:#3a3a3c;--acc:#ff9f0a;--blue:#0a84ff;--grn:#30d158;--red:#ff453a;--txt:#fff;--dim:rgba(255,255,255,.45);--dim2:rgba(255,255,255,.22);--sep:rgba(255,255,255,.07)}
+html,body{width:1024px;height:600px;overflow:hidden;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif}
+
+.layout{display:flex;height:600px}
+
+/* Sidebar */
+.sidebar{width:90px;background:rgba(20,20,22,.98);border-right:1px solid var(--sep);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:4px;flex-shrink:0}
+.sb-time{font-size:1.15rem;font-weight:200;letter-spacing:-1px;text-align:center;margin-bottom:4px}
+.sb-day{font-size:.46rem;color:var(--dim2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.snb{width:68px;height:56px;border-radius:14px;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--dim);transition:background .2s,color .2s}
+.snb svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.snb span{font-size:.46rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.snb.on{background:rgba(255,159,10,.15);color:var(--acc)}
+.sb-wx{margin-top:auto;text-align:center;padding:8px 0}
+.sb-wx svg{width:32px;height:32px;display:block;margin:0 auto 4px}
+.sb-wx-t{font-size:.85rem;font-weight:600}
+
+/* Content */
+.content{flex:1;position:relative;overflow:hidden}
+.pg{position:absolute;inset:0;display:none;padding:18px;overflow:hidden}
+.pg.on{display:flex}
+
+/* ─── HOME PAGE ─── */
+#pg-home{flex-direction:column;gap:14px}
+.home-top{display:flex;gap:12px;height:220px}
+
+/* Hue Karte — grosse Hauptkarte */
+.hue-card{flex:1.6;background:var(--c1);border-radius:22px;padding:20px;border:1px solid var(--sep);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .3s,border-color .3s}
+.hue-card.on{background:rgba(255,159,10,.09);border-color:rgba(255,159,10,.2)}
+.hue-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 90% 0%,rgba(255,159,10,.08),transparent 60%);pointer-events:none;border-radius:22px}
+.hue-card-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.hue-icon{width:42px;height:42px;background:var(--c2);border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s}
+.hue-card.on .hue-icon{background:rgba(255,159,10,.28)}
+.hue-icon svg{width:22px;height:22px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;transition:stroke .3s}
+.hue-card.on .hue-icon svg{stroke:var(--acc)}
+.hue-title{font-size:.85rem;font-weight:700;color:var(--dim)}
+.hue-card.on .hue-title{color:#fff}
+.hue-bri{font-size:.65rem;color:var(--dim2);margin-top:1px}
+.hue-card.on .hue-bri{color:rgba(255,159,10,.7)}
+/* Dimmer */
+.hue-slider-wrap{margin-bottom:14px}
+.hue-slider-label{display:flex;justify-content:space-between;margin-bottom:7px}
+.hue-slider-label span{font-size:.6rem;font-weight:700;color:var(--dim2);text-transform:uppercase;letter-spacing:.8px}
+.hue-slider-label strong{font-size:.68rem;color:var(--acc)}
+input.hue-range{-webkit-appearance:none;width:100%;height:5px;border-radius:5px;background:rgba(255,255,255,.1);outline:none;cursor:pointer}
+input.hue-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.5),0 0 0 2.5px rgba(255,159,10,.4);cursor:pointer}
+/* Szenen-Knöpfe innerhalb der Karte */
+.hue-scenes{display:flex;gap:7px;margin-top:auto}
+.hs{flex:1;background:var(--c2);border:1.5px solid transparent;border-radius:13px;padding:10px 6px;cursor:pointer;text-align:center;transition:background .2s,border-color .2s,transform .15s;border:none}
+.hs:active{transform:scale(.9)}
+.hs.on{background:rgba(255,159,10,.18);outline:1.5px solid rgba(255,159,10,.4)}
+.hs-ico{width:26px;height:26px;margin:0 auto 6px;opacity:.6;transition:opacity .2s}
+.hs.on .hs-ico{opacity:1}
+.hs-ico svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;color:var(--dim)}
+.hs.on .hs-ico svg{color:var(--acc)}
+.hs-name{font-size:.6rem;font-weight:700;color:var(--dim);transition:color .2s}
+.hs.on .hs-name{color:var(--acc)}
+
+/* Rechte Spalte: Wandlampe + Wetter */
+.home-right{display:flex;flex-direction:column;gap:10px;width:230px;flex-shrink:0}
+.wand-card{background:var(--c1);border-radius:20px;padding:16px;border:1px solid var(--sep);flex:1;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;transition:background .25s,border-color .25s}
+.wand-card.on{background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.22)}
+.wand-card:active{transform:scale(.97)}
+.wand-top{display:flex;align-items:center;gap:10px}
+.wand-ico{width:38px;height:38px;background:var(--c2);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .25s}
+.wand-card.on .wand-ico{background:rgba(255,159,10,.28)}
+.wand-ico svg{width:19px;height:19px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;transition:stroke .25s}
+.wand-card.on .wand-ico svg{stroke:var(--acc)}
+.wand-name{font-size:.78rem;font-weight:700;color:var(--dim)}
+.wand-card.on .wand-name{color:#fff}
+.wand-st{font-size:.6rem;color:var(--dim2);margin-top:1px}
+.wand-card.on .wand-st{color:rgba(255,159,10,.7)}
+.wand-hint{font-size:.55rem;color:var(--dim2);text-align:center}
+
+.wx-mini{background:linear-gradient(135deg,#0d1b2e,#162436);border-radius:20px;padding:14px;border:1px solid rgba(255,255,255,.07);flex:1;display:flex;align-items:center;gap:12px}
+.wx-mini svg{width:38px;height:38px;flex-shrink:0}
+.wx-mini-t{font-size:1.6rem;font-weight:100;letter-spacing:-1px}
+.wx-mini-desc{font-size:.62rem;color:var(--dim);margin-top:2px}
+.wx-mini-feel{font-size:.56rem;color:var(--dim2)}
+
+/* Bottom strip: Alle Lichter off */
+.home-bottom{display:flex;gap:10px;height:52px;align-items:stretch}
+.off-btn{flex:1;background:var(--c1);border-radius:16px;border:1px solid var(--sep);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--dim);font-size:.72rem;font-weight:700;transition:background .15s;padding:0 16px}
+.off-btn:active{background:var(--c2);transform:scale(.97)}
+.off-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+
+/* ─── LICHTER PAGE ─── */
+#pg-lichter{flex-direction:column;gap:14px}
+.page-title{font-size:1.1rem;font-weight:700;flex-shrink:0}
+.lichter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex:1;align-content:start}
+.lt-big{background:var(--c1);border-radius:20px;padding:18px 14px;cursor:pointer;border:1px solid var(--sep);display:flex;flex-direction:column;gap:12px;transition:background .25s,border-color .25s;min-height:140px}
+.lt-big.on{background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.22)}
+.lt-big:active{transform:scale(.97)}
+.lb-ico{width:40px;height:40px;background:var(--c2);border-radius:12px;display:flex;align-items:center;justify-content:center;transition:background .25s}
+.lt-big.on .lb-ico{background:rgba(255,159,10,.28)}
+.lb-ico svg{width:20px;height:20px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;transition:stroke .25s}
+.lt-big.on .lb-ico svg{stroke:var(--acc)}
+.lb-name{font-size:.78rem;font-weight:700;color:var(--dim)}
+.lt-big.on .lb-name{color:#fff}
+.lb-bri{font-size:.65rem;color:var(--dim2)}
+.lt-big.on .lb-bri{color:rgba(255,159,10,.7)}
+input.lb-range{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:rgba(255,255,255,.1);outline:none;cursor:pointer;margin-top:auto}
+input.lb-range::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.5),0 0 0 2px rgba(255,159,10,.3)}
+.lb-foot{display:flex;justify-content:space-between;align-items:center}
+
+/* ─── WETTER PAGE ─── */
+#pg-wetter{flex-direction:row;gap:14px}
+.wx-left{width:260px;flex-shrink:0}
+.wx-hero{background:linear-gradient(135deg,#0d1b2e,#1a2840);border-radius:22px;padding:22px;border:1px solid rgba(255,255,255,.07);height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.wx-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(10,132,255,.12),transparent 60%);pointer-events:none}
+.wx-hero-ico{width:64px;height:64px;margin-bottom:10px}
+.wx-hero-t{font-size:3rem;font-weight:100;letter-spacing:-2px;line-height:1}
+.wx-hero-desc{font-size:.75rem;color:var(--dim);margin:6px 0 2px}
+.wx-hero-feel{font-size:.65rem;color:var(--dim2);margin-bottom:auto}
+.wx-stats-list{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.wx-stat-row{display:flex;justify-content:space-between;font-size:.68rem}
+.wx-stat-row span:first-child{color:var(--dim2)}
+.wx-stat-row span:last-child{font-weight:700}
+.wx-right{flex:1;display:flex;flex-direction:column;gap:12px}
+.wx-section{background:var(--c1);border-radius:20px;padding:16px;border:1px solid var(--sep)}
+.wx-section-lbl{font-size:.58rem;font-weight:700;letter-spacing:1px;color:var(--dim2);text-transform:uppercase;margin-bottom:12px}
+.wx-h-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.wx-h-item{flex-shrink:0;text-align:center;background:var(--c2);border-radius:14px;padding:10px 8px;min-width:58px}
+.wx-h-time{font-size:.54rem;color:var(--dim2);margin-bottom:4px}
+.wx-h-ico{width:28px;height:28px;margin:0 auto 4px}
+.wx-h-temp{font-size:.75rem;font-weight:700}
+.wx-h-prec{font-size:.5rem;color:#60a5fa;margin-top:3px}
+.wx-day-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--sep)}
+.wx-day-row:last-child{border-bottom:none}
+.wx-day-name{width:52px;font-size:.7rem;color:var(--dim)}
+.wx-day-ico{width:24px;height:24px;flex-shrink:0}
+.wx-day-bar{flex:1;height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.wx-day-bar-f{height:100%;background:var(--blue);border-radius:4px}
+.wx-day-prec{font-size:.55rem;color:#60a5fa;width:32px;text-align:center}
+.wx-day-lo{font-size:.68rem;color:var(--dim);width:28px;text-align:right}
+.wx-day-hi{font-size:.75rem;font-weight:700;width:30px;text-align:right}
+
+/* Login */
+#login-ov{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.9);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#login-ov h2{font-size:1.2rem;font-weight:700}
+#login-ov p{font-size:.75rem;color:var(--dim);text-align:center}
+#login-btn{background:var(--blue);border:none;border-radius:14px;padding:13px 32px;color:#fff;font-size:.88rem;font-weight:700;cursor:pointer}
+
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+.live{width:7px;height:7px;border-radius:50%;background:var(--grn);display:inline-block;animation:pulse 2s ease-in-out infinite;margin-right:5px}
+@keyframes _rain{0%{opacity:0;transform:translateY(-4px)}50%{opacity:1}100%{opacity:0;transform:translateY(8px)}}
+</style>
+</head>
+<body>
+
+<div id="login-ov">
+  <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="1.5" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+  <h2>Nicht verbunden</h2>
+  <p>Bitte zuerst im Hauptdashboard (wz.html) einloggen</p>
+  <button id="login-btn">Zu wz.html</button>
+</div>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-time" id="sb-t">00:00</div>
+  <div class="sb-day" id="sb-d">Mo</div>
+  <button class="snb on" data-pg="pg-home">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Büro</span>
+  </button>
+  <button class="snb" data-pg="pg-lichter">
+    <svg viewBox="0 0 24 24"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/></svg>
+    <span>Lichter</span>
+  </button>
+  <button class="snb" data-pg="pg-wetter">
+    <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+    <span>Wetter</span>
+  </button>
+  <div class="sb-wx">
+    <svg viewBox="0 0 48 48" id="sb-wx-svg"></svg>
+    <div class="sb-wx-t" id="sb-wx-t">–°</div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- HOME (Büro) -->
+<div class="pg on" id="pg-home">
+  <div class="home-top">
+
+    <!-- Hue Play Hauptkarte -->
+    <div class="hue-card" id="hue-card">
+      <div class="hue-card-top">
+        <div class="hue-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/></svg>
+        </div>
+        <div>
+          <div class="hue-title">Hue Play Bar</div>
+          <div class="hue-bri" id="hue-bri-lbl">Aus</div>
+        </div>
+      </div>
+      <!-- Dimmer -->
+      <div class="hue-slider-wrap">
+        <div class="hue-slider-label">
+          <span>Helligkeit</span>
+          <strong id="hue-pct">–%</strong>
+        </div>
+        <input type="range" class="hue-range" id="hue-range" min="1" max="100" value="60">
+      </div>
+      <!-- Szenen -->
+      <div class="hue-scenes" id="hue-scenes">
+        <button class="hs" data-sc="morgen">
+          <div class="hs-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg></div>
+          <div class="hs-name">Morgen</div>
+        </button>
+        <button class="hs" data-sc="abend">
+          <div class="hs-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/></svg></div>
+          <div class="hs-name">Abend</div>
+        </button>
+        <button class="hs" data-sc="film">
+          <div class="hs-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
+          <div class="hs-name">Film</div>
+        </button>
+        <button class="hs" data-sc="nacht">
+          <div class="hs-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+          <div class="hs-name">Nacht</div>
+        </button>
+        <button class="hs" data-sc="aus">
+          <div class="hs-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="hs-name">Alles Aus</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Rechte Spalte -->
+    <div class="home-right">
+      <!-- Wandlampe -->
+      <div class="wand-card" id="wand-card">
+        <div class="wand-top">
+          <div class="wand-ico">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </div>
+          <div>
+            <div class="wand-name">Wandlampe</div>
+            <div class="wand-st" id="wand-st">Aus</div>
+          </div>
+        </div>
+        <div class="wand-hint">Tippen zum Umschalten</div>
+      </div>
+      <!-- Wetter Mini -->
+      <div class="wx-mini">
+        <svg viewBox="0 0 48 48" id="wx-mini-ico"></svg>
+        <div>
+          <div class="wx-mini-t" id="wx-mini-t">–°</div>
+          <div class="wx-mini-desc" id="wx-mini-desc">Lade…</div>
+          <div class="wx-mini-feel" id="wx-mini-feel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom: Alles aus -->
+  <div class="home-bottom">
+    <button class="off-btn" id="alles-aus">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Alles Aus
+    </button>
+    <button class="off-btn" id="alles-an">
+      <svg viewBox="0 0 24 24"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/></svg>
+      Alles An
+    </button>
+  </div>
+</div><!-- /pg-home -->
+
+<!-- LICHTER -->
+<div class="pg" id="pg-lichter">
+  <div style="display:flex;flex-direction:column;gap:14px;width:100%">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="page-title">Lichter</div>
+      <div style="display:flex;gap:8px">
+        <button id="l-all-on" style="padding:8px 18px;border-radius:10px;background:rgba(255,159,10,.15);border:1px solid rgba(255,159,10,.3);color:var(--acc);font-size:.72rem;font-weight:700;cursor:pointer">Alle An</button>
+        <button id="l-all-off" style="padding:8px 18px;border-radius:10px;background:var(--c1);border:1px solid var(--sep);color:var(--dim);font-size:.72rem;font-weight:700;cursor:pointer">Alle Aus</button>
+      </div>
+    </div>
+    <div class="lichter-grid" id="lichter-grid"></div>
+  </div>
+</div>
+
+<!-- WETTER -->
+<div class="pg" id="pg-wetter">
+  <div class="wx-left">
+    <div class="wx-hero">
+      <svg class="wx-hero-ico" viewBox="0 0 48 48" id="w-ico"></svg>
+      <div class="wx-hero-t" id="w-t">–°</div>
+      <div class="wx-hero-desc" id="w-desc">Lade…</div>
+      <div class="wx-hero-feel" id="w-feel"></div>
+      <div class="wx-stats-list">
+        <div class="wx-stat-row"><span>Luftfeuchtigkeit</span><span id="w-hum">–</span></div>
+        <div class="wx-stat-row"><span>Wind</span><span id="w-wind">–</span></div>
+        <div class="wx-stat-row"><span>UV-Index</span><span id="w-uv">–</span></div>
+        <div class="wx-stat-row"><span>Sonnenauf/-untergang</span><span id="w-sun">–</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="wx-right">
+    <div class="wx-section">
+      <div class="wx-section-lbl">Nächste 12 Stunden</div>
+      <div class="wx-h-row" id="w-hourly"></div>
+    </div>
+    <div class="wx-section" style="flex:1">
+      <div class="wx-section-lbl">7 Tage</div>
+      <div id="w-7days"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<script>
+const HA='http://192.168.1.123:8123';
+const ALL_LIGHTS=['light.hue_play_l','switch.shelly1_98cdac0ca9b2','light.h618a','light.h618a_2','light.deckenlampe','light.color_temperature_light_1'];
+const CFG_LIGHTS=[
+  {id:'light.hue_play_l',      name:'Hue Play',    svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'switch.shelly1_98cdac0ca9b2',name:'Wandlampe',dom:'switch',nodim:true,
+   svg:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>'},
+  {id:'light.h618a',           name:'Sofa LED',     svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
+  {id:'light.h618a_2',         name:'Küche LED',    svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
+  {id:'light.h61e1',    name:'Wand LED',  svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'light.gang_og_licht',   name:'Gang OG', nodim:true,svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
+  {id:'light.gang_eg_licht',   name:'Gang EG', nodim:true,svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
+];
+const GOVEES=['light.h61e1','light.h618a','light.h618a_2'];
+const SCENES={
+  morgen:   ()=>{GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:65,color_temp_kelvin:3000,transition:3}));svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});},
+  abend:    ()=>{svc('light','turn_on',{entity_id:'light.h61e1',brightness_pct:70,rgb_color:[255,167,87]});svc('light','turn_on',{entity_id:'light.h618a',brightness_pct:55,rgb_color:[255,120,40]});svc('light','turn_on',{entity_id:'light.h618a_2',brightness_pct:45,rgb_color:[255,100,30]});svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});},
+  hell:     ()=>{GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:100,color_temp_kelvin:4000}));svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});},
+  nacht:    ()=>{svc('light','turn_on',{entity_id:'light.h618a',brightness_pct:8,rgb_color:[255,100,20]});svc('light','turn_off',{entity_id:'light.h61e1'});svc('light','turn_off',{entity_id:'light.h618a_2'});svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});},
+  film:     ()=>{GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:30,rgb_color:[180,60,20]}));svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});},
+  aus:      ()=>{GOVEES.forEach(id=>svc('light','turn_off',{entity_id:id}));svc('light','turn_off',{entity_id:'light.hue_play_l'});svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});},
+};
+
+let _S={}, _volDrag=false, _hueDrag=false, _activeScene=null;
+const WC_TXT={0:'Klar',1:'Überwiegend klar',2:'Teilweise bewölkt',3:'Bedeckt',45:'Nebel',61:'Leichter Regen',63:'Regen',65:'Starker Regen',71:'Schnee',80:'Regenschauer',95:'Gewitter'};
+
+function getTok(){try{const d=JSON.parse(localStorage.getItem('wz4'));return d?.access_token||'';}catch{return '';}}
+function svc(domain,service,data){
+  const tok=getTok();if(!tok)return;
+  fetch(`${HA}/api/services/${domain}/${service}`,{method:'POST',headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify(data||{})})
+    .then(()=>setTimeout(fetchStates,700)).catch(()=>{});
+}
+function st(id){return _S[id]?.state;}
+function at(id,k){return _S[id]?.attributes?.[k];}
+
+async function fetchStates(){
+  const tok=getTok();
+  if(!tok){document.getElementById('login-ov').style.display='flex';return;}
+  document.getElementById('login-ov').style.display='none';
+  try{
+    const r=await fetch(`${HA}/api/states`,{headers:{'Authorization':'Bearer '+tok}});
+    if(r.ok){const arr=await r.json();arr.forEach(s=>{_S[s.entity_id]=s;});updateAll();}
+  }catch(e){}
+  setTimeout(fetchStates,12000);
+}
+
+function startClock(){
+  const days=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  function tick(){
+    const n=new Date();
+    document.getElementById('sb-t').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+    document.getElementById('sb-d').textContent=days[n.getDay()];
+  }
+  tick();setInterval(tick,10000);
+}
+
+// Weather SVG
+function wxSvg(code,s=48){
+  const h=s/2;
+  if(code<=1)return`<circle cx="${h}" cy="${h}" r="${s*.22}" fill="#ff9f0a"/><g stroke="#ff9f0a" stroke-width="${s*.055}" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>{const rad=a*Math.PI/180,r1=s*.34,r2=s*.42,x1=h+r1*Math.cos(rad),y1=h+r1*Math.sin(rad),x2=h+r2*Math.cos(rad),y2=h+r2*Math.sin(rad);return`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`;}).join('')}</g>`;
+  if(code<=3)return`<ellipse cx="${s*.54}" cy="${s*.42}" rx="${s*.22}" ry="${s*.17}" fill="#64748b"/><ellipse cx="${s*.42}" cy="${s*.5}" rx="${s*.19}" ry="${s*.15}" fill="#94a3b8"/><ellipse cx="${s*.62}" cy="${s*.5}" rx="${s*.17}" ry="${s*.15}" fill="#94a3b8"/><rect x="${s*.21}" y="${s*.42}" width="${s*.58}" height="${s*.18}" rx="${s*.09}" fill="#94a3b8"/>${code<3?`<circle cx="${s*.35}" cy="${s*.34}" r="${s*.15}" fill="#ff9f0a" opacity=".9"/>`:''}`;
+  if(code>=61&&code<=82)return`<ellipse cx="${h}" cy="${s*.38}" rx="${s*.25}" ry="${s*.18}" fill="#64748b"/><ellipse cx="${s*.33}" cy="${s*.46}" rx="${s*.19}" ry="${s*.17}" fill="#475569"/><ellipse cx="${s*.67}" cy="${s*.44}" rx="${s*.17}" ry="${s*.14}" fill="#475569"/><rect x="${s*.13}" y="${s*.38}" width="${s*.74}" height="${s*.18}" rx="${s*.09}" fill="#475569"/>${[[.38,.7,0],[.5,.76,.12],[.62,.7,.06]].map(([x,y,d])=>`<line x1="${(s*x).toFixed(1)}" y1="${(s*(y-.08)).toFixed(1)}" x2="${(s*(x-.04)).toFixed(1)}" y2="${(s*(y+.08)).toFixed(1)}" stroke="#60a5fa" stroke-width="${(s*.05).toFixed(1)}" stroke-linecap="round" style="animation:_rain .9s ${d}s ease-in infinite"/>`).join('')}`;
+  return`<ellipse cx="${h}" cy="${s*.42}" rx="${s*.3}" ry="${s*.2}" fill="#64748b"/><ellipse cx="${s*.33}" cy="${s*.5}" rx="${s*.22}" ry="${s*.18}" fill="#94a3b8"/><ellipse cx="${s*.67}" cy="${s*.48}" rx="${s*.2}" ry="${s*.16}" fill="#94a3b8"/><rect x="${s*.1}" y="${s*.42}" width="${s*.8}" height="${s*.2}" rx="${s*.1}" fill="#94a3b8"/>`;
+}
+
+function buildLichterGrid(){
+  const g=document.getElementById('lichter-grid');
+  g.innerHTML=CFG_LIGHTS.map(l=>`
+    <div class="lt-big" data-id="${l.id}" data-dom="${l.dom||'light'}">
+      <div class="lb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${l.svg}</svg></div>
+      <div class="lb-name">${l.name}</div>
+      <div class="lb-bri" data-bri="${l.id}">Aus</div>
+      ${l.nodim?'':`<input type="range" class="lb-range" data-dim="${l.id}" min="1" max="100" value="60">`}
+    </div>`).join('');
+  g.querySelectorAll('.lt-big').forEach(t=>{
+    t.addEventListener('click',e=>{
+      if(e.target.classList.contains('lb-range'))return;
+      const dom=t.dataset.dom;
+      svc(dom,'toggle',{entity_id:t.dataset.id});
+      t.classList.toggle('on',st(t.dataset.id)!=='on');
+    });
+  });
+  g.querySelectorAll('.lb-range').forEach(sl=>{
+    sl.addEventListener('input',()=>{
+      const bri=+sl.value;
+      sl.style.background=`linear-gradient(90deg,rgba(255,159,10,.6) ${bri}%,rgba(255,255,255,.1) ${bri}%)`;
+      const bd=sl.closest('.lt-big').querySelector('[data-bri]');
+      if(bd)bd.textContent=bri+'%';
+      clearTimeout(sl._t);
+      sl._t=setTimeout(()=>svc('light','turn_on',{entity_id:sl.dataset.dim,brightness_pct:bri}),120);
+    });
+  });
+  document.getElementById('l-all-on').addEventListener('click',()=>{CFG_LIGHTS.filter(l=>!l.nodim).forEach(l=>svc(l.dom||'light','turn_on',{entity_id:l.id,brightness_pct:80}));setTimeout(fetchStates,800);});
+  document.getElementById('l-all-off').addEventListener('click',()=>{CFG_LIGHTS.forEach(l=>svc(l.dom||'light','turn_off',{entity_id:l.id}));setTimeout(fetchStates,800);});
+}
+
+function buildHomeControls(){
+  // Hue Szenen
+  document.querySelectorAll('.hs').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const fn=SCENES[b.dataset.sc];if(!fn)return;
+      fn();
+      document.querySelectorAll('.hs').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      _activeScene=b.dataset.sc;
+    });
+  });
+  // Hue Dimmer
+  const hr=document.getElementById('hue-range');
+  hr.addEventListener('input',()=>{
+    _hueDrag=true;
+    const v=+hr.value;
+    document.getElementById('hue-pct').textContent=v+'%';
+    hr.style.background=`linear-gradient(90deg,rgba(255,159,10,.7) ${v}%,rgba(255,255,255,.1) ${v}%)`;
+  });
+  hr.addEventListener('change',()=>{
+    svc('light','turn_on',{entity_id:'light.hue_play_l',brightness_pct:+hr.value});
+    setTimeout(()=>_hueDrag=false,500);
+  });
+  // Hue Card toggle
+  document.getElementById('hue-card').addEventListener('click',e=>{
+    if(e.target.closest('.hs')||e.target.classList.contains('hue-range')||e.target.closest('input'))return;
+  });
+  // Wandlampe
+  document.getElementById('wand-card').addEventListener('click',()=>{
+    svc('switch','toggle',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    const on=st('switch.shelly1_98cdac0ca9b2')==='on';
+    document.getElementById('wand-card').classList.toggle('on',!on);
+    document.getElementById('wand-st').textContent=!on?'An':'Aus';
+  });
+  // Alles aus / an
+  document.getElementById('alles-aus').addEventListener('click',()=>{
+    ALL_LIGHTS.forEach(id=>{
+      const l=CFG_LIGHTS.find(x=>x.id===id);
+      svc(l?.dom||'light','turn_off',{entity_id:id});
+    });
+    setTimeout(fetchStates,800);
+  });
+  document.getElementById('alles-an').addEventListener('click',()=>{
+    svc('light','turn_on',{entity_id:'light.hue_play_l',brightness_pct:80,color_temp_kelvin:4000});
+    svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    setTimeout(fetchStates,800);
+  });
+}
+
+function updateAll(){
+  // Hue Play
+  const hueSt=st('light.hue_play_l')==='on';
+  const hueBri=Math.round((at('light.hue_play_l','brightness')||128)/2.55);
+  const hueCard=document.getElementById('hue-card');
+  hueCard.classList.toggle('on',hueSt);
+  document.getElementById('hue-bri-lbl').textContent=hueSt?(hueBri+'% · An'):'Aus';
+  if(!_hueDrag){
+    const hr=document.getElementById('hue-range');
+    hr.value=hueBri;
+    hr.style.background=hueSt?`linear-gradient(90deg,rgba(255,159,10,.7) ${hueBri}%,rgba(255,255,255,.1) ${hueBri}%)`:'rgba(255,255,255,.1)';
+    document.getElementById('hue-pct').textContent=hueSt?hueBri+'%':'–';
+  }
+  // Wandlampe
+  const wandOn=st('switch.shelly1_98cdac0ca9b2')==='on';
+  document.getElementById('wand-card').classList.toggle('on',wandOn);
+  document.getElementById('wand-st').textContent=wandOn?'An':'Aus';
+  // Lichter Grid
+  CFG_LIGHTS.forEach(l=>{
+    const t=document.querySelector(`.lt-big[data-id="${l.id}"]`);if(!t)return;
+    const on=st(l.id)==='on';
+    const bri=Math.round((at(l.id,'brightness')||0)/2.55);
+    t.classList.toggle('on',on);
+    const bd=t.querySelector('[data-bri]');if(bd)bd.textContent=on?(bri?bri+'%':'An'):'Aus';
+    const sl=t.querySelector('.lb-range');
+    if(sl&&on&&bri){sl.value=bri;sl.style.background=`linear-gradient(90deg,rgba(255,159,10,.6) ${bri}%,rgba(255,255,255,.1) ${bri}%)`;}
+  });
+}
+
+async function fetchWeather(){
+  try{
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=47.170&longitude=8.783&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m,uv_index&hourly=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max&timezone=Europe%2FZurich&forecast_days=7&models=best_match`);
+    const d=await r.json();const c=d.current;
+    // Sidebar
+    document.getElementById('sb-wx-svg').innerHTML=wxSvg(c.weather_code,32);
+    document.getElementById('sb-wx-t').textContent=Math.round(c.temperature_2m)+'°';
+    // Home mini
+    document.getElementById('wx-mini-ico').innerHTML=wxSvg(c.weather_code);
+    document.getElementById('wx-mini-t').textContent=Math.round(c.temperature_2m)+'°';
+    document.getElementById('wx-mini-desc').textContent=WC_TXT[c.weather_code]||'';
+    document.getElementById('wx-mini-feel').textContent='Gefühlt '+Math.round(c.apparent_temperature)+'°';
+    // Wetter Tab
+    document.getElementById('w-ico').innerHTML=wxSvg(c.weather_code);
+    document.getElementById('w-t').textContent=Math.round(c.temperature_2m)+'°';
+    document.getElementById('w-desc').textContent=WC_TXT[c.weather_code]||'';
+    document.getElementById('w-feel').textContent='Gefühlt '+Math.round(c.apparent_temperature)+'°';
+    document.getElementById('w-hum').textContent=c.relative_humidity_2m+'%';
+    document.getElementById('w-wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
+    document.getElementById('w-uv').textContent=c.uv_index??'–';
+    if(d.daily?.sunrise?.[0]){
+      const sr=new Date(d.daily.sunrise[0]),ss=new Date(d.daily.sunset[0]);
+      const fmt=x=>String(x.getHours()).padStart(2,'0')+':'+String(x.getMinutes()).padStart(2,'0');
+      document.getElementById('w-sun').textContent=fmt(sr)+' / '+fmt(ss);
+    }
+    // Stündlich
+    const now=new Date();let html='',cnt=0;
+    for(let i=0;i<d.hourly.time.length&&cnt<12;i++){
+      const t=new Date(d.hourly.time[i]);if(t<now)continue;
+      const pr=d.hourly.precipitation_probability[i]||0;
+      html+=`<div class="wx-h-item"><div class="wx-h-time">${cnt===0?'Jetzt':String(t.getHours()).padStart(2,'0')+':00'}</div><svg class="wx-h-ico" viewBox="0 0 48 48">${wxSvg(d.hourly.weather_code[i])}</svg><div class="wx-h-temp">${Math.round(d.hourly.temperature_2m[i])}°</div>${pr>10?`<div class="wx-h-prec">${pr}%</div>`:''}</div>`;cnt++;
+    }
+    document.getElementById('w-hourly').innerHTML=html;
+    // 7 Tage
+    const days=['So','Mo','Di','Mi','Do','Fr','Sa'],dd=d.daily;
+    const maxP=Math.max(...(dd.precipitation_probability_max||[1]).map(Number));
+    document.getElementById('w-7days').innerHTML=dd.temperature_2m_max.slice(0,7).map((hi,i)=>{
+      const lo=dd.temperature_2m_min[i],date=new Date();date.setDate(date.getDate()+i);
+      const prec=dd.precipitation_probability_max?.[i]||0;
+      return`<div class="wx-day-row"><div class="wx-day-name">${i===0?'Heute':i===1?'Morgen':days[date.getDay()]}</div><svg class="wx-day-ico" viewBox="0 0 48 48">${wxSvg(dd.weather_code[i])}</svg>${prec>10?`<div class="wx-day-bar"><div class="wx-day-bar-f" style="width:${Math.round(prec/maxP*100)}%"></div></div><div class="wx-day-prec">${prec}%</div>`:'<div style="flex:1"></div><div style="width:32px"></div>'}<div class="wx-day-lo">${Math.round(lo)}°</div><div class="wx-day-hi">${Math.round(hi)}°</div></div>`;
+    }).join('');
+  }catch(e){console.warn('wx',e);}
+}
+
+// Nav
+document.querySelectorAll('.snb').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.snb').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  document.getElementById(b.dataset.pg).classList.add('on');
+}));
+document.getElementById('login-btn').addEventListener('click',()=>{window.location.href='/local/wz.html';});
+
+// Boot
+startClock();
+buildLichterGrid();
+buildHomeControls();
+fetchStates();
+fetchWeather();
+setInterval(fetchWeather,600000);
+</script>
+</body>
+</html>

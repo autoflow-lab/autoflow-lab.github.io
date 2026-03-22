@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Smart Home Premium Dashboard</title>
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  :root {
+    --bg: #000000;
+    --card-1: #1c1c1e;
+    --card-2: #2c2c2e;
+    --card-3: #3a3a3c;
+    --amber: #ff9f0a;
+    --blue: #0a84ff;
+    --green: #30d158;
+    --red: #ff453a;
+    --text: #ffffff;
+    --text-secondary: rgba(255,255,255,0.55);
+    --text-tertiary: rgba(255,255,255,0.3);
+    --border: rgba(255,255,255,0.08);
+    --nav-h: 72px;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  /* ─── LAYOUT ─── */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .tab-content {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 16px calc(var(--nav-h) + 16px);
+    scrollbar-width: none;
+  }
+  .tab-content::-webkit-scrollbar { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(180deg, #0a0a0a 0%, #000 100%);
+    padding: 20px 20px 16px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-clock {
+    font-size: clamp(64px, 18vw, 96px);
+    font-weight: 100;
+    letter-spacing: -4px;
+    line-height: 1;
+    background: linear-gradient(180deg, #fff 60%, rgba(255,255,255,0.5));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-date {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    letter-spacing: 0.2px;
+  }
+
+  .hero-weather {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 20px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--border);
+  }
+  .hero-weather-icon { font-size: 22px; }
+  .hero-weather-temp { font-size: 18px; font-weight: 600; }
+  .hero-weather-desc { font-size: 13px; color: var(--text-secondary); }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin: 20px 0 10px;
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--card-1);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  /* ─── LIGHT TILES ─── */
+  .lights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .light-tile {
+    background: var(--card-1);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 14px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s ease;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    user-select: none;
+  }
+  .light-tile:active { transform: scale(0.96); }
+
+  .light-tile.on {
+    border-color: rgba(255,159,10,0.3);
+  }
+
+  .light-tile-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 16px;
+    pointer-events: none;
+  }
+  .light-tile.on .light-tile-glow {
+    opacity: 1;
+  }
+
+  .light-tile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .light-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: rgba(255,255,255,0.08);
+    transition: background 0.3s ease;
+  }
+  .light-tile.on .light-icon {
+    background: rgba(255,159,10,0.2);
+  }
+
+  .toggle-pill {
+    width: 44px; height: 26px;
+    border-radius: 13px;
+    background: var(--card-3);
+    position: relative;
+    transition: background 0.25s ease;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 1.5px solid rgba(255,255,255,0.1);
+  }
+  .toggle-pill.on {
+    background: var(--amber);
+    border-color: var(--amber);
+  }
+  .toggle-pill::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    top: 1px; left: 1px;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .toggle-pill.on::after { transform: translateX(18px); }
+
+  .light-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .light-status {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .light-dimmer-wrap {
+    margin-top: 8px;
+    display: none;
+  }
+  .light-tile.on .light-dimmer-wrap { display: block; }
+
+  .dimmer-track {
+    height: 3px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+  }
+  .dimmer-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--amber);
+    transition: width 0.1s ease;
+    pointer-events: none;
+  }
+  .dimmer-thumb {
+    position: absolute;
+    top: 50%;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    cursor: grab;
+    transition: left 0.1s ease;
+  }
+
+  /* ─── MUSIC PLAYER ─── */
+  .player-card {
+    background: var(--card-1);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .player-bg-art {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(10,132,255,0.12) 0%, rgba(0,0,0,0) 60%);
+    pointer-events: none;
+  }
+
+  .player-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+  }
+
+  .player-art {
+    width: 60px; height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1a3a5c, #0a84ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(10,132,255,0.3);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .player-art-spin {
+    animation: artSpin 20s linear infinite paused;
+  }
+  .player-art-spin.playing { animation-play-state: running; }
+
+  @keyframes artSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .player-info { flex: 1; min-width: 0; }
+  .player-track {
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .player-artist {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .player-room-badge {
+    background: rgba(10,132,255,0.15);
+    border: 1px solid rgba(10,132,255,0.3);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+
+  .player-progress-area {
+    margin-top: 16px;
+    position: relative;
+  }
+
+  .progress-bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 2px;
+    transition: width 0.5s linear;
+    pointer-events: none;
+  }
+  .progress-bar-thumb {
+    position: absolute;
+    top: 50%;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    cursor: grab;
+    transition: left 0.5s linear;
+  }
+
+  .progress-times {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .player-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .ctrl-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 20px;
+    width: 44px; height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.15s, transform 0.1s;
+    user-select: none;
+  }
+  .ctrl-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.1); }
+  .ctrl-btn.primary {
+    width: 54px; height: 54px;
+    font-size: 22px;
+    background: var(--blue);
+    box-shadow: 0 4px 16px rgba(10,132,255,0.4);
+  }
+  .ctrl-btn.primary:active { background: #0071e3; }
+
+  .volume-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .vol-icon { font-size: 14px; color: var(--text-secondary); }
+  .vol-track {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+  }
+  .vol-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 2px;
+    pointer-events: none;
+    width: 68%;
+  }
+
+  /* Source Radio Buttons */
+  .source-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .source-row::-webkit-scrollbar { display: none; }
+
+  .source-btn {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .source-btn.active {
+    background: rgba(10,132,255,0.15);
+    border-color: rgba(10,132,255,0.4);
+    color: var(--blue);
+  }
+
+  /* ─── SCENES ─── */
+  .scenes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .scene-btn {
+    border: none;
+    border-radius: 16px;
+    padding: 16px 14px;
+    cursor: pointer;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    min-height: 86px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+    user-select: none;
+  }
+  .scene-btn:active { transform: scale(0.96); }
+
+  .scene-icon {
+    font-size: 26px;
+    display: block;
+    animation: none;
+  }
+  .scene-btn.active .scene-icon { animation: scenePulse 2s ease-in-out infinite; }
+  @keyframes scenePulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .scene-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 8px;
+    display: block;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+  }
+  .scene-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+    display: block;
+  }
+
+  .scene-active-dot {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  }
+  .scene-btn.active .scene-active-dot { opacity: 1; }
+
+  /* ─── WEATHER TAB ─── */
+  .weather-hero {
+    text-align: center;
+    padding: 20px 0 16px;
+  }
+  .weather-hero-icon { font-size: 72px; line-height: 1; }
+  .weather-hero-temp {
+    font-size: 56px;
+    font-weight: 200;
+    letter-spacing: -2px;
+    margin-top: 4px;
+  }
+  .weather-hero-feel {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .weather-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 16px;
+    padding: 14px 0;
+    background: var(--card-1);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .weather-stat { text-align: center; }
+  .weather-stat-val { font-size: 17px; font-weight: 600; }
+  .weather-stat-lbl { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  .hourly-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px 0 4px;
+  }
+  .hourly-scroll::-webkit-scrollbar { display: none; }
+
+  .hourly-item {
+    flex-shrink: 0;
+    background: var(--card-1);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: center;
+    min-width: 58px;
+  }
+  .hourly-item.now { border-color: rgba(10,132,255,0.4); background: rgba(10,132,255,0.08); }
+  .hourly-time { font-size: 11px; color: var(--text-secondary); }
+  .hourly-icon { font-size: 20px; margin: 4px 0; }
+  .hourly-temp { font-size: 14px; font-weight: 600; }
+  .hourly-rain { font-size: 10px; color: var(--blue); margin-top: 2px; }
+
+  .daily-list { display: flex; flex-direction: column; gap: 2px; }
+  .daily-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--card-1);
+    border-radius: 10px;
+    gap: 12px;
+  }
+  .daily-row:not(:last-child) { margin-bottom: 2px; }
+  .daily-day { font-size: 14px; font-weight: 500; width: 36px; flex-shrink: 0; }
+  .daily-icon { font-size: 22px; }
+  .daily-rain-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .daily-rain-fill { height: 100%; background: var(--blue); border-radius: 2px; }
+  .daily-rain-pct { font-size: 11px; color: var(--blue); width: 28px; text-align: right; flex-shrink: 0; }
+  .daily-temps { display: flex; gap: 6px; align-items: center; font-size: 13px; }
+  .daily-hi { font-weight: 600; }
+  .daily-lo { color: var(--text-secondary); }
+
+  .radar-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    height: 280px;
+    position: relative;
+    background: #0a1628;
+  }
+  .radar-wrap iframe {
+    width: 100%; height: 100%;
+    border: none;
+    display: block;
+  }
+  .radar-label {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    pointer-events: none;
+  }
+
+  /* ─── SENSORS TAB ─── */
+  .sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .sensor-card {
+    background: var(--card-1);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 14px;
+  }
+  .sensor-icon { font-size: 22px; }
+  .sensor-val {
+    font-size: 26px;
+    font-weight: 300;
+    margin-top: 6px;
+    letter-spacing: -0.5px;
+  }
+  .sensor-unit { font-size: 14px; font-weight: 400; color: var(--text-secondary); }
+  .sensor-name { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .sensor-trend { font-size: 11px; margin-top: 4px; }
+  .trend-up { color: var(--red); }
+  .trend-dn { color: var(--blue); }
+  .trend-ok { color: var(--green); }
+
+  .sensor-bar-wrap { margin-top: 8px; }
+  .sensor-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .sensor-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  /* ─── SETTINGS TAB ─── */
+  .settings-section {
+    background: var(--card-1);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .settings-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-row:active { background: rgba(255,255,255,0.05); }
+  .settings-row-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .settings-row-label { flex: 1; font-size: 15px; }
+  .settings-row-value { font-size: 14px; color: var(--text-secondary); }
+  .settings-row-arrow { color: var(--text-tertiary); font-size: 12px; }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    height: var(--nav-h);
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: stretch;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: inherit;
+    padding: 8px 4px;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-item.active { color: var(--blue); }
+  .nav-icon { font-size: 22px; transition: transform 0.2s; }
+  .nav-item.active .nav-icon { transform: scale(1.1); }
+  .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
+
+  .nav-indicator {
+    position: absolute;
+    top: 6px;
+    width: 24px; height: 3px;
+    background: var(--blue);
+    border-radius: 0 0 3px 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .nav-item.active .nav-indicator { opacity: 1; }
+
+  /* ─── STANDBY ─── */
+  #standby {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 1000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  #standby.visible { display: flex; }
+
+  .standby-clock {
+    font-size: clamp(80px, 24vw, 140px);
+    font-weight: 100;
+    letter-spacing: -6px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1;
+    text-align: center;
+  }
+  .standby-date {
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 8px;
+    text-align: center;
+  }
+  .standby-weather {
+    font-size: 15px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .standby-hint {
+    position: absolute;
+    bottom: 32px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--nav-h) + 16px);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(44,44,46,0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 500;
+    border: 1px solid var(--border);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.4s ease forwards; }
+
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-right: 4px;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  /* Responsive */
+  @media (min-width: 480px) {
+    .lights-grid { grid-template-columns: repeat(3, 1fr); }
+    .scenes-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══════════════════════════════════════════
+       TAB: HOME
+  ══════════════════════════════════════════ -->
+  <div class="tab-content active" id="tab-home">
+
+    <div class="hero">
+      <div class="hero-clock" id="hero-clock">21:30</div>
+      <div class="hero-date" id="hero-date">Donnerstag, 19. März 2026</div>
+      <div class="hero-weather" id="hero-weather">
+        <span class="hero-weather-icon">🌤️</span>
+        <span class="hero-weather-temp" id="hw-temp">12°</span>
+        <span class="hero-weather-desc" id="hw-desc">Teils bewölkt</span>
+      </div>
+    </div>
+
+    <div style="padding:0 16px">
+
+      <!-- Lights -->
+      <div class="section-title">💡 Beleuchtung</div>
+      <div class="lights-grid" id="lights-grid"></div>
+
+      <!-- Scenes -->
+      <div class="section-title">✨ Szenen</div>
+      <div class="scenes-grid" id="scenes-grid"></div>
+
+      <!-- Player -->
+      <div class="section-title">🎵 Musik</div>
+      <div class="player-card" id="player-card">
+        <div class="player-bg-art"></div>
+        <div class="player-header">
+          <div class="player-art">
+            <span class="player-art-spin playing" id="player-art-icon">🎵</span>
+          </div>
+          <div class="player-info">
+            <div class="player-track" id="player-track">Midnight City</div>
+            <div class="player-artist" id="player-artist">M83 · 2011</div>
+          </div>
+          <div class="player-room-badge">🔊 Wohnzimmer</div>
+        </div>
+
+        <div class="player-progress-area">
+          <div class="progress-bar-track" id="progress-track">
+            <div class="progress-bar-fill" id="progress-fill" style="width:32%"></div>
+            <div class="progress-bar-thumb" id="progress-thumb" style="left:32%"></div>
+          </div>
+          <div class="progress-times">
+            <span id="progress-current">1:28</span>
+            <span id="progress-total">4:44</span>
+          </div>
+        </div>
+
+        <div class="player-controls">
+          <button class="ctrl-btn" id="btn-shuffle" title="Shuffle">🔀</button>
+          <button class="ctrl-btn" id="btn-prev" title="Zurück">⏮</button>
+          <button class="ctrl-btn primary" id="btn-play" title="Play/Pause">⏸</button>
+          <button class="ctrl-btn" id="btn-next" title="Weiter">⏭</button>
+          <button class="ctrl-btn" id="btn-repeat" title="Wiederholen">🔁</button>
+        </div>
+
+        <div class="volume-row">
+          <span class="vol-icon">🔈</span>
+          <div class="vol-track" id="vol-track">
+            <div class="vol-fill" id="vol-fill"></div>
+          </div>
+          <span class="vol-icon">🔊</span>
+        </div>
+
+        <div class="source-row" id="source-row"></div>
+      </div>
+
+    </div><!-- /padding -->
+  </div><!-- /tab-home -->
+
+
+  <!-- ══════════════════════════════════════════
+       TAB: LIGHTS (standalone)
+  ══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-lights">
+    <div style="padding:0 0">
+      <div class="section-title" style="padding:0 16px">💡 Alle Räume</div>
+      <div class="lights-grid" id="lights-grid-2" style="padding:0 16px"></div>
+
+      <div class="section-title" style="padding:8px 16px 0">🏠 Räume</div>
+      <div id="room-list" style="padding:0 16px"></div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       TAB: WETTER
+  ══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-weather">
+    <div style="padding:0 16px">
+      <div class="weather-hero">
+        <div class="weather-hero-icon" id="wh-icon">🌤️</div>
+        <div class="weather-hero-temp"><span id="wh-temp">12</span>°</div>
+        <div class="weather-hero-feel" id="wh-feel">Fühlt sich an wie 9° · Teils bewölkt</div>
+      </div>
+
+      <div class="weather-stats" id="weather-stats">
+        <div class="weather-stat"><div class="weather-stat-val" id="ws-hum">62%</div><div class="weather-stat-lbl">Feuchte</div></div>
+        <div class="weather-stat"><div class="weather-stat-val" id="ws-wind">18 km/h</div><div class="weather-stat-lbl">Wind</div></div>
+        <div class="weather-stat"><div class="weather-stat-val" id="ws-uv">2</div><div class="weather-stat-lbl">UV-Index</div></div>
+        <div class="weather-stat"><div class="weather-stat-val" id="ws-vis">10 km</div><div class="weather-stat-lbl">Sicht</div></div>
+      </div>
+
+      <div class="section-title" style="margin-top:20px">🕐 Stündlich</div>
+      <div class="hourly-scroll" id="hourly-scroll"></div>
+
+      <div class="section-title">📅 7-Tage Prognose</div>
+      <div class="daily-list" id="daily-list"></div>
+
+      <div class="section-title">🛰️ Radar</div>
+      <div class="radar-wrap">
+        <iframe
+          src="https://www.meteoblue.com/de/wetter/maps/widget/zug_schweiz_2657896?windAnimation=0&gust=0&satellite=0&cloudsAndPrecipitation=1&temperature=0&sunshine=0&extremeForecastIndex=0&geoloc=fixed&tempunit=C&windunit=km%2Fh&lengthunit=metric&zoom=7&autowidth=auto"
+          title="Meteoblue Radar"
+          loading="lazy"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+        <div class="radar-label">🛰 Live Radar · Zug, CH</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       TAB: SENSOREN
+  ══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-sensors">
+    <div style="padding:0 16px">
+      <div class="section-title"><span class="live-dot"></span>Live Sensoren</div>
+      <div class="sensor-grid" id="sensor-grid"></div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       TAB: EINSTELLUNGEN
+  ══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-settings">
+    <div style="padding:0 16px">
+      <div class="section-title">Verbindung</div>
+      <div class="settings-section">
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(10,132,255,0.15)">🏠</div>
+          <div class="settings-row-label">Home Assistant URL</div>
+          <div class="settings-row-value">lokal</div>
+          <div class="settings-row-arrow">›</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(48,209,88,0.15)">✅</div>
+          <div class="settings-row-label">Verbindungsstatus</div>
+          <div class="settings-row-value" style="color:var(--green)">Verbunden</div>
+          <div class="settings-row-arrow">›</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(255,159,10,0.15)">🔑</div>
+          <div class="settings-row-label">API Token</div>
+          <div class="settings-row-value">••••••••</div>
+          <div class="settings-row-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="section-title">Anzeige</div>
+      <div class="settings-section">
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(255,159,10,0.15)">🌙</div>
+          <div class="settings-row-label">Standby-Zeit</div>
+          <div class="settings-row-value">3 Minuten</div>
+          <div class="settings-row-arrow">›</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(10,132,255,0.15)">📍</div>
+          <div class="settings-row-label">Standort</div>
+          <div class="settings-row-value">Zug, CH</div>
+          <div class="settings-row-arrow">›</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(48,209,88,0.15)">🌡️</div>
+          <div class="settings-row-label">Einheit</div>
+          <div class="settings-row-value">Celsius</div>
+          <div class="settings-row-arrow">›</div>
+        </div>
+      </div>
+
+      <div class="section-title">Info</div>
+      <div class="settings-section">
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(255,255,255,0.08)">📦</div>
+          <div class="settings-row-label">Version</div>
+          <div class="settings-row-value">2.0 Premium</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(255,255,255,0.08)">❤️</div>
+          <div class="settings-row-label">Lizenz</div>
+          <div class="settings-row-value">Gumroad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+
+<!-- ─── BOTTOM NAV ─── -->
+<nav class="bottom-nav" id="bottom-nav" role="navigation">
+  <button class="nav-item active" data-tab="home">
+    <div class="nav-indicator"></div>
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" data-tab="lights">
+    <div class="nav-indicator"></div>
+    <span class="nav-icon">💡</span>
+    <span class="nav-label">Licht</span>
+  </button>
+  <button class="nav-item" data-tab="weather">
+    <div class="nav-indicator"></div>
+    <span class="nav-icon">🌤️</span>
+    <span class="nav-label">Wetter</span>
+  </button>
+  <button class="nav-item" data-tab="sensors">
+    <div class="nav-indicator"></div>
+    <span class="nav-icon">📡</span>
+    <span class="nav-label">Sensoren</span>
+  </button>
+  <button class="nav-item" data-tab="settings">
+    <div class="nav-indicator"></div>
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">Einstellungen</span>
+  </button>
+</nav>
+
+
+<!-- ─── STANDBY ─── -->
+<div id="standby" role="button" aria-label="Standby beenden">
+  <div class="standby-clock" id="standby-clock">21:30</div>
+  <div class="standby-date" id="standby-date">Donnerstag, 19. März</div>
+  <div class="standby-weather" id="standby-weather">
+    <span>🌤️</span><span id="sb-temp">12°</span><span>·</span><span id="sb-desc">Teils bewölkt</span>
+  </div>
+  <div class="standby-hint">Tippen zum Fortfahren</div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   PREMIUM SMART HOME DASHBOARD — JS Core
+   ═══════════════════════════════════════════════════════════════ */
+
+'use strict';
+
+// ─── DATA ────────────────────────────────────────────────────────
+
+var LIGHTS = [
+  { id: 'wohnzimmer', name: 'Wohnzimmer', icon: '🛋️', on: true,  brightness: 72, room: 'wohnzimmer',
+    gradientOn: 'linear-gradient(135deg,rgba(255,159,10,0.18)0%,rgba(255,200,60,0.06)100%)' },
+  { id: 'kueche',     name: 'Küche',       icon: '🍳', on: true,  brightness: 90, room: 'kueche',
+    gradientOn: 'linear-gradient(135deg,rgba(255,159,10,0.15)0%,rgba(255,180,30,0.05)100%)' },
+  { id: 'buero',      name: 'Büro',        icon: '💻', on: false, brightness: 55, room: 'buero',
+    gradientOn: 'linear-gradient(135deg,rgba(255,159,10,0.18)0%,rgba(255,200,60,0.06)100%)' },
+  { id: 'schlaf',     name: 'Schlafzimmer',icon: '🛏️', on: false, brightness: 30, room: 'schlaf',
+    gradientOn: 'linear-gradient(135deg,rgba(255,159,10,0.14)0%,rgba(255,190,50,0.04)100%)' },
+  { id: 'bad',        name: 'Badezimmer',  icon: '🚿', on: true,  brightness: 100, room: 'bad',
+    gradientOn: 'linear-gradient(135deg,rgba(255,159,10,0.2)0%,rgba(255,210,70,0.07)100%)' },
+  { id: 'flur',       name: 'Flur',        icon: '🚪', on: false, brightness: 40, room: 'flur',
+    gradientOn: 'linear-gradient(135deg,rgba(255,159,10,0.12)0%,rgba(255,170,20,0.04)100%)' }
+];
+
+var SCENES = [
+  { id: 'movie',    name: 'Kino',      sub: '5 Lichter · Dunkel',   icon: '🎬',
+    gradient: 'linear-gradient(135deg,#1a0a2e,#0d1a3a)', active: false },
+  { id: 'evening',  name: 'Abend',     sub: 'Warm & gemütlich',     icon: '🌅',
+    gradient: 'linear-gradient(135deg,#3d1a00,#1a0d00)', active: true },
+  { id: 'morning',  name: 'Morgen',    sub: 'Volle Helligkeit',     icon: '☀️',
+    gradient: 'linear-gradient(135deg,#003d1a,#001a0d)', active: false },
+  { id: 'party',    name: 'Party',     sub: 'Farbige Lichter',      icon: '🎉',
+    gradient: 'linear-gradient(135deg,#2a0020,#1a000d)', active: false }
+];
+
+var MUSIC_SOURCES = ['Spotify', 'Radio', 'AirPlay', 'Bluetooth'];
+
+var PLAYLIST = [
+  { track: 'Midnight City',    artist: 'M83 · 2011',         duration: 284, art: '🌃' },
+  { track: 'Strobe',           artist: 'deadmau5 · 2009',    duration: 639, art: '🎛️' },
+  { track: 'Waiting For Love', artist: 'Avicii · 2015',      duration: 217, art: '❤️' },
+  { track: 'Resonance',        artist: 'HOME · 2014',         duration: 214, art: '🌊' },
+  { track: 'Crystals',         artist: 'Of Monsters And Men', duration: 278, art: '❄️' }
+];
+
+var SENSORS = [
+  { icon:'🌡️', val:'21.4', unit:'°C', name:'Wohnzimmer', trend:'+0.2° letzte Std', trendClass:'trend-up', pct:60, color:'#ff9f0a' },
+  { icon:'💧', val:'48',   unit:'%',  name:'Luftfeuchtigkeit', trend:'Optimal', trendClass:'trend-ok', pct:48, color:'#0a84ff' },
+  { icon:'💨', val:'412',  unit:'ppm',name:'CO₂ Büro',  trend:'Gut (< 600)',  trendClass:'trend-ok', pct:42, color:'#30d158' },
+  { icon:'🔊', val:'34',   unit:'dB', name:'Lärm',      trend:'Ruhig',         trendClass:'trend-ok', pct:34, color:'#30d158' },
+  { icon:'⚡', val:'2.4',  unit:'kW', name:'Strom',     trend:'+0.3 kW',       trendClass:'trend-up', pct:48, color:'#ff9f0a' },
+  { icon:'🌬️', val:'21',   unit:'km/h',name:'Wind drauß.',trend:'SW-Wind',     trendClass:'trend-dn', pct:21, color:'#0a84ff' }
+];
+
+var DAYS_DE = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+var MONTHS_DE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+var DAYS_FULL_DE = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+var WMO_ICONS = {
+  0:'☀️',1:'🌤️',2:'⛅',3:'☁️',
+  45:'🌫️',48:'🌫️',
+  51:'🌦️',53:'🌦️',55:'🌧️',
+  61:'🌧️',63:'🌧️',65:'🌧️',
+  71:'🌨️',73:'🌨️',75:'❄️',
+  80:'🌦️',81:'🌧️',82:'⛈️',
+  95:'⛈️',96:'⛈️',99:'⛈️'
+};
+
+// ─── STATE ───────────────────────────────────────────────────────
+
+var state = {
+  currentTab: 'home',
+  playing: true,
+  playlistIdx: 0,
+  progressSec: 88,
+  volumePct: 68,
+  activeScene: 'evening',
+  activeSource: 'Spotify',
+  weatherData: null,
+  standbyTimer: null,
+  shuffle: false,
+  repeat: false
+};
+
+// ─── UTILS ───────────────────────────────────────────────────────
+
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+function fmtTime(sec) {
+  var m = Math.floor(sec / 60);
+  var s = sec % 60;
+  return m + ':' + pad2(s);
+}
+
+function showToast(msg, duration) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, duration || 2200);
+}
+
+function clamp(val, min, max) {
+  return Math.min(Math.max(val, min), max);
+}
+
+// ─── CLOCK ───────────────────────────────────────────────────────
+
+function updateClock() {
+  var now = new Date();
+  var h = pad2(now.getHours());
+  var m = pad2(now.getMinutes());
+  var timeStr = h + ':' + m;
+
+  var el = document.getElementById('hero-clock');
+  if (el) el.textContent = timeStr;
+  var sb = document.getElementById('standby-clock');
+  if (sb) sb.textContent = timeStr;
+
+  var dayName = DAYS_FULL_DE[now.getDay()];
+  var dateStr = dayName + ', ' + now.getDate() + '. ' + MONTHS_DE[now.getMonth()] + ' ' + now.getFullYear();
+  var shortDate = dayName + ', ' + now.getDate() + '. ' + MONTHS_DE[now.getMonth()];
+
+  var hd = document.getElementById('hero-date');
+  if (hd) hd.textContent = dateStr;
+  var sbd = document.getElementById('standby-date');
+  if (sbd) sbd.textContent = shortDate;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── STANDBY ─────────────────────────────────────────────────────
+
+function resetStandby() {
+  clearTimeout(state.standbyTimer);
+  state.standbyTimer = setTimeout(enterStandby, 3 * 60 * 1000);
+}
+
+function enterStandby() {
+  document.getElementById('standby').classList.add('visible');
+}
+
+function exitStandby() {
+  document.getElementById('standby').classList.remove('visible');
+  resetStandby();
+}
+
+document.getElementById('standby').addEventListener('click', exitStandby);
+document.getElementById('standby').addEventListener('touchstart', exitStandby);
+
+['click', 'touchstart', 'keydown', 'mousemove'].forEach(function(ev) {
+  document.addEventListener(ev, resetStandby, { passive: true });
+});
+
+resetStandby();
+
+// ─── NAV TABS ────────────────────────────────────────────────────
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(function(el) {
+    el.classList.remove('active');
+  });
+
+  var content = document.getElementById('tab-' + tabId);
+  if (content) content.classList.add('active');
+
+  var navBtn = document.querySelector('.nav-item[data-tab="' + tabId + '"]');
+  if (navBtn) navBtn.classList.add('active');
+
+  state.currentTab = tabId;
+}
+
+document.getElementById('bottom-nav').addEventListener('click', function(e) {
+  var btn = e.target.closest('.nav-item');
+  if (!btn) return;
+  switchTab(btn.dataset.tab);
+});
+
+// ─── LIGHTS ──────────────────────────────────────────────────────
+
+function buildLightTile(light, prefix) {
+  var div = document.createElement('div');
+  div.className = 'light-tile' + (light.on ? ' on' : '');
+  div.dataset.id = light.id;
+
+  div.innerHTML =
+    '<div class="light-tile-glow"></div>' +
+    '<div class="light-tile-header">' +
+      '<div class="light-icon">' + light.icon + '</div>' +
+      '<div class="toggle-pill' + (light.on ? ' on' : '') + '" data-toggle></div>' +
+    '</div>' +
+    '<div class="light-name">' + light.name + '</div>' +
+    '<div class="light-status" data-status>' + (light.on ? light.brightness + '%' : 'Aus') + '</div>' +
+    '<div class="light-dimmer-wrap">' +
+      '<div class="dimmer-track" data-dimmer>' +
+        '<div class="dimmer-fill" style="width:' + light.brightness + '%"></div>' +
+        '<div class="dimmer-thumb" style="left:' + light.brightness + '%"></div>' +
+      '</div>' +
+    '</div>';
+
+  // Update glow
+  updateLightGlow(div, light);
+
+  // Toggle click (on tile or toggle pill)
+  div.addEventListener('click', function(e) {
+    if (e.target.closest('[data-dimmer]')) return;
+    var l = getLightById(light.id);
+    l.on = !l.on;
+    updateLightTiles(light.id);
+    showToast(l.name + ': ' + (l.on ? 'An 💡' : 'Aus'));
+  });
+
+  // Dimmer drag
+  setupDimmer(div, light, prefix);
+
+  return div;
+}
+
+function getLightById(id) {
+  return LIGHTS.find(function(l) { return l.id === id; });
+}
+
+function updateLightGlow(tile, light) {
+  tile.style.background = light.on ? light.gradientOn : '';
+}
+
+function updateLightTiles(id) {
+  var light = getLightById(id);
+  document.querySelectorAll('.light-tile[data-id="' + id + '"]').forEach(function(tile) {
+    tile.classList.toggle('on', light.on);
+    var pill = tile.querySelector('[data-toggle]');
+    if (pill) pill.classList.toggle('on', light.on);
+    var status = tile.querySelector('[data-status]');
+    if (status) status.textContent = light.on ? light.brightness + '%' : 'Aus';
+    var fill = tile.querySelector('.dimmer-fill');
+    if (fill) fill.style.width = light.brightness + '%';
+    var thumb = tile.querySelector('.dimmer-thumb');
+    if (thumb) thumb.style.left = light.brightness + '%';
+    updateLightGlow(tile, light);
+  });
+}
+
+function setupDimmer(tile, light, prefix) {
+  var dimmer = tile.querySelector('[data-dimmer]');
+  if (!dimmer) return;
+  var dragging = false;
+
+  function getPct(e) {
+    var rect = dimmer.getBoundingClientRect();
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    return clamp(Math.round((clientX - rect.left) / rect.width * 100), 1, 100);
+  }
+
+  function onMove(e) {
+    if (!dragging) return;
+    e.stopPropagation();
+    var pct = getPct(e);
+    var l = getLightById(light.id);
+    l.brightness = pct;
+    updateLightTiles(light.id);
+  }
+
+  function onEnd() { dragging = false; }
+  function onStart(e) { dragging = true; e.stopPropagation(); onMove(e); }
+
+  dimmer.addEventListener('mousedown', onStart);
+  dimmer.addEventListener('touchstart', onStart, { passive: true });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: true });
+  window.addEventListener('mouseup', onEnd);
+  window.addEventListener('touchend', onEnd);
+}
+
+function renderLights() {
+  var grid1 = document.getElementById('lights-grid');
+  var grid2 = document.getElementById('lights-grid-2');
+  LIGHTS.forEach(function(l) {
+    if (grid1) grid1.appendChild(buildLightTile(l, 'home'));
+    if (grid2) grid2.appendChild(buildLightTile(l, 'lights'));
+  });
+}
+
+// ─── SCENES ──────────────────────────────────────────────────────
+
+function renderScenes() {
+  var grid = document.getElementById('scenes-grid');
+  if (!grid) return;
+
+  SCENES.forEach(function(scene) {
+    var btn = document.createElement('button');
+    btn.className = 'scene-btn' + (scene.active ? ' active' : '');
+    btn.dataset.scene = scene.id;
+    btn.style.background = scene.gradient;
+    btn.innerHTML =
+      '<div class="scene-active-dot"></div>' +
+      '<span class="scene-icon">' + scene.icon + '</span>' +
+      '<span class="scene-name">' + scene.name + '</span>' +
+      '<span class="scene-sub">' + scene.sub + '</span>';
+
+    btn.addEventListener('click', function() {
+      SCENES.forEach(function(s) { s.active = false; });
+      scene.active = true;
+      state.activeScene = scene.id;
+      document.querySelectorAll('.scene-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.scene === scene.id);
+      });
+      showToast('Szene: ' + scene.icon + ' ' + scene.name + ' aktiviert');
+    });
+
+    grid.appendChild(btn);
+  });
+}
+
+// ─── MUSIC PLAYER ────────────────────────────────────────────────
+
+function renderSources() {
+  var row = document.getElementById('source-row');
+  if (!row) return;
+  MUSIC_SOURCES.forEach(function(src) {
+    var btn = document.createElement('button');
+    btn.className = 'source-btn' + (src === state.activeSource ? ' active' : '');
+    btn.textContent = src;
+    btn.addEventListener('click', function() {
+      state.activeSource = src;
+      document.querySelectorAll('.source-btn').forEach(function(b) {
+        b.classList.toggle('active', b.textContent === src);
+      });
+      showToast('Quelle: ' + src);
+    });
+    row.appendChild(btn);
+  });
+}
+
+function loadTrack(idx) {
+  idx = ((idx % PLAYLIST.length) + PLAYLIST.length) % PLAYLIST.length;
+  state.playlistIdx = idx;
+  state.progressSec = 0;
+  var t = PLAYLIST[idx];
+  var el = document.getElementById('player-track');
+  if (el) el.textContent = t.track;
+  var ea = document.getElementById('player-artist');
+  if (ea) ea.textContent = t.artist;
+  var art = document.getElementById('player-art-icon');
+  if (art) art.textContent = t.art;
+  var total = document.getElementById('progress-total');
+  if (total) total.textContent = fmtTime(t.duration);
+  updateProgress();
+}
+
+function updateProgress() {
+  var t = PLAYLIST[state.playlistIdx];
+  var pct = Math.min((state.progressSec / t.duration) * 100, 100);
+  var fill = document.getElementById('progress-fill');
+  var thumb = document.getElementById('progress-thumb');
+  var cur = document.getElementById('progress-current');
+  if (fill) fill.style.width = pct + '%';
+  if (thumb) thumb.style.left = pct + '%';
+  if (cur) cur.textContent = fmtTime(Math.floor(state.progressSec));
+}
+
+function setPlayState(playing) {
+  state.playing = playing;
+  var btn = document.getElementById('btn-play');
+  if (btn) btn.textContent = playing ? '⏸' : '▶️';
+  var art = document.getElementById('player-art-icon');
+  if (art) {
+    if (playing) art.classList.add('playing');
+    else art.classList.remove('playing');
+  }
+}
+
+// Progress tick
+setInterval(function() {
+  if (!state.playing) return;
+  state.progressSec += 0.5;
+  var t = PLAYLIST[state.playlistIdx];
+  if (state.progressSec >= t.duration) {
+    loadTrack(state.playlistIdx + 1);
+    return;
+  }
+  updateProgress();
+}, 500);
+
+document.getElementById('btn-play').addEventListener('click', function() {
+  setPlayState(!state.playing);
+});
+
+document.getElementById('btn-next').addEventListener('click', function() {
+  loadTrack(state.playlistIdx + 1);
+});
+
+document.getElementById('btn-prev').addEventListener('click', function() {
+  if (state.progressSec > 5) {
+    state.progressSec = 0;
+    updateProgress();
+  } else {
+    loadTrack(state.playlistIdx - 1);
+  }
+});
+
+document.getElementById('btn-shuffle').addEventListener('click', function() {
+  state.shuffle = !state.shuffle;
+  this.style.color = state.shuffle ? 'var(--blue)' : '';
+  showToast(state.shuffle ? 'Shuffle: An' : 'Shuffle: Aus');
+});
+
+document.getElementById('btn-repeat').addEventListener('click', function() {
+  state.repeat = !state.repeat;
+  this.style.color = state.repeat ? 'var(--blue)' : '';
+  showToast(state.repeat ? 'Wiederholen: An' : 'Wiederholen: Aus');
+});
+
+// Progress bar click
+document.getElementById('progress-track').addEventListener('click', function(e) {
+  var rect = this.getBoundingClientRect();
+  var pct = (e.clientX - rect.left) / rect.width;
+  state.progressSec = pct * PLAYLIST[state.playlistIdx].duration;
+  updateProgress();
+});
+
+// Volume
+document.getElementById('vol-track').addEventListener('click', function(e) {
+  var rect = this.getBoundingClientRect();
+  var pct = clamp(((e.clientX - rect.left) / rect.width) * 100, 0, 100);
+  state.volumePct = pct;
+  document.getElementById('vol-fill').style.width = pct + '%';
+});
+
+// ─── SENSORS ─────────────────────────────────────────────────────
+
+function renderSensors() {
+  var grid = document.getElementById('sensor-grid');
+  if (!grid) return;
+  SENSORS.forEach(function(s) {
+    var card = document.createElement('div');
+    card.className = 'sensor-card fade-up';
+    card.innerHTML =
+      '<div class="sensor-icon">' + s.icon + '</div>' +
+      '<div class="sensor-val">' + s.val + '<span class="sensor-unit">' + s.unit + '</span></div>' +
+      '<div class="sensor-name">' + s.name + '</div>' +
+      '<div class="sensor-trend ' + s.trendClass + '">' + s.trend + '</div>' +
+      '<div class="sensor-bar-wrap"><div class="sensor-bar">' +
+        '<div class="sensor-bar-fill" style="width:' + s.pct + '%;background:' + s.color + '"></div>' +
+      '</div></div>';
+    grid.appendChild(card);
+  });
+}
+
+// Animate sensor values
+setInterval(function() {
+  if (state.currentTab !== 'sensors') return;
+  // jitter temp
+  SENSORS[0].val = (21 + Math.random() * 0.4 - 0.1).toFixed(1);
+  SENSORS[1].val = '' + (46 + Math.round(Math.random() * 4));
+  SENSORS[2].val = '' + (400 + Math.round(Math.random() * 30));
+  renderSensors_update();
+}, 8000);
+
+function renderSensors_update() {
+  var cards = document.querySelectorAll('#sensor-grid .sensor-card');
+  cards.forEach(function(card, i) {
+    var s = SENSORS[i];
+    if (!s) return;
+    var valEl = card.querySelector('.sensor-val');
+    if (valEl) valEl.firstChild.textContent = s.val;
+  });
+}
+
+// ─── ROOMS (lights tab) ───────────────────────────────────────────
+
+function renderRooms() {
+  var list = document.getElementById('room-list');
+  if (!list) return;
+  var rooms = [
+    { name: 'Wohnzimmer', lights: ['wohnzimmer'], icon: '🛋️' },
+    { name: 'Küche',      lights: ['kueche'],      icon: '🍳' },
+    { name: 'Büro',       lights: ['buero'],        icon: '💻' },
+    { name: 'Schlafzimmer', lights: ['schlaf'],     icon: '🛏️' },
+    { name: 'Bad',        lights: ['bad'],           icon: '🚿' }
+  ];
+  var sec = document.createElement('div');
+  sec.className = 'settings-section';
+  rooms.forEach(function(room) {
+    var row = document.createElement('div');
+    row.className = 'settings-row';
+    var onCount = room.lights.filter(function(id) {
+      return getLightById(id) && getLightById(id).on;
+    }).length;
+    row.innerHTML =
+      '<div class="settings-row-icon" style="background:rgba(255,159,10,0.12);font-size:18px">' + room.icon + '</div>' +
+      '<div class="settings-row-label">' + room.name + '</div>' +
+      '<div class="settings-row-value" style="color:' + (onCount ? 'var(--amber)' : 'var(--text-secondary)') + '">' +
+        (onCount ? onCount + ' an' : 'Aus') +
+      '</div>' +
+      '<div class="settings-row-arrow">›</div>';
+    sec.appendChild(row);
+  });
+  list.appendChild(sec);
+}
+
+// ─── WEATHER ─────────────────────────────────────────────────────
+
+function wmoIcon(code) {
+  return WMO_ICONS[code] || '🌤️';
+}
+
+function renderHourly(hourlyData) {
+  var container = document.getElementById('hourly-scroll');
+  if (!container) return;
+  container.innerHTML = '';
+  var now = new Date();
+  var nowH = now.getHours();
+
+  // Show 24 hours starting from now
+  var times = hourlyData.time || [];
+  var temps = hourlyData.temperature_2m || [];
+  var codes = hourlyData.weathercode || [];
+  var precip = hourlyData.precipitation_probability || [];
+
+  var shown = 0;
+  for (var i = 0; i < times.length && shown < 24; i++) {
+    var t = new Date(times[i]);
+    if (t < now - 3600000) continue;
+    var item = document.createElement('div');
+    item.className = 'hourly-item' + (shown === 0 ? ' now' : '');
+    var label = shown === 0 ? 'Jetzt' : pad2(t.getHours()) + ':00';
+    var pp = precip[i] || 0;
+    item.innerHTML =
+      '<div class="hourly-time">' + label + '</div>' +
+      '<div class="hourly-icon">' + wmoIcon(codes[i] || 0) + '</div>' +
+      '<div class="hourly-temp">' + Math.round(temps[i] || 0) + '°</div>' +
+      (pp > 10 ? '<div class="hourly-rain">' + pp + '%</div>' : '');
+    container.appendChild(item);
+    shown++;
+  }
+}
+
+function renderDaily(dailyData) {
+  var list = document.getElementById('daily-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var times = dailyData.time || [];
+  var codes = dailyData.weathercode || [];
+  var maxT = dailyData.temperature_2m_max || [];
+  var minT = dailyData.temperature_2m_min || [];
+  var precip = dailyData.precipitation_probability_max || [];
+
+  times.forEach(function(dateStr, i) {
+    var d = new Date(dateStr + 'T12:00:00');
+    var isToday = i === 0;
+    var row = document.createElement('div');
+    row.className = 'daily-row';
+    var pp = precip[i] || 0;
+    row.innerHTML =
+      '<div class="daily-day">' + (isToday ? 'Heute' : DAYS_DE[d.getDay()]) + '</div>' +
+      '<div class="daily-icon">' + wmoIcon(codes[i] || 0) + '</div>' +
+      '<div class="daily-rain-bar"><div class="daily-rain-fill" style="width:' + pp + '%"></div></div>' +
+      '<div class="daily-rain-pct">' + pp + '%</div>' +
+      '<div class="daily-temps"><span class="daily-hi">' + Math.round(maxT[i] || 0) + '°</span><span class="daily-lo">' + Math.round(minT[i] || 0) + '°</span></div>';
+    list.appendChild(row);
+  });
+}
+
+function applyCurrentWeather(current) {
+  var temp = Math.round(current.temperature_2m || 0);
+  var code = current.weathercode || 0;
+  var icon = wmoIcon(code);
+  var feel = Math.round(current.apparent_temperature || temp);
+  var hum = Math.round(current.relative_humidity_2m || 0);
+  var wind = Math.round((current.windspeed_10m || 0));
+  var desc = getWeatherDesc(code);
+
+  // Hero
+  var hwTemp = document.getElementById('hw-temp');
+  if (hwTemp) hwTemp.textContent = temp + '°';
+  var hwDesc = document.getElementById('hw-desc');
+  if (hwDesc) hwDesc.textContent = desc;
+  document.querySelectorAll('.hero-weather-icon').forEach(function(el) { el.textContent = icon; });
+
+  // Weather tab
+  var whIcon = document.getElementById('wh-icon');
+  if (whIcon) whIcon.textContent = icon;
+  var whTemp = document.getElementById('wh-temp');
+  if (whTemp) whTemp.textContent = temp;
+  var whFeel = document.getElementById('wh-feel');
+  if (whFeel) whFeel.textContent = 'Fühlt sich an wie ' + feel + '° · ' + desc;
+  var wsHum = document.getElementById('ws-hum');
+  if (wsHum) wsHum.textContent = hum + '%';
+  var wsWind = document.getElementById('ws-wind');
+  if (wsWind) wsWind.textContent = wind + ' km/h';
+
+  // Standby
+  var sbTemp = document.getElementById('sb-temp');
+  if (sbTemp) sbTemp.textContent = temp + '°';
+  var sbDesc = document.getElementById('sb-desc');
+  if (sbDesc) sbDesc.textContent = desc;
+  var sbWeather = document.getElementById('standby-weather');
+  if (sbWeather) sbWeather.querySelector('span') && (sbWeather.querySelectorAll('span')[0].textContent = icon);
+}
+
+function getWeatherDesc(code) {
+  var map = {
+    0:'Klar',1:'Überwiegend klar',2:'Teils bewölkt',3:'Bewölkt',
+    45:'Nebel',48:'Nebel',
+    51:'Leichter Niesel',53:'Niesel',55:'Starker Niesel',
+    61:'Leichter Regen',63:'Regen',65:'Starker Regen',
+    71:'Leichter Schnee',73:'Schnee',75:'Starker Schneefall',
+    80:'Schauer',81:'Regenschauer',82:'Starke Schauer',
+    95:'Gewitter',96:'Gewitter',99:'Starkes Gewitter'
+  };
+  return map[code] || 'Teils bewölkt';
+}
+
+function fetchWeather() {
+  var url = 'https://api.open-meteo.com/v1/forecast?' +
+    'latitude=47.170&longitude=8.783' +
+    '&current=temperature_2m,apparent_temperature,relative_humidity_2m,weathercode,windspeed_10m' +
+    '&hourly=temperature_2m,weathercode,precipitation_probability' +
+    '&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+    '&timezone=Europe%2FZurich&forecast_days=7';
+
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      state.weatherData = data;
+      if (data.current) applyCurrentWeather(data.current);
+      if (data.hourly)  renderHourly(data.hourly);
+      if (data.daily)   renderDaily(data.daily);
+    })
+    .catch(function() {
+      // Fallback demo data
+      applyCurrentWeather({
+        temperature_2m: 12,
+        apparent_temperature: 9,
+        relative_humidity_2m: 62,
+        weathercode: 2,
+        windspeed_10m: 18
+      });
+      renderHourlyDemo();
+      renderDailyDemo();
+    });
+}
+
+function renderHourlyDemo() {
+  var temps = [12,11,10,10,9,9,10,12,14,15,16,17,17,16,15,14,13,12,12,11,11,10,10,9];
+  var codes = [2,2,3,3,3,2,1,1,0,0,1,2,2,2,3,3,2,2,1,1,2,2,3,3];
+  var container = document.getElementById('hourly-scroll');
+  if (!container) return;
+  container.innerHTML = '';
+  var now = new Date();
+  for (var i = 0; i < 24; i++) {
+    var h = (now.getHours() + i) % 24;
+    var item = document.createElement('div');
+    item.className = 'hourly-item' + (i === 0 ? ' now' : '');
+    item.innerHTML =
+      '<div class="hourly-time">' + (i === 0 ? 'Jetzt' : pad2(h) + ':00') + '</div>' +
+      '<div class="hourly-icon">' + wmoIcon(codes[i]) + '</div>' +
+      '<div class="hourly-temp">' + temps[i] + '°</div>';
+    container.appendChild(item);
+  }
+}
+
+function renderDailyDemo() {
+  var days = [
+    {code:2,max:12,min:5,pp:30},{code:3,max:10,min:4,pp:60},
+    {code:61,max:9,min:3,pp:80},{code:1,max:11,min:4,pp:20},
+    {code:0,max:14,min:5,pp:5},{code:2,max:13,min:6,pp:25},
+    {code:3,max:11,min:5,pp:40}
+  ];
+  var list = document.getElementById('daily-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var now = new Date();
+  days.forEach(function(d, i) {
+    var dt = new Date(now);
+    dt.setDate(dt.getDate() + i);
+    var row = document.createElement('div');
+    row.className = 'daily-row';
+    row.innerHTML =
+      '<div class="daily-day">' + (i === 0 ? 'Heute' : DAYS_DE[dt.getDay()]) + '</div>' +
+      '<div class="daily-icon">' + wmoIcon(d.code) + '</div>' +
+      '<div class="daily-rain-bar"><div class="daily-rain-fill" style="width:' + d.pp + '%"></div></div>' +
+      '<div class="daily-rain-pct">' + d.pp + '%</div>' +
+      '<div class="daily-temps"><span class="daily-hi">' + d.max + '°</span><span class="daily-lo">' + d.min + '°</span></div>';
+    list.appendChild(row);
+  });
+}
+
+// ─── INIT ────────────────────────────────────────────────────────
+
+function init() {
+  renderLights();
+  renderScenes();
+  renderSources();
+  renderSensors();
+  renderRooms();
+  loadTrack(0);
+  setPlayState(true);
+  fetchWeather();
+  // Refresh weather every 10 minutes
+  setInterval(fetchWeather, 10 * 60 * 1000);
+}
+
+init();
+</script>
+</body>
+</html>
