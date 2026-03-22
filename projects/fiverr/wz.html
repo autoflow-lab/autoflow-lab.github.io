@@ -703,25 +703,27 @@ html,body{height:100%;background:var(--bg);
 }
 
 /* Player controls */
-.pctrl{padding:20px 22px}
-.btns{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:22px}
+.pctrl{padding:16px 22px}
+.btns{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:20px}
 .bsml{
-  width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
-  background:var(--c2);
-  color:var(--dim);display:flex;align-items:center;justify-content:center;
+  width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.07);
+  color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;
   transition:transform .2s cubic-bezier(.34,1.56,.64,1),background .15s;
+  backdrop-filter:blur(8px);
 }
-.bsml:active{transform:scale(.8)!important;background:var(--c3)}
-.bsml svg{width:18px;height:18px;fill:currentColor}
+.bsml:active{transform:scale(.82)!important;background:rgba(255,255,255,.16)}
+.bsml svg{width:20px;height:20px;fill:currentColor}
 .bplay{
-  width:64px;height:64px;border-radius:50%;border:none;cursor:pointer;
-  background:#fff;color:#000;
+  width:70px;height:70px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(145deg,#fff,#e8e8e8);color:#000;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-  transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 6px 28px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;
 }
-.bplay:active{transform:scale(.86)!important}
-.bplay svg{width:28px;height:28px;fill:currentColor;margin-left:2px}
+.bplay:active{transform:scale(.88)!important;box-shadow:0 2px 12px rgba(0,0,0,.5)}
+.bplay svg{width:30px;height:30px;fill:currentColor;margin-left:3px}
 #play-ico{pointer-events:none}
 
 /* Volume */
@@ -729,40 +731,43 @@ html,body{height:100%;background:var(--bg);
 .vi{color:var(--dim2);display:flex;flex-shrink:0}
 .vi svg{width:16px;height:16px}
 .vtrack{
-  flex:1;height:36px;border-radius:18px;background:#2c2c2e;
+  flex:1;height:40px;border-radius:20px;background:rgba(255,255,255,.07);
   position:relative;cursor:pointer;touch-action:pan-y;
-  border:1px solid rgba(255,255,255,.08);border-top-color:var(--on-dim3);
+  border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.12);
   overflow:hidden;
 }
-.vfill{height:100%;border-radius:18px;width:40%;
-  background:linear-gradient(90deg,rgba(10,132,255,.7),#0a84ff);pointer-events:none;transition:width .1s}
+.vfill{height:100%;border-radius:20px;width:40%;
+  background:linear-gradient(90deg,rgba(10,132,255,.5),#0a84ff,rgba(96,184,255,.9));
+  pointer-events:none;transition:width .1s;
+  box-shadow:inset 0 0 8px rgba(10,132,255,.3);}
 .vthumb{
   position:absolute;top:50%;transform:translate(-50%,-50%);
   width:28px;height:28px;border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle at 35% 30%,#fff,#c8c8c8);
-  box-shadow:0 2px 10px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.5) inset;
-  left:40%;transition:left .1s;
+  background:radial-gradient(circle at 35% 30%,#fff,#c0c0c0);
+  box-shadow:0 3px 12px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.6) inset,0 0 0 2.5px rgba(10,132,255,.5);
+  left:40%;transition:left .08s;
 }
 .vval{font-size:.72rem;font-weight:700;color:var(--on-dim);min-width:36px;text-align:right}
 
 /* Radio */
-.rg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
+.rg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
 .rb{
-  padding:12px 4px 10px;border-radius:14px;cursor:pointer;border:none;
+  padding:14px 6px 12px;border-radius:16px;cursor:pointer;border:none;
   display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:var(--c2);
+  background:var(--c2);border:1px solid rgba(255,255,255,.06);
   transition:transform .2s cubic-bezier(.34,1.56,.64,1),background .2s;
   position:relative;overflow:hidden;
 }
 .rb:active{transform:scale(.83)}
 .rb.on{background:rgba(10,132,255,.18);border:1px solid rgba(10,132,255,.35);box-shadow:0 0 16px rgba(10,132,255,.15)}
 .rbico{
-  width:32px;height:32px;border-radius:10px;
+  width:38px;height:38px;border-radius:12px;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.06);transition:background .2s,box-shadow .2s;
+  background:rgba(255,255,255,.08);transition:background .2s,box-shadow .2s;
+  font-size:1.15rem;
 }
 .rb.on .rbico{background:rgba(10,132,255,.3);box-shadow:0 0 10px rgba(10,132,255,.4)}
-.rbn{font-size:.52rem;font-weight:600;color:var(--dim2);transition:color .2s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rbn{font-size:.58rem;font-weight:600;color:var(--dim2);transition:color .2s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
 .rb.on .rbn{color:#60b8ff;font-weight:700}
 /* Wellen-Animation auf aktivem Radio-Button */
 .rb.on::after{content:'';position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at 50% 50%,rgba(10,132,255,.08),transparent 70%);animation:rbPulse 2.5s ease-in-out infinite;pointer-events:none}
@@ -796,7 +801,7 @@ html,body{height:100%;background:var(--bg);
 /* ───────────── LIGHTS PAGE ───────────── */
 .lg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .lt{
-  padding:16px 14px 13px;border-radius:20px;cursor:pointer;
+  padding:18px 14px 14px;border-radius:20px;cursor:pointer;
   background:var(--c2);
   display:flex;flex-direction:column;gap:12px;
   position:relative;overflow:hidden;
@@ -1173,7 +1178,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 <div id="conn"></div>
 
 <!-- TOAST -->
-<div id="toast" id="toast"></div>
+<div id="toast"></div>
 
 <!-- APP -->
 <div id="app" class="hidden">
@@ -1449,6 +1454,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <div class="nplbl">Jetzt läuft</div>
           <div class="nptitle" id="np-t">Bereit</div>
           <div class="npsub" id="np-s">Almando Wohnzimmer</div>
+          <div id="np-src" style="font-size:.56rem;color:rgba(255,255,255,.25);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:4px;min-height:14px">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+            <span id="np-src-txt">Almando</span>
+          </div>
           <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
           <!-- Track progress -->
           <div id="track-prog-wrap" style="margin-top:14px;display:none">
@@ -1526,8 +1535,6 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <span class="lbl">Licht</span>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
-      <span class="lbl" style="margin-top:6px">Geräte</span>
-      <div class="dg" id="dg"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
       <div class="sg2">
         <div class="sb2" data-s="abend" >
@@ -2980,12 +2987,16 @@ async function fetchCalendar(){
 // ═══════════════════════════════════════════════
 function buildUI(){try{
   // Radio
+  const _radioEmoji={
+    'SRF 1':'📻','SRF 3':'🎵','Swiss Pop':'🇨🇭','U1 Tirol':'🏔️','Melody':'🎶'
+  };
   document.getElementById('rg').innerHTML=CFG.radio.map(r=>`
     <div class="rb" data-u="${r.u}" data-n="${r.n}" style="--rc:${r.c};--rr:${r.r}">
-      <div class="rbico">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${r.c}" stroke-width="2.5" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="${r.c}"/></svg>
+      <div class="rbico" style="background:rgba(${r.r},.12);border:1px solid rgba(${r.r},.18)">
+        ${_radioEmoji[r.n]||'📻'}
       </div>
       <span class="rbn">${r.n}</span>
+      ${r.blocked?'<span style="font-size:.4rem;color:rgba(255,255,255,.2);position:absolute;top:5px;right:5px">🏠</span>':''}
     </div>`).join('');
   document.querySelectorAll('.rb').forEach(b=>b.addEventListener('click',()=>{
     hap();
@@ -5125,7 +5136,16 @@ function updateAll(){
     titleEl.classList.remove('scroll');
     titleEl.textContent=titleStr;
   }
-  document.getElementById('np-s').textContent=s?.attributes?.media_artist||s?.attributes?.media_channel||'Almando Wohnzimmer';
+  document.getElementById('np-s').textContent=s?.attributes?.media_artist||s?.attributes?.media_channel||'';
+  // Source info (welches Gerät/Quelle spielt)
+  const npSrc=document.getElementById('np-src-txt');
+  if(npSrc){
+    const sp=_S[CFG.spot];
+    const isSpot=sp?.state==='playing';
+    if(isSpot) npSrc.textContent='Spotify · '+(sp.attributes?.source||'Unbekannt');
+    else if(s?.state==='playing') npSrc.textContent='Almando Wohnzimmer';
+    else npSrc.textContent='';
+  }
   // Track-Fortschrittsbalken
   const pos=s?.attributes?.media_position??null;
   const dur=s?.attributes?.media_duration??null;
