@@ -202,6 +202,12 @@ html,body{height:100%;background:var(--bg);
   pointer-events:none;box-shadow:0 0 6px rgba(255,159,10,.55)}
 .ni-badge.show{opacity:1;transform:scale(1)}
 @keyframes badgePop{0%{transform:scale(1.6)}100%{transform:scale(1)}}
+@keyframes feelArrowUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes feelArrowDown{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+#wxt-feel-arrow{display:inline-block;font-size:.95rem;font-weight:700;margin-left:5px;vertical-align:middle;transition:color .6s ease,opacity .6s ease;opacity:0}
+#wxt-feel-arrow.up{color:#30d158;opacity:1;animation:feelArrowUp 1.8s ease-in-out infinite}
+#wxt-feel-arrow.down{color:#ff453a;opacity:1;animation:feelArrowDown 1.8s ease-in-out infinite}
+#wxt-feel-arrow.neutral{color:rgba(255,255,255,.35);opacity:.7;animation:none}
 .ni-badge.pop{animation:badgePop .28s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes navGlow{
   0%,100%{opacity:.8;width:18px}
@@ -1734,7 +1740,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
             <div style="font-size:.58rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:6px">JETZT · EINSIEDELN</div>
             <div style="display:flex;align-items:baseline;gap:10px">
               <div style="font-size:3.4rem;font-weight:100;letter-spacing:-2px;color:#fff;line-height:1" id="wxt-temp">–°</div>
-              <div style="font-size:1.3rem;font-weight:300;color:rgba(255,255,255,.35);line-height:1">/ <span id="wxt-feel">–°</span></div>
+              <div style="font-size:1.3rem;font-weight:300;color:rgba(255,255,255,.35);line-height:1">/ <span id="wxt-feel">–°</span><span id="wxt-feel-arrow"></span></div>
             </div>
             <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-top:6px" id="wxt-desc">–</div>
             <div style="font-size:.62rem;color:rgba(255,255,255,.25);margin-top:2px">Tatsächlich / Gefühlt</div>
@@ -2689,6 +2695,17 @@ function renderWeather(){
     wxtT.textContent=Math.round(c.temperature_2m)+'°';
     document.getElementById('wxt-desc').textContent=wxTxt(code);
     document.getElementById('wxt-feel').textContent=Math.round(c.apparent_temperature)+'°';
+    // Trend-Pfeil: gefühlt vs. tatsächlich
+    (function(){
+      const arr=document.getElementById('wxt-feel-arrow');
+      if(!arr)return;
+      const diff=c.apparent_temperature-c.temperature_2m;
+      arr.className='';
+      void arr.offsetWidth; // reflow für Animation-Neustart
+      if(diff>1){arr.textContent='↑';arr.className='up';}
+      else if(diff<-1){arr.textContent='↓';arr.className='down';}
+      else{arr.textContent='→';arr.className='neutral';}
+    })();
     document.getElementById('wxt-wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
     document.getElementById('wxt-hum').textContent=c.relative_humidity_2m+'%';
     document.getElementById('wxt-ico').innerHTML=wxIco(code,72,night);

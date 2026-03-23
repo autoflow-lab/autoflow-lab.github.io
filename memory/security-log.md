@@ -272,3 +272,20 @@ Keine verdächtigen Einträge (login attempt / invalid / banned / unauthorized) 
 - Grep auf: `Login attempt`, `Banned IP`, `unauthorized`, `brute`, `invalid_auth`
 - Ergebnis: **Keine Treffer** — keine neuen Failed Logins
 - Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-23 22:00 UTC
+
+- Methode: HA REST API (SSH + API nicht erreichbar — internes Netz geblockt)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-23 22:30 UTC
+
+- Methode: HA REST API `/api/error_log` (SSH nicht verfügbar)
+- Grep auf: `Login attempt`, `Banned IP`, `unauthorized`, `brute`, `invalid_auth`
+- Ergebnis: **Keine Treffer** — keine neuen Failed Logins
+- Aktion: Keine (stille OK)

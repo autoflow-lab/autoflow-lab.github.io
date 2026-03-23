@@ -156,4 +156,4 @@
 - [x] wz.html: Licht-Tab — Farbige Tile-Border bei RGB-Lichtern (wenn color_temp/hs_color vorhanden → dünner farbiger Border um .ltico, passend zur Lichtfarbe)
 - [x] demo.html: Countdown Timer für "Begrenzte Aktion" (echter 24h Countdown unter Scarcity-Banner, zählt von localStorage-gespeichertem Start runter)
 - [x] wz.html: Musik-Tab — Equalizer-Ringe um Album-Art (konzentrisches Pulse wenn isPlaying, 3 halbtransparente Ringe, amber, unterschiedliche Frequenzen via animation-delay)
-- [ ] wz.html: Wetter-Tab — Gefühlte Temperatur Trend-Pfeil (↑↓ je ob apparent_temperature > temperature_2m, Farbe grün/rot, animierter Pfeil)
+- [x] wz.html: Wetter-Tab — Gefühlte Temperatur Trend-Pfeil (↑↓ je ob apparent_temperature > temperature_2m, Farbe grün/rot, animierter Pfeil)

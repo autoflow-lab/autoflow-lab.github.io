@@ -2,10 +2,13 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#000000">
-<title>Schlappe Home</title>
+<title>SchlappHome</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 :root{
@@ -122,30 +125,113 @@ body{padding-bottom:32px}
 .modal-confirm.amber{background:var(--acc);color:#000}
 
 /* ─── LOGIN ─── */
-#login-screen{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center;display:none}
+#login-screen{display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:48px 32px;text-align:center;min-height:100vh;background:var(--bg)}
 .login-ico{font-size:3rem;margin-bottom:8px}
 .login-title{font-size:1.3rem;font-weight:700}
 .login-sub{font-size:.78rem;color:var(--dim);max-width:260px;line-height:1.5}
-.login-btn{background:var(--blue);border:none;border-radius:16px;padding:16px 36px;color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;touch-action:manipulation;margin-top:8px}
+.login-btn{display:block;width:100%;max-width:280px;background:var(--blue);border:none;border-radius:16px;padding:18px 36px;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;touch-action:manipulation;margin-top:16px;-webkit-appearance:none;min-height:56px;}
 
 /* ─── TOAST ─── */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(30,30,32,.95);border:1px solid var(--sep);color:#fff;padding:10px 20px;border-radius:100px;font-size:.8rem;font-weight:600;z-index:300;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;white-space:nowrap;backdrop-filter:blur(10px)}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
+
+/* ─── TABS ─── */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(28,28,30,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.08);padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:100}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;color:rgba(255,255,255,.4);font-size:.6rem;font-weight:500;padding:6px 4px;cursor:pointer;touch-action:manipulation;transition:color .2s}
+.tab-btn.active{color:#ff9f0a}
+.tab-btn svg{opacity:.7;transition:opacity .2s}
+.tab-btn.active svg{opacity:1}
+.tab-page{display:none;padding-bottom:90px}
+.tab-page.active{display:block}
+.section{padding:12px 16px 4px}
+
+
+/* ─── PIN ─── */
+.pin-dots{display:flex;gap:16px;margin:24px 0 8px}
+.pin-dots span{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:transparent;transition:background .15s}
+.pin-dots span.filled{background:#ff9f0a;border-color:#ff9f0a}
+.pin-pad{display:grid;grid-template-columns:repeat(3,72px);gap:12px;margin-top:16px}
+.pin-btn{height:72px;border-radius:50%;border:none;background:rgba(255,255,255,.1);color:#fff;font-size:1.4rem;font-weight:500;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background .1s}
+.pin-btn:active{background:rgba(255,159,10,.4)}
+.pin-del{font-size:1.1rem}
+
+
+/* ─── SETTINGS ─── */
+.settings-row{display:flex;justify-content:space-between;align-items:center;width:100%;padding:16px 20px;background:none;border:none;border-bottom:1px solid var(--sep);color:var(--txt);font-size:.9rem;cursor:pointer;touch-action:manipulation;text-align:left}
+.settings-row:last-child{border-bottom:none}
+.settings-send-btn{width:100%;margin-top:12px;padding:14px;background:var(--blue);border:none;border-radius:12px;color:#fff;font-size:.9rem;font-weight:600;cursor:pointer;touch-action:manipulation}
+.log-row{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.65rem;font-family:monospace}
+.log-t{color:rgba(255,255,255,.3);flex-shrink:0;width:55px}
+.log-m{color:rgba(255,255,255,.7);word-break:break-all}
+.log-error .log-m{color:#ff453a}
+.log-warn .log-m{color:#ff9f0a}
+
+
+/* ─── FLOATING FAB ─── */
+#fab-feedback{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 72px);right:16px;width:46px;height:46px;border-radius:50%;background:rgba(28,28,30,.92);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;z-index:90;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:transform .15s;touch-action:manipulation}
+#fab-feedback:active{transform:scale(.9)}
+#fab-feedback svg{width:20px;height:20px;stroke:rgba(255,255,255,.7);fill:none;stroke-width:1.8;stroke-linecap:round}
+
+/* ─── FEEDBACK SHEET ─── */
+#feedback-sheet{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);z-index:250;display:flex;align-items:flex-end;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s}
+#feedback-sheet.show{opacity:1;pointer-events:all}
+.feedback-inner{background:#1c1c1e;border-radius:22px;padding:22px 20px 28px;width:100%;max-width:420px;border:1px solid rgba(255,255,255,.1);transform:translateY(40px);transition:transform .3s cubic-bezier(.34,1.1,.64,1)}
+#feedback-sheet.show .feedback-inner{transform:translateY(0)}
+.feedback-cats{display:flex;gap:8px;margin:14px 0 16px}
+.fcat{flex:1;padding:10px 6px;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-size:.72rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:all .2s;text-align:center}
+.fcat.active{border-color:var(--acc);background:rgba(255,159,10,.12);color:var(--acc)}
+.feedback-ta{width:100%;min-height:90px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;padding:12px;font-size:.85rem;font-family:inherit;resize:none;box-sizing:border-box;outline:none}
+.feedback-ta:focus{border-color:rgba(255,159,10,.5)}
+.feedback-btns{display:flex;gap:10px;margin-top:12px}
+.feedback-cancel{flex:0 0 auto;padding:14px 20px;border-radius:14px;border:none;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:.88rem;font-weight:600;cursor:pointer;touch-action:manipulation}
+.feedback-send{flex:1;padding:14px;border-radius:14px;border:none;background:var(--acc);color:#000;font-size:.88rem;font-weight:700;cursor:pointer;touch-action:manipulation;transition:opacity .15s}
+.feedback-send:disabled{opacity:.5}
+
+/* ─── CLAWY REPLY BANNER ─── */
+#clawy-banner{display:none;margin:12px 16px 0;background:linear-gradient(135deg,rgba(10,132,255,.15),rgba(94,92,230,.12));border:1px solid rgba(10,132,255,.3);border-radius:18px;padding:14px 16px;cursor:pointer;touch-action:manipulation}
+.banner-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.banner-ico{width:32px;height:32px;border-radius:10px;background:rgba(10,132,255,.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.banner-title{font-size:.8rem;font-weight:700;color:#fff}
+.banner-sub{font-size:.62rem;color:rgba(255,255,255,.45);margin-top:1px}
+.banner-msg{font-size:.8rem;color:rgba(255,255,255,.85);line-height:1.45;padding:10px 12px;background:rgba(255,255,255,.06);border-radius:10px;margin-top:2px}
+.banner-dismiss{font-size:.65rem;color:rgba(10,132,255,.8);margin-top:8px;text-align:right}
+
+/* ─── SCENE SHORTCUTS ─── */
+.scene-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+.sc-btn{background:var(--c1);border:1px solid var(--sep);border-radius:16px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;touch-action:manipulation;transition:transform .15s,background .2s}
+.sc-btn:active{transform:scale(.94)}
+.sc-icon{font-size:1.4rem}
+.sc-lbl{font-size:.6rem;font-weight:600;color:var(--dim);letter-spacing:.2px}
+
 /* ─── FOOTER ─── */
 .footer{padding:24px 16px 0;text-align:center;font-size:.58rem;color:var(--dim2)}
 </style>
+  <!-- Open Graph / Link Preview -->
+  <meta property="og:title" content="SchlappHome">
+  <meta property="og:description" content="Familien-Dashboard">
+  <meta property="og:image" content="https://schlapphome.uk/local/family-icon.png?v=2">
+  <meta property="og:type" content="website">
+  <link rel="apple-touch-icon" href="/local/family-icon.png?v=2">
+  <!-- PWA -->
+  <link rel="manifest" href="/local/family-manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SchlappHome">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#000000">
+
 </head>
 <body>
 
 <!-- Login -->
 <div id="login-screen">
   <div class="login-ico">🏠</div>
-  <div class="login-title">Schlappe Home</div>
-  <div class="login-sub">Melde dich mit deinem Home Assistant Konto an, um fortzufahren.</div>
-  <button class="login-btn" id="login-btn">Mit Home Assistant verbinden</button>
-</div>
-
+  <div class="login-title">SchlappHome</div>
+  <div class="login-sub">Anmelden mit Home Assistant<br><span style="opacity:.5;font-size:.75em">2FA wird unterstützt</span></div>
+  <button class="login-btn" id="login-btn" type="button">🔑 Mit HA anmelden</button>
+</div></div>
+<div id="app-root" style="display:none">
 <!-- Confirm Modal -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
@@ -164,110 +250,257 @@ body{padding-bottom:32px}
 <!-- HEADER -->
 <div class="header">
   <div>
-    <div class="header-title">🏠 Schlappe Home</div>
+    <div class="header-title">🏠 SchlappHome</div>
     <div class="header-sub" id="header-sub">Verbinde…</div>
-    <div id="garage-pill" style="display:none;font-size:.62rem;margin-top:3px;font-weight:600;color:var(--grn)">🚪 Garage: Geschlossen</div>
   </div>
   <div class="status-dot off" id="status-dot"></div>
 </div>
 
-<!-- ANWESENHEIT -->
-<div class="section">
-  <div class="section-title">Anwesenheit</div>
-  <div class="card presence-card" id="person-card">
-    <div class="card-row">
-      <div class="card-ico" id="person-ico">
-        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </div>
-      <div class="card-info">
-        <div class="card-name">Janis</div>
-        <div class="card-state" id="person-state">Lade…</div>
-      </div>
-    </div>
-  </div>
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    <span>Zuhause</span>
+  </button>
+  <button class="tab-btn" data-tab="garage" onclick="switchTab('garage')">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 7l2-4h16l2 4"/><line x1="6" y1="11" x2="18" y2="11"/><line x1="6" y1="14" x2="18" y2="14"/></svg>
+    <span>Garage</span>
+  </button>
+  <button class="tab-btn" data-tab="lights" onclick="switchTab('lights')">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/></svg>
+    <span>Lichter</span>
+  </button>
+  <button class="tab-btn" data-tab="weather" onclick="switchTab('weather')">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+    <span>Wetter</span>
+  </button>
+  <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span>System</span>
+  </button>
 </div>
 
-<!-- GARAGENTOR -->
-<div class="section">
-  <div class="section-title">Garagentor</div>
-  <div class="garage-card" id="garage-card">
-    <div class="garage-top">
-      <div class="garage-ico" id="garage-ico">
-        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 7l2-4h16l2 4"/><line x1="6" y1="11" x2="18" y2="11"/><line x1="6" y1="14" x2="18" y2="14"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
-      </div>
-      <div class="garage-info">
-        <div class="garage-name">Garagentor</div>
-        <div class="garage-state" id="garage-state">Lade…</div>
-      </div>
-    </div>
-    <div class="garage-btns">
-      <button class="garage-btn open" id="btn-garage-open">
-        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-        Öffnen
-      </button>
-      <button class="garage-btn close" id="btn-garage-close">
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        Schließen
-      </button>
-    </div>
+
+<!-- Clawy Antwort Banner -->
+<div id="clawy-banner">
+  <div class="banner-top">
+    <div class="banner-ico">🤖</div>
+    <div><div class="banner-title">Clawy hat geantwortet</div><div class="banner-sub">Tippen zum Lesen & Schließen</div></div>
   </div>
+  <div class="banner-msg" id="clawy-banner-msg"></div>
+  <div class="banner-dismiss">✓ Verstanden & schließen</div>
 </div>
 
-<!-- ANWESENHEITSSIMULATION -->
-<div class="section">
-  <div class="section-title">Sicherheit</div>
-  <div class="card sim-card" id="sim-card">
-    <div class="card-row">
-      <div class="card-ico" id="sim-ico">
-        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </div>
-      <div class="card-info">
-        <div class="card-name" style="display:flex;align-items:center;gap:8px">
-          Anwesenheitssimulation
-          <span class="sim-badge" id="sim-badge" style="display:none">AKTIV</span>
+<!-- TAB: ZUHAUSE -->
+<div class="tab-page active" id="tab-home">
+
+  <div class="section">
+    <div class="section-title">Schnellszenen</div>
+    <div class="scene-row">
+      <button class="sc-btn" data-scene="abend"><div class="sc-icon">🌆</div><div class="sc-lbl">Abend</div></button>
+      <button class="sc-btn" data-scene="hell"><div class="sc-icon">☀️</div><div class="sc-lbl">Hell</div></button>
+      <button class="sc-btn" data-scene="nacht2"><div class="sc-icon">🌙</div><div class="sc-lbl">Gute Nacht</div></button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Anwesenheit</div>
+    <div class="card presence-card" id="person-card">
+      <div class="card-row">
+        <div class="card-ico" id="person-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
-        <div class="card-state" id="sim-state">Lichter aus/ein als wärst du da</div>
-      </div>
-      <button class="toggle" id="sim-toggle" aria-label="Simulation"></button>
-    </div>
-  </div>
-</div>
-
-<!-- LICHTER -->
-<div class="section">
-  <div class="section-title">Lichter</div>
-  <div class="lights-grid" id="lights-grid">
-    <!-- wird dynamisch befüllt -->
-  </div>
-</div>
-
-<!-- WETTER -->
-<div class="section">
-  <div class="section-title">Wetter</div>
-  <div class="card wx-card">
-    <div class="wx-main">
-      <svg id="wx-ico" viewBox="0 0 56 56" width="56" height="56"></svg>
-      <div class="wx-right">
-        <div class="wx-temp" id="wx-temp">–°</div>
-        <div class="wx-cond" id="wx-cond">–</div>
-        <div class="wx-feel" id="wx-feel"></div>
+        <div class="card-info">
+          <div class="card-name">Janis</div>
+          <div class="card-state" id="person-state">Lade…</div>
+        </div>
       </div>
     </div>
-    <div class="wx-stats">
-      <div class="wx-stat"><div class="wx-sv" id="wx-hum">–</div><div class="wx-sl">Feuchte</div></div>
-      <div class="wx-stat"><div class="wx-sv" id="wx-wind">–</div><div class="wx-sl">Wind km/h</div></div>
-      <div class="wx-stat"><div class="wx-sv" id="wx-vis">–</div><div class="wx-sl">UV / Sicht</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Garagenstatus</div>
+    <div class="card" id="garage-status-card" style="padding:16px 20px">
+      <div class="card-row">
+        <div class="card-ico" id="garage-status-ico" style="color:var(--grn)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 7l2-4h16l2 4"/></svg>
+        </div>
+        <div class="card-info">
+          <div class="card-name">Garagentor</div>
+          <div class="card-state" id="garage-state-home">Lade…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Sicherheit</div>
+    <div class="card sim-card" id="sim-card">
+      <div class="card-row">
+        <div class="card-ico" id="sim-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="card-info">
+          <div class="card-name" style="display:flex;align-items:center;gap:8px">
+            Simulation
+            <span class="sim-badge" id="sim-badge" style="display:none">AKTIV</span>
+          </div>
+          <div class="card-state" id="sim-state">Anwesenheit simulieren</div>
+        </div>
+        <button class="toggle" id="sim-toggle" aria-label="Simulation"></button>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="section">
-  <div class="section-title">Nächste Stunden</div>
-  <div id="wx-hourly" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:4px"></div>
+<!-- TAB: GARAGE -->
+<div class="tab-page" id="tab-garage">
+  <div class="section">
+    <div class="garage-card" id="garage-card">
+      <div class="garage-top">
+        <div class="garage-ico" id="garage-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 7l2-4h16l2 4"/><line x1="6" y1="11" x2="18" y2="11"/><line x1="6" y1="14" x2="18" y2="14"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
+        </div>
+        <div class="garage-info">
+          <div class="garage-name">Garagentor</div>
+          <div class="garage-state" id="garage-state">Lade…</div>
+        </div>
+      </div>
+      <div class="garage-btns">
+        <button class="garage-btn open" id="btn-garage-open">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          Öffnen
+        </button>
+        <button class="garage-btn close" id="btn-garage-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          Schließen
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="footer">Schlappe Home · Nur für Familienmitglieder · <span id="last-update">–</span></div>
+
+<!-- TAB: LICHTER -->
+<div class="tab-page" id="tab-lights">
+  <div class="section">
+    <div class="lights-grid" id="lights-grid"></div>
+  </div>
+</div>
+
+<!-- TAB: WETTER -->
+<div class="tab-page" id="tab-weather">
+  <div class="section">
+    <div class="card wx-card">
+      <div class="wx-main">
+        <svg id="wx-ico" viewBox="0 0 56 56" width="56" height="56"></svg>
+        <div class="wx-right">
+          <div class="wx-temp" id="wx-temp">–°</div>
+          <div class="wx-cond" id="wx-cond">–</div>
+          <div class="wx-feel" id="wx-feel"></div>
+        </div>
+      </div>
+      <div class="wx-stats">
+        <div class="wx-stat"><div class="wx-sv" id="wx-hum">–</div><div class="wx-sl">Feuchte</div></div>
+        <div class="wx-stat"><div class="wx-sv" id="wx-wind">–</div><div class="wx-sl">Wind km/h</div></div>
+        <div class="wx-stat"><div class="wx-sv" id="wx-vis">–</div><div class="wx-sl">UV / Sicht</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Nächste Stunden</div>
+    <div id="wx-hourly" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px"></div>
+  </div>
+</div>
+
+<!-- TAB: SYSTEM -->
+<div class="tab-page" id="tab-settings">
+  <div class="section">
+    <div class="section-title">App</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <button class="settings-row" onclick="location.reload(true)">
+        <span>🔄 Neu laden</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </button>
+      <button class="settings-row" onclick="clearCacheAndReload()">
+        <span>🗑️ Cache leeren & neu laden</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </button>
+      <button class="settings-row" onclick="resetAuth()">
+        <span>🔐 PIN zurücksetzen (ausloggen)</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>System-Logs</span>
+      <button onclick="renderLogs()" style="background:none;border:none;color:var(--acc);font-size:.75rem;cursor:pointer">Aktualisieren</button>
+    </div>
+    <div id="log-viewer" class="card" style="padding:10px;max-height:300px;overflow-y:auto">
+      <div id="log-list"><div style="color:var(--dim);padding:8px;font-size:.75rem">Tippe "Aktualisieren"</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div style="font-size:.65rem;color:var(--dim2);text-align:center;padding:8px 0">
+      SchlappHome App · <span id="app-version">v1.0</span><br>
+      Token: <span id="tok-info">–</span>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Feedback Button -->
+<button id="fab-feedback" title="Feedback / Problem melden">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+
+<!-- Feedback Sheet -->
+<div id="feedback-sheet">
+  <div class="feedback-inner">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:4px">💬 Feedback an Clawy</div>
+    <div style="font-size:.72rem;color:rgba(255,255,255,.45);margin-bottom:4px">Ich antworte direkt in der App</div>
+    <div class="feedback-cats">
+      <button class="fcat active" data-cat="Bug">🐛 Bug</button>
+      <button class="fcat" data-cat="Idee">💡 Idee</button>
+      <button class="fcat" data-cat="Frage">❓ Frage</button>
+    </div>
+    <textarea class="feedback-ta" id="feedback-ta" placeholder="Was ist passiert? Was wünschst du dir?"></textarea>
+    <div id="feedback-status" style="font-size:.7rem;color:rgba(255,255,255,.4);min-height:18px;margin-top:6px"></div>
+    <div class="feedback-btns">
+      <button class="feedback-cancel" id="feedback-cancel">Abbrechen</button>
+      <button class="feedback-send" id="feedback-send">Senden 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">SchlappHome <span style='opacity:.4'>v2.2</span> · <span id="last-update">–</span></div>
 
 <script>
+const APP_VERSION='v2.2';
+
+// ─── LOG CAPTURE ───
+const _logs = [];
+const _origConsole = {log:console.log, warn:console.warn, error:console.error};
+['log','warn','error'].forEach(lvl=>{
+  console[lvl] = (...args)=>{
+    _origConsole[lvl](...args);
+    const msg = args.map(a=>typeof a==='object'?JSON.stringify(a):String(a)).join(' ');
+    _logs.push({t:new Date().toLocaleTimeString('de'),lvl,msg});
+    if(_logs.length>100) _logs.shift();
+    // Live-Update Log-Viewer wenn offen
+    const lv=document.getElementById('log-viewer');
+    if(lv&&lv.style.display!=='none') renderLogs();
+  };
+});
+window.onerror=(msg,src,line)=>{
+  _logs.push({t:new Date().toLocaleTimeString('de'),lvl:'error',msg:`${msg} (${src}:${line})`});
+};
+function renderLogs(){
+  const lv=document.getElementById('log-list');
+  if(!lv) return;
+  lv.innerHTML=_logs.slice().reverse().map(l=>
+    `<div class="log-row log-${l.lvl}"><span class="log-t">${l.t}</span><span class="log-m">${l.msg.slice(0,120)}</span></div>`
+  ).join('') || '<div style="color:var(--dim);padding:8px">Keine Logs</div>';
+}
+
 const HA = 'https://schlapphome.uk';
 const GARAGE_ID = 'cover.smart_garage_door_2207188115870761070148e1e99a76de_garage_1';
 const LIGHTS = [
@@ -285,14 +518,12 @@ let _simActive = false;
 let _simTimer = null;
 let _simStep = 0;
 
-// ─── AUTH ───
+// ─── AUTH ─── (HA OAuth — 2FA-fähig, kein Token im Code)
 function getTok(){
-  try{const d=JSON.parse(localStorage.getItem('wz4'));return d?.access_token||'';}catch{return '';}
+  try{const d=JSON.parse(localStorage.getItem('wz4'));if(d?.access_token)return d.access_token;}catch{}
+  return '';
 }
-function saveTok(data){
-  localStorage.setItem('wz4',JSON.stringify(data));
-}
-
+function saveTok(d){ localStorage.setItem('wz4',JSON.stringify(d)); }
 async function refreshTok(){
   try{
     const d=JSON.parse(localStorage.getItem('wz4'));
@@ -301,35 +532,10 @@ async function refreshTok(){
       headers:{'Content-Type':'application/x-www-form-urlencoded'},
       body:`grant_type=refresh_token&refresh_token=${d.refresh_token}&client_id=${encodeURIComponent(location.origin+'/')}`
     });
-    if(r.ok){const nd=await r.json();saveTok({...d,...nd});return true;}
-  }catch(e){}
+    if(r.ok){const nd=await r.json();if(nd.access_token){saveTok({...d,...nd});return true;}}
+  }catch{}
   return false;
 }
-
-function checkLogin(){
-  const params=new URLSearchParams(location.search);
-  const code=params.get('code');
-  if(code){
-    history.replaceState({},'',location.pathname);
-    fetch(`${HA}/auth/token`,{method:'POST',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:`grant_type=authorization_code&code=${code}&client_id=${encodeURIComponent(location.origin+'/')}&redirect_uri=${encodeURIComponent(location.origin+location.pathname)}`
-    }).then(r=>r.json()).then(d=>{
-      if(d.access_token){saveTok(d);init();}
-      else showLogin();
-    }).catch(showLogin);
-    return;
-  }
-  if(getTok()) init();
-  else showLogin();
-}
-
-function showLogin(){
-  document.getElementById('login-screen').style.display='flex';
-}
-document.getElementById('login-btn').addEventListener('click',()=>{
-  location.href=`${HA}/auth/authorize?client_id=${encodeURIComponent(location.origin+'/')}&redirect_uri=${encodeURIComponent(location.origin+location.pathname)}&response_type=code`;
-});
 
 // ─── API ───
 async function api(method,path,body){
@@ -615,12 +821,68 @@ function toast(msg,dur=2800){
 }
 
 // ─── INIT ───
+function showLogin(){
+  const app=document.getElementById('app-root');
+  if(app) app.style.display='none';
+  const ls=document.getElementById('login-screen');
+  if(ls){ls.style.display='flex';ls.style.flexDirection='column';}
+}
+
+function checkLogin(){
+  // OAuth Code-Exchange
+  const p=new URLSearchParams(location.search);
+  const code=p.get('code');
+  if(code){
+    history.replaceState({},'',location.pathname);
+    const _cid=location.origin+'/';
+    const _ruri=location.origin+location.pathname;
+    fetch(`${HA}/auth/token`,{method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:`grant_type=authorization_code&code=${encodeURIComponent(code)}&client_id=${encodeURIComponent(_cid)}&redirect_uri=${encodeURIComponent(_ruri)}`
+    }).then(r=>r.json()).then(d=>{
+      if(d.access_token){saveTok(d);document.getElementById('login-screen').style.display='none';document.getElementById('app-root').style.display='';init();}
+      else showLogin();
+    }).catch(()=>showLogin());
+    return;
+  }
+  // HA App iframe: parent hassTokens versuchen
+  try{
+    if(window!==window.top){
+      const ht=window.parent.localStorage?.getItem('hassTokens');
+      if(ht){const e=Object.values(JSON.parse(ht))[0];if(e?.access_token){saveTok(e);document.getElementById('login-screen').style.display='none';document.getElementById('app-root').style.display='';init();return;}}
+    }
+  }catch{}
+  // Gespeicherter Token
+  if(getTok()){document.getElementById('login-screen').style.display='none';document.getElementById('app-root').style.display='';init();}
+  else showLogin();
+}
+
+// Login-Button
+document.addEventListener('DOMContentLoaded',()=>{
+  const btn=document.getElementById('login-btn');
+  if(!btn) return;
+  btn.addEventListener('click',()=>{
+    // Dynamisch — wie wz.html, funktioniert in jedem Browser
+    const clientId=encodeURIComponent(location.origin+'/');
+    const redirectUri=encodeURIComponent(location.origin+location.pathname);
+    const url=`${HA}/auth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+    console.log('OAuth URL:',url);
+    if(window!==window.top) window.top.location.href=url;
+    else location.href=url;
+  });
+});
+
+
 function init(){
   document.getElementById('login-screen').style.display='none';
+  const app=document.getElementById('app-root');
+  if(app) app.style.display='';
   buildLights();
   fetchAndUpdate();
   loadHourly();
   setInterval(fetchAndUpdate,20000);
+  checkClawyReply();
+  setInterval(checkClawyReply,30000);
   setInterval(loadHourly,300000); // alle 5min
 // Schnelleres Garage-Polling: alle 8s nur Garage-State
 setInterval(async()=>{
@@ -631,7 +893,148 @@ setInterval(async()=>{
   }catch(e){}
 },8000);
 }
+
+function clearCacheAndReload(){
+  localStorage.removeItem('wx_cache');
+  localStorage.removeItem('wx_hourly_cache');
+  if('caches' in window){
+    caches.keys().then(keys=>Promise.all(keys.map(k=>caches.delete(k)))).then(()=>location.reload(true));
+  } else { location.reload(true); }
+}
+function resetAuth(){
+  localStorage.removeItem('fam_auth');
+  location.reload();
+}
+// ─── FEEDBACK SYSTEM ───
+let _feedbackCat = 'Bug';
+document.querySelectorAll('.fcat').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.fcat').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    _feedbackCat=b.dataset.cat;
+  });
+});
+document.getElementById('fab-feedback').addEventListener('click',()=>{
+  document.getElementById('feedback-sheet').classList.add('show');
+  setTimeout(()=>document.getElementById('feedback-ta').focus(),300);
+});
+document.getElementById('feedback-cancel').addEventListener('click',()=>{
+  document.getElementById('feedback-sheet').classList.remove('show');
+});
+document.getElementById('feedback-sheet').addEventListener('click',e=>{
+  if(e.target===e.currentTarget) document.getElementById('feedback-sheet').classList.remove('show');
+});
+document.getElementById('feedback-send').addEventListener('click',async()=>{
+  const ta=document.getElementById('feedback-ta');
+  const txt=ta.value.trim();
+  const stat=document.getElementById('feedback-status');
+  if(!txt){stat.textContent='Bitte Text eingeben';return;}
+  const btn=document.getElementById('feedback-send');
+  btn.disabled=true; stat.textContent='Sende…';
+  try{
+    const r=await fetch(`${HA}/api/webhook/schlapp_family_feedback`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        message:`[${_feedbackCat}] ${txt}`,
+        category:_feedbackCat,
+        user:'Familie App',
+        ua:navigator.userAgent.slice(0,80)
+      })
+    });
+    if(r.ok||r.status===200||r.status===201){
+      stat.textContent='✅ Gesendet! Clawy meldet sich.';
+      ta.value='';
+      setTimeout(()=>{
+        document.getElementById('feedback-sheet').classList.remove('show');
+        stat.textContent='';
+      },1800);
+    } else { stat.textContent='❌ Fehler '+r.status; }
+  }catch(e){ stat.textContent='❌ '+e.message; }
+  btn.disabled=false;
+});
+
+// ─── CLAWY REPLY POLLING ───
+async function checkClawyReply(){
+  const tok=getTok();if(!tok)return;
+  try{
+    const r=await fetch(`${HA}/api/states/input_text.clawy_reply`,{headers:{'Authorization':'Bearer '+tok}});
+    if(!r.ok)return;
+    const d=await r.json();
+    const msg=d?.state||'';
+    const banner=document.getElementById('clawy-banner');
+    const msgEl=document.getElementById('clawy-banner-msg');
+    if(msg&&msg.length>0){
+      msgEl.textContent=msg;
+      banner.style.display='';
+    } else {
+      banner.style.display='none';
+    }
+  }catch{}
+}
+// Banner: Tippen = Lesen & Antwort löschen
+document.getElementById('clawy-banner').addEventListener('click',async()=>{
+  const tok=getTok();if(!tok)return;
+  document.getElementById('clawy-banner').style.display='none';
+  // Antwort leeren
+  await fetch(`${HA}/api/states/input_text.clawy_reply`,{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},
+    body:JSON.stringify({state:'',attributes:{friendly_name:'Clawy Antwort'}})
+  });
+});
+
+// ─── SZENEN SHORTCUTS ───
+const SCENE_HA_URL = 'https://schlapphome.uk';
+function doFamilyScene(name){
+  const SCENES={
+    'abend': ()=>{
+      const lights=['light.h61e1','light.h618a','light.h618a_2'];
+      lights.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:40,color_temp_kelvin:2700,transition:3}));
+      svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+      toast('🌆 Abend-Modus');
+    },
+    'hell': ()=>{
+      const lights=['light.h61e1','light.h618a','light.h618a_2'];
+      lights.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:100,color_temp_kelvin:4000,transition:2}));
+      svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+      toast('☀️ Alle Lichter hell');
+    },
+    'nacht2': ()=>{
+      confirm('🌙 Gute Nacht?','Alle Lichter werden ausgeschaltet.','Gute Nacht ✓','',()=>{
+        const all=['light.h61e1','light.h618a','light.h618a_2','light.hue_play_l','light.garten_licht','light.gang_eg_licht','light.gang_og_licht'];
+        all.forEach(id=>svc('light','turn_off',{entity_id:id,transition:3}));
+        setTimeout(()=>svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'}),500);
+        toast('🌙 Gute Nacht!');
+      });
+    }
+  };
+  if(SCENES[name]) SCENES[name]();
+}
+document.querySelectorAll('.sc-btn').forEach(b=>{
+  b.addEventListener('click',()=>doFamilyScene(b.dataset.scene));
+});
+
+// Alte sendBugReport Funktion (nicht mehr verwendet)
+async function sendBugReport(){}
+
+// Version + Token-Info anzeigen
+setTimeout(()=>{
+  const vi=document.getElementById('app-version');
+  if(vi) vi.textContent=APP_VERSION+' · '+new Date().toLocaleDateString('de');
+  const ti=document.getElementById('tok-info');
+  if(ti) ti.textContent=getTok()?'Aktiv ✓':'Kein Token ✗';
+},500);
+
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+name));
+}
+
 checkLogin();
 </script>
+</div>
+</div>
+</div>
 </body>
 </html>

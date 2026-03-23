@@ -1,5 +1,18 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-23 22:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Gefühlte Temperatur Trend-Pfeil
+- Neues `<span id="wxt-feel-arrow">` direkt hinter `#wxt-feel` im Wetter-Hero (neben "Tatsächlich / Gefühlt")
+- CSS: `#wxt-feel-arrow` — `display:inline-block`, `vertical-align:middle`, `transition:color .6s, opacity .6s`
+- 3 Zustände: `.up` (grün #30d158, ↑), `.down` (rot #ff453a, ↓), `.neutral` (weiß .35, →)
+- `@keyframes feelArrowUp`: translateY 0 → -3px → 0 (1.8s loop) — Pfeil schwebt leicht nach oben
+- `@keyframes feelArrowDown`: translateY 0 → +3px → 0 (1.8s loop) — Pfeil schwebt leicht nach unten
+- Schwelle ±1°C: diff > 1 → ↑ grün, diff < -1 → ↓ rot, sonst → neutral weiß
+- IIFE in `renderWeather()` nach `wxt-feel.textContent` Zuweisung: `c.apparent_temperature - c.temperature_2m`
+- `void arr.offsetWidth` Reflow-Trick → Animation startet sauber bei jedem Weather-Update
+- Beispiel: Wenn es 10° ist aber sich wegen Wind nur 6° anfühlt → roter ↓ Pfeil animiert nach unten
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe, 371KB)
+
 ## 2026-03-23 21:16 UTC — Heartbeat (Main Agent)
 - ✅ demo.html: Countdown Timer im Scarcity-Banner (24h localStorage, HH:MM:SS Anzeige, auto-reset nach Ablauf, ⏱ Badge-Style neben Plätze-Text)
 - JS-Check: OK | Commit: 2d9be49 | Deploy: kein Remote/SSH verfügbar
