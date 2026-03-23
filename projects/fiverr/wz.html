@@ -3285,6 +3285,7 @@ function buildUI(){try{
             <button id="ls-tog" style="padding:9px 20px;border-radius:100px;border:none;font-weight:700;font-size:.82rem;cursor:pointer;background:${on?'rgba(255,159,10,.25)':'rgba(255,255,255,.08)'};color:${on?'#ff9f0a':'rgba(255,255,255,.45)'};transition:all .18s">
               ${on?'✓ An':'Aus'}
             </button>
+            <button id="ls-timer" title="Timer: Auto-aus" style="padding:9px 14px;border-radius:100px;border:none;font-weight:700;font-size:.82rem;cursor:pointer;background:rgba(255,255,255,.07);color:rgba(255,255,255,.45);transition:all .18s">⏱</button>
             <button id="ls-close" style="width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:1.1rem;display:flex;align-items:center;justify-content:center;touch-action:manipulation">✕</button>
           </div>
         </div>
@@ -3395,6 +3396,53 @@ function buildUI(){try{
       hap();
       const dom2=CFG.lights.find(l=>l.id===lid)?.domain||'light'; svc(dom2,'toggle',{entity_id:lid});
       ov.remove();
+    });
+    // ── Timer: Auto-off nach X Minuten ──
+    const _lightTimers=window._lightTimers||(window._lightTimers={});
+    const timerBtn=document.getElementById('ls-timer');
+    const _timerOpts=[5,10,15,30,60];
+    function _updateTimerBtn(){
+      const rem=_lightTimers[lid];
+      if(rem&&rem.until>Date.now()){
+        const secs=Math.round((rem.until-Date.now())/1000);
+        const mm=Math.floor(secs/60),ss=secs%60;
+        timerBtn.style.background='rgba(255,159,10,.22)';
+        timerBtn.style.color='#ff9f0a';
+        timerBtn.title=`Timer: noch ${mm}:${ss<10?'0':''}${ss}`;
+      } else {
+        timerBtn.style.background='rgba(255,255,255,.07)';
+        timerBtn.style.color='rgba(255,255,255,.45)';
+        timerBtn.title='Timer: Auto-aus';
+      }
+    }
+    _updateTimerBtn();
+    const _timerInterval=setInterval(_updateTimerBtn,5000);
+    ov.addEventListener('remove',()=>clearInterval(_timerInterval),{once:true});
+    timerBtn.addEventListener('click',()=>{
+      // Cycle through options: none→5→10→15→30→60→none
+      const cur=_lightTimers[lid];
+      const curMin=cur&&cur.until>Date.now()?cur.minutes:0;
+      const idx=_timerOpts.indexOf(curMin);
+      const next=idx===-1||idx===_timerOpts.length-1?null:_timerOpts[idx+1];
+      if(!next){
+        // Cancel timer
+        if(_lightTimers[lid]){clearTimeout(_lightTimers[lid].tid);delete _lightTimers[lid];}
+        showToast('⏱ Timer abgebrochen');
+      } else {
+        if(_lightTimers[lid]) clearTimeout(_lightTimers[lid].tid);
+        const ms=next*60*1000;
+        const tid=setTimeout(()=>{
+          const dom3=CFG.lights.find(l=>l.id===lid)?.domain||'light';
+          svc(dom3,'turn_off',{entity_id:lid});
+          delete _lightTimers[lid];
+          showToast('💡 Auto-aus: '+name,3000);
+          quickRefresh();
+        },ms);
+        _lightTimers[lid]={tid,until:Date.now()+ms,minutes:next};
+        showToast('⏱ Auto-aus in '+next+' Min',2000);
+      }
+      hap();
+      _updateTimerBtn();
     });
     // Rainbow ball opens custom picker
     document.getElementById('ls-custom-btn')?.addEventListener('click',()=>{
@@ -5916,8 +5964,9 @@ function applyTheme(theme,save=false){
   // Update nav bar style
   const nav=document.querySelector('nav');
   if(nav)nav.style.transition='background 1.4s ease';
-
-
+  // Re-apply hero gradient for new theme
+  const _n=new Date();
+  if(typeof updateHeroGradient==='function') updateHeroGradient(_n.getHours(),_n.getMinutes());
 }
 
 function checkAutoTheme(){
