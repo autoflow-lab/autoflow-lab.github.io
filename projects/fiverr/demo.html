@@ -1247,7 +1247,8 @@ input[type=range]{touch-action:pan-x}
 <!-- SCARCITY BANNER -->
 <div id="scarcity-banner" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#ff6b00,#ff9f0a);color:#fff;text-align:center;padding:10px 40px 10px 16px;font-size:.82rem;font-weight:600;letter-spacing:.02em;box-shadow:0 2px 12px rgba(255,107,0,.35);transform:translateY(-100%);transition:transform .5s cubic-bezier(.34,1.56,.64,1)">
   🔥 <span data-i18n="scarcity_text">Nur noch <strong>3 Plätze</strong> diese Woche verfügbar — jetzt sichern!</span>
-  <a href="#contact-section" style="margin-left:12px;background:rgba(0,0,0,.25);color:#fff;text-decoration:none;padding:3px 10px;border-radius:20px;font-size:.78rem">Anfragen →</a>
+  <span id="sc-timer-wrap" style="margin-left:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.22);border-radius:20px;padding:2px 10px;font-size:.76rem;font-variant-numeric:tabular-nums;letter-spacing:.04em">⏱ <span id="sc-countdown" style="font-weight:700;min-width:52px;display:inline-block">--:--:--</span></span>
+  <a href="#contact-section" style="margin-left:8px;background:rgba(0,0,0,.25);color:#fff;text-decoration:none;padding:3px 10px;border-radius:20px;font-size:.78rem">Anfragen →</a>
   <button onclick="document.getElementById('scarcity-banner').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.8);font-size:1.1rem;cursor:pointer;line-height:1" aria-label="Schließen">×</button>
 </div>
 <script>
@@ -1267,6 +1268,35 @@ input[type=range]{touch-action:pan-x}
     var el=b.querySelector('[data-i18n="scarcity_text"]');
     if(el) el.innerHTML='Only <strong>3 slots</strong> left this week — grab yours now!';
   }
+
+  // ── Countdown Timer ──────────────────────────────
+  (function(){
+    var KEY='scarcityEndTs';
+    var DURATION=24*3600*1000; // 24h
+    var end=parseInt(localStorage.getItem(KEY)||'0',10);
+    if(!end||end<=Date.now()){
+      end=Date.now()+DURATION;
+      localStorage.setItem(KEY,end);
+    }
+    var cdEl=document.getElementById('sc-countdown');
+    if(!cdEl)return;
+    function pad(n){return String(n).padStart(2,'0')}
+    function tick(){
+      var rem=Math.max(0,end-Date.now());
+      if(rem<=0){
+        // reset
+        end=Date.now()+DURATION;
+        localStorage.setItem(KEY,end);
+        rem=DURATION;
+      }
+      var h=Math.floor(rem/3600000);
+      var m=Math.floor((rem%3600000)/60000);
+      var s=Math.floor((rem%60000)/1000);
+      cdEl.textContent=pad(h)+':'+pad(m)+':'+pad(s);
+    }
+    tick();
+    setInterval(tick,1000);
+  })();
 })();
 </script>
 
@@ -4842,6 +4872,107 @@ if(_origGetPos){
     showToast();
     scheduleNext();
   },12000);
+})();
+</script>
+
+<script>
+/* ── Sticky Mobile CTA Bar ── */
+(function(){
+  var bar = document.createElement('div');
+  bar.id = 'mob-cta-bar';
+  bar.innerHTML =
+    '<div id="mob-cta-inner">' +
+      '<div id="mob-cta-txt">' +
+        '<span id="mob-cta-label">Jetzt beauftragen</span>' +
+        '<span id="mob-cta-price">ab <strong>€29</strong></span>' +
+      '</div>' +
+      '<button id="mob-cta-btn" onclick="openFiverr()">Bestellen \u2192</button>' +
+      '<button id="mob-cta-close" aria-label="Schlie\u00dfen">\u2715</button>' +
+    '</div>';
+  document.body.appendChild(bar);
+
+  var style = document.createElement('style');
+  style.textContent = [
+    '#mob-cta-bar{',
+      'position:fixed;bottom:0;left:0;right:0;z-index:9000;',
+      'transform:translateY(110%);transition:transform .45s cubic-bezier(.34,1.28,.64,1);',
+      'display:none;',
+    '}',
+    '@media(max-width:767px){',
+      '#mob-cta-bar{display:block}',
+    '}',
+    '#mob-cta-bar.show{transform:translateY(0)}',
+    '#mob-cta-inner{',
+      'display:flex;align-items:center;gap:10px;',
+      'background:rgba(18,18,20,.97);backdrop-filter:blur(20px) saturate(1.8);',
+      'border-top:1px solid rgba(255,255,255,.10);',
+      'padding:12px 14px calc(12px + env(safe-area-inset-bottom)) 14px;',
+    '}',
+    '#mob-cta-txt{flex:1;display:flex;flex-direction:column;line-height:1.2}',
+    '#mob-cta-label{font-size:.72rem;color:rgba(255,255,255,.52);letter-spacing:.04em;text-transform:uppercase}',
+    '#mob-cta-price{font-size:.92rem;color:#fff;font-weight:600}',
+    '#mob-cta-price strong{color:#30d158;font-size:1.05rem}',
+    '#mob-cta-btn{',
+      'flex-shrink:0;padding:10px 20px;border-radius:22px;border:none;cursor:pointer;',
+      'background:linear-gradient(135deg,#0071e3,#34aadc);',
+      'color:#fff;font-size:.9rem;font-weight:700;',
+      'box-shadow:0 3px 14px rgba(0,113,227,.45);',
+      'transition:transform .18s,box-shadow .18s;touch-action:manipulation;',
+    '}',
+    '#mob-cta-btn:active{transform:scale(.96);box-shadow:0 1px 6px rgba(0,113,227,.3)}',
+    '#mob-cta-close{',
+      'flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;',
+      'background:rgba(255,255,255,.09);color:rgba(255,255,255,.55);font-size:.75rem;',
+      'display:flex;align-items:center;justify-content:center;touch-action:manipulation;',
+    '}',
+    '@keyframes mcbPulse{0%,100%{box-shadow:0 3px 14px rgba(0,113,227,.45)}50%{box-shadow:0 3px 22px rgba(0,113,227,.75)}}'
+  ].join('');
+  document.head.appendChild(style);
+
+  function applyLang(){
+    var lang = document.documentElement.lang || 'de';
+    var lbl = document.getElementById('mob-cta-label');
+    var btn = document.getElementById('mob-cta-btn');
+    if(!lbl || !btn) return;
+    if(lang === 'en'){
+      lbl.textContent = 'Order now';
+      btn.textContent = 'Order \u2192';
+    } else {
+      lbl.textContent = 'Jetzt beauftragen';
+      btn.textContent = 'Bestellen \u2192';
+    }
+  }
+  document.addEventListener('langChange', applyLang);
+
+  var shown = false;
+  var dismissed = sessionStorage.getItem('mobCtaDismissed') === '1';
+  var scrollTriggered = false;
+
+  function tryShow(){
+    if(shown || dismissed) return;
+    shown = true;
+    bar.classList.add('show');
+    var btn = document.getElementById('mob-cta-btn');
+    if(btn) btn.style.animation = 'mcbPulse 2.4s ease-in-out 3';
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!scrollTriggered && window.scrollY > 80){
+      scrollTriggered = true;
+      setTimeout(tryShow, 3000);
+    }
+  }, {passive:true});
+  setTimeout(tryShow, 5000);
+
+  document.getElementById('mob-cta-close').addEventListener('touchend', function(e){
+    e.preventDefault();
+    bar.classList.remove('show');
+    sessionStorage.setItem('mobCtaDismissed','1');
+  });
+  document.getElementById('mob-cta-close').addEventListener('click', function(){
+    bar.classList.remove('show');
+    sessionStorage.setItem('mobCtaDismissed','1');
+  });
 })();
 </script>
 </body>
