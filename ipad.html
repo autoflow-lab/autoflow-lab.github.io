@@ -1,101 +1,142 @@
 <!DOCTYPE html>
-<!-- iPad Kiosk · autoflow-lab · v1 -->
+<!-- iPad Kiosk · autoflow-lab · v3 -->
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta http-equiv="Cache-Control" content="no-cache">
-<title>Home · Kiosk</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Home · Kiosk v3</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 :root{--bg:#000;--c1:#1c1c1e;--c2:#2c2c2e;--c3:#3a3a3c;--acc:#ff9f0a;--blue:#0a84ff;--grn:#30d158;--red:#ff453a;--txt:#fff;--dim:rgba(255,255,255,.5);--dim2:rgba(255,255,255,.25)}
 html,body{width:100vw;height:100vh;background:var(--bg);color:var(--txt);font-family:-apple-system,sans-serif;overflow:hidden}
 
-/* ── GRID ─────────────────────────────────── */
 .root{display:grid;grid-template-rows:auto 1fr auto;height:100vh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 
-/* ── HEADER ───────────────────────────────── */
-header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
-.hdr-left{}
+/* ── HEADER ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px 10px;border-bottom:1px solid rgba(255,255,255,.06);min-height:68px}
+.hdr-left{display:flex;align-items:center;gap:16px}
 .clock{font-size:2.6rem;font-weight:100;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;line-height:1}
-.hdr-date{font-size:.8rem;color:var(--dim2);margin-top:4px;letter-spacing:.5px}
-.hdr-right{display:flex;align-items:center;gap:20px}
-.wx-badge{display:flex;flex-direction:column;align-items:flex-end;gap:2px;cursor:pointer}
-.wx-ico{font-size:2rem}
-.wx-temp{font-size:1.1rem;font-weight:300;color:rgba(255,255,255,.8)}
-.wx-desc{font-size:.65rem;color:var(--dim2);text-align:right}
-.status-row{display:flex;gap:8px;align-items:center}
-.status-dot{width:7px;height:7px;border-radius:50%;background:var(--grn)}
+.hdr-date{font-size:.78rem;color:var(--dim2);letter-spacing:.4px}
+.hdr-right{display:flex;align-items:center;gap:14px}
+/* Weather badge — fixed: horizontal layout, nothing hidden */
+.wx-badge{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.055);border-radius:14px;padding:8px 14px 8px 10px;border:1px solid rgba(255,255,255,.07);cursor:pointer;flex-shrink:0}
+.wx-badge-ico{width:36px;height:36px;flex-shrink:0}
+.wx-badge-temp{font-size:1.4rem;font-weight:200;letter-spacing:-1px;line-height:1;flex-shrink:0}
+.wx-badge-info{display:flex;flex-direction:column;gap:1px}
+.wx-badge-desc{font-size:.65rem;color:var(--dim);white-space:nowrap}
+.wx-badge-feel{font-size:.58rem;color:var(--dim2);white-space:nowrap}
+.status-row{display:flex;gap:7px;align-items:center}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--grn);flex-shrink:0}
 .status-dot.offline{background:var(--red)}
 
-/* ── MAIN ─────────────────────────────────── */
-main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:16px 24px;overflow:hidden}
+/* ── MAIN ── */
+main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:14px 24px;overflow:hidden}
 
-/* ── PANEL ────────────────────────────────── */
+/* ── PANEL ── */
 .panel{background:var(--c1);border-radius:20px;border:1px solid rgba(255,255,255,.055);border-top-color:rgba(255,255,255,.13);padding:18px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
 .panel::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.06) 0%,transparent 45%);pointer-events:none}
 .panel-title{font-size:.62rem;font-weight:700;color:var(--dim2);letter-spacing:1px;text-transform:uppercase}
 
-/* ── LIGHT TILES (in panel) ───────────────── */
+/* ── LIGHT TILES ── */
 .lt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
-.lt{border-radius:14px;background:var(--c2);border:1px solid rgba(255,255,255,.055);border-top-color:rgba(255,255,255,.12);padding:12px 10px;cursor:pointer;transition:background .3s,transform .12s;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.lt{border-radius:14px;background:var(--c2);border:1px solid rgba(255,255,255,.055);border-top-color:rgba(255,255,255,.12);padding:12px 10px 10px;cursor:pointer;transition:background .3s,transform .12s;display:flex;flex-direction:column;gap:7px;position:relative;overflow:hidden;user-select:none}
 .lt:active{transform:scale(.91)}
-.lt::before{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(160deg,rgba(255,255,255,.07) 0%,transparent 45%);pointer-events:none}
-.lt-ico{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
-.lt-ico svg{width:18px;height:18px;stroke:rgba(255,255,255,.4);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.lt-name{font-size:.68rem;font-weight:600;color:rgba(255,255,255,.75);line-height:1.2}
+.lt.on{border-top-color:rgba(255,159,10,.3);box-shadow:0 0 16px rgba(255,159,10,.1)}
+.lt.unavail{opacity:.55;cursor:default}
+.lt-ico{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;transition:background .3s}
+.lt.on .lt-ico{background:rgba(255,159,10,.2)}
+.lt-ico svg{width:18px;height:18px;stroke:rgba(255,255,255,.4);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
+.lt.on .lt-ico svg{stroke:var(--acc)}
+.lt-name{font-size:.68rem;font-weight:600;color:rgba(255,255,255,.75);line-height:1.2;display:flex;align-items:center;gap:4px}
+.lt-unavail-badge{font-size:.5rem;background:rgba(255,159,10,.15);color:var(--acc);border-radius:4px;padding:1px 4px}
 .lt-st{font-size:.55rem;color:rgba(255,255,255,.35)}
+.lt.on .lt-st{color:rgba(255,159,10,.75)}
+/* Brightness bar */
+.lt-bri-bar{height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.lt-bri-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .2s;width:0%}
+/* Dimmer — visible on "on" tiles */
+.lt-dim-wrap{display:none;align-items:center;gap:5px}
+.lt.on .lt-dim-wrap{display:flex}
+input.lt-dim{-webkit-appearance:none;flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.1);outline:none;cursor:pointer}
+input.lt-dim::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.4),0 0 0 2px rgba(255,159,10,.3)}
+.lt-dim-pct{font-size:.5rem;color:var(--acc);min-width:24px;text-align:right}
 
-/* ── MEDIA PANEL ──────────────────────────── */
+/* ── MEDIA ── */
 .media-now{display:flex;align-items:center;gap:12px;background:var(--c2);border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.055)}
-.media-art{width:52px;height:52px;border-radius:10px;background:linear-gradient(145deg,#1a1a2e,#0d0d1e);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.media-art{width:52px;height:52px;border-radius:10px;background:linear-gradient(145deg,#1a1a2e,#0d0d1e);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.media-art img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:10px}
+.media-art-ico{font-size:1.3rem}
 .media-info{flex:1;min-width:0}
 .media-title{font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .media-sub{font-size:.62rem;color:var(--dim2);margin-top:2px}
-.media-ctrl{display:flex;gap:8px;margin-top:4px}
-.mc-btn{width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
-.mc-btn:active{background:rgba(255,255,255,.2)}
+/* Controls */
+.media-ctrl{display:flex;align-items:center;gap:8px;margin-top:6px}
+.mc-btn{width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .15s}
+.mc-btn:active{background:rgba(255,255,255,.2);transform:scale(.88)}
 .mc-btn svg{width:14px;height:14px;fill:currentColor}
-.mc-play{background:var(--blue)!important;width:38px;height:38px}
-.vol-row{display:flex;align-items:center;gap:8px;margin-top:6px}
-.vol-lbl{font-size:.6rem;color:var(--dim2)}
-.vol-bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.12);position:relative;cursor:pointer}
-.vol-fill{height:100%;border-radius:2px;background:var(--blue);width:40%}
-.vol-pct{font-size:.6rem;color:var(--dim2);min-width:24px;text-align:right}
+.mc-play{background:var(--blue)!important;width:40px;height:40px}
+.mc-skip{transition:opacity .25s,transform .25s}
+.mc-skip.hidden{opacity:0;pointer-events:none;transform:scale(.7)}
+/* Volume */
+.vol-row{display:flex;align-items:center;gap:8px}
+.vol-row svg{width:14px;height:14px;stroke:rgba(255,255,255,.35);fill:none;stroke-width:1.8;stroke-linecap:round;flex-shrink:0}
+input.vol-slider{-webkit-appearance:none;flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.12);outline:none;cursor:pointer}
+input.vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 5px rgba(0,0,0,.5),0 0 0 2px rgba(10,132,255,.35)}
+.vol-pct{font-size:.6rem;color:var(--dim2);min-width:28px;text-align:right}
+/* Radio */
+.radio-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.rb{padding:7px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);font-size:.65rem;font-weight:600;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.rb:active{transform:scale(.93)}
+.rb.on{background:rgba(10,132,255,.2);border-color:rgba(10,132,255,.4);color:#60b8ff}
 
-/* ── WETTER PANEL ─────────────────────────── */
-.forecast-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:1}
-.fc-day{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--c2);border-radius:10px;padding:8px 4px}
-.fc-lbl{font-size:.55rem;color:var(--dim2)}
-.fc-ico{font-size:1rem}
-.fc-hi{font-size:.72rem;font-weight:700;color:#fff}
-.fc-lo{font-size:.6rem;color:var(--dim2)}
-.fc-prec{font-size:.5rem;color:var(--blue)}
-.hourly-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
-.hh-item{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:44px;background:var(--c2);border-radius:10px;padding:8px 4px}
-.hh-t{font-size:.55rem;color:var(--dim2)}
-.hh-ico{font-size:.9rem}
-.hh-temp{font-size:.68rem;font-weight:600;color:#fff}
-
-/* ── SZENEN PANEL ─────────────────────────── */
+/* ── SZENEN ── */
 .sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
-.sc{border-radius:14px;border:none;cursor:pointer;padding:14px 12px;display:flex;flex-direction:column;gap:8px;text-align:left;transition:transform .12s,opacity .2s;position:relative;overflow:hidden}
+.sc{border-radius:14px;border:none;cursor:pointer;padding:14px 12px;display:flex;flex-direction:column;gap:7px;text-align:left;transition:transform .12s;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.07) 0%,transparent 45%);pointer-events:none}
 .sc:active{transform:scale(.93)}
+.sc svg{width:20px;height:20px;stroke:rgba(255,255,255,.6);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .sc span{font-size:.72rem;font-weight:700;color:#fff}
 .sc small{font-size:.58rem;color:rgba(255,255,255,.45)}
 
-/* ── FOOTER ───────────────────────────────── */
-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 28px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.06)}
+/* ── GRUNDRISS ── */
+.fp-panel{padding:14px}
+
+/* ── FOOTER ── */
+footer{display:flex;align-items:center;justify-content:space-between;padding:8px 28px calc(8px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.06)}
 .ft-info{font-size:.65rem;color:rgba(255,255,255,.2)}
 .ft-btns{display:flex;gap:8px}
 .ft-btn{padding:7px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-size:.65rem;font-weight:600;cursor:pointer;transition:background .2s}
 .ft-btn:active{background:rgba(255,255,255,.1)}
 .ft-btn.danger{border-color:rgba(255,69,58,.3);color:var(--red)}
 
+/* ── COLOR SHEET ── */
+#cs{position:fixed;inset:0;z-index:800;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
+#cs.show{opacity:1;pointer-events:all}
+#cs-bg{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px)}
+#cs-card{position:relative;z-index:1;width:100%;background:var(--c1);border-radius:24px 24px 0 0;padding:18px 24px 36px;border-top:1px solid rgba(255,255,255,.1);transform:translateY(20px);transition:transform .25s}
+#cs.show #cs-card{transform:translateY(0)}
+.cs-handle{width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:0 auto 16px}
+.cs-close{position:absolute;top:14px;right:18px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:#fff;font-size:.85rem;cursor:pointer}
+.cs-title{font-size:.95rem;font-weight:700;margin-bottom:16px}
+.cs-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.cs-lbl{font-size:.6rem;color:var(--dim2);text-transform:uppercase;letter-spacing:.8px;width:80px;flex-shrink:0}
+input.cs-range{-webkit-appearance:none;flex:1;height:6px;border-radius:6px;outline:none;cursor:pointer}
+input.cs-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.cs-bri{background:linear-gradient(90deg,#000,#ff9f0a)}
+.cs-temp{background:linear-gradient(90deg,#ff8c00,#fff5e0,#cce4ff)}
+.cs-colors{display:flex;gap:10px}
+.cc{width:34px;height:34px;border-radius:50%;cursor:pointer;transition:transform .15s,box-shadow .15s;flex-shrink:0;border:2px solid transparent}
+.cc:active{transform:scale(.82)}
+.cc.sel{border-color:rgba(255,255,255,.8);box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+.cs-bri-val{font-size:.68rem;color:var(--acc);min-width:30px;text-align:right}
+
 /* Toast */
-#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(28,28,30,.95);color:#fff;padding:10px 22px;border-radius:100px;font-size:.8rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1)}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(28,28,30,.96);color:#fff;padding:10px 22px;border-radius:100px;font-size:.78rem;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);white-space:nowrap}
 #toast.show{opacity:1}
 
 /* Standby */
@@ -103,147 +144,143 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
 #standby.show{display:flex}
 #sb-clock{font-size:min(22vw,150px);font-weight:100;color:rgba(255,255,255,.85);letter-spacing:-4px;font-variant-numeric:tabular-nums}
 #sb-date{font-size:1rem;color:rgba(255,255,255,.28);margin-top:6px;letter-spacing:1px;text-transform:uppercase}
-#sb-wx{font-size:1rem;color:rgba(255,255,255,.18);margin-top:20px}
+#sb-wx{font-size:.9rem;color:rgba(255,255,255,.18);margin-top:18px}
 </style>
 </head>
 <body>
 <div class="root">
-  <header>
-    <div class="hdr-left">
-      <div class="clock" id="clock">--:--</div>
-      <div class="hdr-date" id="hdr-date">–</div>
+
+<header>
+  <div class="hdr-left">
+    <div class="clock" id="clock">--:--</div>
+    <div class="hdr-date" id="hdr-date">–</div>
+  </div>
+  <div class="hdr-right">
+    <div class="status-row">
+      <div class="status-dot" id="status-dot"></div>
+      <span style="font-size:.62rem;color:rgba(255,255,255,.3)" id="status-lbl">Verbinden…</span>
     </div>
-    <div class="hdr-right">
-      <div class="status-row">
-        <div class="status-dot" id="status-dot"></div>
-        <span style="font-size:.65rem;color:rgba(255,255,255,.3)" id="status-lbl">Verbinden…</span>
+    <!-- Wetter — einzige Anzeige, horizontal, alles sichtbar -->
+    <div class="wx-badge">
+      <svg class="wx-badge-ico" id="wx-ico" viewBox="0 0 48 48"></svg>
+      <div class="wx-badge-temp" id="wx-temp">–°</div>
+      <div class="wx-badge-info">
+        <div class="wx-badge-desc" id="wx-desc">Lade…</div>
+        <div class="wx-badge-feel" id="wx-feel"></div>
       </div>
-      <div class="wx-badge" id="wx-badge">
-        <div class="wx-ico" id="wx-ico">🌤</div>
-        <div class="wx-temp" id="wx-temp">–°</div>
-        <div class="wx-desc" id="wx-desc">–</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- LICHTER (spans 2 rows) -->
+  <div class="panel" style="grid-row:span 2">
+    <div class="panel-title">Lichter</div>
+    <div class="lt-grid" id="lt-grid"></div>
+  </div>
+
+  <!-- MUSIK -->
+  <div class="panel">
+    <div class="panel-title">Musik · Almando</div>
+    <div class="media-now">
+      <div class="media-art" id="media-art">
+        <span class="media-art-ico">🎵</span>
+      </div>
+      <div class="media-info">
+        <div class="media-title" id="media-title">Bereit</div>
+        <div class="media-sub" id="media-sub">Almando</div>
       </div>
     </div>
-  </header>
-
-  <main>
-    <!-- Lichter Panel -->
-    <div class="panel">
-      <div class="panel-title">💡 Lichter</div>
-      <div class="lt-grid" id="lt-grid"></div>
+    <div class="media-ctrl">
+      <button class="mc-btn mc-skip" id="mc-prev"><svg viewBox="0 0 24 24"><path d="M19 20 9 12l10-8v16z"/><rect x="5" y="4" width="2" height="16"/></svg></button>
+      <button class="mc-btn mc-play" id="mc-play"><svg id="mc-play-ico" viewBox="0 0 24 24"><path d="M8 5.5v13L19 12z"/></svg></button>
+      <button class="mc-btn mc-skip" id="mc-next"><svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4z"/><rect x="17" y="4" width="2" height="16"/></svg></button>
+      <button class="mc-btn" id="mc-stop" style="margin-left:auto"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></svg></button>
     </div>
+    <div class="vol-row">
+      <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+      <input type="range" class="vol-slider" id="alm-vol" min="0" max="100" value="40">
+      <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <div class="vol-pct" id="alm-vol-pct">40%</div>
+    </div>
+    <div class="panel-title">Radio</div>
+    <div class="radio-wrap" id="radio-btns"></div>
+  </div>
 
-    <!-- Musik Panel -->
-    <div class="panel">
-      <div class="panel-title">🎵 Musik</div>
-      <div class="media-now">
-        <div class="media-art" id="media-art">🎵</div>
-        <div class="media-info">
-          <div class="media-title" id="media-title">Bereit</div>
-          <div class="media-sub" id="media-sub">Almando Wohnzimmer</div>
-          <div class="media-ctrl">
-            <button class="mc-btn" id="mc-prev" title="Zurück"><svg viewBox="0 0 24 24"><path d="M19 20 9 12l10-8v16z"/><rect x="5" y="4" width="2" height="16"/></svg></button>
-            <button class="mc-btn mc-play" id="mc-play" title="Play/Pause"><svg id="mc-play-ico" viewBox="0 0 24 24"><path d="M8 5.5v13L19 12z"/></svg></button>
-            <button class="mc-btn" id="mc-stop" title="Stop"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></svg></button>
-          </div>
-        </div>
+  <!-- SZENEN -->
+  <div class="panel">
+    <div class="panel-title">Szenen</div>
+    <div class="sc-grid" id="sc-grid"></div>
+  </div>
+
+  <!-- GRUNDRISS (full width) -->
+  <div class="panel fp-panel" style="grid-column:1/4">
+    <div class="panel-title">Grundriss</div>
+    <svg id="fp-svg" viewBox="0 0 520 200" style="width:100%;flex:1;min-height:80px" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="rg-wz" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ff9f0a" stop-opacity="0"/><stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="rg-kue" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ff9f0a" stop-opacity="0"/><stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="rg-buro" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#30d158" stop-opacity="0"/><stop offset="100%" stop-color="#30d158" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect data-room="wz"   x="8"   y="8"   width="230" height="140" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
+      <circle id="glow-wz"   cx="123" cy="78"  r="85" fill="url(#rg-wz)"   opacity="0" style="transition:opacity 1s"/>
+      <text x="123" y="74"  text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">WOHNZIMMER</text>
+      <text id="fp-wz-st"   x="123" y="87"  text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
+      <rect data-room="kue"  x="248"  y="8"   width="150" height="100" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
+      <circle id="glow-kue"  cx="323" cy="58"  r="55" fill="url(#rg-kue)"  opacity="0" style="transition:opacity 1s"/>
+      <text x="323" y="54"  text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">KÜCHE</text>
+      <text id="fp-kue-st"  x="323" y="67"  text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
+      <rect x="8" y="158" width="230" height="34" rx="4" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      <text x="123" y="179" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="8" font-family="-apple-system,sans-serif">GANG</text>
+      <rect data-room="buro" x="408"  y="8"   width="104" height="140" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
+      <circle id="glow-buro" cx="460" cy="78"  r="50" fill="url(#rg-buro)" opacity="0" style="transition:opacity 1s"/>
+      <text x="460" y="74"  text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">BÜRO</text>
+      <text id="fp-buro-st" x="460" y="87"  text-anchor="middle" fill="rgba(48,209,88,0)"  font-size="8" font-family="-apple-system,sans-serif">Aus</text>
+      <circle id="fp-dot-wz"   cx="100" cy="55" r="5" fill="rgba(255,159,10,.15)" stroke="rgba(255,159,10,.3)" stroke-width="1" style="transition:all .5s"/>
+      <circle id="fp-dot-kue"  cx="323" cy="42" r="5" fill="rgba(255,159,10,.15)" stroke="rgba(255,159,10,.3)" stroke-width="1" style="transition:all .5s"/>
+      <circle id="fp-dot-buro" cx="460" cy="55" r="4" fill="rgba(48,209,88,.15)"  stroke="rgba(48,209,88,.3)"  stroke-width="1" style="transition:all .5s"/>
+    </svg>
+  </div>
+</main>
+
+<footer>
+  <div class="ft-info">autoflow-lab · Home</div>
+  <div class="ft-btns">
+    <button class="ft-btn" id="ft-reload">↻ Reload</button>
+    <button class="ft-btn" id="ft-fullscreen">⛶ Vollbild</button>
+    <button class="ft-btn danger" id="ft-alloff">🌙 Alles aus</button>
+  </div>
+</footer>
+</div>
+
+<!-- COLOR SHEET -->
+<div id="cs">
+  <div id="cs-bg"></div>
+  <div id="cs-card">
+    <div class="cs-handle"></div>
+    <button class="cs-close" id="cs-close">✕</button>
+    <div class="cs-title" id="cs-title">Licht</div>
+    <div class="cs-row">
+      <div class="cs-lbl">Helligkeit</div>
+      <input type="range" class="cs-range cs-bri" id="cs-bri" min="1" max="100" value="60">
+      <div class="cs-bri-val" id="cs-bri-val">60%</div>
+    </div>
+    <div class="cs-row" id="cs-temp-row">
+      <div class="cs-lbl">Farbtemp.</div>
+      <input type="range" class="cs-range cs-temp" id="cs-temp" min="2000" max="6500" value="3500">
+    </div>
+    <div class="cs-row" id="cs-color-row">
+      <div class="cs-lbl">Farbe</div>
+      <div class="cs-colors">
+        <div class="cc" data-rgb="255,200,100" style="background:#ffc864" title="Warm"></div>
+        <div class="cc" data-rgb="255,80,30"   style="background:#ff501e" title="Orange"></div>
+        <div class="cc" data-rgb="30,120,255"  style="background:#1e78ff" title="Blau"></div>
+        <div class="cc" data-rgb="30,200,80"   style="background:#1ec850" title="Grün"></div>
+        <div class="cc" data-rgb="180,30,255"  style="background:#b41eff" title="Lila"></div>
+        <div class="cc" data-rgb="255,255,255" style="background:linear-gradient(135deg,#ff8800,#fff,#aad4ff)" title="Neutral"></div>
       </div>
-      <!-- Almando Volume -->
-      <div>
-        <div class="vol-lbl" style="margin-bottom:5px">Almando Lautstärke</div>
-        <div class="vol-row">
-          <span style="font-size:.8rem">🔈</span>
-          <div class="vol-bar" id="alm-vol-bar">
-            <div class="vol-fill" id="alm-vol-fill"></div>
-          </div>
-          <span class="vol-pct" id="alm-vol-pct">–%</span>
-        </div>
-      </div>
-      <!-- Radio Buttons -->
-      <div class="panel-title" style="margin-top:4px">📻 Radio</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap" id="radio-btns"></div>
     </div>
-
-    <!-- Wetter Panel -->
-    <div class="panel">
-      <div class="panel-title">🌤 Wetter</div>
-      <div class="hourly-strip" id="hourly-strip"></div>
-      <div class="forecast-grid" id="forecast-grid"></div>
-    </div>
-
-    <!-- Szenen Panel -->
-    <div class="panel" style="grid-column:1/3">
-      <div class="panel-title">⚡ Szenen</div>
-      <div class="sc-grid" id="sc-grid"></div>
-    </div>
-
-    <!-- Grundriss Panel -->
-    <div class="panel" style="padding:14px">
-      <div class="panel-title">🏠 Grundriss</div>
-      <svg id="fp-svg" viewBox="0 0 520 380" style="width:100%;flex:1;min-height:0" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <!-- Room glow gradients -->
-          <radialGradient id="rg-wz" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse" fx="50%" fy="50%">
-            <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="rg-kue" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="rg-bad" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#0a84ff" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#0a84ff" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="rg-buro" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#30d158" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#30d158" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <!-- Floor plan rooms -->
-        <!-- Wohnzimmer (large, left) -->
-        <rect data-room="wz" x="10" y="10" width="240" height="180" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
-        <circle id="glow-wz" cx="130" cy="100" r="90" fill="url(#rg-wz)" opacity="0" style="transition:opacity 1s"/>
-        <text x="130" y="96" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">WOHNZIMMER</text>
-        <text id="fp-wz-st" x="130" y="110" text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
-        <!-- Küche (top right) -->
-        <rect data-room="kue" x="260" y="10" width="150" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
-        <circle id="glow-kue" cx="335" cy="70" r="60" fill="url(#rg-kue)" opacity="0" style="transition:opacity 1s"/>
-        <text x="335" y="66" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">KÜCHE</text>
-        <text id="fp-kue-st" x="335" y="80" text-anchor="middle" fill="rgba(255,159,10,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
-        <!-- Bad (mid right) -->
-        <rect data-room="bad" x="420" y="10" width="90" height="120" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
-        <circle id="glow-bad" cx="465" cy="70" r="44" fill="url(#rg-bad)" opacity="0" style="transition:opacity 1s"/>
-        <text x="465" y="66" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">BAD</text>
-        <text id="fp-bad-st" x="465" y="79" text-anchor="middle" fill="rgba(10,132,255,0)" font-size="7" font-family="-apple-system,sans-serif">Aus</text>
-        <!-- Gang (horizontal) -->
-        <rect x="10" y="200" width="240" height="50" rx="4" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/>
-        <text x="130" y="230" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="8" font-family="-apple-system,sans-serif">GANG</text>
-        <!-- Büro (bottom left) -->
-        <rect data-room="buro" x="10" y="260" width="160" height="110" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" style="cursor:pointer"/>
-        <circle id="glow-buro" cx="90" cy="315" r="55" fill="url(#rg-buro)" opacity="0" style="transition:opacity 1s"/>
-        <text x="90" y="311" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">BÜRO</text>
-        <text id="fp-buro-st" x="90" y="325" text-anchor="middle" fill="rgba(48,209,88,0)" font-size="8" font-family="-apple-system,sans-serif">Aus</text>
-        <!-- Schlafzimmer (bottom right) -->
-        <rect x="260" y="140" width="250" height="230" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
-        <text x="385" y="258" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" font-weight="600">SCHLAFZIMMER</text>
-        <!-- Light dots -->
-        <circle id="fp-dot-wz"   cx="130" cy="80"  r="5" fill="rgba(255,159,10,.2)" stroke="rgba(255,159,10,.4)" stroke-width="1" style="transition:all .5s"/>
-        <circle id="fp-dot-kue"  cx="335" cy="50"  r="5" fill="rgba(255,159,10,.2)" stroke="rgba(255,159,10,.4)" stroke-width="1" style="transition:all .5s"/>
-        <circle id="fp-dot-bad"  cx="465" cy="50"  r="4" fill="rgba(10,132,255,.2)" stroke="rgba(10,132,255,.4)"  stroke-width="1" style="transition:all .5s"/>
-        <circle id="fp-dot-buro" cx="90"  cy="295" r="4" fill="rgba(48,209,88,.2)"  stroke="rgba(48,209,88,.4)"  stroke-width="1" style="transition:all .5s"/>
-      </svg>
-    </div>
-  </main>
-
-  <footer>
-    <div class="ft-info" id="ft-info">autoflow-lab · Home</div>
-    <div class="ft-btns">
-      <button class="ft-btn" id="ft-reload">↻ Reload</button>
-      <button class="ft-btn" id="ft-fullscreen">⛶ Vollbild</button>
-      <button class="ft-btn danger" id="ft-alloff">🌙 Alles aus</button>
-    </div>
-  </footer>
+  </div>
 </div>
 
 <div id="standby">
@@ -254,242 +291,300 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
 <div id="toast"></div>
 
 <script>
-const HA='http://192.168.1.123:8123';
+const HA=window.location.origin;
 const LS_KEY='wz4';
-const WC={'0':'☀️','1':'🌤','2':'⛅','3':'☁️','45':'🌫','48':'🌫','51':'🌦','53':'🌦','55':'🌧','61':'🌧','63':'🌧','65':'🌧','71':'❄️','73':'❄️','75':'❄️','80':'🌦','81':'🌧','82':'🌩','95':'⛈','99':'⛈'};
 const DAYS=['So','Mo','Di','Mi','Do','Fr','Sa'];
 const MONTHS=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const WC_TXT={'0':'Klar','1':'Leicht bewölkt','2':'Bewölkt','3':'Bedeckt','45':'Nebel','51':'Leichter Regen','61':'Regen','63':'Regen','65':'Starker Regen','71':'Schnee','80':'Regenschauer','95':'Gewitter'};
 
-let _S={}, _wx=null;
+let _S={}, _csTarget=null, _volDragging=false, _radActive=null;
 
+// ── Lights config ──
 const LIGHTS=[
-  {id:'light.h618a',     name:'Sofa', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
-  {id:'light.h618a_2',   name:'Küche', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
-  {id:'light.hue_play_l',name:'Büro', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
-  {id:'light.hue_iris',  name:'Iris', svg:'<circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9" opacity=".3"/>'},
-  {id:'light.gang_og_licht',name:'Gang OG', svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'},
-  {id:'light.gang_eg_licht',name:'Gang EG', svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'},
-  {id:'switch.shelly1_98cdac0ca9b2',name:'Wand', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
-  {id:'light.h61e1',     name:'WZ Wand', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+  {id:'light.h618a',            name:'Sofa'},
+  {id:'light.h618a_2',          name:'Küche'},
+  {id:'light.gang_og_licht',    name:'Gang OG',  nodim:true},
+  {id:'light.gang_eg_licht',    name:'Gang EG',  nodim:true},
+  {id:'light.h61e1',            name:'WZ Wand',  unavail:true},
+  {id:'light.hue_play_l',       name:'Büro Hue'},
 ];
+const BULB_SVG='<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>';
+const HOUSE_SVG='<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>';
 
 const SCENES=[
-  {id:'abend',label:'Abend',sub:'Warm & gemütlich',bg:'linear-gradient(135deg,#1a1200,#2d1f00)',action:()=>{
-    svc('light','turn_on',{entity_id:'light.h618a',brightness_pct:40,rgb_color:[255,128,30]});
-    svc('light','turn_on',{entity_id:'light.h618a_2',brightness_pct:22,rgb_color:[255,70,15]});
-    toast('🌙 Abend-Modus');
-  }},
-  {id:'hell',label:'Hell',sub:'100% Tageslicht',bg:'linear-gradient(135deg,#1a1400,#2a2000)',action:()=>{
-    LIGHTS.filter(l=>l.id.startsWith('light')).forEach(l=>svc('light','turn_on',{entity_id:l.id,brightness_pct:100,color_temp_kelvin:3500}));
-    toast('☀️ Volle Helligkeit');
-  }},
-  {id:'film',label:'Film',sub:'Kino-Modus',bg:'linear-gradient(135deg,#000d1a,#001833)',action:()=>{
-    LIGHTS.filter(l=>l.id.startsWith('light')).forEach(l=>svc('light','turn_off',{entity_id:l.id}));
-    svc('media_player','turn_on',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});
-    toast('🎬 Film-Modus');
-  }},
-  {id:'off',label:'Alles aus',sub:'Alle Geräte aus',bg:'linear-gradient(135deg,#180000,#240808)',action:()=>{
-    LIGHTS.forEach(l=>svc(l.id.split('.')[0],'turn_off',{entity_id:l.id}));
-    svc('media_player','turn_off',{entity_id:'media_player.wohnzimmer_alm'});
-    svc('media_player','turn_off',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});
-    svc('media_player','turn_off',{entity_id:'media_player.nest'});
-    toast('🌙 Alles aus');
-  }},
+  {id:'abend', label:'Abend',    sub:'Warm & gemütlich', bg:'linear-gradient(135deg,#1a1200,#2d1f00)',
+   ico:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+   action(){svc('light','turn_on',{entity_id:'light.h618a',brightness_pct:40,rgb_color:[255,128,30]});svc('light','turn_on',{entity_id:'light.h618a_2',brightness_pct:22,rgb_color:[255,70,15]});toast('Abend-Modus');}},
+  {id:'hell',  label:'Hell',     sub:'Volle Helligkeit',  bg:'linear-gradient(135deg,#1a1400,#2a2000)',
+   ico:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
+   action(){['light.h618a','light.h618a_2','light.hue_play_l'].forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:100,color_temp_kelvin:3500}));toast('Volle Helligkeit');}},
+  {id:'film',  label:'Film',     sub:'Kino-Modus',         bg:'linear-gradient(135deg,#000d1a,#001833)',
+   ico:'<rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/>',
+   action(){['light.h618a','light.h618a_2','light.hue_play_l'].forEach(id=>svc('light','turn_off',{entity_id:id}));svc('media_player','turn_on',{entity_id:'media_player.lg_webos_tv_oled65g49ls_2'});toast('Film-Modus');}},
+  {id:'nacht', label:'Nacht',    sub:'Alles aus',           bg:'linear-gradient(135deg,#100010,#180018)',
+   ico:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+   action(){LIGHTS.forEach(l=>svc('light','turn_off',{entity_id:l.id}));svc('media_player','turn_off',{entity_id:'media_player.wohnzimmer_alm'});toast('Alles aus');}},
 ];
 
 const RADIO=[
-  {n:'SRF 1', u:'http://stream.srg-ssr.ch/m/drs1/mp3_128'},
-  {n:'SRF 3', u:'http://stream.srg-ssr.ch/m/drs3/mp3_128'},
-  {n:'Energy', u:'https://energyzurich.ice.infomaniak.ch/energyzurich-high.mp3'},
-  {n:'Radio24', u:'https://radio24.ice.infomaniak.ch/radio24-high.mp3'},
+  {n:'SRF 1',   u:'http://stream.srg-ssr.ch/m/drs1/mp3_128'},
+  {n:'SRF 3',   u:'http://stream.srg-ssr.ch/m/drs3/mp3_128'},
+  {n:'Energy',  u:'https://energyzurich.ice.infomaniak.ch/energyzurich-high.mp3'},
+  {n:'Radio 24',u:'https://radio24.ice.infomaniak.ch/radio24-high.mp3'},
 ];
 
+// ── Auth ──
 function getTok(){try{const r=localStorage.getItem(LS_KEY);if(!r)return null;const p=JSON.parse(r);return p?.access_token||p;}catch{return null;}}
-function svc(domain,service,data){const tok=getTok();if(!tok)return;fetch(HA+`/api/services/${domain}/${service}`,{method:'POST',headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify(data)}).then(()=>setTimeout(fetchStates,600));}
-function st(id){return _S[id]?.state||'off';}
+async function handleCallback(){
+  const code=new URLSearchParams(location.search).get('code');
+  if(!code)return;
+  try{
+    const r=await fetch(HA+'/auth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'grant_type=authorization_code&code='+code+'&client_id='+encodeURIComponent(location.origin+'/')+'&redirect_uri='+encodeURIComponent(location.origin+location.pathname)});
+    if(r.ok){localStorage.setItem(LS_KEY,JSON.stringify(await r.json()));history.replaceState({},'',location.pathname);}
+  }catch(e){}
+}
+function checkAuth(){
+  if(!getTok()){window.location.href=HA+'/auth/authorize?response_type=code&client_id='+encodeURIComponent(location.origin+'/')+'&redirect_uri='+encodeURIComponent(location.href);return false;}
+  return true;
+}
+
+function svc(domain,service,data){
+  const tok=getTok();if(!tok)return;
+  fetch(HA+'/api/services/'+domain+'/'+service,{method:'POST',headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify(data||{})})
+    .then(()=>setTimeout(fetchStates,700)).catch(()=>{});
+}
+function st(id){return _S[id]?.state||'';}
 function at(id,k){return _S[id]?.attributes?.[k];}
+function toast(msg,ms=2200){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),ms);}
 
-function toast(msg,ms=2500){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),ms);}
-
-// Build lights
+// ── Build Lights ──
+let _ltHolds={};
 function buildLights(){
   const g=document.getElementById('lt-grid');
-  g.innerHTML=LIGHTS.map((l,i)=>`
-    <div class="lt" id="ip-lt-${i}" data-id="${l.id}">
-      <div class="lt-ico" id="ip-ico-${i}">
-        <svg viewBox="0 0 24 24">${l.svg}</svg>
-      </div>
-      <div class="lt-name">${l.name}</div>
+  g.innerHTML=LIGHTS.map((l,i)=>{
+    const isGang=l.id.includes('gang');
+    return`<div class="lt${l.unavail?' unavail':''}" id="ip-lt-${i}" data-i="${i}">
+      <div class="lt-ico" id="ip-ico-${i}"><svg viewBox="0 0 24 24">${isGang?HOUSE_SVG:BULB_SVG}</svg></div>
+      <div class="lt-name">${l.name}${l.unavail?'<span class="lt-unavail-badge">!</span>':''}</div>
       <div class="lt-st" id="ip-st-${i}">Aus</div>
-    </div>`).join('');
+      <div class="lt-bri-bar"><div class="lt-bri-fill" id="ip-bri-${i}"></div></div>
+      ${(!l.nodim&&!l.unavail)?`<div class="lt-dim-wrap"><input type="range" class="lt-dim" id="ip-dim-${i}" min="1" max="100" value="60"><div class="lt-dim-pct" id="ip-dimp-${i}">60%</div></div>`:''}
+    </div>`;
+  }).join('');
+
   LIGHTS.forEach((l,i)=>{
-    document.getElementById('ip-lt-'+i).addEventListener('click',()=>{
-      const on=st(l.id)==='on';
-      const domain=l.id.split('.')[0];
-      svc(domain,on?'turn_off':'turn_on',{entity_id:l.id});
-      // Optimistic
-      applyLight(i,!on,null);
+    if(l.unavail)return;
+    const el=document.getElementById('ip-lt-'+i);
+    // Tap = toggle
+    el.addEventListener('click',e=>{
+      if(e.target.closest('input'))return;
+      const on=_S[l.id]?.state==='on';
+      svc('light',on?'turn_off':'turn_on',{entity_id:l.id});
+      applyTile(i,!on,null);
       toast((on?'Aus: ':'An: ')+l.name);
     });
+    // Long press = color sheet
+    if(!l.nodim){
+      el.addEventListener('pointerdown',()=>{
+        _ltHolds[i]=setTimeout(()=>{_ltHolds[i]=null;openCS(l,i);},600);
+      });
+      ['pointerup','pointercancel','pointermove'].forEach(ev=>el.addEventListener(ev,()=>{clearTimeout(_ltHolds[i]);_ltHolds[i]=null;},{passive:true}));
+    }
+    // Dimmer slider
+    const sl=document.getElementById('ip-dim-'+i);
+    if(sl){
+      sl.addEventListener('input',e=>{
+        e.stopPropagation();
+        const v=+sl.value;
+        const vl=document.getElementById('ip-dimp-'+i);if(vl)vl.textContent=v+'%';
+        sl.style.background=`linear-gradient(90deg,rgba(255,159,10,.7) ${v}%,rgba(255,255,255,.1) ${v}%)`;
+        clearTimeout(sl._t);sl._t=setTimeout(()=>svc('light','turn_on',{entity_id:l.id,brightness_pct:v}),120);
+      });
+      sl.addEventListener('click',e=>e.stopPropagation());
+    }
   });
 }
 
-function applyLight(i,on,lc){
+function applyTile(i,on,lc){
   const el=document.getElementById('ip-lt-'+i);
   const ico=document.getElementById('ip-ico-'+i);
-  const st=document.getElementById('ip-st-'+i);
+  const stEl=document.getElementById('ip-st-'+i);
+  const bfill=document.getElementById('ip-bri-'+i);
   if(!el)return;
   const c=lc||'255,159,10';
-  el.style.background=on?`linear-gradient(145deg,rgb(${c.split(',').map(v=>Math.round(+v*.12)).join(',')}),rgb(${c.split(',').map(v=>Math.round(+v*.2)).join(',')}))`:'';
+  el.classList.toggle('on',on);
+  el.style.background=on?`linear-gradient(145deg,rgba(${c},.07),rgba(${c},.13))`:'';
   el.style.borderTopColor=on?`rgba(${c},.3)`:'';
-  el.style.boxShadow=on?`0 0 18px rgba(${c},.15)`:''
-  const sv=ico?.querySelector('svg');
-  if(sv)sv.style.stroke=on?`rgb(${c})`:'rgba(255,255,255,.4)';
-  if(ico)ico.style.background=on?`rgba(${c},.18)`:'rgba(255,255,255,.08)';
-  if(st){
-    const s=_S[LIGHTS[i].id];
-    const bri=s?Math.round((s.attributes?.brightness||0)/2.55):0;
-    st.textContent=on?(bri>0?bri+'%':'An'):'Aus';
-    st.style.color=on?`rgba(${c},.8)`:'rgba(255,255,255,.35)';
-  }
+  el.style.boxShadow=on?`0 0 16px rgba(${c},.12)`:'';
+  if(ico){const sv=ico.querySelector('svg');if(sv)sv.style.stroke=on?`rgb(${c})`:'rgba(255,255,255,.4)';ico.style.background=on?`rgba(${c},.18)`:'rgba(255,255,255,.08)';}
+  const s=_S[LIGHTS[i].id];
+  const bri=s?Math.round((s.attributes?.brightness||0)/2.55):0;
+  if(stEl){stEl.textContent=on?(bri>0?bri+'%':'An'):'Aus';stEl.style.color=on?`rgba(${c},.8)`:'rgba(255,255,255,.35)';}
+  if(bfill)bfill.style.width=(on?Math.max(bri,5):0)+'%';
+  const sl=document.getElementById('ip-dim-'+i);
+  if(sl&&on&&bri){sl.value=bri;sl.style.background=`linear-gradient(90deg,rgba(255,159,10,.7) ${bri}%,rgba(255,255,255,.1) ${bri}%)`;const vl=document.getElementById('ip-dimp-'+i);if(vl)vl.textContent=bri+'%';}
 }
 
-// Build scenes
+// ── Color Sheet ──
+function openCS(l,i){
+  _csTarget={l,i};
+  document.getElementById('cs-title').textContent=l.name;
+  const s=_S[l.id];
+  const bri=s?Math.round((s.attributes?.brightness||0)/2.55):60;
+  const briEl=document.getElementById('cs-bri');briEl.value=bri;
+  document.getElementById('cs-bri-val').textContent=bri+'%';
+  briEl.style.background=`linear-gradient(90deg,rgba(255,159,10,.85) ${bri}%,rgba(255,255,255,.1) ${bri}%)`;
+  const modes=at(l.id,'supported_color_modes')||[];
+  const hasColor=modes.some(m=>['rgb','hs','xy'].includes(m));
+  const hasTemp=modes.includes('color_temp');
+  document.getElementById('cs-temp-row').style.display=hasTemp?'flex':'none';
+  document.getElementById('cs-color-row').style.display=hasColor?'flex':'none';
+  if(hasTemp){const ct=at(l.id,'color_temp_kelvin')||3000;document.getElementById('cs-temp').value=Math.min(6500,Math.max(2000,ct));}
+  document.querySelectorAll('.cc').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('cs').classList.add('show');
+}
+document.getElementById('cs-bg').addEventListener('click',()=>document.getElementById('cs').classList.remove('show'));
+document.getElementById('cs-close').addEventListener('click',()=>document.getElementById('cs').classList.remove('show'));
+document.getElementById('cs-bri').addEventListener('input',function(){
+  const v=+this.value;document.getElementById('cs-bri-val').textContent=v+'%';
+  this.style.background=`linear-gradient(90deg,rgba(255,159,10,.85) ${v}%,rgba(255,255,255,.1) ${v}%)`;
+  if(!_csTarget)return;clearTimeout(this._t);this._t=setTimeout(()=>svc('light','turn_on',{entity_id:_csTarget.l.id,brightness_pct:v}),120);
+});
+document.getElementById('cs-temp').addEventListener('input',function(){
+  if(!_csTarget)return;const v=+this.value;clearTimeout(this._t);this._t=setTimeout(()=>svc('light','turn_on',{entity_id:_csTarget.l.id,color_temp_kelvin:v}),120);
+});
+document.querySelectorAll('.cc').forEach(cc=>{
+  cc.addEventListener('click',()=>{
+    if(!_csTarget)return;
+    const rgb=cc.dataset.rgb.split(',').map(Number);
+    if(rgb[0]===255&&rgb[1]===255&&rgb[2]===255){svc('light','turn_on',{entity_id:_csTarget.l.id,color_temp_kelvin:3500});}
+    else{svc('light','turn_on',{entity_id:_csTarget.l.id,rgb_color:rgb});}
+    document.querySelectorAll('.cc').forEach(x=>x.classList.remove('sel'));cc.classList.add('sel');
+  });
+});
+
+// ── Scenes ──
 function buildScenes(){
   const g=document.getElementById('sc-grid');
   g.innerHTML=SCENES.map((s,i)=>`
     <button class="sc" id="sc-${i}" style="background:${s.bg}">
-      <span>${s.label}</span>
-      <small>${s.sub}</small>
+      <svg viewBox="0 0 24 24">${s.ico}</svg>
+      <span>${s.label}</span><small>${s.sub}</small>
     </button>`).join('');
-  SCENES.forEach((s,i)=>{
-    document.getElementById('sc-'+i).addEventListener('click',()=>{s.action();});
-  });
+  SCENES.forEach((s,i)=>document.getElementById('sc-'+i).addEventListener('click',()=>s.action()));
 }
 
-// Build radio
+// ── Radio ──
 function buildRadio(){
   const g=document.getElementById('radio-btns');
-  g.innerHTML=RADIO.map((r,i)=>`
-    <button id="rb-${i}" style="padding:6px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);font-size:.65rem;font-weight:600;cursor:pointer;transition:background .2s">${r.n}</button>
-  `).join('');
-  RADIO.forEach((r,i)=>{
-    document.getElementById('rb-'+i).addEventListener('click',()=>{
-      svc('media_player','play_media',{entity_id:'media_player.wohnzimmer_alm',media_content_id:r.u,media_content_type:'audio/mpeg'});
-      toast('📻 '+r.n);
-      RADIO.forEach((_,j)=>{
-        const b=document.getElementById('rb-'+j);
-        if(b){b.style.background=j===i?'rgba(10,132,255,.2)':'rgba(255,255,255,.05)';b.style.color=j===i?'#0a84ff':'rgba(255,255,255,.6)';b.style.borderColor=j===i?'rgba(10,132,255,.4)':'rgba(255,255,255,.1)';}
-      });
-    });
-  });
+  g.innerHTML=RADIO.map((r,i)=>`<button class="rb" id="rb-${i}">${r.n}</button>`).join('');
+  RADIO.forEach((r,i)=>document.getElementById('rb-'+i).addEventListener('click',()=>{
+    svc('media_player','play_media',{entity_id:'media_player.wohnzimmer_alm',media_content_id:r.u,media_content_type:'audio/mpeg'});
+    _radActive=r.n;
+    RADIO.forEach((_,j)=>document.getElementById('rb-'+j)?.classList.toggle('on',j===i));
+    setSkip(false);toast('Radio: '+r.n);
+  }));
 }
 
-// Update media
+function setSkip(show){
+  ['mc-prev','mc-next'].forEach(id=>document.getElementById(id).classList.toggle('hidden',!show));
+}
+
+// ── Media update ──
 function updateMedia(){
-  const alm=_S['media_player.wohnzimmer_alm'];
-  if(!alm)return;
-  const title=alm.attributes?.media_title||alm.attributes?.app_name||'–';
-  const sub=alm.attributes?.media_artist||alm.state;
+  const alm=_S['media_player.wohnzimmer_alm'];if(!alm)return;
+  const cid=alm.attributes?.media_content_id||'';
+  const isRadio=RADIO.some(r=>cid===r.u);
+  const isSpotify=cid.startsWith('spotify:')||(_S['media_player.spotify_janisss']?.state==='playing');
+  // Active radio
+  if(isRadio){const r=RADIO.find(x=>x.u===cid);if(r)_radActive=r.n;}
+  else if(alm.state!=='playing')_radActive=null;
+  RADIO.forEach((r,i)=>document.getElementById('rb-'+i)?.classList.toggle('on',r.n===_radActive&&alm.state==='playing'));
+  // Skip buttons
+  setSkip(isSpotify&&!isRadio);
+  // Title/sub
+  const title=isRadio&&_radActive?('📻 '+_radActive):(alm.attributes?.media_title||alm.attributes?.app_name||'Kein Titel');
+  const sub=alm.attributes?.media_artist||alm.state||'–';
   document.getElementById('media-title').textContent=title;
   document.getElementById('media-sub').textContent=sub;
-  const vol=Math.round((alm.attributes?.volume_level||0.4)*100);
-  document.getElementById('alm-vol-fill').style.width=vol+'%';
-  document.getElementById('alm-vol-pct').textContent=vol+'%';
+  // Art
+  const ep=alm.attributes?.entity_picture;
+  const artEl=document.getElementById('media-art');
+  if(ep){let img=artEl.querySelector('img');if(!img){img=document.createElement('img');artEl.appendChild(img);}img.src=HA+ep;artEl.querySelector('.media-art-ico')?.remove();}
+  // Play icon
   const ico=document.getElementById('mc-play-ico');
   if(ico)ico.innerHTML=alm.state==='playing'?'<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>':'<path d="M8 5.5v13L19 12z"/>';
+  // Volume
+  if(!_volDragging){
+    const vol=Math.round((alm.attributes?.volume_level||0.4)*100);
+    const el=document.getElementById('alm-vol');if(el){el.value=vol;updateVolUI(vol);}
+  }
 }
 
-// Update lights
+function updateVolUI(v){
+  document.getElementById('alm-vol-pct').textContent=v+'%';
+  document.getElementById('alm-vol').style.background=`linear-gradient(90deg,var(--blue) ${v}%,rgba(255,255,255,.12) ${v}%)`;
+}
+
+// ── Volume slider ──
+document.getElementById('alm-vol').addEventListener('input',function(){
+  _volDragging=true;updateVolUI(+this.value);
+});
+document.getElementById('alm-vol').addEventListener('change',function(){
+  svc('media_player','volume_set',{entity_id:'media_player.wohnzimmer_alm',volume_level:+this.value/100});
+  setTimeout(()=>{_volDragging=false;},500);
+});
+
+// ── Media controls ──
+document.getElementById('mc-play').addEventListener('click',()=>svc('media_player','media_play_pause',{entity_id:'media_player.wohnzimmer_alm'}));
+document.getElementById('mc-stop').addEventListener('click',()=>{svc('media_player','media_stop',{entity_id:'media_player.wohnzimmer_alm'});_radActive=null;RADIO.forEach((_,i)=>document.getElementById('rb-'+i)?.classList.remove('on'));});
+document.getElementById('mc-prev').addEventListener('click',()=>svc('media_player','media_previous_track',{entity_id:'media_player.wohnzimmer_alm'}));
+document.getElementById('mc-next').addEventListener('click',()=>svc('media_player','media_next_track',{entity_id:'media_player.wohnzimmer_alm'}));
+
+// ── Lights update ──
 function updateLights(){
   LIGHTS.forEach((l,i)=>{
     const s=_S[l.id];if(!s)return;
     const on=s.state==='on';
     const rgb=s.attributes?.rgb_color;
-    const lc=rgb?rgb.join(','):null;
-    applyLight(i,on,lc);
+    applyTile(i,on,rgb?rgb.join(','):null);
   });
 }
 
-// Update system
-function updateSystem(count){
-  // sys elements may no longer exist (replaced by floorplan)
-  const sd=document.getElementById('status-dot');
-  const sl=document.getElementById('status-lbl');
-  if(sd)sd.className='status-dot';
-  if(sl)sl.textContent='Live';
-  updateFloorplan();
-}
-
-// Floorplan click → toggle light
-(function(){
-  const ROOM_LIGHTS={
-    wz:  'light.h618a',
-    kue: 'light.h618a_2',
-    bad: 'light.color_temperature_light_1',
-    buro:'light.hue_play_l',
-  };
-  document.getElementById('fp-svg')?.addEventListener('click',e=>{
-    const room=e.target.closest('[data-room]')?.dataset?.room;
-    if(!room||!ROOM_LIGHTS[room])return;
-    const id=ROOM_LIGHTS[room];
-    const on=_S[id]?.state==='on';
-    svc('light',on?'turn_off':'turn_on',{entity_id:id});
-    // Optimistic flash
-    const dot=document.getElementById('fp-dot-'+room);
-    if(dot){dot.setAttribute('r','9');setTimeout(()=>dot.setAttribute('r',on?'5':'7'),300);}
-    toast((on?'💡 Aus: ':'💡 An: ')+(e.target.closest('[data-room]')?.nextElementSibling?.textContent?.trim()||room));
-    setTimeout(()=>fetchStates(),600);
-  });
-})();
-
-// Floorplan glow
+// ── Floorplan ──
 function updateFloorplan(){
-  const ROOMS=[
-    {glow:'rg-wz',  dot:'fp-dot-wz',  st:'fp-wz-st',  ids:['light.h618a'],           col:'255,159,10', tcol:'rgba(255,159,10,1)'},
-    {glow:'rg-kue', dot:'fp-dot-kue', st:'fp-kue-st', ids:['light.h618a_2'],          col:'255,159,10', tcol:'rgba(255,159,10,1)'},
-    {glow:'rg-bad', dot:'fp-dot-bad', st:'fp-bad-st', ids:['light.color_temperature_light_1'], col:'10,132,255', tcol:'rgba(10,132,255,1)'},
-    {glow:'rg-buro',dot:'fp-dot-buro',st:'fp-buro-st',ids:['light.hue_play_l'],        col:'48,209,88',  tcol:'rgba(48,209,88,1)'},
-  ];
-  ROOMS.forEach(room=>{
-    const on=room.ids.some(id=>_S[id]?.state==='on');
-    // Gradient glow
-    const rg=document.getElementById(room.glow);
-    if(rg){
-      rg.querySelectorAll('stop')[0].setAttribute('stop-opacity',on?'0.55':'0');
-      rg.querySelectorAll('stop')[1].setAttribute('stop-opacity','0');
-    }
-    // Glow circle opacity
-    const gc=document.getElementById('glow-'+room.glow.replace('rg-',''));
-    if(gc)gc.setAttribute('opacity',on?'1':'0');
-    // Dot
-    const dot=document.getElementById(room.dot);
-    if(dot){
-      dot.setAttribute('fill',on?`rgba(${room.col},.7)`:`rgba(${room.col},.15)`);
-      dot.setAttribute('stroke',on?`rgba(${room.col},1)`:`rgba(${room.col},.3)`);
-      dot.setAttribute('r',on?'7':'5');
-    }
-    // Status text
-    const stEl=document.getElementById(room.st);
-    if(stEl){
-      const bri=room.ids.map(id=>Math.round((_S[id]?.attributes?.brightness||0)/2.55)).find(b=>b>0)||0;
-      stEl.textContent=on?(bri>0?bri+'%':'An'):'Aus';
-      stEl.setAttribute('fill',on?room.tcol:'rgba(255,255,255,0.2)');
-    }
+  [{root:'wz',dot:'fp-dot-wz',st:'fp-wz-st',ids:['light.h618a'],col:'255,159,10'},
+   {root:'kue',dot:'fp-dot-kue',st:'fp-kue-st',ids:['light.h618a_2'],col:'255,159,10'},
+   {root:'buro',dot:'fp-dot-buro',st:'fp-buro-st',ids:['light.hue_play_l'],col:'48,209,88'}
+  ].forEach(rm=>{
+    const on=rm.ids.some(id=>_S[id]?.state==='on');
+    const rg=document.getElementById('rg-'+rm.root);
+    if(rg){[...rg.querySelectorAll('stop')][0].setAttribute('stop-opacity',on?'0.5':'0');}
+    const gc=document.getElementById('glow-'+rm.root);if(gc)gc.setAttribute('opacity',on?'1':'0');
+    const dot=document.getElementById(rm.dot);
+    if(dot){dot.setAttribute('fill',on?`rgba(${rm.col},.7)`:`rgba(${rm.col},.15)`);dot.setAttribute('stroke',on?`rgba(${rm.col},1)`:`rgba(${rm.col},.3)`);dot.setAttribute('r',on?'7':'5');}
+    const stEl=document.getElementById(rm.st);
+    if(stEl){const bri=rm.ids.map(id=>Math.round((_S[id]?.attributes?.brightness||0)/2.55)).find(b=>b>0)||0;stEl.textContent=on?(bri>0?bri+'%':'An'):'Aus';stEl.setAttribute('fill',on?`rgba(${rm.col},1)`:'rgba(255,255,255,0.15)');}
   });
 }
+document.getElementById('fp-svg').addEventListener('click',e=>{
+  const room=e.target.closest('[data-room]')?.dataset?.room;
+  const map={wz:'light.h618a',kue:'light.h618a_2',buro:'light.hue_play_l'};
+  if(!room||!map[room])return;
+  const id=map[room];svc('light',_S[id]?.state==='on'?'turn_off':'turn_on',{entity_id:id});
+});
 
-// Fetch states
+// ── Fetch states ──
 async function fetchStates(){
   const tok=getTok();if(!tok)return;
   try{
     const r=await fetch(HA+'/api/states',{headers:{'Authorization':'Bearer '+tok}});
     if(r.ok){
-      const arr=await r.json();
-      arr.forEach(s=>{_S[s.entity_id]=s;});
-      updateLights();
-      updateMedia();
-      updateSystem(arr.length);
+      const arr=await r.json();arr.forEach(s=>{_S[s.entity_id]=s;});
+      updateLights();updateMedia();updateFloorplan();
+      document.getElementById('status-dot').className='status-dot';
+      document.getElementById('status-lbl').textContent='Live';
     }
   }catch(e){
     document.getElementById('status-dot').className='status-dot offline';
@@ -497,114 +592,56 @@ async function fetchStates(){
   }
 }
 
-// Almando volume bar click
-document.getElementById('alm-vol-bar')?.addEventListener('click',e=>{
-  const bar=e.currentTarget;
-  const pct=Math.round((e.offsetX/bar.offsetWidth)*100);
-  svc('media_player','volume_set',{entity_id:'media_player.wohnzimmer_alm',volume_level:pct/100});
-  document.getElementById('alm-vol-fill').style.width=pct+'%';
-  document.getElementById('alm-vol-pct').textContent=pct+'%';
-});
-
-// Media controls
-document.getElementById('mc-play')?.addEventListener('click',()=>svc('media_player','media_play_pause',{entity_id:'media_player.wohnzimmer_alm'}));
-document.getElementById('mc-stop')?.addEventListener('click',()=>svc('media_player','media_stop',{entity_id:'media_player.wohnzimmer_alm'}));
-document.getElementById('mc-prev')?.addEventListener('click',()=>svc('media_player','media_previous_track',{entity_id:'media_player.wohnzimmer_alm'}));
-
-// Footer
-document.getElementById('ft-reload')?.addEventListener('click',()=>location.reload());
-document.getElementById('ft-fullscreen')?.addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen();});
-document.getElementById('ft-alloff')?.addEventListener('click',()=>{SCENES.find(s=>s.id==='off')?.action();});
-
-// Clock
+// ── Clock ──
 function updateClock(){
-  const now=new Date();
-  document.getElementById('clock').textContent=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('hdr-date').textContent=DAYS[now.getDay()]+', '+now.getDate()+'. '+MONTHS[now.getMonth()]+' '+now.getFullYear();
-  document.getElementById('sb-clock').textContent=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('sb-date').textContent=DAYS[now.getDay()]+' · '+now.getDate()+'. '+MONTHS[now.getMonth()];
+  const n=new Date();
+  document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('hdr-date').textContent=DAYS[n.getDay()]+', '+n.getDate()+'. '+MONTHS[n.getMonth()]+' '+n.getFullYear();
+  document.getElementById('sb-clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('sb-date').textContent=DAYS[n.getDay()]+' · '+n.getDate()+'. '+MONTHS[n.getMonth()];
 }
 
-// Weather
-const WTX={'0':'Klar','1':'Leicht bewölkt','2':'Bewölkt','3':'Bedeckt','45':'Nebel','51':'Leichter Sprühregen','61':'Leichter Regen','63':'Regen','80':'Regenschauer','95':'Gewitter'};
+// ── Weather (SVG icons, nur im Header) ──
+function wxSvg(code){
+  code=+code;
+  if(code<=1)return`<circle cx="24" cy="24" r="10" fill="#ff9f0a"/><g stroke="#ff9f0a" stroke-width="2.5" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>{const r=a*Math.PI/180,x1=24+16*Math.cos(r),y1=24+16*Math.sin(r),x2=24+21*Math.cos(r),y2=24+21*Math.sin(r);return`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`;}).join('')}</g>`;
+  if(code<=3)return`<ellipse cx="26" cy="20" rx="10" ry="8" fill="#64748b"/><ellipse cx="20" cy="25" rx="9" ry="7" fill="#94a3b8"/><ellipse cx="30" cy="25" rx="8" ry="7" fill="#94a3b8"/><rect x="12" y="20" width="24" height="9" rx="5" fill="#94a3b8"/>${code<3?'<circle cx="18" cy="16" r="7" fill="#ff9f0a" opacity=".9"/>':''}`;
+  if(code>=61&&code<=82)return`<ellipse cx="24" cy="18" rx="12" ry="9" fill="#475569"/><rect x="10" y="17" width="28" height="10" rx="5" fill="#475569"/>${[[16,34],[21,38],[26,34],[31,38]].map(([x,y],i)=>`<line x1="${x}" y1="29" x2="${x-2}" y2="${y}" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>`).join('')}`;
+  return`<ellipse cx="24" cy="22" rx="14" ry="10" fill="#64748b"/>`;
+}
 async function fetchWeather(){
   try{
-    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.170&longitude=8.783&current=temperature_2m,apparent_temperature,weather_code,is_day&hourly=temperature_2m,weather_code,precipitation_probability&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max&timezone=Europe%2FZurich&forecast_days=7&models=best_match');
-    const d=await r.json();
-    _wx=d;
-    const c=d.current;
-    const t=Math.round(c.temperature_2m);
-    const code=c.weather_code;
-    const ico=WC[String(code)]||'🌡';
-    document.getElementById('wx-ico').textContent=ico;
-    document.getElementById('wx-temp').textContent=t+'°';
-    document.getElementById('wx-desc').textContent=WTX[String(code)]||'–';
-    document.getElementById('sb-wx').textContent=t+'° · '+(WTX[String(code)]||'');
-    // Hourly
-    const nowH=new Date().getHours();
-    const hs=document.getElementById('hourly-strip');
-    hs.innerHTML=d.hourly.temperature_2m.slice(nowH,nowH+6).map((temp,i)=>{
-      const h=(nowH+i)%24;
-      const hcode=d.hourly.weather_code[nowH+i]??0;
-      return`<div class="hh-item"><div class="hh-t">${String(h).padStart(2,'0')}:00</div><div class="hh-ico">${WC[String(hcode)]||'🌡'}</div><div class="hh-temp">${Math.round(temp)}°</div></div>`;
-    }).join('');
-    // Forecast
-    const fg=document.getElementById('forecast-grid');
-    fg.innerHTML=d.daily.temperature_2m_max.slice(0,7).map((hi,i)=>{
-      const lo=d.daily.temperature_2m_min[i];
-      const dcode=d.daily.weather_code[i]??0;
-      const date=new Date();date.setDate(date.getDate()+i);
-      const lbl=i===0?'Heute':i===1?'Morgen':DAYS[date.getDay()];
-      const prec=d.daily.precipitation_probability_max[i]??0;
-      return`<div class="fc-day"><div class="fc-lbl">${lbl}</div><div class="fc-ico">${WC[String(dcode)]||'🌡'}</div><div class="fc-hi">${Math.round(hi)}°</div><div class="fc-lo">${Math.round(lo)}°</div>${prec>10?`<div class="fc-prec">${prec}%</div>`:''}</div>`;
-    }).join('');
-  }catch(e){console.warn('Weather error',e);}
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.170&longitude=8.783&current=temperature_2m,apparent_temperature,weather_code&timezone=Europe%2FZurich&forecast_days=1');
+    const d=await r.json();const c=d.current;
+    document.getElementById('wx-ico').innerHTML=wxSvg(c.weather_code);
+    document.getElementById('wx-temp').textContent=Math.round(c.temperature_2m)+'°';
+    document.getElementById('wx-desc').textContent=WC_TXT[String(c.weather_code)]||'–';
+    document.getElementById('wx-feel').textContent='Gefühlt '+Math.round(c.apparent_temperature)+'°';
+    document.getElementById('sb-wx').textContent=Math.round(c.temperature_2m)+'° · '+(WC_TXT[String(c.weather_code)]||'');
+  }catch(e){}
 }
 
-// Auth check
-function getTok(){try{const r=localStorage.getItem(LS_KEY);if(!r)return null;const p=JSON.parse(r);return p?.access_token||p;}catch{return null;}}
-async function handleCallback(){
-  const params=new URLSearchParams(location.search);
-  const code=params.get('code');
-  if(code){
-    try{
-      const r=await fetch(HA+'/auth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:'grant_type=authorization_code&code='+code+'&client_id='+encodeURIComponent(location.origin+'/')+'&redirect_uri='+encodeURIComponent(location.origin+location.pathname)});
-      if(r.ok){const tok=await r.json();localStorage.setItem(LS_KEY,JSON.stringify(tok));history.replaceState({},'',location.pathname);}
-    }catch(e){console.error(e);}
-  }
-}
-function checkAuth(){
-  if(!getTok()){
-    window.location.href=HA+'/auth/authorize?response_type=code&client_id='+encodeURIComponent(location.origin+'/')+'&redirect_uri='+encodeURIComponent(location.href);
-    return false;
-  }
-  return true;
-}
+// ── Footer ──
+document.getElementById('ft-reload').addEventListener('click',()=>location.reload());
+document.getElementById('ft-fullscreen').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.();});
+document.getElementById('ft-alloff').addEventListener('click',()=>SCENES.find(s=>s.id==='nacht')?.action());
 
-// Standby
+// ── Standby ──
 (function(){
-  const sb=document.getElementById('standby');
-  let _idle=null;
-  const IDLE_MS=4*60*1000;
-  function resetIdle(){clearTimeout(_idle);if(sb.classList.contains('show')){sb.classList.remove('show');return;}_idle=setTimeout(()=>sb.classList.add('show'),IDLE_MS);}
+  const sb=document.getElementById('standby');let _idle=null;
+  function resetIdle(){clearTimeout(_idle);if(sb.classList.contains('show')){sb.classList.remove('show');return;}_idle=setTimeout(()=>sb.classList.add('show'),5*60*1000);}
   ['touchstart','pointerdown','click'].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
-  sb.addEventListener('click',()=>{sb.classList.remove('show');resetIdle();});
-  resetIdle();
+  sb.addEventListener('click',()=>{sb.classList.remove('show');resetIdle();});resetIdle();
 })();
 
+// ── Boot ──
 async function boot(){
-  await handleCallback();
-  if(!checkAuth())return;
-  buildLights();
-  buildScenes();
-  buildRadio();
-  updateClock();
-  setInterval(updateClock,30000);
-  fetchStates();
-  setInterval(fetchStates,5000);
-  fetchWeather();
-  setInterval(fetchWeather,600000);
+  await handleCallback();if(!checkAuth())return;
+  buildLights();buildScenes();buildRadio();
+  setSkip(false);
+  updateClock();setInterval(updateClock,30000);
+  fetchStates();setInterval(fetchStates,6000);
+  fetchWeather();setInterval(fetchWeather,600000);
 }
 boot();
 </script>
