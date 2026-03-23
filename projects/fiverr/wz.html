@@ -726,6 +726,11 @@ html,body{height:100%;background:var(--bg);
 @keyframes discSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 #alb-disc.playing{animation:discSpin 8s linear infinite}
 #alb-disc.playing #alb-glow{opacity:1}
+.eq-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(255,159,10,.55);opacity:0;inset:0;pointer-events:none;z-index:1}
+@keyframes eqRingPulse{0%{transform:scale(1);opacity:.55}70%{opacity:.15}100%{transform:scale(1.6);opacity:0}}
+#alb-disc.playing .eq-ring:nth-of-type(1){animation:eqRingPulse 2.2s 0s ease-out infinite}
+#alb-disc.playing .eq-ring:nth-of-type(2){animation:eqRingPulse 2.2s .73s ease-out infinite}
+#alb-disc.playing .eq-ring:nth-of-type(3){animation:eqRingPulse 2.2s 1.46s ease-out infinite}
 #alb-img{border-radius:50%}
 /* Tonearm / Needle */
 #alb-tonearm-wrap{position:absolute;top:-18px;right:-14px;width:80px;height:80px;z-index:10;pointer-events:none;transform-origin:22px 22px}
@@ -928,6 +933,11 @@ html,body{height:100%;background:var(--bg);
 .lt.on .ltico::after{
   border-color:rgba(var(--lc,255,159,10),.55);
   animation:pulseRing 2.2s ease-in-out infinite;
+}
+/* RGB-color border: thin glowing ring in exact light color when RGB active */
+.ltico.rgb-border{
+  box-shadow:0 0 0 1.5px var(--rgb-border-c,transparent), 0 0 8px 1px var(--rgb-border-glow,transparent);
+  transition:box-shadow .8s ease, background .35s;
 }
 @keyframes pulseRing{
   0%,100%{inset:-3px;opacity:.6;border-radius:15px}
@@ -1184,7 +1194,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
   <style>
     .leaflet-control-attribution{display:none!important}
     .leaflet-control-zoom{margin:8px!important}
@@ -1524,6 +1534,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
         </div>
         <!-- Rotating Album Disc -->
         <div id="alb-disc" style="position:relative;width:clamp(130px,38vw,160px);height:clamp(130px,38vw,160px);margin:14px auto 10px;flex-shrink:0">
+          <!-- Equalizer pulse rings (animate when playing) -->
+          <div class="eq-ring"></div>
+          <div class="eq-ring"></div>
+          <div class="eq-ring"></div>
           <!-- Outer glow ring -->
           <div id="alb-glow" style="position:absolute;inset:-12px;border-radius:50%;opacity:0;transition:opacity 1.5s ease;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(255,159,10,.35) 30%,transparent 70%)"></div>
           <!-- Shadow -->
@@ -1955,6 +1969,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 </div>
 
 <script>
+const APP_VERSION='v3.2';
 // ═══════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════
@@ -5857,6 +5872,19 @@ function updateAll(){
         se.textContent='Aus'+age;
       }
     }
+    // RGB color border on .ltico
+    const ico=tile.querySelector('.ltico');
+    if(ico){
+      if(on&&rgb&&rgb.length===3){
+        ico.classList.add('rgb-border');
+        ico.style.setProperty('--rgb-border-c',`rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.75)`);
+        ico.style.setProperty('--rgb-border-glow',`rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.28)`);
+      } else {
+        ico.classList.remove('rgb-border');
+        ico.style.removeProperty('--rgb-border-c');
+        ico.style.removeProperty('--rgb-border-glow');
+      }
+    }
     // Brightness arc ring
     const arc=tile.querySelector('[data-bri-arc]');
     if(arc){
@@ -7147,5 +7175,6 @@ const _origSetWxMode=setWxMode;
   }
 })();
 </script>
+<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v3.2</div>
 </body>
 </html>

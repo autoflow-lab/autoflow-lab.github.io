@@ -1,5 +1,177 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-23 21:16 UTC — Heartbeat (Main Agent)
+- ✅ demo.html: Countdown Timer im Scarcity-Banner (24h localStorage, HH:MM:SS Anzeige, auto-reset nach Ablauf, ⏱ Badge-Style neben Plätze-Text)
+- JS-Check: OK | Commit: 2d9be49 | Deploy: kein Remote/SSH verfügbar
+
+## 2026-03-23 20:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Farbige Tile-Border bei RGB-Lichtern
+- Neue CSS-Klasse `.ltico.rgb-border`: `box-shadow: 0 0 0 1.5px var(--rgb-border-c) + 0 0 8px 1px var(--rgb-border-glow)` — dünner Ring + Glow in exakter Lichtfarbe
+- `transition: box-shadow .8s ease` → weicher Farbübergang beim Schalten / Farbwechsel
+- JS im `updateLights()` Loop: wenn `on && rgb_color` vorhanden → `.rgb-border` Klasse setzen + `--rgb-border-c: rgba(r,g,b,.75)` + `--rgb-border-glow: rgba(r,g,b,.28)` als CSS-Variablen direkt auf `.ltico`
+- Wenn Licht aus ODER kein rgb_color → Klasse entfernt, CSS-Variablen gelöscht → kein Border sichtbar
+- Kein Konflikt mit bestehendem `pulseRing` auf `::after` (verschiedene CSS-Properties: box-shadow vs. border)
+- Kein Konflikt mit `.lt-bri-arc` SVG-Overlay (separate DOM-Ebene)
+- Effekt: RGB-fähige Lichter zeigen einen dünnen farbigen Leuchtrand um das Icon-Oval, der exakt die aktuelle Lichtfarbe widerspiegelt — z.B. warmes Orange, Türkis, Lila je nach eingestellter Farbe
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe, 361KB)
+
+## 2026-03-23 18:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — Equalizer-Ringe um Album-Art
+- 3 `<div class="eq-ring">` als erste Kinder von `#alb-disc` eingefügt (position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:1)
+- `.eq-ring`: `border:1.5px solid rgba(255,159,10,.55)` — amber, semi-transparent
+- `@keyframes eqRingPulse`: `scale(1) opacity(.55)` → `scale(1.6) opacity(0)` über 2.2s ease-out
+- `#alb-disc.playing .eq-ring:nth-of-type(1/2/3)`: animation-delay 0s / 0.73s / 1.46s → gestaffelte Wellen
+- Ringe nutzen CSS-Selektor `#alb-disc.playing` — kein extra JS nötig (bestehende `playing`-Klasse auf alb-disc reicht)
+- Effekt: wenn Musik spielt, pulsieren 3 konzentrische amber Ringe aus der Platte heraus — wie Schallwellen
+- Zusammenspiel mit bestehendem `alb-glow` und `alb-tonearm` intakt, kein Konflikt
+- JS-Check: OK | Deployed via SSH (paramiko stdin-pipe)
+
+## 2026-03-23 17:09 UTC — Heartbeat (Main Agent)
+- ✅ wz.html: Mini Forecast Strip auf Home-Tab — 2 Chips (morgen + übermorgen), wxIco(18px) + Kurztext + Hi/Lo Temp, flex-Row unter Scene-Chip, wird via updateHomeForecast() aus _wx.daily befüllt
+- JS-Check: OK | Commit: c178c9f | Deploy: kein Remote/SSH verfügbar
+
+## 2026-03-23 16:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — Lichtstimmung Ambient Orb
+- Neues `#amb-orb` Div direkt im Hero (neben `.hglow`), `position:absolute;top:-60px;right:-50px;width:280px;height:280px`
+- CSS: `border-radius:50%`, `background:radial-gradient(circle,var(--amb-orb-c,transparent) 0%,transparent 65%)`
+- `opacity:0;transition:opacity 2.8s ease, background 3.5s ease` → weiches Ein-/Ausblenden
+- `@keyframes ambOrbDrift` (18s loop, 3 Waypoints) → träger Drift wie der `.hglow` links, aber mit anderem Timing (nicht synchron)
+- `.show` Klasse → `opacity:1` — erscheint wenn mind. 1 Licht an
+- JS IIFE in `updateAll()`: iteriert `CFG.lights.filter(on)`, liest `_S[id].attributes.rgb_color` (Array [r,g,b])
+- Mittelwert über alle aktiven Lichter mit rgb_color: `rSum/cnt, gSum/cnt, bSum/cnt`
+- Fallback: wenn Lichter an aber ohne rgb_color (z.B. weiße CT-Lichter) → amber `rgba(255,159,10,0.32)`
+- Setzt `--amb-orb-c` CSS-Variable auf `rgba(r,g,b,0.32)` → sanfter Farbton, nicht grell
+- CSS-Transition `background 3.5s ease` → Farbe wechselt weich beim Schalten mehrerer Lichter
+- Orb faded nach 2.8s aus wenn alle Lichter aus (smooth, kein harter Cut)
+- Effekt: Der Hero-Hintergrund reflektiert live die Stimmungsfarbe der aktiven Lichter — wie ein sanfter Raumglow
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe)
+
+## 2026-03-23 14:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Geräte-Tab — Device Pulse-Dot + Last-Changed Timestamp
+- Neue CSS-Klassen: `.g-pulse-dot` (7px Kreis, inline-block), `.on` (grün + `gDevPulse` Animation), `.off` (gedimmt weiß)
+- `@keyframes gDevPulse`: `box-shadow` 0→5px Glow-Ring in `rgba(48,209,88,...)`, 2.2s ease-in-out loop → sanfter Herzschlag-Puls
+- `.g-last-changed`: kleines Zeitstempel-Label in rgba .22 (sehr dezent), "vor Xmin / vor Xh / vor Xd / gerade"
+- `.g-status-row`: flex-Row, vereint Dot + Statustext + Zeit nahtlos
+- JS in `patchDevCards`: `s?.last_changed` → `Date.now() - new Date(lc).getTime()` → Sekunden → formatierter String
+- `stEl.innerHTML` ersetzt `stEl.textContent` → rendert Dot + Label + Zeitstempel als HTML
+- Effekt: Jede Gerätekarte zeigt einen grün pulsierenden Punkt wenn aktiv, plus eine diskrete Zeitangabe wann zuletzt geschaltet
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe)
+
+## 2026-03-23 12:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — Audio Spectrum Visualizer Canvas
+- Neues `<canvas id="spec-cv">` als absolutes Layer am Bottom von `#album-page-bg` (z-index:1, pointer-events:none, height:38%)
+- `BAR_COUNT=38` Balken, gleichmäßig über die volle Breite verteilt, `gap` 18% der Balkenbreite
+- Fake-Frequenzmodell: 4 Bänder (Sub-Bass / Bass / Mitten / Höhen) mit unterschiedlichen `base`-Amplituden
+- Pro Bar: `phase` + `speed` → individuelle Sinuswelle → organisch fluktuierende Höhen (keine identischen Muster)
+- Beat-Simulation: alle 380–660ms wird ein zufälliger Bass-Balken (0–6) mit `beatLatch=1.0` gespikt → federt mit `*=0.88` ab
+- Smoothing: `val+=(target-val)*(1-0.82)` → weiche, träge Übergänge (kein hartes Springen)
+- Gradient per Balken: `createLinearGradient` blau (#0a84ff,55%) oben → amber (#ff9f0a,65%) Mitte → amber transparent unten
+- `ctx.roundRect` mit r=2px für subtil abgerundete Balken-Tops (Fallback: rect)
+- `resize()`: passt `cv.width/height` via `getBoundingClientRect()` an → responsive
+- rAF-Loop läuft permanent; wenn nicht playing → targets auf 0 → Balken fahren smooth runter
+- MutationObserver auf `#spk-wrap` (`attributeFilter:['class']`) → `_specShow(true/false)` bei `playing`-Klassen-Wechsel
+- `cv.style.opacity`: 0 wenn nicht playing → 0.55 wenn playing (1.6s CSS-Transition)
+- Effekt: Beim Musikspielen erscheint im unteren Drittel des Musik-Tabs ein sanft pulsierender Equalizer-Visualizer — Apple-Music/Spotify-Stil
+- JS-Check: OK | Deployed via SSH (paramiko chunk-pipe, 362647 bytes)
+
+
+## 2026-03-23 10:03 UTC — Cron (Design-Ideen Agent)
+- ✅ demo.html: Sticky Mobile CTA-Bar
+- `#mob-cta-bar` via JS dynamisch ins DOM injiziert (position:fixed, bottom:0, z-index:9000)
+- Nur auf Mobile sichtbar (`@media(max-width:767px){display:block}`)
+- Design: iOS Dark Glassmorphism (`rgba(18,18,20,.97)`, `backdrop-filter:blur(20px) saturate(1.8)`)
+- Inhalt: Label "Jetzt beauftragen" (klein, gedimmt) + Preis "ab **€29**" (grün highlight) + "Bestellen →" Button + ✕ Close
+- `#mob-cta-btn`: blauer Gradient-Button, `mcbPulse` Animation (3× nach Einblenden)
+- Einblende-Logik: Scroll >80px → 3s Timeout ODER 5s nach Seitenload (was zuerst eintritt)
+- `bar.classList.add('show')` → `transform:translateY(0)` via spring-Transition `cubic-bezier(.34,1.28,.64,1)`
+- Close-Button: `sessionStorage.mobCtaDismissed` verhindert erneutes Erscheinen in derselben Session
+- i18n reaktiv: `langChange` Event → DE "Jetzt beauftragen / Bestellen →" | EN "Order now / Order →"
+- `env(safe-area-inset-bottom)` im Padding → kein Overlap mit iPhone Home-Indicator
+- Onclick: ruft bestehende `openFiverr()` Funktion auf
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe)
+
+## 2026-03-23 08:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — Sleep-Timer Button
+- Neues `#sleep-timer-row` Div in `.pctrl` (nach Volume-Slider, vor "Radio" Label)
+- Design: dunkle Zeile mit `rgba(.04)` Hintergrund, border-radius:14px, subtle border
+- `#sleep-timer-btn`: Uhr-Icon (SVG clock) + Label, toggle-Stil mit `.st-active` Klasse (blau highlight)
+- Tap-Logik zyklisch: off → 15min → 30min → 60min → off (STEPS Array)
+- `#sleep-pill`: blaue Countdown-Pill (zeigt verbleibende Zeit mm:ss), pulsierender Dot (`stDotPulse` @keyframes)
+- `#sleep-cancel` ✕-Button zum sofortigen Abbrechen ohne Zyklus-Wechsel
+- `fmt(ms)`: Millisekunden → "m:ss" Format
+- `startTimer(minutes)`: setzt `endTime`, startet `setInterval` für Live-Countdown + `setTimeout` für turn_off
+- Bei Ablauf: ruft `svc('media_player','turn_off',{entity_id:CFG.alm})` auf + Toast "⏱ Musik gestoppt"
+- `stopTimer(wasCancelled)`: räumt alle Timer auf, resettet UI, optionaler Cancel-Toast
+- Kein Konflikt mit bestehenden Swipe-Gesten oder Volume-Controls (eigenes IIFE)
+- JS-Check: OK | Deployed via SSH (stdin-pipe, chunked)
+
+
+## 2026-03-23 06:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Aktive Szene Chip
+- Neues `#scene-chip` Element direkt nach den `.home-scenes` Szenen-Buttons (vor Radio-Leiste)
+- Design: `display:inline-flex` Pill mit amber Akzentfarbe (bg `rgba(255,159,10,.13)`, border `.32` opacity)
+- Animierter Dot (`.sc-dot`): `@keyframes scDotPulse` 2.4s ease-in-out – pulsiert subtil in Tile-Farbe
+- Chip erscheint mit spring-Animation (`cubic-bezier(.34,1.28,.64,1)`) via `.show` Klasse
+- 4 Farb-Varianten via `data-scene` Attribut: `abend` (amber), `film` (blau #0a84ff), `nacht` (lila #7d7aff), `hell` (gelb)
+- Doppelte Logik: Live-Erkennung aus Lichtzustand (in `_updateQaBar` IIFE) + sofortiges Update beim `setActiveScene()` Aufruf
+- Scene-Detection-IIFE: bestimmt `key` aus `activeScene`-String → setzt `chip.dataset.scene` + `chipTxt.textContent`
+- `setActiveScene()`: mappt Szenen-Key direkt zu Emoji+Label → Chip aktualisiert sich ohne nächsten Poll-Cycle
+- Chip-Text z.B.: "🌆 Abend-Szene aktiv", "🎬 Film-Szene aktiv", "🌙 Nacht-Szene aktiv", "☀️ Hell-Szene aktiv"
+- `#scene-chip` zur `.page-entering>` Stagger-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- `#scene-chip` bleibt versteckt (`opacity:0, pointer-events:none`) wenn keine Szene erkannt (alle Lichter aus)
+- JS-Check: OK | Deployed via SSH (paramiko base64-stdin-pipe, 6790 Zeilen)
+
+## 2026-03-23 04:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Gruppen-Header mit Collapse/Expand
+- Neues `LIGHT_GROUPS` Konstanten-Array vor CFG: 4 Gruppen (Wohnzimmer/Küche/Büro/Außen & Flur)
+- `mkLtTile(l)` Hilfsfunktion für einzelne Licht-Tile HTML
+- `#lg` Render neu: gruppierte HTML-Struktur mit `.lg-grp-hdr` + `.lg-grp-tiles` + `.lg-grp-inner`
+- `.lg-grp-hdr`: grid-column:1/-1, Flex-Row mit Gruppe-Emoji+Name links + Count-Badge+Pfeil rechts
+- `.lg-grp-tiles`: `grid-template-rows 1fr→0fr` Transition (0.35s ease) → native CSS Collapse ohne Höhen-Mathe
+- `.lg-grp-arr`: `▾` rotiert bei `.collapsed` auf -90° via cubic-bezier spring-Übergang (0.32s)
+- `.lg-grp-count[data-grp-count]`: zeigt "2/3 an" in amber wenn Lichter an, sonst gedimmt "3 Lichter"
+- Collapse-State persistiert in `localStorage('lg_collapsed')` → Gruppen merken ihren Zustand nach Reload
+- `window._lgCollapsed` Set für externe Zugänglichkeit
+- `updateAll()`: iteriert LIGHT_GROUPS, setzt Count-Badge live mit `has-on` Klasse für amber Highlight
+- Lichter ohne Gruppe (künftige Erweiterungen) erscheinen automatisch in "Weitere" Gruppe am Ende
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe)
+
+## 2026-03-23 12:51 UTC — Heartbeat (Main Agent)
+- ✅ wz.html: Pull-to-Refresh Indikator — iOS-Style touchmove, blauer Arc-Progress, "Aktualisiere..." bei Threshold, ruft fetchStates()
+- JS-Check: OK | Commit: 6b23d1c | Deploy: SSH nicht verfügbar (kein Key)
+
+## 2026-03-23 00:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — Vinyl-Tonearm (Needle/Abtastarm) Animation
+- Neues `#alb-tonearm-wrap` Div als letztes Kind von `#alb-disc` (position:absolute, top:-18px, right:-14px, z-index:10)
+- `transform-origin:22px 22px` → Rotation um die Pivot-Achse (linke Schulter des Arms)
+- SVG 80×80px: Pivot-Kreis (outer + inner dot), Arm-Linie (stroke-linecap:round, rgba .55), Cartridge-Head (kurze Querlinie), Nadelspitze (amber Glow-Dot + Halo)
+- `.lifted` Klasse: `transform:rotate(-32deg)` + `opacity:.7` → Arm zurückgezogen (über dem Vinyl, aber nicht berührend)
+- `.on-disc` Klasse: `transform:rotate(0deg)` + `opacity:1` → Arm liegt auf der Platte
+- CSS Transition: `.9s cubic-bezier(.34,1.28,.64,1)` → spring-Einschlag beim Absenken (leichtes Überschwingen wie echter Tonearm)
+- JS: `albArm.classList.toggle('lifted',!playing); albArm.classList.toggle('on-disc',playing)` — unmittelbar nach `albDisc.classList.toggle('playing',playing)`
+- Effekt: Bei Play schwenkt der Arm elegant auf die Platte, gleichzeitig beginnt die Platte zu rotieren — bei Pause zieht er sich zurück und die Rotation stoppt
+- Kombiniert mit bestehendem `discSpin 8s linear infinite` → komplett authentisches Plattenspieler-Feeling
+- Nadelspitze: `rgba(255,159,10,.9)` amber + `rgba(255,159,10,.25)` Glow → passt zu Dashboard-Akzentfarbe
+- JS-Check: OK | Deployed via SSH (paramiko base64-stdin-pipe, 341531 bytes)
+
+## 2026-03-22 22:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Wind-Chill / Heat-Index Komfort-Karte
+- Neue `#wc-card` Section im Wetter-Tab, direkt VOR der Luftdruck-Barometer Card
+- Dynamische Berechnung je nach Temperatur + Windstärke + Luftfeuchtigkeit:
+  - **Wind-Chill** (t ≤ 10°C und wind ≥ 4.8 km/h): Kanadische metrische Formel
+  - **Hitze-Index** (t ≥ 27°C): Rothfusz-Gleichung mit Luftfeuchtigkeit
+  - **Apparent Temperature**: HA-Wert als Fallback für Mittelbereiche
+- SVG-Komfort-Arc (gleiche Struktur wie Barometer): Track-Pfad 210° + Fill mit `linearGradient wcGrad` (blau→grün→amber→rot)
+- `stroke-dashoffset` Animation: -30°C → 0%, +45°C → 100%, 1.2s cubic-bezier
+- Typ-Label: "WIND-CHILL" / "HITZE-INDEX" / "GEFÜHLT" — farb-codiert je Komfort-Level
+- 8 Komfort-Stufen: Extrem kalt / Sehr kalt / Kalt / Kühl / Angenehm / Warm / Heiß / Sehr heiß
+- Kleidungsempfehlung pro Stufe: z.B. "🧥 Dicke Jacke, Mütze & Handschuhe empfohlen"
+- Komfort-Balken: horizontaler blau→grün→amber→rot Gradient + weißer Dot-Marker mit smooth transition
+- `drawWindChill()` in `renderWeather()` nach `drawBarometer()` aufgerufen
+- Card bleibt `display:none` wenn keine Wetterdaten (graceful fallback)
+- `#wc-card` zu `.page-entering>` Stagger-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe, 340022 bytes)
+
 ## 2026-03-22 20:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Musik-Tab — "Now Playing" Rich Notification beim Track-Wechsel
 - Neues `#np-notify` Element: `position:fixed;top:env(safe-area-inset-top)+10px` — erscheint oben zentriert

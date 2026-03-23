@@ -122,9 +122,38 @@
 ## Neue Ideen (2026-03-22 Nacht)
 - [x] wz.html: Musik-Tab — "Now Playing" Rich Notification (Apple-Style Pill erscheint oben beim Track-Wechsel: Mini Album-Art + Track-Titel + Artist + animierte Equalizer-Wellen, 4.2s sichtbar, spring-in Animation)
 
+## Neue Ideen (2026-03-22 Nacht 2)
+- [x] wz.html: Wetter-Tab — Wind-Chill / Heat-Index Komfort-Karte (berechnet gefühlte Bedingungen, animierter SVG-Arc, Komfort-Skala, Kleidungsempfehlung)
+
+## Neue Ideen (2026-03-23 Nacht)
+- [x] wz.html: Musik-Tab — Vinyl-Tonearm Animation (SVG-Abtastarm schwenkt bei Play auf Disc, zieht sich bei Pause zurück, spring cubic-bezier)
+
 ## Neue Ideen (2026-03-22 Morgen 2)
 - [x] demo.html: Social Proof Toast — zufällige "Jemand hat bestellt" Notification-Einblendungen (Conversion-Booster)
 - [x] demo.html: FAQ Accordion-Section (5 häufige Fragen, smooth expand/collapse Animation)
 - [x] demo.html: "Wie es funktioniert" Timeline-Section (3 Schritte: Anfragen → Konfigurieren → Genießen, animated icons)
 - [x] wz.html: Home-Tab — Quick-Actions Bar (4 kleine Icon-Buttons: Alle aus / Szene / Musik / Heizung, horizontal scrollbar)
 - [x] demo.html: Trust-Badge-Row unter dem CTA-Button (🔒 Sicher bezahlen · ⭐ 5 Sterne · ⚡ 24h Lieferung · 💬 24/7 Support)
+
+## Neue Ideen (2026-03-23 Mittag)
+- [x] wz.html: Musik-Tab — Audio Spectrum Visualizer Canvas (animierte Frequenz-Balken im Hintergrund, amber→blau Gradient, MutationObserver auf spk-wrap.playing)
+
+## Neue Ideen (2026-03-23 Nacht 2)
+- [x] wz.html: Pull-to-Refresh Indikator (iOS-Style touchmove, progress-Arc, "Aktualisiere..." Label, ruft fetchStates())
+- [x] wz.html: Licht-Tab — Gruppen-Header mit Collapse/Expand (Räume faltbar: "Wohnzimmer ▼", alle Tiles darunter, Tap auf Header klappt ein/aus)
+- [x] wz.html: Home-Tab — Aktive Szene Chip (kleiner Chip unter Hero: "🌅 Abend-Szene aktiv", basierend auf Lichtzustand)
+- [x] demo.html: Sticky Mobile CTA-Bar (am unteren Rand auf Mobile: "Jetzt beauftragen → ab €29", erscheint nach 3s Scroll)
+- [x] wz.html: Musik-Tab — Sleep-Timer Button (⏱ 15/30/60 min, Countdown-Pill, ruft media_player.turn_off nach Ablauf)
+
+## Neue Ideen (2026-03-23 Nachmittag)
+- [x] wz.html: Geräte-Tab — Device Pulse-Dot + last_changed Timestamp (animierter grüner Dot wenn an, "vor X min" relative Zeit in Status-Zeile)
+
+## Neue Ideen (2026-03-23 16:03 UTC)
+- [x] wz.html: Home-Hero — Lichtstimmung Ambient Orb (weicher Glow-Orb rechts im Hero, Farbe = Durchschnitt der aktiven Licht-RGB-Werte, faded ein/aus je nach Lichtzustand, eigene Drift-Animation)
+
+## Neue Ideen (2026-03-23 17:09 UTC)
+- [x] wz.html: Home-Tab — Mini Forecast Strip (2 Chips: morgen + übermorgen, wxIco + Kurztext + Hi/Lo Temp, unter Scene-Chip)
+- [x] wz.html: Licht-Tab — Farbige Tile-Border bei RGB-Lichtern (wenn color_temp/hs_color vorhanden → dünner farbiger Border um .ltico, passend zur Lichtfarbe)
+- [x] demo.html: Countdown Timer für "Begrenzte Aktion" (echter 24h Countdown unter Scarcity-Banner, zählt von localStorage-gespeichertem Start runter)
+- [x] wz.html: Musik-Tab — Equalizer-Ringe um Album-Art (konzentrisches Pulse wenn isPlaying, 3 halbtransparente Ringe, amber, unterschiedliche Frequenzen via animation-delay)
+- [ ] wz.html: Wetter-Tab — Gefühlte Temperatur Trend-Pfeil (↑↓ je ob apparent_temperature > temperature_2m, Farbe grün/rot, animierter Pfeil)

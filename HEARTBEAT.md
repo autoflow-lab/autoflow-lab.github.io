@@ -30,10 +30,10 @@ Wenn es zwischen 23:00 und 08:00 Uhr ist und kein Improvement in den letzten 3h 
 5. Commit zu git
 
 ### Bekannte Todo-Liste für Nacht:
-- [ ] Light mode vollständig fixen (updateHeroGradient setzt dark bg unconditional)
+- [x] Light mode vollständig fixen (updateHeroGradient setzt dark bg unconditional) — 2026-03-23 01:xx
 - [ ] Musik-Tab: Spotify Source-Auswahl verbessern
 - [ ] Wetter-Tab: UV-Index anzeigen wenn verfügbar
 - [ ] nsscreen.html: WebSocket für live updates
 - [ ] family.html: Push-Notification bei offenem Garagentor > 10min
-- [ ] wz.html: Timer-Funktion für Lichter (auto-aus nach X min)
+- [x] wz.html: Timer-Funktion für Lichter (auto-aus nach X min) — 2026-03-23 01:xx
 - [ ] wz.html: Bessere Offline-Banner (aktuell nur nach 2 polls)
