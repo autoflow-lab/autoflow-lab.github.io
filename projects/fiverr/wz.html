@@ -155,10 +155,10 @@ html,body{height:100%;background:var(--bg);
 /* ── Page-enter staggered card animation ── */
 @keyframes pgCardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#wx-rec-pill,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#wc-card,.page-entering>#golden-hour-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#wc-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>.pctrl,.page-entering>.vrow{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -202,6 +202,8 @@ html,body{height:100%;background:var(--bg);
   pointer-events:none;box-shadow:0 0 6px rgba(255,159,10,.55)}
 .ni-badge.show{opacity:1;transform:scale(1)}
 @keyframes badgePop{0%{transform:scale(1.6)}100%{transform:scale(1)}}
+@keyframes wxRecShimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+@keyframes wxRecIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes feelArrowUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes feelArrowDown{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
 #wxt-feel-arrow{display:inline-block;font-size:.95rem;font-weight:700;margin-left:5px;vertical-align:middle;transition:color .6s ease,opacity .6s ease;opacity:0}
@@ -308,6 +310,7 @@ html,body{height:100%;background:var(--bg);
 }
 #amb-orb.show{opacity:1}
 @keyframes ambOrbDrift{0%,100%{transform:translate(0,0)}30%{transform:translate(-20px,22px)}65%{transform:translate(10px,-15px)}}
+@keyframes bestHourOrb{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-12px,10px) scale(1.1)}70%{transform:translate(8px,-8px) scale(.93)}}
 @keyframes ghOrbDrift{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-18px,14px) scale(1.12)}70%{transform:translate(10px,-10px) scale(.95)}}
 @keyframes ghSunPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(255,159,10,.5));transform:scale(1)}50%{filter:drop-shadow(0 0 14px rgba(255,204,2,.7));transform:scale(1.08)}}
 /* ── Hero Wave ── */
@@ -1552,6 +1555,13 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
       <!-- Compact 3-day forecast -->
       <div class="c fc3" id="fc3"></div>
 
+      <!-- Wetter-Empfehlung Pill -->
+      <div id="wx-rec-pill" style="display:none;align-items:center;gap:8px;margin:0 0 10px;padding:9px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;font-size:.75rem;color:rgba(255,255,255,.75);overflow:hidden;position:relative">
+        <span id="wx-rec-ico" style="font-size:1.1rem;flex-shrink:0"></span>
+        <span id="wx-rec-txt" style="flex:1;line-height:1.3"></span>
+        <div id="wx-rec-shimmer" style="position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.04) 50%,transparent 100%);transform:translateX(-100%);animation:wxRecShimmer 3.5s ease-in-out infinite"></div>
+      </div>
+
       <!-- Scenes 2x2 -->
       <span class="lbl">Szenen</span>
       <div class="sg2">
@@ -1955,6 +1965,26 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
                 <span id="gh-countdown" style="font-size:.65rem;font-weight:700;color:#ff9f0a"></span>
                 <span id="gh-end-lbl" style="font-size:.58rem;color:rgba(255,255,255,.3)">–:––</span>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Beste Stunde -->
+      <div id="best-hour-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(48,209,88,.55);text-transform:uppercase;margin-bottom:8px">⭐ BESTE STUNDE HEUTE</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(48,209,88,.18);border-top-color:rgba(48,209,88,.3);padding:14px 18px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:-20px;right:-20px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(48,209,88,.15) 0%,transparent 70%);pointer-events:none;animation:bestHourOrb 8s ease-in-out infinite"></div>
+          <div style="position:relative;z-index:1;display:flex;align-items:center;gap:14px">
+            <!-- Zeit-Badge -->
+            <div id="bh-time-badge" style="flex-shrink:0;min-width:58px;height:58px;border-radius:16px;background:linear-gradient(145deg,rgba(48,209,88,.22),rgba(48,209,88,.10));border:1px solid rgba(48,209,88,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px">
+              <div id="bh-time" style="font-size:1.3rem;font-weight:700;color:#30d158;line-height:1">–:––</div>
+              <div id="bh-time-rel" style="font-size:.55rem;color:rgba(48,209,88,.6)">–</div>
+            </div>
+            <!-- Info rechts -->
+            <div style="flex:1;min-width:0">
+              <div id="bh-label" style="font-size:.82rem;font-weight:700;color:#fff;margin-bottom:4px">Ideale Außenbedingungen</div>
+              <!-- Condition Chips -->
+              <div id="bh-chips" style="display:flex;flex-wrap:wrap;gap:5px"></div>
             </div>
           </div>
         </div>
@@ -2847,11 +2877,25 @@ function renderWeather(){
         const hcode=hrs.weather_code?.[idx]??0;
         const prec=hrs.precipitation_probability?.[idx]??0;
         const hh=String((nowH+i)%24).padStart(2,'0');
-        return`<div style="flex-shrink:0;width:58px;background:var(--c1);border-radius:14px;border:1px solid rgba(255,255,255,.06);padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:5px">
+        // Regen-Gradient-Tinting: Sonne=amber, Regen=blau
+        let bgStyle,borderCol;
+        if(prec<=15){
+          const a=(0.10*(1-prec/15)).toFixed(3);
+          bgStyle=`background:linear-gradient(180deg,rgba(255,159,10,${a}) 0%,var(--c1) 100%)`;
+          borderCol='rgba(255,255,255,.06)';
+        } else if(prec<=40){
+          bgStyle=`background:var(--c1)`;
+          borderCol='rgba(255,255,255,.06)';
+        } else {
+          const a=(0.05+0.18*((prec-40)/60)).toFixed(3);
+          bgStyle=`background:linear-gradient(180deg,rgba(10,132,255,${a}) 0%,var(--c1) 100%)`;
+          borderCol=`rgba(10,132,255,${(0.08+0.15*(prec-40)/60).toFixed(2)})`;
+        }
+        return`<div style="flex-shrink:0;width:58px;${bgStyle};border-radius:14px;border:1px solid ${borderCol};padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:background .8s ease">
           <div style="font-size:.58rem;color:rgba(255,255,255,.35)">${i===0?'Jetzt':hh+':00'}</div>
           <svg viewBox="0 0 28 28" width="28" height="28">${wxIco(hcode,28,false)}</svg>
           <div style="font-size:.78rem;font-weight:600;color:#fff">${Math.round(+t)}°</div>
-          ${prec>10?`<div style="font-size:.55rem;color:#0a84ff">${prec}%</div>`:'<div style="height:14px"></div>'}
+          ${prec>10?`<div style="font-size:.55rem;color:${prec>50?'#4fc3f7':'#0a84ff'};font-weight:${prec>50?'700':'400'}">${prec}%</div>`:'<div style="height:14px"></div>'}
         </div>`;
       }).join('');
     }
@@ -3013,6 +3057,7 @@ function renderWeather(){
   drawBarometer();
   drawWindChill();
   drawGoldenHour();
+  drawBestHour();
   if(window.updateWxPrecipCanvas) updateWxPrecipCanvas(code, night);
 }
 
@@ -3389,6 +3434,86 @@ function drawGoldenHour(){
     if(bar) bar.style.width='0%';
     if(sunIcon){ sunIcon.textContent='🌅'; sunIcon.style.animation='ghSunPulse 3s ease-in-out infinite'; }
   }
+}
+
+// ═══════════════════════════════════════════════
+// BESTE STUNDE (optimal outdoor activity hour)
+// ═══════════════════════════════════════════════
+function drawBestHour(){
+  const card=document.getElementById('best-hour-card');
+  if(!card||!_wx||!_wx.hourly) return;
+  const h=_wx.hourly;
+  const temps=h.temperature_2m||[];
+  const precs=h.precipitation_probability||[];
+  const winds=h.wind_speed_10m||[];
+  const codes=h.weather_code||[];
+  const times=h.time||[];
+  if(!temps.length) return;
+
+  const now=new Date();
+  const nowH=now.getHours();
+  // Score each of the next 12 daylight hours (6:00-21:00)
+  let best={score:-Infinity,idx:-1};
+  for(let i=0;i<Math.min(18,temps.length);i++){
+    const idx=(nowH+i)%24;
+    if(idx<6||idx>21) continue; // skip night hours
+    const t=temps[nowH+i]??15;
+    const pr=precs[nowH+i]??50;
+    const ws=winds[nowH+i]??10;
+    const wc=codes[nowH+i]??0;
+    // Score: prefer comfortable temp, low rain, low wind, good sky
+    let score=0;
+    // Temperature comfort (10–22°C ideal)
+    const tDiff=Math.abs(t-16);
+    score += Math.max(0, 40 - tDiff*2);
+    // Rain probability penalty
+    score -= pr * 0.8;
+    // Wind penalty (>20 km/h bad)
+    score -= Math.max(0, ws - 10) * 0.5;
+    // Weather code bonus: clear/partly cloudy = good
+    if(wc<=2) score+=20;
+    else if(wc<=45) score+=10;
+    else if(wc>=51) score-=15;
+    if(score>best.score){ best={score,idx:nowH+i,hour:idx,i}; }
+  }
+  if(best.idx<0){ card.style.display='none'; return; }
+  card.style.display='block';
+
+  const bIdx=best.idx;
+  const bHour=best.hour;
+  const bTemp=Math.round(temps[bIdx]??0);
+  const bPrec=precs[bIdx]??0;
+  const bWind=Math.round(winds[bIdx]??0);
+  const bCode=codes[bIdx]??0;
+  const bHours=best.i;
+
+  // Time display
+  const timeEl=document.getElementById('bh-time');
+  const timeRelEl=document.getElementById('bh-time-rel');
+  const labelEl=document.getElementById('bh-label');
+  const chipsEl=document.getElementById('bh-chips');
+  if(!timeEl) return;
+
+  timeEl.textContent=String(bHour).padStart(2,'0')+':00';
+  if(bHours===0) timeRelEl.textContent='Jetzt';
+  else if(bHours===1) timeRelEl.textContent='in 1h';
+  else timeRelEl.textContent='in '+bHours+'h';
+
+  // Label based on conditions
+  const labels=['Ideale Außenbedingungen','Perfekt für einen Spaziergang','Gutes Wetter-Fenster','Beste Stunde zum Lüften'];
+  if(bCode<=1&&bPrec<10) labelEl.textContent='☀️ Perfekter Moment für draußen';
+  else if(bPrec<20&&bTemp>12) labelEl.textContent='🌤 Gutes Wetter-Fenster';
+  else labelEl.textContent='🌡 Beste verfügbare Stunde';
+
+  // Chips
+  const chip=(txt,color)=>`<span style="display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;background:rgba(${color},.14);border:1px solid rgba(${color},.3);font-size:.62rem;font-weight:600;color:rgba(${color},1)">${txt}</span>`;
+  const tempColor=bTemp>=18?'255,159,10':bTemp>=10?'48,209,88':'10,132,255';
+  const precColor=bPrec<15?'48,209,88':bPrec<40?'255,159,10':'255,69,58';
+  const windColor=bWind<15?'48,209,88':bWind<30?'255,159,10':'255,69,58';
+  chipsEl.innerHTML=
+    chip(bTemp+'°C',''+tempColor)+
+    chip('🌧 '+bPrec+'%',precColor)+
+    chip('💨 '+bWind+' km/h',windColor);
 }
 
 // ═══════════════════════════════════════════════
@@ -5892,6 +6017,45 @@ function updateAll(){
   window._updateDevCards&&window._updateDevCards();
   // Quick-Actions Bar state
   window._updateQaBar&&window._updateQaBar(on, playing);
+  // ── Wetter-Empfehlung Pill ──
+  (function(){
+    const pill=document.getElementById('wx-rec-pill');
+    const icoEl=document.getElementById('wx-rec-ico');
+    const txtEl=document.getElementById('wx-rec-txt');
+    if(!pill||!icoEl||!txtEl||!_wx||!_wx.current)return;
+    const c=_wx.current;
+    const code=c.weather_code||0;
+    const temp=c.temperature_2m??null;
+    const wind=c.windspeed_10m??0;
+    const uv=_wx.daily?.uv_index_max?.[0]??0;
+    const rainProb=_wx.hourly?.precipitation_probability?.[0]??0;
+    let ico='',txt='',col='rgba(255,255,255,.75)',bg='rgba(255,255,255,.05)',border='rgba(255,255,255,.09)';
+    // Determine recommendation
+    if(temp!==null&&temp<=-5){ico='🧊';txt='Starker Frost – Finger und Ohren schützen!';col='#a8d8ff';bg='rgba(100,160,255,.08)';border='rgba(100,160,255,.2)';}
+    else if(temp!==null&&temp<2){ico='❄️';txt='Frost möglich – Vorsicht Glatteis auf Straßen.';col='#c0e0ff';bg='rgba(130,180,255,.07)';border='rgba(130,180,255,.18)';}
+    else if(code>=95){ico='⛈️';txt='Gewitter erwartet – besser drinbleiben!';col='#ffd60a';bg='rgba(255,214,10,.07)';border='rgba(255,214,10,.2)';}
+    else if(code>=71&&code<=77){ico='🌨️';txt='Schneefall – rutschige Wege, langsam fahren.';col='#c0e0ff';bg='rgba(130,180,255,.07)';border='rgba(130,180,255,.18)';}
+    else if((code>=51&&code<=67)||(code>=80&&code<=82)){ico='☔';txt='Regen heute – Regenschirm mitnehmen!';col='#6ec6ff';bg='rgba(60,150,255,.07)';border='rgba(60,150,255,.18)';}
+    else if(wind>50){ico='🌬️';txt='Starker Wind – Sturm möglich, Vorsicht im Freien.';col='#aaa';bg='rgba(200,200,200,.06)';border='rgba(200,200,200,.14)';}
+    else if(temp!==null&&temp>=32){ico='🥵';txt='Extremhitze – viel trinken, Sonne meiden.';col='#ff6b35';bg='rgba(255,80,20,.08)';border='rgba(255,80,20,.2)';}
+    else if(temp!==null&&temp>=26&&uv>=8){ico='🕶️';txt='Heiß & starke UV – Sonnencreme und Hut!';col='#ffd60a';bg='rgba(255,159,10,.08)';border='rgba(255,159,10,.2)';}
+    else if(temp!==null&&temp>=26){ico='🌡️';txt='Warmer Tag – leicht anziehen, viel trinken.';col='#ff9f0a';bg='rgba(255,159,10,.07)';border='rgba(255,159,10,.18)';}
+    else if(uv>=6&&code<=2){ico='🧴';txt='Starke UV-Strahlung – Sonnenschutz auftragen!';col='#ffd60a';bg='rgba(255,214,10,.07)';border='rgba(255,214,10,.18)';}
+    else if(rainProb>=60&&code<=2){ico='🌂';txt='Regenwahrscheinlichkeit hoch – Schirm griffbereit.';col='#6ec6ff';bg='rgba(60,150,255,.07)';border='rgba(60,150,255,.18)';}
+    else if(code<=1&&temp!==null&&temp>=14&&temp<=24){ico='🌤️';txt='Schönes Wetter – perfekter Tag für draußen!';col='#30d158';bg='rgba(48,209,88,.07)';border='rgba(48,209,88,.18)';}
+    else if(code===2||code===3){ico='☁️';txt='Bewölkt heute – trotzdem angenehme Temperaturen.';col='rgba(255,255,255,.65)';bg='rgba(255,255,255,.04)';border='rgba(255,255,255,.08)';}
+    else if(temp!==null&&temp<10){ico='🧥';txt='Kühl heute – warme Jacke nicht vergessen!';col='#90caf9';bg='rgba(100,160,255,.07)';border='rgba(100,160,255,.17)';}
+    else{ico='😊';txt='Angenehmes Wetter heute – genieße den Tag!';col='#30d158';bg='rgba(48,209,88,.07)';border='rgba(48,209,88,.18)';}
+    icoEl.textContent=ico;
+    txtEl.textContent=txt;
+    pill.style.color=col;
+    pill.style.background=bg;
+    pill.style.borderColor=border;
+    if(pill.style.display==='none'){
+      pill.style.display='flex';
+      pill.style.animation='wxRecIn .45s cubic-bezier(.32,0,.15,1) both';
+    }
+  })();
   const pll=document.getElementById('pl-l');
   pll.classList.toggle('on',on>0);
   pll.querySelector('.pd').style.cssText=on>0?'background:#34d399;box-shadow:0 0 7px #34d399':'';

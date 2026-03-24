@@ -1,5 +1,21 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-24 12:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Beste Stunde" Aktivitäts-Karte
+- Neue `#best-hour-card` Section im Wetter-Tab, direkt VOR der Mondphase-Card
+- Grünes Farbschema: `rgba(48,209,88)` Border + Glow, passend zu "aktiv/positiv" Semantik
+- `@keyframes bestHourOrb`: träger Drift-Orb Hintergrund (8s loop, 3 Keypoints — analog zu ghOrbDrift)
+- Linker Zeit-Badge (`#bh-time-badge`): grüner Gradient-Hintergrund, grosse `HH:00` Anzeige + relative Zeit ("in Xh")
+- Rechts: dynamisches Label + `#bh-chips` Flex-Wrap mit 3 Condition-Chips
+- Chip-Farben: Temperatur (amber/grün/blau je Bereich), Regenwahrsch. (grün<15% / amber<40% / rot), Wind (grün<15 / amber<30 / rot)
+- `drawBestHour()` Funktion: iteriert nächste 18 Stunden, überspringt Nacht-Stunden (vor 6h / nach 21h)
+- Score-Formel: Temp-Komfort-Bonus (±16°C ideal, max 40Pkt), Regen-Malus (-0.8×%), Wind-Malus (-0.5×km/h über 10), WMO-Bonus (+20 bei klar, +10 bei leicht bewölkt, -15 bei Niederschlag)
+- 3 Label-Varianten: "☀️ Perfekter Moment für draußen" / "🌤 Gutes Wetter-Fenster" / "🌡 Beste verfügbare Stunde"
+- Card bleibt `display:none` wenn keine Stundendaten verfügbar (graceful fallback)
+- `drawBestHour()` in `renderWeather()` nach `drawGoldenHour()` eingehängt
+- `#best-hour-card` zur `.page-entering>` Stagger-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- JS-Check: OK | Deployed via SSH (paramiko base64-chunk-pipe, 393466 bytes)
+
 ## 2026-03-24 08:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — "Goldene Stunde" Karte (bereits implementiert, als [x] markiert)
 - ✅ wz.html: Home-Tab — Batterie-Status Chip (bereits implementiert, als [x] markiert)
@@ -12,6 +28,10 @@
   - Schwellwert ≤20% → roter Chip mit Gerätenamen + Prozentwert, max 2 Geräte + "+N" Hinweis
   - `.show` Klasse via spring-Animation (`cubic-bezier(.34,1.28,.64,1)`)
 - JS-Check: OK | Deployed via SSH (paramiko base64-pipe, DEPLOY_OK)
+
+## 2026-03-24 16:36 UTC — Heartbeat (Main Agent)
+- ✅ demo.html: "Warum jetzt?" 3-Spalten Urgency-Section — 3 Karten (120h / €340 / 3000+), animierte Zähler mit easeOut via IntersectionObserver, Accent-Karte für Preis-Highlight, i18n DE+EN, responsive 1-Spalte Mobile
+- JS-Check: OK | Commit: d009767 | Deploy: kein Remote verfügbar
 
 ## 2026-03-24 07:08 UTC — Heartbeat (Main Agent)
 - ✅ demo.html: "Kunden-Stimmen" Ratings-Balken — 5 Sterne-Reihen (5⭐ 87%, 4⭐ 13%, 3-1⭐ 0%), animierte Füll-Balken via IntersectionObserver, gold/silver Gradient, 4.98 Summary-Block, i18n DE+EN, Gesamtbewertungs-Summary-Card

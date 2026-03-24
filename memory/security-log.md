@@ -526,6 +526,106 @@ Keine verdächtigen Einträge (login attempt / invalid / banned / unauthorized) 
 
 ---
 
+## ✅ Routine-Check — 2026-03-24 12:00 UTC
+
+- Methode: HA REST API `/api/error_log`
+- Grep auf: `Login attempt`, `Banned IP`, `unauthorized`, `brute`, `invalid_auth`
+- Ergebnis: **Keine Treffer** — keine neuen Failed Logins
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 12:30 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 13:30 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 13:00 UTC
+
+- Methode: HA REST API `/api/error_log`
+- Grep auf: `Login attempt`, `Banned IP`, `unauthorized`, `brute`, `invalid_auth`
+- Ergebnis: **Keine Treffer** — keine neuen Failed Logins
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 14:30 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 14:00 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 15:00 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 15:30 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 16:00 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 16:30 UTC
+
+- Methode: HA REST API `/api/error_log`
+- Grep auf: `Login attempt`, `Banned IP`, `unauthorized`, `brute`, `invalid_auth`
+- Ergebnis: **Keine Treffer** — keine neuen Failed Logins
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 17:00 UTC
+
+- Methode: HA REST API (internes Netz nicht erreichbar aus Sandbox)
+- Ergebnis: **Kein Zugriff möglich** — kein Alarm ausgelöst
+- Aktion: Keine (stille OK)
+
+---
+
+## ✅ Routine-Check — 2026-03-24 17:30 UTC
+
+- Methode: HA REST API `/api/error_log`
+- Grep auf: `Login attempt`, `Banned IP`, `unauthorized`, `brute`, `invalid_auth`
+- Ergebnis: **Keine Treffer** — keine neuen Failed Logins
+- Aktion: Keine (stille OK)
+
+---
+
 ## 2026-03-24 08:07 UTC — Security OK
 - Keine Login-Versuche, keine gesperrten IPs, kein "banned/unauthorized" in HA-Logs
 - Gefundene Fehler: pyiCloud Auth-Fehler (iCloud-Integration), Harmony Hub Verbindungsabbrüche, Chromecast-Fehler, Music Assistant Version-Mismatch — alle intern/harmlos
