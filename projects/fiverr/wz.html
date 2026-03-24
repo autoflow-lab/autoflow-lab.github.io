@@ -208,6 +208,16 @@ html,body{height:100%;background:var(--bg);
 #wxt-feel-arrow.up{color:#30d158;opacity:1;animation:feelArrowUp 1.8s ease-in-out infinite}
 #wxt-feel-arrow.down{color:#ff453a;opacity:1;animation:feelArrowDown 1.8s ease-in-out infinite}
 #wxt-feel-arrow.neutral{color:rgba(255,255,255,.35);opacity:.7;animation:none}
+/* ── Licht-Tab Helligkeits-Meter ── */
+#lt-bri-meter{margin:10px 14px 6px;opacity:0;transition:opacity .5s ease}
+#lt-bri-meter.show{opacity:1}
+#lt-bri-meter-bar-wrap{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-bottom:5px}
+#lt-bri-meter-bar{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,#ff9f0a 0%,#ffcc02 60%,#fff9a0 100%);transition:width 1.1s cubic-bezier(.4,0,.2,1),background 1.5s ease;box-shadow:0 0 6px rgba(255,159,10,.5)}
+@keyframes ltBriShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+#lt-bri-meter-label{display:flex;justify-content:space-between;align-items:center;font-size:.58rem;color:rgba(255,255,255,.42)}
+#lt-bri-meter-label .lt-bri-pct{font-size:.75rem;font-weight:700;color:rgba(255,159,10,.9);transition:color .5s}
+#lt-bri-meter-label .lt-bri-pct.dim{color:rgba(255,255,255,.28)}
+#lt-bri-meter-label .lt-bri-count{letter-spacing:.02em}
 .ni-badge.pop{animation:badgePop .28s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes navGlow{
   0%,100%{opacity:.8;width:18px}
@@ -863,6 +873,10 @@ html,body{height:100%;background:var(--bg);
 .sp-pl-img{width:42px;height:42px;border-radius:8px;background:var(--c3);object-fit:cover;flex-shrink:0}
 .sp-pl-name{font-size:.82rem;font-weight:600;color:var(--txt);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sp-pl-info{font-size:.65rem;color:var(--dim2)}
+.sp-dev-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 11px;color:rgba(255,255,255,.6);font-size:.68rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap;max-width:160px;overflow:hidden}
+.sp-dev-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-dev-chip:active{transform:scale(.94)}
+.sp-dev-chip-on{background:rgba(29,185,84,.22)!important;border-color:rgba(29,185,84,.5)!important;color:#1db954!important;font-weight:700!important}
 .spotcard svg{width:30px;height:30px;color:#1db954;flex-shrink:0}
 .spott{font-size:.84rem;font-weight:600;color:#1db954}
 .spots{font-size:.62rem;color:rgba(29,185,84,.5);margin-top:2px}
@@ -1690,6 +1704,13 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
     <!-- ═══ LICHT ═══ -->
     <div class="page" id="pg-licht">
       <span class="lbl">Licht</span>
+      <div id="lt-bri-meter" aria-label="Gesamt-Helligkeit">
+        <div id="lt-bri-meter-bar-wrap"><div id="lt-bri-meter-bar"></div></div>
+        <div id="lt-bri-meter-label">
+          <span class="lt-bri-count"></span>
+          <span class="lt-bri-pct">--%</span>
+        </div>
+      </div>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
@@ -2493,10 +2514,11 @@ async function fetchStates(){
   }catch(e){
     console.warn('fetchStates err:',e);
     _offlineCount=(_offlineCount||0)+1;
-    // Nur Banner zeigen wenn AUCH WS weg ist — HTTP-Fehler allein reicht nicht
-    if(_offlineCount>=2 && !_wsOk)showOfflineBanner(true);
+    // Banner: sofort wenn WS schon weg, sonst nach 2 Fehlern
+    if(!_wsOk || _offlineCount>=2)showOfflineBanner(true,_offlineCount);
     // Retry-Backoff: 5s, 15s, 30s
     const delay=[5000,15000,30000][Math.min(_offlineCount-1,2)];
+    _offlineNextRetry=Date.now()+delay;
     setTimeout(fetchStates, delay);
   }
 }
@@ -2544,15 +2566,32 @@ function showRainBanner(msg){
   else{b.style.transform='translateY(-100%)';}
 }
 
-function showOfflineBanner(show){
+let _offlineNextRetry=0;
+let _offlineCdTimer=null;
+function showOfflineBanner(show,failCount){
   let b=document.getElementById('offline-banner');
   if(!b){
     b=document.createElement('div');b.id='offline-banner';
-    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:8000;background:rgba(255,69,58,.92);color:#fff;text-align:center;font-size:.75rem;font-weight:700;padding:10px;backdrop-filter:blur(10px);transform:translateY(-100%);transition:transform .35s;letter-spacing:.3px';
-    b.textContent='⚠️ Home Assistant nicht erreichbar — Verbindung wird wiederhergestellt…';
+    b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:8000;background:linear-gradient(90deg,rgba(255,69,58,.95),rgba(200,30,20,.95));color:#fff;text-align:center;font-size:.73rem;font-weight:700;padding:11px 16px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transform:translateY(-100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);letter-spacing:.3px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+    b.innerHTML='<span id="ob-icon">⚠️</span><span id="ob-msg">Home Assistant nicht erreichbar</span><span id="ob-cd" style="opacity:.7;font-weight:400"></span>';
+    b.addEventListener('click',fetchStates);
     document.body.appendChild(b);
   }
-  b.style.transform=show?'translateY(0)':'translateY(-100%)';
+  if(show){
+    b.style.transform='translateY(0)';
+    const msg=document.getElementById('ob-msg');
+    if(msg)msg.textContent=(failCount&&failCount>2)?'Home Assistant nicht erreichbar':'Verbindungsfehler — prüfe HA';
+    if(_offlineCdTimer)clearInterval(_offlineCdTimer);
+    _offlineCdTimer=setInterval(()=>{
+      const cd=document.getElementById('ob-cd');
+      if(!cd)return;
+      const secs=Math.max(0,Math.round((_offlineNextRetry-Date.now())/1000));
+      cd.textContent=secs>0?`· Retry in ${secs}s`:'· Verbinde…';
+    },500);
+  } else {
+    b.style.transform='translateY(-100%)';
+    if(_offlineCdTimer){clearInterval(_offlineCdTimer);_offlineCdTimer=null;}
+  }
 }
 
 // Service calls via HTTP — doesn't depend on WS auth state
@@ -4283,6 +4322,18 @@ function buildUI(){try{
   // Spotify
   // Spotify playlist dropdown
   let _spOpen=false, _spLoaded=false;
+  function buildSpotifyDeviceChips(){
+    const sp=_S[CFG.spot];
+    const srcList=sp?.attributes?.source_list||[];
+    const curSrc=sp?.attributes?.source||'';
+    if(!srcList.length)return'';
+    const chips=srcList.map(s=>{
+      const active=s===curSrc;
+      const ico=s.toLowerCase().includes('phone')||s.toLowerCase().includes('pixel')||s.toLowerCase().includes('samsung')?'📱':s.toLowerCase().includes('pc')||s.toLowerCase().includes('windows')||s.toLowerCase().includes('mac')||s.toLowerCase().includes('computer')?'💻':s.toLowerCase().includes('tv')||s.toLowerCase().includes('oled')?'📺':'🔊';
+      return`<button class="sp-dev-chip${active?' sp-dev-chip-on':''}" data-src="${s}" title="${s}">${ico} <span>${s}</span></button>`;
+    }).join('');
+    return`<div style="padding:10px 12px 4px"><div style="font-size:.58rem;color:rgba(255,255,255,.3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">🔊 Gerät auswählen</div><div style="display:flex;flex-wrap:wrap;gap:6px">${chips}</div></div><div style="height:1px;background:rgba(255,255,255,.06);margin:6px 0"></div>`;
+  }
   function loadSpotifyPlaylists(){
     const list=document.getElementById('sp-pl-list');if(!list)return;
     const curUri=_S[CFG.spot]?.attributes?.media_content_id||'';
@@ -4301,7 +4352,17 @@ function buildUI(){try{
         <button id="sp-uri-go" style="background:#1db954;border:none;border-radius:10px;padding:8px 14px;color:#000;font-weight:700;font-size:.8rem;cursor:pointer">▶</button>
       </div>
     </div>`;
-    list.innerHTML=favHTML+inputHTML;
+    list.innerHTML=buildSpotifyDeviceChips()+favHTML+inputHTML;
+    list.querySelectorAll('.sp-dev-chip').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        e.stopPropagation();hap();
+        const src=btn.dataset.src;
+        svc('media_player','select_source',{entity_id:CFG.spot,source:src});
+        toast('🔊 '+src);
+        list.querySelectorAll('.sp-dev-chip').forEach(b=>b.classList.remove('sp-dev-chip-on'));
+        btn.classList.add('sp-dev-chip-on');
+      });
+    });
     list.querySelectorAll('.sp-pl-item').forEach(el=>{
       el.addEventListener('click',e=>{
         e.stopPropagation();
@@ -4347,7 +4408,7 @@ function buildUI(){try{
     const arrow=document.getElementById('sp-arrow');
     if(panel){panel.style.maxHeight=_spOpen?'55vh':'0';panel.style.overflowY=_spOpen?'auto':'hidden'}
     if(arrow){arrow.style.transform=_spOpen?'rotate(180deg)':'rotate(0deg)'}
-    if(_spOpen&&!_spLoaded)loadSpotifyPlaylists();
+    if(_spOpen)loadSpotifyPlaylists();
   });
   // Premium Volume Range Input
   const vtrack=null; // legacy ref, kept for compat
@@ -5591,6 +5652,44 @@ function updateAll(){
       sum.textContent='Alle Lichter aus';
       sum.style.opacity='.5';
     }
+  })();
+  // Helligkeits-Meter im Licht-Tab
+  (function(){
+    const meter=document.getElementById('lt-bri-meter');
+    const bar=document.getElementById('lt-bri-meter-bar');
+    const lbl=meter&&meter.querySelector('.lt-bri-count');
+    const pct=meter&&meter.querySelector('.lt-bri-pct');
+    if(!meter||!bar||!lbl||!pct)return;
+    const total=CFG.lights.length;
+    if(on===0){
+      bar.style.width='0%';
+      lbl.textContent='Alle Lichter aus';
+      pct.textContent='--%';
+      pct.classList.add('dim');
+      meter.classList.remove('show');
+      return;
+    }
+    // average brightness of lights that are on and have brightness attribute
+    const onLights=CFG.lights.filter(l=>effOn(l.id));
+    let briSum=0,briCount=0;
+    onLights.forEach(l=>{
+      const a=_S[l.id]&&_S[l.id].attributes;
+      if(a&&a.brightness!=null){briSum+=(a.brightness/255*100);briCount++;}
+    });
+    const avgBri=briCount>0?Math.round(briSum/briCount):null;
+    bar.style.width=(avgBri!=null?avgBri:75)+'%';
+    lbl.textContent=`${on} von ${total} an`;
+    pct.textContent=avgBri!=null?`Ø ${avgBri}%`:'aktiv';
+    pct.classList.toggle('dim',avgBri===null);
+    // tint bar color if very dim (<30%) or very bright (>85%)
+    if(avgBri!=null&&avgBri<30){
+      bar.style.background='linear-gradient(90deg,rgba(255,159,10,.55) 0%,rgba(255,159,10,.7) 100%)';
+    } else if(avgBri!=null&&avgBri>85){
+      bar.style.background='linear-gradient(90deg,#ffcc02 0%,#fff9a0 60%,#ffffff 100%)';
+    } else {
+      bar.style.background='linear-gradient(90deg,#ff9f0a 0%,#ffcc02 60%,#fff9a0 100%)';
+    }
+    meter.classList.add('show');
   })();
   // Group count badges
   (function(){
