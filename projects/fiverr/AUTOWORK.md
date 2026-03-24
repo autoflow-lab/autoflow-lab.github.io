@@ -166,7 +166,7 @@
 
 ## Neue Ideen (2026-03-24 02:05 UTC)
 - [x] demo.html: Live-Besucher FOMO-Counter im Hero (grüner Pulse-Dot, 4-8 Besucher, drift ±1 alle 18-45s)
-- [ ] wz.html: Wetter-Tab — "Goldene Stunde" Karte (Sonnenuntergang - 45min bis Sonnenuntergang, orangener Glow, "Perfektes Foto-Licht" Hinweis)
+- [x] wz.html: Wetter-Tab — "Goldene Stunde" Karte (Sonnenuntergang - 45min bis Sonnenuntergang, orangener Glow, "Perfektes Foto-Licht" Hinweis)
 - [x] demo.html: Anchor-Navigation (sticky Mini-Nav unter Header: Überblick · Preise · Demo · Kontakt, smooth scroll, aktiver Abschnitt highlighted)
-- [ ] wz.html: Home-Tab — Batterie-Status Chip (wenn sensor.*.battery_level < 20% → roter Chip "Batterie schwach: Gerätename X%")
-- [ ] demo.html: "Kunden-Stimmen" Ratings-Balken (5⭐ 87% / 4⭐ 13% als animierte Balken, IntersectionObserver)
+- [x] wz.html: Home-Tab — Batterie-Status Chip (wenn sensor.*.battery_level < 20% → roter Chip "Batterie schwach: Gerätename X%")
+- [x] demo.html: "Kunden-Stimmen" Ratings-Balken (5⭐ 87% / 4⭐ 13% als animierte Balken, IntersectionObserver)

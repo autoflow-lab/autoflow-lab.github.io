@@ -85,7 +85,10 @@ body{padding-bottom:32px}
 .sim-badge{font-size:.58rem;padding:3px 8px;border-radius:100px;background:rgba(94,92,230,.25);color:#a78bfa;font-weight:700;letter-spacing:.3px}
 
 /* ─── LIGHTS ─── */
-.lights-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.lights-grid{margin-bottom:10px}
+.lights-grid-inner{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.room-label{font-size:.58rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:14px 4px 6px;margin-top:2px}
+.room-label:first-child{padding-top:4px}
 .lt-tile{background:var(--c1);border-radius:16px;padding:14px 12px;border:1px solid var(--sep);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:8px;touch-action:manipulation}
 .lt-tile:active{transform:scale(.95)}
 .lt-tile.on{background:rgba(255,159,10,.09);border-color:rgba(255,159,10,.3)}
@@ -380,6 +383,11 @@ body{padding-bottom:32px}
 
 <!-- TAB: LICHTER -->
 <div class="tab-page" id="tab-lights">
+  <div class="section" style="padding-bottom:0">
+    <button id="all-off-btn" style="width:100%;padding:14px;border-radius:16px;border:none;background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.2);color:#ff453a;font-size:.88rem;font-weight:700;cursor:pointer;touch-action:manipulation;margin-bottom:4px">
+      ⛔ Alle Lichter aus
+    </button>
+  </div>
   <div class="section">
     <div class="lights-grid" id="lights-grid"></div>
   </div>
@@ -471,10 +479,10 @@ body{padding-bottom:32px}
   </div>
 </div>
 
-<div class="footer">SchlappHome <span style='opacity:.4'>v2.2</span> · <span id="last-update">–</span></div>
+<div class="footer">SchlappHome <span style='opacity:.4'>v2.3</span> · <span id="last-update">–</span></div>
 
 <script>
-const APP_VERSION='v2.2';
+const APP_VERSION='v2.3';
 
 // ─── LOG CAPTURE ───
 const _logs = [];
@@ -503,15 +511,56 @@ function renderLogs(){
 
 const HA = 'https://schlapphome.uk';
 const GARAGE_ID = 'cover.smart_garage_door_2207188115870761070148e1e99a76de_garage_1';
-const LIGHTS = [
-  {id:'light.h61e1',    name:'Wohnzimmer Wand', svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
-  {id:'light.h618a',    name:'Sofa LED',         svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
-  {id:'light.h618a_2',  name:'Küche LED',        svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
-  {id:'switch.shelly1_98cdac0ca9b2',name:'Wandlampe Büro', dom:'switch',
-   svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/><line x1="12" y1="17" x2="12" y2="21"/>'},
-  {id:'light.gang_eg_licht',name:'Gang Erdgeschoss', svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
-  {id:'light.garten_licht', name:'Fassade',          svg:'<circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>'},
+// SVG Bibliothek
+const SVG = {
+  bulb: '<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>',
+  strip: '<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>',
+  home:  '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  sun:   '<circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>',
+  bed:   '<path d="M2 4v16M2 8h20a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
+  sofa:  '<path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0z"/>',
+  lamp:  '<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  ceil:  '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>',
+  wc:    '<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v8M8 12h8"/>',
+  tree:  '<path d="M17 14l3-3-3-3M7 14l-3-3 3-3"/><path d="M14 3l-2 18-2-18"/>',
+};
+
+// Räume mit Lichtern
+const LIGHT_ROOMS = [
+  { room: '🛋️ Wohnzimmer', lights: [
+    {id:'light.h61e1',       name:'Govee Wand',    svg:SVG.strip},
+    {id:'light.h618a',       name:'Govee Sofa',    svg:SVG.sofa},
+    {id:'light.deckenlampe', name:'Deckenlampe',   svg:SVG.ceil},
+    {id:'light.hue_play',    name:'Hue Play',      svg:SVG.lamp},
+  ]},
+  { room: '🍳 Küche', lights: [
+    {id:'light.h618a_2',     name:'LED Streifen',  svg:SVG.strip},
+  ]},
+  { room: '🛏️ Schlafzimmer', lights: [
+    {id:'light.schlafzimmer',              name:'Schlafzimmer',     svg:SVG.bulb},
+    {id:'light.color_temperature_light_1', name:'LED Bett',         svg:SVG.strip},
+    {id:'light.hue_iris',                  name:'Hue Iris',         svg:SVG.lamp},
+    {id:'light.shelly1_c45bbe47adb9',      name:'Kleiderschrank',   svg:SVG.bulb, dom:'light'},
+  ]},
+  { room: '🛏️ Eltern SZ', lights: [
+    {id:'light.eltern_schlafzimmer', name:'Eltern SZ', svg:SVG.bulb},
+  ]},
+  { room: '💼 Büro', lights: [
+    {id:'switch.shelly1_98cdac0ca9b2', name:'Wandlampe',  svg:SVG.lamp, dom:'switch'},
+    {id:'light.hue_play_l',            name:'Hue Play',   svg:SVG.lamp},
+  ]},
+  { room: '🚪 Gänge & WC', lights: [
+    {id:'light.gang_eg_licht',  name:'Gang EG',   svg:SVG.home, nodim:true},
+    {id:'light.gang_og_licht',  name:'Gang OG',   svg:SVG.home, nodim:true},
+    {id:'light.gaste_wc_licht', name:'Gäste WC',  svg:SVG.wc,   nodim:true},
+  ]},
+  { room: '🌿 Außen', lights: [
+    {id:'light.garten_licht', name:'Fassade', svg:SVG.sun, nodim:true},
+  ]},
 ];
+
+// Flache Liste für updateLights compat
+const LIGHTS = LIGHT_ROOMS.flatMap(r=>r.lights);
 
 let _S = {};
 let _simActive = false;
@@ -630,16 +679,22 @@ function updateLights(){
 }
 
 function buildLights(){
-  const grid=document.getElementById('lights-grid');
-  grid.innerHTML=LIGHTS.map(l=>`
-    <div class="lt-tile" data-id="${l.id}" data-dom="${l.dom||'light'}">
-      <div class="lt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${l.svg}</svg></div>
-      <div>
-        <div class="lt-name">${l.name}</div>
-        <div class="lt-state">Aus</div>
-      </div>
-    </div>`).join('');
-  grid.querySelectorAll('.lt-tile').forEach(t=>{
+  const container=document.getElementById('lights-grid');
+  let html='';
+  LIGHT_ROOMS.forEach(room=>{
+    html+=`<div class="room-label">${room.room}</div><div class="lights-grid-inner">`;
+    html+=room.lights.map(l=>`
+      <div class="lt-tile" data-id="${l.id}" data-dom="${l.dom||'light'}" data-nodim="${l.nodim||false}">
+        <div class="lt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${l.svg}</svg></div>
+        <div>
+          <div class="lt-name">${l.name}</div>
+          <div class="lt-state">Aus</div>
+        </div>
+      </div>`).join('');
+    html+=`</div>`;
+  });
+  container.innerHTML=html;
+  container.querySelectorAll('.lt-tile').forEach(t=>{
     t.addEventListener('click',()=>{
       const on=t.classList.contains('on');
       const dom=t.dataset.dom;
@@ -806,6 +861,16 @@ function stopSim(){
   document.getElementById('sim-state').textContent='Lichter aus/ein als wärst du da';
   toast('Simulation gestoppt');
 }
+document.getElementById('all-off-btn').addEventListener('click',()=>{
+  confirm('⛔ Alle Lichter aus?','Alle Lichter werden sofort ausgeschaltet.','Alle aus','red',()=>{
+    LIGHTS.forEach(l=>{
+      const dom=l.dom||'light';
+      svc(dom,'turn_off',{entity_id:l.id});
+    });
+    toast('⛔ Alle Lichter aus');
+  });
+});
+
 document.getElementById('sim-toggle').addEventListener('click',()=>{
   if(_simActive) stopSim();
   else confirm('🛡️ Simulation starten?','Lichter gehen in zufälligen Abständen an und aus — so als ob jemand daheim wäre.','Starten','',startSim);

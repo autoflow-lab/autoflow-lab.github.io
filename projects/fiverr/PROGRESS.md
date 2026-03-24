@@ -1,5 +1,22 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-24 08:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Goldene Stunde" Karte (bereits implementiert, als [x] markiert)
+- ✅ wz.html: Home-Tab — Batterie-Status Chip (bereits implementiert, als [x] markiert)
+- Beide Features waren vollständig in wz.html vorhanden (HTML, CSS, JS) aber noch nicht in AUTOWORK.md abgehakt
+- Goldene Stunde: `#golden-hour-card` zeigt sich im 4h-Vorschaufenster + aktiv während der 45min vor Sunset
+  - `@keyframes ghSunPulse` + `ghOrbDrift` — orangener Glow-Orb im Hintergrund
+  - Fortschrittsbalken (amber Gradient), Live-Countdown (sekunden-genau), Zustandswechsel Upcoming→Aktiv
+  - `drawGoldenHour()` in `renderWeather()` aufgerufen
+- Batterie-Chip: `#batt-chip` scannt alle `_S` States nach `device_class=battery` oder `_battery_level`/`_battery` IDs
+  - Schwellwert ≤20% → roter Chip mit Gerätenamen + Prozentwert, max 2 Geräte + "+N" Hinweis
+  - `.show` Klasse via spring-Animation (`cubic-bezier(.34,1.28,.64,1)`)
+- JS-Check: OK | Deployed via SSH (paramiko base64-pipe, DEPLOY_OK)
+
+## 2026-03-24 07:08 UTC — Heartbeat (Main Agent)
+- ✅ demo.html: "Kunden-Stimmen" Ratings-Balken — 5 Sterne-Reihen (5⭐ 87%, 4⭐ 13%, 3-1⭐ 0%), animierte Füll-Balken via IntersectionObserver, gold/silver Gradient, 4.98 Summary-Block, i18n DE+EN, Gesamtbewertungs-Summary-Card
+- JS-Check: OK | Commit: 834215a | Deploy: kein Remote verfügbar
+
 ## 2026-03-24 06:08 UTC — Heartbeat (Main Agent)
 - ✅ demo.html: Anchor-Navigation — sticky Mini-Nav (Überblick · Preise · Demo · Kontakt), erscheint nach Hero-Scroll, smooth scroll, aktiver Abschnitt highlighted (blauer Unterstrich), Dark Mode + i18n DE/EN, Mobile responsive
 - JS-Check: OK | Commit: ae09b7f | Deploy: kein Remote/SSH verfügbar
