@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#000000">
 <title>SchlappHome</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 :root{
   --bg:#000;--c1:#1c1c1e;--c2:#2c2c2e;--c3:#3a3a3c;
   --txt:#fff;--dim:rgba(255,255,255,.5);--dim2:rgba(255,255,255,.25);
@@ -18,6 +18,7 @@
   --acc:#ff9f0a;--blue:#0a84ff;--grn:#30d158;--red:#ff453a;--teal:#5ac8fa;
 }
 html,body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;min-height:100vh;overflow-x:hidden}
+input,textarea{-webkit-user-select:text;user-select:text}
 body{padding-bottom:32px}
 
 /* ─── HEADER ─── */
@@ -211,7 +212,7 @@ body{padding-bottom:32px}
 /* ─── LIGHT DETAIL SHEET ─── */
 #ld-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(12px);z-index:220;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 #ld-bg.show{opacity:1;pointer-events:all}
-#ld-sheet{background:#1c1c1e;border-radius:26px 26px 0 0;padding:0 0 max(24px,env(safe-area-inset-bottom)) 0;width:100%;max-width:480px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.1,.64,1);max-height:90vh;overflow-y:auto}
+#ld-sheet{background:#1c1c1e;border-radius:26px 26px 0 0;padding:0 0 max(24px,env(safe-area-inset-bottom)) 0;width:100%;max-width:480px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.1,.64,1);max-height:90vh;overflow-y:auto;-webkit-user-select:none;user-select:none}
 #ld-bg.show #ld-sheet{transform:translateY(0)}
 .ld-handle{width:40px;height:4px;background:rgba(255,255,255,.18);border-radius:2px;margin:12px auto 0}
 .ld-head{display:flex;align-items:center;gap:14px;padding:18px 22px 0}
@@ -232,7 +233,7 @@ body{padding-bottom:32px}
 .ld-sec-title{font-size:.56rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px}
 .ld-bri-wrap{display:flex;align-items:center;gap:10px}
 .ld-ico-sm{font-size:.85rem;flex-shrink:0}
-input[type=range].ld-slider{-webkit-appearance:none;appearance:none;width:100%;height:7px;border-radius:4px;outline:none;cursor:pointer;flex:1}
+input[type=range].ld-slider{-webkit-appearance:none;appearance:none;width:100%;height:7px;border-radius:4px;outline:none;cursor:pointer;flex:1;touch-action:none}
 input[type=range].ld-slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.5);cursor:pointer;transition:transform .1s;border:2px solid rgba(255,255,255,.3)}
 input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
 #ld-bri-slider{background:linear-gradient(to right,#333,rgba(255,159,10,.9))}
@@ -248,7 +249,7 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
 .ld-preset-ico{font-size:1.3rem;margin-bottom:5px}
 .ld-preset-name{font-size:.75rem;font-weight:600}
 .ld-preset-desc{font-size:.6rem;color:rgba(255,255,255,.35);margin-top:2px}
-.lt-tile{position:relative;overflow:hidden;user-select:none}
+.lt-tile{position:relative;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .lt-tile::after{content:'';position:absolute;inset:0;background:rgba(255,159,10,.1);opacity:0;border-radius:16px;transition:opacity .1s;pointer-events:none}
 .lt-tile.pressing::after{opacity:1}
 
@@ -570,10 +571,10 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
   </div>
 </div>
 
-<div class="footer">SchlappHome <span style='opacity:.4'>v2.6</span> · <span id="last-update">–</span></div>
+<div class="footer">SchlappHome <span style='opacity:.4'>v2.7</span> · <span id="last-update">–</span></div>
 
 <script>
-const APP_VERSION='v2.6';
+const APP_VERSION='v2.7';
 
 // ─── LOG CAPTURE ───
 const _logs = [];
@@ -627,8 +628,8 @@ const LIGHT_ROOMS = [
     {id:'light.h618a_2', name:'Oberschrank', svg:SVG.ledstrip_v, caps:'rgb'},
   ]},
   { room: '🛏️ Schlafzimmer', lights: [
-    {id:'light.schlafzimmer', name:'Decke',    svg:SVG.ceiling, caps:'ct'},
-    {id:'light.deckenlampe',  name:'Pendel',   svg:SVG.ceiling, caps:'ct'},
+    {id:'light.schlafzimmer', name:'Decke',    svg:SVG.ceiling, caps:'color'},
+    {id:'light.deckenlampe',  name:'Pendel',   svg:SVG.ceiling, caps:'color'},
     {id:'light.hue_play',     name:'Hue Play', svg:SVG.hueplay, caps:'color'},
     {id:'light.hue_iris',     name:'Hue Iris', svg:SVG.orb,     caps:'color'},
   ]},
@@ -886,16 +887,21 @@ function buildLights(){
     const lCfg=LIGHTS.find(l=>l.id===t.dataset.id);
     const rCfg=LIGHT_ROOMS.find(r=>r.lights.some(l=>l.id===t.dataset.id));
     let pressTimer=null,didLong=false;
-    t.addEventListener('touchstart',()=>{
+    let _ts={x:0,y:0};
+    t.addEventListener('touchstart',e=>{
       didLong=false;t.classList.add('pressing');
+      _ts={x:e.touches[0].clientX,y:e.touches[0].clientY};
       pressTimer=setTimeout(()=>{
         didLong=true;t.classList.remove('pressing');
         navigator.vibrate&&navigator.vibrate(25);
         if(lCfg)showLightDetail(lCfg,rCfg?.room||'');
       },550);
     },{passive:true});
-    t.addEventListener('touchend',()=>{clearTimeout(pressTimer);t.classList.remove('pressing');});
-    t.addEventListener('touchmove',()=>{clearTimeout(pressTimer);t.classList.remove('pressing');});
+    t.addEventListener('touchend',e=>{clearTimeout(pressTimer);t.classList.remove('pressing');});
+    t.addEventListener('touchmove',e=>{
+      const dx=Math.abs(e.touches[0].clientX-_ts.x),dy=Math.abs(e.touches[0].clientY-_ts.y);
+      if(dx>6||dy>6){clearTimeout(pressTimer);t.classList.remove('pressing');}
+    },{passive:true});
     t.addEventListener('click',()=>{
       if(didLong){didLong=false;return;}
       const on=t.classList.contains('on'),dom=t.dataset.dom;
@@ -1296,6 +1302,7 @@ function switchTab(name){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+name));
 }
 
+document.addEventListener("contextmenu",e=>e.preventDefault());
 checkLogin();
 </script>
 </div>

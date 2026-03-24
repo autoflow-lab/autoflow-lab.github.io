@@ -1,5 +1,25 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-24 18:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — Podcast/Radio Fallback-Anzeige
+- Neues `#radio-fallback-card` Element im Musik-Tab, erscheint wenn Almando spielt aber KEIN Spotify-Stream (`_isSpot=false`)
+- Hintergrund: amber `radial-gradient` Orb (`#rfc-bg`) mit 12% Opacity — dezenter Warmton
+- Linkes Icon: 44×44px Card mit SVG-Antenne (`#rfc-antenna-ico`) — amber für Radio, lila für Podcast
+- `@keyframes rfcAntennaPulse`: Antenne pulsiert sanft (0.35→0.7 Opacity, 2.4s Loop) — signalisiert Empfang
+- Type-Badge `#rfc-type-badge`: "📻 RADIO" (amber) oder "🎙 PODCAST" (lila #bf5af2) — automatisch erkannt via Content-ID
+- Podcast-Erkennung: `media_content_id` enthält "podcast", "anchor", "simplecast" ODER Titel enthält "podcast"
+- `#rfc-title`: `media_title` → `media_channel` → `_radActive` → "Livestream" (Fallback-Kette)
+- `#rfc-sub`: `media_channel` wenn anders als Titel, sonst "Almando Wohnzimmer"
+- `#rfc-freq-row`: 5 animierte Balken (`#rfc-wave-bars`) + gekürzte Content-ID (`#rfc-cid`, max 40 Zeichen)
+- `@keyframes rfcBar`: Balken tanzen mit 0.15s gestaffelten Delays (4px→16px Höhe, 1.1s alternate loop)
+- Balken animieren nur wenn `.playing` Klasse aktiv (kein visuelles Rauschen im Idle-Zustand)
+- Content-ID Anzeige: versucht URL-Parsing via `new URL()` → zeigt nur Hostname+Pfad (nicht volle URL)
+- JS IIFE in `updateAll()`: `isRadioOrPodcast = playing && !_isSpot` → `card.classList.toggle('show', ...)`
+- Karte bleibt versteckt (`display:none`) bei Spotify-Streams, Idle, und wenn Almando aus
+- `#radio-fallback-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- Effekt: Wenn Radio/Podcast läuft aber kein Spotify-UI verfügbar, erscheint eine saubere Karte mit Station-Info, animierten Wellen-Balken und Typ-Badge — statt einem leeren Album-Art-Disc
+- JS-Check: OK | Deployed via SSH (paramiko base64-chunk-pipe, 404364 bytes)
+
 ## 2026-03-24 12:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — "Beste Stunde" Aktivitäts-Karte
 - Neue `#best-hour-card` Section im Wetter-Tab, direkt VOR der Mondphase-Card
