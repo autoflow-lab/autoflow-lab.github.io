@@ -1,5 +1,43 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-24 06:08 UTC — Heartbeat (Main Agent)
+- ✅ demo.html: Anchor-Navigation — sticky Mini-Nav (Überblick · Preise · Demo · Kontakt), erscheint nach Hero-Scroll, smooth scroll, aktiver Abschnitt highlighted (blauer Unterstrich), Dark Mode + i18n DE/EN, Mobile responsive
+- JS-Check: OK | Commit: ae09b7f | Deploy: kein Remote/SSH verfügbar
+
+## 2026-03-24 02:05 UTC — Heartbeat (Main Agent)
+- ✅ demo.html: Live-Besucher FOMO-Counter im Hero — grüner Pulse-Dot + "X Personen schauen gerade", startet 4-8 Besucher, driftet ±1 alle 18-45s, erscheint nach 2.5s, i18n DE/EN
+- JS-Check: OK | Commit: 9934d0b | Deploy: kein Remote/SSH verfügbar
+
+## 2026-03-24 02:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — Animierte SVG-Wellen im Hintergrund
+- Neues `<svg id="hero-wave-svg">` als letztes Element VOR `.hcont` im `.hero` Container (position:absolute, bottom:0, left:0, width:100%, height:72px, z-index:1, pointer-events:none)
+- 2 Wellen-Gruppen: `#hero-wave-p1` (amber) + `#hero-wave-p2` (blau), gegenläufig animiert
+- Welle 1: `path` mit Sinus-Form (C100 28,200 68,...), `fill:url(#wv1Grad)` — amber 10%→18%→10% horizontal Gradient
+- Welle 2: `path` mit versetzter Sinus-Form (C133 38,...), `fill:url(#wv2Grad)` — blau 08%→15%→08% Gradient
+- `@keyframes heroWave1`: translateX 0 → -50% in 18s linear infinite (amber nach links)
+- `@keyframes heroWave2`: translateX -50% → 0% → +50% in 24s linear infinite (blau nach rechts, entgegengesetzt)
+- Welle-Pfade sind 2× Viewport-Breite (1800px / 2000px path) → nahtloser endloser Loop
+- Kein JS nötig — reine CSS-Animation, null Overhead
+- Kein Konflikt mit bestehenden `#star-cv`, `#wx-particles`, `#amb-orb` (separate z-index Layer)
+- `.hero{overflow:hidden}` bereits gesetzt → Wellen werden am Rand sauber abgeschnitten
+- Effekt: Am unteren Rand des Home-Heroes fließen zwei halbtransparente Farbwellen (amber + blau) sanft in entgegengesetzte Richtungen — wie ein lebendiger, athmosphärischer Horizont
+- JS-Check: OK | Deployed via SSH (base64-chunk-pipe, 379030 bytes)
+
+## 2026-03-24 00:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Gesamt-Helligkeits-Meter
+- Neues `#lt-bri-meter` Div direkt unterhalb des "Licht" Labels im pg-licht Tab (vor dem .lg Grid)
+- Aufbau: `#lt-bri-meter-bar-wrap` (6px hoher Track) + `#lt-bri-meter-bar` (animierter Fill) + Label-Zeile
+- CSS `#lt-bri-meter-bar`: `background: linear-gradient(90deg, #ff9f0a 0%, #ffcc02 60%, #fff9a0 100%)`, `box-shadow: 0 0 6px rgba(255,159,10,.5)`
+- `transition: width 1.1s cubic-bezier(.4,0,.2,1)` → smooth Breiten-Animation beim Schalten
+- 3 Farbstufen: dim (<30% avg) → abgedunkeltes Amber | normal → Standard-Gradient | bright (>85%) → weißlich-gelb
+- Label-Zeile: links `"X von Y an"` (dezent) + rechts `"Ø XX%"` (amber, fett) via Flexbox justify-between
+- `.lt-bri-pct.dim` Klasse → weiße Farbe wenn keine brightness-Daten vorhanden (z.B. Switches)
+- JS IIFE in `updateAll()`: iteriert `CFG.lights.filter(effOn)`, liest `_S[id].attributes.brightness` (0–255 → %)
+- Durchschnitt über alle Lichter mit brightness-Attribut; Fallback-Label "aktiv" wenn keine HA-Helligkeitsdaten
+- Meter faded aus (`opacity:0`, `width:0%`) wenn alle Lichter aus → kein visuelles Rauschen
+- Effekt: Übersichtlicher Helligkeits-Balken zeigt auf einen Blick wie "hell" die Gesamtstimmung ist
+- JS-Check: OK | Deployed via SSH (base64-chunk-pipe, 373971 bytes)
+
 ## 2026-03-23 22:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — Gefühlte Temperatur Trend-Pfeil
 - Neues `<span id="wxt-feel-arrow">` direkt hinter `#wxt-feel` im Wetter-Hero (neben "Tatsächlich / Gefühlt")

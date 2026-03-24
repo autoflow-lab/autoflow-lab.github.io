@@ -157,3 +157,16 @@
 - [x] demo.html: Countdown Timer für "Begrenzte Aktion" (echter 24h Countdown unter Scarcity-Banner, zählt von localStorage-gespeichertem Start runter)
 - [x] wz.html: Musik-Tab — Equalizer-Ringe um Album-Art (konzentrisches Pulse wenn isPlaying, 3 halbtransparente Ringe, amber, unterschiedliche Frequenzen via animation-delay)
 - [x] wz.html: Wetter-Tab — Gefühlte Temperatur Trend-Pfeil (↑↓ je ob apparent_temperature > temperature_2m, Farbe grün/rot, animierter Pfeil)
+
+## Neue Ideen (2026-03-24 00:03 UTC)
+- [x] wz.html: Licht-Tab — Gesamt-Helligkeits-Meter (animierter Gradient-Balken oben im Licht-Tab zeigt Durchschnittshelligkeit aller aktiven Lichter, % Label + "X von Y an", smooth width-Transition)
+
+## Neue Ideen (2026-03-24 02:03 UTC)
+- [x] wz.html: Home-Hero — Animierte SVG-Wellen im Hintergrund (2 überlagerte Sinuswellen am unteren Hero-Rand, amber + blau Gradient-Fill, gegenläufige Richtungen, 18s/24s Loop, z-index:1 unter hcont)
+
+## Neue Ideen (2026-03-24 02:05 UTC)
+- [x] demo.html: Live-Besucher FOMO-Counter im Hero (grüner Pulse-Dot, 4-8 Besucher, drift ±1 alle 18-45s)
+- [ ] wz.html: Wetter-Tab — "Goldene Stunde" Karte (Sonnenuntergang - 45min bis Sonnenuntergang, orangener Glow, "Perfektes Foto-Licht" Hinweis)
+- [x] demo.html: Anchor-Navigation (sticky Mini-Nav unter Header: Überblick · Preise · Demo · Kontakt, smooth scroll, aktiver Abschnitt highlighted)
+- [ ] wz.html: Home-Tab — Batterie-Status Chip (wenn sensor.*.battery_level < 20% → roter Chip "Batterie schwach: Gerätename X%")
+- [ ] demo.html: "Kunden-Stimmen" Ratings-Balken (5⭐ 87% / 4⭐ 13% als animierte Balken, IntersectionObserver)
