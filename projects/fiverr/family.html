@@ -96,7 +96,7 @@ body{padding-bottom:32px}
 .lt-ico{width:34px;height:34px;border-radius:10px;background:var(--c2);display:flex;align-items:center;justify-content:center;transition:background .3s}
 .lt-tile.on .lt-ico{background:rgba(255,159,10,.22)}
 .lt-ico svg{width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;transition:stroke .3s}
-.lt-tile.on .lt-ico svg{stroke:var(--acc)}
+.lt-tile.on .lt-ico svg{fill:var(--acc)}
 .lt-name{font-size:.7rem;font-weight:600;color:var(--dim)}
 .lt-tile.on .lt-name{color:#fff}
 .lt-state{font-size:.58rem;color:var(--dim2)}
@@ -212,14 +212,14 @@ body{padding-bottom:32px}
 /* ─── LIGHT DETAIL SHEET ─── */
 #ld-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(12px);z-index:220;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 #ld-bg.show{opacity:1;pointer-events:all}
-#ld-sheet{background:#1c1c1e;border-radius:26px 26px 0 0;padding:0 0 max(24px,env(safe-area-inset-bottom)) 0;width:100%;max-width:480px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.1,.64,1);max-height:90vh;overflow-y:auto;-webkit-user-select:none;user-select:none}
+#ld-sheet{background:#1c1c1e;border-radius:26px 26px 0 0;padding:0 0 max(24px,env(safe-area-inset-bottom)) 0;width:100%;max-width:480px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.1,.64,1);max-height:90vh;overflow-y:auto;-webkit-user-select:none;user-select:none;will-change:transform}
 #ld-bg.show #ld-sheet{transform:translateY(0)}
 .ld-handle{width:40px;height:4px;background:rgba(255,255,255,.18);border-radius:2px;margin:12px auto 0}
 .ld-head{display:flex;align-items:center;gap:14px;padding:18px 22px 0}
 .ld-light-ico{width:54px;height:54px;border-radius:16px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s}
 .ld-light-ico.on{background:rgba(255,159,10,.18)}
-.ld-light-ico svg{width:26px;height:26px;stroke:rgba(255,255,255,.4);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
-.ld-light-ico.on svg{stroke:#ff9f0a}
+.ld-light-ico svg{width:26px;height:26px;fill:rgba(255,255,255,.4);stroke:none;transition:fill .3s}
+.ld-light-ico.on svg{fill:#ff9f0a}
 .ld-title{flex:1;min-width:0}
 .ld-light-name{font-size:1.1rem;font-weight:700}
 .ld-light-room{font-size:.68rem;color:rgba(255,255,255,.35);margin-top:2px}
@@ -507,7 +507,7 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
     <div class="ld-handle"></div>
     <div class="ld-head">
       <div class="ld-light-ico" id="ld-ico">
-        <svg id="ld-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></svg>
+        <svg id="ld-ico-svg" viewBox="0 0 24 24" fill="currentColor" stroke="none"></svg>
       </div>
       <div class="ld-title">
         <div class="ld-light-name" id="ld-name">–</div>
@@ -571,10 +571,10 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
   </div>
 </div>
 
-<div class="footer">SchlappHome <span style='opacity:.4'>v2.7</span> · <span id="last-update">–</span></div>
+<div class="footer">SchlappHome <span style='opacity:.4'>v3.2</span> · <span id="last-update">–</span></div>
 
 <script>
-const APP_VERSION='v2.7';
+const APP_VERSION='v3.2';
 
 // ─── LOG CAPTURE ───
 const _logs = [];
@@ -603,52 +603,52 @@ function renderLogs(){
 
 const HA = 'https://schlapphome.uk';
 const GARAGE_ID = 'cover.smart_garage_door_2207188115870761070148e1e99a76de_garage_1';
+// Hue Icons (hass-hue-icons by arallsopp) + custom fills
 const SVG = {
-  ledstrip_h: '<rect x="2" y="9" width="20" height="6" rx="3"/><circle cx="6.5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="10.5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="14.5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.5" fill="currentColor" stroke="none"/>',
-  ledstrip_v: '<rect x="9" y="2" width="6" height="20" rx="3"/><circle cx="12" cy="6.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.5" fill="currentColor" stroke="none"/>',
-  ceiling: '<line x1="12" y1="2" x2="12" y2="6"/><path d="M5 6h14l-2 8H7L5 6z"/><line x1="8" y1="14" x2="6" y2="20"/><line x1="16" y1="14" x2="18" y2="20"/><line x1="6" y1="20" x2="18" y2="20"/>',
-  hueplay: '<rect x="3" y="8" width="18" height="8" rx="4"/><circle cx="8" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/>',
-  orb: '<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>',
-  moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
-  bedstrip: '<rect x="2" y="9" width="20" height="5" rx="2"/><path d="M4 6h5a2 2 0 0 1 2 2v1H4V6z"/><line x1="5" y1="14" x2="5" y2="18"/><line x1="19" y1="14" x2="19" y2="18"/>',
-  wardrobe: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><path d="M8 12h1.5M14.5 12H16"/>',
-  sconce: '<path d="M14 3H9a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/><path d="M14 3c0 5 4 7 4 12M14 17c0-4 4-6 4-12"/>',
-  corridor: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/>',
-  wc: '<path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2z"/><path d="M4 22c0-4.4 3.6-8 8-8s8 3.6 8 8"/>',
-  outdoor: '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>',
+  lightstrip:  '<path d="M6.33,12.5c0.41-0.09,0.8,0.17,0.89,0.58c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57C5.67,12.99,5.93,12.59,6.33,12.5M10,11.71c0.4-0.09,0.8,0.17,0.89,0.57c0.09,0.41-0.17,0.8-0.57,0.89C9.91,13.26,9.51,13,9.42,12.6C9.33,12.2,9.59,11.8,10,11.71M13.66,10.92c0.41-0.09,0.8,0.17,0.89,0.57c0.09,0.41-0.17,0.8-0.57,0.89c-0.4,0.09-0.8-0.17-0.89-0.57C13,11.4,13.25,11,13.66,10.92M17.32,10.12c0.41-0.09,0.8,0.17,0.89,0.57c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57C16.66,10.61,16.92,10.21,17.32,10.12M8,15.48l11.1-2.4c0.81-0.17,1.32-0.97,1.15-1.78c-0.42-1.94-2.33-3.17-4.26-2.75L4.89,10.95c-0.81,0.18-1.32,0.97-1.15,1.78C4.16,14.66,6.07,15.9,8,15.48M18.75,19.5c-0.41,0-0.75-0.34-0.75-0.75S18.34,18,18.75,18s0.75,0.34,0.75,0.75S19.16,19.5,18.75,19.5M15,19.5c-0.41,0-0.75-0.34-0.75-0.75S14.59,18,15,18s0.75,0.34,0.75,0.75S15.41,19.5,15,19.5M11.25,19.5c-0.41,0-0.75-0.34-0.75-0.75S10.84,18,11.25,18S12,18.34,12,18.75S11.66,19.5,11.25,19.5M7.5,19.5c-0.41,0-0.75-0.34-0.75-0.75S7.09,18,7.5,18s0.75,0.34,0.75,0.75S7.91,19.5,7.5,19.5M20.25,16.5H6.75c-3,0-3.75-2.25-3.75-3v3.75C3,19.32,4.68,21,6.75,21h13.5c0.41,0,0.75-0.34,0.75-0.75v-3C21,16.84,20.66,16.5,20.25,16.5M16.5,6c-0.41,0-0.75-0.34-0.75-0.75S16.09,4.5,16.5,4.5s0.75,0.34,0.75,0.75S16.91,6,16.5,6M12.75,6C12.34,6,12,5.66,12,5.25s0.34-0.75,0.75-0.75s0.75,0.34,0.75,0.75S13.16,6,12.75,6M9,6C8.59,6,8.25,5.66,8.25,5.25S8.59,4.5,9,4.5s0.75,0.34,0.75,0.75S9.41,6,9,6M5.25,6C4.84,6,4.5,5.66,4.5,5.25S4.84,4.5,5.25,4.5S6,4.84,6,5.25S5.66,6,5.25,6M17.25,3H3.75C3.34,3,3,3.34,3,3.75v3C3,7.16,3.34,7.5,3.75,7.5h13.5c3,0,3.75,2.25,3.75,3V6.75C21,4.68,19.32,3,17.25,3"/>',
+  play_bar:    '<path d="M21.73,14.5c-1.6,0.79-3.17,0.2-4.22-0.21C16.65,13.95,2.16,7.97,2.16,7.97s-1.34-0.6,0.12-1.13c1.8-0.66,3.25-0.11,4.93,0.56c1.06,0.43,14.13,5.67,14.13,5.67S23.33,13.71,21.73,14.5zM23.24,13.83c-0.01-0.36-0.2-1.01-1.27-1.45L6.51,6.17C5.85,5.9,4.83,5.74,3.83,5.74c-0.51,0-1.25,0.05-1.84,0.27c-1.04,0.4-1.25,1-1.27,1.35l-0.01,0l-0.01,4.27l0,0c0.02,0.34,0.21,0.89,1.1,1.27l15.88,6.53c0.6,0.25,1.38,0.4,2.21,0.4c0.83,0,1.61-0.14,2.2-0.4c1.02-0.45,1.16-1.1,1.16-1.45L23.24,13.83L23.24,13.83z"/>',
+  iris:        '<path d="M19.2,13.75c-1.15-0.38-2.85-1.48-5.14-3.78c-1.84-1.84-3.29-3.88-3.76-5.12c-0.1-0.27,0.14-0.54,0.43-0.49c0.29,0.05,0.69,0.18,1.2,0.42c1.39,0.64,2.66,1.48,4.25,3.07c1.59,1.59,2.43,2.86,3.07,4.25c0.25,0.52,0.37,0.93,0.42,1.22C19.72,13.59,19.46,13.83,19.2,13.75M16.53,16.88c-0.05,0.16-0.2,0.26-0.36,0.26c-0.04,0-0.08,0-0.11-0.02c-1.03-0.34-2.32-1.17-3.77-2.44c-1.72,0.95-4.54,2.06-4.47,2.54c0.14,0.92-0.41,1.43-1.45,0.39c-1.04-1.04-0.53-1.59,0.39-1.45c0.48,0.07,1.61-2.78,2.55-4.5C8.18,10.32,7.29,8.96,6.93,8C6.85,7.8,6.95,7.59,7.14,7.52c0.19-0.07,0.41,0.02,0.48,0.22C8.1,9,9.57,11,11.3,12.73c2.53,2.53,4.11,3.4,4.99,3.68C16.48,16.47,16.59,16.68,16.53,16.88M20.43,11.8c-1.44-3.09-5.12-6.8-8.18-8.24C11,2.97,10.08,2.87,9.51,3.16C9.44,3.2,9.38,3.25,9.3,3.29c-0.75,0.5-1.48,1.08-2.16,1.75c-4.23,4.22-5.9,9.4-1.73,13.57c4.12,4.11,9.36,2.5,13.59-1.72c0.67-0.67,1.24-1.39,1.73-2.12c0.03-0.05,0.06-0.09,0.09-0.14C21.14,14.06,21.04,13.09,20.43,11.8"/>',
+  pendant:     '<path d="M20.64,13.02L6.62,17.73c-0.15,0.05-0.32,0.05-0.47-0.01l-2.77-1.05c-0.19-0.07-0.18-0.34,0.01-0.4l14.02-4.71c0.15-0.05,0.32-0.05,0.47,0.01l2.77,1.05C20.84,12.69,20.83,12.96,20.64,13.02M22.84,9.18l-4.96-1.87c-0.15-0.06-0.32-0.06-0.47-0.01l-4.7,1.58V4.97v-0.2c0-0.18-0.32-0.33-0.71-0.33c-0.39,0-0.71,0.15-0.71,0.33v0.2v4.38L1.19,12.75c-0.29,0.1-0.48,0.37-0.48,0.67v3.26c0,0.3,0.18,0.56,0.46,0.66l4.96,1.87c0.15,0.06,0.32,0.06,0.47,0.01l16.22-5.45c0.29-0.1,0.48-0.37,0.48-0.67V9.85C23.29,9.55,23.11,9.29,22.84,9.18"/>',
+  ceiling:     '<path d="M18.85,14.36c-3.68,0.9-9.74,0.9-13.42,0c-3.64-0.89-3.53-2.3,0.16-3.16c3.63-0.84,9.46-0.84,13.09,0C22.36,12.06,22.48,13.47,18.85,14.36M23.31,7c-0.27-0.67-1.39-1.31-3.33-1.82c-4.37-1.14-11.36-1.14-15.72,0C2.34,5.69,1.23,6.33,0.95,7C0.9,7.12,0.88,7.22,0.88,7.34v3.79c0,0.11,0.02,2.91,0.07,3.01c0.27,0.64,1.3,1.27,3.13,1.77c4.42,1.21,11.69,1.21,16.11,0c1.82-0.5,2.85-1.12,3.12-1.77c0.05-0.11,0.07-0.22,0.07-0.33V7.34C23.38,7.22,23.36,7.12,23.31,7"/>',
+  bulb:        '<path d="M7.18,9.91c1.41,0.45,3.48,0.59,4.82,0.59s3.41-0.14,4.82-0.59c-0.57,1.51-1.57,2.18-1.81,3.59c-0.11,0.61-0.19,1.47-0.13,2.1c0.04,0.4-0.27,0.75-0.67,0.79c-0.65,0.07-1.38,0.11-2.21,0.11s-1.56-0.04-2.21-0.11c-0.4-0.04-0.7-0.39-0.67-0.79c0.06-0.63-0.03-1.49-0.13-2.1C8.75,12.09,7.76,11.42,7.18,9.91zM9.75,17.15c0.78,0.07,1.64,0.1,2.25,0.1s1.47-0.03,2.25-0.1l-0.38,2.33c-0.02,0.16-0.1,0.32-0.23,0.43l-0.35,0.32c-0.02,0.02-0.05,0.04-0.07,0.07l-0.37,0.44C12.72,20.9,12.5,21,12.27,21h-0.55c-0.23,0-0.45-0.1-0.59-0.27l-0.37-0.44c-0.02-0.02-0.04-0.05-0.07-0.07l-0.35-0.32c-0.12-0.11-0.21-0.27-0.23-0.43L9.75,17.15zM12,3c2.89,0,5.25,2.5,5.25,4.88c0,0.21-0.04,0.41-0.06,0.61c-0.02,0.19-0.06,0.35-0.1,0.53C16.27,9.36,14.54,9.75,12,9.75S7.73,9.36,6.91,9.01c-0.04-0.18-0.07-0.34-0.1-0.53c-0.02-0.2-0.06-0.39-0.06-0.61C6.75,5.5,9.11,3,12,3z"/>',
+  wall_lamp:   '<path d="M16.33,18.41c-0.99-0.32-2.43-0.32-3.41,0l-0.82-5.82c1.61,0.2,3.44,0.2,5.05,0L16.33,18.41zM19.19,9.57c-1.17-0.35-2.7-0.54-4.25-0.56C14.58,6.46,12.39,4.5,9.75,4.5c-1.16,0-2.22,0.38-3.09,1.02C6.6,5.03,6.52,4.57,6.4,4.17C6.21,3.5,5.97,3.12,5.72,3.03C5.68,3.01,5.63,3,5.59,3H4.16C4.12,3,4.07,3.01,4.03,3.03c-0.26,0.1-0.5,0.51-0.7,1.22c-0.44,1.6-0.44,4.16,0,5.76c0.2,0.71,0.44,1.12,0.7,1.21c0.04,0.02,0.09,0.03,0.13,0.03h1.43c0.04,0,0.09-0.01,0.13-0.03c0.25-0.1,0.49-0.48,0.68-1.14c0.21-0.75,0.33-1.72,0.34-2.7C7.45,6.48,8.53,5.9,9.75,5.9c1.88,0,3.44,1.35,3.78,3.13c-1.27,0.07-2.49,0.24-3.47,0.54c-2.47,0.75-2.39,1.93,0.12,2.65c0.11,0.03,0.25,0.05,0.37,0.09l1.08,7.68c0.09,0.34,0.62,0.75,1.86,0.93c0.38,0.05,0.76,0.08,1.14,0.08c0.38,0,0.77-0.03,1.14-0.08c1.23-0.18,1.74-0.59,1.86-0.93l1.08-7.69c0.12-0.03,0.25-0.05,0.37-0.09C21.58,11.5,21.66,10.31,19.19,9.57z"/>',
+  wardrobe:    '<path d="M18,6.75h-3c-0.41,0-0.75-0.34-0.75-0.75S14.59,5.25,15,5.25h3c0.41,0,0.75,0.34,0.75,0.75S18.41,6.75,18,6.75zM18,11.25h-3c-0.41,0-0.75-0.34-0.75-0.75S14.59,9.75,15,9.75h3c0.41,0,0.75,0.34,0.75,0.75S18.41,11.25,18,11.25zM18,15.75h-3c-0.41,0-0.75-0.34-0.75-0.75s0.34-0.75,0.75-0.75h3c0.41,0,0.75,0.34,0.75,0.75S18.41,15.75,18,15.75zM12.75,17.25c0,0.41-0.34,0.75-0.75,0.75s-0.75-0.34-0.75-0.75V3.75C11.25,3.34,11.59,3,12,3s0.75,0.34,0.75,0.75V17.25zM9,11.25H7.5c-0.41,0-0.75-0.34-0.75-0.75S7.09,9.75,7.5,9.75H9c0.41,0,0.75,0.34,0.75,0.75S9.41,11.25,9,11.25zM19.5,0.75h-15c-0.41,0-0.75,0.34-0.75,0.75v18c0,0.41,0.34,0.75,0.75,0.75h0.75V21c0,0.41,0.34,0.75,0.75,0.75S6.75,21.41,6.75,21v-0.75h10.5V21c0,0.41,0.34,0.75,0.75,0.75s0.75-0.34,0.75-0.75v-0.75h0.75c0.41,0,0.75-0.34,0.75-0.75v-18C20.25,1.09,19.91,0.75,19.5,0.75z"/>',
+  hallway:     '<path d="M20.98,16.37l-2.16-9.58c-0.34-1.51-1.79-2.46-3.29-2.24l-0.59-0.88C14.67,3.25,14.2,3,13.7,3h-0.95C12.34,3,12,3.34,12,3.75v1.5h-1.5v-4.5C10.5,0.34,10.16,0,9.75,0S9,0.34,9,0.75V9H6V7.5c0-0.41-0.34-0.75-0.75-0.75S4.5,7.09,4.5,7.5v2.25c0,0.41,0.34,0.75,0.75,0.75H9v11.25H6c-0.83,0-1.5,0.67-1.5,1.5C4.5,23.66,4.84,24,5.25,24h9c0.41,0,0.75-0.34,0.75-0.75c0-0.83-0.67-1.5-1.5-1.5h-3v-15H12v12c0,0.41,0.34,0.75,0.75,0.75h1c1.55,0,2.71-1.42,2.41-2.94L15.25,12l0.83-3.73l1.97,8.76c0.09,0.4,0.49,0.66,0.9,0.57l1.46-0.33C20.82,17.17,21.07,16.77,20.98,16.37"/>',
+  bathroom:    '<path d="M20.02,12.75H19.5V3.86C19.5,1.73,17.77,0,15.64,0c-1.83,0-3.36,1.29-3.75,3H10.5C9.68,3,9,3.67,9,4.5c0,0.41,0.34,0.75,0.75,0.75H15c0.41,0,0.75-0.33,0.75-0.75c0-0.83-0.67-1.5-1.5-1.5h-0.79c0.34-0.88,1.19-1.5,2.19-1.5c1.3,0,2.36,1.06,2.36,2.36v8.89H3.98C3.44,12.75,3,13.19,3,13.73c0,0.55,0.44,0.99,0.98,0.99H4.5v1.67c0,2.11,1.23,3.93,3,4.8v1.3C7.5,23.33,8.17,24,9,24s1.5-0.67,1.5-1.5v-0.75h3.64c0.04,0,0.07,0,0.11,0v0.75c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5v-1.75c1.36-0.97,2.25-2.56,2.25-4.36v-1.67h0.52c0.54,0,0.98-0.44,0.98-0.99C21,13.19,20.56,12.75,20.02,12.75"/>',
+  outdoor:     '<path d="M12,6A6,6,0,1,0,18,12,6,6,0,0,0,12,6Zm0,10.5A4.5,4.5,0,1,1,16.5,12,4.505,4.505,0,0,1,12,16.5ZM11.25,1.5v2.25a.75.75,0,0,0,1.5,0V1.5a.75.75,0,0,0-1.5,0Zm0,18.75v2.25a.75.75,0,0,0,1.5,0V20.25a.75.75,0,0,0-1.5,0ZM3.28,4.34,4.87,5.93a.75.75,0,0,0,1.06-1.06L4.34,3.28A.75.75,0,0,0,3.28,4.34Zm14.84,14.84,1.59,1.59a.75.75,0,0,0,1.06-1.06l-1.59-1.59a.75.75,0,1,0-1.06,1.06ZM1.5,11.25a.75.75,0,0,0,0,1.5H3.75a.75.75,0,0,0,0-1.5Zm18.75,0a.75.75,0,0,0,0,1.5h2.25a.75.75,0,0,0,0-1.5ZM5.93,17.13,4.34,18.72a.75.75,0,1,0,1.06,1.06l1.59-1.59a.75.75,0,0,0-1.06-1.06ZM18.07,4.87l1.59-1.59A.75.75,0,0,0,18.6,2.22L17,3.81a.75.75,0,1,0,1.06,1.06Z"/>',
 };
 
 // Räume mit Lichtern
 const LIGHT_ROOMS = [
   { room: '🛋️ Wohnzimmer', lights: [
-    {id:'light.h61e1',  name:'Holzwand',    svg:SVG.ledstrip_h, caps:'rgb'},
-    {id:'light.h618a',  name:'Sofa LED',    svg:SVG.ledstrip_h, caps:'rgb'},
+    {id:'light.h61e1',  name:'Holzwand',    svg:SVG.lightstrip, caps:'rgb'},
+    {id:'light.h618a',  name:'Sofa LED',    svg:SVG.lightstrip, caps:'rgb_nowhite'},
   ]},
   { room: '🍳 Küche', lights: [
-    {id:'light.h618a_2', name:'Oberschrank', svg:SVG.ledstrip_v, caps:'rgb'},
+    {id:'light.h618a_2', name:'Oberschrank', svg:SVG.ledstrip_v, caps:'rgb_nowhite'},
   ]},
   { room: '🛏️ Schlafzimmer', lights: [
     {id:'light.schlafzimmer', name:'Decke',    svg:SVG.ceiling, caps:'color'},
-    {id:'light.deckenlampe',  name:'Pendel',   svg:SVG.ceiling, caps:'color'},
-    {id:'light.hue_play',     name:'Hue Play', svg:SVG.hueplay, caps:'color'},
-    {id:'light.hue_iris',     name:'Hue Iris', svg:SVG.orb,     caps:'color'},
+    {id:'light.deckenlampe',  name:'Pendel',   svg:SVG.pendant, caps:'color'},
+    {id:'light.hue_play',     name:'Hue Play', svg:SVG.play_bar, caps:'color'},
+    {id:'light.hue_iris',     name:'Hue Iris', svg:SVG.iris,   caps:'color'},
   ]},
   { room: '🛏️ Eltern SZ', lights: [
     {id:'light.eltern_schlafzimmer',       name:'Decke',         svg:SVG.ceiling,  caps:'ct'},
-    {id:'light.color_temperature_light_1', name:'LED Bett',      svg:SVG.bedstrip, caps:'ct'},
+    {id:'light.color_temperature_light_1', name:'LED Bett',      svg:SVG.lightstrip, caps:'ct'},
     {id:'light.shelly1_c45bbe47adb9',      name:'Kleiderschrank',svg:SVG.wardrobe, caps:'onoff', dom:'light'},
   ]},
   { room: '💼 Büro', lights: [
-    {id:'switch.shelly1_98cdac0ca9b2', name:'Wandlampe', svg:SVG.sconce,  caps:'onoff', dom:'switch'},
-    {id:'light.hue_play_l',            name:'Hue Play',  svg:SVG.hueplay, caps:'color'},
+    {id:'switch.shelly1_98cdac0ca9b2', name:'Wandlampe', svg:SVG.wall_lamp, caps:'onoff', dom:'switch'},
+    {id:'light.hue_play_l',            name:'Hue Play',  svg:SVG.play_bar, caps:'color'},
   ]},
   { room: '🚪 Gänge & WC', lights: [
-    {id:'light.gang_eg_licht',  name:'Gang EG',  svg:SVG.corridor, caps:'onoff', nodim:true},
-    {id:'light.gang_og_licht',  name:'Gang OG',  svg:SVG.corridor, caps:'onoff', nodim:true},
-    {id:'light.gaste_wc_licht', name:'Gäste WC', svg:SVG.wc,       caps:'onoff', nodim:true},
+    {id:'light.gang_eg_licht',  name:'Gang EG',  svg:SVG.hallway,  caps:'onoff', nodim:true},
+    {id:'light.gang_og_licht',  name:'Gang OG',  svg:SVG.hallway, caps:'onoff', nodim:true},
+    {id:'light.gaste_wc_licht', name:'Gäste WC', svg:SVG.bathroom, caps:'onoff', nodim:true},
   ]},
   { room: '🌿 Außen', lights: [
-    {id:'light.garten_licht', name:'Fassade', svg:SVG.outdoor, caps:'onoff', nodim:true},
+    {id:'light.garten_licht', name:'Fassade', svg:SVG.outdoor,  caps:'onoff', nodim:true},
   ]},
 ];
 
@@ -752,8 +752,14 @@ function updateGarage(){
   else if(state==='opening'){card.classList.add('moving');label='⬆️ Öffnet…';pillTxt='Öffnet…';pillColor='var(--acc)';}
   else if(state==='closing'){card.classList.add('moving');label='⬇️ Schließt…';pillTxt='Schließt…';pillColor='var(--acc)';}
   stEl.textContent=label;
-  const pill=document.getElementById('garage-pill');
-  if(pill){pill.style.display='';pill.textContent='🚪 '+pillTxt;pill.style.color=pillColor;}
+  // Home-Tab Status updaten
+  const homeState=document.getElementById('garage-state-home');
+  if(homeState){homeState.textContent=label;homeState.style.color=pillColor;}
+  const homeIco=document.getElementById('garage-status-ico');
+  if(homeIco){
+    homeIco.style.background=state==='open'?'rgba(255,69,58,.15)':state==='closed'?'rgba(48,209,88,.1)':'rgba(255,159,10,.12)';
+    homeIco.querySelector('svg').style.stroke=state==='open'?'var(--red)':state==='closed'?'var(--grn)':'var(--acc)';
+  }
 }
 
 function updateLights(){
@@ -774,23 +780,38 @@ function updateLights(){
 // ─── LIGHT DETAIL PANEL ───
 let _ldLight=null;
 const COLORS=[
-  {name:'Warmweiß',  rgb:[255,210,140], ct:2700},
-  {name:'Neutral',   rgb:[255,248,220], ct:4000},
-  {name:'Kaltweiß',  rgb:[200,225,255], ct:6500},
-  {name:'Rot',       rgb:[255,40,40]},
-  {name:'Orange',    rgb:[255,140,0]},
-  {name:'Gelb',      rgb:[255,230,0]},
-  {name:'Grün',      rgb:[0,200,80]},
+  {name:'Warmweiß',  rgb:[255,147,41]},
+  {name:'Neutral',   rgb:[255,213,140], ct:4000},
+  {name:'Kaltweiß',  rgb:[180,210,255], ct:6000},
+  {name:'Rot',       rgb:[255,30,30]},
+  {name:'Orange',    rgb:[255,130,0]},
+  {name:'Gelb',      rgb:[255,220,0]},
+  {name:'Grün',      rgb:[0,210,80]},
   {name:'Türkis',    rgb:[0,200,200]},
-  {name:'Blau',      rgb:[30,100,255]},
-  {name:'Lila',      rgb:[160,40,255]},
-  {name:'Pink',      rgb:[255,40,160]},
+  {name:'Blau',      rgb:[20,90,255]},
+  {name:'Lila',      rgb:[160,30,255]},
+  {name:'Pink',      rgb:[255,30,150]},
   {name:'Weiß',      rgb:[255,255,255]},
 ];
+// Farben für RGB-only LEDs (kein Weiß)
+const COLORS_RGB=[
+  {name:'Rot',    rgb:[255,30,30]},
+  {name:'Orange', rgb:[255,100,0]},
+  {name:'Gelb',   rgb:[255,210,0]},
+  {name:'Lime',   rgb:[100,255,0]},
+  {name:'Grün',   rgb:[0,220,80]},
+  {name:'Türkis', rgb:[0,210,200]},
+  {name:'Blau',   rgb:[20,80,255]},
+  {name:'Indigo', rgb:[80,0,255]},
+  {name:'Lila',   rgb:[180,0,255]},
+  {name:'Pink',   rgb:[255,0,150]},
+  {name:'Magenta',rgb:[255,0,100]},
+  {name:'Weiß',   rgb:[255,255,255]},
+];
 const PRESETS=[
-  {ico:'🌅',name:'Entspannen', desc:'Warm & gedimmt',   bri:35, ct:2700},
+  {ico:'🌅',name:'Entspannen', desc:'Warm & gedimmt',   bri:35, ct:2700, rgb:[255,147,41]},
   {ico:'📖',name:'Lesen',      desc:'Hell & neutral',   bri:90, ct:4000},
-  {ico:'🎬',name:'Film',       desc:'Ambient & dunkel', bri:12, ct:2700},
+  {ico:'🎬',name:'Film',       desc:'Ambient & dunkel', bri:12, ct:2700, rgb:[255,100,20]},
   {ico:'⚡',name:'Fokus',      desc:'Kalt & hell',      bri:100,ct:5500},
 ];
 function debounce(fn,ms){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);};}
@@ -811,7 +832,8 @@ function showLightDetail(light,room){
   const caps=light.caps||'onoff';
   const hasBri=caps!=='onoff';
   const hasCT=caps==='ct'||caps==='color'||caps==='rgb';
-  const hasCol=caps==='rgb'||caps==='color';
+  const hasCol=caps==='rgb'||caps==='color'||caps==='rgb_nowhite';
+  const colorPalette=caps==='rgb_nowhite'?COLORS_RGB:COLORS;
   document.getElementById('ld-bri-sec').style.display=hasBri?'':'none';
   document.getElementById('ld-ct-sec').style.display=hasCT?'':'none';
   document.getElementById('ld-col-sec').style.display=hasCol?'':'none';
@@ -827,12 +849,12 @@ function showLightDetail(light,room){
   }
   if(hasCol){
     const cols=document.getElementById('ld-colors');
-    cols.innerHTML=COLORS.map((col,i)=>`<div class="ld-swatch" data-i="${i}" style="background:rgb(${col.rgb.join(',')})" title="${col.name}"></div>`).join('');
+    cols.innerHTML=colorPalette.map((col,i)=>`<div class="ld-swatch" data-i="${i}" style="background:rgb(${col.rgb.join(',')})" title="${col.name}"></div>`).join('');
     cols.querySelectorAll('.ld-swatch').forEach(sw=>{
       sw.addEventListener('click',()=>{
         cols.querySelectorAll('.ld-swatch').forEach(x=>x.classList.remove('active'));
         sw.classList.add('active');
-        const col=COLORS[+sw.dataset.i];
+        const col=colorPalette[+sw.dataset.i];
         if(col.ct) _sendCT(light.id,col.ct);
         else _sendRGB(light.id,col.rgb);
       });
@@ -844,7 +866,9 @@ function showLightDetail(light,room){
     pp.querySelectorAll('.ld-preset').forEach(el=>{
       el.addEventListener('click',()=>{
         const p=PRESETS[+el.dataset.pi];
-        svc('light','turn_on',{entity_id:light.id,brightness_pct:p.bri,color_temp_kelvin:p.ct,transition:1});
+        const pd={entity_id:light.id,brightness_pct:p.bri,transition:1};
+        if(p.rgb&&(light.caps==='rgb')) pd.rgb_color=p.rgb; else pd.color_temp_kelvin=p.ct;
+        svc('light','turn_on',pd);
         document.getElementById('ld-bri-slider').value=p.bri;
         document.getElementById('ld-bri-val').textContent=p.bri+'%';
         document.getElementById('ld-ct-slider').value=p.ct;
@@ -854,7 +878,62 @@ function showLightDetail(light,room){
   }
   document.getElementById('ld-bg').classList.add('show');
 }
-document.getElementById('ld-bg').addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById('ld-bg').classList.remove('show');});
+document.getElementById('ld-bg').addEventListener('click',e=>{
+  if(e.target===e.currentTarget)closeLdSheet();
+});
+
+// ── SWIPE DOWN TO CLOSE ──
+(()=>{
+  const sheet=document.getElementById('ld-sheet');
+  let startY=0, curY=0, dragging=false, startScroll=0;
+  const THRESHOLD=100, VELOCITY_THRESHOLD=0.5;
+  let lastY=0, lastT=0, velocity=0;
+
+  sheet.addEventListener('touchstart',e=>{
+    // Nur wenn Sheet ganz oben gescrollt
+    if(sheet.scrollTop>4) return;
+    startY=e.touches[0].clientY;
+    lastY=startY; lastT=Date.now();
+    dragging=true; velocity=0;
+    sheet.style.transition='none';
+  },{passive:true});
+
+  sheet.addEventListener('touchmove',e=>{
+    if(!dragging) return;
+    if(sheet.scrollTop>4){dragging=false;sheet.style.transition='';return;}
+    curY=e.touches[0].clientY;
+    const dy=curY-startY;
+    if(dy<0) return; // kein Hoch-Swipen
+    const now=Date.now();
+    velocity=(curY-lastY)/(now-lastT+1);
+    lastY=curY; lastT=now;
+    sheet.style.transform=`translateY(${dy}px)`;
+  },{passive:true});
+
+  sheet.addEventListener('touchend',()=>{
+    if(!dragging) return;
+    dragging=false;
+    const dy=curY-startY;
+    if(dy>THRESHOLD||velocity>VELOCITY_THRESHOLD){
+      closeLdSheet();
+    } else {
+      sheet.style.transition='transform .3s cubic-bezier(.34,1.1,.64,1)';
+      sheet.style.transform='';
+    }
+  });
+})();
+
+function closeLdSheet(){
+  const sheet=document.getElementById('ld-sheet');
+  const bg=document.getElementById('ld-bg');
+  sheet.style.transition='transform .3s ease-in';
+  sheet.style.transform='translateY(100%)';
+  setTimeout(()=>{
+    bg.classList.remove('show');
+    sheet.style.transition='';
+    sheet.style.transform='';
+  },300);
+}
 document.getElementById('ld-power').addEventListener('click',()=>{
   if(!_ldLight)return;
   const on=document.getElementById('ld-power').classList.contains('on');
@@ -877,7 +956,7 @@ function buildLights(){
     html+=`<div class="room-label">${room.room}</div><div class="lights-grid-inner">`;
     html+=room.lights.map(l=>`
       <div class="lt-tile" data-id="${l.id}" data-dom="${l.dom||'light'}" data-nodim="${l.nodim||false}">
-        <div class="lt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${l.svg}</svg></div>
+        <div class="lt-ico"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none">${l.svg}</svg></div>
         <div><div class="lt-name">${l.name}</div><div class="lt-state">Aus</div></div>
       </div>`).join('');
     html+=`</div>`;
@@ -1050,9 +1129,9 @@ function startSim(){
   card.classList.add('sim-active');
   badge.style.display='';
   // Sofort loslegen
-  const firstDelay=rnd(10000,60000); // 10s-1min Wartezeit vor erstem Schritt
+  const firstDelay=rnd(8000,25000); // 8-25s bis erste Aktion
   _simTimer=setTimeout(simTick,firstDelay);
-  document.getElementById('sim-state').textContent=`Startet in ${Math.round(firstDelay/1000)} Sek…`;
+  document.getElementById('sim-state').textContent=`Startet in ${Math.round(firstDelay/1000)}s — schaltet Lichter zufällig`;
   toast('🛡️ Simulation gestartet');
 }
 function stopSim(){

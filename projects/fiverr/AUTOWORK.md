@@ -179,4 +179,4 @@
 - [x] demo.html: "Warum jetzt?" 3-Spalten Urgency-Section (Zeitersparnis / Kostenersparnis / Komplexität — je mit animiertem Icon + Zahl-Highlight)
 - [x] wz.html: Musik-Tab — Podcast/Radio Fallback-Anzeige (wenn kein Spotify → zeigt media_title + media_content_id als Radio-Card mit Frequenz-Icon)
 - [ ] demo.html: Cookie/DSGVO Banner (schlichter Bottom-Banner, "Diese Seite verwendet keine Tracking-Cookies", einmalig schliessbar, localStorage)
-- [ ] wz.html: Wetter-Tab — Allergiker-Warnung Chip (Gras/Birke/Ambrosia Pollen via Open-Meteo wenn verfügbar, farbcodiert nach Level)
+- [x] wz.html: Wetter-Tab — Allergiker-Warnung Chip (Gras/Birke/Ambrosia Pollen via Open-Meteo wenn verfügbar, farbcodiert nach Level)

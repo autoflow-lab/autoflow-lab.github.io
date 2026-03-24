@@ -1,5 +1,20 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-24 20:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Allergiker-Warnung Chip
+- Neues `#allerg-chip-row` Flex-Container direkt im `#wx-hero` (nach Stats-Row, vor Hero-Ende)
+- Trennlinie `border-top:1px solid rgba(255,255,255,.06)` und `padding-top:10px` — dezent integriert
+- 3 Chips: 🌲 Birke (`birch_pollen`), 🌾 Gräser (`grass_pollen`), ⚠️ Ambrosia (`ragweed_pollen`)
+- 4 Severity-Klassen: `.ac-low` grün (#30d158) / `.ac-mid` gelb (#ffd60a) / `.ac-high` amber (#ff9f0a) / `.ac-vhigh` rot (#ff453a)
+- `.ac-vhigh` Chips: `@keyframes allergChipWarn` — roter Puls-Ring um den Chip bei sehr hohem Pollen (2.2s loop), um Allergiker sofort zu warnen
+- Chip-Design: Pill-Shape (`border-radius:20px`), halbtransparenter farbiger Hintergrund + passender Border
+- `renderPollenChips()` neue Funktion: liest `window._pollenLatest` (von fetchPollen gesetzt), updated Chip-Klassen + Labels + Farben
+- `window._pollenLatest={data,hi}` wird am Ende von `fetchPollen()` gesetzt → `renderPollenChips()` direkt aufgerufen
+- Chips nur sichtbar wenn Wert ≥ 0 vorhanden — fehlende Pollen-Typen (Saison-abhängig) werden automatisch ausgeblendet
+- `#allerg-chip-row` selbst `display:none` wenn alle 3 Chips leer (graceful fallback, z.B. Winter)
+- Effekt: Im Wetter-Hero erscheinen direkt neben Temperatur/Wind die 3 wichtigsten Allergen-Chips — sofort auf einen Blick sichtbar ob Allergiker heute draußen sein sollten
+- JS-Check: OK | Deployed via SSH (paramiko base64-chunk-pipe, DEPLOY_OK)
+
 ## 2026-03-24 18:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Musik-Tab — Podcast/Radio Fallback-Anzeige
 - Neues `#radio-fallback-card` Element im Musik-Tab, erscheint wenn Almando spielt aber KEIN Spotify-Stream (`_isSpot=false`)
