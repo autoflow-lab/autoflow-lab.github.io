@@ -170,3 +170,13 @@
 - [x] demo.html: Anchor-Navigation (sticky Mini-Nav unter Header: Überblick · Preise · Demo · Kontakt, smooth scroll, aktiver Abschnitt highlighted)
 - [x] wz.html: Home-Tab — Batterie-Status Chip (wenn sensor.*.battery_level < 20% → roter Chip "Batterie schwach: Gerätename X%")
 - [x] demo.html: "Kunden-Stimmen" Ratings-Balken (5⭐ 87% / 4⭐ 13% als animierte Balken, IntersectionObserver)
+
+## Neue Ideen (2026-03-24 12:03 UTC)
+- [x] wz.html: Wetter-Tab — "Beste Stunde" Karte (scannt stündliche Vorschau nach optimalem Outdoor-Zeitfenster heute: Score aus Temp-Komfort + Regenwahrsch. + Wind + WMO-Code, grüner Zeit-Badge + Condition-Chips)
+
+## Neue Ideen (2026-03-24 Nachmittag)
+- [ ] demo.html: Scroll-to-Top Button (erscheint ab 500px, amber Ring-Icon, smooth scroll, fade+scale Animation)
+- [ ] demo.html: "Warum jetzt?" 3-Spalten Urgency-Section (Zeitersparnis / Kostenersparnis / Komplexität — je mit animiertem Icon + Zahl-Highlight)
+- [ ] wz.html: Musik-Tab — Podcast/Radio Fallback-Anzeige (wenn kein Spotify → zeigt media_title + media_content_id als Radio-Card mit Frequenz-Icon)
+- [ ] demo.html: Cookie/DSGVO Banner (schlichter Bottom-Banner, "Diese Seite verwendet keine Tracking-Cookies", einmalig schliessbar, localStorage)
+- [ ] wz.html: Wetter-Tab — Allergiker-Warnung Chip (Gras/Birke/Ambrosia Pollen via Open-Meteo wenn verfügbar, farbcodiert nach Level)

@@ -787,6 +787,19 @@ audio{display:none}
 .rev-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s;cursor:pointer;border:none;padding:0}
 .rev-dot.active{background:var(--accent);width:22px;border-radius:4px}
 @media(max-width:640px){.rev-prev{left:-12px}.rev-next{right:-12px}.rev{padding:24px 20px}}
+/* Why Now Section */
+.wn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.wn-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:36px 28px;text-align:center;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+.wn-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.35)}
+.wn-card--accent{border-color:rgba(255,159,10,.35);background:linear-gradient(145deg,var(--card),rgba(255,159,10,.07))}
+.wn-card--accent::before{content:'';position:absolute;inset:0;border-radius:var(--r);box-shadow:inset 0 0 0 1px rgba(255,159,10,.2);pointer-events:none}
+.wn-icon-wrap{width:60px;height:60px;border-radius:50%;background:rgba(255,159,10,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;border:1px solid rgba(255,159,10,.2)}
+.wn-stat{font-size:2.6rem;font-weight:800;color:var(--accent);line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;transition:color .3s}
+.wn-card--accent .wn-stat{color:#ff9f0a}
+.wn-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:14px}
+.wn-desc{font-size:.83rem;color:var(--text2);line-height:1.7;margin:0}
+@media(max-width:700px){.wn-grid{grid-template-columns:1fr}.wn-card{padding:28px 22px}}
+
 /* Rating Breakdown Bars */
 .rating-breakdown{max-width:480px;margin:48px auto 0;padding:28px 32px;background:var(--card);border:1px solid var(--border);border-radius:var(--r)}
 .rating-breakdown h3{font-size:1rem;font-weight:700;color:var(--text1);margin:0 0 20px;text-align:center;letter-spacing:.5px}
@@ -2651,6 +2664,34 @@ input[type=range]{touch-action:pan-x}
     </div>
   </div>
 
+  <!-- WHY NOW -->
+  <div class="band" id="why-now-band" style="padding:72px 24px">
+    <div style="max-width:1000px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="wnTitle">Warum jetzt?</h2>
+      <p class="sec-sub sec-center reveal" data-i="wnSub">Drei Gründe, die für sich sprechen.</p>
+      <div class="wn-grid reveal" id="wn-grid">
+        <div class="wn-card">
+          <div class="wn-icon-wrap"><span class="wn-icon">⏱</span></div>
+          <div class="wn-stat" data-target="120" data-suffix="h">0h</div>
+          <div class="wn-label" data-i="wnCard1Label">Stunden gespart</div>
+          <p class="wn-desc" data-i="wnCard1Desc">Durchschnittlich 120 Stunden Einrichtungszeit — erledigt in 24–48h durch uns.</p>
+        </div>
+        <div class="wn-card wn-card--accent">
+          <div class="wn-icon-wrap"><span class="wn-icon">💶</span></div>
+          <div class="wn-stat" data-target="340" data-prefix="€" data-suffix="">€0</div>
+          <div class="wn-label" data-i="wnCard2Label">Ø Ersparnis vs. Agentur</div>
+          <p class="wn-desc" data-i="wnCard2Desc">Agenturen verlangen €400–€800 für vergleichbare Setups. Unsere Pakete starten ab €29.</p>
+        </div>
+        <div class="wn-card">
+          <div class="wn-icon-wrap"><span class="wn-icon">🔌</span></div>
+          <div class="wn-stat" data-target="3000" data-suffix="+">0+</div>
+          <div class="wn-label" data-i="wnCard3Label">Kompatible Geräte</div>
+          <p class="wn-desc" data-i="wnCard3Desc">Home Assistant unterstützt über 3000 Integrationen — von Ikea bis Tesla, alles in einem Dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FAQ -->
   <div class="band" style="padding:72px 24px">
     <div style="max-width:800px;margin:0 auto">
@@ -3211,6 +3252,37 @@ document.addEventListener('click',e=>{if(!e.target.closest('#mob-menu')&&!e.targ
 // ── SCROLL REVEAL ──
 const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── Why Now Counter Animation ──
+(function(){
+  const grid=document.getElementById('wn-grid');
+  if(!grid)return;
+  function animateCounter(el,target,prefix,suffix,duration){
+    const start=performance.now();
+    function tick(now){
+      const p=Math.min((now-start)/duration,1);
+      const ease=1-Math.pow(1-p,3);
+      const val=Math.round(ease*target);
+      el.textContent=(prefix||'')+val.toLocaleString('de-DE')+(suffix||'');
+      if(p<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        grid.querySelectorAll('.wn-stat').forEach(stat=>{
+          const target=parseInt(stat.dataset.target)||0;
+          const prefix=stat.dataset.prefix||'';
+          const suffix=stat.dataset.suffix||'';
+          animateCounter(stat,target,prefix,suffix,1400);
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.3});
+  obs.observe(grid);
+})();
 
 // ── Rating Breakdown Bars ──
 (function(){
@@ -4253,6 +4325,7 @@ const T={
     pf2Ttl:'Solar Energy Manager',pf2Desc:'Echtzeit-Energiemonitoring mit Solar, Tesla, Wärmepumpe und E-Auto-Lader.',
     pf3Ttl:'3D Grundriss Dashboard',pf3Desc:'Isometrischer Grundriss mit per-Raum Licht, Szenen, Farbwechsel und Live-Status.',
     revTtl:'Was Kunden sagen',ratingTitle:'Bewertungsübersicht',ratingCount:'47+ Bewertungen · Fiverr Top-Rated',
+    wnTitle:'Warum jetzt?',wnSub:'Drei Gründe, die für sich sprechen.',wnCard1Label:'Stunden gespart',wnCard1Desc:'Durchschnittlich 120 Stunden Einrichtungszeit — erledigt in 24–48h durch uns.',wnCard2Label:'Ø Ersparnis vs. Agentur',wnCard2Desc:'Agenturen verlangen €400–€800 für vergleichbare Setups. Unsere Pakete starten ab €29.',wnCard3Label:'Kompatible Geräte',wnCard3Desc:'Home Assistant unterstützt über 3000 Integrationen — von Ikea bis Tesla, alles in einem Dashboard.',
     rev1:'"Altbau-Chaos aus Philips Hue, Shelly und Viessmann Heizung — in 48h ein einheitliches Dashboard. Lieferung schneller als erwartet!"',
     rev2:'"8 Räume, IKEA Tradfri + Sonos. Ergebnis: iOS-artiges Dashboard mit Szenen, Musik-Widget und Energie-Überblick. Jede Revision sofort umgesetzt."',
     rev3:'"Lokale KI offline — Whisper + Piper auf eigenem Server. Kein Paket geht nach außen. Grundriss meines Einfamilienhauses ist der Hammer!"',
@@ -4348,6 +4421,7 @@ const T={
     pf2Ttl:'Solar Energy Manager',pf2Desc:'Real-time energy monitoring with solar, Tesla, heat pump and EV charger.',
     pf3Ttl:'3D Floor Plan Dashboard',pf3Desc:'Isometric floor plan with per-room lighting, scenes, color changes and live device status.',
     revTtl:'What Clients Say',ratingTitle:'Rating Breakdown',ratingCount:'47+ Reviews · Fiverr Top-Rated',
+    wnTitle:'Why Now?',wnSub:'Three reasons that speak for themselves.',wnCard1Label:'Hours Saved',wnCard1Desc:'Average 120 hours of setup time — done in 24–48h by us.',wnCard2Label:'Avg. Savings vs. Agency',wnCard2Desc:'Agencies charge €400–€800 for comparable setups. Our packages start at €29.',wnCard3Label:'Compatible Devices',wnCard3Desc:'Home Assistant supports 3000+ integrations — from Ikea to Tesla, all in one dashboard.',
     rev1:'"Old building chaos: Philips Hue, Shelly and Viessmann heating — unified dashboard in 48h. Delivery faster than expected!"',
     rev2:'"8 rooms, IKEA Tradfri + Sonos. Result: iOS-style dashboard with scenes, music widget and energy overview. Every revision done immediately."',
     rev3:'"Local AI fully offline — Whisper + Piper on own server. Nothing leaves my network. The floor plan of my house is incredible!"',
