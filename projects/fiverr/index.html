@@ -318,6 +318,7 @@ html[data-mode="security"] #sec-card{box-shadow:0 0 0 2px rgba(255,59,48,.5),0 0
    ANIMATIONS
 ═══════════════════════════════════════════ */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes lvPulse{0%{transform:scale(1);opacity:.8}70%{transform:scale(2.2);opacity:0}100%{transform:scale(2.2);opacity:0}}
 
 /* ── SNOW FX ── */
 @keyframes snowFall{0%{transform:translateY(-20px) translateX(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) translateX(var(--drift,40px)) rotate(360deg);opacity:.2}}
@@ -446,6 +447,17 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
 .hero-sub{font-size:1.08rem;color:var(--text2);max-width:520px;margin:0 auto 34px;line-height:1.7;animation:fadeInUp .8s .2s ease both;min-height:3.4em}
 .typed-cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:2px;vertical-align:text-bottom;border-radius:1px;animation:cursorBlink 1s step-end infinite}
 @keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes hiwIconBounce{0%{transform:scale(1) translateY(0)}30%{transform:scale(1.15) translateY(-7px)}55%{transform:scale(.95) translateY(2px)}75%{transform:scale(1.06) translateY(-3px)}100%{transform:scale(1) translateY(0)}}
+@keyframes hiwIconGlow1{0%,100%{box-shadow:0 4px 16px rgba(0,113,227,.35)}50%{box-shadow:0 4px 32px rgba(0,113,227,.72),0 0 0 8px rgba(0,113,227,.12)}}
+@keyframes hiwIconGlow2{0%,100%{box-shadow:0 4px 16px rgba(112,80,255,.35)}50%{box-shadow:0 4px 32px rgba(112,80,255,.72),0 0 0 8px rgba(112,80,255,.12)}}
+@keyframes hiwIconGlow3{0%,100%{box-shadow:0 4px 16px rgba(52,199,89,.35)}50%{box-shadow:0 4px 32px rgba(52,199,89,.72),0 0 0 8px rgba(52,199,89,.12)}}
+@keyframes hiwIconIn{0%{opacity:0;transform:scale(.55) translateY(18px)}60%{transform:scale(1.1) translateY(-4px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.hiw-ico{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;opacity:0;transform:scale(.55) translateY(18px)}
+.hiw-ico.hiw-in{animation:hiwIconIn .55s cubic-bezier(.34,1.28,.64,1) forwards}
+.hiw-ico-1.hiw-in{animation:hiwIconIn .55s .05s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow1 3s 1s ease-in-out infinite}
+.hiw-ico-2.hiw-in{animation:hiwIconIn .55s .18s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow2 3s 1.18s ease-in-out infinite}
+.hiw-ico-3.hiw-in{animation:hiwIconIn .55s .31s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow3 3s 1.31s ease-in-out infinite}
+.hiw-ico:hover{animation:hiwIconBounce .6s ease forwards!important}
 .hero-actions{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-bottom:50px;animation:fadeInUp .9s .3s ease both}
 .btn-p{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:28px;border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.95rem;font-weight:700;transition:all .25s;box-shadow:0 4px 18px rgba(0,113,227,.4)}
 .btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,113,227,.5)}
@@ -461,6 +473,15 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
    TRUST BADGES
 ═══════════════════════════════════════════ */
 .trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:28px 24px 0}
+.cta-trust-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08)}
+.cta-trust-badge{display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.55);transition:color .2s,transform .2s;cursor:default;animation:ctaTrustIn .5s cubic-bezier(.34,1.28,.64,1) both}
+.cta-trust-badge:hover{color:rgba(255,255,255,.85);transform:translateY(-2px)}
+.cta-trust-ico{font-size:1rem;opacity:.8}
+.cta-trust-badge:nth-child(1){animation-delay:.05s}
+.cta-trust-badge:nth-child(2){animation-delay:.12s}
+.cta-trust-badge:nth-child(3){animation-delay:.19s}
+.cta-trust-badge:nth-child(4){animation-delay:.26s}
+@keyframes ctaTrustIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .badge{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:24px;background:var(--bg2);border:1px solid var(--border);font-size:.79rem;font-weight:600;color:var(--text2);transition:all .2s}
 .badge:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
 
@@ -1227,7 +1248,8 @@ input[type=range]{touch-action:pan-x}
 <!-- SCARCITY BANNER -->
 <div id="scarcity-banner" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#ff6b00,#ff9f0a);color:#fff;text-align:center;padding:10px 40px 10px 16px;font-size:.82rem;font-weight:600;letter-spacing:.02em;box-shadow:0 2px 12px rgba(255,107,0,.35);transform:translateY(-100%);transition:transform .5s cubic-bezier(.34,1.56,.64,1)">
   🔥 <span data-i18n="scarcity_text">Nur noch <strong>3 Plätze</strong> diese Woche verfügbar — jetzt sichern!</span>
-  <a href="#contact-section" style="margin-left:12px;background:rgba(0,0,0,.25);color:#fff;text-decoration:none;padding:3px 10px;border-radius:20px;font-size:.78rem">Anfragen →</a>
+  <span id="sc-timer-wrap" style="margin-left:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.22);border-radius:20px;padding:2px 10px;font-size:.76rem;font-variant-numeric:tabular-nums;letter-spacing:.04em">⏱ <span id="sc-countdown" style="font-weight:700;min-width:52px;display:inline-block">--:--:--</span></span>
+  <a href="#contact-section" style="margin-left:8px;background:rgba(0,0,0,.25);color:#fff;text-decoration:none;padding:3px 10px;border-radius:20px;font-size:.78rem">Anfragen →</a>
   <button onclick="document.getElementById('scarcity-banner').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.8);font-size:1.1rem;cursor:pointer;line-height:1" aria-label="Schließen">×</button>
 </div>
 <script>
@@ -1247,6 +1269,35 @@ input[type=range]{touch-action:pan-x}
     var el=b.querySelector('[data-i18n="scarcity_text"]');
     if(el) el.innerHTML='Only <strong>3 slots</strong> left this week — grab yours now!';
   }
+
+  // ── Countdown Timer ──────────────────────────────
+  (function(){
+    var KEY='scarcityEndTs';
+    var DURATION=24*3600*1000; // 24h
+    var end=parseInt(localStorage.getItem(KEY)||'0',10);
+    if(!end||end<=Date.now()){
+      end=Date.now()+DURATION;
+      localStorage.setItem(KEY,end);
+    }
+    var cdEl=document.getElementById('sc-countdown');
+    if(!cdEl)return;
+    function pad(n){return String(n).padStart(2,'0')}
+    function tick(){
+      var rem=Math.max(0,end-Date.now());
+      if(rem<=0){
+        // reset
+        end=Date.now()+DURATION;
+        localStorage.setItem(KEY,end);
+        rem=DURATION;
+      }
+      var h=Math.floor(rem/3600000);
+      var m=Math.floor((rem%3600000)/60000);
+      var s=Math.floor((rem%60000)/1000);
+      cdEl.textContent=pad(h)+':'+pad(m)+':'+pad(s);
+    }
+    tick();
+    setInterval(tick,1000);
+  })();
 })();
 </script>
 
@@ -1321,6 +1372,76 @@ input[type=range]{touch-action:pan-x}
   <button class="mob-btn" onclick="openFiverr()">🛒 Fiverr öffnen</button>
 </div>
 
+<!-- ANCHOR NAV -->
+<nav id="anchor-nav" style="position:fixed;top:var(--nav,56px);left:0;right:0;z-index:8990;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.08);transform:translateY(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;justify-content:center;gap:0;padding:0 16px">
+  <a href="#hero" class="an-link active" data-section="hero" data-i18n="anOverview">Überblick</a>
+  <a href="#preise" class="an-link" data-section="preise" data-i18n="anPrices">Preise</a>
+  <a href="#video-section" class="an-link" data-section="video-section" data-i18n="anDemo">Demo</a>
+  <a href="#contact-section" class="an-link" data-section="contact-section" data-i18n="anContact">Kontakt</a>
+</nav>
+<style>
+:root[data-theme="dark"] #anchor-nav { background:rgba(20,20,20,0.88); border-bottom-color:rgba(255,255,255,.1); }
+.an-link { display:inline-block; padding:9px 16px; font-size:.78rem; font-weight:600; letter-spacing:.03em; text-decoration:none; color:var(--text2,#555); border-bottom:2px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
+.an-link:hover { color:var(--acc,#0071e3); }
+.an-link.active { color:var(--acc,#0071e3); border-bottom-color:var(--acc,#0071e3); }
+@media(max-width:480px){ .an-link { padding:9px 10px; font-size:.72rem; } }
+</style>
+<script>
+(function(){
+  var nav = document.getElementById('anchor-nav');
+  var hero = document.getElementById('hero');
+  var links = nav ? nav.querySelectorAll('.an-link') : [];
+  var sections = ['hero','fp-section','video-section','preise','contact-section'];
+  function updateAnchors(){
+    if(!nav||!hero) return;
+    var heroBottom = hero.getBoundingClientRect().bottom;
+    if(heroBottom < 60){ nav.style.transform='translateY(0)'; }
+    else { nav.style.transform='translateY(-100%)'; }
+    // highlight active section
+    var scrollY = window.scrollY||window.pageYOffset;
+    var active = null;
+    links.forEach(function(l){
+      var id = l.getAttribute('data-section');
+      var el = document.getElementById(id);
+      if(!el) return;
+      var top = el.getBoundingClientRect().top + scrollY;
+      if(scrollY + 100 >= top) active = id;
+    });
+    links.forEach(function(l){
+      l.classList.toggle('active', l.getAttribute('data-section') === active);
+    });
+  }
+  window.addEventListener('scroll', updateAnchors, {passive:true});
+  updateAnchors();
+  // smooth scroll
+  if(nav) nav.addEventListener('click', function(e){
+    var a = e.target.closest('.an-link');
+    if(!a) return;
+    e.preventDefault();
+    var target = document.querySelector(a.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  // i18n hook
+  window._anchorNavI18n = {
+    anOverview:{de:'Überblick',en:'Overview'},
+    anPrices:{de:'Preise',en:'Prices'},
+    anDemo:{de:'Demo',en:'Demo'},
+    anContact:{de:'Kontakt',en:'Contact'}
+  };
+  function applyAnchorI18n(lang){
+    links.forEach(function(l){
+      var k = l.getAttribute('data-i18n');
+      if(k && window._anchorNavI18n[k]) l.textContent = window._anchorNavI18n[k][lang]||window._anchorNavI18n[k].de;
+    });
+  }
+  var _origToggleLang = window.toggleLang;
+  window.toggleLang = function(){
+    if(_origToggleLang) _origToggleLang();
+    applyAnchorI18n(document.documentElement.lang==='en'?'en':'de');
+  };
+})();
+</script>
+
 <!-- ═══════════════════════ SMART HOME PAGE ═══════════════════════ -->
 <div class="page active" id="page-smarthome">
 
@@ -1343,7 +1464,42 @@ input[type=range]{touch-action:pan-x}
       <div class="stat"><div class="num" id="s-del">0h</div><div class="lbl" data-i="stat3">Lieferzeit</div></div>
       <div class="stat"><div class="num" id="s-price">€0</div><div class="lbl" data-i="stat4">ab Preis</div></div>
     </div>
+    <!-- Live Visitor Counter -->
+    <div id="live-visitors" style="display:inline-flex;align-items:center;gap:7px;margin-top:22px;padding:6px 16px;background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.25);border-radius:24px;font-size:.75rem;font-weight:600;color:rgba(52,199,89,.9);opacity:0;transition:opacity .6s ease;animation:none">
+      <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0">
+        <span style="position:absolute;inset:0;border-radius:50%;background:#34c759;animation:lvPulse 2s ease-out infinite"></span>
+        <span style="width:8px;height:8px;border-radius:50%;background:#34c759;position:relative;z-index:1"></span>
+      </span>
+      <span id="lv-count">5</span> <span id="lv-label">Personen schauen gerade</span>
+    </div>
   </section>
+<script>
+(function(){
+  var el=document.getElementById('live-visitors');
+  var cnt=document.getElementById('lv-count');
+  var lbl=document.getElementById('lv-label');
+  if(!el||!cnt)return;
+  // i18n
+  var lang=document.documentElement.lang||'de';
+  if(lang==='en') lbl.textContent='people viewing right now';
+  // Start with random value 4-8
+  var cur=Math.floor(Math.random()*5)+4;
+  cnt.textContent=cur;
+  // Show after 2.5s
+  setTimeout(function(){el.style.opacity='1';},2500);
+  // Drift ±1 every 18-45s
+  function drift(){
+    var delta=Math.random()<.5?1:-1;
+    cur=Math.max(3,Math.min(9,cur+delta));
+    // Animate the number change
+    el.style.transform='scale(1.08)';
+    setTimeout(function(){cnt.textContent=cur;el.style.transform='scale(1)';el.style.transition='opacity .6s ease,transform .2s ease';},120);
+    // Schedule next drift
+    setTimeout(drift, 18000+Math.random()*27000);
+  }
+  setTimeout(drift,18000+Math.random()*27000);
+})();
+</script>
 
   <!-- TRUST -->
   <div class="trust-row">
@@ -1690,19 +1846,19 @@ input[type=range]{touch-action:pan-x}
         <!-- Connector line -->
         <div style="position:absolute;top:40px;left:calc(16.67% + 20px);right:calc(16.67% + 20px);height:2px;background:linear-gradient(90deg,var(--accent),#af52de);opacity:.3;z-index:0" class="hiw-line"></div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#34aadc);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
+          <div class="hiw-ico hiw-ico-1" style="background:linear-gradient(135deg,var(--accent),#34aadc);box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
           <div style="font-size:.65rem;font-weight:800;color:var(--accent);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw1-step">Schritt 1</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw1-ttl">Briefing</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw1-desc">Du beschreibst dein Projekt via Fiverr-Chat. Geräte, Wünsche, Stil — ich frage alles was ich brauche.</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7050ff,#e040fb);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(112,80,255,.35)">⚡</div>
+          <div class="hiw-ico hiw-ico-2" style="background:linear-gradient(135deg,#7050ff,#e040fb);box-shadow:0 4px 16px rgba(112,80,255,.35)">⚡</div>
           <div style="font-size:.65rem;font-weight:800;color:#9060ff;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw2-step">Schritt 2</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw2-ttl">Umsetzung</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw2-desc">Ich baue dein Dashboard in 24–72h. Du bekommst Updates und kannst Revisionen anfragen.</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--green),#30d068);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(52,199,89,.35)">🚀</div>
+          <div class="hiw-ico hiw-ico-3" style="background:linear-gradient(135deg,var(--green),#30d068);box-shadow:0 4px 16px rgba(52,199,89,.35)">🚀</div>
           <div style="font-size:.65rem;font-weight:800;color:var(--green);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw3-step">Schritt 3</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw3-ttl">Launch</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw3-desc">Du bekommst fertige Dateien + Video-Erklärung + Docs. Importieren, fertig. Los geht's!</div>
@@ -2249,7 +2405,7 @@ input[type=range]{touch-action:pan-x}
   </div>
 
   <!-- PRICING -->
-  <div style="padding:72px 24px">
+  <div id="preise" style="padding:72px 24px">
     <div style="max-width:1100px;margin:0 auto">
       <h2 class="sec-title sec-center reveal" data-i="priceTitle">Preise & Pakete</h2>
       <p class="sec-sub sec-center reveal" data-i="priceSub">Transparent kalkulierbar — keine versteckten Kosten.</p>
@@ -2506,6 +2662,12 @@ input[type=range]{touch-action:pan-x}
       <h2 data-i="ctaH2">Bereit für dein Smart Home?</h2>
       <p data-i="ctaP">Kostenloses Briefing — ich zeige dir was möglich ist.</p>
       <button class="btn-p" onclick="openFiverr()" data-i="ctaBtn">🛒 Auf Fiverr bestellen</button>
+      <div class="cta-trust-row">
+        <div class="cta-trust-badge"><span class="cta-trust-ico">🔒</span><span data-i="ctaTrust1">Sicher bezahlen</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">⭐</span><span data-i="ctaTrust2">5 Sterne bewertet</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">⚡</span><span data-i="ctaTrust3">24h Lieferung</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">💬</span><span data-i="ctaTrust4">24/7 Support</span></div>
+      </div>
     </div>
   </div>
 
@@ -2988,6 +3150,16 @@ document.addEventListener('click',e=>{if(!e.target.closest('#mob-menu')&&!e.targ
 // ── SCROLL REVEAL ──
 const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── HIW Animated Icons ──
+(function(){
+  const icos=document.querySelectorAll('.hiw-ico');
+  if(!icos.length)return;
+  const ob=new IntersectionObserver(entries=>entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('hiw-in');ob.unobserve(e.target);}
+  }),{threshold:.4});
+  icos.forEach(el=>ob.observe(el));
+})();
 
 // ── MUSIC / RADIO ──
 const tracks=[{t:'Midnight City',a:'M83',d:214},{t:'Blinding Lights',a:'The Weeknd',d:202},{t:'As It Was',a:'Harry Styles',d:167},{t:'Levitating',a:'Dua Lipa',d:194}];
@@ -4049,7 +4221,7 @@ const T={
     cfLblName:'Name',cfLblEmail:'E-Mail',cfLblType:'Projekttyp',cfLblBudget:'Budget',cfLblMsg:'Nachricht',
     cfSubmit:'✉ Anfrage senden',cfSuccess:'Danke! Deine Anfrage wurde gesendet. Ich melde mich bald.',
     cfPh1:'Max Mustermann',cfPh2:'max@beispiel.de',cfPh3:'Kurze Beschreibung deines Smart Home Setups und was du dir vorstellst...',
-    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',
+    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',ctaTrust1:'Sicher bezahlen',ctaTrust2:'5 Sterne bewertet',ctaTrust3:'24h Lieferung',ctaTrust4:'24/7 Support',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ KI Automation',ftLinkOrder:'🛒 Bestellen',
     ftTagline:'Handgefertigte Smart Home Dashboards — keine Cloud, kein Abo, ganz deins.',
     aiH1a:'Dein Alltag,',aiH1b:'vollautomatisch.',aiSub:'Lokale KI-Modelle, N8N Workflows, Chatbots — alles ohne Cloud-Abhängigkeit.',
@@ -4144,7 +4316,7 @@ const T={
     cfLblName:'Name',cfLblEmail:'Email',cfLblType:'Project Type',cfLblBudget:'Budget',cfLblMsg:'Message',
     cfSubmit:'✉ Send Request',cfSuccess:'Thank you! Your request was sent. I will be in touch soon.',
     cfPh1:'John Smith',cfPh2:'john@example.com',cfPh3:'Brief description of your smart home setup and what you have in mind...',
-    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I will show you what is possible.',ctaBtn:'🛒 Order on Fiverr',
+    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I will show you what is possible.',ctaBtn:'🛒 Order on Fiverr',ctaTrust1:'Secure payment',ctaTrust2:'5-star rated',ctaTrust3:'24h delivery',ctaTrust4:'24/7 Support',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ AI Automation',ftLinkOrder:'🛒 Order',
     ftTagline:'Handcrafted Smart Home dashboards — no cloud, no subscription, just yours.',
     aiH1a:'Your daily life,',aiH1b:'fully automated.',aiSub:'Local AI models, N8N workflows, chatbots — zero cloud dependency.',
@@ -4806,6 +4978,107 @@ if(_origGetPos){
     showToast();
     scheduleNext();
   },12000);
+})();
+</script>
+
+<script>
+/* ── Sticky Mobile CTA Bar ── */
+(function(){
+  var bar = document.createElement('div');
+  bar.id = 'mob-cta-bar';
+  bar.innerHTML =
+    '<div id="mob-cta-inner">' +
+      '<div id="mob-cta-txt">' +
+        '<span id="mob-cta-label">Jetzt beauftragen</span>' +
+        '<span id="mob-cta-price">ab <strong>€29</strong></span>' +
+      '</div>' +
+      '<button id="mob-cta-btn" onclick="openFiverr()">Bestellen \u2192</button>' +
+      '<button id="mob-cta-close" aria-label="Schlie\u00dfen">\u2715</button>' +
+    '</div>';
+  document.body.appendChild(bar);
+
+  var style = document.createElement('style');
+  style.textContent = [
+    '#mob-cta-bar{',
+      'position:fixed;bottom:0;left:0;right:0;z-index:9000;',
+      'transform:translateY(110%);transition:transform .45s cubic-bezier(.34,1.28,.64,1);',
+      'display:none;',
+    '}',
+    '@media(max-width:767px){',
+      '#mob-cta-bar{display:block}',
+    '}',
+    '#mob-cta-bar.show{transform:translateY(0)}',
+    '#mob-cta-inner{',
+      'display:flex;align-items:center;gap:10px;',
+      'background:rgba(18,18,20,.97);backdrop-filter:blur(20px) saturate(1.8);',
+      'border-top:1px solid rgba(255,255,255,.10);',
+      'padding:12px 14px calc(12px + env(safe-area-inset-bottom)) 14px;',
+    '}',
+    '#mob-cta-txt{flex:1;display:flex;flex-direction:column;line-height:1.2}',
+    '#mob-cta-label{font-size:.72rem;color:rgba(255,255,255,.52);letter-spacing:.04em;text-transform:uppercase}',
+    '#mob-cta-price{font-size:.92rem;color:#fff;font-weight:600}',
+    '#mob-cta-price strong{color:#30d158;font-size:1.05rem}',
+    '#mob-cta-btn{',
+      'flex-shrink:0;padding:10px 20px;border-radius:22px;border:none;cursor:pointer;',
+      'background:linear-gradient(135deg,#0071e3,#34aadc);',
+      'color:#fff;font-size:.9rem;font-weight:700;',
+      'box-shadow:0 3px 14px rgba(0,113,227,.45);',
+      'transition:transform .18s,box-shadow .18s;touch-action:manipulation;',
+    '}',
+    '#mob-cta-btn:active{transform:scale(.96);box-shadow:0 1px 6px rgba(0,113,227,.3)}',
+    '#mob-cta-close{',
+      'flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;',
+      'background:rgba(255,255,255,.09);color:rgba(255,255,255,.55);font-size:.75rem;',
+      'display:flex;align-items:center;justify-content:center;touch-action:manipulation;',
+    '}',
+    '@keyframes mcbPulse{0%,100%{box-shadow:0 3px 14px rgba(0,113,227,.45)}50%{box-shadow:0 3px 22px rgba(0,113,227,.75)}}'
+  ].join('');
+  document.head.appendChild(style);
+
+  function applyLang(){
+    var lang = document.documentElement.lang || 'de';
+    var lbl = document.getElementById('mob-cta-label');
+    var btn = document.getElementById('mob-cta-btn');
+    if(!lbl || !btn) return;
+    if(lang === 'en'){
+      lbl.textContent = 'Order now';
+      btn.textContent = 'Order \u2192';
+    } else {
+      lbl.textContent = 'Jetzt beauftragen';
+      btn.textContent = 'Bestellen \u2192';
+    }
+  }
+  document.addEventListener('langChange', applyLang);
+
+  var shown = false;
+  var dismissed = sessionStorage.getItem('mobCtaDismissed') === '1';
+  var scrollTriggered = false;
+
+  function tryShow(){
+    if(shown || dismissed) return;
+    shown = true;
+    bar.classList.add('show');
+    var btn = document.getElementById('mob-cta-btn');
+    if(btn) btn.style.animation = 'mcbPulse 2.4s ease-in-out 3';
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!scrollTriggered && window.scrollY > 80){
+      scrollTriggered = true;
+      setTimeout(tryShow, 3000);
+    }
+  }, {passive:true});
+  setTimeout(tryShow, 5000);
+
+  document.getElementById('mob-cta-close').addEventListener('touchend', function(e){
+    e.preventDefault();
+    bar.classList.remove('show');
+    sessionStorage.setItem('mobCtaDismissed','1');
+  });
+  document.getElementById('mob-cta-close').addEventListener('click', function(){
+    bar.classList.remove('show');
+    sessionStorage.setItem('mobCtaDismissed','1');
+  });
 })();
 </script>
 </body>

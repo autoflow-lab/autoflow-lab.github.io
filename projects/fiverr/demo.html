@@ -1372,6 +1372,76 @@ input[type=range]{touch-action:pan-x}
   <button class="mob-btn" onclick="openFiverr()">🛒 Fiverr öffnen</button>
 </div>
 
+<!-- ANCHOR NAV -->
+<nav id="anchor-nav" style="position:fixed;top:var(--nav,56px);left:0;right:0;z-index:8990;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.08);transform:translateY(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;justify-content:center;gap:0;padding:0 16px">
+  <a href="#hero" class="an-link active" data-section="hero" data-i18n="anOverview">Überblick</a>
+  <a href="#preise" class="an-link" data-section="preise" data-i18n="anPrices">Preise</a>
+  <a href="#video-section" class="an-link" data-section="video-section" data-i18n="anDemo">Demo</a>
+  <a href="#contact-section" class="an-link" data-section="contact-section" data-i18n="anContact">Kontakt</a>
+</nav>
+<style>
+:root[data-theme="dark"] #anchor-nav { background:rgba(20,20,20,0.88); border-bottom-color:rgba(255,255,255,.1); }
+.an-link { display:inline-block; padding:9px 16px; font-size:.78rem; font-weight:600; letter-spacing:.03em; text-decoration:none; color:var(--text2,#555); border-bottom:2px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
+.an-link:hover { color:var(--acc,#0071e3); }
+.an-link.active { color:var(--acc,#0071e3); border-bottom-color:var(--acc,#0071e3); }
+@media(max-width:480px){ .an-link { padding:9px 10px; font-size:.72rem; } }
+</style>
+<script>
+(function(){
+  var nav = document.getElementById('anchor-nav');
+  var hero = document.getElementById('hero');
+  var links = nav ? nav.querySelectorAll('.an-link') : [];
+  var sections = ['hero','fp-section','video-section','preise','contact-section'];
+  function updateAnchors(){
+    if(!nav||!hero) return;
+    var heroBottom = hero.getBoundingClientRect().bottom;
+    if(heroBottom < 60){ nav.style.transform='translateY(0)'; }
+    else { nav.style.transform='translateY(-100%)'; }
+    // highlight active section
+    var scrollY = window.scrollY||window.pageYOffset;
+    var active = null;
+    links.forEach(function(l){
+      var id = l.getAttribute('data-section');
+      var el = document.getElementById(id);
+      if(!el) return;
+      var top = el.getBoundingClientRect().top + scrollY;
+      if(scrollY + 100 >= top) active = id;
+    });
+    links.forEach(function(l){
+      l.classList.toggle('active', l.getAttribute('data-section') === active);
+    });
+  }
+  window.addEventListener('scroll', updateAnchors, {passive:true});
+  updateAnchors();
+  // smooth scroll
+  if(nav) nav.addEventListener('click', function(e){
+    var a = e.target.closest('.an-link');
+    if(!a) return;
+    e.preventDefault();
+    var target = document.querySelector(a.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  // i18n hook
+  window._anchorNavI18n = {
+    anOverview:{de:'Überblick',en:'Overview'},
+    anPrices:{de:'Preise',en:'Prices'},
+    anDemo:{de:'Demo',en:'Demo'},
+    anContact:{de:'Kontakt',en:'Contact'}
+  };
+  function applyAnchorI18n(lang){
+    links.forEach(function(l){
+      var k = l.getAttribute('data-i18n');
+      if(k && window._anchorNavI18n[k]) l.textContent = window._anchorNavI18n[k][lang]||window._anchorNavI18n[k].de;
+    });
+  }
+  var _origToggleLang = window.toggleLang;
+  window.toggleLang = function(){
+    if(_origToggleLang) _origToggleLang();
+    applyAnchorI18n(document.documentElement.lang==='en'?'en':'de');
+  };
+})();
+</script>
+
 <!-- ═══════════════════════ SMART HOME PAGE ═══════════════════════ -->
 <div class="page active" id="page-smarthome">
 
@@ -2335,7 +2405,7 @@ input[type=range]{touch-action:pan-x}
   </div>
 
   <!-- PRICING -->
-  <div style="padding:72px 24px">
+  <div id="preise" style="padding:72px 24px">
     <div style="max-width:1100px;margin:0 auto">
       <h2 class="sec-title sec-center reveal" data-i="priceTitle">Preise & Pakete</h2>
       <p class="sec-sub sec-center reveal" data-i="priceSub">Transparent kalkulierbar — keine versteckten Kosten.</p>
