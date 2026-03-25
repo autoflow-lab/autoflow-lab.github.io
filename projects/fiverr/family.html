@@ -88,15 +88,18 @@ body{padding-bottom:32px}
 /* ─── LIGHTS ─── */
 .lights-grid{margin-bottom:10px}
 .lights-grid-inner{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.room-scenes{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.scene-pill{padding:5px 13px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:500;color:rgba(255,255,255,.5);cursor:pointer;touch-action:manipulation;transition:background .2s,color .2s;white-space:nowrap;-webkit-user-select:none;user-select:none;}
+.scene-pill:active{background:rgba(255,159,10,.2);color:#ff9f0a;}
 .room-label{font-size:.58rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:14px 4px 6px;margin-top:2px}
 .room-label:first-child{padding-top:4px}
 .lt-tile{background:var(--c1);border-radius:16px;padding:14px 12px;border:1px solid var(--sep);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:8px;touch-action:manipulation}
 .lt-tile:active{transform:scale(.95)}
-.lt-tile.on{background:rgba(255,159,10,.09);border-color:rgba(255,159,10,.3)}
+.lt-tile.on{background:rgba(var(--tile-c,255,159,10),.09);border-color:rgba(var(--tile-c,255,159,10),.3)}
 .lt-ico{width:34px;height:34px;border-radius:10px;background:var(--c2);display:flex;align-items:center;justify-content:center;transition:background .3s}
-.lt-tile.on .lt-ico{background:rgba(255,159,10,.22)}
-.lt-ico svg{width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:1.8;stroke-linecap:round;transition:stroke .3s}
-.lt-tile.on .lt-ico svg{fill:var(--acc)}
+.lt-tile.on .lt-ico{background:rgba(var(--tile-c,255,159,10),.22)}
+.lt-ico svg{width:16px;height:16px;fill:var(--dim);stroke:none;transition:fill .3s}
+.lt-tile.on .lt-ico svg{fill:rgb(var(--tile-c,255,159,10))}
 .lt-name{font-size:.7rem;font-weight:600;color:var(--dim)}
 .lt-tile.on .lt-name{color:#fff}
 .lt-state{font-size:.58rem;color:var(--dim2)}
@@ -255,6 +258,16 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
 
 /* ─── FOOTER ─── */
 .footer{padding:24px 16px 0;text-align:center;font-size:.58rem;color:var(--dim2)}
+
+.presence-card{background:var(--c1);border-radius:16px;padding:14px;border:1px solid var(--sep);}
+.presence-person{display:flex;align-items:center;gap:12px;}
+.presence-avatar{font-size:1.8rem;width:44px;height:44px;background:var(--c2);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.presence-info{flex:1;}
+.presence-name{font-size:.85rem;font-weight:600;color:var(--txt);}
+.presence-state{font-size:.72rem;color:var(--dim);margin-top:2px;}
+.presence-dot{width:12px;height:12px;border-radius:50%;background:#3a3a3c;transition:background .4s;}
+.presence-dot.home{background:#30d158;box-shadow:0 0 8px rgba(48,209,88,.5);}
+.presence-dot.away{background:#636366;}
 </style>
   <!-- Open Graph / Link Preview -->
   <meta property="og:title" content="SchlappHome">
@@ -571,10 +584,10 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
   </div>
 </div>
 
-<div class="footer">SchlappHome <span style='opacity:.4'>v3.2</span> · <span id="last-update">–</span></div>
+<div class="footer">SchlappHome <span style='opacity:.4'>v4.0</span> · <span id="last-update">–</span></div>
 
 <script>
-const APP_VERSION='v3.2';
+const APP_VERSION='v4.0';
 
 // ─── LOG CAPTURE ───
 const _logs = [];
@@ -615,7 +628,12 @@ const SVG = {
   wardrobe:    '<path d="M18,6.75h-3c-0.41,0-0.75-0.34-0.75-0.75S14.59,5.25,15,5.25h3c0.41,0,0.75,0.34,0.75,0.75S18.41,6.75,18,6.75zM18,11.25h-3c-0.41,0-0.75-0.34-0.75-0.75S14.59,9.75,15,9.75h3c0.41,0,0.75,0.34,0.75,0.75S18.41,11.25,18,11.25zM18,15.75h-3c-0.41,0-0.75-0.34-0.75-0.75s0.34-0.75,0.75-0.75h3c0.41,0,0.75,0.34,0.75,0.75S18.41,15.75,18,15.75zM12.75,17.25c0,0.41-0.34,0.75-0.75,0.75s-0.75-0.34-0.75-0.75V3.75C11.25,3.34,11.59,3,12,3s0.75,0.34,0.75,0.75V17.25zM9,11.25H7.5c-0.41,0-0.75-0.34-0.75-0.75S7.09,9.75,7.5,9.75H9c0.41,0,0.75,0.34,0.75,0.75S9.41,11.25,9,11.25zM19.5,0.75h-15c-0.41,0-0.75,0.34-0.75,0.75v18c0,0.41,0.34,0.75,0.75,0.75h0.75V21c0,0.41,0.34,0.75,0.75,0.75S6.75,21.41,6.75,21v-0.75h10.5V21c0,0.41,0.34,0.75,0.75,0.75s0.75-0.34,0.75-0.75v-0.75h0.75c0.41,0,0.75-0.34,0.75-0.75v-18C20.25,1.09,19.91,0.75,19.5,0.75z"/>',
   hallway:     '<path d="M20.98,16.37l-2.16-9.58c-0.34-1.51-1.79-2.46-3.29-2.24l-0.59-0.88C14.67,3.25,14.2,3,13.7,3h-0.95C12.34,3,12,3.34,12,3.75v1.5h-1.5v-4.5C10.5,0.34,10.16,0,9.75,0S9,0.34,9,0.75V9H6V7.5c0-0.41-0.34-0.75-0.75-0.75S4.5,7.09,4.5,7.5v2.25c0,0.41,0.34,0.75,0.75,0.75H9v11.25H6c-0.83,0-1.5,0.67-1.5,1.5C4.5,23.66,4.84,24,5.25,24h9c0.41,0,0.75-0.34,0.75-0.75c0-0.83-0.67-1.5-1.5-1.5h-3v-15H12v12c0,0.41,0.34,0.75,0.75,0.75h1c1.55,0,2.71-1.42,2.41-2.94L15.25,12l0.83-3.73l1.97,8.76c0.09,0.4,0.49,0.66,0.9,0.57l1.46-0.33C20.82,17.17,21.07,16.77,20.98,16.37"/>',
   bathroom:    '<path d="M20.02,12.75H19.5V3.86C19.5,1.73,17.77,0,15.64,0c-1.83,0-3.36,1.29-3.75,3H10.5C9.68,3,9,3.67,9,4.5c0,0.41,0.34,0.75,0.75,0.75H15c0.41,0,0.75-0.33,0.75-0.75c0-0.83-0.67-1.5-1.5-1.5h-0.79c0.34-0.88,1.19-1.5,2.19-1.5c1.3,0,2.36,1.06,2.36,2.36v8.89H3.98C3.44,12.75,3,13.19,3,13.73c0,0.55,0.44,0.99,0.98,0.99H4.5v1.67c0,2.11,1.23,3.93,3,4.8v1.3C7.5,23.33,8.17,24,9,24s1.5-0.67,1.5-1.5v-0.75h3.64c0.04,0,0.07,0,0.11,0v0.75c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5v-1.75c1.36-0.97,2.25-2.56,2.25-4.36v-1.67h0.52c0.54,0,0.98-0.44,0.98-0.99C21,13.19,20.56,12.75,20.02,12.75"/>',
-  outdoor:     '<path d="M12,6A6,6,0,1,0,18,12,6,6,0,0,0,12,6Zm0,10.5A4.5,4.5,0,1,1,16.5,12,4.505,4.505,0,0,1,12,16.5ZM11.25,1.5v2.25a.75.75,0,0,0,1.5,0V1.5a.75.75,0,0,0-1.5,0Zm0,18.75v2.25a.75.75,0,0,0,1.5,0V20.25a.75.75,0,0,0-1.5,0ZM3.28,4.34,4.87,5.93a.75.75,0,0,0,1.06-1.06L4.34,3.28A.75.75,0,0,0,3.28,4.34Zm14.84,14.84,1.59,1.59a.75.75,0,0,0,1.06-1.06l-1.59-1.59a.75.75,0,1,0-1.06,1.06ZM1.5,11.25a.75.75,0,0,0,0,1.5H3.75a.75.75,0,0,0,0-1.5Zm18.75,0a.75.75,0,0,0,0,1.5h2.25a.75.75,0,0,0,0-1.5ZM5.93,17.13,4.34,18.72a.75.75,0,1,0,1.06,1.06l1.59-1.59a.75.75,0,0,0-1.06-1.06ZM18.07,4.87l1.59-1.59A.75.75,0,0,0,18.6,2.22L17,3.81a.75.75,0,1,0,1.06,1.06Z"/>',
+  double_spot: '<path d="M21.69,17.42c-0.5,1.38-1.52,2.28-2.28,2.02c-0.76-0.26-0.98-1.59-0.48-2.98c0.5-1.38,1.52-2.28,2.28-2.02 C21.97,14.71,22.18,16.04,21.69,17.42 M3.96,15.55c-0.49,0.17-1.14-0.41-1.46-1.3c-0.32-0.89-0.18-1.74,0.3-1.91 c0.49-0.17,1.14,0.41,1.46,1.3C4.58,14.52,4.45,15.38,3.96,15.55 M22.09,13.44l-7.29-2.39V6.89c1-0.1,1.93-0.24,2.75-0.42 c1.49-0.34,2.33-0.75,2.55-1.19c0.04-0.07,0.06-0.15,0.06-0.22V4.51c0-0.08-0.02-0.15-0.06-0.22c-0.22-0.45-1.14-0.88-2.71-1.22 c-3.56-0.77-9.27-0.77-12.82,0C2.98,3.4,2.08,3.83,1.85,4.28C1.81,4.36,1.8,4.43,1.8,4.51v0.55c0,0.08,0.02,0.15,0.06,0.22 C2.07,5.71,2.91,6.13,4.4,6.46c0.81,0.18,1.75,0.32,2.74,0.42v2.66l-5.28,1.77c-0.86,0.3-1.1,1.8-0.54,3.36 c0.56,1.56,1.71,2.58,2.57,2.28l5.76-2.65c0.65-0.25,0.74-1.54,0.2-2.87c-0.28-0.7-0.73-1.29-1.18-1.66V7.01 c1.51,0.08,3.08,0.09,4.59,0v4.23c-0.68,0.45-1.39,1.31-1.83,2.35c-0.72,1.73-0.6,3.41,0.27,3.74l7.67,3.45 c1.14,0.39,2.68-0.94,3.42-2.97C23.56,15.78,23.23,13.82,22.09,13.44"/>',
+  bollard:     '<path d="M15.75,9.38c0,0.62-1.68,1.12-3.75,1.12S8.25,10,8.25,9.38V6.22c0-0.18,0.2-0.28,0.35-0.18 C9.2,6.42,10.5,6.75,12,6.75s2.8-0.33,3.4-0.71c0.15-0.1,0.35,0,0.35,0.18V9.38z M10.01,3.96c1.2-0.28,3.04-0.28,4.16,0 c1.14,0.29,1.12,0.76-0.09,1.06c-1.23,0.31-3.19,0.31-4.32,0C8.65,4.72,8.78,4.24,10.01,3.96z M15.25,3.36 C14.41,3.12,13.3,3,12.17,3c-1.12,0-2.27,0.12-3.16,0.36C8.02,3.62,7.5,3.98,7.5,4.34v15.42c0,0.3,0.38,0.6,1.14,0.84 c0.86,0.26,2.01,0.4,3.19,0.4c1.18,0,2.37-0.14,3.29-0.4S16.5,20,16.5,19.66V4.24C16.5,3.91,16.08,3.6,15.25,3.36z"/>',
+  room_garage: '<path d="M20.84,4.3c0.22,0.22,0.22,0.6,0,0.92l-3.38,4.84c-0.3,0.43-0.87,0.55-1.17,0.25l-0.71-0.7l-0.81,0.81 L13.6,9.25l0.81-0.81l-0.7-0.71c-0.3-0.3-0.18-0.87,0.25-1.17l4.84-3.38c0.32-0.22,0.7-0.22,0.92,0L20.84,4.3z M8.66,13.01L11,15.36 l-5.4,5.4c-0.32,0.32-0.85,0.32-1.18,0l-1.17-1.17c-0.32-0.32-0.32-0.85,0-1.18L8.66,13.01z M20.74,18.51 c0.32,0.32,0.32,0.85,0,1.18l-1.06,1.06c-0.16,0.16-0.38,0.24-0.59,0.24c-0.21,0-0.43-0.08-0.59-0.24L8.39,10.62 c-1.21,0.47-2.62,0.33-3.7-0.43C3.32,9.22,2.79,7.62,3.08,6.16c0.06-0.3,0.45-0.41,0.66-0.19L5.27,7.5c0.31,0.31,0.81,0.31,1.12,0 L7.5,6.39c0.31-0.31,0.31-0.81,0-1.12L5.98,3.74c-0.22-0.22-0.11-0.61,0.2-0.66c1.25-0.25,2.6,0.11,3.57,1.07 c1.14,1.14,1.43,2.82,0.88,4.23L20.74,18.51z"/>',
+  recessed:    '<path d="M12,8.25c-2.57,0-5.03,0.46-6.9,1.3c-0.9,0.4-1.58,0.85-2.09,1.3C2.95,9.78,3.85,8.7,5.7,7.89 c3.5-1.52,9.09-1.52,12.59,0c1.86,0.8,2.76,1.89,2.71,2.96c-0.51-0.45-1.19-0.9-2.1-1.3C17.02,8.71,14.57,8.25,12,8.25z M18.29,10.17c3.54,1.58,3.66,4.19,0.17,5.83c-3.54,1.66-9.35,1.66-12.89,0c-3.49-1.64-3.39-4.25,0.15-5.83 C9.21,8.61,14.8,8.61,18.29,10.17z M16.84,15.18c2.62-0.75,2.53-1.93-0.12-2.65c-2.62-0.71-6.81-0.71-9.43,0 c-2.65,0.72-2.73,1.91-0.11,2.65C9.84,15.94,14.19,15.94,16.84,15.18z"/>',
+  floor_lamp:  '<path d="M13.89,9.73c-1.07-0.37-2.71-0.37-3.78,0L9.2,3.46c1.78,0.22,3.82,0.22,5.6,0L13.89,9.73z M16.83,0.55 c-2.66-0.73-7.02-0.73-9.67,0C4.55,1.27,4.63,2.42,7.29,3.12C7.4,3.15,7.53,3.17,7.64,3.2l1.18,8.12c0.09,0.32,0.58,0.7,1.68,0.9 v8.97c-0.73,0.12-1.27,0.31-1.44,0.55C9.02,21.8,9,21.86,9,21.91v0.54c0,0.45,1.34,0.82,3,0.82s3-0.37,3-0.82v-0.54 c0-0.3-0.61-0.56-1.5-0.71v-8.98c1.09-0.2,1.56-0.59,1.68-0.9l1.18-8.13c0.12-0.03,0.25-0.05,0.36-0.08 C19.37,2.42,19.45,1.27,16.83,0.55z"/>',
+    outdoor:     '<path d="M12,6A6,6,0,1,0,18,12,6,6,0,0,0,12,6Zm0,10.5A4.5,4.5,0,1,1,16.5,12,4.505,4.505,0,0,1,12,16.5ZM11.25,1.5v2.25a.75.75,0,0,0,1.5,0V1.5a.75.75,0,0,0-1.5,0Zm0,18.75v2.25a.75.75,0,0,0,1.5,0V20.25a.75.75,0,0,0-1.5,0ZM3.28,4.34,4.87,5.93a.75.75,0,0,0,1.06-1.06L4.34,3.28A.75.75,0,0,0,3.28,4.34Zm14.84,14.84,1.59,1.59a.75.75,0,0,0,1.06-1.06l-1.59-1.59a.75.75,0,1,0-1.06,1.06ZM1.5,11.25a.75.75,0,0,0,0,1.5H3.75a.75.75,0,0,0,0-1.5Zm18.75,0a.75.75,0,0,0,0,1.5h2.25a.75.75,0,0,0,0-1.5ZM5.93,17.13,4.34,18.72a.75.75,0,1,0,1.06,1.06l1.59-1.59a.75.75,0,0,0-1.06-1.06ZM18.07,4.87l1.59-1.59A.75.75,0,0,0,18.6,2.22L17,3.81a.75.75,0,1,0,1.06,1.06Z"/>',
 };
 
 // Räume mit Lichtern
@@ -623,32 +641,101 @@ const LIGHT_ROOMS = [
   { room: '🛋️ Wohnzimmer', lights: [
     {id:'light.h61e1',  name:'Holzwand',    svg:SVG.lightstrip, caps:'rgb'},
     {id:'light.h618a',  name:'Sofa LED',    svg:SVG.lightstrip, caps:'rgb_nowhite'},
+  ], scenes: [
+    {name:'Abend',     ico:'🌆', steps:[
+      {id:'light.h61e1',  bri:40, rgb:[255,147,41]},
+      {id:'light.h618a',  bri:35, rgb:[255,110,20]},
+    ]},
+    {name:'Chill',     ico:'💜', steps:[
+      {id:'light.h61e1',  bri:25, rgb:[120,30,200]},
+      {id:'light.h618a',  bri:20, rgb:[80,10,180]},
+    ]},
+    {name:'Aus',       ico:'⚫', steps:[
+      {id:'light.h61e1',  off:true},
+      {id:'light.h618a',  off:true},
+    ]},
   ]},
   { room: '🍳 Küche', lights: [
-    {id:'light.h618a_2', name:'Oberschrank', svg:SVG.ledstrip_v, caps:'rgb_nowhite'},
+    {id:'light.h618a_2', name:'Küchen LED',  svg:SVG.lightstrip, caps:'rgb_nowhite'},
+  ], scenes: [
+    {name:'Kochen',    ico:'🍳', steps:[{id:'light.h618a_2', bri:100, rgb:[255,220,180]}]},
+    {name:'Abend',     ico:'🌆', steps:[{id:'light.h618a_2', bri:40,  rgb:[255,130,30]}]},
+    {name:'Aus',       ico:'⚫', steps:[{id:'light.h618a_2', off:true}]},
   ]},
   { room: '🛏️ Schlafzimmer', lights: [
-    {id:'light.schlafzimmer', name:'Decke',    svg:SVG.ceiling, caps:'color'},
-    {id:'light.deckenlampe',  name:'Pendel',   svg:SVG.pendant, caps:'color'},
+    {id:'light.deckenlampe',  name:'Decke',    svg:SVG.ceiling,  caps:'color'},
     {id:'light.hue_play',     name:'Hue Play', svg:SVG.play_bar, caps:'color'},
-    {id:'light.hue_iris',     name:'Hue Iris', svg:SVG.iris,   caps:'color'},
+    {id:'light.hue_iris',     name:'Hue Iris', svg:SVG.iris,     caps:'color'},
+  ], scenes: [
+    {name:'Entspannen', ico:'🌅', steps:[
+      {id:'light.deckenlampe', off:true},
+      {id:'light.hue_play',    bri:45, rgb:[255,147,41]},
+      {id:'light.hue_iris',    bri:45, rgb:[255,147,41]},
+    ]},
+    {name:'Film',       ico:'🎬', steps:[
+      {id:'light.deckenlampe', off:true},
+      {id:'light.hue_play',    bri:12, rgb:[255,60,10]},
+      {id:'light.hue_iris',    bri:10, rgb:[200,30,5]},
+    ]},
+    {name:'Alles aus',  ico:'⚫', steps:[
+      {id:'light.deckenlampe', off:true},
+      {id:'light.hue_play',    off:true},
+      {id:'light.hue_iris',    off:true},
+    ]},
   ]},
   { room: '🛏️ Eltern SZ', lights: [
-    {id:'light.eltern_schlafzimmer',       name:'Decke',         svg:SVG.ceiling,  caps:'ct'},
     {id:'light.color_temperature_light_1', name:'LED Bett',      svg:SVG.lightstrip, caps:'ct'},
-    {id:'light.shelly1_c45bbe47adb9',      name:'Kleiderschrank',svg:SVG.wardrobe, caps:'onoff', dom:'light'},
+    {id:'light.shelly1_c45bbe47adb9',      name:'Kleiderschrank',svg:SVG.wardrobe,   caps:'onoff', dom:'light'},
+  ], scenes: [
+    {name:'Schlafen', ico:'🌙', steps:[
+      {id:'light.color_temperature_light_1', bri:10,  ct:2200},
+      {id:'light.shelly1_c45bbe47adb9',      off:true, dom:'light'},
+    ]},
+    {name:'Lesen',    ico:'📖', steps:[
+      {id:'light.color_temperature_light_1', bri:90,  ct:4000},
+    ]},
+    {name:'Aus',      ico:'⚫', steps:[
+      {id:'light.color_temperature_light_1', off:true},
+      {id:'light.shelly1_c45bbe47adb9',      off:true, dom:'light'},
+    ]},
   ]},
   { room: '💼 Büro', lights: [
-    {id:'switch.shelly1_98cdac0ca9b2', name:'Wandlampe', svg:SVG.wall_lamp, caps:'onoff', dom:'switch'},
-    {id:'light.hue_play_l',            name:'Hue Play',  svg:SVG.play_bar, caps:'color'},
+    {id:'switch.shelly1_98cdac0ca9b2', name:'Wandlampe', svg:SVG.bollard,   caps:'onoff', dom:'switch'},
+    {id:'light.hue_play_l',            name:'Hue Play',  svg:SVG.play_bar,  caps:'color'},
+  ], scenes: [
+    {name:'Fokus',  ico:'⚡', steps:[
+      {id:'switch.shelly1_98cdac0ca9b2', on:true,  dom:'switch'},
+      {id:'light.hue_play_l',            bri:100, ct:5000},
+    ]},
+    {name:'Abend',  ico:'🌆', steps:[
+      {id:'switch.shelly1_98cdac0ca9b2', on:true,  dom:'switch'},
+      {id:'light.hue_play_l',            bri:30,  rgb:[255,100,20]},
+    ]},
+    {name:'Aus',    ico:'⚫', steps:[
+      {id:'switch.shelly1_98cdac0ca9b2', off:true, dom:'switch'},
+      {id:'light.hue_play_l',            off:true},
+    ]},
   ]},
   { room: '🚪 Gänge & WC', lights: [
-    {id:'light.gang_eg_licht',  name:'Gang EG',  svg:SVG.hallway,  caps:'onoff', nodim:true},
-    {id:'light.gang_og_licht',  name:'Gang OG',  svg:SVG.hallway, caps:'onoff', nodim:true},
-    {id:'light.gaste_wc_licht', name:'Gäste WC', svg:SVG.bathroom, caps:'onoff', nodim:true},
+    {id:'light.gang_eg_licht',  name:'Gang EG',  svg:SVG.double_spot, caps:'onoff', nodim:true},
+    {id:'light.gang_og_licht',  name:'Gang OG',  svg:SVG.double_spot, caps:'onoff', nodim:true},
+    {id:'light.gaste_wc_licht', name:'Gäste WC', svg:SVG.bathroom,    caps:'onoff', nodim:true},
+  ], scenes: [
+    {name:'Alle an', ico:'💡', steps:[
+      {id:'light.gang_eg_licht',  on:true},
+      {id:'light.gang_og_licht',  on:true},
+    ]},
+    {name:'Alle aus',ico:'⚫', steps:[
+      {id:'light.gang_eg_licht',  off:true},
+      {id:'light.gang_og_licht',  off:true},
+      {id:'light.gaste_wc_licht', off:true},
+    ]},
   ]},
   { room: '🌿 Außen', lights: [
-    {id:'light.garten_licht', name:'Fassade', svg:SVG.outdoor,  caps:'onoff', nodim:true},
+    {id:'light.garten_licht', name:'Fassade', svg:SVG.wall_lamp, caps:'onoff', nodim:true},
+  ], scenes: [
+    {name:'An',  ico:'🌿', steps:[{id:'light.garten_licht', on:true}]},
+    {name:'Aus', ico:'⚫', steps:[{id:'light.garten_licht', off:true}]},
   ]},
 ];
 
@@ -723,6 +810,7 @@ function setDot(on){
 function updateAll(){
   updatePerson();
   updateGarage();
+  updatePresence();
   updateLights();
   updateWeather();
 }
@@ -738,6 +826,17 @@ function updatePerson(){
   ico.querySelector('svg').style.stroke=home?'var(--grn)':'var(--acc)';
   stEl.textContent=home?'🏠 Daheim':'🚗 Unterwegs';
   stEl.style.color=home?'var(--grn)':'var(--acc)';
+}
+
+
+function updatePresence(){
+  const s=_S['person.janis'];
+  if(!s) return;
+  const home=s.state==='home';
+  const dot=document.getElementById('presence-dot-janis');
+  const stEl=document.getElementById('presence-state-janis');
+  if(dot){dot.className='presence-dot '+(home?'home':'away');}
+  if(stEl){stEl.textContent=home?'🏠 Zuhause':'🚗 Unterwegs';}
 }
 
 function updateGarage(){
@@ -762,16 +861,39 @@ function updateGarage(){
   }
 }
 
+function ctToRgb(k){
+  // Kelvin → RGB Näherung (2000K warm bis 6500K kalt)
+  k=Math.max(1000,Math.min(10000,k));
+  let r,g,b;
+  if(k<=6600){r=255;g=Math.round(99.47*Math.log(k/100)-161.12);b=k<=2000?0:Math.round(138.52*Math.log(k/100-10)-305.04);}
+  else{r=Math.round(329.7*Math.pow(k/100-60,-0.133));g=Math.round(288.1*Math.pow(k/100-60,-0.0755));b=255;}
+  return [Math.max(0,Math.min(255,r)),Math.max(0,Math.min(255,g)),Math.max(0,Math.min(255,b))];
+}
+
 function updateLights(){
   const grid=document.getElementById('lights-grid');
   if(!grid.children.length) buildLights();
-  LIGHTS.forEach(l=>{
+  LIGHT_ROOMS.flatMap(r=>r.lights).forEach(l=>{
     const s=_S[l.id];
     const on=s?.state==='on';
-    const bri=Math.round((s?.attributes?.brightness||0)/2.55);
+    const a=s?.attributes||{};
+    const bri=Math.round((a.brightness||0)/2.55);
     const tile=grid.querySelector(`[data-id="${l.id}"]`);
     if(!tile)return;
     tile.classList.toggle('on',on);
+    // Farbe bestimmen: RGB > CT > default amber
+    let rgb=null;
+    if(on){
+      if(a.rgb_color) rgb=a.rgb_color;
+      else if(a.color_temp_kelvin) rgb=ctToRgb(a.color_temp_kelvin);
+      else if(a.color_mode==='color_temp'&&a.color_temp) rgb=ctToRgb(Math.round(1000000/a.color_temp));
+    }
+    if(on&&rgb){
+      const rc=rgb.join(',');
+      tile.style.setProperty('--tile-c',rc);
+    } else {
+      tile.style.removeProperty('--tile-c');
+    }
     const stEl=tile.querySelector('.lt-state');
     if(stEl)stEl.textContent=on&&bri>0?bri+'% Hell':'Aus';
   });
@@ -780,7 +902,7 @@ function updateLights(){
 // ─── LIGHT DETAIL PANEL ───
 let _ldLight=null;
 const COLORS=[
-  {name:'Warmweiß',  rgb:[255,147,41]},
+  {name:'Warmweiß',  rgb:[255,167,87], ct:2700},
   {name:'Neutral',   rgb:[255,213,140], ct:4000},
   {name:'Kaltweiß',  rgb:[180,210,255], ct:6000},
   {name:'Rot',       rgb:[255,30,30]},
@@ -809,7 +931,7 @@ const COLORS_RGB=[
   {name:'Weiß',   rgb:[255,255,255]},
 ];
 const PRESETS=[
-  {ico:'🌅',name:'Entspannen', desc:'Warm & gedimmt',   bri:35, ct:2700, rgb:[255,147,41]},
+  {ico:'🌅',name:'Entspannen', desc:'Warm & gedimmt',   bri:45, ct:2202, rgb:[255,146,39]},
   {ico:'📖',name:'Lesen',      desc:'Hell & neutral',   bri:90, ct:4000},
   {ico:'🎬',name:'Film',       desc:'Ambient & dunkel', bri:12, ct:2700, rgb:[255,100,20]},
   {ico:'⚡',name:'Fokus',      desc:'Kalt & hell',      bri:100,ct:5500},
@@ -953,43 +1075,60 @@ function buildLights(){
   const container=document.getElementById('lights-grid');
   let html='';
   LIGHT_ROOMS.forEach(room=>{
-    html+=`<div class="room-label">${room.room}</div><div class="lights-grid-inner">`;
-    html+=room.lights.map(l=>`
-      <div class="lt-tile" data-id="${l.id}" data-dom="${l.dom||'light'}" data-nodim="${l.nodim||false}">
-        <div class="lt-ico"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none">${l.svg}</svg></div>
-        <div><div class="lt-name">${l.name}</div><div class="lt-state">Aus</div></div>
-      </div>`).join('');
-    html+=`</div>`;
+    let pillsHtml='';
+    if(room.scenes&&room.scenes.length){
+      pillsHtml='<div class="room-scenes">'+room.scenes.map((s,i)=>
+        `<button class="scene-pill" data-room="${encodeURIComponent(room.room)}" data-scene="${i}">${s.ico} ${s.name}</button>`
+      ).join('')+'</div>';
+    }
+    html+=`<div class="room-label">${room.room}</div>${pillsHtml}<div class="lights-grid-inner">`;
+    html+=room.lights.map(l=>`<div class="lt-tile" data-id="${l.id}" data-dom="${l.dom||'light'}" data-nodim="${l.nodim||false}"><div class="lt-ico"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none">${l.svg}</svg></div><div><div class="lt-name">${l.name}</div><div class="lt-state">Aus</div></div></div>`).join('');
+    html+='</div>';
   });
   container.innerHTML=html;
+
+  container.querySelectorAll('.scene-pill').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const roomName=decodeURIComponent(btn.dataset.room);
+      const idx=+btn.dataset.scene;
+      const rm=LIGHT_ROOMS.find(x=>x.room===roomName);
+      if(rm&&rm.scenes[idx]) doRoomScene(rm.scenes[idx].steps);
+      btn.style.background='rgba(255,159,10,.25)'; btn.style.color='#ff9f0a';
+      setTimeout(()=>{btn.style.background=''; btn.style.color='';},900);
+    });
+  });
+
   container.querySelectorAll('.lt-tile').forEach(t=>{
-    const lCfg=LIGHTS.find(l=>l.id===t.dataset.id);
-    const rCfg=LIGHT_ROOMS.find(r=>r.lights.some(l=>l.id===t.dataset.id));
-    let pressTimer=null,didLong=false;
-    let _ts={x:0,y:0};
+    const lid=t.dataset.id;
+    const lCfg=LIGHT_ROOMS.flatMap(r=>r.lights).find(l=>l.id===lid);
+    const rCfg=LIGHT_ROOMS.find(r=>r.lights.some(l=>l.id===lid));
+    let pressTimer=null,didLong=false,_ts={x:0,y:0};
     t.addEventListener('touchstart',e=>{
-      didLong=false;t.classList.add('pressing');
+      didLong=false; t.classList.add('pressing');
       _ts={x:e.touches[0].clientX,y:e.touches[0].clientY};
       pressTimer=setTimeout(()=>{
-        didLong=true;t.classList.remove('pressing');
+        didLong=true; t.classList.remove('pressing');
         navigator.vibrate&&navigator.vibrate(25);
-        if(lCfg)showLightDetail(lCfg,rCfg?.room||'');
+        if(lCfg) showLightDetail(lCfg,rCfg?.room||'');
       },550);
     },{passive:true});
-    t.addEventListener('touchend',e=>{clearTimeout(pressTimer);t.classList.remove('pressing');});
+    t.addEventListener('touchend',()=>{clearTimeout(pressTimer); t.classList.remove('pressing');});
     t.addEventListener('touchmove',e=>{
       const dx=Math.abs(e.touches[0].clientX-_ts.x),dy=Math.abs(e.touches[0].clientY-_ts.y);
-      if(dx>6||dy>6){clearTimeout(pressTimer);t.classList.remove('pressing');}
+      if(dx>6||dy>6){clearTimeout(pressTimer); t.classList.remove('pressing');}
     },{passive:true});
     t.addEventListener('click',()=>{
-      if(didLong){didLong=false;return;}
-      const on=t.classList.contains('on'),dom=t.dataset.dom;
-      svc(dom,on?'turn_off':'turn_on',{entity_id:t.dataset.id});
-      t.classList.toggle('on',!on);
-      const s=t.querySelector('.lt-state');if(s)s.textContent=!on?'Ein':'Aus';
+      if(didLong){didLong=false; return;}
+      const dom=t.dataset.dom||'light';
+      const isOn=_S[lid]?.state==='on';
+      svc(dom,isOn?'turn_off':'turn_on',{entity_id:lid});
+      if(!_S[lid]) _S[lid]={state:'off',attributes:{}};
+      _S[lid].state=isOn?'off':'on';
+      updateLights();
     });
   });
 }
+
 
 // ─── WEATHER ───
 const WX_LABELS={
@@ -1148,7 +1287,7 @@ function stopSim(){
 }
 document.getElementById('all-off-btn').addEventListener('click',()=>{
   confirm('⛔ Alle Lichter aus?','Alle Lichter werden sofort ausgeschaltet.','Alle aus','red',()=>{
-    LIGHTS.forEach(l=>{
+    LIGHT_ROOMS.flatMap(r=>r.lights).forEach(l=>{
       const dom=l.dom||'light';
       svc(dom,'turn_off',{entity_id:l.id});
     });
@@ -1239,7 +1378,8 @@ setInterval(async()=>{
   const tok=getTok();if(!tok)return;
   try{
     const r=await fetch(`${HA}/api/states/${GARAGE_ID}`,{headers:{'Authorization':'Bearer '+tok}});
-    if(r.ok){const s=await r.json();_S[GARAGE_ID]=s;updateGarage();}
+    if(r.ok){const s=await r.json();_S[GARAGE_ID]=s;updateGarage();
+  updatePresence();}
   }catch(e){}
 },8000);
 }
@@ -1336,6 +1476,23 @@ document.getElementById('clawy-banner').addEventListener('click',async()=>{
 
 // ─── SZENEN SHORTCUTS ───
 const SCENE_HA_URL = 'https://schlapphome.uk';
+function doRoomScene(steps){
+  steps.forEach((s,i)=>{
+    setTimeout(()=>{
+      const dom=s.dom||(s.id.startsWith('switch.')?'switch':'light');
+      if(s.off){ svc(dom,'turn_off',{entity_id:s.id,transition:1}); }
+      else {
+        const d={entity_id:s.id,transition:1};
+        if(s.bri!==undefined) d.brightness_pct=s.bri;
+        if(s.ct)  d.color_temp_kelvin=s.ct;
+        if(s.rgb) d.rgb_color=s.rgb;
+        svc(dom,'turn_on',d);
+      }
+    },i*120);
+  });
+  showToast('Szene aktiv ✓');
+}
+
 function doFamilyScene(name){
   const SCENES={
     'abend': ()=>{

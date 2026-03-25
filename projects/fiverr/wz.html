@@ -158,7 +158,7 @@ html,body{height:100%;background:var(--bg);
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#wx-rec-pill,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#wc-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -392,6 +392,14 @@ html,body{height:100%;background:var(--bg);
   color:var(--on-dim);margin-top:4px;
   animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0}
 @keyframes greetFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes greetCursor{0%,100%{opacity:1}50%{opacity:0}}
+.hgreet-cursor{display:inline-block;width:1.5px;height:.8em;background:rgba(255,255,255,.5);border-radius:1px;vertical-align:middle;margin-left:2px;animation:greetCursor .8s ease-in-out infinite}
+.hgreet-cursor.gc-hide{display:none}
+/* ── Analog Clock Mini ── */
+#aclock-wrap{display:flex;align-items:center;gap:10px}
+#aclock{flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,159,10,.25))}
+@keyframes aclockIn{from{opacity:0;transform:scale(.6) rotate(-30deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+#aclock{animation:aclockIn .9s cubic-bezier(.34,1.28,.64,1) both;animation-delay:.15s}
 .hwx{display:flex;flex-direction:column;align-items:flex-end;gap:0;padding-top:6px;cursor:pointer}
 .hwico{width:68px;height:68px;animation:wxFloat 6s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));overflow:visible}
 @keyframes wxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -790,6 +798,9 @@ html,body{height:100%;background:var(--bg);
 #alb-tonearm-wrap{transition:transform .9s cubic-bezier(.34,1.28,.64,1),opacity .4s ease}
 #alb-tonearm-wrap.lifted{transform:rotate(-32deg);opacity:.7}
 #alb-tonearm-wrap.on-disc{transform:rotate(0deg);opacity:1}
+/* Album 3D Tilt */
+#alb-tilt-wrap{will-change:transform;transition:box-shadow .4s ease}
+#alb-tilt-wrap.tilted{box-shadow:0 24px 60px rgba(0,0,0,.55),0 8px 20px rgba(0,0,0,.35)}
 .spk-ico{position:relative;z-index:3;color:var(--on-dim);transition:color .4s}
 .spk-wrap.playing .spk-ico{color:var(--blue)}
 .spk-ring{position:absolute;border-radius:50%;border:2px solid var(--blue);opacity:0;transform:scale(1);pointer-events:none}
@@ -1400,8 +1411,37 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
         <div class="hcont">
           <div class="htop">
             <div>
-              <div class="htime" id="htime">
-                <span class="htime-h">--</span><span class="htime-sep"><i></i><i></i></span><span class="htime-m">--</span>
+              <div id="aclock-wrap">
+                <!-- Mini Analog Clock -->
+                <svg id="aclock" viewBox="0 0 44 44" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Face ring -->
+                  <circle cx="22" cy="22" r="20" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.12)" stroke-width="1.2"/>
+                  <!-- Subtle tick marks at 12/3/6/9 -->
+                  <line x1="22" y1="3.5" x2="22" y2="6.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="40.5" y1="22" x2="37.5" y2="22" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="22" y1="40.5" x2="22" y2="37.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="3.5" y1="22" x2="6.5" y2="22" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/>
+                  <!-- 12 o'clock amber dot -->
+                  <circle cx="22" cy="5" r="1.4" fill="#ff9f0a" opacity=".9"/>
+                  <!-- Hour hand -->
+                  <g id="ach-hour-g" transform="rotate(0,22,22)">
+                    <line x1="22" y1="22" x2="22" y2="11" stroke="#ff9f0a" stroke-width="2.4" stroke-linecap="round"/>
+                  </g>
+                  <!-- Minute hand -->
+                  <g id="ach-min-g" transform="rotate(0,22,22)">
+                    <line x1="22" y1="22" x2="22" y2="5.5" stroke="rgba(255,255,255,.88)" stroke-width="1.4" stroke-linecap="round"/>
+                  </g>
+                  <!-- Second hand -->
+                  <g id="ach-sec-g" transform="rotate(0,22,22)">
+                    <line x1="22" y1="25" x2="22" y2="4.5" stroke="#ff453a" stroke-width=".9" stroke-linecap="round"/>
+                  </g>
+                  <!-- Center pivot -->
+                  <circle cx="22" cy="22" r="2" fill="#ff9f0a"/>
+                  <circle cx="22" cy="22" r=".8" fill="#1c1c1e"/>
+                </svg>
+                <div class="htime" id="htime">
+                  <span class="htime-h">--</span><span class="htime-sep"><i></i><i></i></span><span class="htime-m">--</span>
+                </div>
               </div>
               <div class="hdate-wrap">
                 <div class="hdate" id="hdate">–</div>
@@ -1645,7 +1685,8 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           </svg>
         </div>
         <!-- Rotating Album Disc -->
-        <div id="alb-disc" style="position:relative;width:clamp(130px,38vw,160px);height:clamp(130px,38vw,160px);margin:14px auto 10px;flex-shrink:0">
+        <div id="alb-tilt-wrap" style="display:block;width:clamp(130px,38vw,160px);height:clamp(130px,38vw,160px);margin:14px auto 10px;flex-shrink:0;perspective:700px;transform-style:preserve-3d">
+        <div id="alb-disc" style="position:relative;width:100%;height:100%;transform-style:preserve-3d">
           <!-- Track Progress Arc -->
           <svg id="track-prog-arc-svg" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -1713,6 +1754,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
             </svg>
           </div>
         </div>
+        </div><!-- /alb-tilt-wrap -->
         <div class="np">
           <div class="nplbl">Jetzt läuft</div>
           <div class="nptitle" id="np-t">Bereit</div>
@@ -2025,6 +2067,104 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <div id="pollen-hint" style="font-size:.58rem;color:rgba(255,255,255,.3);margin-top:10px;text-align:right">Open-Meteo Air Quality</div>
         </div>
       </div>
+      <!-- Luftfeuchtigkeit Komfort-Karte -->
+      <div id="hum-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">💧 LUFTFEUCHTIGKEIT</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.1);padding:16px 18px;display:flex;align-items:center;gap:18px">
+          <div style="position:relative;flex-shrink:0;width:72px;height:72px">
+            <svg viewBox="0 0 72 72" width="72" height="72">
+              <defs>
+                <linearGradient id="humGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0a84ff" stop-opacity=".8"/>
+                  <stop offset="40%" stop-color="#30d158"/>
+                  <stop offset="72%" stop-color="#ff9f0a"/>
+                  <stop offset="100%" stop-color="#ff453a"/>
+                </linearGradient>
+              </defs>
+              <path d="M10.07 57.36 A30 30 0 1 1 61.93 57.36"
+                fill="none" stroke="rgba(255,255,255,.07)" stroke-width="5" stroke-linecap="round"/>
+              <path id="hum-fill" d="M10.07 57.36 A30 30 0 1 1 61.93 57.36"
+                fill="none" stroke="url(#humGrad)" stroke-width="5" stroke-linecap="round"
+                stroke-dasharray="188.5" stroke-dashoffset="188.5"
+                style="transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)"/>
+              <text x="36" y="34" text-anchor="middle" dominant-baseline="middle"
+                font-size="13" font-weight="700" fill="white" id="hum-svg-val">–</text>
+              <text x="36" y="47" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.35)">%</text>
+            </svg>
+          </div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap">
+              <div style="font-size:1.6rem;font-weight:200;color:#fff;letter-spacing:-1px" id="hum-val">–</div>
+              <div style="font-size:.65rem;color:rgba(255,255,255,.35)">%</div>
+              <div id="hum-level" style="font-size:.72rem;font-weight:600;margin-left:4px"></div>
+            </div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.38);margin-top:4px;line-height:1.4" id="hum-desc">–</div>
+            <div style="font-size:.6rem;color:rgba(255,255,255,.22);margin-top:5px">Taupunkt: <span id="hum-dew" style="color:rgba(255,255,255,.4)">–</span></div>
+            <div style="margin-top:10px;height:3px;border-radius:2px;background:rgba(255,255,255,.06)">
+              <div id="hum-bar" style="height:100%;border-radius:2px;background:linear-gradient(90deg,#0a84ff,#30d158,#ff9f0a,#ff453a);transition:width 1.4s ease;width:0%"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px">
+              <span style="font-size:.5rem;color:rgba(255,255,255,.2)">0%</span>
+              <span style="font-size:.5rem;color:rgba(255,255,255,.2)">30%</span>
+              <span style="font-size:.5rem;color:rgba(255,255,255,.2)">60%</span>
+              <span style="font-size:.5rem;color:rgba(255,255,255,.2)">100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Sichtweite & Bewölkung -->
+      <div id="vis-cloud-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">👁 SICHTWEITE · ☁️ BEWÖLKUNG</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.1);padding:16px 18px;display:flex;align-items:center;gap:14px">
+          <!-- Sichtweite Gauge -->
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="position:relative;width:72px;height:72px">
+              <svg viewBox="0 0 72 72" width="72" height="72">
+                <defs>
+                  <linearGradient id="visGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ff453a" stop-opacity=".8"/>
+                    <stop offset="40%" stop-color="#ff9f0a"/>
+                    <stop offset="75%" stop-color="#30d158"/>
+                    <stop offset="100%" stop-color="#0a84ff"/>
+                  </linearGradient>
+                </defs>
+                <path d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="5" stroke-linecap="round"/>
+                <path id="vis-fill" d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="url(#visGrad)" stroke-width="5" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5" style="transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)"/>
+                <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="700" fill="white" id="vis-svg-val">–</text>
+                <text x="36" y="46" text-anchor="middle" font-size="6" fill="rgba(255,255,255,.35)" id="vis-svg-unit">km</text>
+              </svg>
+            </div>
+            <div style="text-align:center">
+              <div id="vis-label" style="font-size:.65rem;font-weight:600;margin-bottom:2px">–</div>
+              <div style="font-size:.55rem;color:rgba(255,255,255,.25)">Sichtweite</div>
+            </div>
+          </div>
+          <!-- Trennlinie -->
+          <div style="width:1px;height:80px;background:rgba(255,255,255,.07);flex-shrink:0"></div>
+          <!-- Bewölkung Gauge -->
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="position:relative;width:72px;height:72px">
+              <svg viewBox="0 0 72 72" width="72" height="72">
+                <defs>
+                  <linearGradient id="cldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#30d158" stop-opacity=".8"/>
+                    <stop offset="45%" stop-color="#0a84ff"/>
+                    <stop offset="100%" stop-color="rgba(255,255,255,.6)"/>
+                  </linearGradient>
+                </defs>
+                <path d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="5" stroke-linecap="round"/>
+                <path id="cld-fill" d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="url(#cldGrad)" stroke-width="5" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5" style="transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)"/>
+                <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="white" id="cld-svg-val">–</text>
+                <text x="36" y="46" text-anchor="middle" font-size="6" fill="rgba(255,255,255,.35)">%</text>
+              </svg>
+            </div>
+            <div style="text-align:center">
+              <div id="cld-label" style="font-size:.65rem;font-weight:600;margin-bottom:2px">–</div>
+              <div style="font-size:.55rem;color:rgba(255,255,255,.25)">Bewölkung</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- Goldene Stunde -->
       <div id="golden-hour-card" style="display:none;margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,159,10,.55);text-transform:uppercase;margin-bottom:8px">🌅 GOLDENE STUNDE</div>
@@ -2070,6 +2210,44 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           </div>
         </div>
       </div>
+      <!-- Wetter-Score -->
+      <div id="wx-score-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,159,10,.55);text-transform:uppercase;margin-bottom:8px">🎯 WETTER-SCORE HEUTE</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,159,10,.18);border-top-color:rgba(255,159,10,.3);padding:16px 18px;display:flex;align-items:center;gap:18px">
+          <div style="position:relative;flex-shrink:0;width:80px;height:80px">
+            <svg viewBox="0 0 80 80" width="80" height="80">
+              <defs>
+                <linearGradient id="wxScoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff453a"/>
+                  <stop offset="40%" stop-color="#ff9f0a"/>
+                  <stop offset="75%" stop-color="#30d158"/>
+                  <stop offset="100%" stop-color="#34c8e8"/>
+                </linearGradient>
+              </defs>
+              <!-- Track -->
+              <path d="M11 65 A33 33 0 1 1 69 65"
+                fill="none" stroke="rgba(255,255,255,.07)" stroke-width="6" stroke-linecap="round"/>
+              <!-- Fill -->
+              <path id="wx-score-fill" d="M11 65 A33 33 0 1 1 69 65"
+                fill="none" stroke="url(#wxScoreGrad)" stroke-width="6" stroke-linecap="round"
+                stroke-dasharray="207.3" stroke-dashoffset="207.3"
+                style="transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)"/>
+              <text x="40" y="38" text-anchor="middle" dominant-baseline="middle"
+                font-size="16" font-weight="800" fill="white" id="wx-score-num">–</text>
+              <text x="40" y="52" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.35)">/100</text>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:3px" id="wx-score-label">–</div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.38);line-height:1.4;margin-bottom:10px" id="wx-score-desc">–</div>
+            <div style="height:3px;border-radius:2px;background:rgba(255,255,255,.06)">
+              <div id="wx-score-bar" style="height:100%;border-radius:2px;background:linear-gradient(90deg,#ff453a,#ff9f0a,#30d158);transition:width 1.6s ease;width:0%"></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:7px;flex-wrap:wrap" id="wx-score-chips"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Mondphase -->
       <div id="moon-card" style="margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">🌙 MONDPHASE</div>
@@ -2197,21 +2375,21 @@ const CFG = {
     // nodim:true = kein Dimmer/Farbe (onoff only)
     // norgb:true = kein RGB Farbrad (nur color_temp)
     {id:'light.h61e1',     name:'Wand',       lc:'251,191,36',
-     svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+     svg:'<path d="M6.33,12.5c0.41-0.09,0.8,0.17,0.89,0.58c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57 C5.67,12.99,5.93,12.59,6.33,12.5 M10,11.71c0.4-0.09,0.8,0.17,0.89,0.57c0.09,0.41-0.17,0.8-0.57,0.89 C9.91,13.26,9.51,13,9.42,12.6C9.33,12.2,9.59,11.8,10,11.71 M13.66,10.92c0.41-0.09,0.8,0.17,0.89,0.57 c0.09,0.41-0.17,0.8-0.57,0.89c-0.4,0.09-0.8-0.17-0.89-0.57C13,11.4,13.25,11,13.66,10.92 M17.32,10.12 c0.41-0.09,0.8,0.17,0.89,0.57c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57C16.66,10.61,16.92,10.21,17.32,10.12 M8,15.48l11.1-2.4c0.81-0.17,1.32-0.97,1.15-1.78c-0.42-1.94-2.33-3.17-4.26-2.75L4.89,10.95c-0.81,0.18-1.32,0.97-1.15,1.78 C4.16,14.66,6.07,15.9,8,15.48 M18.75,19.5c-0.41,0-0.75-0.34-0.75-0.75S18.34,18,18.75,18s0.75,0.34,0.75,0.75 S19.16,19.5,18.75,19.5 M15,19.5c-0.41,0-0.75-0.34-0.75-0.75S14.59,18,15,18s0.75,0.34,0.75,0.75S15.41,19.5,15,19.5 M11.25,19.5 c-0.41,0-0.75-0.34-0.75-0.75S10.84,18,11.25,18S12,18.34,12,18.75S11.66,19.5,11.25,19.5 M7.5,19.5c-0.41,0-0.75-0.34-0.75-0.75 S7.09,18,7.5,18s0.75,0.34,0.75,0.75S7.91,19.5,7.5,19.5 M20.25,16.5H6.75c-3,0-3.75-2.25-3.75-3v3.75C3,19.32,4.68,21,6.75,21h13.5 c0.41,0,0.75-0.34,0.75-0.75v-3C21,16.84,20.66,16.5,20.25,16.5 M16.5,6c-0.41,0-0.75-0.34-0.75-0.75S16.09,4.5,16.5,4.5 s0.75,0.34,0.75,0.75S16.91,6,16.5,6 M12.75,6C12.34,6,12,5.66,12,5.25s0.34-0.75,0.75-0.75s0.75,0.34,0.75,0.75S13.16,6,12.75,6 M9,6C8.59,6,8.25,5.66,8.25,5.25S8.59,4.5,9,4.5s0.75,0.34,0.75,0.75S9.41,6,9,6 M5.25,6C4.84,6,4.5,5.66,4.5,5.25 S4.84,4.5,5.25,4.5S6,4.84,6,5.25S5.66,6,5.25,6 M17.25,3H3.75C3.34,3,3,3.34,3,3.75v3C3,7.16,3.34,7.5,3.75,7.5h13.5 c3,0,3.75,2.25,3.75,3V6.75C21,4.68,19.32,3,17.25,3"/>'},
     {id:'light.h618a',     name:'Sofa',       lc:'245,158,11',
-     svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
+     svg:'<path d="M6.33,12.5c0.41-0.09,0.8,0.17,0.89,0.58c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57 C5.67,12.99,5.93,12.59,6.33,12.5 M10,11.71c0.4-0.09,0.8,0.17,0.89,0.57c0.09,0.41-0.17,0.8-0.57,0.89 C9.91,13.26,9.51,13,9.42,12.6C9.33,12.2,9.59,11.8,10,11.71 M13.66,10.92c0.41-0.09,0.8,0.17,0.89,0.57 c0.09,0.41-0.17,0.8-0.57,0.89c-0.4,0.09-0.8-0.17-0.89-0.57C13,11.4,13.25,11,13.66,10.92 M17.32,10.12 c0.41-0.09,0.8,0.17,0.89,0.57c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57C16.66,10.61,16.92,10.21,17.32,10.12 M8,15.48l11.1-2.4c0.81-0.17,1.32-0.97,1.15-1.78c-0.42-1.94-2.33-3.17-4.26-2.75L4.89,10.95c-0.81,0.18-1.32,0.97-1.15,1.78 C4.16,14.66,6.07,15.9,8,15.48 M18.75,19.5c-0.41,0-0.75-0.34-0.75-0.75S18.34,18,18.75,18s0.75,0.34,0.75,0.75 S19.16,19.5,18.75,19.5 M15,19.5c-0.41,0-0.75-0.34-0.75-0.75S14.59,18,15,18s0.75,0.34,0.75,0.75S15.41,19.5,15,19.5 M11.25,19.5 c-0.41,0-0.75-0.34-0.75-0.75S10.84,18,11.25,18S12,18.34,12,18.75S11.66,19.5,11.25,19.5 M7.5,19.5c-0.41,0-0.75-0.34-0.75-0.75 S7.09,18,7.5,18s0.75,0.34,0.75,0.75S7.91,19.5,7.5,19.5 M20.25,16.5H6.75c-3,0-3.75-2.25-3.75-3v3.75C3,19.32,4.68,21,6.75,21h13.5 c0.41,0,0.75-0.34,0.75-0.75v-3C21,16.84,20.66,16.5,20.25,16.5 M16.5,6c-0.41,0-0.75-0.34-0.75-0.75S16.09,4.5,16.5,4.5 s0.75,0.34,0.75,0.75S16.91,6,16.5,6 M12.75,6C12.34,6,12,5.66,12,5.25s0.34-0.75,0.75-0.75s0.75,0.34,0.75,0.75S13.16,6,12.75,6 M9,6C8.59,6,8.25,5.66,8.25,5.25S8.59,4.5,9,4.5s0.75,0.34,0.75,0.75S9.41,6,9,6 M5.25,6C4.84,6,4.5,5.66,4.5,5.25 S4.84,4.5,5.25,4.5S6,4.84,6,5.25S5.66,6,5.25,6 M17.25,3H3.75C3.34,3,3,3.34,3,3.75v3C3,7.16,3.34,7.5,3.75,7.5h13.5 c3,0,3.75,2.25,3.75,3V6.75C21,4.68,19.32,3,17.25,3"/>'},
     {id:'light.h618a_2',   name:'Küche',      lc:'251,146,60',
-     svg:'<path d="M4 10h16M8 10V7a4 4 0 0 1 8 0v3"/><rect x="4" y="10" width="16" height="4" rx="2"/><path d="M4 14v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1"/>'},
+     svg:'<path d="M6.33,12.5c0.41-0.09,0.8,0.17,0.89,0.58c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57 C5.67,12.99,5.93,12.59,6.33,12.5 M10,11.71c0.4-0.09,0.8,0.17,0.89,0.57c0.09,0.41-0.17,0.8-0.57,0.89 C9.91,13.26,9.51,13,9.42,12.6C9.33,12.2,9.59,11.8,10,11.71 M13.66,10.92c0.41-0.09,0.8,0.17,0.89,0.57 c0.09,0.41-0.17,0.8-0.57,0.89c-0.4,0.09-0.8-0.17-0.89-0.57C13,11.4,13.25,11,13.66,10.92 M17.32,10.12 c0.41-0.09,0.8,0.17,0.89,0.57c0.09,0.4-0.17,0.8-0.57,0.89c-0.41,0.09-0.8-0.17-0.89-0.57C16.66,10.61,16.92,10.21,17.32,10.12 M8,15.48l11.1-2.4c0.81-0.17,1.32-0.97,1.15-1.78c-0.42-1.94-2.33-3.17-4.26-2.75L4.89,10.95c-0.81,0.18-1.32,0.97-1.15,1.78 C4.16,14.66,6.07,15.9,8,15.48 M18.75,19.5c-0.41,0-0.75-0.34-0.75-0.75S18.34,18,18.75,18s0.75,0.34,0.75,0.75 S19.16,19.5,18.75,19.5 M15,19.5c-0.41,0-0.75-0.34-0.75-0.75S14.59,18,15,18s0.75,0.34,0.75,0.75S15.41,19.5,15,19.5 M11.25,19.5 c-0.41,0-0.75-0.34-0.75-0.75S10.84,18,11.25,18S12,18.34,12,18.75S11.66,19.5,11.25,19.5 M7.5,19.5c-0.41,0-0.75-0.34-0.75-0.75 S7.09,18,7.5,18s0.75,0.34,0.75,0.75S7.91,19.5,7.5,19.5 M20.25,16.5H6.75c-3,0-3.75-2.25-3.75-3v3.75C3,19.32,4.68,21,6.75,21h13.5 c0.41,0,0.75-0.34,0.75-0.75v-3C21,16.84,20.66,16.5,20.25,16.5 M16.5,6c-0.41,0-0.75-0.34-0.75-0.75S16.09,4.5,16.5,4.5 s0.75,0.34,0.75,0.75S16.91,6,16.5,6 M12.75,6C12.34,6,12,5.66,12,5.25s0.34-0.75,0.75-0.75s0.75,0.34,0.75,0.75S13.16,6,12.75,6 M9,6C8.59,6,8.25,5.66,8.25,5.25S8.59,4.5,9,4.5s0.75,0.34,0.75,0.75S9.41,6,9,6 M5.25,6C4.84,6,4.5,5.66,4.5,5.25 S4.84,4.5,5.25,4.5S6,4.84,6,5.25S5.66,6,5.25,6 M17.25,3H3.75C3.34,3,3,3.34,3,3.75v3C3,7.16,3.34,7.5,3.75,7.5h13.5 c3,0,3.75,2.25,3.75,3V6.75C21,4.68,19.32,3,17.25,3"/>'},
     {id:'light.garten_licht',name:'Fassade',  lc:'255,230,120',nodim:true,
-     svg:'<path d="M12 2v4M4.93 4.93l2.83 2.83M2 12h4M4.93 19.07l2.83-2.83M12 22v-4M19.07 19.07l-2.83-2.83M22 12h-4M19.07 4.93l-2.83 2.83"/><circle cx="12" cy="12" r="4"/>'},
+     svg:'<path d="M15.75,9.38c0,0.62-1.68,1.12-3.75,1.12S8.25,10,8.25,9.38V6.22c0-0.18,0.2-0.28,0.35-0.18 C9.2,6.42,10.5,6.75,12,6.75s2.8-0.33,3.4-0.71c0.15-0.1,0.35,0,0.35,0.18V9.38z M10.01,3.96c1.2-0.28,3.04-0.28,4.16,0 c1.14,0.29,1.12,0.76-0.09,1.06c-1.23,0.31-3.19,0.31-4.32,0C8.65,4.72,8.78,4.24,10.01,3.96z M15.25,3.36 C14.41,3.12,13.3,3,12.17,3c-1.12,0-2.27,0.12-3.16,0.36C8.02,3.62,7.5,3.98,7.5,4.34v15.42c0,0.3,0.38,0.6,1.14,0.84 c0.86,0.26,2.01,0.4,3.19,0.4c1.18,0,2.37-0.14,3.29-0.4S16.5,20,16.5,19.66V4.24C16.5,3.91,16.08,3.6,15.25,3.36z"/>'},
     {id:'light.gang_eg_licht',name:'Gang EG', lc:'255,220,160',nodim:true,
-     svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
+     svg:'<path d="M20.98,16.37l-2.16-9.58c-0.34-1.51-1.79-2.46-3.29-2.24l-0.59-0.88C14.67,3.25,14.2,3,13.7,3h-0.95 C12.34,3,12,3.34,12,3.75v1.5h-1.5v-4.5C10.5,0.34,10.16,0,9.75,0S9,0.34,9,0.75V9H6V7.5c0-0.41-0.34-0.75-0.75-0.75 S4.5,7.09,4.5,7.5v2.25c0,0.41,0.34,0.75,0.75,0.75H9v11.25H6c-0.83,0-1.5,0.67-1.5,1.5C4.5,23.66,4.84,24,5.25,24h9 c0.41,0,0.75-0.34,0.75-0.75c0-0.83-0.67-1.5-1.5-1.5h-3v-15H12v12c0,0.41,0.34,0.75,0.75,0.75h1c1.55,0,2.71-1.42,2.41-2.94 L15.25,12l0.83-3.73l1.97,8.76c0.09,0.4,0.49,0.66,0.9,0.57l1.46-0.33C20.82,17.17,21.07,16.77,20.98,16.37"/>'},
     {id:'light.gang_og_licht',name:'Gang OG', lc:'255,220,160',nodim:true,
-     svg:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
+     svg:'<path d="M20.98,16.37l-2.16-9.58c-0.34-1.51-1.79-2.46-3.29-2.24l-0.59-0.88C14.67,3.25,14.2,3,13.7,3h-0.95 C12.34,3,12,3.34,12,3.75v1.5h-1.5v-4.5C10.5,0.34,10.16,0,9.75,0S9,0.34,9,0.75V9H6V7.5c0-0.41-0.34-0.75-0.75-0.75 S4.5,7.09,4.5,7.5v2.25c0,0.41,0.34,0.75,0.75,0.75H9v11.25H6c-0.83,0-1.5,0.67-1.5,1.5C4.5,23.66,4.84,24,5.25,24h9 c0.41,0,0.75-0.34,0.75-0.75c0-0.83-0.67-1.5-1.5-1.5h-3v-15H12v12c0,0.41,0.34,0.75,0.75,0.75h1c1.55,0,2.71-1.42,2.41-2.94 L15.25,12l0.83-3.73l1.97,8.76c0.09,0.4,0.49,0.66,0.9,0.57l1.46-0.33C20.82,17.17,21.07,16.77,20.98,16.37"/>'},
     {id:'light.hue_play_l',name:'Büro Hue',  lc:'167,139,250',norgb:true,
-     svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/>'},
+     svg:'<path d="M21.73,14.5c-1.6,0.79-3.17,0.2-4.22-0.21C16.65,13.95,2.16,7.97,2.16,7.97s-1.34-0.6,0.12-1.13 c1.8-0.66,3.25-0.11,4.93,0.56c1.06,0.43,14.13,5.67,14.13,5.67S23.33,13.71,21.73,14.5z M23.24,13.83 c-0.01-0.36-0.2-1.01-1.27-1.45L6.51,6.17C5.85,5.9,4.83,5.74,3.83,5.74c-0.51,0-1.25,0.05-1.84,0.27c-1.04,0.4-1.25,1-1.27,1.35 l-0.01,0l-0.01,4.27l0,0c0.02,0.34,0.21,0.89,1.1,1.27l15.88,6.53c0.6,0.25,1.38,0.4,2.21,0.4c0.83,0,1.61-0.14,2.2-0.4 c1.02-0.45,1.16-1.1,1.16-1.45L23.24,13.83L23.24,13.83z"/>'},
     {id:'switch.shelly1_98cdac0ca9b2',name:'Wandlampe',lc:'255,200,120',nodim:true,domain:'switch',
-     svg:'<path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/><line x1="12" y1="17" x2="12" y2="21"/>'},
+     svg:'<path d="M16.33,18.41c-0.99-0.32-2.43-0.32-3.41,0l-0.82-5.82c1.61,0.2,3.44,0.2,5.05,0L16.33,18.41z M19.19,9.57 c-1.17-0.35-2.7-0.54-4.25-0.56C14.58,6.46,12.39,4.5,9.75,4.5c-1.16,0-2.22,0.38-3.09,1.02C6.6,5.03,6.52,4.57,6.4,4.17 C6.21,3.5,5.97,3.12,5.72,3.03C5.68,3.01,5.63,3,5.59,3H4.16C4.12,3,4.07,3.01,4.03,3.03c-0.26,0.1-0.5,0.51-0.7,1.22 c-0.44,1.6-0.44,4.16,0,5.76c0.2,0.71,0.44,1.12,0.7,1.21c0.04,0.02,0.09,0.03,0.13,0.03h1.43c0.04,0,0.09-0.01,0.13-0.03 c0.25-0.1,0.49-0.48,0.68-1.14c0.21-0.75,0.33-1.72,0.34-2.7C7.45,6.48,8.53,5.9,9.75,5.9c1.88,0,3.44,1.35,3.78,3.13 c-1.27,0.07-2.49,0.24-3.47,0.54c-2.47,0.75-2.39,1.93,0.12,2.65c0.11,0.03,0.25,0.05,0.37,0.09l1.08,7.68 c0.09,0.34,0.62,0.75,1.86,0.93c0.38,0.05,0.76,0.08,1.14,0.08c0.38,0,0.77-0.03,1.14-0.08c1.23-0.18,1.74-0.59,1.86-0.93l1.08-7.69 c0.12-0.03,0.25-0.05,0.37-0.09C21.58,11.5,21.66,10.31,19.19,9.57z"/>'},
   ],
   devs:[
     {id:'media_player.lg_webos_tv_oled65g49ls_2', name:'LG OLED TV', domain:'media_player',
@@ -2807,7 +2985,7 @@ let _wx=null;
 async function fetchWeather(){
   try{
     const u=`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CFG.lon}`+
-      `&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day,surface_pressure`+
+      `&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day,surface_pressure,visibility,cloud_cover`+
       `&hourly=temperature_2m,weather_code,precipitation_probability,precipitation`+
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,precipitation_sum,uv_index_max`+
       `&forecast_days=7&timezone=Europe%2FZurich&models=best_match`;
@@ -3136,7 +3314,10 @@ function renderWeather(){
   drawTempCurve();
   drawMoonPhase();
   drawBarometer();
+  drawHumidity();
+  updateWxScore();
   drawWindChill();
+  drawVisCloud();
   drawGoldenHour();
   drawBestHour();
   if(window.updateWxPrecipCanvas) updateWxPrecipCanvas(code, night);
@@ -3436,6 +3617,130 @@ function drawBarometer(){
 }
 
 // ═══════════════════════════════════════════════
+// LUFTFEUCHTIGKEIT KOMFORT-KARTE
+// ═══════════════════════════════════════════════
+function drawHumidity(){
+  const card=document.getElementById('hum-card');
+  if(!card||!_wx?.current) return;
+  const rh=_wx.current.relative_humidity_2m;
+  const t=_wx.current.temperature_2m;
+  if(rh==null){ card.style.display='none'; return; }
+  card.style.display='';
+
+  const valEl=document.getElementById('hum-val');
+  const svgValEl=document.getElementById('hum-svg-val');
+  const levelEl=document.getElementById('hum-level');
+  const descEl=document.getElementById('hum-desc');
+  const dewEl=document.getElementById('hum-dew');
+  const barEl=document.getElementById('hum-bar');
+  const fillEl=document.getElementById('hum-fill');
+
+  const rounded=Math.round(rh);
+  if(valEl) valEl.textContent=rounded;
+  if(svgValEl) svgValEl.textContent=rounded;
+
+  // Komfort-Stufen
+  let level='', desc='', color='rgba(255,255,255,.5)';
+  if(rh<20){
+    level='🏜 Sehr trocken'; color='#0a84ff';
+    desc='Schleimhäute können austrocknen — Luftbefeuchter empfohlen';
+  } else if(rh<30){
+    level='💨 Trocken'; color='#5ac8fa';
+    desc='Etwas niedrige Luftfeuchtigkeit — leichte Reizungen möglich';
+  } else if(rh<60){
+    level='✅ Optimal'; color='#30d158';
+    desc='Ideale Luftfeuchtigkeit — angenehmes Raumklima';
+  } else if(rh<75){
+    level='🌫 Feucht'; color='#ff9f0a';
+    desc='Erhöhte Luftfeuchtigkeit — regelmässiges Lüften empfohlen';
+  } else {
+    level='💦 Sehr feucht'; color='#ff453a';
+    desc='Risiko für Schimmelbildung — sofort lüften oder entfeuchten';
+  }
+  if(levelEl){ levelEl.textContent=level; levelEl.style.color=color; }
+  if(descEl) descEl.textContent=desc;
+
+  // Taupunkt via Magnus-Formel
+  if(dewEl && t!=null){
+    const a=17.625, b=243.04;
+    const lnRH=Math.log(Math.max(0.01,rh)/100);
+    const alpha=lnRH+(a*t/(b+t));
+    const dew=(b*alpha/(a-alpha));
+    dewEl.textContent=dew.toFixed(1)+'°C';
+  }
+
+  // Arc-Animation: 0–100% → dashoffset 188.5→0
+  const ARC_LEN=188.5;
+  const pct=Math.max(0,Math.min(1,rh/100));
+  if(fillEl) fillEl.style.strokeDashoffset=(ARC_LEN*(1-pct)).toFixed(2);
+  if(barEl) barEl.style.width=(pct*100).toFixed(1)+'%';
+}
+
+// ═══════════════════════════════════════════════
+// SICHTWEITE & BEWÖLKUNG KARTE
+// ═══════════════════════════════════════════════
+function drawVisCloud(){
+  const card=document.getElementById('vis-cloud-card');
+  if(!card||!_wx?.current) return;
+  const vis_m=_wx.current.visibility;     // metres
+  const cloud=_wx.current.cloud_cover;    // 0–100 %
+  if(vis_m==null && cloud==null){ card.style.display='none'; return; }
+  card.style.display='';
+
+  const ARC_LEN=188.5;
+
+  // ── Sichtweite ──
+  if(vis_m!=null){
+    const vis_km=vis_m/1000;
+    const visValEl=document.getElementById('vis-svg-val');
+    const visUnitEl=document.getElementById('vis-svg-unit');
+    const visLblEl=document.getElementById('vis-label');
+    const visFill=document.getElementById('vis-fill');
+
+    // Display: if <1km show meters, else km
+    let dispVal, dispUnit;
+    if(vis_km<1){ dispVal=Math.round(vis_m); dispUnit='m'; }
+    else { dispVal=vis_km>=10?Math.round(vis_km):vis_km.toFixed(1); dispUnit='km'; }
+    if(visValEl) visValEl.textContent=dispVal;
+    if(visUnitEl) visUnitEl.textContent=dispUnit;
+
+    // Pct: 0=0m, 1=50km (max practical)
+    const MAX_VIS=50000;
+    const pct=Math.max(0,Math.min(1,vis_m/MAX_VIS));
+    if(visFill) visFill.style.strokeDashoffset=(ARC_LEN*(1-pct)).toFixed(2);
+
+    // Label + Farbe
+    let lbl='', lc='rgba(255,255,255,.5)';
+    if(vis_m<200){ lbl='🌫 Dichter Nebel'; lc='#ff453a'; }
+    else if(vis_m<1000){ lbl='🌫 Nebel'; lc='#ff9f0a'; }
+    else if(vis_m<4000){ lbl='😶‍🌫️ Dunstig'; lc='#ffd60a'; }
+    else if(vis_m<10000){ lbl='👁 Mässig'; lc='#5ac8fa'; }
+    else if(vis_m<30000){ lbl='👁 Gut'; lc='#30d158'; }
+    else { lbl='🔭 Ausgezeichnet'; lc='#0a84ff'; }
+    if(visLblEl){ visLblEl.textContent=lbl; visLblEl.style.color=lc; }
+  }
+
+  // ── Bewölkung ──
+  if(cloud!=null){
+    const cldValEl=document.getElementById('cld-svg-val');
+    const cldLblEl=document.getElementById('cld-label');
+    const cldFill=document.getElementById('cld-fill');
+
+    if(cldValEl) cldValEl.textContent=Math.round(cloud);
+    const pct=Math.max(0,Math.min(1,cloud/100));
+    if(cldFill) cldFill.style.strokeDashoffset=(ARC_LEN*(1-pct)).toFixed(2);
+
+    let lbl='', lc='rgba(255,255,255,.5)';
+    if(cloud<12){ lbl='☀️ Klar'; lc='#ffd60a'; }
+    else if(cloud<30){ lbl='🌤 Heiter'; lc='#ff9f0a'; }
+    else if(cloud<60){ lbl='⛅ Wolkig'; lc='#5ac8fa'; }
+    else if(cloud<85){ lbl='🌥 Stark bewölkt'; lc='#8e8e93'; }
+    else { lbl='☁️ Bedeckt'; lc='rgba(255,255,255,.5)'; }
+    if(cldLblEl){ cldLblEl.textContent=lbl; cldLblEl.style.color=lc; }
+  }
+}
+
+// ═══════════════════════════════════════════════
 // GOLDENE STUNDE
 // ═══════════════════════════════════════════════
 function drawGoldenHour(){
@@ -3595,6 +3900,94 @@ function drawBestHour(){
     chip(bTemp+'°C',''+tempColor)+
     chip('🌧 '+bPrec+'%',precColor)+
     chip('💨 '+bWind+' km/h',windColor);
+}
+
+// ═══════════════════════════════════════════════
+// WETTER-SCORE (aktueller Score 0–100)
+// ═══════════════════════════════════════════════
+function updateWxScore(){
+  const card=document.getElementById('wx-score-card');
+  if(!card||!_wx||!_wx.current) return;
+  const c=_wx.current;
+  const h=_wx.hourly||{};
+
+  // Aktuelle Stunde
+  const nowH=new Date().getHours();
+  const precs=h.precipitation_probability||[];
+  const precNow=precs[nowH]??50;
+
+  const temp=c.temperature_2m??15;
+  const wind=c.wind_speed_10m??10;
+  const wmo=c.weather_code??0;
+  const uv=c.uv_index??0;
+
+  // Score-Berechnung (0–100)
+  // 1. Temperatur-Komfort (Peak bei 20°C, max 30 Pkt)
+  const tDiff=Math.abs(temp-20);
+  const tempScore=Math.max(0, 30 - tDiff * 1.5);
+
+  // 2. Niederschlag (0%=25 Pkt, 100%=0 Pkt)
+  const precipScore=Math.round((1 - precNow/100) * 25);
+
+  // 3. Wind (0=25 Pkt, 60km/h=0)
+  const windScore=Math.max(0, 25 - (wind/60)*25);
+
+  // 4. WMO-Code (klarer Himmel=20, Regen=-5, Schnee=-10)
+  let wmoScore=0;
+  if(wmo<=1) wmoScore=20;
+  else if(wmo<=3) wmoScore=14;
+  else if(wmo<=45) wmoScore=8;
+  else if(wmo<=55) wmoScore=2;
+  else if(wmo<=69) wmoScore=-5;
+  else wmoScore=-5;
+
+  const raw=tempScore+precipScore+windScore+wmoScore;
+  const score=Math.min(100, Math.max(0, Math.round(raw)));
+
+  // Gauges
+  const CIRCUMFERENCE=207.3;
+  const fill=document.getElementById('wx-score-fill');
+  const numEl=document.getElementById('wx-score-num');
+  const labelEl=document.getElementById('wx-score-label');
+  const descEl=document.getElementById('wx-score-desc');
+  const barEl=document.getElementById('wx-score-bar');
+  const chipsEl=document.getElementById('wx-score-chips');
+  if(!fill) return;
+
+  setTimeout(()=>{
+    fill.style.strokeDashoffset=CIRCUMFERENCE*(1-score/100);
+  },200);
+  if(numEl) numEl.textContent=score;
+  if(barEl) barEl.style.width=score+'%';
+
+  // Label & Beschreibung
+  let label='', desc='';
+  if(score>=85){ label='☀️ Herrliches Wetter'; desc='Perfekter Tag für alle Outdoor-Aktivitäten. Unbedingt raus!'; }
+  else if(score>=68){ label='🌤 Angenehmes Wetter'; desc='Gute Bedingungen — leichte Einschränkungen möglich.'; }
+  else if(score>=50){ label='⛅ Durchschnittlich'; desc='Weder schlecht noch ideal. Kurze Ausflüge machbar.'; }
+  else if(score>=30){ label='🌦 Eher ungünstig'; desc='Wechselhaft oder ungemütlich — besser drinnen planen.'; }
+  else { label='🌧 Drinnen bleiben'; desc='Ungünstige Bedingungen heute. Gemütlicher Innen-Tag!'; }
+
+  if(labelEl) labelEl.textContent=label;
+  if(descEl) descEl.textContent=desc;
+
+  // Chips (Unterpunkte)
+  if(chipsEl){
+    const chip=(icon, val, ok)=>{
+      const col=ok?'48,209,88':ok===null?'255,159,10':'255,69,58';
+      return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;background:rgba(${col},.13);border:1px solid rgba(${col},.3);font-size:.6rem;font-weight:600;color:rgba(${col},1)">${icon} ${val}</span>`;
+    };
+    const tempOk=temp>=15&&temp<=26;
+    const precipOk=precNow<20?true:precNow<50?null:false;
+    const windOk=wind<20?true:wind<40?null:false;
+    chipsEl.innerHTML=
+      chip('🌡',Math.round(temp)+'°C', tempOk)+
+      chip('🌧',precNow+'%', precipOk)+
+      chip('💨',Math.round(wind)+' km/h', windOk)+
+      (uv>0?chip('☀️','UV '+Math.round(uv), uv<3?true:uv<7?null:false):'');
+  }
+
+  card.style.display='block';
 }
 
 // ═══════════════════════════════════════════════
@@ -5471,6 +5864,26 @@ function updateDayArc(){
   dot.style.filter=`drop-shadow(0 0 5px ${dc})`;if(dotGlow)dotGlow.setAttribute('fill',dc.replace(')',',0.25)').replace('#','rgba(0,0,0,'));
   if(lbl)lbl.textContent=lab;
 }
+// ── Typewriter Greeting ──
+function typeGreet(el,text){
+  if(window._greetTmr)clearTimeout(window._greetTmr);
+  el.innerHTML='';
+  const cur=document.createElement('span');
+  cur.className='hgreet-cursor';
+  el.appendChild(cur);
+  let i=0;
+  function step(){
+    if(i<text.length){
+      el.insertBefore(document.createTextNode(text[i]),cur);
+      i++;
+      window._greetTmr=setTimeout(step,i<2?0:40);
+    }else{
+      setTimeout(()=>{cur.classList.add('gc-hide');},900);
+    }
+  }
+  step();
+}
+
 function updateClock(){
   const n=new Date();
   const h=String(n.getHours()).padStart(2,'0');
@@ -5491,8 +5904,21 @@ function updateClock(){
   // ── Time-of-day hero gradient ──
   updateHeroGradient(n.getHours(), n.getMinutes());
   const hgreet=document.getElementById('hgreet');
-  if(hgreet)hgreet.textContent=getGreeting(n.getHours());
+  if(hgreet){const g=getGreeting(n.getHours());if(!window._greetTyped){window._greetTyped=true;window._greetLast=g;typeGreet(hgreet,g);}else if(g!==window._greetLast){window._greetLast=g;typeGreet(hgreet,g);}}
   updateDayArc();
+  // ── Analog clock hands ──
+  (function(){
+    const sec=n.getSeconds(), min=n.getMinutes(), hr=n.getHours()%12;
+    const secDeg=sec*6;
+    const minDeg=min*6+sec*.1;
+    const hrDeg=hr*30+min*.5;
+    const hg=document.getElementById('ach-hour-g');
+    const mg=document.getElementById('ach-min-g');
+    const sg=document.getElementById('ach-sec-g');
+    if(hg)hg.setAttribute('transform',`rotate(${hrDeg},22,22)`);
+    if(mg)mg.setAttribute('transform',`rotate(${minDeg},22,22)`);
+    if(sg)sg.setAttribute('transform',`rotate(${secDeg},22,22)`);
+  })();
 }
 function startClock(){
   updateClock();
@@ -7804,6 +8230,56 @@ const _origSetWxMode=setWxMode;
   // hook into existing updateAll / music update
   window._specShow=show;
 
+  // 3D Perspective Tilt on Album Disc (gyroscope mobile / mouse desktop)
+  (function(){
+    const wrap=document.getElementById('alb-tilt-wrap');
+    const album=document.querySelector('.album');
+    if(!wrap||!album) return;
+    const MAX=9;
+    let tX=0,tY=0,gX=0,gY=0,raf=null,gyroActive=false;
+    function spring(){
+      tX+=(gX-tX)*.11;
+      tY+=(gY-tY)*.11;
+      wrap.style.transform=`rotateX(${tX.toFixed(2)}deg) rotateY(${tY.toFixed(2)}deg)`;
+      if(Math.abs(gX-tX)>.04||Math.abs(gY-tY)>.04){
+        raf=requestAnimationFrame(spring);
+      } else {
+        tX=gX;tY=gY;
+        wrap.style.transform=`rotateX(${tX.toFixed(2)}deg) rotateY(${tY.toFixed(2)}deg)`;
+        raf=null;
+        if(!gX&&!gY) wrap.classList.remove('tilted');
+      }
+    }
+    function aim(x,y){
+      gX=Math.max(-MAX,Math.min(MAX,x));
+      gY=Math.max(-MAX,Math.min(MAX,y));
+      if(gX||gY) wrap.classList.add('tilted'); else wrap.classList.remove('tilted');
+      if(!raf) raf=requestAnimationFrame(spring);
+    }
+    // Desktop mouse
+    album.addEventListener('mousemove',e=>{
+      if(gyroActive) return;
+      const r=wrap.getBoundingClientRect();
+      aim(-(e.clientY-(r.top+r.height/2))/(r.height/2)*MAX,(e.clientX-(r.left+r.width/2))/(r.width/2)*MAX);
+    },{passive:true});
+    album.addEventListener('mouseleave',()=>{if(!gyroActive) aim(0,0);},{passive:true});
+    // Mobile touch tilt
+    album.addEventListener('touchmove',e=>{
+      if(gyroActive) return;
+      const t=e.touches[0],r=wrap.getBoundingClientRect();
+      aim(-(t.clientY-(r.top+r.height/2))/(r.height/2)*MAX*.65,(t.clientX-(r.left+r.width/2))/(r.width/2)*MAX*.65);
+    },{passive:true});
+    album.addEventListener('touchend',()=>{if(!gyroActive) aim(0,0);},{passive:true});
+    // Gyroscope (mobile)
+    if(window.DeviceOrientationEvent){
+      window.addEventListener('deviceorientation',e=>{
+        if(e.beta==null||e.gamma==null) return;
+        gyroActive=true;
+        aim((Math.max(-30,Math.min(30,e.beta-45))/30)*MAX*.7,(Math.max(-30,Math.min(30,e.gamma))/30)*MAX*.7);
+      },{passive:true});
+    }
+  })();
+
   // patch: intercept playing state changes
   const origToggle=document.getElementById('spk-wrap')?.classList.toggle.bind(document.getElementById('spk-wrap'));
   // Instead, poll via MutationObserver on spk-wrap
@@ -7815,6 +8291,61 @@ const _origSetWxMode=setWxMode;
     mo.observe(spkWrap,{attributeFilter:['class']});
   }
 })();
+
+  // ═══════════════════════════════════════════════
+  // HORIZONTAL SWIPE BETWEEN TABS
+  // Swipe left → next tab, right → previous tab
+  // ═══════════════════════════════════════════════
+  (function(){
+    const TABS=['home','musik','licht','wetter','geraete'];
+    const app=document.getElementById('app');
+    if(!app) return;
+    let sx=0,sy=0,st2=0,swiping=false;
+    const MIN_DX=65, MAX_DY=80, MAX_MS=480;
+
+    // Swipe hint overlay
+    const hint=document.createElement('div');
+    hint.id='tab-swipe-hint';
+    hint.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;z-index:9998;font-size:2.2rem;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.28,.64,1);background:rgba(28,28,30,.85);backdrop-filter:blur(12px);border-radius:18px;padding:14px 22px;color:#fff;border:1px solid rgba(255,255,255,.10)';
+    document.body.appendChild(hint);
+    let hintTimer=null;
+    function showHint(dir){
+      hint.textContent=dir>0?'▶':'◀';
+      hint.style.opacity='1';
+      hint.style.transform='translate(-50%,-50%) scale(1)';
+      clearTimeout(hintTimer);
+      hintTimer=setTimeout(()=>{hint.style.opacity='0';hint.style.transform='translate(-50%,-50%) scale(.7)'},600);
+    }
+
+    app.addEventListener('touchstart',e=>{
+      const t=e.touches[0];
+      sx=t.clientX; sy=t.clientY; st2=Date.now(); swiping=false;
+    },{passive:true});
+
+    app.addEventListener('touchmove',e=>{
+      if(!sx) return;
+      const dx=e.touches[0].clientX-sx;
+      const dy=Math.abs(e.touches[0].clientY-sy);
+      if(Math.abs(dx)>18&&dy<MAX_DY) swiping=true;
+    },{passive:true});
+
+    app.addEventListener('touchend',e=>{
+      if(!swiping){sx=0;return;}
+      const dx=e.changedTouches[0].clientX-sx;
+      const dy=Math.abs(e.changedTouches[0].clientY-sy);
+      const dt=Date.now()-st2;
+      sx=0; swiping=false;
+      if(Math.abs(dx)<MIN_DX||dy>MAX_DY||dt>MAX_MS) return;
+      const idx=TABS.indexOf(_page);
+      if(idx<0) return;
+      const dir=dx<0?1:-1; // swipe left=next(+1), swipe right=prev(-1)
+      const next=idx+dir;
+      if(next<0||next>=TABS.length) return;
+      showHint(dir);
+      hap&&hap();
+      navTo(TABS[next]);
+    },{passive:true});
+  })();
 </script>
 <div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v3.2</div>
 </body>

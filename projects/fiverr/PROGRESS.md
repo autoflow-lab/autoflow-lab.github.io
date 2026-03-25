@@ -1,5 +1,142 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-25 14:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — Typewriter-Animation für Greeting-Text
+- Neue CSS-Klasse `.hgreet-cursor`: 1.5px breiter, 0.8em hoher vertikaler Strich in `rgba(255,255,255,.5)`, `border-radius:1px`, `vertical-align:middle`
+- `@keyframes greetCursor`: 0%/100% opacity:1 → 50% opacity:0 → 0.8s ease-in-out infinite (klassischer Cursor-Blink)
+- `.hgreet-cursor.gc-hide`: `display:none` → Cursor verschwindet nach Tipp-Ende
+- `typeGreet(el, text)` Funktion: räumt bestehenden Timer auf, leert `el`, fügt Cursor-Span ein
+- Typing-Loop via `setTimeout`: fügt je ein Zeichen als `TextNode` vor dem Cursor-Span ein
+  - Delay: 0ms für erste 2 Zeichen (kein Anfangs-Ruckeln), dann 40ms/Zeichen → ~2s für typische Begrüssung
+  - Am Ende: `cur.classList.add('gc-hide')` nach 900ms → Cursor blendet sich diskret weg
+- `window._greetTyped` Flag: `typeGreet` läuft nur beim ersten `updateClock()`-Aufruf (Seitenload)
+- `window._greetLast` String: vergleicht aktuellen Greeting-Text — `typeGreet` feuert erneut wenn sich die Tageszeit-Begrüssung ändert (z.B. Morgen → Mittag)
+- Kein Konflikt mit bestehendem `greetFade`-CSS-Animation (fade läuft auf Parent-Element, Typewriter modifiziert innerHTML)
+- Kein Flickern: `updateClock` prüft vor jedem Tick ob Text identisch ist → kein ständiges Neu-Tippen
+- Effekt: Beim Öffnen der App tippt sich "Guten Morgen, Janis ☀️" zeichenweise ein — danach verschwindet der Cursor smooth
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 437291 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-25 12:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: App — Horizontales Swipe zwischen Tabs
+- IIFE am Ende des Haupt-Script-Blocks (vor `</script>`), nutzt vorhandene `navTo()` + `hap()` Funktionen
+- `TABS` Array: `['home','musik','licht','wetter','geraete']` — entspricht der Navbar-Reihenfolge
+- `touchstart`: speichert `sx`, `sy`, `st2` (Zeitstempel) + resettet `swiping=false`
+- `touchmove`: setzt `swiping=true` wenn `|dx|>18` und `|dy|<MAX_DY` → unterscheidet horizontale von vertikalen Gesten
+- `touchend`: prüft `|dx|≥65px`, `|dy|≤80px`, `dt≤480ms` → swipe links=+1 (nächster Tab), rechts=-1 (vorheriger Tab)
+- Guard: `idx<0||next<0||next≥TABS.length` → kein Wraparound, kein Fehler am Ende der Liste
+- Swipe-Hint Overlay `#tab-swipe-hint`: dynamisch per JS injiziert, `position:fixed` zentriert, Glassmorphism-Pill
+  - Zeigt `▶` (nächster Tab) oder `◀` (vorheriger Tab) als großes Emoji
+  - Einblend-Animation: scale(.7)+opacity:0 → scale(1)+opacity:1 via `cubic-bezier(.34,1.28,.64,1)`
+  - Auto-fade nach 600ms via `clearTimeout` + `setTimeout`
+- Kein Konflikt mit horizontalen Gesten auf Album-Art (Musik-Tab hat eigene touchend-Guards mit `dy`-Filter)
+- Kein Konflikt mit Pull-to-Refresh (vertikal, dx-Guard vorhanden)
+- Kein Konflikt mit Light-Sheet Long-Press (kein deltaX-Kriterium)
+- Passive Event-Listener → kein Performance-Impact
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 436342 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-25 08:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Sichtweite & Bewölkungs-Karte
+- Neue `#vis-cloud-card` Section im Wetter-Tab, nach `#hum-card` und vor `#golden-hour-card`
+- Zwei SVG-Arc-Gauges (72×72px, gleiche 210°-Geometrie wie Barometer/Feuchte) nebeneinander mit Trennlinie
+- **Sichtweite-Gauge** (`#vis-fill`): `linearGradient visGrad` rot (#ff453a) → amber (#ff9f0a) → grün (#30d158) → blau (#0a84ff)
+  - API: `visibility` (in Metern) von Open-Meteo `&current=`
+  - Skala 0–50km (50'000m = 100%), `stroke-dashoffset` = ARC_LEN*(1-pct)
+  - Anzeige: <1km zeigt Meter (z.B. "450 m"), ≥1km zeigt km (z.B. "8.4 km")
+  - 6 Stufen: Dichter Nebel (<200m, rot) / Nebel (<1km, amber) / Dunstig (<4km, gelb) / Mässig (<10km, hellblau) / Gut (<30km, grün) / Ausgezeichnet (≥30km, blau)
+- **Bewölkungs-Gauge** (`#cld-fill`): `linearGradient cldGrad` grün (#30d158) → blau (#0a84ff) → weiß (.6 opacity)
+  - API: `cloud_cover` (0–100%) von Open-Meteo `&current=`
+  - 5 Stufen: Klar (<12%, gelb) / Heiter (<30%, amber) / Wolkig (<60%, hellblau) / Stark bewölkt (<85%, grau) / Bedeckt (≥85%, weiß)
+- Trennlinie: 1px × 80px `rgba(255,255,255,.07)` zwischen den zwei Gauges
+- Beide Gauges mit eigenem Label (farbcodiert, dynamisch) + statischem Beschriftungs-Text unten
+- `drawVisCloud()` neue Funktion: liest `_wx.current.visibility` + `_wx.current.cloud_cover`
+- Card bleibt `display:none` wenn beide Werte fehlen (graceful fallback)
+- In `renderWeather()` nach `drawWindChill()` eingehängt
+- `#vis-cloud-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- `transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)` → weiche Einblende-Animation
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 427668 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-25 04:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Luftfeuchtigkeit Komfort-Karte
+- Neue `#hum-card` Section im Wetter-Tab, zwischen Barometer-Card und Goldene-Stunde-Card
+- SVG-Arc-Gauge (72×72px, viewBox 0 0 72 72): Track-Pfad + Fill-Pfad identische Geometrie wie Barometer
+- `linearGradient #humGrad`: blau (#0a84ff, 0%) → grün (#30d158, 40%) → amber (#ff9f0a, 72%) → rot (#ff453a, 100%)
+- `stroke-dasharray:188.5` + `stroke-dashoffset = 188.5*(1-rh/100)` → rh=0% → leer, rh=100% → voll
+- `transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)` → weiche Einblende-Animation
+- Center-Text: `#hum-svg-val` (13px, bold, weiß) + "%" Label (7px, gedimmt)
+- Rechts: `#hum-val` (1.6rem, light) + "%" Einheit + `#hum-level` (farbig)
+- 5 Komfort-Stufen: 🏜 Sehr trocken (<20%, blau) / 💨 Trocken (<30%, hellblau) / ✅ Optimal (<60%, grün) / 🌫 Feucht (<75%, amber) / 💦 Sehr feucht (≥75%, rot)
+- `#hum-desc`: kontextsensitive Empfehlung je Stufe (z.B. "Ideale Luftfeuchtigkeit — angenehmes Raumklima")
+- `#hum-dew`: Taupunkt-Berechnung via Magnus-Formel (a=17.625, b=243.04), zeigt z.B. "8.3°C"
+- `#hum-bar`: horizontaler Fortschrittsbalken (blau→grün→amber→rot Gradient), 1.4s ease Transition
+- 4 Skala-Marker: 0% / 30% / 60% / 100%
+- `drawHumidity()` neue Funktion: liest `_wx.current.relative_humidity_2m` + `temperature_2m`
+- Card bleibt `display:none` wenn kein Feuchtigkeitswert vorhanden (graceful fallback)
+- In `renderWeather()` nach `drawBarometer()` eingehängt
+- `#hum-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- JS-Check: OK | Deployed via SSH (paramiko printf-chunk-pipe, 418316 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-25 02:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — Mini SVG Analog Clock neben Digitaluhr
+- Neues `<svg id="aclock">` (44×44px) als Geschwister der `.htime` — beide in einem Flex-Row-Wrapper `#aclock-wrap`
+- Zifferblatt: gefüllter Kreis (`rgba(0,0,0,.22)`) + dezenter Ring (`rgba(255,255,255,.12)`) + 4 Tick-Striche bei 12/3/6/9 (rgba .35)
+- Amber-Dot bei 12 Uhr als Orientierungshilfe (`#ff9f0a`)
+- Stundenzeiger: `<g id="ach-hour-g">` → dicker amber Strich (2.4px), Länge bis Pixel 11
+- Minutenzeiger: `<g id="ach-min-g">` → weißlicher Strich (1.4px, .88 opacity), Länge bis Pixel 5.5
+- Sekundenzeiger: `<g id="ach-sec-g">` → roter Strich (`#ff453a`, .9px), mit kurzem Gegengewicht (y1=25, y2=4.5)
+- Zentrum: amber Pivot-Punkt + dunkle Abdeckscheibe (2-layered)
+- `@keyframes aclockIn`: scale(.6)+rotate(-30deg) → scale(1)+rotate(0), cubic-bezier(.34,1.28,.64,1), .9s, delay .15s
+- `drop-shadow(0 0 6px rgba(255,159,10,.25))` SVG-Filter → subtiler Amber-Glow
+- JS IIFE in `updateClock()`: `sec*6`, `min*6+sec*.1`, `hr*30+min*.5` → Grad für SVG `rotate(deg,22,22)` Attribute
+- `setAttribute('transform', rotate(...))` → nativer SVG-Ansatz, kein transform-box CSS-Problem, 100% cross-browser
+- Sekundenzeiger springt diskret jede Sekunde (da `updateClock` alle 1000ms läuft — klassischer Zeiger-Stil)
+- Effekt: Neben der grossen Digitaluhr tickt eine kleine, elegante analoge Uhr — Apple Watch mini vibe
+- JS-Check: OK | Deployed via SSH (base64-chunk-pipe, 412506 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-25 00:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — Track Progress Arc um Album-Disc
+- Neues `<svg id="track-prog-arc-svg">` als erstes Kind von `#alb-disc` (position:absolute, inset:-10px, calc 100%+20px, z-index:9, pointer-events:none, transform:rotate(-90deg))
+- SVG-Struktur: `#tpa-track` (dünner Hintergrundring, rgba .07) + `#tpa-fill` (aktiver Bogen, amber→gelb Gradient)
+- `linearGradient #tpaGrad`: amber #ff9f0a → gelb #ffcc02 → amber 50% Opacity — passt zur Dashboard-Akzentfarbe
+- Kreis r=86 im 180×180 viewBox → Umfang = 2π×86 = 540.35px
+- `stroke-dasharray:540.35` + `stroke-dashoffset` = 540.35 × (1 - pct) → Arc zeigt Fortschritt von oben (rotate -90°)
+- `stroke-linecap:round` → runder Endpunkt (Apple-Music-Stil)
+- CSS-Transition: `opacity .8s ease, stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)` → weiche Animation
+- `.show` Klasse → `#tpa-fill` opacity:1; versteckt wenn kein Track (opacity:0) — kein visuelles Rauschen bei Radio/Idle
+- JS IIFE im Track-Fortschrittsbalken-Block: `CIRC=540.35`, berechnet `pct=pos/dur`, setzt `strokeDashoffset=CIRC*(1-pct)`
+- `arcSvg.classList.toggle('show', hasArc)` — Arc erscheint nur wenn `playing && pos!=null && dur!=null && dur>0`
+- Kein Konflikt mit bestehenden `eq-ring` Puls-Animationen (separate Kreise, different z-index layers)
+- Kein Konflikt mit `#alb-tonearm-wrap` (absolut positioniert, z-index:10 — liegt über dem Arc)
+- Effekt: Beim Spotify-Stream dreht sich um den Vinyl-Disc ein feiner amber Leuchtring, der sekündlich aktualisiert die Spielposition zeigt — wie Apple Music Fortschritts-Halo
+- JS-Check: OK | Deployed via SSH (paramiko stdin-pipe, 409360 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-24 22:03 UTC — Cron (Design-Ideen Agent)
+- ✅ demo.html: Cookie/DSGVO Banner
+- Neues `#dsgvo-banner` Element als `position:fixed;bottom:0` Bottom-Banner (z-index:10001)
+- Design: iOS Dark Glassmorphism (`rgba(18,18,20,.97)`, `backdrop-filter:blur(20px) saturate(1.6)`)
+- Border-Top-Linie `rgba(255,255,255,.08)` — dezent, passt ins Dark Theme
+- Inhalt: 🔒 Icon + Text ("Diese Seite verwendet **keine** Tracking-Cookies") + "Verstanden ✓" Button
+- Schließen-Button: grüner Akzent (`#30d158`), rounded pill, hover lift-effect
+- Erscheint nach 1.5s via `setTimeout` + CSS `transform:translateY(0)` spring-Animation
+- `localStorage.getItem('dsgvo_dismissed_v1')` — einmalig schliessbar, bleibt dauerhaft weg nach Klick
+- i18n reaktiv: `langChange` Event → DE/EN Text-Varianten für Banner-Text + Button
+- Kein Flackern: Banner wird gar nicht gezeigt wenn `localStorage` bereits gesetzt
+- `[x]` auch für Scroll-to-Top markiert (war bereits in demo.html implementiert, nur nicht abgehakt)
+- JS-Check: OK | Deployed via SSH (paramiko stdin-pipe, 365273 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-24 20:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — Allergiker-Warnung Chip
 - Neues `#allerg-chip-row` Flex-Container direkt im `#wx-hero` (nach Stats-Row, vor Hero-Ende)
@@ -1002,3 +1139,44 @@
 - ✅ reddit_posts_v2.md: 3 fertige Posts für r/homeassistant, r/selfhosted + Kommentar-Vorlage
 - ✅ wz.html: tile-flash beim Schalten deployed (162KB)
 - MARKETING READY: Janis kann jetzt Posts 1-to-1 auf Reddit kopieren
+## 2026-03-25 09:37 UTC — Heartbeat Auto-Improve
+
+- ✅ wz.html: Wetter-Tab — Wetter-Score Karte
+- Neuer `#wx-score-card` Bereich nach Best-Hour-Karte im Wetter-Tab
+- SVG Arc-Gauge (80px) mit Gradient rot→amber→grün, Score 0–100
+- Score-Berechnung: Temperatur-Komfort (30 Pkt) + Niederschlag (25 Pkt) + Wind (25 Pkt) + WMO-Code (20 Pkt)
+- 5 Stufen: Herrliches Wetter ☀️ / Angenehmes Wetter 🌤 / Durchschnittlich ⛅ / Eher ungünstig 🌦 / Drinnen bleiben 🌧
+- Condition-Chips mit Farbkodierung (grün/amber/rot) für Temp, Niederschlag, Wind, UV-Index
+- wz.html: KB deployed → GitHub Pages (autoflow-lab.github.io)
+## 2026-03-25 09:37 UTC — Heartbeat Auto-Improve
+
+- ✅ wz.html: Wetter-Tab — Wetter-Score Karte
+- Neuer `#wx-score-card` Bereich nach Best-Hour-Karte im Wetter-Tab
+- SVG Arc-Gauge (80px) mit Gradient rot→amber→grün, Score 0–100
+- Score-Berechnung: Temperatur-Komfort (30 Pkt) + Niederschlag (25 Pkt) + Wind (25 Pkt) + WMO-Code (20 Pkt)
+- 5 Stufen: Herrliches Wetter ☀️ / Angenehmes Wetter 🌤 / Durchschnittlich ⛅ / Eher ungünstig 🌦 / Drinnen bleiben 🌧
+- Condition-Chips mit Farbkodierung (grün/amber/rot) für Temp, Niederschlag, Wind, UV-Index
+- wz.html: 423.7KB deployed → GitHub Pages (autoflow-lab.github.io)
+
+
+## 2026-03-25 18:03 UTC — Cron (Design-Ideen Agent)
+- ⚠️ Keine offenen Aufgaben mehr — alle Einträge in AUTOWORK.md sind [x] erledigt
+- Empfehlung: Neue Ideen in AUTOWORK.md ergänzen für nächsten Run
+
+## 2026-03-25 16:37 UTC — Heartbeat Auto-Improve
+
+- ✅ wz.html: Home-Tab — Jahreszeit-Chip
+- Neuer `#season-chip` unter dem Mini-Forecast-Strip
+- Zeigt aktuelle Jahreszeit (🌸 Frühling / ☀️ Sommer / 🍂 Herbst / ❄️ Winter) mit passendem Farbschema
+- Countdown: "· Xd bis [nächste Jahreszeit]" als Sub-Text
+- Farben: Frühling grün, Sommer amber, Herbst orange, Winter blau
+- Astronomische Berechnung (Äquinoktien/Solstitien, Nordhalbkugel)
+- wz.html: 429.2KB deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-25 22:13 UTC — Heartbeat Auto-Improve
+
+- ✅ demo.html: Pricing-Bereich — Tages-Deal Chip
+- Neuer `#daily-deal-chip` über dem Preistisch, erscheint animiert (fadeInUp)
+- 7 rotierende Angebote je Wochentag (Mo–So): Dark-Mode Theme, Mobile, Express, Nacht-Modus, Push, Energie, Farbschema
+- Amber Pulsing-Dot + Glow-Effekt, DE+EN i18n-fähig via `langChanged` Event
+- demo.html: 358.8KB + index.html deployed → GitHub Pages (autoflow-lab.github.io)

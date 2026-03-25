@@ -175,8 +175,35 @@
 - [x] wz.html: Wetter-Tab — "Beste Stunde" Karte (scannt stündliche Vorschau nach optimalem Outdoor-Zeitfenster heute: Score aus Temp-Komfort + Regenwahrsch. + Wind + WMO-Code, grüner Zeit-Badge + Condition-Chips)
 
 ## Neue Ideen (2026-03-24 Nachmittag)
-- [ ] demo.html: Scroll-to-Top Button (erscheint ab 500px, amber Ring-Icon, smooth scroll, fade+scale Animation)
+- [x] demo.html: Scroll-to-Top Button (erscheint ab 500px, amber Ring-Icon, smooth scroll, fade+scale Animation)
 - [x] demo.html: "Warum jetzt?" 3-Spalten Urgency-Section (Zeitersparnis / Kostenersparnis / Komplexität — je mit animiertem Icon + Zahl-Highlight)
 - [x] wz.html: Musik-Tab — Podcast/Radio Fallback-Anzeige (wenn kein Spotify → zeigt media_title + media_content_id als Radio-Card mit Frequenz-Icon)
-- [ ] demo.html: Cookie/DSGVO Banner (schlichter Bottom-Banner, "Diese Seite verwendet keine Tracking-Cookies", einmalig schliessbar, localStorage)
+- [x] demo.html: Cookie/DSGVO Banner (schlichter Bottom-Banner, "Diese Seite verwendet keine Tracking-Cookies", einmalig schliessbar, localStorage)
 - [x] wz.html: Wetter-Tab — Allergiker-Warnung Chip (Gras/Birke/Ambrosia Pollen via Open-Meteo wenn verfügbar, farbcodiert nach Level)
+
+## Neue Ideen (2026-03-25 00:03 UTC)
+- [x] wz.html: Musik-Tab — Track Progress Arc um Album-Disc (dünner SVG-Kreisbogen außen um die Vinyl-Disc, amber→gelb Gradient, zeigt media_position/media_duration als animierten Fortschrittsring, smooth transition 1.2s)
+
+## Neue Ideen (2026-03-25 02:03 UTC)
+- [x] wz.html: Home-Hero — Mini SVG Analog Clock neben Digitaluhr (44px SVG-Uhr, amber Stundenzeiger, weißer Minutenzeiger, roter Sekundenzeiger, Tick-Marks bei 12/3/6/9, Einblende-Animation, sekundengenau per updateClock() rotiert)
+
+## Neue Ideen (2026-03-25 04:03 UTC)
+- [x] wz.html: Wetter-Tab — Luftfeuchtigkeit Komfort-Karte (SVG-Arc-Gauge 0–100%, Farb-Gradient blau→grün→amber→rot, Komfort-Stufen Sehr trocken/Trocken/Optimal/Feucht/Sehr feucht, Magnus-Formel Taupunkt-Berechnung, animierter Fortschrittsbalken)
+
+## Neue Ideen (2026-03-25 08:03 UTC)
+- [x] wz.html: Wetter-Tab — Sichtweite & Bewölkungs-Karte (visibility + cloud_cover von Open-Meteo, zwei SVG-Arc-Gauges nebeneinander, Sichtweite rot→amber→grün→blau Farbskala 0–50km, Bewölkung grün→blau→weiß 0–100%, 6 Sichtweite-Stufen von "Dichter Nebel" bis "Ausgezeichnet", 5 Bewölkungs-Stufen von "Klar" bis "Bedeckt", animierte stroke-dashoffset Transition 1.4s)
+
+## Neue Ideen (2026-03-25 09:37 UTC)
+- [x] wz.html: Wetter-Tab — Wetter-Score Karte (Gesamtscore 0–100 aus Temperatur-Komfort + Niederschlag + Wind + WMO-Code, SVG Arc-Gauge rot→amber→grün Gradient, 5 Bewertungsstufen von "Drinnen bleiben 🌧" bis "Herrliches Wetter ☀️", Beschreibungstext + farbige Condition-Chips für Temp/Regen/Wind/UV)
+
+## Neue Ideen (2026-03-25 16:37 UTC)
+- [x] wz.html: Home-Tab — Jahreszeit-Chip (🌸/☀️/🍂/❄️ Emoji + Jahreszeitsname + "Xd bis [nächste]" Countdown, astronomische Berechnung, farbcodiert grün/amber/orange/blau, erscheint unter Mini-Forecast-Strip)
+
+## Neue Ideen (2026-03-25 14:03 UTC)
+- [x] wz.html: Home-Hero — Typewriter-Animation für Greeting-Text (tippt Begrüssung zeichenweise ein mit blinkendem Cursor)
+
+## Neue Ideen (2026-03-25 12:03 UTC)
+- [x] wz.html: App — Horizontales Swipe zwischen Tabs (touchstart/end auf #app, swipe links→nächster Tab, rechts→vorheriger Tab, MAX_DX 65px Threshold, MAX_DY 80px Guard gegen Scroll-Konflikt, MAX_MS 480ms Zeitfenster, zentrierter Emoji-Hint-Overlay ◀/▶ erscheint kurz mit Glassmorphism, ruft navTo() auf für einheitliche Stagger-Animation)
+
+## Neue Ideen (2026-03-25 22:13 UTC)
+- [x] demo.html: Pricing-Bereich — Tages-Deal Chip (7 rotierende Wochentagsangebote über dem Preistisch: "🎨 Heute: Gratis Dark-Mode Theme" etc., amber Pulse-Dot + Glow, animierter Einblend, DE+EN i18n)

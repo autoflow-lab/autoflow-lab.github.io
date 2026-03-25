@@ -979,6 +979,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 .footer-links a{font-size:.84rem;color:var(--text2);transition:color .2s;font-weight:500}
 .footer-links a:hover{color:var(--accent)}
 .footer-copy{font-size:.76rem;color:var(--text3)}
+/* ── DSGVO COOKIE BANNER ── */
+#dsgvo-banner{position:fixed;bottom:0;left:0;right:0;z-index:10001;padding:14px 20px;background:rgba(18,18,20,.97);backdrop-filter:blur(20px) saturate(1.6);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between;transform:translateY(100%);opacity:0;transition:transform .45s cubic-bezier(.34,1.28,.64,1),opacity .35s ease;pointer-events:none}
+#dsgvo-banner.show{transform:translateY(0);opacity:1;pointer-events:auto}
+#dsgvo-banner-text{flex:1;min-width:200px;font-size:.82rem;color:rgba(255,255,255,.65);line-height:1.5;display:flex;align-items:center;gap:9px}
+#dsgvo-banner-text .dsgvo-ico{font-size:1.1rem;flex-shrink:0}
+#dsgvo-banner-close{flex-shrink:0;background:rgba(48,209,88,.13);border:1px solid rgba(48,209,88,.32);color:#30d158;border-radius:20px;padding:7px 18px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s,transform .2s}
+#dsgvo-banner-close:hover{background:rgba(48,209,88,.22);transform:translateY(-1px)}
+@keyframes dsgvoBannerIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
 /* ── SCROLL-TO-TOP ── */
 #scrollTop{position:fixed;bottom:24px;right:24px;z-index:9999;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px var(--glow);opacity:0;transform:translateY(20px) scale(.85);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none;cursor:pointer}
 #scrollTop.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
@@ -2483,6 +2491,8 @@ input[type=range]{touch-action:pan-x}
     <div style="max-width:1100px;margin:0 auto">
       <h2 class="sec-title sec-center reveal" data-i="priceTitle">Preise & Pakete</h2>
       <p class="sec-sub sec-center reveal" data-i="priceSub">Transparent kalkulierbar — keine versteckten Kosten.</p>
+      <!-- Tages-Deal Chip -->
+      <div id="daily-deal-chip" style="display:flex;justify-content:center;margin-bottom:24px"></div>
       <!-- Pricing Toggle -->
       <div class="price-toggle-wrap reveal">
         <span id="lbl-onetime" class="active" data-i="lblOnetime">Einmalig</span>
@@ -4916,6 +4926,50 @@ if(_origGetPos){
 })();
 </script>
 
+<!-- DSGVO Cookie Banner -->
+<div id="dsgvo-banner" role="region" aria-label="Cookie-Hinweis">
+  <div id="dsgvo-banner-text">
+    <span class="dsgvo-ico">🔒</span>
+    <span id="dsgvo-banner-msg">Diese Seite verwendet <strong>keine</strong> Tracking-Cookies und speichert keine personenbezogenen Daten.</span>
+  </div>
+  <button id="dsgvo-banner-close" aria-label="Banner schließen">Verstanden ✓</button>
+</div>
+<script>
+(function(){
+  var STORAGE_KEY = 'dsgvo_dismissed_v1';
+  if(localStorage.getItem(STORAGE_KEY) === '1') return;
+  var banner = document.getElementById('dsgvo-banner');
+  if(!banner) return;
+  // Show after 1.5s
+  setTimeout(function(){
+    banner.classList.add('show');
+  }, 1500);
+  // Close handler
+  var closeBtn = document.getElementById('dsgvo-banner-close');
+  function dismiss(){
+    banner.classList.remove('show');
+    localStorage.setItem(STORAGE_KEY, '1');
+  }
+  closeBtn.addEventListener('click', dismiss);
+  closeBtn.addEventListener('touchend', function(e){ e.preventDefault(); dismiss(); });
+  // i18n support
+  function applyDsgvoLang(){
+    var lang = document.documentElement.lang || 'de';
+    var msgEl = document.getElementById('dsgvo-banner-msg');
+    var btnEl = document.getElementById('dsgvo-banner-close');
+    if(!msgEl) return;
+    if(lang === 'en'){
+      msgEl.innerHTML = 'This site uses <strong>no</strong> tracking cookies and stores no personal data.';
+      if(btnEl) btnEl.textContent = 'Got it ✓';
+    } else {
+      msgEl.innerHTML = 'Diese Seite verwendet <strong>keine</strong> Tracking-Cookies und speichert keine personenbezogenen Daten.';
+      if(btnEl) btnEl.textContent = 'Verstanden ✓';
+    }
+  }
+  document.addEventListener('langChange', applyDsgvoLang);
+  applyDsgvoLang();
+})();
+</script>
 <!-- Scroll-to-top button -->
 <button id="scrollTop" aria-label="Zurück nach oben / Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
@@ -5232,6 +5286,43 @@ if(_origGetPos){
   document.getElementById('mob-cta-close').addEventListener('click', function(){
     bar.classList.remove('show');
     sessionStorage.setItem('mobCtaDismissed','1');
+  });
+})();
+</script>
+
+<!-- Tages-Deal Chip -->
+<script>
+(function(){
+  var chip = document.getElementById('daily-deal-chip');
+  if(!chip) return;
+  var deals = [
+    { de: '🎨 Heute: Gratis Dark-Mode Theme beim Basic-Paket', en: '🎨 Today: Free Dark Mode Theme with Basic' },
+    { de: '📱 Heute: Bonus Mobile-Optimierung inklusive',       en: '📱 Today: Bonus Mobile Optimization included' },
+    { de: '⚡ Heute: Express-Lieferung in 24h kostenlos',       en: '⚡ Today: Free Express Delivery in 24h' },
+    { de: '🌙 Heute: Gratis Nacht-Modus & Automationen',        en: '🌙 Today: Free Night Mode & Automations' },
+    { de: '🔔 Heute: Bonus Push-Benachrichtigungen Setup',      en: '🔔 Today: Bonus Push Notification Setup' },
+    { de: '📊 Heute: Energie-Monitoring Widget gratis dazu',    en: '📊 Today: Free Energy Monitoring Widget' },
+    { de: '🎯 Heute: Personalisiertes Farbschema inklusive',    en: '🎯 Today: Personalized Color Scheme included' },
+  ];
+  var day = new Date().getDay(); // 0=So, 1=Mo...
+  var deal = deals[day] || deals[0];
+  var lang = (document.documentElement.lang||'de').startsWith('en') ? 'en' : 'de';
+  var txt = deal[lang];
+
+  chip.innerHTML =
+    '<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;' +
+    'border-radius:100px;background:rgba(255,159,10,.13);border:1px solid rgba(255,159,10,.35);' +
+    'font-size:.78rem;font-weight:700;color:#ff9f0a;animation:fadeInUp .6s ease both;' +
+    'box-shadow:0 2px 12px rgba(255,159,10,.12)">' +
+    '<span style="width:7px;height:7px;border-radius:50%;background:#ff9f0a;flex-shrink:0;' +
+    'box-shadow:0 0 6px rgba(255,159,10,.8);animation:pulse 2s ease-in-out infinite"></span>' +
+    txt +
+    '</div>';
+
+  // Re-render on language switch
+  document.addEventListener('langChanged', function(e){
+    var newLang = (e.detail||'de').startsWith('en') ? 'en' : 'de';
+    chip.querySelector('div').childNodes[1].textContent = ' ' + deal[newLang];
   });
 })();
 </script>
