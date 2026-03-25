@@ -1,5 +1,23 @@
 # HA Security Log
 
+## 2026-03-25 23:30 UTC — Security OK
+
+Checked HA error log via API. Keine neuen Einträge seit 23:00 UTC.
+Die zwei Login-Versuche von 192.168.1.17 (19:10 UTC) waren bereits bekannt und gemeldet.
+
+**Fazit: Keine neuen Bedrohungen. Alles normal.**
+
+---
+
+## 2026-03-25 23:00 UTC — Security OK
+
+Checked HA error log via API. Keine neuen Einträge seit 22:30 UTC.
+Die zwei Login-Versuche von 192.168.1.17 (19:10 UTC) waren bereits bekannt und gemeldet.
+
+**Fazit: Keine neuen Bedrohungen. Alles normal.**
+
+---
+
 ## 2026-03-25 22:30 UTC — Security OK
 
 Checked HA error log via API. Keine neuen Einträge seit 22:00 UTC.

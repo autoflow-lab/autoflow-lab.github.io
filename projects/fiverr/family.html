@@ -268,6 +268,25 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
 .presence-dot{width:12px;height:12px;border-radius:50%;background:#3a3a3c;transition:background .4s;}
 .presence-dot.home{background:#30d158;box-shadow:0 0 8px rgba(48,209,88,.5);}
 .presence-dot.away{background:#636366;}
+
+.greeting-card{background:linear-gradient(135deg,rgba(255,159,10,.1),rgba(255,69,58,.05));border:1px solid rgba(255,159,10,.2);border-radius:16px;padding:18px 20px;}
+.greeting-text{font-size:1.1rem;font-weight:700;color:var(--txt);}
+.greeting-sub{font-size:.72rem;color:var(--acc);margin-top:3px;font-weight:600;}
+.radio-favs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.radio-fav-btn{background:var(--c2);border:1px solid var(--sep);border-radius:14px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;touch-action:manipulation;transition:background .2s;-webkit-user-select:none;user-select:none;}
+.radio-fav-btn:active{background:rgba(255,159,10,.15);}
+.radio-fav-ico{font-size:1.5rem;}
+.radio-fav-name{font-size:.62rem;font-weight:600;color:var(--dim);text-align:center;}
+.room-dimmer{margin-bottom:10px;background:var(--c2);border-radius:12px;padding:10px 14px;}
+.room-dimmer-lbl{font-size:.62rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:8px;}
+.room-dimmer-row{display:flex;align-items:center;gap:10px;}
+.room-dim-slider{flex:1;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:var(--c3);outline:none;touch-action:none;}
+.room-dim-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--acc);cursor:pointer;box-shadow:0 2px 6px rgba(255,159,10,.4);}
+.room-dim-val{font-size:.72rem;font-weight:700;color:var(--acc);min-width:34px;text-align:right;}
+.profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:6px;}
+.profile-btn{background:var(--c2);border:1.5px solid var(--sep);border-radius:12px;padding:13px 10px;font-size:.85rem;font-weight:600;color:var(--dim);cursor:pointer;touch-action:manipulation;transition:all .2s;-webkit-user-select:none;user-select:none;}
+.profile-btn.active{background:rgba(255,159,10,.12);border-color:rgba(255,159,10,.4);color:var(--acc);}
+.profile-hint{font-size:.62rem;color:var(--dim);text-align:center;padding:2px 0 4px;}
 </style>
   <!-- Open Graph / Link Preview -->
   <meta property="og:title" content="SchlappHome">
@@ -355,6 +374,18 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
 
 <!-- TAB: ZUHAUSE -->
 <div class="tab-page active" id="tab-home">
+
+  <div class="section" id="home-greeting-section">
+    <div class="greeting-card">
+      <div class="greeting-text" id="profile-greeting">Hallo! 👋</div>
+      <div class="greeting-sub" id="profile-name">SchlappHome</div>
+    </div>
+  </div>
+
+  <div class="section" id="home-radio-section" style="display:none">
+    <div class="section-title">🎵 Radio</div>
+    <div class="radio-favs-grid" id="radio-favs-grid"></div>
+  </div>
 
   <div class="section">
     <div class="section-title">Schnellszenen</div>
@@ -584,10 +615,10 @@ input[type=range].ld-slider:active::-webkit-slider-thumb{transform:scale(1.15)}
   </div>
 </div>
 
-<div class="footer">SchlappHome <span style='opacity:.4'>v4.0</span> · <span id="last-update">–</span></div>
+<div class="footer">SchlappHome <span style='opacity:.4'>v4.1</span> · <span id="last-update">–</span></div>
 
 <script>
-const APP_VERSION='v4.0';
+const APP_VERSION='v4.1';
 
 // ─── LOG CAPTURE ───
 const _logs = [];
@@ -741,6 +772,117 @@ const LIGHT_ROOMS = [
 
 // Flache Liste für updateLights compat
 const LIGHTS = LIGHT_ROOMS.flatMap(r=>r.lights);
+
+// ─── PROFILE ───
+const PROFILES = {
+  janis: {
+    key:'janis', name:'Janis', emoji:'👩',
+    greetings:['Hey Janis! ✨','Hallo Janis! 👋','Schön zuhause! 🌟'],
+    person:'person.janis',
+    roomOrder:['🛏️ Schlafzimmer','🛋️ Wohnzimmer','🍳 Küche','💼 Büro','🛏️ Eltern SZ','🚪 Gänge & WC','🌿 Außen'],
+    hideRooms:[],
+    roomAliases:{},
+    showRadio:false, showGarage:true, showSim:true,
+    quickScenes:['abend','hell','nacht2'],
+    dimmerRooms:['🛏️ Schlafzimmer'],
+  },
+  kurt: {
+    key:'kurt', name:'Kurt', emoji:'👨',
+    greetings:['Hallo Kurt! 😊','Guten Tag Kurt! 🏠','Schön dich zu sehen, Kurt! 🌞'],
+    person:null,
+    roomOrder:['🛋️ Wohnzimmer','🍳 Küche','🛏️ Eltern SZ','🚪 Gänge & WC','🌿 Außen'],
+    hideRooms:['🛏️ Schlafzimmer','💼 Büro'],
+    roomAliases:{'🛏️ Eltern SZ':'🛏️ Schlafzimmer'},
+    showRadio:true,
+    radioFavs:[
+      {name:'U1 Tirol',ico:'🏔️',url:'https://livestream.u1.at/u1tirol',player:'media_player.wohnzimmer_alm'},
+      {name:'Melody FM',ico:'🎶',url:'https://cdn.melodyfm.at/melodyfm.mp3',player:'media_player.wohnzimmer_alm'},
+      {name:'SRF 3',ico:'🎵',url:'http://stream.srg-ssr.ch/m/drs3/mp3_128',player:'media_player.wohnzimmer_alm'},
+    ],
+    showGarage:true, showSim:false,
+    quickScenes:['abend','hell'],
+    dimmerRooms:[],
+  },
+  brigitte: {
+    key:'brigitte', name:'Brigitte', emoji:'👩‍🦳',
+    greetings:['Hallo Brigitte! 🌸','Guten Tag Brigitte! ☀️','Schön, Brigitte! 💐'],
+    person:null,
+    roomOrder:['🛋️ Wohnzimmer','🍳 Küche','🛏️ Eltern SZ','🚪 Gänge & WC','🌿 Außen'],
+    hideRooms:['🛏️ Schlafzimmer','💼 Büro'],
+    roomAliases:{'🛏️ Eltern SZ':'🛏️ Schlafzimmer'},
+    showRadio:false, showGarage:true, showSim:false,
+    quickScenes:['hell','abend'],
+    dimmerRooms:[],
+  },
+  sidonia: {
+    key:'sidonia', name:'Sidonia', emoji:'👱‍♀️',
+    greetings:['Hey Sidi! 💕','Hi Sidonia! 🌺','Hallo Sidi! 🦋'],
+    person:null,
+    roomOrder:['🛏️ Schlafzimmer','🛋️ Wohnzimmer','🍳 Küche','🚪 Gänge & WC'],
+    hideRooms:['🛏️ Eltern SZ','💼 Büro','🌿 Außen'],
+    roomAliases:{},
+    showRadio:false, showGarage:false, showSim:false,
+    quickScenes:['abend','hell','nacht2'],
+    dimmerRooms:['🛏️ Schlafzimmer'],
+  },
+};
+
+let _profile = null;
+
+function getProfile(){
+  if(_profile) return _profile;
+  const param = new URLSearchParams(location.search).get('wer');
+  const stored = localStorage.getItem('fam_profil');
+  const key = param || stored || 'janis';
+  _profile = PROFILES[key] || PROFILES.janis;
+  if(param) localStorage.setItem('fam_profil', key);
+  return _profile;
+}
+
+function setProfile(key){
+  localStorage.setItem('fam_profil', key);
+  _profile = PROFILES[key] || PROFILES.janis;
+  applyProfile();
+  buildLights();
+  updateUI();
+}
+
+function applyProfile(){
+  const p = getProfile();
+  const g = p.greetings[Math.floor(Math.random()*p.greetings.length)];
+  const grEl = document.getElementById('profile-greeting');
+  if(grEl) grEl.textContent = g;
+  const nmEl = document.getElementById('profile-name');
+  if(nmEl) nmEl.textContent = p.emoji + ' ' + p.name;
+  const radioSec = document.getElementById('home-radio-section');
+  if(radioSec) radioSec.style.display = p.showRadio ? '' : 'none';
+  if(p.showRadio && p.radioFavs) buildRadioFavs(p.radioFavs);
+  const garageSec = document.getElementById('home-garage-section');
+  if(garageSec) garageSec.style.display = p.showGarage ? '' : 'none';
+  const simSec = document.getElementById('home-sim-section');
+  if(simSec) simSec.style.display = p.showSim ? '' : 'none';
+  document.querySelectorAll('.sc-btn').forEach(btn=>{
+    btn.style.display = (!p.quickScenes||p.quickScenes.includes(btn.dataset.scene)) ? '' : 'none';
+  });
+  document.querySelectorAll('.profile-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.profile === p.key);
+  });
+}
+
+function buildRadioFavs(favs){
+  const container = document.getElementById('radio-favs-grid');
+  if(!container) return;
+  container.innerHTML = favs.map(f=>`<button class="radio-fav-btn" data-url="${f.url}" data-player="${f.player}"><span class="radio-fav-ico">${f.ico}</span><span class="radio-fav-name">${f.name}</span></button>`).join('');
+  container.querySelectorAll('.radio-fav-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      svc('media_player','play_media',{entity_id:btn.dataset.player,media_content_id:btn.dataset.url,media_content_type:'music'});
+      svc('media_player','volume_set',{entity_id:btn.dataset.player,volume_level:0.3});
+      showToast(btn.querySelector('.radio-fav-name').textContent+' startet… 🎵');
+      btn.style.background='rgba(255,159,10,.2)'; setTimeout(()=>btn.style.background='',1500);
+    });
+  });
+}
+
 
 let _S = {};
 let _simActive = false;
@@ -1074,18 +1216,40 @@ document.getElementById('ld-ct-slider').addEventListener('input',e=>{if(_ldLight
 function buildLights(){
   const container=document.getElementById('lights-grid');
   let html='';
-  LIGHT_ROOMS.forEach(room=>{
+  const prof = getProfile();
+  let visRooms = LIGHT_ROOMS.filter(r=>!prof.hideRooms.includes(r.room));
+  if(prof.roomOrder){
+    visRooms.sort((a,b)=>{
+      const na=prof.roomAliases[a.room]||a.room, nb=prof.roomAliases[b.room]||b.room;
+      const ia=prof.roomOrder.indexOf(na)<0?prof.roomOrder.indexOf(a.room):prof.roomOrder.indexOf(na);
+      const ib=prof.roomOrder.indexOf(nb)<0?prof.roomOrder.indexOf(b.room):prof.roomOrder.indexOf(nb);
+      return (ia<0?99:ia)-(ib<0?99:ib);
+    });
+  }
+  visRooms.forEach(room=>{
+    const displayName=prof.roomAliases[room.room]||room.room;
+    const showDimmer=prof.dimmerRooms&&prof.dimmerRooms.includes(room.room);
     let pillsHtml='';
     if(room.scenes&&room.scenes.length){
       pillsHtml='<div class="room-scenes">'+room.scenes.map((s,i)=>
         `<button class="scene-pill" data-room="${encodeURIComponent(room.room)}" data-scene="${i}">${s.ico} ${s.name}</button>`
       ).join('')+'</div>';
     }
-    html+=`<div class="room-label">${room.room}</div>${pillsHtml}<div class="lights-grid-inner">`;
+    let dimHtml='';
+    if(showDimmer){const rk=encodeURIComponent(room.room);dimHtml=`<div class="room-dimmer"><span class="room-dimmer-lbl">💡 Alle dimmen</span><div class="room-dimmer-row"><input type="range" class="room-dim-slider" data-rkey="${rk}" min="1" max="100" value="70"><span class="room-dim-val" id="rdv-${rk}">70%</span></div></div>`;}
+    html+=`<div class="room-label">${displayName}</div>${pillsHtml}${dimHtml}<div class="lights-grid-inner">`;
     html+=room.lights.map(l=>`<div class="lt-tile" data-id="${l.id}" data-dom="${l.dom||'light'}" data-nodim="${l.nodim||false}"><div class="lt-ico"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none">${l.svg}</svg></div><div><div class="lt-name">${l.name}</div><div class="lt-state">Aus</div></div></div>`).join('');
     html+='</div>';
   });
   container.innerHTML=html;
+
+  container.querySelectorAll('.room-dim-slider').forEach(slider=>{
+    const rk=slider.dataset.rkey, rm=LIGHT_ROOMS.find(r=>r.room===decodeURIComponent(rk));
+    const valEl=document.getElementById('rdv-'+rk);
+    const dd=debounce(bri=>{if(!rm)return;rm.lights.filter(l=>!l.nodim&&_S[l.id]?.state==='on').forEach(l=>svc(l.dom||'light','turn_on',{entity_id:l.id,brightness_pct:bri,transition:0.3}));},120);
+    slider.addEventListener('input',()=>{const b=+slider.value;if(valEl)valEl.textContent=b+'%';dd(b);});
+    if(rm){const on=rm.lights.filter(l=>!l.nodim&&_S[l.id]?.state==='on');if(on.length){const avg=Math.round(on.reduce((s,l)=>s+Math.round((_S[l.id]?.attributes?.brightness||128)/2.55),0)/on.length);slider.value=avg;if(valEl)valEl.textContent=avg+'%';}}
+  });
 
   container.querySelectorAll('.scene-pill').forEach(btn=>{
     btn.addEventListener('click',()=>{
@@ -1540,6 +1704,8 @@ function switchTab(name){
 
 document.addEventListener("contextmenu",e=>e.preventDefault());
 checkLogin();
+applyProfile();
+document.querySelectorAll('.profile-btn').forEach(btn=>btn.addEventListener('click',()=>setProfile(btn.dataset.profile)));
 </script>
 </div>
 </div>
