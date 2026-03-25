@@ -155,7 +155,7 @@ html,body{height:100%;background:var(--bg);
 /* ── Page-enter staggered card animation ── */
 @keyframes pgCardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#wx-rec-pill,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#season-chip,.page-entering>#wx-rec-pill,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,
@@ -392,6 +392,9 @@ html,body{height:100%;background:var(--bg);
   color:var(--on-dim);margin-top:4px;
   animation:greetFade 1.2s ease both;animation-delay:.3s;opacity:0}
 @keyframes greetFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes greetCursor{0%,100%{opacity:1}50%{opacity:0}}
+.hgreet-cursor{display:inline-block;width:1.5px;height:.8em;background:rgba(255,255,255,.5);border-radius:1px;vertical-align:middle;margin-left:2px;animation:greetCursor .8s ease-in-out infinite}
+.hgreet-cursor.gc-hide{display:none}
 /* ── Analog Clock Mini ── */
 #aclock-wrap{display:flex;align-items:center;gap:10px}
 #aclock{flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,159,10,.25))}
@@ -605,6 +608,13 @@ html,body{height:100%;background:var(--bg);
 #batt-chip .bc-dot{width:6px;height:6px;border-radius:50%;background:#ff453a;flex-shrink:0;
   box-shadow:0 0 5px 1px rgba(255,69,58,.6);animation:bcDotPulse 2.4s ease-in-out infinite}
 @keyframes bcDotPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.5);opacity:1}}
+/* ───────────── JAHRESZEIT-CHIP ───────────── */
+#season-chip{display:none;align-items:center;gap:7px;padding:6px 14px;
+  border-radius:100px;font-size:.72rem;font-weight:600;margin:0 0 8px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);
+  color:rgba(255,255,255,.65);transition:opacity .4s ease}
+#season-chip.show{display:inline-flex}
+#season-chip .sc-sub{font-size:.6rem;color:rgba(255,255,255,.35);font-weight:400;margin-left:2px}
 /* ───────────── QUICK-ACTIONS BAR ───────────── */
 #qa-bar{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;padding-bottom:2px}
@@ -1549,6 +1559,8 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <div class="hfc-temps"><div class="hfc-hi" id="hfc-h1">--°</div><div class="hfc-lo" id="hfc-l1">--°</div></div>
         </div>
       </div>
+      <!-- Jahreszeit-Chip -->
+      <div id="season-chip"></div>
       <!-- Batterie-Status Chip -->
       <div id="batt-chip" role="alert" aria-live="polite">
         <span class="bc-dot"></span>
@@ -2559,6 +2571,38 @@ function thunderIco(s,id){
 }
 
 // Mini Forecast Strip — Home Tab
+function updateSeasonChip(){
+  const el=document.getElementById('season-chip');
+  if(!el) return;
+  const now=new Date();
+  const y=now.getFullYear();
+  // Astronomische Jahreszeiten (Nordhalbkugel, approximiert)
+  const seasons=[
+    {name:'Frühling', emoji:'🌸', color:'rgba(48,209,88,.18)', border:'rgba(48,209,88,.35)', textColor:'#30d158',
+     start:new Date(y,2,20), next:new Date(y,5,21), nextName:'Sommer'},
+    {name:'Sommer',   emoji:'☀️', color:'rgba(255,159,10,.15)', border:'rgba(255,159,10,.35)', textColor:'#ff9f0a',
+     start:new Date(y,5,21), next:new Date(y,8,23), nextName:'Herbst'},
+    {name:'Herbst',   emoji:'🍂', color:'rgba(255,120,40,.15)', border:'rgba(255,120,40,.32)', textColor:'#ff7828',
+     start:new Date(y,8,23), next:new Date(y,11,21), nextName:'Winter'},
+    {name:'Winter',   emoji:'❄️', color:'rgba(10,132,255,.15)', border:'rgba(10,132,255,.32)', textColor:'#0a84ff',
+     start:new Date(y,11,21), next:new Date(y+1,2,20), nextName:'Frühling'},
+  ];
+  const today=new Date(y,now.getMonth(),now.getDate());
+  let cur=seasons[3]; // default winter
+  for(let i=0;i<4;i++){
+    if(today>=seasons[i].start && (i===3 || today<seasons[(i+1)%4].start)){
+      cur=seasons[i]; break;
+    }
+  }
+  const msDay=86400000;
+  const daysLeft=Math.ceil((cur.next-today)/msDay);
+  el.style.background=cur.color;
+  el.style.borderColor=cur.border;
+  el.style.color=cur.textColor;
+  el.innerHTML=`${cur.emoji} ${cur.name}<span class="sc-sub">· ${daysLeft}d bis ${cur.nextName}</span>`;
+  el.classList.add('show');
+}
+
 function updateHomeForecast(){
   const strip=document.getElementById('home-fcast');
   if(!strip||!_wx.daily) return;
@@ -3065,6 +3109,7 @@ function renderWeather(){
       if(lblEl) lblEl.textContent=dirLbl;
     }
     updateHomeForecast();
+  updateSeasonChip();
     if(_wx.daily){
       document.getElementById('wx-hi').textContent=Math.round(_wx.daily.temperature_2m_max[0]);
       document.getElementById('wx-lo').textContent=Math.round(_wx.daily.temperature_2m_min[0]);
@@ -5861,6 +5906,26 @@ function updateDayArc(){
   dot.style.filter=`drop-shadow(0 0 5px ${dc})`;if(dotGlow)dotGlow.setAttribute('fill',dc.replace(')',',0.25)').replace('#','rgba(0,0,0,'));
   if(lbl)lbl.textContent=lab;
 }
+// ── Typewriter Greeting ──
+function typeGreet(el,text){
+  if(window._greetTmr)clearTimeout(window._greetTmr);
+  el.innerHTML='';
+  const cur=document.createElement('span');
+  cur.className='hgreet-cursor';
+  el.appendChild(cur);
+  let i=0;
+  function step(){
+    if(i<text.length){
+      el.insertBefore(document.createTextNode(text[i]),cur);
+      i++;
+      window._greetTmr=setTimeout(step,i<2?0:40);
+    }else{
+      setTimeout(()=>{cur.classList.add('gc-hide');},900);
+    }
+  }
+  step();
+}
+
 function updateClock(){
   const n=new Date();
   const h=String(n.getHours()).padStart(2,'0');
@@ -5881,7 +5946,7 @@ function updateClock(){
   // ── Time-of-day hero gradient ──
   updateHeroGradient(n.getHours(), n.getMinutes());
   const hgreet=document.getElementById('hgreet');
-  if(hgreet)hgreet.textContent=getGreeting(n.getHours());
+  if(hgreet){const g=getGreeting(n.getHours());if(!window._greetTyped){window._greetTyped=true;window._greetLast=g;typeGreet(hgreet,g);}else if(g!==window._greetLast){window._greetLast=g;typeGreet(hgreet,g);}}
   updateDayArc();
   // ── Analog clock hands ──
   (function(){
@@ -8268,6 +8333,61 @@ const _origSetWxMode=setWxMode;
     mo.observe(spkWrap,{attributeFilter:['class']});
   }
 })();
+
+  // ═══════════════════════════════════════════════
+  // HORIZONTAL SWIPE BETWEEN TABS
+  // Swipe left → next tab, right → previous tab
+  // ═══════════════════════════════════════════════
+  (function(){
+    const TABS=['home','musik','licht','wetter','geraete'];
+    const app=document.getElementById('app');
+    if(!app) return;
+    let sx=0,sy=0,st2=0,swiping=false;
+    const MIN_DX=65, MAX_DY=80, MAX_MS=480;
+
+    // Swipe hint overlay
+    const hint=document.createElement('div');
+    hint.id='tab-swipe-hint';
+    hint.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;z-index:9998;font-size:2.2rem;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.28,.64,1);background:rgba(28,28,30,.85);backdrop-filter:blur(12px);border-radius:18px;padding:14px 22px;color:#fff;border:1px solid rgba(255,255,255,.10)';
+    document.body.appendChild(hint);
+    let hintTimer=null;
+    function showHint(dir){
+      hint.textContent=dir>0?'▶':'◀';
+      hint.style.opacity='1';
+      hint.style.transform='translate(-50%,-50%) scale(1)';
+      clearTimeout(hintTimer);
+      hintTimer=setTimeout(()=>{hint.style.opacity='0';hint.style.transform='translate(-50%,-50%) scale(.7)'},600);
+    }
+
+    app.addEventListener('touchstart',e=>{
+      const t=e.touches[0];
+      sx=t.clientX; sy=t.clientY; st2=Date.now(); swiping=false;
+    },{passive:true});
+
+    app.addEventListener('touchmove',e=>{
+      if(!sx) return;
+      const dx=e.touches[0].clientX-sx;
+      const dy=Math.abs(e.touches[0].clientY-sy);
+      if(Math.abs(dx)>18&&dy<MAX_DY) swiping=true;
+    },{passive:true});
+
+    app.addEventListener('touchend',e=>{
+      if(!swiping){sx=0;return;}
+      const dx=e.changedTouches[0].clientX-sx;
+      const dy=Math.abs(e.changedTouches[0].clientY-sy);
+      const dt=Date.now()-st2;
+      sx=0; swiping=false;
+      if(Math.abs(dx)<MIN_DX||dy>MAX_DY||dt>MAX_MS) return;
+      const idx=TABS.indexOf(_page);
+      if(idx<0) return;
+      const dir=dx<0?1:-1; // swipe left=next(+1), swipe right=prev(-1)
+      const next=idx+dir;
+      if(next<0||next>=TABS.length) return;
+      showHint(dir);
+      hap&&hap();
+      navTo(TABS[next]);
+    },{passive:true});
+  })();
 </script>
 <div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v3.2</div>
 </body>
