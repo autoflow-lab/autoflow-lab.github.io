@@ -318,6 +318,7 @@ html[data-mode="security"] #sec-card{box-shadow:0 0 0 2px rgba(255,59,48,.5),0 0
    ANIMATIONS
 ═══════════════════════════════════════════ */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes lvPulse{0%{transform:scale(1);opacity:.8}70%{transform:scale(2.2);opacity:0}100%{transform:scale(2.2);opacity:0}}
 
 /* ── SNOW FX ── */
 @keyframes snowFall{0%{transform:translateY(-20px) translateX(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) translateX(var(--drift,40px)) rotate(360deg);opacity:.2}}
@@ -446,6 +447,17 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
 .hero-sub{font-size:1.08rem;color:var(--text2);max-width:520px;margin:0 auto 34px;line-height:1.7;animation:fadeInUp .8s .2s ease both;min-height:3.4em}
 .typed-cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:2px;vertical-align:text-bottom;border-radius:1px;animation:cursorBlink 1s step-end infinite}
 @keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes hiwIconBounce{0%{transform:scale(1) translateY(0)}30%{transform:scale(1.15) translateY(-7px)}55%{transform:scale(.95) translateY(2px)}75%{transform:scale(1.06) translateY(-3px)}100%{transform:scale(1) translateY(0)}}
+@keyframes hiwIconGlow1{0%,100%{box-shadow:0 4px 16px rgba(0,113,227,.35)}50%{box-shadow:0 4px 32px rgba(0,113,227,.72),0 0 0 8px rgba(0,113,227,.12)}}
+@keyframes hiwIconGlow2{0%,100%{box-shadow:0 4px 16px rgba(112,80,255,.35)}50%{box-shadow:0 4px 32px rgba(112,80,255,.72),0 0 0 8px rgba(112,80,255,.12)}}
+@keyframes hiwIconGlow3{0%,100%{box-shadow:0 4px 16px rgba(52,199,89,.35)}50%{box-shadow:0 4px 32px rgba(52,199,89,.72),0 0 0 8px rgba(52,199,89,.12)}}
+@keyframes hiwIconIn{0%{opacity:0;transform:scale(.55) translateY(18px)}60%{transform:scale(1.1) translateY(-4px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+.hiw-ico{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;opacity:0;transform:scale(.55) translateY(18px)}
+.hiw-ico.hiw-in{animation:hiwIconIn .55s cubic-bezier(.34,1.28,.64,1) forwards}
+.hiw-ico-1.hiw-in{animation:hiwIconIn .55s .05s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow1 3s 1s ease-in-out infinite}
+.hiw-ico-2.hiw-in{animation:hiwIconIn .55s .18s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow2 3s 1.18s ease-in-out infinite}
+.hiw-ico-3.hiw-in{animation:hiwIconIn .55s .31s cubic-bezier(.34,1.28,.64,1) forwards,hiwIconGlow3 3s 1.31s ease-in-out infinite}
+.hiw-ico:hover{animation:hiwIconBounce .6s ease forwards!important}
 .hero-actions{display:flex;gap:13px;flex-wrap:wrap;justify-content:center;margin-bottom:50px;animation:fadeInUp .9s .3s ease both}
 .btn-p{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:28px;border:none;background:linear-gradient(135deg,var(--accent),#34aadc);color:#fff;font-size:.95rem;font-weight:700;transition:all .25s;box-shadow:0 4px 18px rgba(0,113,227,.4)}
 .btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,113,227,.5)}
@@ -461,6 +473,15 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
    TRUST BADGES
 ═══════════════════════════════════════════ */
 .trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:28px 24px 0}
+.cta-trust-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08)}
+.cta-trust-badge{display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.55);transition:color .2s,transform .2s;cursor:default;animation:ctaTrustIn .5s cubic-bezier(.34,1.28,.64,1) both}
+.cta-trust-badge:hover{color:rgba(255,255,255,.85);transform:translateY(-2px)}
+.cta-trust-ico{font-size:1rem;opacity:.8}
+.cta-trust-badge:nth-child(1){animation-delay:.05s}
+.cta-trust-badge:nth-child(2){animation-delay:.12s}
+.cta-trust-badge:nth-child(3){animation-delay:.19s}
+.cta-trust-badge:nth-child(4){animation-delay:.26s}
+@keyframes ctaTrustIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .badge{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:24px;background:var(--bg2);border:1px solid var(--border);font-size:.79rem;font-weight:600;color:var(--text2);transition:all .2s}
 .badge:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
 
@@ -766,6 +787,36 @@ audio{display:none}
 .rev-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s;cursor:pointer;border:none;padding:0}
 .rev-dot.active{background:var(--accent);width:22px;border-radius:4px}
 @media(max-width:640px){.rev-prev{left:-12px}.rev-next{right:-12px}.rev{padding:24px 20px}}
+/* Why Now Section */
+.wn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.wn-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:36px 28px;text-align:center;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+.wn-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.35)}
+.wn-card--accent{border-color:rgba(255,159,10,.35);background:linear-gradient(145deg,var(--card),rgba(255,159,10,.07))}
+.wn-card--accent::before{content:'';position:absolute;inset:0;border-radius:var(--r);box-shadow:inset 0 0 0 1px rgba(255,159,10,.2);pointer-events:none}
+.wn-icon-wrap{width:60px;height:60px;border-radius:50%;background:rgba(255,159,10,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;border:1px solid rgba(255,159,10,.2)}
+.wn-stat{font-size:2.6rem;font-weight:800;color:var(--accent);line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;transition:color .3s}
+.wn-card--accent .wn-stat{color:#ff9f0a}
+.wn-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:14px}
+.wn-desc{font-size:.83rem;color:var(--text2);line-height:1.7;margin:0}
+@media(max-width:700px){.wn-grid{grid-template-columns:1fr}.wn-card{padding:28px 22px}}
+
+/* Rating Breakdown Bars */
+.rating-breakdown{max-width:480px;margin:48px auto 0;padding:28px 32px;background:var(--card);border:1px solid var(--border);border-radius:var(--r)}
+.rating-breakdown h3{font-size:1rem;font-weight:700;color:var(--text1);margin:0 0 20px;text-align:center;letter-spacing:.5px}
+.rating-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.rating-label{font-size:.82rem;color:var(--text2);width:22px;text-align:right;flex-shrink:0;font-weight:600}
+.rating-stars-mini{color:#ffcc00;font-size:.78rem;flex-shrink:0;width:70px}
+.rating-bar-track{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.rating-bar-fill{height:100%;border-radius:4px;width:0;transition:width 1.1s cubic-bezier(.4,0,.2,1)}
+.rating-bar-fill.gold{background:linear-gradient(90deg,#ff9f0a,#ffcc00)}
+.rating-bar-fill.silver{background:linear-gradient(90deg,#636366,#8e8e93)}
+.rating-pct{font-size:.78rem;color:var(--text2);width:34px;text-align:right;font-weight:600;flex-shrink:0}
+.rating-summary{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.rating-big{font-size:2.6rem;font-weight:800;color:var(--text1);line-height:1}
+.rating-info{display:flex;flex-direction:column;gap:3px}
+.rating-info .stars-row{color:#ffcc00;font-size:1.1rem;letter-spacing:2px}
+.rating-info .count{font-size:.78rem;color:var(--text2)}
+@media(max-width:540px){.rating-breakdown{padding:20px 18px}.rating-stars-mini{width:54px}}
 
 /* ═══════════════════════════════════════════
    FAQ
@@ -844,6 +895,38 @@ audio{display:none}
 .ba-result.bad{color:#ff3b30}
 .ba-result.good{color:#30d158}
 
+/* ── Vorher/Nachher Slider ───────────────────────────── */
+#vn-slider-wrap{position:relative;width:100%;max-width:720px;margin:0 auto;border-radius:var(--r);overflow:hidden;cursor:ew-resize;user-select:none;touch-action:pan-y;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+#vn-before,#vn-after{position:absolute;inset:0;width:100%;height:100%}
+#vn-before{background:linear-gradient(145deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)}
+#vn-after{background:linear-gradient(145deg,#0d0d0d 0%,#1c1c1e 50%,#2c2c2e 100%);clip-path:inset(0 0 0 50%);transition:clip-path 0s}
+.vn-screen{width:100%;display:block;pointer-events:none;aspect-ratio:16/9;position:relative;overflow:hidden}
+.vn-label{position:absolute;top:16px;font-size:.65rem;font-weight:800;letter-spacing:.9px;text-transform:uppercase;padding:4px 10px;border-radius:50px;backdrop-filter:blur(8px)}
+#vn-lbl-before{left:14px;background:rgba(255,59,48,.18);color:#ff6b6b;border:1px solid rgba(255,59,48,.3)}
+#vn-lbl-after{right:14px;background:rgba(0,113,227,.22);color:#5ac8fa;border:1px solid rgba(0,113,227,.35)}
+#vn-handle{position:absolute;top:0;bottom:0;width:3px;background:rgba(255,255,255,.9);left:50%;transform:translateX(-50%);z-index:10;pointer-events:none;box-shadow:0 0 18px rgba(255,255,255,.5)}
+#vn-handle-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 16px rgba(0,0,0,.4);pointer-events:none;z-index:11}
+#vn-handle-btn svg{display:block}
+.vn-ui-mock{padding:18px;height:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:8px}
+.vn-mock-header{font-size:.55rem;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.7px;text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.06)}
+.vn-row{display:flex;gap:7px}
+.vn-tile{flex:1;border-radius:8px;padding:9px;display:flex;flex-direction:column;gap:5px}
+.vn-before .vn-tile{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.vn-after .vn-tile{border:none;background:linear-gradient(145deg,rgba(255,159,10,.14),rgba(255,159,10,.06))}
+.vn-tile-ico{font-size:.95rem;line-height:1}
+.vn-tile-nm{font-size:.42rem;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.3px}
+.vn-tile-val{font-size:.5rem;font-weight:700;color:rgba(255,255,255,.7)}
+.vn-after .vn-tile-val{color:#ff9f0a}
+.vn-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:.52rem;color:rgba(255,255,255,.45);white-space:nowrap;pointer-events:none;animation:vnHintFade 3s ease-in-out 1.5s forwards}
+@keyframes vnHintFade{0%{opacity:1}70%{opacity:1}100%{opacity:0}}
+/* Stat bar rows in mock */
+.vn-bar-row{display:flex;align-items:center;gap:6px;margin:2px 0}
+.vn-bar-bg{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden}
+.vn-bar-fill{height:100%;border-radius:2px}
+.vn-bar-lbl{font-size:.4rem;color:rgba(255,255,255,.35);min-width:22px;text-align:right}
+.vn-before .vn-bar-fill{background:rgba(255,255,255,.22)}
+.vn-after .vn-bar-fill{background:linear-gradient(90deg,#ff9f0a,#ff6b35)}
+
 .wf-nodes{display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
 .wf-node{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:18px 22px;text-align:center;min-width:115px;position:relative;transition:transform .3s,box-shadow .3s}
 .wf-node:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
@@ -896,6 +979,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 .footer-links a{font-size:.84rem;color:var(--text2);transition:color .2s;font-weight:500}
 .footer-links a:hover{color:var(--accent)}
 .footer-copy{font-size:.76rem;color:var(--text3)}
+/* ── DSGVO COOKIE BANNER ── */
+#dsgvo-banner{position:fixed;bottom:0;left:0;right:0;z-index:10001;padding:14px 20px;background:rgba(18,18,20,.97);backdrop-filter:blur(20px) saturate(1.6);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between;transform:translateY(100%);opacity:0;transition:transform .45s cubic-bezier(.34,1.28,.64,1),opacity .35s ease;pointer-events:none}
+#dsgvo-banner.show{transform:translateY(0);opacity:1;pointer-events:auto}
+#dsgvo-banner-text{flex:1;min-width:200px;font-size:.82rem;color:rgba(255,255,255,.65);line-height:1.5;display:flex;align-items:center;gap:9px}
+#dsgvo-banner-text .dsgvo-ico{font-size:1.1rem;flex-shrink:0}
+#dsgvo-banner-close{flex-shrink:0;background:rgba(48,209,88,.13);border:1px solid rgba(48,209,88,.32);color:#30d158;border-radius:20px;padding:7px 18px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s,transform .2s}
+#dsgvo-banner-close:hover{background:rgba(48,209,88,.22);transform:translateY(-1px)}
+@keyframes dsgvoBannerIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
 /* ── SCROLL-TO-TOP ── */
 #scrollTop{position:fixed;bottom:24px;right:24px;z-index:9999;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px var(--glow);opacity:0;transform:translateY(20px) scale(.85);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none;cursor:pointer}
 #scrollTop.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
@@ -1195,7 +1286,8 @@ input[type=range]{touch-action:pan-x}
 <!-- SCARCITY BANNER -->
 <div id="scarcity-banner" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#ff6b00,#ff9f0a);color:#fff;text-align:center;padding:10px 40px 10px 16px;font-size:.82rem;font-weight:600;letter-spacing:.02em;box-shadow:0 2px 12px rgba(255,107,0,.35);transform:translateY(-100%);transition:transform .5s cubic-bezier(.34,1.56,.64,1)">
   🔥 <span data-i18n="scarcity_text">Nur noch <strong>3 Plätze</strong> diese Woche verfügbar — jetzt sichern!</span>
-  <a href="#contact-section" style="margin-left:12px;background:rgba(0,0,0,.25);color:#fff;text-decoration:none;padding:3px 10px;border-radius:20px;font-size:.78rem">Anfragen →</a>
+  <span id="sc-timer-wrap" style="margin-left:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.22);border-radius:20px;padding:2px 10px;font-size:.76rem;font-variant-numeric:tabular-nums;letter-spacing:.04em">⏱ <span id="sc-countdown" style="font-weight:700;min-width:52px;display:inline-block">--:--:--</span></span>
+  <a href="#contact-section" style="margin-left:8px;background:rgba(0,0,0,.25);color:#fff;text-decoration:none;padding:3px 10px;border-radius:20px;font-size:.78rem">Anfragen →</a>
   <button onclick="document.getElementById('scarcity-banner').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.8);font-size:1.1rem;cursor:pointer;line-height:1" aria-label="Schließen">×</button>
 </div>
 <script>
@@ -1215,6 +1307,35 @@ input[type=range]{touch-action:pan-x}
     var el=b.querySelector('[data-i18n="scarcity_text"]');
     if(el) el.innerHTML='Only <strong>3 slots</strong> left this week — grab yours now!';
   }
+
+  // ── Countdown Timer ──────────────────────────────
+  (function(){
+    var KEY='scarcityEndTs';
+    var DURATION=24*3600*1000; // 24h
+    var end=parseInt(localStorage.getItem(KEY)||'0',10);
+    if(!end||end<=Date.now()){
+      end=Date.now()+DURATION;
+      localStorage.setItem(KEY,end);
+    }
+    var cdEl=document.getElementById('sc-countdown');
+    if(!cdEl)return;
+    function pad(n){return String(n).padStart(2,'0')}
+    function tick(){
+      var rem=Math.max(0,end-Date.now());
+      if(rem<=0){
+        // reset
+        end=Date.now()+DURATION;
+        localStorage.setItem(KEY,end);
+        rem=DURATION;
+      }
+      var h=Math.floor(rem/3600000);
+      var m=Math.floor((rem%3600000)/60000);
+      var s=Math.floor((rem%60000)/1000);
+      cdEl.textContent=pad(h)+':'+pad(m)+':'+pad(s);
+    }
+    tick();
+    setInterval(tick,1000);
+  })();
 })();
 </script>
 
@@ -1289,6 +1410,76 @@ input[type=range]{touch-action:pan-x}
   <button class="mob-btn" onclick="openFiverr()">🛒 Fiverr öffnen</button>
 </div>
 
+<!-- ANCHOR NAV -->
+<nav id="anchor-nav" style="position:fixed;top:var(--nav,56px);left:0;right:0;z-index:8990;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.08);transform:translateY(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;justify-content:center;gap:0;padding:0 16px">
+  <a href="#hero" class="an-link active" data-section="hero" data-i18n="anOverview">Überblick</a>
+  <a href="#preise" class="an-link" data-section="preise" data-i18n="anPrices">Preise</a>
+  <a href="#video-section" class="an-link" data-section="video-section" data-i18n="anDemo">Demo</a>
+  <a href="#contact-section" class="an-link" data-section="contact-section" data-i18n="anContact">Kontakt</a>
+</nav>
+<style>
+:root[data-theme="dark"] #anchor-nav { background:rgba(20,20,20,0.88); border-bottom-color:rgba(255,255,255,.1); }
+.an-link { display:inline-block; padding:9px 16px; font-size:.78rem; font-weight:600; letter-spacing:.03em; text-decoration:none; color:var(--text2,#555); border-bottom:2px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; }
+.an-link:hover { color:var(--acc,#0071e3); }
+.an-link.active { color:var(--acc,#0071e3); border-bottom-color:var(--acc,#0071e3); }
+@media(max-width:480px){ .an-link { padding:9px 10px; font-size:.72rem; } }
+</style>
+<script>
+(function(){
+  var nav = document.getElementById('anchor-nav');
+  var hero = document.getElementById('hero');
+  var links = nav ? nav.querySelectorAll('.an-link') : [];
+  var sections = ['hero','fp-section','video-section','preise','contact-section'];
+  function updateAnchors(){
+    if(!nav||!hero) return;
+    var heroBottom = hero.getBoundingClientRect().bottom;
+    if(heroBottom < 60){ nav.style.transform='translateY(0)'; }
+    else { nav.style.transform='translateY(-100%)'; }
+    // highlight active section
+    var scrollY = window.scrollY||window.pageYOffset;
+    var active = null;
+    links.forEach(function(l){
+      var id = l.getAttribute('data-section');
+      var el = document.getElementById(id);
+      if(!el) return;
+      var top = el.getBoundingClientRect().top + scrollY;
+      if(scrollY + 100 >= top) active = id;
+    });
+    links.forEach(function(l){
+      l.classList.toggle('active', l.getAttribute('data-section') === active);
+    });
+  }
+  window.addEventListener('scroll', updateAnchors, {passive:true});
+  updateAnchors();
+  // smooth scroll
+  if(nav) nav.addEventListener('click', function(e){
+    var a = e.target.closest('.an-link');
+    if(!a) return;
+    e.preventDefault();
+    var target = document.querySelector(a.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  // i18n hook
+  window._anchorNavI18n = {
+    anOverview:{de:'Überblick',en:'Overview'},
+    anPrices:{de:'Preise',en:'Prices'},
+    anDemo:{de:'Demo',en:'Demo'},
+    anContact:{de:'Kontakt',en:'Contact'}
+  };
+  function applyAnchorI18n(lang){
+    links.forEach(function(l){
+      var k = l.getAttribute('data-i18n');
+      if(k && window._anchorNavI18n[k]) l.textContent = window._anchorNavI18n[k][lang]||window._anchorNavI18n[k].de;
+    });
+  }
+  var _origToggleLang = window.toggleLang;
+  window.toggleLang = function(){
+    if(_origToggleLang) _origToggleLang();
+    applyAnchorI18n(document.documentElement.lang==='en'?'en':'de');
+  };
+})();
+</script>
+
 <!-- ═══════════════════════ SMART HOME PAGE ═══════════════════════ -->
 <div class="page active" id="page-smarthome">
 
@@ -1311,7 +1502,42 @@ input[type=range]{touch-action:pan-x}
       <div class="stat"><div class="num" id="s-del">0h</div><div class="lbl" data-i="stat3">Lieferzeit</div></div>
       <div class="stat"><div class="num" id="s-price">€0</div><div class="lbl" data-i="stat4">ab Preis</div></div>
     </div>
+    <!-- Live Visitor Counter -->
+    <div id="live-visitors" style="display:inline-flex;align-items:center;gap:7px;margin-top:22px;padding:6px 16px;background:rgba(52,199,89,.1);border:1px solid rgba(52,199,89,.25);border-radius:24px;font-size:.75rem;font-weight:600;color:rgba(52,199,89,.9);opacity:0;transition:opacity .6s ease;animation:none">
+      <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0">
+        <span style="position:absolute;inset:0;border-radius:50%;background:#34c759;animation:lvPulse 2s ease-out infinite"></span>
+        <span style="width:8px;height:8px;border-radius:50%;background:#34c759;position:relative;z-index:1"></span>
+      </span>
+      <span id="lv-count">5</span> <span id="lv-label">Personen schauen gerade</span>
+    </div>
   </section>
+<script>
+(function(){
+  var el=document.getElementById('live-visitors');
+  var cnt=document.getElementById('lv-count');
+  var lbl=document.getElementById('lv-label');
+  if(!el||!cnt)return;
+  // i18n
+  var lang=document.documentElement.lang||'de';
+  if(lang==='en') lbl.textContent='people viewing right now';
+  // Start with random value 4-8
+  var cur=Math.floor(Math.random()*5)+4;
+  cnt.textContent=cur;
+  // Show after 2.5s
+  setTimeout(function(){el.style.opacity='1';},2500);
+  // Drift ±1 every 18-45s
+  function drift(){
+    var delta=Math.random()<.5?1:-1;
+    cur=Math.max(3,Math.min(9,cur+delta));
+    // Animate the number change
+    el.style.transform='scale(1.08)';
+    setTimeout(function(){cnt.textContent=cur;el.style.transform='scale(1)';el.style.transition='opacity .6s ease,transform .2s ease';},120);
+    // Schedule next drift
+    setTimeout(drift, 18000+Math.random()*27000);
+  }
+  setTimeout(drift,18000+Math.random()*27000);
+})();
+</script>
 
   <!-- TRUST -->
   <div class="trust-row">
@@ -1658,19 +1884,19 @@ input[type=range]{touch-action:pan-x}
         <!-- Connector line -->
         <div style="position:absolute;top:40px;left:calc(16.67% + 20px);right:calc(16.67% + 20px);height:2px;background:linear-gradient(90deg,var(--accent),#af52de);opacity:.3;z-index:0" class="hiw-line"></div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#34aadc);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
+          <div class="hiw-ico hiw-ico-1" style="background:linear-gradient(135deg,var(--accent),#34aadc);box-shadow:0 4px 16px rgba(0,113,227,.35)">💬</div>
           <div style="font-size:.65rem;font-weight:800;color:var(--accent);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw1-step">Schritt 1</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw1-ttl">Briefing</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw1-desc">Du beschreibst dein Projekt via Fiverr-Chat. Geräte, Wünsche, Stil — ich frage alles was ich brauche.</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7050ff,#e040fb);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(112,80,255,.35)">⚡</div>
+          <div class="hiw-ico hiw-ico-2" style="background:linear-gradient(135deg,#7050ff,#e040fb);box-shadow:0 4px 16px rgba(112,80,255,.35)">⚡</div>
           <div style="font-size:.65rem;font-weight:800;color:#9060ff;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw2-step">Schritt 2</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw2-ttl">Umsetzung</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw2-desc">Ich baue dein Dashboard in 24–72h. Du bekommst Updates und kannst Revisionen anfragen.</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 24px;position:relative;z-index:1;transition:transform .25s,box-shadow .25s" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--green),#30d068);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 18px;box-shadow:0 4px 16px rgba(52,199,89,.35)">🚀</div>
+          <div class="hiw-ico hiw-ico-3" style="background:linear-gradient(135deg,var(--green),#30d068);box-shadow:0 4px 16px rgba(52,199,89,.35)">🚀</div>
           <div style="font-size:.65rem;font-weight:800;color:var(--green);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px" id="hiw3-step">Schritt 3</div>
           <div style="font-size:1rem;font-weight:700;margin-bottom:8px" id="hiw3-ttl">Launch</div>
           <div style="font-size:.82rem;color:var(--text2);line-height:1.6" id="hiw3-desc">Du bekommst fertige Dateien + Video-Erklärung + Docs. Importieren, fertig. Los geht's!</div>
@@ -2077,6 +2303,50 @@ input[type=range]{touch-action:pan-x}
     </div>
   </div>
 
+  <!-- RATING BREAKDOWN -->
+  <div class="band" style="padding:0 24px 72px">
+    <div class="rating-breakdown reveal" id="rating-breakdown">
+      <h3 data-i="ratingTitle">Bewertungsübersicht</h3>
+      <div class="rating-row">
+        <span class="rating-label">5</span>
+        <span class="rating-stars-mini">★★★★★</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill gold" data-pct="87"></div></div>
+        <span class="rating-pct">87%</span>
+      </div>
+      <div class="rating-row">
+        <span class="rating-label">4</span>
+        <span class="rating-stars-mini">★★★★☆</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill gold" data-pct="13"></div></div>
+        <span class="rating-pct">13%</span>
+      </div>
+      <div class="rating-row">
+        <span class="rating-label">3</span>
+        <span class="rating-stars-mini">★★★☆☆</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill silver" data-pct="0"></div></div>
+        <span class="rating-pct">0%</span>
+      </div>
+      <div class="rating-row">
+        <span class="rating-label">2</span>
+        <span class="rating-stars-mini">★★☆☆☆</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill silver" data-pct="0"></div></div>
+        <span class="rating-pct">0%</span>
+      </div>
+      <div class="rating-row">
+        <span class="rating-label">1</span>
+        <span class="rating-stars-mini">★☆☆☆☆</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill silver" data-pct="0"></div></div>
+        <span class="rating-pct">0%</span>
+      </div>
+      <div class="rating-summary">
+        <span class="rating-big">4.98</span>
+        <div class="rating-info">
+          <span class="stars-row">★★★★★</span>
+          <span class="count" data-i="ratingCount">47+ Bewertungen · Fiverr Top-Rated</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- COMPARISON TABLE -->
   <div class="band" style="padding:72px 24px">
     <div style="max-width:900px;margin:0 auto">
@@ -2108,11 +2378,121 @@ input[type=range]{touch-action:pan-x}
     </div>
   </div>
 
+  <!-- VORHER / NACHHER SLIDER -->
+  <div id="vn-section" class="band" style="padding:72px 24px;text-align:center">
+    <div style="max-width:760px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="vnTitle">Vorher &amp; Nachher — visuell</h2>
+      <p class="sec-sub sec-center reveal" data-i="vnSub">Standard Home Assistant UI vs. Custom autoflow-lab Dashboard. Ziehe den Regler!</p>
+      <div class="reveal" style="margin-top:36px;position:relative">
+        <div id="vn-slider-wrap">
+          <!-- BEFORE: standard HA -->
+          <div id="vn-before" class="vn-before">
+            <div class="vn-screen">
+              <div class="vn-ui-mock" style="padding-top:40px">
+                <div class="vn-mock-header">Overview — Home Assistant</div>
+                <div class="vn-row">
+                  <div class="vn-tile"><div class="vn-tile-ico">💡</div><div class="vn-tile-nm">LICHT WOHNZIMMER</div><div class="vn-tile-val">An</div></div>
+                  <div class="vn-tile"><div class="vn-tile-ico">🌡️</div><div class="vn-tile-nm">TEMPERATUR</div><div class="vn-tile-val">21.2°</div></div>
+                  <div class="vn-tile"><div class="vn-tile-ico">💡</div><div class="vn-tile-nm">LICHT KÜCHE</div><div class="vn-tile-val">Aus</div></div>
+                </div>
+                <div class="vn-row" style="margin-top:4px">
+                  <div class="vn-tile"><div class="vn-tile-ico">🔌</div><div class="vn-tile-nm">STECKDOSE</div><div class="vn-tile-val">Aus</div></div>
+                  <div class="vn-tile"><div class="vn-tile-ico">🚪</div><div class="vn-tile-nm">TÜR</div><div class="vn-tile-val">Zu</div></div>
+                  <div class="vn-tile"><div class="vn-tile-ico">📡</div><div class="vn-tile-nm">SENSOREN</div><div class="vn-tile-val">7 online</div></div>
+                </div>
+                <div style="margin-top:8px">
+                  <div class="vn-bar-row"><span style="font-size:.4rem;color:rgba(255,255,255,.3);min-width:38px">CPU</span><div class="vn-bar-bg"><div class="vn-bar-fill" style="width:42%"></div></div><div class="vn-bar-lbl">42%</div></div>
+                  <div class="vn-bar-row"><span style="font-size:.4rem;color:rgba(255,255,255,.3);min-width:38px">RAM</span><div class="vn-bar-bg"><div class="vn-bar-fill" style="width:61%"></div></div><div class="vn-bar-lbl">61%</div></div>
+                </div>
+                <div style="font-size:.38rem;color:rgba(255,255,255,.2);margin-top:auto;padding-top:6px">Home Assistant 2024.x · Lovelace UI</div>
+              </div>
+            </div>
+          </div>
+          <!-- AFTER: custom dashboard -->
+          <div id="vn-after" class="vn-after">
+            <div class="vn-screen">
+              <div class="vn-ui-mock" style="padding-top:40px">
+                <div class="vn-mock-header" style="color:rgba(255,159,10,.7);border-bottom-color:rgba(255,159,10,.1)">🏠 Wohnzimmer · autoflow-lab</div>
+                <div class="vn-row">
+                  <div class="vn-tile" style="background:linear-gradient(135deg,rgba(255,159,10,.2),rgba(255,159,10,.08));border:1px solid rgba(255,159,10,.25)"><div class="vn-tile-ico">☀️</div><div class="vn-tile-nm" style="color:rgba(255,159,10,.7)">Deckenlampe</div><div class="vn-tile-val" style="color:#ff9f0a">82% · 3200K</div></div>
+                  <div class="vn-tile" style="background:linear-gradient(135deg,rgba(10,132,255,.2),rgba(10,132,255,.08));border:1px solid rgba(10,132,255,.25)"><div class="vn-tile-ico">🎵</div><div class="vn-tile-nm" style="color:rgba(10,132,255,.7)">Spotify</div><div class="vn-tile-val" style="color:#0a84ff">▶ Bonobo</div></div>
+                  <div class="vn-tile" style="background:linear-gradient(135deg,rgba(48,209,88,.2),rgba(48,209,88,.08));border:1px solid rgba(48,209,88,.25)"><div class="vn-tile-ico">🌤</div><div class="vn-tile-nm" style="color:rgba(48,209,88,.7)">Wetter</div><div class="vn-tile-val" style="color:#30d158">14° · Bewölkt</div></div>
+                </div>
+                <div class="vn-row" style="margin-top:4px">
+                  <div class="vn-tile" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);flex:2"><div class="vn-tile-ico">🎬</div><div class="vn-tile-nm" style="color:rgba(255,255,255,.4)">Szene aktiv</div><div class="vn-tile-val" style="color:#ff9f0a">✦ Abend</div></div>
+                  <div class="vn-tile" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);flex:1"><div class="vn-tile-ico">⚡</div><div class="vn-tile-nm" style="color:rgba(255,255,255,.4)">Energie</div><div class="vn-tile-val" style="color:#30d158">312W</div></div>
+                </div>
+                <div style="margin-top:8px">
+                  <div class="vn-bar-row"><span style="font-size:.4rem;color:rgba(255,159,10,.5);min-width:38px">Licht</span><div class="vn-bar-bg" style="background:rgba(255,159,10,.1)"><div class="vn-bar-fill" style="width:82%;background:linear-gradient(90deg,#ff9f0a,#ff6b35)"></div></div><div class="vn-bar-lbl" style="color:rgba(255,159,10,.6)">82%</div></div>
+                  <div class="vn-bar-row"><span style="font-size:.4rem;color:rgba(10,132,255,.5);min-width:38px">Vol</span><div class="vn-bar-bg" style="background:rgba(10,132,255,.1)"><div class="vn-bar-fill" style="width:55%;background:linear-gradient(90deg,#0a84ff,#5ac8fa)"></div></div><div class="vn-bar-lbl" style="color:rgba(10,132,255,.6)">55%</div></div>
+                </div>
+                <div style="font-size:.38rem;color:rgba(255,159,10,.3);margin-top:auto;padding-top:6px">autoflow-lab · iOS Dark · Live-Daten</div>
+              </div>
+            </div>
+          </div>
+          <!-- Labels -->
+          <div class="vn-label" id="vn-lbl-before" data-i="vnBefore">Standard HA</div>
+          <div class="vn-label" id="vn-lbl-after" data-i="vnAfter">Custom Dashboard</div>
+          <!-- Handle -->
+          <div id="vn-handle">
+            <div id="vn-handle-btn">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 5l-4 5 4 5" stroke="#333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 5l4 5-4 5" stroke="#333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="vn-hint" id="vn-hint" data-i="vnHint">← Ziehe zum Vergleichen →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO PREVIEW -->
+  <div id="video-section" style="padding:64px 24px;text-align:center">
+    <div style="max-width:700px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="videoTitle">So sieht dein Dashboard aus</h2>
+      <p class="sec-sub sec-center reveal" data-i="videoSub">Echtzeit-Demo · iOS-Design · Live-Daten</p>
+      <div id="video-thumb" class="reveal" onclick="openVideoLink()" style="position:relative;margin:32px auto 0;max-width:600px;border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:0 8px 40px rgba(0,0,0,.35);background:#111;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;transition:transform .25s ease,box-shadow .25s ease">
+        <!-- Thumbnail gradient background (simulated) -->
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d1117 0%,#161b22 40%,#0d1117 100%);z-index:0"></div>
+        <!-- Fake screen preview overlay -->
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%,rgba(0,113,227,.18) 0%,transparent 70%);z-index:1;pointer-events:none"></div>
+        <!-- Dashboard mockup hint lines -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.12" viewBox="0 0 600 338" preserveAspectRatio="xMidYMid slice">
+          <rect x="24" y="24" width="552" height="290" rx="14" fill="none" stroke="#fff" stroke-width="1.2"/>
+          <rect x="40" y="44" width="180" height="100" rx="8" fill="#fff" opacity=".06"/>
+          <rect x="232" y="44" width="180" height="100" rx="8" fill="#fff" opacity=".06"/>
+          <rect x="424" y="44" width="152" height="100" rx="8" fill="#fff" opacity=".06"/>
+          <rect x="40" y="158" width="360" height="140" rx="8" fill="#fff" opacity=".04"/>
+          <rect x="416" y="158" width="160" height="140" rx="8" fill="#fff" opacity=".04"/>
+        </svg>
+        <!-- Play button -->
+        <div id="vid-play-btn" style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#0071e3,#0098ff);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(0,113,227,.18),0 8px 32px rgba(0,113,227,.45);transition:transform .2s,box-shadow .2s">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="white" style="margin-left:3px"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div style="color:#fff;font-size:.82rem;font-weight:600;letter-spacing:.04em;opacity:.85" data-i="videoPlayHint">▶ Demo ansehen auf Fiverr</div>
+        </div>
+        <!-- Duration badge -->
+        <div style="position:absolute;bottom:14px;right:16px;z-index:3;background:rgba(0,0,0,.72);color:#fff;font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:.03em">2:14</div>
+        <!-- "Jetzt auf Fiverr" badge top-right -->
+        <div style="position:absolute;top:14px;right:16px;z-index:3;background:linear-gradient(135deg,#1dbf73,#19a463);color:#fff;font-size:.66rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.03em">🟢 Fiverr GIG</div>
+      </div>
+      <!-- Hover pulse for play btn -->
+      <style>
+        #video-thumb:hover { transform:scale(1.015); box-shadow:0 12px 52px rgba(0,113,227,.38)!important; }
+        #video-thumb:hover #vid-play-btn > div:first-child { transform:scale(1.1); box-shadow:0 0 0 16px rgba(0,113,227,.24),0 10px 40px rgba(0,113,227,.55); }
+        @keyframes vidPlayPulse { 0%,100%{box-shadow:0 0 0 12px rgba(0,113,227,.18),0 8px 32px rgba(0,113,227,.45)} 50%{box-shadow:0 0 0 20px rgba(0,113,227,.08),0 8px 32px rgba(0,113,227,.55)} }
+        #vid-play-btn > div:first-child { animation: vidPlayPulse 2.4s ease-in-out infinite; }
+      </style>
+    </div>
+  </div>
+
   <!-- PRICING -->
-  <div style="padding:72px 24px">
+  <div id="preise" style="padding:72px 24px">
     <div style="max-width:1100px;margin:0 auto">
       <h2 class="sec-title sec-center reveal" data-i="priceTitle">Preise & Pakete</h2>
       <p class="sec-sub sec-center reveal" data-i="priceSub">Transparent kalkulierbar — keine versteckten Kosten.</p>
+      <!-- Tages-Deal Chip -->
+      <div id="daily-deal-chip" style="display:flex;justify-content:center;margin-bottom:24px"></div>
       <!-- Pricing Toggle -->
       <div class="price-toggle-wrap reveal">
         <span id="lbl-onetime" class="active" data-i="lblOnetime">Einmalig</span>
@@ -2294,6 +2674,34 @@ input[type=range]{touch-action:pan-x}
     </div>
   </div>
 
+  <!-- WHY NOW -->
+  <div class="band" id="why-now-band" style="padding:72px 24px">
+    <div style="max-width:1000px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="wnTitle">Warum jetzt?</h2>
+      <p class="sec-sub sec-center reveal" data-i="wnSub">Drei Gründe, die für sich sprechen.</p>
+      <div class="wn-grid reveal" id="wn-grid">
+        <div class="wn-card">
+          <div class="wn-icon-wrap"><span class="wn-icon">⏱</span></div>
+          <div class="wn-stat" data-target="120" data-suffix="h">0h</div>
+          <div class="wn-label" data-i="wnCard1Label">Stunden gespart</div>
+          <p class="wn-desc" data-i="wnCard1Desc">Durchschnittlich 120 Stunden Einrichtungszeit — erledigt in 24–48h durch uns.</p>
+        </div>
+        <div class="wn-card wn-card--accent">
+          <div class="wn-icon-wrap"><span class="wn-icon">💶</span></div>
+          <div class="wn-stat" data-target="340" data-prefix="€" data-suffix="">€0</div>
+          <div class="wn-label" data-i="wnCard2Label">Ø Ersparnis vs. Agentur</div>
+          <p class="wn-desc" data-i="wnCard2Desc">Agenturen verlangen €400–€800 für vergleichbare Setups. Unsere Pakete starten ab €29.</p>
+        </div>
+        <div class="wn-card">
+          <div class="wn-icon-wrap"><span class="wn-icon">🔌</span></div>
+          <div class="wn-stat" data-target="3000" data-suffix="+">0+</div>
+          <div class="wn-label" data-i="wnCard3Label">Kompatible Geräte</div>
+          <p class="wn-desc" data-i="wnCard3Desc">Home Assistant unterstützt über 3000 Integrationen — von Ikea bis Tesla, alles in einem Dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FAQ -->
   <div class="band" style="padding:72px 24px">
     <div style="max-width:800px;margin:0 auto">
@@ -2366,6 +2774,12 @@ input[type=range]{touch-action:pan-x}
       <h2 data-i="ctaH2">Bereit für dein Smart Home?</h2>
       <p data-i="ctaP">Kostenloses Briefing — ich zeige dir was möglich ist.</p>
       <button class="btn-p" onclick="openFiverr()" data-i="ctaBtn">🛒 Auf Fiverr bestellen</button>
+      <div class="cta-trust-row">
+        <div class="cta-trust-badge"><span class="cta-trust-ico">🔒</span><span data-i="ctaTrust1">Sicher bezahlen</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">⭐</span><span data-i="ctaTrust2">5 Sterne bewertet</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">⚡</span><span data-i="ctaTrust3">24h Lieferung</span></div>
+        <div class="cta-trust-badge"><span class="cta-trust-ico">💬</span><span data-i="ctaTrust4">24/7 Support</span></div>
+      </div>
     </div>
   </div>
 
@@ -2688,6 +3102,45 @@ if(localStorage.getItem('alf-hints')==='off'){
   setTimeout(()=>document.body.classList.add('hints-off'),100);
 }
 function toast(msg,d=2200){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),d)}
+function openVideoLink(){
+  window.open('https://www.fiverr.com/autoflow-lab','_blank');
+}
+
+// ── VORHER/NACHHER SLIDER ──────────────────────────────
+(function(){
+  let wrap,after,handle,pct=0.5,dragging=false;
+  function setPct(p){
+    pct=Math.max(0.04,Math.min(0.96,p));
+    after.style.clipPath='inset(0 '+(100-pct*100).toFixed(2)+'% 0 0)';
+    handle.style.left=(pct*100).toFixed(2)+'%';
+    const hint=document.getElementById('vn-hint');
+    if(hint)hint.style.opacity='0';
+  }
+  function getX(e){return e.touches?e.touches[0].clientX:e.clientX}
+  function onMove(e){
+    if(!dragging)return;
+    const r=wrap.getBoundingClientRect();
+    setPct((getX(e)-r.left)/r.width);
+  }
+  function onEnd(){dragging=false;}
+  function init(){
+    wrap=document.getElementById('vn-slider-wrap');
+    after=document.getElementById('vn-after');
+    handle=document.getElementById('vn-handle');
+    if(!wrap)return;
+    setPct(0.5);
+    wrap.addEventListener('mousedown',e=>{dragging=true;onMove(e);},{passive:true});
+    wrap.addEventListener('touchstart',e=>{dragging=true;onMove(e);},{passive:true});
+    document.addEventListener('mousemove',onMove,{passive:true});
+    document.addEventListener('touchmove',onMove,{passive:true});
+    document.addEventListener('mouseup',onEnd);
+    document.addEventListener('touchend',onEnd);
+    // animate hint sweep on first load
+    let t=0;const sweep=()=>{t+=0.012;setPct(0.5+Math.sin(t)*0.22);if(t<Math.PI*1.1&&!dragging)requestAnimationFrame(sweep);else setPct(0.5);};
+    setTimeout(()=>{if(!dragging)requestAnimationFrame(sweep);},2200);
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+})();
 function openFiverr(){
   // Scroll to contact section
   const el=document.getElementById('contact-section');
@@ -2809,6 +3262,66 @@ document.addEventListener('click',e=>{if(!e.target.closest('#mob-menu')&&!e.targ
 // ── SCROLL REVEAL ──
 const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── Why Now Counter Animation ──
+(function(){
+  const grid=document.getElementById('wn-grid');
+  if(!grid)return;
+  function animateCounter(el,target,prefix,suffix,duration){
+    const start=performance.now();
+    function tick(now){
+      const p=Math.min((now-start)/duration,1);
+      const ease=1-Math.pow(1-p,3);
+      const val=Math.round(ease*target);
+      el.textContent=(prefix||'')+val.toLocaleString('de-DE')+(suffix||'');
+      if(p<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        grid.querySelectorAll('.wn-stat').forEach(stat=>{
+          const target=parseInt(stat.dataset.target)||0;
+          const prefix=stat.dataset.prefix||'';
+          const suffix=stat.dataset.suffix||'';
+          animateCounter(stat,target,prefix,suffix,1400);
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.3});
+  obs.observe(grid);
+})();
+
+// ── Rating Breakdown Bars ──
+(function(){
+  const bd=document.getElementById('rating-breakdown');
+  if(!bd)return;
+  const fills=bd.querySelectorAll('.rating-bar-fill');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        fills.forEach(f=>{
+          const pct=parseInt(f.dataset.pct)||0;
+          requestAnimationFrame(()=>{ f.style.width=pct+'%'; });
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.3});
+  obs.observe(bd);
+})();
+
+// ── HIW Animated Icons ──
+(function(){
+  const icos=document.querySelectorAll('.hiw-ico');
+  if(!icos.length)return;
+  const ob=new IntersectionObserver(entries=>entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('hiw-in');ob.unobserve(e.target);}
+  }),{threshold:.4});
+  icos.forEach(el=>ob.observe(el));
+})();
 
 // ── MUSIC / RADIO ──
 const tracks=[{t:'Midnight City',a:'M83',d:214},{t:'Blinding Lights',a:'The Weeknd',d:202},{t:'As It Was',a:'Harry Styles',d:167},{t:'Levitating',a:'Dua Lipa',d:194}];
@@ -3821,7 +4334,8 @@ const T={
     pf1Ttl:'Luxus Penthouse Dashboard',pf1Desc:'Vollständiges 8-Zimmer-Dashboard mit Mood-Beleuchtung, Musik, Klima, Solar und Sicherheit.',
     pf2Ttl:'Solar Energy Manager',pf2Desc:'Echtzeit-Energiemonitoring mit Solar, Tesla, Wärmepumpe und E-Auto-Lader.',
     pf3Ttl:'3D Grundriss Dashboard',pf3Desc:'Isometrischer Grundriss mit per-Raum Licht, Szenen, Farbwechsel und Live-Status.',
-    revTtl:'Was Kunden sagen',
+    revTtl:'Was Kunden sagen',ratingTitle:'Bewertungsübersicht',ratingCount:'47+ Bewertungen · Fiverr Top-Rated',
+    wnTitle:'Warum jetzt?',wnSub:'Drei Gründe, die für sich sprechen.',wnCard1Label:'Stunden gespart',wnCard1Desc:'Durchschnittlich 120 Stunden Einrichtungszeit — erledigt in 24–48h durch uns.',wnCard2Label:'Ø Ersparnis vs. Agentur',wnCard2Desc:'Agenturen verlangen €400–€800 für vergleichbare Setups. Unsere Pakete starten ab €29.',wnCard3Label:'Kompatible Geräte',wnCard3Desc:'Home Assistant unterstützt über 3000 Integrationen — von Ikea bis Tesla, alles in einem Dashboard.',
     rev1:'"Altbau-Chaos aus Philips Hue, Shelly und Viessmann Heizung — in 48h ein einheitliches Dashboard. Lieferung schneller als erwartet!"',
     rev2:'"8 Räume, IKEA Tradfri + Sonos. Ergebnis: iOS-artiges Dashboard mit Szenen, Musik-Widget und Energie-Überblick. Jede Revision sofort umgesetzt."',
     rev3:'"Lokale KI offline — Whisper + Piper auf eigenem Server. Kein Paket geht nach außen. Grundriss meines Einfamilienhauses ist der Hammer!"',
@@ -3830,6 +4344,8 @@ const T={
     rev6:'"N8N sendet täglich WhatsApp mit Wetter + Kalender + Heizungsstatus. Rollläden, Licht, Heizung laufen vollautomatisch. Traumhaft!"',
     rev7:'"6 Meetingräume automatisiert: CO2-Sensor, Präsenz-Dimmer, Kalender-Raumbelegung. Unser Team spart täglich Zeit. Professionell!"',
     rev8:'"Matter + Zigbee in einem Dashboard, alles lokal auf dem NUC. Kein Abo, keine Cloud. Bestes Fiverr-Gig ever!"',
+    vnTitle:'Vorher & Nachher — visuell',vnSub:'Standard Home Assistant UI vs. Custom autoflow-lab Dashboard. Ziehe den Regler!',vnBefore:'Standard HA',vnAfter:'Custom Dashboard',vnHint:'← Ziehe zum Vergleichen →',
+    videoTitle:'So sieht dein Dashboard aus',videoSub:'Echtzeit-Demo · iOS-Design · Live-Daten',videoPlayHint:'▶ Demo ansehen auf Fiverr',
     priceTtl:'Preise & Pakete',priceSub:'Transparent — keine versteckten Kosten.',
     lblOnetime:'Einmalig',lblMonthly:'Monatlich',saveBadge:'–40%',
     tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/ Projekt',popularLbl:'Beliebt',
@@ -3868,7 +4384,7 @@ const T={
     cfLblName:'Name',cfLblEmail:'E-Mail',cfLblType:'Projekttyp',cfLblBudget:'Budget',cfLblMsg:'Nachricht',
     cfSubmit:'✉ Anfrage senden',cfSuccess:'Danke! Deine Anfrage wurde gesendet. Ich melde mich bald.',
     cfPh1:'Max Mustermann',cfPh2:'max@beispiel.de',cfPh3:'Kurze Beschreibung deines Smart Home Setups und was du dir vorstellst...',
-    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',
+    ctaH2:'Bereit für dein Smart Home?',ctaP:'Kostenloses Briefing — ich zeige dir was möglich ist.',ctaBtn:'🛒 Auf Fiverr bestellen',ctaTrust1:'Sicher bezahlen',ctaTrust2:'5 Sterne bewertet',ctaTrust3:'24h Lieferung',ctaTrust4:'24/7 Support',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ KI Automation',ftLinkOrder:'🛒 Bestellen',
     ftTagline:'Handgefertigte Smart Home Dashboards — keine Cloud, kein Abo, ganz deins.',
     aiH1a:'Dein Alltag,',aiH1b:'vollautomatisch.',aiSub:'Lokale KI-Modelle, N8N Workflows, Chatbots — alles ohne Cloud-Abhängigkeit.',
@@ -3914,7 +4430,8 @@ const T={
     pf1Ttl:'Luxury Penthouse Dashboard',pf1Desc:'Complete 8-room dashboard with mood lighting, music, climate, solar monitoring and security.',
     pf2Ttl:'Solar Energy Manager',pf2Desc:'Real-time energy monitoring with solar, Tesla, heat pump and EV charger.',
     pf3Ttl:'3D Floor Plan Dashboard',pf3Desc:'Isometric floor plan with per-room lighting, scenes, color changes and live device status.',
-    revTtl:'What Clients Say',
+    revTtl:'What Clients Say',ratingTitle:'Rating Breakdown',ratingCount:'47+ Reviews · Fiverr Top-Rated',
+    wnTitle:'Why Now?',wnSub:'Three reasons that speak for themselves.',wnCard1Label:'Hours Saved',wnCard1Desc:'Average 120 hours of setup time — done in 24–48h by us.',wnCard2Label:'Avg. Savings vs. Agency',wnCard2Desc:'Agencies charge €400–€800 for comparable setups. Our packages start at €29.',wnCard3Label:'Compatible Devices',wnCard3Desc:'Home Assistant supports 3000+ integrations — from Ikea to Tesla, all in one dashboard.',
     rev1:'"Old building chaos: Philips Hue, Shelly and Viessmann heating — unified dashboard in 48h. Delivery faster than expected!"',
     rev2:'"8 rooms, IKEA Tradfri + Sonos. Result: iOS-style dashboard with scenes, music widget and energy overview. Every revision done immediately."',
     rev3:'"Local AI fully offline — Whisper + Piper on own server. Nothing leaves my network. The floor plan of my house is incredible!"',
@@ -3923,6 +4440,8 @@ const T={
     rev6:'"N8N sends daily WhatsApp with weather + calendar + heating status. Blinds, lights, heating run fully automated. Dreamlike!"',
     rev7:'"6 meeting rooms automated: CO2 sensor, presence dimming, calendar room display. Our team saves time daily. Professional work!"',
     rev8:'"Matter + Zigbee in one dashboard, all local on NUC. No subscription, no cloud. Best Fiverr gig I ever ordered!"',
+    vnTitle:'Before & After — Visual',vnSub:'Standard Home Assistant UI vs. Custom autoflow-lab Dashboard. Drag the slider!',vnBefore:'Standard HA',vnAfter:'Custom Dashboard',vnHint:'← Drag to Compare →',
+    videoTitle:'See Your Dashboard in Action',videoSub:'Real-time Demo · iOS Design · Live Data',videoPlayHint:'▶ Watch Demo on Fiverr',
     priceTtl:'Pricing & Packages',priceSub:'Transparent pricing — no hidden costs.',
     lblOnetime:'One-time',lblMonthly:'Monthly',saveBadge:'–40%',
     tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/ project',popularLbl:'Popular',
@@ -3961,7 +4480,7 @@ const T={
     cfLblName:'Name',cfLblEmail:'Email',cfLblType:'Project Type',cfLblBudget:'Budget',cfLblMsg:'Message',
     cfSubmit:'✉ Send Request',cfSuccess:'Thank you! Your request was sent. I will be in touch soon.',
     cfPh1:'John Smith',cfPh2:'john@example.com',cfPh3:'Brief description of your smart home setup and what you have in mind...',
-    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I will show you what is possible.',ctaBtn:'🛒 Order on Fiverr',
+    ctaH2:'Ready for your Smart Home?',ctaP:'Free consultation — I will show you what is possible.',ctaBtn:'🛒 Order on Fiverr',ctaTrust1:'Secure payment',ctaTrust2:'5-star rated',ctaTrust3:'24h delivery',ctaTrust4:'24/7 Support',
     ftLinkSH:'🏠 Smart Home',ftLinkAI:'⚡ AI Automation',ftLinkOrder:'🛒 Order',
     ftTagline:'Handcrafted Smart Home dashboards — no cloud, no subscription, just yours.',
     aiH1a:'Your daily life,',aiH1b:'fully automated.',aiSub:'Local AI models, N8N workflows, chatbots — zero cloud dependency.',
@@ -4407,6 +4926,50 @@ if(_origGetPos){
 })();
 </script>
 
+<!-- DSGVO Cookie Banner -->
+<div id="dsgvo-banner" role="region" aria-label="Cookie-Hinweis">
+  <div id="dsgvo-banner-text">
+    <span class="dsgvo-ico">🔒</span>
+    <span id="dsgvo-banner-msg">Diese Seite verwendet <strong>keine</strong> Tracking-Cookies und speichert keine personenbezogenen Daten.</span>
+  </div>
+  <button id="dsgvo-banner-close" aria-label="Banner schließen">Verstanden ✓</button>
+</div>
+<script>
+(function(){
+  var STORAGE_KEY = 'dsgvo_dismissed_v1';
+  if(localStorage.getItem(STORAGE_KEY) === '1') return;
+  var banner = document.getElementById('dsgvo-banner');
+  if(!banner) return;
+  // Show after 1.5s
+  setTimeout(function(){
+    banner.classList.add('show');
+  }, 1500);
+  // Close handler
+  var closeBtn = document.getElementById('dsgvo-banner-close');
+  function dismiss(){
+    banner.classList.remove('show');
+    localStorage.setItem(STORAGE_KEY, '1');
+  }
+  closeBtn.addEventListener('click', dismiss);
+  closeBtn.addEventListener('touchend', function(e){ e.preventDefault(); dismiss(); });
+  // i18n support
+  function applyDsgvoLang(){
+    var lang = document.documentElement.lang || 'de';
+    var msgEl = document.getElementById('dsgvo-banner-msg');
+    var btnEl = document.getElementById('dsgvo-banner-close');
+    if(!msgEl) return;
+    if(lang === 'en'){
+      msgEl.innerHTML = 'This site uses <strong>no</strong> tracking cookies and stores no personal data.';
+      if(btnEl) btnEl.textContent = 'Got it ✓';
+    } else {
+      msgEl.innerHTML = 'Diese Seite verwendet <strong>keine</strong> Tracking-Cookies und speichert keine personenbezogenen Daten.';
+      if(btnEl) btnEl.textContent = 'Verstanden ✓';
+    }
+  }
+  document.addEventListener('langChange', applyDsgvoLang);
+  applyDsgvoLang();
+})();
+</script>
 <!-- Scroll-to-top button -->
 <button id="scrollTop" aria-label="Zurück nach oben / Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
@@ -4465,6 +5028,302 @@ if(_origGetPos){
     btn.style.transform=show?'translateY(0)':'translateY(20px)';
     btn.style.pointerEvents=show?'auto':'none';
   },{passive:true});
+})();
+</script>
+<!-- EXIT-INTENT POPUP -->
+<div id="exit-popup" style="display:none;position:fixed;inset:0;z-index:10000;align-items:center;justify-content:center">
+  <div id="exit-backdrop" style="position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);cursor:pointer"></div>
+  <div id="exit-card" style="position:relative;background:linear-gradient(160deg,#1c1c1e 0%,#2c2c2e 100%);border:1px solid rgba(255,255,255,.1);border-radius:22px;max-width:400px;width:90%;padding:36px 28px 32px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.7);transform:scale(.88) translateY(30px);opacity:0;transition:transform .38s cubic-bezier(.34,1.28,.64,1),opacity .3s ease">
+    <button id="exit-close" aria-label="Schließen" style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.45);font-size:1.4rem;cursor:pointer;line-height:1;padding:4px">×</button>
+    <div style="font-size:2.4rem;margin-bottom:10px">🎁</div>
+    <div style="font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:8px" data-i18n="exitTitle">Warte kurz — exklusives Angebot!</div>
+    <div style="font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.5;margin-bottom:20px" data-i18n="exitSub">Hol dir jetzt <strong style="color:#ff9f0a">10% Rabatt</strong> auf dein erstes Projekt. Einfach Code beim Kontakt angeben:</div>
+    <div style="background:rgba(255,159,10,.12);border:1.5px dashed #ff9f0a;border-radius:12px;padding:14px 20px;margin-bottom:22px;letter-spacing:.18em;font-size:1.35rem;font-weight:800;color:#ff9f0a;user-select:all">EXIT10</div>
+    <a href="#contact-section" id="exit-cta" style="display:block;background:linear-gradient(135deg,#0071e3,#0098ff);color:#fff;text-decoration:none;padding:14px 20px;border-radius:50px;font-weight:700;font-size:.9rem;box-shadow:0 8px 24px rgba(0,113,227,.4);margin-bottom:12px" data-i18n="exitCta">Jetzt Rabatt sichern →</a>
+    <div style="font-size:.72rem;color:rgba(255,255,255,.3)" data-i18n="exitNote">Einmalig gültig · Kein Ablaufdatum</div>
+  </div>
+</div>
+<script>
+(function(){
+  var pop=document.getElementById('exit-popup');
+  var card=document.getElementById('exit-card');
+  var backdrop=document.getElementById('exit-backdrop');
+  var closeBtn=document.getElementById('exit-close');
+  var ctaBtn=document.getElementById('exit-cta');
+  if(!pop||!card)return;
+
+  // i18n strings
+  var STRINGS={
+    de:{exitTitle:'Warte kurz — exklusives Angebot!',exitSub:'Hol dir jetzt <strong style="color:#ff9f0a">10% Rabatt</strong> auf dein erstes Projekt. Einfach Code beim Kontakt angeben:',exitCta:'Jetzt Rabatt sichern →',exitNote:'Einmalig gültig · Kein Ablaufdatum'},
+    en:{exitTitle:'Wait — exclusive offer!',exitSub:'Get <strong style="color:#ff9f0a">10% off</strong> your first project. Just mention the code when you contact us:',exitCta:'Claim discount →',exitNote:'One-time use · No expiry'}
+  };
+  function applyExitI18n(){
+    var lang=(document.documentElement.lang||'de').startsWith('de')?'de':'en';
+    var s=STRINGS[lang]||STRINGS.de;
+    ['exitTitle','exitSub','exitCta','exitNote'].forEach(function(k){
+      var el=pop.querySelector('[data-i18n="'+k+'"]');
+      if(el)el.innerHTML=s[k];
+    });
+  }
+  applyExitI18n();
+  document.addEventListener('langChange',applyExitI18n);
+
+  var shown=false;
+  var dismissed=false;
+
+  // Session storage: don't show again if dismissed this session
+  if(sessionStorage.getItem('exitDismissed')){dismissed=true;}
+
+  function showPopup(){
+    if(shown||dismissed)return;
+    shown=true;
+    pop.style.display='flex';
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        card.style.transform='scale(1) translateY(0)';
+        card.style.opacity='1';
+      });
+    });
+  }
+  function hidePopup(){
+    dismissed=true;
+    sessionStorage.setItem('exitDismissed','1');
+    card.style.transform='scale(.88) translateY(30px)';
+    card.style.opacity='0';
+    setTimeout(function(){pop.style.display='none';},380);
+  }
+
+  // Exit intent: mouse moves rapidly toward top of viewport
+  var lastY=null;
+  var lastT=0;
+  document.addEventListener('mousemove',function(e){
+    if(dismissed||shown)return;
+    var now=Date.now();
+    var dt=now-lastT;
+    if(lastY!==null&&dt>0&&dt<80){
+      var dy=e.clientY-lastY;
+      var vy=dy/dt; // px/ms negative = moving up
+      // Trigger if: mouse near top 5% of screen AND moving up fast
+      if(e.clientY<(window.innerHeight*0.08)&&vy<-0.5){
+        showPopup();
+      }
+    }
+    lastY=e.clientY;
+    lastT=now;
+  });
+
+  // Mobile fallback: show on page visibility hidden (tab switch / back gesture)
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden)showPopup();
+  });
+
+  // Close handlers
+  backdrop.addEventListener('click',hidePopup);
+  closeBtn.addEventListener('click',hidePopup);
+  ctaBtn.addEventListener('click',hidePopup);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')hidePopup();});
+})();
+</script>
+
+<!-- Social Proof Toast: random "someone just ordered" notifications -->
+<div id="sp-toast" style="
+  position:fixed;bottom:80px;left:16px;z-index:9998;
+  background:#1c1c1e;border:1px solid rgba(255,255,255,.1);border-radius:14px;
+  padding:12px 16px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  max-width:290px;pointer-events:none;
+  transform:translateX(-320px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  will-change:transform;
+">
+  <div id="sp-avatar" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.3rem;background:linear-gradient(135deg,#ff9f0a,#ff6b00)">👤</div>
+  <div>
+    <div id="sp-name" style="font-size:.82rem;font-weight:700;color:#fff;line-height:1.2"></div>
+    <div id="sp-action" style="font-size:.74rem;color:#aeaeb2;margin-top:2px;line-height:1.3"></div>
+    <div style="font-size:.68rem;color:#636366;margin-top:3px">⏱ gerade eben · ✅ verifiziert</div>
+  </div>
+</div>
+<script>
+(function(){
+  var orders=[
+    {name:'Max K. aus München',action:'hat das Premium Dashboard bestellt 🏆',emoji:'🏠',color:'linear-gradient(135deg,#ff9f0a,#ff6b00)'},
+    {name:'Sarah L. aus Hamburg',action:'hat eine Anfrage gesendet 💬',emoji:'💬',color:'linear-gradient(135deg,#0a84ff,#005fc5)'},
+    {name:'Thomas R. aus Berlin',action:'hat das Starter-Paket gekauft ⚡',emoji:'⚡',color:'linear-gradient(135deg,#30d158,#1a8a38)'},
+    {name:'Anna M. aus Wien',action:'hat 5 Sterne hinterlassen ⭐⭐⭐⭐⭐',emoji:'⭐',color:'linear-gradient(135deg,#ffd60a,#cc9900)'},
+    {name:'Felix B. aus Zürich',action:'hat das Pro-Paket bestellt 🚀',emoji:'🚀',color:'linear-gradient(135deg,#bf5af2,#8434d4)'},
+    {name:'Julia H. aus Stuttgart',action:'hat eine Bewertung geschrieben ❤️',emoji:'❤️',color:'linear-gradient(135deg,#ff375f,#c0003c)'},
+    {name:'Markus W. aus Köln',action:'hat das Dashboard erhalten ✅',emoji:'✅',color:'linear-gradient(135deg,#30d158,#1a8a38)'},
+    {name:'Lisa S. aus Frankfurt',action:'hat das Projekt freigegeben 🎉',emoji:'🎉',color:'linear-gradient(135deg,#ff9f0a,#ff6b00)'},
+  ];
+  var toast=document.getElementById('sp-toast');
+  var nameEl=document.getElementById('sp-name');
+  var actionEl=document.getElementById('sp-action');
+  var avatarEl=document.getElementById('sp-avatar');
+  var shown=false;
+
+  function showToast(){
+    var o=orders[Math.floor(Math.random()*orders.length)];
+    nameEl.textContent=o.name;
+    actionEl.textContent=o.action;
+    avatarEl.style.background=o.color;
+    avatarEl.textContent=o.emoji;
+    toast.style.transform='translateX(0)';
+    shown=true;
+    setTimeout(function(){
+      toast.style.transform='translateX(-320px)';
+      shown=false;
+    },4200);
+  }
+
+  // First show after 12s, then random intervals 18–40s
+  function scheduleNext(){
+    var delay=18000+Math.random()*22000;
+    setTimeout(function(){
+      if(!shown) showToast();
+      scheduleNext();
+    },delay);
+  }
+  setTimeout(function(){
+    showToast();
+    scheduleNext();
+  },12000);
+})();
+</script>
+
+<script>
+/* ── Sticky Mobile CTA Bar ── */
+(function(){
+  var bar = document.createElement('div');
+  bar.id = 'mob-cta-bar';
+  bar.innerHTML =
+    '<div id="mob-cta-inner">' +
+      '<div id="mob-cta-txt">' +
+        '<span id="mob-cta-label">Jetzt beauftragen</span>' +
+        '<span id="mob-cta-price">ab <strong>€29</strong></span>' +
+      '</div>' +
+      '<button id="mob-cta-btn" onclick="openFiverr()">Bestellen \u2192</button>' +
+      '<button id="mob-cta-close" aria-label="Schlie\u00dfen">\u2715</button>' +
+    '</div>';
+  document.body.appendChild(bar);
+
+  var style = document.createElement('style');
+  style.textContent = [
+    '#mob-cta-bar{',
+      'position:fixed;bottom:0;left:0;right:0;z-index:9000;',
+      'transform:translateY(110%);transition:transform .45s cubic-bezier(.34,1.28,.64,1);',
+      'display:none;',
+    '}',
+    '@media(max-width:767px){',
+      '#mob-cta-bar{display:block}',
+    '}',
+    '#mob-cta-bar.show{transform:translateY(0)}',
+    '#mob-cta-inner{',
+      'display:flex;align-items:center;gap:10px;',
+      'background:rgba(18,18,20,.97);backdrop-filter:blur(20px) saturate(1.8);',
+      'border-top:1px solid rgba(255,255,255,.10);',
+      'padding:12px 14px calc(12px + env(safe-area-inset-bottom)) 14px;',
+    '}',
+    '#mob-cta-txt{flex:1;display:flex;flex-direction:column;line-height:1.2}',
+    '#mob-cta-label{font-size:.72rem;color:rgba(255,255,255,.52);letter-spacing:.04em;text-transform:uppercase}',
+    '#mob-cta-price{font-size:.92rem;color:#fff;font-weight:600}',
+    '#mob-cta-price strong{color:#30d158;font-size:1.05rem}',
+    '#mob-cta-btn{',
+      'flex-shrink:0;padding:10px 20px;border-radius:22px;border:none;cursor:pointer;',
+      'background:linear-gradient(135deg,#0071e3,#34aadc);',
+      'color:#fff;font-size:.9rem;font-weight:700;',
+      'box-shadow:0 3px 14px rgba(0,113,227,.45);',
+      'transition:transform .18s,box-shadow .18s;touch-action:manipulation;',
+    '}',
+    '#mob-cta-btn:active{transform:scale(.96);box-shadow:0 1px 6px rgba(0,113,227,.3)}',
+    '#mob-cta-close{',
+      'flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;',
+      'background:rgba(255,255,255,.09);color:rgba(255,255,255,.55);font-size:.75rem;',
+      'display:flex;align-items:center;justify-content:center;touch-action:manipulation;',
+    '}',
+    '@keyframes mcbPulse{0%,100%{box-shadow:0 3px 14px rgba(0,113,227,.45)}50%{box-shadow:0 3px 22px rgba(0,113,227,.75)}}'
+  ].join('');
+  document.head.appendChild(style);
+
+  function applyLang(){
+    var lang = document.documentElement.lang || 'de';
+    var lbl = document.getElementById('mob-cta-label');
+    var btn = document.getElementById('mob-cta-btn');
+    if(!lbl || !btn) return;
+    if(lang === 'en'){
+      lbl.textContent = 'Order now';
+      btn.textContent = 'Order \u2192';
+    } else {
+      lbl.textContent = 'Jetzt beauftragen';
+      btn.textContent = 'Bestellen \u2192';
+    }
+  }
+  document.addEventListener('langChange', applyLang);
+
+  var shown = false;
+  var dismissed = sessionStorage.getItem('mobCtaDismissed') === '1';
+  var scrollTriggered = false;
+
+  function tryShow(){
+    if(shown || dismissed) return;
+    shown = true;
+    bar.classList.add('show');
+    var btn = document.getElementById('mob-cta-btn');
+    if(btn) btn.style.animation = 'mcbPulse 2.4s ease-in-out 3';
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!scrollTriggered && window.scrollY > 80){
+      scrollTriggered = true;
+      setTimeout(tryShow, 3000);
+    }
+  }, {passive:true});
+  setTimeout(tryShow, 5000);
+
+  document.getElementById('mob-cta-close').addEventListener('touchend', function(e){
+    e.preventDefault();
+    bar.classList.remove('show');
+    sessionStorage.setItem('mobCtaDismissed','1');
+  });
+  document.getElementById('mob-cta-close').addEventListener('click', function(){
+    bar.classList.remove('show');
+    sessionStorage.setItem('mobCtaDismissed','1');
+  });
+})();
+</script>
+
+<!-- Tages-Deal Chip -->
+<script>
+(function(){
+  var chip = document.getElementById('daily-deal-chip');
+  if(!chip) return;
+  var deals = [
+    { de: '🎨 Heute: Gratis Dark-Mode Theme beim Basic-Paket', en: '🎨 Today: Free Dark Mode Theme with Basic' },
+    { de: '📱 Heute: Bonus Mobile-Optimierung inklusive',       en: '📱 Today: Bonus Mobile Optimization included' },
+    { de: '⚡ Heute: Express-Lieferung in 24h kostenlos',       en: '⚡ Today: Free Express Delivery in 24h' },
+    { de: '🌙 Heute: Gratis Nacht-Modus & Automationen',        en: '🌙 Today: Free Night Mode & Automations' },
+    { de: '🔔 Heute: Bonus Push-Benachrichtigungen Setup',      en: '🔔 Today: Bonus Push Notification Setup' },
+    { de: '📊 Heute: Energie-Monitoring Widget gratis dazu',    en: '📊 Today: Free Energy Monitoring Widget' },
+    { de: '🎯 Heute: Personalisiertes Farbschema inklusive',    en: '🎯 Today: Personalized Color Scheme included' },
+  ];
+  var day = new Date().getDay(); // 0=So, 1=Mo...
+  var deal = deals[day] || deals[0];
+  var lang = (document.documentElement.lang||'de').startsWith('en') ? 'en' : 'de';
+  var txt = deal[lang];
+
+  chip.innerHTML =
+    '<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;' +
+    'border-radius:100px;background:rgba(255,159,10,.13);border:1px solid rgba(255,159,10,.35);' +
+    'font-size:.78rem;font-weight:700;color:#ff9f0a;animation:fadeInUp .6s ease both;' +
+    'box-shadow:0 2px 12px rgba(255,159,10,.12)">' +
+    '<span style="width:7px;height:7px;border-radius:50%;background:#ff9f0a;flex-shrink:0;' +
+    'box-shadow:0 0 6px rgba(255,159,10,.8);animation:pulse 2s ease-in-out infinite"></span>' +
+    txt +
+    '</div>';
+
+  // Re-render on language switch
+  document.addEventListener('langChanged', function(e){
+    var newLang = (e.detail||'de').startsWith('en') ? 'en' : 'de';
+    chip.querySelector('div').childNodes[1].textContent = ' ' + deal[newLang];
+  });
 })();
 </script>
 </body>
