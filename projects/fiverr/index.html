@@ -155,10 +155,10 @@ html,body{height:100%;background:var(--bg);
 /* ── Page-enter staggered card animation ── */
 @keyframes pgCardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#lt-color-palette,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -244,6 +244,16 @@ html,body{height:100%;background:var(--bg);
 /* ── Globaler Dimmer-Slider ── */
 #lt-global-dimmer{margin:4px 14px 10px;opacity:0;transition:opacity .5s ease;display:flex;align-items:center;gap:10px}
 #lt-global-dimmer.show{opacity:1}
+/* ── Licht Schnellfarben-Palette ── */
+#lt-color-palette{margin:0 14px 12px;opacity:0;transition:opacity .5s ease;pointer-events:none}
+#lt-color-palette.show{opacity:1;pointer-events:auto}
+.lt-cp-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin-bottom:7px}
+.lt-cp-chips{display:flex;gap:8px;flex-wrap:wrap}
+.lt-cp-chip{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.13);background:radial-gradient(circle at 38% 32%,var(--cc,#888) 0%,rgba(0,0,0,.55) 100%);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;box-shadow:0 0 0 0 transparent;position:relative;overflow:hidden}
+.lt-cp-chip:active{transform:scale(.86)!important}
+.lt-cp-chip.lt-cp-active{transform:scale(1.13);box-shadow:0 0 0 2px var(--cc,#fff),0 0 12px 3px rgba(255,255,255,.18)}
+@keyframes ltCpPop{0%{transform:scale(.75)}55%{transform:scale(1.22)}100%{transform:scale(1)}}
+.lt-cp-chip.lt-cp-pop{animation:ltCpPop .34s cubic-bezier(.34,1.56,.64,1) forwards}
 #lt-global-dimmer svg{flex-shrink:0;opacity:.55}
 #lt-gd-range{-webkit-appearance:none;appearance:none;flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.1);outline:none;cursor:pointer;transition:background .3s}
 #lt-gd-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ffcc02,#ff9f0a);box-shadow:0 0 8px rgba(255,159,10,.55);cursor:pointer;transition:transform .15s}
@@ -1968,6 +1978,20 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
         <input type="range" id="lt-gd-range" min="1" max="100" value="80" step="1">
         <span id="lt-gd-val">--%</span>
       </div>
+      <!-- Schnellfarben-Palette -->
+      <div id="lt-color-palette" aria-label="Licht-Schnellfarben">
+        <div class="lt-cp-lbl">Schnellfarben</div>
+        <div class="lt-cp-chips">
+          <button class="lt-cp-chip" data-ct="1900" style="--cc:#ff7b1a" title="Kerze 1900K">🕯️</button>
+          <button class="lt-cp-chip" data-ct="2700" style="--cc:#ffb347" title="Warm 2700K">🌅</button>
+          <button class="lt-cp-chip" data-ct="4000" style="--cc:#ffe8c0" title="Neutral 4000K">☀️</button>
+          <button class="lt-cp-chip" data-ct="6500" style="--cc:#cce8ff" title="Kühl 6500K">🧊</button>
+          <button class="lt-cp-chip" data-rgb="255,50,50" style="--cc:#ff3232" title="Rot">🔴</button>
+          <button class="lt-cp-chip" data-rgb="30,140,255" style="--cc:#1e8cff" title="Blau">💙</button>
+          <button class="lt-cp-chip" data-rgb="50,210,80" style="--cc:#32d250" title="Grün">💚</button>
+          <button class="lt-cp-chip" data-rgb="190,60,255" style="--cc:#be3cff" title="Lila">💜</button>
+        </div>
+      </div>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
@@ -2369,6 +2393,87 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
             </div>
           </div>
           <div id="frost-days" style="display:flex;gap:7px;margin-top:11px;flex-wrap:wrap"></div>
+        </div>
+      </div>
+
+      <!-- Kleidungs-Empfehlung -->
+      <div id="outfit-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">👗 OUTFIT-EMPFEHLUNG</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.1);padding:14px 18px;position:relative;overflow:hidden">
+          <div id="outfit-orb" style="position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;opacity:.13;filter:blur(30px);pointer-events:none;transition:background 2s ease"></div>
+          <div style="display:flex;align-items:center;gap:14px;position:relative;z-index:1">
+            <div id="outfit-icons" style="font-size:1.8rem;line-height:1;flex-shrink:0;letter-spacing:2px">👕</div>
+            <div style="flex:1;min-width:0">
+              <div id="outfit-title" style="font-size:.92rem;font-weight:700;color:#fff;margin-bottom:3px">–</div>
+              <div id="outfit-desc" style="font-size:.7rem;color:rgba(255,255,255,.45);line-height:1.5">–</div>
+            </div>
+          </div>
+          <div id="outfit-chips" style="display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;position:relative;z-index:1"></div>
+        </div>
+      </div>
+
+      <!-- Tageslicht-Stunden Card -->
+      <div id="daylight-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">☀️ TAGESLICHT HEUTE</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.1);padding:14px 18px;position:relative;overflow:hidden">
+          <!-- Glow orb background -->
+          <div id="dl-orb" style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,204,0,.18) 0%,transparent 70%);pointer-events:none;filter:blur(24px)"></div>
+          <div style="display:flex;align-items:center;gap:16px;position:relative;z-index:1">
+            <!-- SVG progress ring -->
+            <svg viewBox="0 0 72 72" width="72" height="72" style="flex-shrink:0;overflow:visible">
+              <defs>
+                <linearGradient id="dlGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff9f0a"/>
+                  <stop offset="50%" stop-color="#ffcc02"/>
+                  <stop offset="100%" stop-color="#fffaa0"/>
+                </linearGradient>
+              </defs>
+              <!-- Track arc 210° -->
+              <path d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="5" stroke-linecap="round"/>
+              <!-- Fill arc -->
+              <path id="dl-arc-fill" d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="url(#dlGrad)" stroke-width="5" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5" style="transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)"/>
+              <!-- Center text -->
+              <text id="dl-svg-pct" x="36" y="38" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="13" font-weight="700" font-family="system-ui">0%</text>
+              <text x="36" y="51" text-anchor="middle" dominant-baseline="middle" fill="rgba(255,255,255,.3)" font-size="6.5" font-family="system-ui">genutzt</text>
+            </svg>
+            <!-- Stats right side -->
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:4px">
+                <div id="dl-hours" style="font-size:1.55rem;font-weight:300;color:#fff;line-height:1">–</div>
+                <div style="font-size:.7rem;color:rgba(255,255,255,.35);letter-spacing:.5px">Tageslicht</div>
+              </div>
+              <div id="dl-countdown" style="font-size:.78rem;font-weight:500;color:rgba(255,159,10,.9);margin-bottom:8px">–</div>
+              <!-- Progress bar -->
+              <div style="height:4px;border-radius:2px;background:rgba(255,255,255,.07);overflow:hidden">
+                <div id="dl-bar" style="height:100%;border-radius:2px;background:linear-gradient(90deg,#ff9f0a,#ffcc02,#fff4a0);transition:width 1.6s cubic-bezier(.4,0,.2,1);width:0%"></div>
+              </div>
+              <!-- SR / SS times row -->
+              <div style="display:flex;justify-content:space-between;margin-top:5px">
+                <div style="font-size:.62rem;color:rgba(255,255,255,.28)">🌄 <span id="dl-sr-time">–</span></div>
+                <div style="font-size:.62rem;color:rgba(255,255,255,.28)">🌅 <span id="dl-ss-time">–</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wöchentlicher Niederschlag -->
+      <div id="weekly-rain-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(10,132,255,.65);text-transform:uppercase;margin-bottom:8px">🌧 NIEDERSCHLAG DIESE WOCHE</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(10,132,255,.18);border-top-color:rgba(10,132,255,.35);padding:14px 18px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div>
+              <div style="font-size:1.55rem;font-weight:800;color:#0a84ff" id="wr-total">– mm</div>
+              <div style="font-size:.68rem;color:rgba(255,255,255,.38)" id="wr-label">diese Woche</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:.78rem;font-weight:600;color:rgba(255,255,255,.7)" id="wr-category">–</div>
+              <div style="font-size:.62rem;color:rgba(255,255,255,.32)" id="wr-days-rain">– Regentage</div>
+            </div>
+          </div>
+          <!-- Bar chart -->
+          <div id="wr-bars" style="display:flex;align-items:flex-end;gap:5px;height:44px"></div>
+          <div id="wr-xlabels" style="display:flex;gap:5px;margin-top:4px"></div>
         </div>
       </div>
 
@@ -3451,7 +3556,10 @@ function renderWeather(){
     document.getElementById('hourly').innerHTML=items.join('');
   }
   checkRainWarning();
+  drawWeeklyRain();
   drawFrostWarning();
+  drawOutfitCard();
+  drawDaylightCard();
   drawTempCurve();
   drawWindCurve();
   drawMoonPhase();
@@ -4132,6 +4240,56 @@ function drawBestHour(){
 // WETTER-SCORE (aktueller Score 0–100)
 // ═══════════════════════════════════════════════
 // ═══════════════════════════════════════════════
+// WÖCHENTLICHER NIEDERSCHLAG
+function drawWeeklyRain(){
+  const card=document.getElementById('weekly-rain-card');
+  if(!card||!_wx?.daily?.precipitation_sum) return;
+  const {precipitation_sum:sums,time:days}=_wx.daily;
+  const n=Math.min(7,sums.length);
+  if(n<2){card.style.display='none';return;}
+  card.style.display='';
+  const total=sums.slice(0,n).reduce((a,b)=>a+(b||0),0);
+  const rainDays=sums.slice(0,n).filter(v=>v>0.2).length;
+  document.getElementById('wr-total').textContent=total.toFixed(1)+' mm';
+  // Category
+  let cat,catColor;
+  if(total<10){cat='Trocken 🌤';catColor='#ff9f0a';}
+  else if(total<30){cat='Normal 🌦';catColor='#30d158';}
+  else if(total<60){cat='Nass 🌧';catColor='#0a84ff';}
+  else{cat='Sehr nass 🌊';catColor='#5e9bff';}
+  document.getElementById('wr-category').textContent=cat;
+  document.getElementById('wr-category').style.color=catColor;
+  document.getElementById('wr-days-rain').textContent=rainDays+' Regentag'+(rainDays!==1?'e':'');
+  // Bar chart
+  const maxVal=Math.max(...sums.slice(0,n),0.5);
+  const dayNames=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  const barsEl=document.getElementById('wr-bars');
+  const xlabEl=document.getElementById('wr-xlabels');
+  const today=new Date().getDay();
+  barsEl.innerHTML=''; xlabEl.innerHTML='';
+  for(let i=0;i<n;i++){
+    const v=sums[i]||0;
+    const pct=Math.max(v/maxVal*100,v>0.2?8:2);
+    const d=new Date(days[i]);
+    const isToday=i===0;
+    const barColor=v>0.2?'#0a84ff':'rgba(255,255,255,.1)';
+    const barEl=document.createElement('div');
+    barEl.style.cssText=`flex:1;background:${barColor};border-radius:4px 4px 2px 2px;height:${pct}%;transition:height 1.2s cubic-bezier(.4,0,.2,1);opacity:${isToday?1:.72};position:relative`;
+    if(v>0.2){
+      const tip=document.createElement('div');
+      tip.style.cssText='position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:.52rem;color:rgba(255,255,255,.55);white-space:nowrap';
+      tip.textContent=v.toFixed(1);
+      barEl.appendChild(tip);
+    }
+    barsEl.appendChild(barEl);
+    const lbl=document.createElement('div');
+    lbl.style.cssText=`flex:1;text-align:center;font-size:.58rem;color:${isToday?'#0a84ff':'rgba(255,255,255,.3)'};font-weight:${isToday?700:400}`;
+    lbl.textContent=isToday?'Heute':dayNames[d.getDay()];
+    xlabEl.appendChild(lbl);
+  }
+}
+
+// ═══════════════════════════════════════════════
 // FROSTWARNUNG
 function drawFrostWarning(){
   const card=document.getElementById('frost-card');
@@ -4168,6 +4326,136 @@ function drawFrostWarning(){
   // Day chips
   const chips=frostDays.map(f=>`<div style="background:rgba(50,200,255,.12);border:1px solid rgba(50,200,255,.25);border-radius:10px;padding:5px 11px;font-size:.7rem;color:rgba(255,255,255,.75)"><span style="font-weight:700;color:${accent}">${f.label}</span> ${Math.round(f.temp)}°C</div>`).join('');
   document.getElementById('frost-days').innerHTML=chips;
+}
+
+function drawOutfitCard(){
+  const card=document.getElementById('outfit-card');
+  if(!card||!_wx?.current) return;
+  const c=_wx.current;
+  const temp=c.temperature_2m;
+  const feel=c.apparent_temperature??temp;
+  const wind=c.windspeed_10m??0;
+  const rh=c.relative_humidity_2m??50;
+  // Use daily precipitation probability if available
+  const rainProb=(_wx.hourly?.precipitation_probability?.[0]??0);
+  const uvMax=(_wx.daily?.uv_index_max?.[0]??0);
+  const code=c.weathercode??0;
+  const isRain=rainProb>=40||([51,53,55,61,63,65,80,81,82,95,96,99].includes(code));
+  const isSnow=[71,73,75,77,85,86].includes(code);
+
+  // Outfit tiers based on apparent temp
+  let icons,title,desc,accentColor;
+  if(feel<-5){
+    icons='🧥🧤🧣';title='Winterausrüstung nötig';desc='Sehr kalt — dicker Mantel, Handschuhe und Schal sind Pflicht.';accentColor='#32c8ff';
+  } else if(feel<2){
+    icons='🧥🧣';title='Dicke Jacke + Schal';desc='Frostige Temperaturen — warm einpacken, Schichten helfen.';accentColor='#64b0ff';
+  } else if(feel<8){
+    icons='🧥';title='Warme Jacke empfohlen';desc='Kühles Wetter — eine gefütterte Jacke hält angenehm warm.';accentColor='#9ab8ff';
+  } else if(feel<14){
+    icons='🧢👔';title='Leichte Jacke';desc='Frische Luft — eine dünne Jacke oder Pulli reicht gut aus.';accentColor='#a8d8ea';
+  } else if(feel<20){
+    icons='👕🧢';title='T-Shirt + Übergangsjacke';desc='Angenehme Temperaturen — leichte Kleidung mit einer Extra-Schicht.';accentColor='#30d158';
+  } else if(feel<26){
+    icons='👕';title='Sommerlich leger';desc='Warmes Wetter — T-Shirt und leichte Kleidung perfekt geeignet.';accentColor='#ffd60a';
+  } else {
+    icons='🩱☀️';title='Sommerkleidung + Sonnenschutz';desc='Heiß draußen — Sonnencreme, Hut und leichte helle Kleidung empfohlen.';accentColor='#ff9f0a';
+  }
+
+  // Modifier chips
+  const chips=[];
+  if(isSnow) chips.push({ic:'❄️',lbl:'Schnee',clr:'rgba(50,200,255,.15)',bc:'rgba(50,200,255,.3)'});
+  else if(isRain) chips.push({ic:'🌂',lbl:`Regen ${rainProb}%`,clr:'rgba(10,132,255,.13)',bc:'rgba(10,132,255,.3)'});
+  if(wind>30) chips.push({ic:'💨',lbl:`Wind ${Math.round(wind)} km/h`,clr:'rgba(255,255,255,.07)',bc:'rgba(255,255,255,.18)'});
+  if(uvMax>=6) chips.push({ic:'🕶️',lbl:`UV ${Math.round(uvMax)} – Sonnenbrille`,clr:'rgba(255,204,0,.12)',bc:'rgba(255,204,0,.3)'});
+  if(rh>75) chips.push({ic:'💧',lbl:'Schwül',clr:'rgba(0,200,180,.1)',bc:'rgba(0,200,180,.28)'});
+
+  // Inject icons if rain/snow not in main icons string
+  if(isSnow&&!icons.includes('❄️')) icons='❄️'+icons;
+  else if(isRain&&!icons.includes('🌂')&&rainProb>=60) icons+=isSnow?'':' 🌂';
+
+  card.style.display='';
+  document.getElementById('outfit-icons').textContent=icons;
+  document.getElementById('outfit-title').textContent=title;
+  document.getElementById('outfit-title').style.color=accentColor;
+  document.getElementById('outfit-desc').textContent=desc;
+  document.getElementById('outfit-orb').style.background=accentColor;
+  // Chips
+  const cd=document.getElementById('outfit-chips');
+  cd.innerHTML=chips.map(ch=>`<div style="display:inline-flex;align-items:center;gap:5px;background:${ch.clr};border:1px solid ${ch.bc};border-radius:10px;padding:4px 10px;font-size:.68rem;color:rgba(255,255,255,.8)">${ch.ic} ${ch.lbl}</div>`).join('');
+}
+
+function drawDaylightCard(){
+  const card=document.getElementById('daylight-card');
+  if(!card||!_wx?.daily) return;
+  const sr0=_wx.daily.sunrise?.[0];
+  const ss0=_wx.daily.sunset?.[0];
+  if(!sr0||!ss0) return;
+
+  const srMs=new Date(sr0).getTime();
+  const ssMs=new Date(ss0).getTime();
+  if(isNaN(srMs)||isNaN(ssMs)||ssMs<=srMs) return;
+
+  const totalMs=ssMs-srMs;
+  const now=Date.now();
+  const elapsedMs=Math.max(0,Math.min(now-srMs,totalMs));
+  const pct=elapsedMs/totalMs; // 0..1
+  const pctInt=Math.round(pct*100);
+
+  // Format total daylight as "Xh Ymin"
+  const totalMin=Math.round(totalMs/60000);
+  const dh=Math.floor(totalMin/60);
+  const dm=totalMin%60;
+  const dlStr=`${dh}h ${dm}min`;
+
+  // Countdown text
+  let cdText='';
+  const isDay=now>=srMs&&now<=ssMs;
+  if(isDay){
+    const remMs=ssMs-now;
+    const remMin=Math.round(remMs/60000);
+    if(remMin>=60){
+      const rh=Math.floor(remMin/60),rm=remMin%60;
+      cdText=`🌅 Noch ${rh}h ${rm}min Tageslicht`;
+    } else {
+      cdText=`🌅 Noch ${remMin} min bis Dunkelheit`;
+    }
+  } else if(now<srMs){
+    const toSrMs=srMs-now;
+    const toSrMin=Math.round(toSrMs/60000);
+    if(toSrMin>=60){
+      const rh=Math.floor(toSrMin/60),rm=toSrMin%60;
+      cdText=`🌄 Sonnenaufgang in ${rh}h ${rm}min`;
+    } else {
+      cdText=`🌄 Sonnenaufgang in ${toSrMin} min`;
+    }
+  } else {
+    cdText='🌙 Sonne bereits untergegangen';
+  }
+
+  // Format sr/ss time HH:MM
+  const fmtT=d=>{const h=d.getHours(),m=d.getMinutes();return`${h}:${m.toString().padStart(2,'0')}`;};
+  const srTime=fmtT(new Date(srMs));
+  const ssTime=fmtT(new Date(ssMs));
+
+  // Arc: stroke-dashoffset = ARC_LEN*(1-pct), ARC_LEN=188.5
+  const ARC_LEN=188.5;
+  const offset=ARC_LEN*(1-Math.min(pct,1));
+
+  // Update DOM
+  card.style.display='block';
+  document.getElementById('dl-arc-fill').style.strokeDashoffset=offset;
+  document.getElementById('dl-svg-pct').textContent=pctInt+'%';
+  document.getElementById('dl-hours').textContent=dlStr;
+  document.getElementById('dl-countdown').textContent=cdText;
+  document.getElementById('dl-bar').style.width=Math.round(pct*100)+'%';
+  document.getElementById('dl-sr-time').textContent=srTime;
+  document.getElementById('dl-ss-time').textContent=ssTime;
+
+  // Orb glow: amber during day, muted at night
+  const orb=document.getElementById('dl-orb');
+  if(orb) orb.style.background=isDay
+    ?'radial-gradient(circle,rgba(255,204,0,.22) 0%,transparent 70%)'
+    :'radial-gradient(circle,rgba(80,120,200,.15) 0%,transparent 70%)';
 }
 
 function updateWxScore(){
@@ -7050,6 +7338,8 @@ function updateAll(){
   window._updateQaBar&&window._updateQaBar(on, playing);
   // ── Kontext-Empfehlungs-Chip ──
   window._updateCtxSuggest&&window._updateCtxSuggest(on, playing);
+  // Schnellfarben-Palette
+  window._updateColorPalette&&window._updateColorPalette(on);
   // ── Wetter-Empfehlung Pill ──
   (function(){
     const pill=document.getElementById('wx-rec-pill');
@@ -8791,6 +9081,54 @@ const _origSetWxMode=setWxMode;
       hap&&hap();
       navTo(TABS[next]);
     },{passive:true});
+  })();
+
+  // ── Licht-Tab Schnellfarben-Palette ──
+  (function(){
+    const pal = document.getElementById('lt-color-palette');
+    if(!pal) return;
+
+    pal.querySelectorAll('.lt-cp-chip').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const ct = parseInt(this.dataset.ct||'0');
+        const rgbStr = this.dataset.rgb||'';
+
+        // Visual feedback
+        pal.querySelectorAll('.lt-cp-chip').forEach(function(b){ b.classList.remove('lt-cp-active'); });
+        this.classList.remove('lt-cp-pop');
+        void this.offsetWidth;
+        this.classList.add('lt-cp-active','lt-cp-pop');
+        const self = this;
+        this.addEventListener('animationend', function(){ self.classList.remove('lt-cp-pop'); }, {once:true});
+        if(typeof hap === 'function') hap();
+
+        // Apply to all on lights
+        let applied = 0;
+        CFG.lights.forEach(function(l){
+          const id = typeof l === 'string' ? l : l.id;
+          const s = _S[id];
+          if(!s || s.state !== 'on') return;
+          if(ct) {
+            const a = s.attributes||{};
+            const minK = a.min_color_temp_kelvin||1000;
+            const maxK = a.max_color_temp_kelvin||9000;
+            const clampedCt = Math.min(maxK, Math.max(minK, ct));
+            svc('light','turn_on',{entity_id:id, color_temp_kelvin:clampedCt});
+            applied++;
+          } else if(rgbStr) {
+            const parts = rgbStr.split(',').map(Number);
+            svc('light','turn_on',{entity_id:id, rgb_color:parts});
+            applied++;
+          }
+        });
+        if(applied > 0 && typeof showToast === 'function') showToast('🎨 Farbe auf ' + applied + (applied===1?' Licht':' Lichter') + ' angewendet');
+      }, {passive:false});
+    });
+
+    // Expose show/hide hook
+    window._updateColorPalette = function(onCount){
+      pal.classList.toggle('show', onCount > 0);
+    };
   })();
 </script>
 <div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v3.2</div>
