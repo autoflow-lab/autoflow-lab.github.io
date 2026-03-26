@@ -1,5 +1,36 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-26 14:37 UTC — Heartbeat (Auto-Improve)
+- ✅ wz.html: Wetter-Tab — Wöchentlicher Niederschlags-Überblick Card (🌧)
+- Neue `#weekly-rain-card`: Balkendiagramm 7 Tage, Gesamt-mm, Kategorien, Regentage-Zähler
+
+## 2026-03-26 10:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Kleidungs-Empfehlung Card (👗)
+- Neuer `#outfit-card` Block im Wetter-Tab, direkt VOR der Mondphase-Card (nach Frost-Karte)
+- 6 Temperatur-Stufen basierend auf `apparent_temperature` (gefühlte Temperatur):
+  - < -5°C: 🧥🧤🧣 "Winterausrüstung nötig" (blau #32c8ff)
+  - < 2°C: 🧥🧣 "Dicke Jacke + Schal" (hellblau #64b0ff)
+  - < 8°C: 🧥 "Warme Jacke empfohlen" (#9ab8ff)
+  - < 14°C: 🧢👔 "Leichte Jacke" (eisblau #a8d8ea)
+  - < 20°C: 👕🧢 "T-Shirt + Übergangsjacke" (grün #30d158)
+  - < 26°C: 👕 "Sommerlich leger" (gelb #ffd60a)
+  - ≥ 26°C: 🩱☀️ "Sommerkleidung + Sonnenschutz" (amber #ff9f0a)
+- `#outfit-orb`: positionierter Glow-Orb rechts oben im Card, Farbe = Akzentfarbe der Temperaturstufe, `filter:blur(30px)` → subtiler Farbton-Hintergrund
+- Modifier-Chips (dynamisch, nur wenn relevant):
+  - 🌂 Regen (wenn `precipitation_probability ≥ 40%` oder WMO-Code = Niederschlag)
+  - ❄️ Schnee (wenn WMO-Code = Schnee)
+  - 💨 Wind (wenn `windspeed_10m > 30 km/h` — mit km/h Wert)
+  - 🕶️ UV-Schutz (wenn `uv_index_max ≥ 6` — UV-Wert + Hinweis)
+  - 💧 Schwül (wenn `relative_humidity_2m > 75%`)
+- `drawOutfitCard()` liest aus `_wx.current`: `apparent_temperature`, `windspeed_10m`, `relative_humidity_2m`, `weathercode`, stündliche `precipitation_probability[0]` + `_wx.daily.uv_index_max[0]`
+- Card bleibt `display:none` wenn keine Current-Daten vorhanden (graceful fallback)
+- In `renderWeather()` nach `drawFrostWarning()` eingehängt
+- `#outfit-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- Effekt: Im Wetter-Tab erscheint eine praktische Kleidungs-Empfehlung mit Emoji-Icons und kontextuellen Chips — "was soll ich heute anziehen?" auf einen Blick
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, DEPLOY_OK)
+
+
+
 ## 2026-03-26 08:37 UTC — Heartbeat (Auto-Improve)
 - ✅ wz.html: Wetter-Tab — Frostwarnung Card (❄️/🥶)
 - Neue `#frost-card` im Wetter-Tab: erscheint wenn Min-Temp < 2°C in nächsten 4 Tagen

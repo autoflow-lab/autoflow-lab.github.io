@@ -229,3 +229,9 @@
 
 ## Neue Ideen (2026-03-26 08:37 UTC)
 - [x] wz.html: Wetter-Tab — Frostwarnung Card (❄️/🥶 erscheint wenn temperature_2m_min < 2°C in den nächsten 4 Tagen, zeigt betroffene Tage als Chips, Minimal-Temperatur, blau→lila Farbgebung je nach Schwere)
+
+## Neue Ideen (2026-03-26 10:03 UTC)
+- [x] wz.html: Wetter-Tab — Kleidungs-Empfehlung Card (👗 Outfit-Vorschlag basierend auf apparent_temperature + Niederschlag + Wind + UV-Index: Emoji-Kleidungsstücke je Temperaturstufe, Modifier-Chips für Regen/Schnee/Wind/UV/Schwüle, farbiger Akzent-Orb passend zur Temperatur-Skala)
+
+## Neue Ideen (2026-03-26 14:37 UTC)
+- [x] wz.html: Wetter-Tab — Wöchentlicher Niederschlags-Überblick Card (🌧 Balkendiagramm 7 Tage aus precipitation_sum, Gesamt-mm, Kategorien Trocken/Normal/Nass/Sehr nass, Regentage-Zähler, animierte Bar-Höhe)
