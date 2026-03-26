@@ -231,6 +231,18 @@ html,body{height:100%;background:var(--bg);
 #lt-bri-meter-label .lt-bri-pct{font-size:.75rem;font-weight:700;color:rgba(255,159,10,.9);transition:color .5s}
 #lt-bri-meter-label .lt-bri-pct.dim{color:rgba(255,255,255,.28)}
 #lt-bri-meter-label .lt-bri-count{letter-spacing:.02em}
+/* ── Globaler Dimmer-Slider ── */
+#lt-global-dimmer{margin:4px 14px 10px;opacity:0;transition:opacity .5s ease;display:flex;align-items:center;gap:10px}
+#lt-global-dimmer.show{opacity:1}
+#lt-global-dimmer svg{flex-shrink:0;opacity:.55}
+#lt-gd-range{-webkit-appearance:none;appearance:none;flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.1);outline:none;cursor:pointer;transition:background .3s}
+#lt-gd-range::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ffcc02,#ff9f0a);box-shadow:0 0 8px rgba(255,159,10,.55);cursor:pointer;transition:transform .15s}
+#lt-gd-range:active::-webkit-slider-thumb{transform:scale(1.25)}
+#lt-gd-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ffcc02,#ff9f0a);border:none;box-shadow:0 0 8px rgba(255,159,10,.55);cursor:pointer}
+#lt-gd-val{font-size:.72rem;font-weight:700;color:rgba(255,159,10,.9);min-width:34px;text-align:right}
+/* ── Wochenend-Highlight im 7-Tage Forecast ── */
+.wx7-wknd{background:rgba(100,180,255,.06)!important;border-left:2px solid rgba(100,180,255,.28)!important}
+.wx7-wknd-lbl{font-size:.52rem;color:rgba(100,180,255,.6);letter-spacing:.03em;margin-left:1px;display:block}
 .ni-badge.pop{animation:badgePop .28s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes navGlow{
   0%,100%{opacity:.8;width:18px}
@@ -415,6 +427,11 @@ html,body{height:100%;background:var(--bg);
 #day-arc-lbl{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
   font-size:.46rem;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;
   color:var(--on-dim2);white-space:nowrap;pointer-events:none;text-align:center}
+/* Sun countdown chip */
+#sun-cd-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px 5px 9px;border-radius:20px;font-size:.72rem;font-weight:500;margin:3px 0 2px;background:rgba(255,159,10,.12);border:1px solid rgba(255,159,10,.25);color:rgba(255,255,255,.82);opacity:0;transition:opacity .6s ease,transform .5s cubic-bezier(.34,1.28,.64,1);transform:scale(.88);pointer-events:none}
+#sun-cd-chip.show{opacity:1;transform:scale(1)}
+#sun-cd-chip.sr-mode{background:rgba(100,180,255,.1);border-color:rgba(100,180,255,.28);color:rgba(180,210,255,.9)}
+#sun-cd-chip .sc-ico{font-size:.85rem;line-height:1}
 /* Wetter-Animationen via _rain, _cld in wxIco functions */
 
 /* Hourly strip */
@@ -1480,6 +1497,11 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
             </svg>
             <span id="day-arc-lbl"></span>
           </div>
+          <!-- Sunrise/Sunset countdown chip -->
+          <div id="sun-cd-chip">
+            <span class="sc-ico" id="sun-cd-ico">🌅</span>
+            <span id="sun-cd-txt">Sonnenuntergang in --</span>
+          </div>
           <!-- Now playing strip inside hero -->
           <div class="hnp" id="hnp">
             <div class="hnp-eq" id="hnp-eq"><i></i><i></i><i></i></div>
@@ -1882,6 +1904,19 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
           <span class="lt-bri-count"></span>
           <span class="lt-bri-pct">--%</span>
         </div>
+      </div>
+      <div id="lt-global-dimmer" aria-label="Alle Lichter dimmen">
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none">
+          <circle cx="10" cy="10" r="4" fill="#ff9f0a"/>
+          <g stroke="#ff9f0a" stroke-width="1.4" stroke-linecap="round">
+            <line x1="10" y1="1.5" x2="10" y2="3.5"/><line x1="10" y1="16.5" x2="10" y2="18.5"/>
+            <line x1="1.5" y1="10" x2="3.5" y2="10"/><line x1="16.5" y1="10" x2="18.5" y2="10"/>
+            <line x1="4.1" y1="4.1" x2="5.5" y2="5.5"/><line x1="14.5" y1="14.5" x2="15.9" y2="15.9"/>
+            <line x1="15.9" y1="4.1" x2="14.5" y2="5.5"/><line x1="5.5" y1="14.5" x2="4.1" y2="15.9"/>
+          </g>
+        </svg>
+        <input type="range" id="lt-gd-range" min="1" max="100" value="80" step="1">
+        <span id="lt-gd-val">--%</span>
       </div>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
@@ -3204,11 +3239,14 @@ function renderWeather(){
         const prec=dd.precipitation_probability_max?.[i]??0;
         const rain=dd.precipitation_sum?.[i]??0;
         const date=new Date();date.setDate(date.getDate()+i);
-        const lbl=i===0?'Heute':i===1?'Morgen':days[date.getDay()];
+        const dow=date.getDay();
+        const isWknd=(dow===6||dow===0);
+        const lbl=i===0?'Heute':i===1?'Morgen':days[dow];
+        const wkndSub=isWknd&&i>1?`<span class="wx7-wknd-lbl">${dow===6?'SA':'SO'}</span>`:'';
         const bar=`<div style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden"><div style="width:${prec}%;height:100%;background:#0a84ff;border-radius:2px"></div></div>`;
         const rainBadge=rain>0?`<span style="font-size:.58rem;color:#60a5fa;white-space:nowrap">${rain.toFixed(1)}mm</span>`:'';
-        return`<div style="display:flex;align-items:center;padding:11px 16px;gap:10px;${i>0?'border-top:1px solid rgba(255,255,255,.05)':''}">
-          <div style="width:40px;font-size:.72rem;color:rgba(255,255,255,.5)">${lbl}</div>
+        return`<div class="${isWknd&&i>1?'wx7-wknd':''}" style="display:flex;align-items:center;padding:11px 16px;gap:10px;${i>0?'border-top:1px solid rgba(255,255,255,.05)':''}">
+          <div style="width:40px;font-size:.72rem;color:${isWknd&&i>1?'rgba(140,190,255,.8)':'rgba(255,255,255,.5)'}">${lbl}${wkndSub}</div>
           <svg viewBox="0 0 28 28" width="26" height="26">${wxIco(dcode,28,false)}</svg>
           ${prec>5?bar+'<span style="font-size:.6rem;color:#0a84ff;min-width:26px;text-align:right">'+prec+'%</span>'+rainBadge:'<div style="flex:1"></div>'}
           <div style="font-size:.72rem;color:rgba(255,255,255,.4);min-width:26px;text-align:right">${Math.round(lo)}°</div>
@@ -5863,6 +5901,31 @@ function updateDayArc(){
   dot.setAttribute('fill',dc);
   dot.style.filter=`drop-shadow(0 0 5px ${dc})`;if(dotGlow)dotGlow.setAttribute('fill',dc.replace(')',',0.25)').replace('#','rgba(0,0,0,'));
   if(lbl)lbl.textContent=lab;
+  // ── Sun countdown chip ──
+  (function(){
+    const chip=document.getElementById('sun-cd-chip');
+    const icoEl=document.getElementById('sun-cd-ico');
+    const txtEl=document.getElementById('sun-cd-txt');
+    if(!chip||!icoEl||!txtEl)return;
+    if(!window._wx?.daily?.sunrise?.[0]){chip.classList.remove('show');return;}
+    const ts=Date.now();
+    const sr0=new Date(_wx.daily.sunrise[0]).getTime();
+    const ss0=new Date(_wx.daily.sunset[0]).getTime();
+    const sr1=_wx.daily.sunrise[1]?new Date(_wx.daily.sunrise[1]).getTime():sr0+86400000;
+    let target,isSunrise;
+    if(ts<sr0){target=sr0;isSunrise=true;}
+    else if(ts<ss0){target=ss0;isSunrise=false;}
+    else{target=sr1;isSunrise=true;}
+    const diff=target-ts;
+    if(diff<=0){chip.classList.remove('show');return;}
+    const totalMin=Math.floor(diff/60000);
+    const hh=Math.floor(totalMin/60),mm=totalMin%60;
+    const timeStr=hh>0?`${hh}h ${mm}min`:`${mm}min`;
+    icoEl.textContent=isSunrise?'🌄':'🌅';
+    txtEl.textContent=(isSunrise?'Sonnenaufgang':'Sonnenuntergang')+' in '+timeStr;
+    chip.classList.toggle('sr-mode',isSunrise);
+    chip.classList.add('show');
+  })();
 }
 // ── Typewriter Greeting ──
 function typeGreet(el,text){
@@ -5926,6 +5989,33 @@ function startClock(){
 }
 
 
+
+// ── Globaler Dimmer-Slider Event Handler ──
+(function(){
+  const rng=document.getElementById('lt-gd-range');
+  const val=document.getElementById('lt-gd-val');
+  if(!rng||!val)return;
+  let debT=null;
+  function applyDim(v){
+    val.textContent=v+'%';
+    rng.style.background=`linear-gradient(90deg,#ff9f0a ${v}%,rgba(255,255,255,.1) ${v}%)`;
+  }
+  rng.addEventListener('input',function(){
+    rng._dragging=true;
+    applyDim(+this.value);
+    clearTimeout(debT);
+    debT=setTimeout(()=>{
+      const pct=+rng.value;
+      const onLights=CFG.lights.filter(l=>effOn(l.id)&&_S[l.id]?.attributes?.brightness!=null);
+      if(!onLights.length)return;
+      onLights.forEach(l=>{
+        svc('light','turn_on',{entity_id:l.id,brightness_pct:pct});
+      });
+      hap();
+      rng._dragging=false;
+    },350);
+  });
+})();
 
 // ═══════════════════════════════════════════════
 // AMBIENT
@@ -6556,6 +6646,21 @@ function updateAll(){
       bar.style.background='linear-gradient(90deg,#ff9f0a 0%,#ffcc02 60%,#fff9a0 100%)';
     }
     meter.classList.add('show');
+    // Sync global dimmer slider thumb to current avg brightness
+    const gdRange=document.getElementById('lt-gd-range');
+    const gdVal=document.getElementById('lt-gd-val');
+    const gdWrap=document.getElementById('lt-global-dimmer');
+    if(gdWrap){
+      if(on===0){gdWrap.classList.remove('show');}
+      else{
+        gdWrap.classList.add('show');
+        if(gdVal&&avgBri!=null&&!gdRange._dragging){
+          gdRange.value=avgBri;
+          gdVal.textContent=avgBri+'%';
+          gdRange.style.background=`linear-gradient(90deg,#ff9f0a ${avgBri}%,rgba(255,255,255,.1) ${avgBri}%)`;
+        }
+      }
+    }
   })();
   // Group count badges
   (function(){
