@@ -1,5 +1,98 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-26 08:37 UTC — Heartbeat (Auto-Improve)
+- ✅ wz.html: Wetter-Tab — Frostwarnung Card (❄️/🥶)
+- Neue `#frost-card` im Wetter-Tab: erscheint wenn Min-Temp < 2°C in nächsten 4 Tagen
+- Tag-Chips zeigen betroffene Tage + Temperatur, blau→lila je nach Schwere
+
+## 2026-03-26 08:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Nav-Icons — Burst-Animation beim Tab-Wechsel
+- 5 neue CSS `@keyframes` für jedes Nav-Tab: `niHomePop` / `niMusikSpin` / `niLichtFlash` / `niWetterWobble` / `niGeraeteShake`
+- **Home**: Bounce-Up Animation (translateY -5px → +1px → 0, `.5s cubic-bezier(.34,1.56,.64,1)`) — federnder Sprung
+- **Musik**: Volle 360°-Rotation (`.55s cubic-bezier(.4,0,.2,1)`) — Note dreht sich einmal herum
+- **Licht**: Flash-Glow (scale 1.12→1.28→1.12 + `drop-shadow(0 0 8px rgba(255,159,10,.95))`, `.5s ease`) — Glühbirne blitzt auf
+- **Wetter**: Wobble-Rotation (-8°→+6°→-4°→0°, `.55s ease`) — Wolke wackelt freundlich
+- **Geräte**: Horizontal-Shake (±3px→±2px→0, `.5s ease`) — Monitor zittert kurz
+- CSS-Klassen `.ni-anim-{page}` aktivieren Animation auf dem SVG-Element des Buttons
+- JS IIFE in `navTo()`: `classList.remove → offsetWidth reflow → classList.add`, `animationend` → auto-remove
+- Kein Konflikt mit bestehendem `transform:scale(1.12)` auf `.ni.on svg` (Animationen starten von diesem Wert)
+- Kein Konflikt mit `badgePop` oder `navGlow` (separate Elemente / Properties)
+- Effekt: Jeder Tab-Wechsel gibt dem Icon eine kleine persönlichkeitspassende Geste — wie App-Icons in iOS 18 die beim Tap wackeln
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, DEPLOY_OK)
+
+
+## 2026-03-26 06:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Temperatur-Heatmap im 7-Tage-Forecast
+- Neue `tempHeatBg(t)` Helper-Funktion: gibt `linear-gradient(90deg, <color> 0%, transparent 68%)` zurück
+- 7 Temperaturstufen: ≤2°C blau rgba(10,132,255,.13) / ≤8°C hellblau / ≤14°C grün (#30d158) / ≤20°C hellgrün / ≤26°C amber (#ff9f0a) / ≤32°C orange / >32°C rot (#ff453a)
+- Gradient läuft von links (volle Farbe) nach rechts (transparent) — dezenter Wash-Effekt, UI bleibt lesbar
+- Pro 7-Tage-Zeile wird `heatBg` via `background:${heatBg}` inline gesetzt
+- Kompatibel mit `.wx7-wknd` Wochenend-Highlight (beide Styles addieren sich graceful)
+- Effekt: Auf einen Blick sieht man ob die Woche kalt (blau) oder warm (amber/rot) wird — wie ein Kalender-Heatmap
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 462810 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-26 04:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Stündliche Wind-Kurve 24H
+- Neue `#wind-curve-card` Section im Wetter-Tab, direkt vor der Pollen-Warnung
+- SVG-Area-Chart (viewBox 320×60, `preserveAspectRatio=none` → responsive volle Breite)
+- `windspeed_10m` zu Open-Meteo `&hourly=` Parameter hinzugefügt
+- Smooth cubic-bezier Linienpfad (identische `smooth()` Logik wie Temp-Kurve)
+- Blauer Gradient-Fill (`wndGrad`): #0a84ff mit 45%→2% Opacity — kühler Wind-Charakter
+- Blaue Linie (`#0a84ff`, stroke-width 1.5) + blauer Glow-Dot bei Jetzt-Stunde
+- `wnd-now-dot`: `drop-shadow(0 0 4px rgba(10,132,255,.9))` — markiert aktuelle Stunde
+- `wnd-labels` SVG-Gruppe: Windwerte (km/h) an 0h/6h/12h/18h/23h Positionen
+- `wnd-time-labels` Row: Zeitlabels "Jetzt / HH:00" unter dem Chart
+- `wnd-max-row`: Max-Wind + Uhrzeit + Stärke-Beschreibung (Leicht/Mäßig/Frisch/Stark/Sturm)
+- Y-Skala: 0 unten, max(winds, 10) oben → mindest 10 km/h Spanne, kein verzerrter Chart bei Windstille
+- `drawWindCurve()` in `renderWeather()` nach `drawTempCurve()` aufgerufen
+- Card bleibt `display:none` wenn keine Hourly-Winddaten verfügbar (graceful fallback)
+- `#wind-curve-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- JS-Check: OK | Deployed via SSH (paramiko stdin-pipe, 462312 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-26 01:00 UTC — Cron (Nacht-Improvements HA Dashboards)
+- ✅ wz.html: Licht-Tab — Globaler Dimmer-Schieberegler
+- Neues `#lt-global-dimmer` Element zwischen Helligkeits-Meter und Licht-Grid
+- SVG Sonne-Icon (amber), Range-Slider `#lt-gd-range` (1–100%), Wert-Label `#lt-gd-val`
+- CSS: WebKit/Moz slider-thumb styling (amber Gradient, Glow-Box-Shadow, Scale-on-Active)
+- Hintergrundtrack via `background: linear-gradient(90deg, #ff9f0a X%, rgba(.1) X%)` — Füllstand sichtbar
+- In `updateAll()`: Slider synct sich mit aktueller Durchschnittshelligkeit (wenn nicht `_dragging`)
+- Event-Handler IIFE: `input` Event mit 350ms Debounce → `svc('light','turn_on',{brightness_pct})` für alle aktiven dimmb. Lichter
+- `hap()` Feedback nach erfolgreichem Senden
+- Nur sichtbar wenn ≥1 Licht an (`.show` Klasse via `updateAll()`)
+- ✅ wz.html: Wetter-Tab — Wochenend-Highlight im 7-Tage Forecast
+- CSS-Klassen `.wx7-wknd` (blauer linker Border + subtiler blauer Background) + `.wx7-wknd-lbl` (hellblaues Sub-Label)
+- JS: `dow===6||dow===0` Erkennung → `.wx7-wknd` Klasse auf Row-Div + hellblaue Textfarbe für Tageslabel
+- `wkndSub` Sub-Label `<span class="wx7-wknd-lbl">SA</span>` oder `SO` unter dem Wochentagsnamen
+- Nur für i>1 (nicht "Heute"/"Morgen") — klare Unterscheidung
+- Effekt: Sa/So im Wochenforecast sofort auf einen Blick erkennbar durch blauen Akzent
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 450042 bytes, DEPLOY_OK) | Git: 2a3dda8
+
+
+
+## 2026-03-26 00:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — Sonnenuntergang/Sonnenaufgang Countdown-Chip
+- Neues `#sun-cd-chip` Div direkt unter dem `#day-arc-wrap` im Home-Hero
+- Design: Pill-Shape `border-radius:20px`, amber Akzent (`rgba(255,159,10,.12)` Hintergrund + `.25` Border) für Sunset-Modus
+- `.sr-mode` Klasse → blaues Farbschema (`rgba(100,180,255,.1)`) wenn nächstes Event Sonnenaufgang ist
+- CSS Transition: `opacity .6s ease, transform .5s cubic-bezier(.34,1.28,.64,1)` → spring-Einblend-Animation
+- Emoji-Icon: 🌅 für Sonnenuntergang, 🌄 für Sonnenaufgang — wechselt dynamisch
+- `.show` Klasse: `opacity:1; transform:scale(1)` — Chip erscheint smooth nach erstem Weather-Load
+- JS IIFE am Ende von `updateDayArc()`: läuft bei jedem `updateClock()` Tick (alle 1s)
+- Datenquelle: `window._wx.daily.sunrise[0]`, `.sunset[0]`, `.sunrise[1]` (morgen als Fallback +86400s)
+- Logik: `now < sr0` → Sonnenaufgang heute | `now < ss0` → Sonnenuntergang heute | sonst → Sonnenaufgang morgen
+- Zeitformatierung: `Xh Ymin` wenn ≥60min, `Ymin` wenn <1h — kompakt und lesbar
+- Chip bleibt versteckt wenn `_wx.daily` noch nicht geladen (graceful fallback)
+- Kein Konflikt mit bestehenden Hero-Elementen (day-arc, aclock, hnp-strip)
+- Kein extra API-Call — nutzt bereits vorhandene Open-Meteo `daily` Daten
+- Effekt: Unter dem Tageszeit-Arc blinkt ein kleiner Chip: "🌅 Sonnenuntergang in 1h 23min" — zeitbewusst wie eine Apple Watch Complication
+- JS-Check: OK | Deployed via SSH (paramiko base64-chunk-pipe, 446226 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-25 14:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Hero — Typewriter-Animation für Greeting-Text
 - Neue CSS-Klasse `.hgreet-cursor`: 1.5px breiter, 0.8em hoher vertikaler Strich in `rgba(255,255,255,.5)`, `border-radius:1px`, `vertical-align:middle`
@@ -1180,3 +1273,13 @@
 - 7 rotierende Angebote je Wochentag (Mo–So): Dark-Mode Theme, Mobile, Express, Nacht-Modus, Push, Energie, Farbschema
 - Amber Pulsing-Dot + Glow-Effekt, DE+EN i18n-fähig via `langChanged` Event
 - demo.html: 358.8KB + index.html deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-26 02:37 UTC — Heartbeat Auto-Improve
+
+- ✅ demo.html: Kundenprojekte Galerie Section
+- Neuer `#projects-section` Block vor dem Kontaktformular
+- 3 Projekt-Cards im responsive Grid: Wohnzimmer Setup / Smart Office / Energie-Monitor
+- Jede Card: gradient Preview-Header mit Icons, Titel + Badge, Beschreibung, Technologie-Chips
+- Hover: translateY(-4px) + box-shadow Lift-Effekt
+- CTA "Mein Projekt anfragen →" unter der Galerie
+- demo.html: 369.0KB + index.html deployed → GitHub Pages

@@ -207,3 +207,25 @@
 
 ## Neue Ideen (2026-03-25 22:13 UTC)
 - [x] demo.html: Pricing-Bereich — Tages-Deal Chip (7 rotierende Wochentagsangebote über dem Preistisch: "🎨 Heute: Gratis Dark-Mode Theme" etc., amber Pulse-Dot + Glow, animierter Einblend, DE+EN i18n)
+
+## Neue Ideen (2026-03-26 01:00 UTC)
+- [x] wz.html: Licht-Tab — Globaler Dimmer-Schieberegler (Range-Slider nach Helligkeits-Meter, dimmt alle aktiven Lichter gleichzeitig auf gewählte %, 350ms Debounce, Slider-Thumb synct mit avg brightness)
+- [x] wz.html: Wetter-Tab — Wochenend-Highlight im 7-Tage Forecast (Sa/So Zeilen mit blauem linkem Rand + hellblauem Sub-Label hervorgehoben)
+
+## Neue Ideen (2026-03-26 00:03 UTC)
+- [x] wz.html: Home-Hero — Sonnenuntergang/Sonnenaufgang Countdown-Chip (kleiner animierter Pill-Chip direkt unter dem Day-Arc, zeigt Countdown bis nächstem Sonnenaufgang 🌄 oder Sonnenuntergang 🌅, aktualisiert sich sekündlich mit updateDayArc(), verwendet _wx.daily Daten, zwei Farbvarianten: amber für Sunset, blau für Sunrise)
+
+## Neue Ideen (2026-03-26 02:37 UTC)
+- [x] demo.html: Kundenprojekte Galerie Section (3 Projekt-Cards mit gradient Preview, Badges, Tech-Chips, Hover-Lift — Wohnzimmer Setup / Smart Office / Energie-Monitor, erscheint vor Kontaktformular)
+
+## Neue Ideen (2026-03-26 04:03 UTC)
+- [x] wz.html: Wetter-Tab — Stündliche Wind-Kurve 24H (SVG-Area-Chart analog zur Temp-Kurve, blaues Gradient-Fill, Jetzt-Dot, Stunden-Labels, Max-Wind Info-Zeile mit Windstärke-Beschreibung)
+
+## Neue Ideen (2026-03-26 08:03 UTC)
+- [x] wz.html: Nav-Icons — Burst-Animation beim Tab-Wechsel (jedes Tab-Icon hat eine einzigartige Animations-Geste beim Aktivieren: Home=Bounce, Musik=Spin, Licht=Glow-Flash, Wetter=Wobble, Geräte=Shake)
+
+## Neue Ideen (2026-03-26 06:03 UTC)
+- [x] wz.html: Wetter-Tab — Temperatur-Heatmap im 7-Tage-Forecast (subtiler Links-Farbverlauf pro Zeile je Maximaltemperatur: ≤2°C blau, ≤8°C hellblau, ≤14°C grün, ≤20°C hellgrün, ≤26°C amber, ≤32°C orange, >32°C rot — sofort erkennbar ob die Woche kalt oder warm wird)
+
+## Neue Ideen (2026-03-26 08:37 UTC)
+- [x] wz.html: Wetter-Tab — Frostwarnung Card (❄️/🥶 erscheint wenn temperature_2m_min < 2°C in den nächsten 4 Tagen, zeigt betroffene Tage als Chips, Minimal-Temperatur, blau→lila Farbgebung je nach Schwere)
