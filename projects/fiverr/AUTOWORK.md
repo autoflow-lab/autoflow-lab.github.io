@@ -235,3 +235,42 @@
 
 ## Neue Ideen (2026-03-26 14:37 UTC)
 - [x] wz.html: Wetter-Tab — Wöchentlicher Niederschlags-Überblick Card (🌧 Balkendiagramm 7 Tage aus precipitation_sum, Gesamt-mm, Kategorien Trocken/Normal/Nass/Sehr nass, Regentage-Zähler, animierte Bar-Höhe)
+
+## Neue Ideen (2026-03-26 16:03 UTC)
+- [x] wz.html: Nav-Bar — Fließender Sliding-Pill Aktiv-Indikator (amber halbtransparenter Pill-Hintergrund gleitet smooth zwischen den 5 Nav-Tabs, cubic-bezier spring Transition, positioniert sich via getBoundingClientRect, initialisiert beim DOMContentLoaded auf Home-Tab)
+
+## Neue Ideen (2026-03-26 18:03 UTC)
+- [x] wz.html: Home-Tab — 7-Tage-Temperatur Sparkline im Home-Wetter-Widget (mini 56×16px SVG-Linienkurve unter "Gefühlt X°" im hwx-Card, smooth cubic-bezier Kurve, amber Gradient-Fill, Start-Dot + End-Dot, zeigt Wochen-Temperaturtrend auf einen Blick, fade-in via .show Klasse)
+
+## Neue Ideen (2026-03-26 22:03 UTC)
+- [x] wz.html: Wetter-Tab — Regenrisiko-Heatmap 24H (kompakte Balken-Reihe: 24 Stunden × Farb-Codierung grün→gelb→amber→orange→rot je Niederschlagswahrscheinlichkeit, aktuelle Stunde hervorgehoben, Summary-Zeile "X Stunden erhöhtes Regenrisiko", zeigt auf einen Blick WANN es heute regnen könnte)
+
+## Neue Ideen (2026-03-27 02:03 UTC)
+- [x] wz.html: Wetter-Tab — "Nächster Regen / Aufklärung" Countdown-Chip im Wetter-Hero (scannt stündliche precipitation_probability: wenn es regnet → "☀️ Aufklärung in ~Xh"; wenn kein Regen → "🌧 Regen in ~Xh" oder "✅ Heute kein Regen erwartet"; 3 Farbvarianten blau/amber/grün, fade-in Animation, direkt über den Allergiker-Chips)
+
+## Neue Ideen (2026-03-27 04:03 UTC)
+- [x] wz.html: Home-Hero — "Wetter-Brief" Sentence (1-Satz personalisierter Wetter-Überblick im Home-Hero: generiert kontextsensitiven Satz aus WMO-Code + Temperatur + Regenwahrscheinlichkeit + UV + Wind, z.B. "🌤 Morgens schön, bis 14° — nachmittags Regen ☔", fade-in Animation, Light-Mode kompatibel)
+
+## Neue Ideen (2026-03-27 12:03 UTC)
+- [x] wz.html: Wetter-Tab — Solar-Einstrahlung 24h Karte (☀️ shortwave_radiation von Open-Meteo, SVG Area-Chart gelb/amber Gradient, Peak-Stunde Badge, Gesamt-Wh/m², Condition-Text)
+
+## Neue Ideen (2026-03-27 08:03 UTC)
+- [x] wz.html: Licht-Tab — Fade-Out Timer (🌙 Lichter in 15/30/60 min ausblenden: sanftes Dimmen die letzten 90s, dann turn_off; Countdown-Pill mit Puls-Dot; Cancel-Button; nur sichtbar wenn Lichter an)
+
+## Neue Ideen (2026-03-27 00:03 UTC)
+- [x] wz.html: Licht-Tab — Circadian Lighting Button
+
+## Neue Ideen (2026-03-27 16:03 UTC)
+- [x] wz.html: Home-Tab — Tages-Mood-Tracker (😊/😐/😔 Emoji-Picker, localStorage, 7-Tage Dot-Verlauf)
+
+## Neue Ideen (2026-03-27 18:03 UTC)
+- [x] wz.html: Geräte-Tab — "Letzte Schaltvorgänge" Mini-Timeline (letzte 5 State-Changes aller Lichter + Geräte, chronologisch mit relativem Zeitstempel, farbiger Dot in Entity-Farbe, Ein/Aus Badge, localStorage-Persistenz)
+
+## Neue Ideen (2026-03-27 20:03 UTC)
+- [x] wz.html: Home-Tab — "Aktive Lichter" Farb-Dots Strip (kompakte Pill-Chips direkt vor der Tages-Zusammenfassung, zeigt jeden aktiven Licht als farbigen Dot + Name, Farbe = tatsächliche RGB/Farbtemperatur, animiertes Einblenden mit staggered lcsIn, verschwindet wenn alle Lichter aus)
+
+## Neue Ideen (2026-03-27 14:03 UTC)
+- [x] wz.html: Licht-Tab — Party Mode Button (🪩 Disco-Modus: alle aktiven RGB-Lichter wechseln jede 500ms zu einer anderen Zufallsfarbe, 120 BPM, 10min Auto-Stop, Countdown-Pill mit Puls-Dot, ✕ Cancel, Disco-Ball-Icon rotiert, lila Farbschema)
+
+## Neue Ideen (2026-03-27 08:03 UTC)
+- [x] demo.html: Floating Live-Chat FAQ Widget (🦀 Bot unten rechts, 3 klickbare FAQ-Fragen mit Antworten, Fiverr-CTA, Badge-Notification nach 4s, DE+EN i18n, schliessbar) (🌿 Tageszeit-optimierter Einzel-Tap-Button zwischen Global-Dimmer und Schnellfarben-Palette: berechnet ideale Farbtemperatur 1900K–6500K + Helligkeit 18%–100% je Tagesphase Nacht/Morgengrauen/Morgen/Mittag/Nachmittag/Abend/Spätabend, zeigt aktuellen Tageszeit-Emoji + Zielwerte live, setzt alle aktiven Lichter per svc('light','turn_on',{color_temp_kelvin, brightness_pct}), grüner Flash-Animation bei Tap, Toast "🌅 Circadian auf X Lichter · 2700K / 45%")

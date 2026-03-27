@@ -1,5 +1,313 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-27 20:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — "Aktive Lichter" Farb-Dots Strip
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#lt-color-strip` Div im Home-Tab, direkt vor der Tages-Zusammenfassung (`#tagsum`)
+- **Konzept**: Zeigt alle aktuell eingeschalteten Lichter als bunte Pill-Chips mit Name + Farb-Swatch
+- **CSS**: `.lcs-dot` (flex pill, `border-radius:20px`, `0.63rem`), `.lcs-swatch` (10px Farbkreis mit `--lcs-glow` Glow-Variable)
+- `@keyframes lcsIn`: scale(.78)+opacity:0 → scale(1)+opacity:1, 0.38s cubic-bezier(.32,0,.15,1)
+- Staggered `animation-delay: i*0.055s` → Pills erscheinen wie eine Welle von links nach rechts
+- **Farb-Logik** (kein extra API-Call, nutzt `_S[id].attributes`):
+  - `rgb_color` vorhanden → exakte Lichtfarbe (z.B. Hue RGB)
+  - `color_temp_kelvin` → warm (<2800K) amber / (<3500K) warmorange / (<5000K) cremegelb / kühl blau-weiß
+  - Fallback → Dashboard-amber `rgb(255,159,10)`
+- Name-Cleanup: entfernt redundante "Licht/Lampe"-Suffixe, kürzt auf max 15 Zeichen + "…"
+- **Glow-Effekt**: `box-shadow: 0 0 6px 1px rgba(r,g,b,.45)` auf dem Swatch → subtiler Leuchtpunkt
+- `#lt-color-strip.show{display:flex}` via `classList.toggle` in `updateAll()` — verschwindet sauber wenn alle Lichter aus
+- **Light-Mode**: eigene CSS-Override-Regeln (dunklere Border + transparenter BG)
+- In `updateAll()` nach `_updateQaBar()` eingehängt — aktualisiert sich bei jedem State-Poll
+- `#lt-color-strip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Kein Konflikt mit ambient orb, scene-chip, batt-chip (komplett separates Element)
+- Effekt: Beim Öffnen der App sieht man auf einen Blick welche Lichter an sind und in welcher Farbe — wie eine Licht-Palette des aktuellen Ambientes
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 446636 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 18:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Geräte-Tab — "Letzte Schaltvorgänge" Mini-Timeline
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#dev-timeline` Div im Geräte-Tab, direkt unterhalb `#dev-cards`
+- **Konzept**: Zeigt die letzten 5 State-Changes aller Lichter + Geräte als kompakte Timeline
+- **HTML**: `<div id="dev-timeline">` + `.dtl-list` Container + `.sec-head` "⏱ Letzte Schaltvorgänge"
+- **CSS-Klassen**: `.dtl-item` (flex-Row, staggered `dtlItemIn` Animation), `.dtl-dot` (8px farbiger Kreis mit Glow), `.dtl-name` (Entity-Name, overflow ellipsis), `.dtl-badge` (Ein grün / Aus gedimmt), `.dtl-time` (relative Zeit, rechts)
+- `@keyframes dtlItemIn`: `translateX(-10px) opacity:0` → normal, 0.35s cubic-bezier(.32,0,.15,1), gestaffelt mit `animation-delay 0–0.24s`
+- **localStorage** Key `dev_tl`: Array von `{ts, name, on, lc}` — max. 8 Einträge, neueste zuerst
+- `window._detectDevChanges()` IIFE: vergleicht alle `CFG.lights + CFG.devs` gegen `window._dtlPrev{}` Dict
+- **Change-Detection**: `prev !== cur` bei echten State-Änderungen → Eintrag wird `unshift()`-ed in localStorage
+- `fmtDtlAgo(ms)`: "gerade" / "vor X min" / "vor X h" / "vor X d" — kompakte Zeitanzeige
+- `window._renderDevTimeline()`: liest localStorage, rendert max. 5 Items als `<div class="dtl-item">` ins DOM
+- Dot-Farbe: `rgba(${e.lc},1)` — exakt die Tile-Akzentfarbe des Lichts (amber/blau/weiß je Entity)
+- Fallback: "Noch keine Änderungen heute" wenn localStorage leer
+- Aufgerufen bei jedem `updateAll()` (nach `_updateParty`) — auch relative Timestamps aktualisieren sich
+- `#dev-timeline` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Overrides: `background:var(--c1)`, `.dtl-badge.dtl-off` mit `rgba(0,0,0,.06)` + dunkler Text
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 536178 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 16:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Tages-Mood-Tracker (😊/😐/😔)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#mood-card` Div im Home-Tab, direkt vor dem 3-Tage-Forecast (`#fc3`)
+- **Konzept**: Täglich eine Stimmung festhalten — gut/ok/nicht gut — mit 7-Tage Rückblick als farbige Dots
+- **3 Emoji-Buttons**: 😊 Gut (grün), 😐 Ok (gelb), 😔 Nicht gut (rot) — klickbar, touch-action:manipulation
+- **Button-Design**: 14px border-radius Cards, aktiver State `.selected` mit farbcodiertem Border + Hintergrund per CSS-Variable (--mood-sel-c/--mood-sel-bg)
+- `.mood-btn.sel-good/ok/bad`: 3 separate CSS-Klassen für grün/gelb/rot Farbschema
+- `@keyframes moodBtnPop`: scale 1→1.18→1.06 Bounce beim Selektieren (0.35s cubic-bezier)
+- **localStorage**: Key `mood_YYYY_MM_DD` → Wert `good|ok|bad` — ein Eintrag pro Tag, persistent
+- `todayKey()` Funktion: generiert Datums-Key für heute
+- `getDot(dateObj)` Funktion: liest Mood-Wert für beliebiges Datum aus localStorage
+- `renderDots()`: erzeugt 7-Tage Dot-Reihe (So/Mo/.../Heu Labels) — farbige Dots: grün/gelb/rot, grau wenn kein Eintrag
+- **After-Selection**: Buttons werden halbtransparent + pointer-events:none, `#mood-done` zeigt kontextsensitiven Text
+  - 😊 → "😊 Schön zu hören! Hab einen tollen Abend."
+  - 😐 → "😐 Alles okay — morgen wird besser!"
+  - 😔 → "😔 Kopf hoch, morgen ist ein neuer Tag!"
+- **Init-Logik**: wenn bereits Mood für heute gewählt → `applyTodayMood()` zeigt gespeicherten State sofort
+- Kein HA-Dependency — rein lokale Persistenz (funktioniert ohne Verbindung)
+- Kein Konflikt mit tagsum, cal-card, oder anderen Home-Tab Elementen
+- `#mood-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Effekt: Am Ende des Home-Tabs kann Janis täglich mit einem Tap festhalten wie der Tag war — nach 7 Tagen sieht man ein buntes Stimmungsmuster der Woche
+- JS-Check: OK | Deployed via SSH (paramiko stdin-pipe, 532008 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 14:07 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Party Mode Button (🪩)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#lt-party` Div im Licht-Tab, zwischen `#lt-fadeout` und `#lg` Grid
+- Nur sichtbar wenn ≥1 aktives RGB-Licht vorhanden (`.show` Klasse via `window._updateParty(onCount)`)
+- **Button-Design**: lila `rgba(191,90,242)` Farbschema (klar von amber=Licht, blau=Media, grün=Circadian unterscheidbar)
+- `@keyframes partyBtnGlow`: pulsierender Lila-Glow um den Button wenn aktiv (2s ease-in-out loop)
+- **Disco-Ball-Icon** `#lt-party-ico`: `@keyframes partyIcoSpin` — rotiert 360° in 3s wenn Party läuft
+- `#lt-party-pill`: Aktiv-Pill mit pulsierendem Dot (`@keyframes partyDotPulse`) + Info-Text + ✕ Stop-Button
+- `hslToRgb(h,s,l)` Helper: konvertiert Zufalls-HSL zu RGB Array (90% Sättigung, 55% Helligkeit → kräftige Disco-Farben)
+- **`_tick()`**: jede 500ms (~120 BPM) → assign für jeden RGB-Licht eine neue Zufallsfarbe (Set-Tracking für weniger Wiederholungen)
+- `svc('light','turn_on', {entity_id, rgb_color:[r,g,b], brightness_pct:75, transition:0.4})` → 400ms Übergänge zwischen Farben
+- **`startParty(lights)`**: sammelt aktive RGB-Lichter aus `_S`, startet 500ms Interval, 10min Auto-Stop-Timeout, Toast + hap()
+- **`stopParty(quiet)`**: räumt Interval + Timeout auf, resettet UI, optionaler Toast
+- `window._updateParty(onCount)` in `updateAll()` nach `_updateFadeOut` eingehängt
+- Auto-Stop-Schutz: wenn Lichter extern ausgeschaltet werden während Party läuft → Party stoppt automatisch
+- Kein Konflikt mit Circadian-Button, Fade-Out-Timer, Global-Dimmer (separates IIFE, eigener State)
+- Effekt: Ein Tap startet eine Disco-Lichtshow mit allen aktiven RGB-Lichtern — Farben wechseln im 120-BPM-Takt, ideal fürs Feiern
+- JS-Check: OK | Deployed via SSH (base64-chunk, 526092 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 12:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Solar-Einstrahlung 24h Karte (☀️)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#solar-card` Div im Wetter-Tab, direkt zwischen `#weekly-rain-card` und `#moon-card`
+- **Open-Meteo API**: `shortwave_radiation` zu `&hourly=` Parameter hinzugefügt (kein extra API-Call)
+- `drawSolarCurve()` neue Funktion, aufgerufen in `renderWeather()` nach `drawRainHeatmap()`
+- **Header**: gelbes Farbschema `rgba(255,214,10)` — passend zur Sonne, deutlich von amber (Licht) unterschieden
+- **Peak-Badge**: zeigt Uhrzeit des Einstrahlungs-Peaks + Watt-Wert (z.B. "13:00 / 820 W/m²")
+- **Gesamt-Energie**: summiert alle Stundenwerte → Wh/m² (Trapez-Näherung für 1h-Intervalle)
+- **SVG Area-Chart** (320×56px): smooth cubic-bezier Kurve, `linearGradient solGrad` gelb→amber (50%→4% Opacity)
+- `#sol-now-dot`: amber Leuchtpunkt bei aktueller Stunde (nur sichtbar wenn Einstrahlung >5 W/m²)
+- Zeitlabels bei Jetzt / +6h / +12h / +18h / letzter Stunde
+- **5 Condition-Texte**: Hervorragend (>700 W/m²) / Gut (>400) / Mäßig (>150) / Schwach (>30) / Kaum (<30)
+- Card bleibt `display:none` wenn `shortwave_radiation` nicht verfügbar (<6 Werte) — graceful fallback
+- `#solar-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- JS-Check: OK | Deployed via SSH (b64-chunk, 520043 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 08:08 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: Floating Live-Chat FAQ Widget implementiert
+- 🦀 Amber Chat-Bubble unten rechts, öffnet Popup mit 3 FAQ-Fragen + Antworten + Fiverr-CTA
+- Badge erscheint nach 4s wenn Popup nicht geöffnet, DE+EN i18n, schliessbar
+- Deployed auf GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-27 08:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Fade-Out Timer (🌙)
+- Alle AUTOWORK.md Tasks waren bereits [x] → neue Idee generiert und implementiert
+- Neues `#lt-fadeout` Div im Licht-Tab, zwischen `#lt-color-palette` und `#lg` Grid
+- Nur sichtbar wenn ≥1 Licht an (`.show` Klasse via `window._updateFadeOut(onCount)`)
+- **3 Dauer-Buttons**: `[data-min="15"]` / `[data-min="30"]` / `[data-min="60"]` → starten den Timer
+- Design: amber `rgba(255,159,10,.06)` Hintergrund + `.16` Border → dezent, zur Licht-Tab-Palette passend
+- `#lt-fo-pill`: Countdown-Pill mit pulsierendem Dot + `#lt-fo-cd` (mm:ss Countdown) + `#lt-fo-phase` (Status-Text)
+- `@keyframes foDotPulse`: amber Puls-Ring um den Dot (1.4s loop) — zeigt dass Timer aktiv
+- `#lt-fo-cancel` ✕-Button: erscheint nur wenn Timer läuft, stoppt und zeigt Toast "Timer abgebrochen"
+- **`startTimer(minutes)`**: setzt `_endMs`, startet `setInterval(1s)`, zeigt Pill + Cancel, versteckt Buttons
+- **Dimmlogik**: 90s vor Ablauf → `svc('light','turn_on',{entity_id, brightness_pct})` mit linear fallenden % (3–30%)
+  - Nur auf Lichtern mit `brightness` Attribut (keine Switches)
+  - Countdown-Phase: "Dimmt in Xs" → ab 90s: "Dimmt jetzt…"
+- **Bei Ablauf**: `svc('light','turn_off')` auf alle `CFG.lights`, Toast "🌙 Lichter ausgeschaltet", Timer-Reset
+- `stopTimer(toasted)`: räumt alles auf, resettet UI-State, optionaler Abbruch-Toast
+- Externer Schutz: wenn Lichter anderweitig aus (`onCount===0` während Timer läuft) → Timer automatisch gestoppt
+- `window._updateFadeOut` in `updateAll()` nach `_updateCircadian` eingehängt
+- `#lt-fadeout` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Kein Konflikt mit Sleep-Timer (Musik-Tab, andere Entities), Global-Dimmer, Circadian-Button
+- Effekt: Mit einem Tap auf "30'" dimmen alle Lichter sanft über 30 Minuten (letzten 90s) und schalten dann komplett aus — ideal zum Einschlafen
+- JS-Check: OK | Deployed via SSH (paramiko base64-chunk, 513990 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 04:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — "Wetter-Brief" Sentence Card
+- Alle AUTOWORK.md Tasks waren bereits [x] → neue Idee generiert und implementiert
+- Neues `#wx-brief` Div im Home-Hero, direkt zwischen `#sun-cd-chip` und `#hnp` (Now-Playing Strip)
+- `#wx-brief-txt` Span: enthält den generierten Satz (kein innerHTML — XSS-sicher via textContent)
+- CSS: `font-size:.67rem`, `font-style:italic`, `color:rgba(255,255,255,.5)` — dezent unter dem Sunset-Chip
+- `opacity:0 → 1` via `transition:opacity 1.6s ease` — sanftes Einblenden nach Wetter-Load
+- `.show` Klasse → Satz erscheint smooth sobald Wetterdaten vorhanden
+- `@keyframes wxBriefIn` definiert (fade+translateY — für optionale Nutzung)
+- `:root.light #wx-brief`: `color:rgba(0,0,0,.42)` → lesbar im Light-Mode
+- `drawWxBrief()` Funktion (60 Zeilen): liest `_wx.current` + `_wx.daily` + `_wx.hourly`
+- Findet `rainAft` (Nachmittags-Peak) und `rainMrn` (Morgens-Peak) aus `precipitation_probability` Array
+- **Satz-Logik (10 Varianten):**
+  - ❄️ Schnee → "Schneefall — warm einpacken"
+  - ⛈ Gewitter (WMO ≥95) → "Gewitter möglich — lieber drinnen bleiben"
+  - 🌧 Aktuell Regen → morgens "Schirm einpacken" / nachmittags "bald Aufklärung?"
+  - 🌤 rainAft > 60% → "Morgens schön, nachmittags Regen ☔"
+  - 🌦 rainMrn > 55% → "Morgens Regen — später aufheiternd/wechselhaft"
+  - ☀️ Klar + UV ≥6 → "Toller Tag, UV X — Sonnenschutz nicht vergessen"
+  - 😎 Klar + temp ≥18 → "Schöner Tag — ideal für draußen"
+  - 🥶 Klar + temp <3 → "Klarer Himmel, aber nur X° — dick anziehen"
+  - 💨 Wind >35 km/h → "Windig (X km/h) — Jacke sinnvoll"
+  - 🌞 temp ≥20 → "Angenehme X° — guter Tag für Spaziergang"
+  - 🧊 temp <2 → "Nahe Gefrierpunkt — Frost möglich"
+  - 🌥 Fallback → "Wechselhafter Tag, bis X° — typisches Wetter"
+- `drawWxBrief()` in `renderWeather()` als erste Zeile eingehängt (vor drawOutfitCard)
+- `#wx-brief` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Graceful: `el.classList.remove('show')` wenn kein Brief generierbar (fehlende Daten)
+- Kein extra API-Call: nutzt bereits vorhandene `_wx` Daten
+- Effekt: Im Home-Hero erscheint unter dem Sonnenuntergangs-Chip ein kleiner kursiver Satz der auf einen Blick erklärt was das Wetter heute bedeutet — wie ein persönlicher Wetter-Assistent
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 507499 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 02:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Nächster Regen / Aufklärung" Countdown-Chip
+- Alle AUTOWORK.md Tasks waren bereits [x] → neue Idee generiert und implementiert
+- Neues `#rain-next-chip` Div im `#wx-hero`, direkt über den Allergiker-Chips (neue `border-top` Trenner-Zeile)
+- `#rain-next-pill`: Inline-Pill mit `#rain-next-ico` (Emoji) + `#rain-next-txt` (Text)
+- 3 CSS-Farbvarianten: Standard (blau `rgba(10,132,255,.12)`) / `.rn-clear` (amber) / `.rn-ok` (grün)
+- CSS `@keyframes rainNextIn`: fade+translateY Einblende-Animation
+- `drawRainNextChip()` Funktion: liest `_wx.hourly.precipitation_probability` + `_wx.current.weathercode`
+- Findet Start-Index für aktuelle Stunde via `_wx.hourly.time` Array (ISO-Datetime-Vergleich)
+- **Wenn es aktuell regnet** (WMO code 51–99): scannt bis nächste Stunde mit prob < 20% → "☀️ Aufklärung in ~Xh" (amber Pill)
+  - Bleibt regnerisch (kein Clear in 24h) → "🌧 Regen hält an" (blaue Pill)
+  - Clear sofort → "🌤 Aufklärung bald"
+- **Wenn kein Regen**: scannt bis nächste Stunde mit prob ≥ 40% → "🌧 Regen in ~Xh" (blaue Pill)
+  - Kein Regen in 24h → "✅ Heute kein Regen erwartet" (grüne Pill)
+  - Regen sofort möglich → "🌧 Regen jetzt möglich"
+- Chip bleibt `display:none` wenn keine Hourly-Daten (<4 Werte) — graceful fallback
+- `drawRainNextChip()` in `renderWeather()` nach `drawWindCurve()` aufgerufen
+- `#rain-next-chip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Kein extra API-Call: nutzt bereits vorhandene `_wx.hourly` Daten
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 503944 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-27 01:03 UTC — Cron (Nacht-Improvements HA Dashboards)
+- ✅ wz.html: Light-Mode Bug-Fixes (NIGHTPLAN_2.md Item 4)
+- **renderWeather() Hero-Gradient Fix**: Light-Mode Gradients waren paradoxerweise dunkel (Navy #0d1e38 etc.)
+  statt hell — fixiert mit echten Tageszeit-Himmelsfarben:
+  - 🌙 Nacht (22–6h): `#1a2240 → #0a1428` (dezent dunkel)
+  - 🌅 Morgenröte (6–8h): `#fde8cc → #f5c87a` (warmes Apricot)
+  - ☀️ Morgen (8–12h): `#d4ebf8 → #aecde8` (helles Himmelsblau)
+  - 🌤 Mittag (12–17h): `#c8e4f6 → #9ec8e8` (klares Blau)
+  - 🌆 Abend (17–20h): `#f5d4a8 → #e88f5a` (goldene Stunde)
+  - 🌃 Dämmerung (20–22h): `#2a1840 → #140c22` (lila-dunkel)
+- **Tagsum "Noch keine Aktivität heute"**: hardcoded `rgba(255,255,255,.3)` → `var(--dim2)` — war im Light-Mode
+  auf hellem Hintergrund komplett unsichtbar (weißer Text auf weißem BG)
+- **CSS Light-Mode Overrides** ergänzt: wx-hero & Home-Hero Textelemente nutzen jetzt `var(--txt)` / `var(--dim)`
+  statt hardcoded weiß → lesbar sowohl auf hellen Tageszeit-Hintergründen als auch nachts
+- Geräte-Tab: `.g-pulse-dot.off` und `.g-last-changed` erhalten Light-Mode Override (schwarz-transparent statt weiß-transparent)
+- JS-Check: OK | Deployed via SSH (sudo tee, 500117 bytes) | Git: 25e63a9
+
+## 2026-03-27 00:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Circadian Lighting Button (🌿)
+- Neues `#lt-circadian` Div direkt zwischen `#lt-global-dimmer` und `#lt-color-palette` im Licht-Tab
+- Button-Design: `border:1px solid rgba(48,209,88,.22)` + `background:rgba(48,209,88,.07)` → dezenter grüner Akzent (Circadian = natürlich, biologisch → Grün)
+- 3 Inhalts-Elemente: `#lt-circ-ico` (dynamisches Tageszeit-Emoji), `#lt-circ-label` "Circadian" + `#lt-circ-val` (aktueller Zielwert "2700K · 45%")
+- `getCircadian()` Funktion: 7 Tagesphasen je Stunde mit sanften Übergängen:
+  - 🌙 Nacht (23–6h): 1900K / 18%
+  - 🌅 Morgengrauen (6–8h): interpoliert 1900→4000K / 18→70%
+  - ☀️ Morgen (8–12h): interpoliert 4000→6500K / 70→100%
+  - 🌤 Mittag (12–16h): 6500K / 100%
+  - 🌤 Nachmittag (16–18h): interpoliert 6500→4000K / 100→80%
+  - 🌆 Abend (18–21h): interpoliert 4000→2700K / 80→45%
+  - 🌃 Spätabend (21–23h): interpoliert 2700→1900K / 45→20%
+- `updateCircLabel()`: aktualisiert Emoji + Zielwert-Anzeige; läuft beim Init + alle 60s
+- Tap-Handler: iteriert `CFG.lights.filter(on)`, klemmt CT in Licht-eigene min/max-Grenzen, sendet `svc('light','turn_on',{color_temp_kelvin, brightness_pct})`
+- `@keyframes circApply`: grüner Flash 38%→7% Opacity → Feedback ohne aufdringlichen Effekt
+- Graceful: Button nur sichtbar wenn ≥1 Licht an (`_updateCircadian(onCount)` in `updateAll()`)
+- `_updateCircadian` in `updateAll()` nach `_updateColorPalette` eingehängt
+- `#lt-circadian` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Toast: "🌅 Circadian auf X Lichter · 2700K / 45%"
+- Effekt: Ein Tap setzt alle aktiven Lichter auf die wissenschaftlich optimale Helligkeit+Farbtemperatur für die aktuelle Tageszeit — wie "Adaptive Lighting" aber ohne Plugin, direkt im Dashboard
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 498976 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-26 22:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Regenrisiko-Heatmap 24H (🌂)
+- Neue `#rain-hm-card` Section im Wetter-Tab, direkt NACH der Wind-Kurven-Card und VOR der Pollen-Warnung
+- Aufbau: 24 flex-Kinder in `#rain-hm-cells` (je Stunde eine Balken-Zelle) + Zeitlabels `#rain-hm-labels` + Summary `#rain-hm-summary`
+- Balken-Höhe: 4px (0%) → 32px (100%) proportional zur Wahrscheinlichkeit — visueller Höhenunterschied macht Peak sofort erkennbar
+- 5 Farbstufen (kontinuierlicher Opacity-Anstieg je Stufe):
+  - <15%: `rgba(48,209,88,...)` grün — praktisch kein Risiko
+  - <35%: `rgba(255,214,10,...)` gelb — leichtes Risiko
+  - <55%: `rgba(255,159,10,...)` amber — merkliches Risiko
+  - <75%: `rgba(255,100,30,...)` orange — hohes Risiko
+  - ≥75%: `rgba(255,69,58,...)` rot — sehr hohes Risiko
+- Aktuelle Stunde (i===0): weißer `outline: 1.5px solid rgba(255,255,255,.4)` Rahmen → sofort als "Jetzt" erkennbar
+- Staggered Einblend-Transition: `transition: height .8s cubic-bezier(.4,0,.2,1) ${i*18}ms` → Balken erscheinen wie eine Welle von links nach rechts
+- Zeitlabels bei: Jetzt / +6h / +12h / +18h / letzte Stunde (absolutes Uhrzeit-Format wenn API-Zeitstempel verfügbar)
+- Start-Index: iteriert `_wx.hourly.time` nach aktueller Stunde → zeigt immer von "jetzt" aus 24h voraus
+- Summary-Zeile zählt Stunden mit ≥40% Wahrscheinlichkeit → 3 Varianten:
+  - "✅ Kein Niederschlag erwartet" (0h, max < 25%)
+  - "⚠️ Leichtes Regenrisiko (max. X%)" (0h, aber ≥25% Peak)
+  - "🌂 Xh erhöhtes Regenrisiko (max. X%) · ~HH:00 Uhr" (Peak-Uhrzeit wird berechnet)
+- `drawRainHeatmap()` neue Funktion, aufgerufen in `renderWeather()` nach `drawWindCurve()`
+- Graceful: `card.style.display='none'` wenn keine `precipitation_probability` Hourly-Daten (<12 Werte)
+- `#rain-hm-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- Kein extra API-Call: nutzt bereits vorhandene `_wx.hourly.precipitation_probability` Daten
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 494917 bytes, DEPLOY_OK)
+
+
+## 2026-03-26 18:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — 7-Tage-Temperatur Sparkline im Home-Wetter-Widget
+- Neues `<svg id="hw-sparkline">` als letztes Kind der `.hwx` Wetter-Card im Home-Hero (unter `#hwfeel`)
+- SVG 56×16px, `viewBox="0 0 56 16"`, `overflow:visible` — passt dezent unter die "Gefühlt X°" Zeile
+- `linearGradient #hwSpkGrad`: amber #ff9f0a mit 45%→0% Opacity (von oben nach unten) → subtiler Gradient-Fill
+- `#hw-spk-fill`: Area-Fill Pfad (geschlossen nach unten), `fill:url(#hwSpkGrad)`
+- `#hw-spk-line`: Linienpfad, `stroke:#ff9f0a`, `stroke-width:1.5`, `stroke-linecap/linejoin:round`
+- `#hw-spk-dot0`: Ausgangspunkt (heute), r=2, amber voll — markiert aktuellen Tag
+- `#hw-spk-dot6`: Endpunkt (7 Tage), r=1.5, amber 50% — zeigt Wochenendziel
+- CSS: `#hw-sparkline{opacity:0;transition:opacity 1.2s ease}` + `.show{opacity:1}` → sanftes Einblenden
+- `drawHwSparkline()` IIFE direkt nach `hwfeel.textContent` Zuweisung in `renderWeather()`
+- Datenquelle: `_wx.daily.temperature_2m_max` (erste 7 Werte) — bereits vorhanden, kein extra API-Call
+- Smooth cubic-bezier Kurve via `C cp1x,cp1y cp2x,cp2y x,y` Pfadsegmente (horizontale Kontrollpunkte)
+- Y-Normalisierung: `(temp-min)/(max-min)*(H-PAD*2)` mit ±1°C Padding → immer volle Höhe ausgenutzt
+- Mindestens 2 Datenpunkte erforderlich, sonst `display:none` (graceful fallback)
+- `svg.classList.add('show')` nach Pfad-Berechnung → Sparkline blendet smooth ein beim Wetter-Laden
+- Kein Konflikt mit bestehenden `.hwx` Elementen (flex-column, neues letztes Kind)
+- Kein Konflikt mit `hwx-tap` Click-Handler (pointer-events erbt den Container)
+- Effekt: Im Home-Wetter-Widget erscheint unter der gefühlten Temperatur eine winzige amber Linienkurve — auf einen Blick sieht man ob die Woche wärmer oder kälter wird
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 490203 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-26 16:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Nav-Bar — Fließender Sliding-Pill Aktiv-Indikator
+- Neues `#nav-slide-pill` Div als erstes Kind der `<nav>` — `position:absolute`, gleitet smooth zwischen Tabs
+- CSS: `background:rgba(255,159,10,.10)` + `border:1px solid rgba(255,159,10,.18)` → dezenter amber Pill-Hintergrund
+- `box-shadow:0 0 12px rgba(255,159,10,.08)` → subtiler Glow um den aktiven Tab-Bereich
+- `transition:left .42s cubic-bezier(.34,1.15,.64,1), width .42s cubic-bezier(.34,1.15,.64,1)` → spring-Glide beim Tab-Wechsel
+- `overflow:hidden` auf `.nav` → Pill bleibt sauber innerhalb der Nav-Bar
+- JS IIFE in `navTo()`: `getBoundingClientRect()` auf aktivem Button → berechnet exakte `left` + `width` relativ zur Nav
+- 6px padding beidseitig → Pill ist schmaler als der Button → wirkt wie ein eleganter Unterton
+- `pill.classList.add('show')` → `opacity:1` Transition (`.3s ease`) — Pill erscheint beim ersten navTo
+- `DOMContentLoaded` IIFE: initialisiert Pill sofort auf dem Home-Tab (kein flash of unstyled state)
+- Kein Konflikt mit bestehendem `navGlow` auf `::after` (separate DOM-Ebene, z-index:0 unter Buttons)
+- Kein Konflikt mit `ni-badge` (absolut positioniert im Button, nicht in Nav)
+- Effekt: Beim Tab-Wechsel gleitet ein weicher amber Schimmer sanft unter das neue Tab-Icon — wie iOS 17 Tab Bar Highlight
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk-pipe, 487900 bytes, DEPLOY_OK)
+
 ## 2026-03-26 14:37 UTC — Heartbeat (Auto-Improve)
 - ✅ wz.html: Wetter-Tab — Wöchentlicher Niederschlags-Überblick Card (🌧)
 - Neue `#weekly-rain-card`: Balkendiagramm 7 Tage, Gesamt-mm, Kategorien, Regentage-Zähler

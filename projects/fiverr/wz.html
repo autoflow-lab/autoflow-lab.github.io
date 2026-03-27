@@ -1943,7 +1943,7 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
               <div id="vfill" style="height:100%;width:0%;background:linear-gradient(90deg,rgba(10,132,255,.7),#0a84ff);border-radius:5px;transition:width .15s"></div>
             </div>
             <input id="vol-range" type="range" min="0" max="100" value="40"
-              style="position:absolute;left:0;right:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;padding:0">
+              style="position:absolute;left:0;right:0;width:100%;height:48px;top:50%;transform:translateY(-50%);opacity:0;cursor:pointer;margin:0;padding:0;touch-action:none">
             <div id="vthumb" style="position:absolute;left:0%;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.5),0 0 0 3px rgba(10,132,255,.3);transform:translateX(-50%);pointer-events:none;transition:left .1s,transform .1s;"></div>
           </div>
         </div>
@@ -2707,6 +2707,7 @@ const CFG = {
     {n:'SRF 1',     c:'#38bdf8', r:'56,189,248',   u:'http://stream.srg-ssr.ch/m/drs1/mp3_128'},
     {n:'SRF 3',     c:'#fb923c', r:'251,146,60',    u:'http://stream.srg-ssr.ch/m/drs3/mp3_128'},
     {n:'Swiss Pop', c:'#34d399', r:'52,211,153',    u:'http://stream.srg-ssr.ch/m/rsp/mp3_128'},
+    {n:'Kiss FM',  c:'#e11d48', r:'225,29,72',     u:'http://stream.kissfm.de/kissfm/mp3-128/internetradio/'},
     {n:'U1 Tirol',  c:'#f472b6', r:'244,114,182',   u:'https://livestream.u1.at/u1tirol',     blocked:true},
     {n:'Melody',    c:'#c084fc', r:'192,132,252',   u:'https://cdn.melodyfm.at/melodyfm.mp3', blocked:true},
   ],
@@ -4899,7 +4900,7 @@ async function fetchCalendar(){
 function buildUI(){try{
   // Radio
   const _radioEmoji={
-    'SRF 1':'📻','SRF 3':'🎵','Swiss Pop':'🇨🇭','U1 Tirol':'🏔️','Melody':'🎶'
+    'SRF 1':'📻','SRF 3':'🎵','Swiss Pop':'🇨🇭','Kiss FM':'💋','U1 Tirol':'🏔️','Melody':'🎶'
   };
   document.getElementById('rg').innerHTML=CFG.radio.map(r=>`
     <div class="rb" data-u="${r.u}" data-n="${r.n}" style="--rc:${r.c};--rr:${r.r}">
@@ -5499,7 +5500,7 @@ function buildUI(){try{
   });
 
   // Devs
-  document.getElementById('dg').innerHTML=CFG.devs.map(d=>`
+  const _dg=document.getElementById('dev-cards')||document.getElementById('dg');if(_dg)_dg.innerHTML=CFG.devs.map(d=>`
     <div class="dt" data-id="${d.id}" data-dom="${d.domain}">
       <div class="dtio"><svg viewBox="0 0 24 24">${d.svg}</svg></div>
       <div><div class="dtnm">${d.name}</div><div class="dtst" data-dst="${d.id}">Aus</div></div>
