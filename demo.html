@@ -5422,5 +5422,142 @@ if(_origGetPos){
   });
 })();
 </script>
+
+<!-- ===== FLOATING CHAT WIDGET ===== -->
+<style>
+#chat-fab{position:fixed;bottom:80px;right:18px;z-index:9990;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+#chat-bubble{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#ff9f0a,#ff6b00);box-shadow:0 4px 20px rgba(255,159,10,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s,box-shadow .2s;border:none;outline:none}
+#chat-bubble:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(255,159,10,.65)}
+#chat-bubble svg{width:24px;height:24px;fill:#fff;transition:opacity .2s}
+#chat-badge{position:absolute;top:-4px;right:-4px;background:#ff3b30;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;animation:chatPop .4s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes chatPop{from{transform:scale(0)}to{transform:scale(1)}}
+#chat-popup{background:#1c1c1e;border:1px solid rgba(255,255,255,.1);border-radius:18px;width:300px;max-width:calc(100vw - 36px);box-shadow:0 12px 40px rgba(0,0,0,.6);overflow:hidden;transform-origin:bottom right;animation:chatSlideIn .3s cubic-bezier(.34,1.56,.64,1) both;display:none}
+#chat-popup.open{display:block}
+@keyframes chatSlideIn{from{opacity:0;transform:scale(.8) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.chat-head{background:linear-gradient(135deg,rgba(255,159,10,.18),rgba(255,107,0,.08));padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ff9f0a,#ff6b00);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.chat-name{font-size:.85rem;font-weight:700;color:#fff}
+.chat-status{font-size:.7rem;color:#30d158;display:flex;align-items:center;gap:4px}
+.chat-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#30d158;display:inline-block;animation:pulse 2s infinite}
+.chat-close{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:1.1rem;padding:2px;line-height:1;transition:color .2s}
+.chat-close:hover{color:#fff}
+.chat-body{padding:14px 14px 8px}
+.chat-intro{font-size:.78rem;color:rgba(255,255,255,.55);margin-bottom:10px;line-height:1.45}
+.chat-qs{display:flex;flex-direction:column;gap:6px}
+.chat-q{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:9px 12px;font-size:.78rem;color:rgba(255,255,255,.8);cursor:pointer;transition:background .2s,border-color .2s,color .2s;text-align:left}
+.chat-q:hover{background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.35);color:#ff9f0a}
+.chat-answer{display:none;background:rgba(255,255,255,.04);border-radius:10px;padding:10px 12px;font-size:.77rem;color:rgba(255,255,255,.7);line-height:1.5;margin-top:6px;border-left:3px solid #ff9f0a;animation:fadeInUp .25s ease both}
+.chat-answer.show{display:block}
+.chat-footer{padding:10px 14px 14px}
+.chat-cta{display:block;background:linear-gradient(135deg,#ff9f0a,#ff6b00);border-radius:10px;padding:10px 14px;text-align:center;font-size:.8rem;font-weight:700;color:#fff;text-decoration:none;transition:opacity .2s,transform .2s}
+.chat-cta:hover{opacity:.88;transform:translateY(-1px)}
+@media(max-width:480px){#chat-fab{bottom:70px;right:14px}}
+</style>
+
+<div id="chat-fab">
+  <div id="chat-popup">
+    <div class="chat-head">
+      <div class="chat-avatar">🦀</div>
+      <div>
+        <div class="chat-name" id="chat-title-text">autoflow-lab Support</div>
+        <div class="chat-status" id="chat-online-text">Online – antwortet schnell</div>
+      </div>
+      <button class="chat-close" id="chat-close-btn" aria-label="Schließen">✕</button>
+    </div>
+    <div class="chat-body">
+      <div class="chat-intro" id="chat-intro-text">Hallo! 👋 Ich beantworte deine Fragen zum Dashboard-Service.</div>
+      <div class="chat-qs" id="chat-qs-list">
+        <button class="chat-q" data-idx="0" id="chatq0">💰 Was kostet das genau?</button>
+        <button class="chat-q" data-idx="1" id="chatq1">⏱ Wie lange dauert die Lieferung?</button>
+        <button class="chat-q" data-idx="2" id="chatq2">🔧 Brauche ich Vorkenntnisse?</button>
+      </div>
+      <div class="chat-answer" id="chat-answer-box"></div>
+    </div>
+    <div class="chat-footer">
+      <a class="chat-cta" id="chat-cta-link" href="https://www.fiverr.com" target="_blank" rel="noopener">
+        Jetzt auf Fiverr beauftragen →
+      </a>
+    </div>
+  </div>
+  <button id="chat-bubble" aria-label="Chat öffnen">
+    <span id="chat-badge">1</span>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+  </button>
+</div>
+
+<script>
+(function(){
+  var answers = {
+    de: [
+      'Ab <strong>€29</strong> für ein Basis-Dashboard. Premium mit Animationen, Musik-Tab und Wetter-Widget ab <strong>€59</strong>. Alle Preise auf Fiverr.',
+      'Standard: <strong>3 Werktage</strong>. Mit Express-Option: <strong>24 Stunden</strong>. Du erhältst die fertige HTML-Datei direkt auf Fiverr.',
+      'Nein! Du brauchst nur Home Assistant mit einem Browser. Ich passe alles auf dein Setup an — keine Coding-Kenntnisse nötig. 🙌'
+    ],
+    en: [
+      'Starting at <strong>€29</strong> for a basic dashboard. Premium with animations, music tab & weather widget from <strong>€59</strong>. All prices on Fiverr.',
+      'Standard: <strong>3 business days</strong>. With express option: <strong>24 hours</strong>. You get the finished HTML file directly on Fiverr.',
+      'No! You just need Home Assistant and a browser. I adapt everything to your setup — no coding knowledge required. 🙌'
+    ]
+  };
+  var bubble = document.getElementById('chat-bubble');
+  var popup  = document.getElementById('chat-popup');
+  var closeBtn = document.getElementById('chat-close-btn');
+  var ansBox = document.getElementById('chat-answer-box');
+  var badge  = document.getElementById('chat-badge');
+
+  function getLang(){
+    return (document.documentElement.lang||'de').startsWith('en') ? 'en' : 'de';
+  }
+
+  function updateLang(){
+    var l = getLang();
+    var t = {
+      de:{ title:'autoflow-lab Support', online:'Online – antwortet schnell', intro:'Hallo! 👋 Ich beantworte deine Fragen zum Dashboard-Service.', q:['💰 Was kostet das genau?','⏱ Wie lange dauert die Lieferung?','🔧 Brauche ich Vorkenntnisse?'], cta:'Jetzt auf Fiverr beauftragen →' },
+      en:{ title:'autoflow-lab Support', online:'Online – replies quickly',      intro:"Hi! 👋 I'll answer your questions about the dashboard service.", q:['💰 What does it cost?','⏱ How long is delivery?','🔧 Do I need prior knowledge?'], cta:'Order now on Fiverr →' }
+    }[l];
+    document.getElementById('chat-title-text').textContent  = t.title;
+    document.getElementById('chat-online-text').textContent = t.online;
+    document.getElementById('chat-intro-text').textContent  = t.intro;
+    document.getElementById('chat-cta-link').textContent    = t.cta;
+    for(var i=0;i<3;i++){ var el=document.getElementById('chatq'+i); if(el) el.textContent=t.q[i]; }
+    if(ansBox.classList.contains('show') && ansBox._idx!==undefined){
+      ansBox.innerHTML = answers[l][ansBox._idx];
+    }
+  }
+
+  bubble.addEventListener('click', function(){
+    var open = popup.classList.contains('open');
+    if(open){ popup.classList.remove('open'); }
+    else {
+      popup.classList.add('open');
+      if(badge){ badge.style.display='none'; }
+    }
+  });
+  closeBtn.addEventListener('click', function(e){ e.stopPropagation(); popup.classList.remove('open'); });
+
+  document.getElementById('chat-qs-list').addEventListener('click', function(e){
+    var btn = e.target.closest('.chat-q');
+    if(!btn) return;
+    var idx = parseInt(btn.getAttribute('data-idx'));
+    var l = getLang();
+    ansBox.classList.remove('show');
+    ansBox._idx = idx;
+    setTimeout(function(){
+      ansBox.innerHTML = answers[l][idx];
+      ansBox.classList.add('show');
+    }, 60);
+  });
+
+  document.addEventListener('langChanged', updateLang);
+
+  // Show badge after 4s if popup not opened yet
+  setTimeout(function(){
+    if(!popup.classList.contains('open') && badge) badge.style.display='flex';
+  }, 4000);
+
+  updateLang();
+})();
+</script>
+
 </body>
 </html>
