@@ -1391,6 +1391,26 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 .g-status-row{display:flex;align-items:center;gap:0}
 .g-last-changed{margin-left:6px;font-size:.6rem;color:rgba(255,255,255,.22);font-weight:400}
 
+
+/* ─── iPad / iOS Robustheit ─── */
+html, body { height: 100%; overflow: hidden; }
+#app {
+  height: 100dvh;
+  height: -webkit-fill-available;
+  min-height: 100vh;
+}
+.nav {
+  display: grid !important;
+  grid-template-columns: repeat(5,1fr);
+  flex-shrink: 0;
+  width: 100%;
+  padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
+}
+.pages { flex: 1; min-height: 0; }
+.page { -webkit-overflow-scrolling: touch; }
+* { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+input[type=range] { touch-action: none; }
+
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
@@ -9388,6 +9408,6 @@ const _origSetWxMode=setWxMode;
     };
   })();
 </script>
-<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v3.2</div>
+<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>
 </body>
 </html>

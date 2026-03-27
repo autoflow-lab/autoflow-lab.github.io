@@ -118,6 +118,20 @@ Keine externen IPs im Log. Einzige Login-Warnung:
 - 2026-03-25 19:10: `192.168.1.17` (lokal) — 2× invalid auth auf `/api/websocket` (Safari/Mobile — wahrscheinlich Janis' iPhone mit abgelaufenem Token)
 
 Kein Handlungsbedarf.
+## 2026-03-27 21:30 UTC — Security OK
+
+Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
+Kein Handlungsbedarf.
+
+---
+
+## 2026-03-27 21:00 UTC — Security OK
+
+Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
+Kein Handlungsbedarf.
+
+---
+
 ## 2026-03-27 20:30 UTC — Security OK
 
 Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
