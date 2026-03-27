@@ -5981,37 +5981,41 @@ function buildUI(){try{
     if(vv)vv.textContent=pct+'%';
     if(volRange)volRange.value=pct;
   }
-  // Pointer-Events auf vol-track Container statt auf hidden input range
+  // Volume Slider — nur horizontal steuert Lautstärke, kein Scroll-Konflikt
   const _volTrack=volRange?volRange.parentElement:null;
   if(_volTrack){
-    _volTrack.style.touchAction='none';
+    _volTrack.style.touchAction='pan-y';
     _volTrack.style.cursor='pointer';
-    function _setVolFromEvent(e){
+    let _vStartX=0,_vStartY=0,_vCommitted=false;
+    function _setVolFromX(clientX){
       const rect=_volTrack.getBoundingClientRect();
-      const pct=Math.max(0,Math.min(100,Math.round((e.clientX-rect.left)/rect.width*100)));
+      const pct=Math.max(0,Math.min(100,Math.round((clientX-rect.left)/rect.width*100)));
       if(volRange)volRange.value=pct;
       syncVolUI(pct);
       return pct;
     }
     _volTrack.addEventListener('pointerdown',e=>{
-      e.preventDefault();
-      _volDrag=true;
-      _volTrack.setPointerCapture(e.pointerId);
-      _setVolFromEvent(e);
-    });
+      _vStartX=e.clientX;_vStartY=e.clientY;_volDrag=false;_vCommitted=false;
+    },{passive:true});
     _volTrack.addEventListener('pointermove',e=>{
+      const dx=Math.abs(e.clientX-_vStartX);
+      const dy=Math.abs(e.clientY-_vStartY);
+      if(!_vCommitted){
+        if(dx<6&&dy<6)return;
+        if(dy>dx){return;}
+        _vCommitted=true;_volDrag=true;
+        try{_volTrack.setPointerCapture(e.pointerId);}catch{}
+      }
       if(!_volDrag)return;
-      const pct=_setVolFromEvent(e);
+      const pct=_setVolFromX(e.clientX);
       clearTimeout(_volTimer);
       _volTimer=setTimeout(()=>svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:pct/100*0.6}),120);
-    });
+    },{passive:true});
     _volTrack.addEventListener('pointerup',e=>{
-      if(!_volDrag)return;
-      _volDrag=false;
-      const pct=_setVolFromEvent(e);
-      svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:pct/100*0.6});
+      if(_volDrag){_volDrag=false;svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:_setVolFromX(e.clientX)/100*0.6});}
+      _vCommitted=false;
     });
-    _volTrack.addEventListener('pointercancel',()=>{_volDrag=false;});
+    _volTrack.addEventListener('pointercancel',()=>{_volDrag=false;_vCommitted=false;});
   }
     function confirmVol(pct,onYes){
     // iOS-style action sheet
