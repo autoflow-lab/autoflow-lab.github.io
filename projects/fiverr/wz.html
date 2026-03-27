@@ -1074,11 +1074,11 @@ html,body{height:100%;background:var(--bg);
 .lg-grp-count.has-on{color:var(--acc);font-weight:700}
 .lg-grp-arr{font-size:.7rem;color:rgba(255,255,255,.28);transition:transform .32s cubic-bezier(.34,1.28,.64,1)}
 .lg-grp-hdr.collapsed .lg-grp-arr{transform:rotate(-90deg)}
-.lg-grp-tiles{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;
+.lg-grp-tiles{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px;
   overflow:hidden;transition:grid-template-rows .35s ease,opacity .3s ease}
 .lg-grp-tiles.collapsed{grid-template-rows:0fr;opacity:0;pointer-events:none}
 .lg-grp-tiles:not(.collapsed){grid-template-rows:1fr;opacity:1}
-.lg-grp-inner{min-height:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;width:100%}
+.lg-grp-inner{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
 @keyframes grpToggle{from{transform:scaleY(.96);opacity:.7}to{transform:scaleY(1);opacity:1}}
 .lt{
   padding:18px 14px 14px;border-radius:20px;cursor:pointer;
@@ -1095,7 +1095,7 @@ html,body{height:100%;background:var(--bg);
   background:linear-gradient(160deg,rgba(255,255,255,.07) 0%,transparent 45%);
   z-index:1;
 }
-.lt:active{transform:scale(.93)}
+.lt:active{transform:scale(.93) !important;transition:transform .08s !important}
 .lt-inner{position:absolute;inset:0;border-radius:18px;pointer-events:none;z-index:0}
 .ltgl{position:absolute;inset:-120%;border-radius:50%;z-index:0;
   background:radial-gradient(circle,rgba(var(--lc,255,159,10),.55) 0%,transparent 60%);
@@ -2702,9 +2702,9 @@ const APP_VERSION='v3.2';
 // CONFIG
 // ═══════════════════════════════════════════════
 const LIGHT_GROUPS = [
-  {name:'Wohnzimmer', icon:'🛋', ids:['light.h61e1','light.h618a','light.hue_play_l']},
+  {name:'Wohnzimmer', icon:'🛋', ids:['light.h61e1','light.h618a']},
   {name:'Küche',      icon:'🍳', ids:['light.h618a_2']},
-  {name:'Büro',       icon:'💡', ids:['switch.shelly1_98cdac0ca9b2']},
+  {name:'Büro',       icon:'💡', ids:['switch.shelly1_98cdac0ca9b2','light.hue_play_l']},
   {name:'Außen & Flur',icon:'🚪',ids:['light.garten_licht','light.gang_eg_licht','light.gang_og_licht']},
 ];
 
@@ -8360,6 +8360,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 
+document.addEventListener('touchstart',function(){},{passive:true});
 boot();
 
 // ── Tageszeit Hintergrund ────────────────────────────────────
