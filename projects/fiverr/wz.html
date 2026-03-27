@@ -1058,7 +1058,7 @@ html,body{height:100%;background:var(--bg);
 .spots{font-size:.62rem;color:rgba(29,185,84,.5);margin-top:2px}
 
 /* ───────────── LIGHTS PAGE ───────────── */
-.lg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lg{display:block}
 /* ── Light Group Headers ── */
 .lg-grp-hdr{
   grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
@@ -1074,7 +1074,7 @@ html,body{height:100%;background:var(--bg);
 .lg-grp-count.has-on{color:var(--acc);font-weight:700}
 .lg-grp-arr{font-size:.7rem;color:rgba(255,255,255,.28);transition:transform .32s cubic-bezier(.34,1.28,.64,1)}
 .lg-grp-hdr.collapsed .lg-grp-arr{transform:rotate(-90deg)}
-.lg-grp-tiles{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px;
+.lg-grp-tiles{grid-column:1/-1;display:grid;grid-template-columns:1fr;gap:0;
   overflow:hidden;transition:grid-template-rows .35s ease,opacity .3s ease}
 .lg-grp-tiles.collapsed{grid-template-rows:0fr;opacity:0;pointer-events:none}
 .lg-grp-tiles:not(.collapsed){grid-template-rows:1fr;opacity:1}
