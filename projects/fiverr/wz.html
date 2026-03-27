@@ -155,7 +155,7 @@ html,body{height:100%;background:var(--bg);
 /* ── Page-enter staggered card animation ── */
 @keyframes pgCardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
@@ -226,6 +226,15 @@ html,body{height:100%;background:var(--bg);
 @keyframes badgePop{0%{transform:scale(1.6)}100%{transform:scale(1)}}
 @keyframes wxRecShimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 @keyframes wxRecIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes silenceChipIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes silenceDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(100,180,255,.6)}60%{box-shadow:0 0 0 5px rgba(100,180,255,0)}}
+#silence-chip{display:none;align-items:center;gap:8px;margin:0 0 10px;padding:9px 14px;background:rgba(10,132,255,.06);border:1px solid rgba(10,132,255,.18);border-radius:14px;font-size:.75rem;color:rgba(180,220,255,.9);animation:silenceChipIn .42s cubic-bezier(.34,1.15,.64,1) both}
+#silence-chip.show{display:flex}
+#silence-dot{width:8px;height:8px;border-radius:50%;background:#64b0ff;flex-shrink:0;animation:silenceDotPulse 2s ease-in-out infinite}
+#silence-txt{flex:1;line-height:1.3}
+#silence-cd{font-weight:700;color:#90caff;margin-left:3px}
+:root.light #silence-chip{background:rgba(10,100,220,.06);border-color:rgba(10,100,220,.15);color:rgba(0,60,140,.8)}
+:root.light #silence-cd{color:rgba(0,80,180,.9)}
 @keyframes feelArrowUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes feelArrowDown{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
 /* Allergiker-Warnung Chips */
@@ -1063,11 +1072,11 @@ html,body{height:100%;background:var(--bg);
 .lg-grp-count.has-on{color:var(--acc);font-weight:700}
 .lg-grp-arr{font-size:.7rem;color:rgba(255,255,255,.28);transition:transform .32s cubic-bezier(.34,1.28,.64,1)}
 .lg-grp-hdr.collapsed .lg-grp-arr{transform:rotate(-90deg)}
-.lg-grp-tiles{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px;
+.lg-grp-tiles{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;
   overflow:hidden;transition:grid-template-rows .35s ease,opacity .3s ease}
 .lg-grp-tiles.collapsed{grid-template-rows:0fr;opacity:0;pointer-events:none}
 .lg-grp-tiles:not(.collapsed){grid-template-rows:1fr;opacity:1}
-.lg-grp-inner{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.lg-grp-inner{min-height:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;width:100%}
 @keyframes grpToggle{from{transform:scaleY(.96);opacity:.7}to{transform:scaleY(1);opacity:1}}
 .lt{
   padding:18px 14px 14px;border-radius:20px;cursor:pointer;
@@ -1794,6 +1803,12 @@ input[type=range] { touch-action: none; }
         <span id="wx-rec-ico" style="font-size:1.1rem;flex-shrink:0"></span>
         <span id="wx-rec-txt" style="flex:1;line-height:1.3"></span>
         <div id="wx-rec-shimmer" style="position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.04) 50%,transparent 100%);transform:translateX(-100%);animation:wxRecShimmer 3.5s ease-in-out infinite"></div>
+      </div>
+
+      <!-- Stunde der Stille Chip -->
+      <div id="silence-chip">
+        <div id="silence-dot"></div>
+        <span id="silence-txt">🌙 Ruhezeit aktiv<span id="silence-cd"></span></span>
       </div>
 
       <!-- Scenes 2x2 -->
@@ -3069,6 +3084,12 @@ async function launch(tok){
   // States FIRST, then build UI so brightness/volume show correct values immediately
   await fetchStates();
   buildUI();
+  // Fallback: Nav-Buttons sicher binden (falls buildUI früh crasht)
+  setTimeout(()=>{
+    document.querySelectorAll('.ni').forEach(b=>{
+      if(!b._navBound){b._navBound=true;b.addEventListener('click',()=>{if(typeof navTo==='function'&&b.dataset.p)navTo(b.dataset.p);});}
+    });
+  },300);
   wsConnect(tok);
   fetchWeather();
   setInterval(fetchWeather,10*60*1e3);
@@ -6477,15 +6498,9 @@ window._updateDevCards=patchDevCards;
     }, {passive: true});
   })();
 }catch(err){
-  // Show error visibly so we know what broke
-  const msg='UI Fehler: '+err.message;
-  console.error('buildUI crash:',err);
-  document.body.insertAdjacentHTML('beforeend',
-    `<div style="position:fixed;inset:0;z-index:999;background:#1c0000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px">
-      <div style="font-size:1.1rem;color:#ff453a;font-weight:600">Initialisierungsfehler</div>
-      <div style="font-size:.8rem;color:rgba(255,255,255,.6);text-align:center;max-width:280px">${msg}</div>
-      <button onclick="location.reload()" style="margin-top:8px;padding:12px 32px;border-radius:100px;border:none;background:#ff9f0a;color:#000;font-weight:700;font-size:.9rem">Neu laden</button>
-    </div>`);
+  const _step=window._buildStep||'?';
+  console.error('buildUI crash at',_step,err);
+  if(typeof toast==='function') toast('⚠️ UI '+_step+': '+String(err).slice(0,50),6000);
 }}
 
 // ═══════════════════════════════════════════════
@@ -7532,6 +7547,26 @@ function updateAll(){
   // Schnellfarben-Palette
   window._updateColorPalette&&window._updateColorPalette(on);
   window._updateCircadian&&window._updateCircadian(on);
+  // ── Stunde der Stille Chip ──
+  (function(){
+    const chip=document.getElementById('silence-chip');
+    const cdEl=document.getElementById('silence-cd');
+    if(!chip)return;
+    const now=new Date();
+    const h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
+    const isQuiet=(h>=22)||(h<7);
+    chip.classList.toggle('show',isQuiet);
+    if(!isQuiet||!cdEl)return;
+    // Calculate minutes until 07:00
+    let minsUntil;
+    if(h>=22){minsUntil=(24-h-1)*60+(60-m)+(7*60);}
+    else{minsUntil=(7-h-1)*60+(60-m);}
+    minsUntil-=Math.floor(s/60);
+    const hLeft=Math.floor(minsUntil/60);
+    const minLeft=minsUntil%60;
+    const fmt=hLeft>0?` · noch ${hLeft}h ${minLeft}min`:(minLeft>1?` · noch ${minLeft}min`:' · gleich vorbei');
+    cdEl.textContent=fmt;
+  })();
   // ── Wetter-Empfehlung Pill ──
   (function(){
     const pill=document.getElementById('wx-rec-pill');
@@ -9259,34 +9294,8 @@ const _origSetWxMode=setWxMode;
       hintTimer=setTimeout(()=>{hint.style.opacity='0';hint.style.transform='translate(-50%,-50%) scale(.7)'},600);
     }
 
-    app.addEventListener('touchstart',e=>{
-      const t=e.touches[0];
-      sx=t.clientX; sy=t.clientY; st2=Date.now(); swiping=false;
-    },{passive:true});
-
-    app.addEventListener('touchmove',e=>{
-      if(!sx) return;
-      const dx=e.touches[0].clientX-sx;
-      const dy=Math.abs(e.touches[0].clientY-sy);
-      if(Math.abs(dx)>18&&dy<MAX_DY) swiping=true;
-    },{passive:true});
-
-    app.addEventListener('touchend',e=>{
-      if(!swiping){sx=0;return;}
-      const dx=e.changedTouches[0].clientX-sx;
-      const dy=Math.abs(e.changedTouches[0].clientY-sy);
-      const dt=Date.now()-st2;
-      sx=0; swiping=false;
-      if(Math.abs(dx)<MIN_DX||dy>MAX_DY||dt>MAX_MS) return;
-      const idx=TABS.indexOf(_page);
-      if(idx<0) return;
-      const dir=dx<0?1:-1; // swipe left=next(+1), swipe right=prev(-1)
-      const next=idx+dir;
-      if(next<0||next>=TABS.length) return;
-      showHint(dir);
-      hap&&hap();
-      navTo(TABS[next]);
-    },{passive:true});
+    // Swipe-Navigation deaktiviert (iPad: nur Tab-Klicks)
+    // app.addEventListener('touchstart'... — entfernt
   })();
 
   // ── Licht-Tab Schnellfarben-Palette ──

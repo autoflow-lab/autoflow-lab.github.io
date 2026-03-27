@@ -269,6 +269,9 @@
 ## Neue Ideen (2026-03-27 20:03 UTC)
 - [x] wz.html: Home-Tab — "Aktive Lichter" Farb-Dots Strip (kompakte Pill-Chips direkt vor der Tages-Zusammenfassung, zeigt jeden aktiven Licht als farbigen Dot + Name, Farbe = tatsächliche RGB/Farbtemperatur, animiertes Einblenden mit staggered lcsIn, verschwindet wenn alle Lichter aus)
 
+## Neue Ideen (2026-03-27 22:03 UTC)
+- [x] wz.html: Home-Tab — "Stunde der Stille" Nacht-Chip (🌙 erscheint zwischen 22:00–07:00, pulsierender blauer Dot, Countdown "noch Xh Ymin bis 07:00", dezentes blaues Farbschema rgba(10,132,255), spring-in Animation, aktualisiert sich mit jedem updateAll()-Poll)
+
 ## Neue Ideen (2026-03-27 14:03 UTC)
 - [x] wz.html: Licht-Tab — Party Mode Button (🪩 Disco-Modus: alle aktiven RGB-Lichter wechseln jede 500ms zu einer anderen Zufallsfarbe, 120 BPM, 10min Auto-Stop, Countdown-Pill mit Puls-Dot, ✕ Cancel, Disco-Ball-Icon rotiert, lila Farbschema)
 

@@ -1,5 +1,27 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-27 22:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — "Stunde der Stille" Nacht-Chip (🌙)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#silence-chip` Div im Home-Tab, direkt vor den Szenen-Buttons (nach `#wx-rec-pill`)
+- **Konzept**: Zwischen 22:00 und 07:00 Uhr erscheint ein dezenter blauer Chip der signalisiert dass gerade Ruhezeit ist — mit Live-Countdown bis 07:00
+- **HTML**: `#silence-dot` (8px Kreis, blau) + `#silence-txt` ("🌙 Ruhezeit aktiv") + `#silence-cd` (Countdown-Span)
+- **CSS**: `background:rgba(10,132,255,.06)` + `border:rgba(10,132,255,.18)` → klar blaues Nacht-Farbschema (unterscheidet sich von amber=Licht, grün=Circadian)
+- `@keyframes silenceChipIn`: `opacity:0 + scale(.96) + translateY(5px)` → `opacity:1 + scale(1)`, cubic-bezier(.34,1.15,.64,1), 0.42s — spring-in
+- `@keyframes silenceDotPulse`: `box-shadow` 0px → 5px rgba(100,180,255,.6) → 0, 2s loop — pulsierende blaue Aura
+- **Zeit-Logik** im updateAll()-IIFE: `h>=22 || h<7` → `isQuiet=true`, `chip.classList.toggle('show',isQuiet)`
+- **Countdown-Berechnung**: wenn `h>=22` → Minuten bis Mitternacht + 7h; wenn `h<7` → Minuten bis 07:00
+- Anzeige: `· noch 7h 32min` / `· noch 14min` / `· gleich vorbei` (unter 2min)
+- Chip verschwindet smooth (`display:none` via `classList.remove('show')`) wenn Ruhezeit endet
+- Light-Mode Override: `background:rgba(10,100,220,.06)`, dunklere Textfarbe für Lesbarkeit auf hellem BG
+- `#silence-chip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Kein extra API-Call — reine Uhrzeit-Logik, läuft jedes mal wenn `updateAll()` feuert (~alle 30s)
+- Kein Konflikt mit `#scene-chip`, `#batt-chip`, `#wx-rec-pill` (separates Element, eigene Position)
+- Effekt: Nachts erinnert ein sanfter blauer Chip daran dass gerade Ruhezeit ist — elegant und dezent wie ein Apple Watch Schlafmodus-Indikator
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 502897 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-27 20:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — "Aktive Lichter" Farb-Dots Strip
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
