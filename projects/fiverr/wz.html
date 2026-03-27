@@ -8994,6 +8994,7 @@ const _origSetWxMode=setWxMode;
     ind.style.transition='transform .28s cubic-bezier(.4,0,.2,1)';
     ind.style.transform='translateY(-100%)';
     setTimeout(function(){
+    if(document.getElementById('pages')?.querySelector('.page.cur')?.id==='pg-musik')return;
       triggered=false;pulling=false;
       lbl.textContent='Zum Aktualisieren ziehen';
       arc.style.animation='';
