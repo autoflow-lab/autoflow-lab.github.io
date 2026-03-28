@@ -2163,13 +2163,14 @@ input[type=range] { touch-action: none; }
         <!-- Volume -->
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          <div id="vol-container" style="flex:1;position:relative;height:44px;display:flex;align-items:center;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none">
-            <div style="position:absolute;left:0;right:0;height:4px;background:rgba(255,255,255,.12);border-radius:2px;pointer-events:none">
-              <div id="vfill" style="height:100%;width:40%;background:linear-gradient(90deg,#0a84ff,rgba(10,132,255,.6));border-radius:2px"></div>
-              <div id="vthumb" style="position:absolute;left:40%;top:50%;width:20px;height:20px;background:#fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.45),0 0 0 2px rgba(10,132,255,.3);transform:translate(-50%,-50%);pointer-events:none;transition:box-shadow .1s"></div>
+          <div id="vol-container" style="position:relative;height:38px;display:flex;align-items:center;margin:4px 0">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;pointer-events:none">
+            <div style="width:100%;height:5px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden">
+              <div id="vfill" style="height:100%;width:40%;background:linear-gradient(90deg,#ff9f0a,#ff6b35);border-radius:6px"></div>
             </div>
-            <input type="range" id="vol-range" min="0" max="100" value="40" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none">
           </div>
+          <input type="range" id="vol-range" min="0" max="100" value="40" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;padding:0;z-index:10;cursor:pointer">
+        </div>
           <span id="vv-hdr" style="font-size:.65rem;font-weight:600;color:rgba(255,255,255,.45);min-width:30px;text-align:right">40%</span>
         </div>
         <div id="vol-wrap" style="display:none">
@@ -5539,7 +5540,7 @@ function buildUI(){try{
         }
       </div>
       <span class="rbn">${r.n}</span>
-      ${r.blocked&&!window._dbgRadioAll?'<span title="Nur im Heimnetz" style="position:absolute;top:3px;right:3px;font-size:.5rem">🏠</span>':''}
+      
     </div>`).join('');
   document.querySelectorAll('.rb').forEach(b=>b.addEventListener('click',()=>{
     hap();
@@ -10335,48 +10336,21 @@ const _origSetWxMode=setWxMode;
     };
   })();
 
-  // Volume — Touch + Mouse Events (iOS-sicher, passive:false für e.preventDefault)
+    // Volume — native range input (immer iOS-sicher)
   (function(){
-    var vc=document.getElementById('vol-container');
-    if(!vc)return;
-    var dragging=false,lastP=40;
-    function getPct(clientX){
-      var r=vc.getBoundingClientRect();
-      return Math.max(0,Math.min(100,Math.round((clientX-r.left)/r.width*100)));
-    }
-    function commit(p){
-      lastP=p;
+    var rng=document.getElementById('vol-range');
+    if(!rng)return;
+    rng.addEventListener('input',function(){
+      var p=parseInt(this.value);
+      syncVolUI(p);
+    });
+    rng.addEventListener('change',function(){
+      var p=parseInt(this.value);
+      syncVolUI(p);
       svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});
-    }
-    // ── Touch Events (iOS) ──
-    vc.addEventListener('touchstart',function(e){
-      e.preventDefault(); // verhindert Scroll während Slider
-      dragging=true;_volDrag=true;
-      var p=getPct(e.touches[0].clientX);
-      syncVolUI(p);
-    },{passive:false});
-    vc.addEventListener('touchmove',function(e){
-      e.preventDefault();
-      if(!dragging)return;
-      var p=getPct(e.touches[0].clientX);
-      syncVolUI(p);
-    },{passive:false});
-    vc.addEventListener('touchend',function(e){
-      dragging=false;_volDrag=false;
-      var p=getPct(e.changedTouches[0].clientX);
-      syncVolUI(p);commit(p);
-    },{passive:false});
-    vc.addEventListener('touchcancel',function(){dragging=false;_volDrag=false;});
-    // ── Mouse Events (Desktop) ──
-    vc.addEventListener('mousedown',function(e){
-      dragging=true;_volDrag=true;
-      var p=getPct(e.clientX);syncVolUI(p);
-      function onMove(e){if(dragging){var p=getPct(e.clientX);syncVolUI(p);}}
-      function onUp(e){dragging=false;_volDrag=false;var p=getPct(e.clientX);syncVolUI(p);commit(p);document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);}
-      document.addEventListener('mousemove',onMove);
-      document.addEventListener('mouseup',onUp);
     });
   })();
+
 
   // Licht-Feedback: .pressing Klasse für zuverlässiges iOS Touch-Feedback
   document.querySelectorAll('.lt').forEach(function(tile){
