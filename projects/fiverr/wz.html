@@ -231,6 +231,19 @@ html,body{height:100%;background:var(--bg);
 .ni-badge.show{opacity:1;transform:scale(1)}
 @keyframes badgePop{0%{transform:scale(1.6)}100%{transform:scale(1)}}
 @keyframes wxRecShimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+/* Beste Außenzeit Chip */
+#outdoor-chip{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 14px;border-radius:14px;font-size:.74rem;cursor:default;animation:outdoorChipIn .38s cubic-bezier(.34,1.15,.64,1) both}
+#outdoor-chip.show{display:flex}
+#outdoor-chip.oc-green{background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.2);color:rgba(180,255,200,.85)}
+#outdoor-chip.oc-amber{background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.2);color:rgba(255,220,150,.85)}
+#outdoor-chip.oc-red{background:rgba(255,69,58,.07);border:1px solid rgba(255,69,58,.18);color:rgba(255,180,170,.8)}
+#outdoor-chip-ico{font-size:1.1rem;flex-shrink:0}
+#outdoor-chip-txt{flex:1;line-height:1.3}
+#outdoor-chip-score{font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.08);flex-shrink:0}
+@keyframes outdoorChipIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+:root.light #outdoor-chip.oc-green{background:rgba(30,160,60,.07);border-color:rgba(30,160,60,.2);color:rgba(0,80,30,.8)}
+:root.light #outdoor-chip.oc-amber{background:rgba(180,90,0,.06);border-color:rgba(180,90,0,.18);color:rgba(120,60,0,.8)}
+:root.light #outdoor-chip.oc-red{background:rgba(200,40,30,.06);border-color:rgba(200,40,30,.15);color:rgba(130,20,10,.7)}
 @keyframes wxRecIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes silenceChipIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes silenceDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(100,180,255,.6)}60%{box-shadow:0 0 0 5px rgba(100,180,255,0)}}
@@ -1976,6 +1989,13 @@ input[type=range] { touch-action: none; }
 
       <!-- Compact 3-day forecast -->
       <div class="c fc3" id="fc3"></div>
+
+      <!-- Beste Außenzeit Chip -->
+      <div id="outdoor-chip">
+        <span id="outdoor-chip-ico">🌤</span>
+        <span id="outdoor-chip-txt">Beste Außenzeit wird berechnet…</span>
+        <span id="outdoor-chip-score"></span>
+      </div>
 
       <!-- Wetter-Empfehlung Pill -->
       <div id="wx-rec-pill" style="display:none;align-items:center;gap:8px;margin:0 0 10px;padding:9px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;font-size:.75rem;color:rgba(255,255,255,.75);overflow:hidden;position:relative">
@@ -3963,6 +3983,7 @@ function renderWeather(){
   checkRainWarning();
   drawWeeklyRain();
   drawFrostWarning();
+  drawOutdoorChip();
   drawOutfitCard();
   drawDaylightCard();
   drawTempCurve();
@@ -4886,6 +4907,68 @@ function drawFrostWarning(){
   // Day chips
   const chips=frostDays.map(f=>`<div style="background:rgba(50,200,255,.12);border:1px solid rgba(50,200,255,.25);border-radius:10px;padding:5px 11px;font-size:.7rem;color:rgba(255,255,255,.75)"><span style="font-weight:700;color:${accent}">${f.label}</span> ${Math.round(f.temp)}°C</div>`).join('');
   document.getElementById('frost-days').innerHTML=chips;
+}
+
+function drawOutdoorChip(){
+  const chip=document.getElementById('outdoor-chip');
+  if(!chip||!_wx?.hourly)return;
+  const now=new Date();
+  const hrs=_wx.hourly;
+  const {time:times,temperature_2m:temps,weather_code:codes,precipitation_probability:precs,wind_speed_10m:winds,uv_index:uvs}=hrs;
+  // Only look at today's remaining hours (current hour → 22:00)
+  const today=now.toDateString();
+  const curH=now.getHours();
+  // Score each hour: 0-100
+  // Temp comfort: 14-24°C best, outside penalised
+  // Rain: high prob = bad
+  // Wind: >30km/h = bad
+  // UV: >8 = needs caution but not disqualifying
+  // WMO: 0-2 clear=best, 3 cloudy=ok, 45-57 fog=bad, 61+ rain=bad, 95+ thunder=very bad
+  function scoreHour(t,p,w,uv,code){
+    let s=100;
+    // Temp
+    if(t<8)s-=40;else if(t<14)s-=20;else if(t>30)s-=20;else if(t>26)s-=8;
+    // Rain prob
+    if(p>70)s-=40;else if(p>40)s-=20;else if(p>20)s-=8;
+    // Wind
+    if(w>40)s-=25;else if(w>25)s-=10;
+    // WMO
+    if(code>=95)s-=50;else if(code>=61)s-=35;else if(code>=51)s-=20;else if(code>=45)s-=15;else if(code>=3)s-=3;
+    // UV only penalise extreme
+    if(uv>9)s-=8;
+    return Math.max(0,s);
+  }
+  let best={start:-1,score:0};
+  for(let i=0;i<times.length-1;i++){
+    const d=new Date(times[i]);
+    if(d.toDateString()!==today)continue;
+    const h=d.getHours();
+    if(h<curH||h>20)continue;
+    // Score this hour + next as a 2h window
+    const s1=scoreHour(temps[i],precs[i],winds?winds[i]:10,uvs?uvs[i]:3,codes[i]);
+    const s2=i+1<times.length?scoreHour(temps[i+1],precs[i+1],winds?winds[i+1]:10,uvs?uvs[i+1]:3,codes[i+1]):s1;
+    const avg=(s1+s2)/2;
+    if(avg>best.score){best={start:h,score:avg};}
+  }
+  const ico=document.getElementById('outdoor-chip-ico');
+  const txt=document.getElementById('outdoor-chip-txt');
+  const scoreEl=document.getElementById('outdoor-chip-score');
+  chip.classList.remove('oc-green','oc-amber','oc-red');
+  if(best.start<0||best.score<30){
+    chip.classList.add('oc-red');
+    if(ico)ico.textContent='🌧';
+    if(txt)txt.textContent='Heute nicht ideal für draußen';
+    if(scoreEl)scoreEl.textContent='';
+  } else {
+    const endH=Math.min(best.start+2,22);
+    if(best.score>=70){chip.classList.add('oc-green');if(ico)ico.textContent=best.score>=85?'☀️':'🌤';}
+    else{chip.classList.add('oc-amber');if(ico)ico.textContent='⛅';}
+    if(txt)txt.textContent=`Beste Außenzeit: ${best.start}:00–${endH}:00 Uhr`;
+    if(scoreEl)scoreEl.textContent=Math.round(best.score)+'/100';
+  }
+  chip.classList.remove('show');
+  void chip.offsetWidth;
+  chip.classList.add('show');
 }
 
 function drawOutfitCard(){

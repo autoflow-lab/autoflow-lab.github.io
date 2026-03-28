@@ -296,6 +296,9 @@
 ## Neue Ideen (2026-03-28 12:03 UTC)
 - [x] wz.html: Wetter-Tab — "Guter Moment zum Lüften?" Empfehlung-Card (smart Ventilations-Empfehlung: grün wenn Temp 14–26°C + Regenprob <25% + Wind <35 km/h → "Jetzt lüften!"; blau bei Regen; kalt bei <8°C; amber bei Wind oder Grenztemperatur; animiertes Fenster-Icon, Temp + Feuchte Stats rechts)
 
+## Neue Ideen (2026-03-28 15:45 UTC)
+- [x] wz.html: Home-Tab — "Beste Außenzeit" Chip (scannt stündliche Wetterdaten für heute: Score je Stunde aus Temperatur-Komfort + Regenwahrsch. + Wind + WMO-Code, ermittelt bestes 2h-Fenster für Outdoor, zeigt "Beste Außenzeit: 14:00–16:00 Uhr" grüner/amber/roter Chip je Score, unter Mini-Forecast-Strip)
+
 ## Neue Ideen (2026-03-28 08:43 UTC)
 - [x] wz.html: Musik-Tab — "Zuletzt gespielt" History Chips (localStorage speichert letzte 5 Tracks bei Track-Wechsel; Chip-Row mit 🎵 Ikon + Titel + Artist + relative Zeit; amber Glass-Style; staggered fade-in; erscheint unter Sleep-Timer wenn History vorhanden)
 

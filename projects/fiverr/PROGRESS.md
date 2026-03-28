@@ -1850,3 +1850,13 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Tap → Toast mit vollständigem Track-Info
 - Funktionen: `_saveTrackHistory()`, `_renderTrackHistory()`, `_relTime()`
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-28 15:45 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Home-Tab — "Beste Außenzeit" Chip
+- Scannt stündliche Open-Meteo Daten für heute (aktuelle Stunde → 20:00)
+- Score je Stunde (0–100): Temperaturkomfort + Regenwahrscheinlichkeit + Wind + WMO-Code + UV
+- Sucht bestes 2h-Fenster (Sliding Window, höchster Durchschnittsscore)
+- Zeigt "🌤 Beste Außenzeit: 14:00–16:00 Uhr · 87/100" grün/amber/rot je Score
+- Fallback: "🌧 Heute nicht ideal für draußen" wenn kein Fenster ≥30 Punkte
+- Chip erscheint unter fc3 Mini-Forecast, spring-in Animation, 3 Farbvarianten
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
