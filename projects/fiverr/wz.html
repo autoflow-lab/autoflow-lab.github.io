@@ -2019,225 +2019,177 @@ input[type=range] { touch-action: none; }
     <!-- ═══ MUSIK ═══ -->
     <div class="page" id="pg-musik">
       <!-- Blurred album-art background layer -->
-      <div id="album-page-bg" style="position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;border-radius:inherit">
-        <img id="album-page-bg-img" src="" alt="" style="width:120%;height:120%;margin:-10%;object-fit:cover;filter:blur(55px) saturate(2.2) brightness(0.6);opacity:0;transition:opacity 3s ease,filter 3s ease;display:block">
-        <div style="position:absolute;inset:0;background:rgba(0,0,0,.62)"></div>
-        <canvas id="spec-cv" style="position:absolute;bottom:0;left:0;width:100%;height:38%;opacity:0;transition:opacity 1.6s ease;pointer-events:none;z-index:1"></canvas>
+      <div id="album-page-bg" style="position:absolute;inset:0;z-index:0;overflow:hidden;border-radius:0;pointer-events:none">
+        <img id="album-page-bg-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.15);filter:blur(40px) brightness(.35) saturate(1.8);transition:opacity 1.8s ease">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,.55)"></div>
+        <canvas id="spec-cv" style="position:absolute;bottom:0;left:0;width:100%;height:38%;opacity:0;pointer-events:none;transition:opacity 1.2s ease"></canvas>
       </div>
-      <div class="album" style="position:relative;z-index:1">
-        <div class="album-orb1"></div>
-        <div class="album-orb2"></div>
-        <!-- Album Art Disc -->
-        <div class="spk-wrap" id="spk-wrap">
-          <div class="spk-ring"></div>
-          <div class="spk-ring"></div>
-          <div class="spk-ring"></div>
-          <svg class="spk-ico" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-          </svg>
-        </div>
-        <!-- Rotating Album Disc -->
-        <div id="alb-tilt-wrap" style="display:block;width:clamp(80px,20vw,110px);height:clamp(80px,20vw,110px);margin:6px auto 6px;flex-shrink:0;perspective:700px;transform-style:preserve-3d">
-        <div id="alb-disc" style="position:relative;width:100%;height:100%;transform-style:preserve-3d">
-          <!-- Track Progress Arc -->
-          <svg id="track-prog-arc-svg" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="tpaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#ff9f0a"/>
-                <stop offset="60%" stop-color="#ffcc02"/>
-                <stop offset="100%" stop-color="#ff9f0a" stop-opacity=".5"/>
-              </linearGradient>
-            </defs>
-            <circle id="tpa-track" cx="90" cy="90" r="86" stroke-width="2.5"/>
-            <circle id="tpa-fill" cx="90" cy="90" r="86" stroke-width="2.5" stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
-          </svg>
-          <!-- Equalizer pulse rings (animate when playing) -->
-          <div class="eq-ring"></div>
-          <div class="eq-ring"></div>
-          <div class="eq-ring"></div>
-          <!-- Outer glow ring -->
-          <div id="alb-glow" style="position:absolute;inset:-12px;border-radius:50%;opacity:0;transition:opacity 1.5s ease;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(255,159,10,.35) 30%,transparent 70%)"></div>
-          <!-- Shadow -->
-          <div style="position:absolute;inset:0;border-radius:50%;box-shadow:0 20px 60px rgba(0,0,0,.6),0 8px 24px rgba(0,0,0,.4);z-index:1;pointer-events:none;border-radius:50%"></div>
-          <!-- Disc SVG (vinyl ring) -->
-          <svg viewBox="0 0 160 160" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none">
-            <defs>
-              <radialGradient id="vinylGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#2a2a2a"/>
-                <stop offset="20%" stop-color="#1a1a1a"/>
-                <stop offset="35%" stop-color="#222"/>
-                <stop offset="50%" stop-color="#181818"/>
-                <stop offset="65%" stop-color="#222"/>
-                <stop offset="80%" stop-color="#181818"/>
-                <stop offset="100%" stop-color="#111"/>
-              </radialGradient>
-              <clipPath id="discClip"><circle cx="80" cy="80" r="80"/></clipPath>
-            </defs>
-            <circle cx="80" cy="80" r="80" fill="url(#vinylGrad)"/>
-            <!-- Vinyl grooves -->
-            <circle cx="80" cy="80" r="72" fill="none" stroke="rgba(255,255,255,.04)" stroke-width=".5"/>
-            <circle cx="80" cy="80" r="64" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".5"/>
-            <circle cx="80" cy="80" r="55" fill="none" stroke="rgba(255,255,255,.04)" stroke-width=".5"/>
-            <circle cx="80" cy="80" r="45" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".5"/>
-          </svg>
-          <!-- Album Art Image (inner disc) -->
-          <div id="alb-img-wrap" style="position:absolute;inset:22px;border-radius:50%;overflow:hidden;z-index:3;background:#1c1c1e;transition:opacity .6s">
-            <img id="alb-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease;border-radius:50%">
-            <!-- Fallback icon when no art -->
-            <div id="alb-fallback" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.15)">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+
+      <!-- ── Compact Now Playing Card ── -->
+      <div class="c" id="np-card" style="position:relative;z-index:1;margin:0 0 10px;padding:14px 16px 10px">
+        <!-- Top: disc + info -->
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+          <!-- Vinyl Disc (simple, rotating when playing) -->
+          <div id="alb-tilt-wrap" style="position:relative;flex-shrink:0;width:72px;height:72px">
+            <div id="alb-disc" style="
+              width:72px;height:72px;border-radius:50%;overflow:hidden;position:relative;
+              box-shadow:0 4px 18px rgba(0,0,0,.55);
+              background:radial-gradient(circle at 50% 50%,#222 28%,transparent 29%),
+                         conic-gradient(#1a1a1a 0deg,#2d2d2d 60deg,#1a1a1a 120deg,#2d2d2d 180deg,#1a1a1a 240deg,#2d2d2d 300deg,#1a1a1a 360deg)">
+              <!-- Album art covers the disc -->
+              <img id="alb-img" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;opacity:0;transition:opacity .8s ease">
+              <div id="alb-fallback" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1">
+                <div id="spk-wrap" style="width:32px;height:32px;opacity:.6">
+                  <svg viewBox="0 0 32 32" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.6" stroke-linecap="round">
+                    <ellipse cx="16" cy="16" rx="11" ry="11"/>
+                    <ellipse cx="16" cy="16" rx="5" ry="5"/>
+                    <circle cx="16" cy="16" r="2" fill="rgba(255,255,255,.7)" stroke="none"/>
+                  </svg>
+                </div>
+              </div>
+              <!-- Center hole -->
+              <div style="position:absolute;top:50%;left:50%;width:10px;height:10px;background:#111;border-radius:50%;transform:translate(-50%,-50%);z-index:3"></div>
             </div>
+            <!-- Glow ring when playing -->
+            <div id="alb-glow" style="position:absolute;inset:-3px;border-radius:50%;background:transparent;transition:box-shadow .8s ease;pointer-events:none"></div>
+            <!-- Hidden tonearm (kept for JS compat) -->
+            <div id="alb-tonearm-wrap" style="display:none"><svg></svg></div>
           </div>
-          <!-- Center spindle dot -->
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#3a3a3a,#111);border:2px solid rgba(255,255,255,.15);z-index:4;pointer-events:none"></div>
-          <!-- Tonearm / Needle -->
-          <div id="alb-tonearm-wrap" class="lifted">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Pivot circle -->
-              <circle cx="22" cy="22" r="7" fill="#2a2a2e" stroke="rgba(255,255,255,.25)" stroke-width="1.2"/>
-              <circle cx="22" cy="22" r="3" fill="rgba(255,255,255,.35)"/>
-              <!-- Arm body -->
-              <line x1="22" y1="22" x2="58" y2="68" stroke="rgba(255,255,255,.55)" stroke-width="2.2" stroke-linecap="round"/>
-              <!-- Arm head (cartridge) -->
-              <line x1="52" y1="63" x2="62" y2="72" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-linecap="round"/>
-              <!-- Needle tip glow -->
-              <circle cx="61" cy="71" r="2.5" fill="rgba(255,159,10,.9)"/>
-              <circle cx="61" cy="71" r="4" fill="rgba(255,159,10,.25)"/>
-            </svg>
+
+          <!-- Track Info -->
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <div id="np-src" style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.1);border-radius:20px;padding:2px 8px 2px 6px;font-size:.58rem;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.2px">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                <span id="np-src-txt">Almando</span>
+              </div>
+            </div>
+            <div class="nptitle" id="np-t" style="font-size:.92rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.25">Bereit</div>
+            <div class="npsub" id="np-s" style="font-size:.7rem;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px">Almando Wohnzimmer</div>
+            <!-- EQ Bars -->
+            <div class="eq" id="eq" style="margin-top:5px"><i></i><i></i><i></i><i></i><i></i></div>
           </div>
         </div>
-        </div><!-- /alb-tilt-wrap -->
-        <div class="np">
-          <div class="nplbl">Jetzt läuft</div>
-          <div class="nptitle" id="np-t">Bereit</div>
-          <div class="npsub" id="np-s">Almando Wohnzimmer</div>
-          <div id="np-src" style="font-size:.56rem;color:rgba(255,255,255,.25);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:4px;min-height:14px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-            <span id="np-src-txt">Almando</span>
+
+        <!-- Track progress (hidden until known) -->
+        <div id="track-prog-wrap" style="display:none;margin-bottom:10px">
+          <svg id="track-prog-arc-svg" style="display:none"></svg>
+          <div style="height:3px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden">
+            <div id="track-prog-fill" style="height:100%;width:0%;background:linear-gradient(90deg,#0a84ff,rgba(10,132,255,.6));border-radius:2px;transition:width .5s linear"></div>
           </div>
-          <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
-          <!-- Track progress -->
-          <div id="track-prog-wrap" style="margin-top:14px;display:none">
-            <div style="height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;position:relative">
-              <div id="track-prog-fill" style="height:100%;background:linear-gradient(90deg,var(--blue),#38bdf8);border-radius:3px;width:0%;transition:width .5s linear"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:5px">
-              <span id="track-pos" style="font-size:.55rem;color:rgba(255,255,255,.3)">0:00</span>
-              <span id="track-dur" style="font-size:.55rem;color:rgba(255,255,255,.3)">0:00</span>
-            </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px">
+            <span id="track-pos" style="font-size:.55rem;color:rgba(255,255,255,.3)">0:00</span>
+            <span id="track-dur" style="font-size:.55rem;color:rgba(255,255,255,.3)">0:00</span>
           </div>
         </div>
-      </div>
-      <div class="c pctrl" style="position:relative;z-index:1">
-        <div class="btns">
+
+        <!-- Controls row -->
+        <div class="btns" style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px">
           <button class="bsml" id="btn-prev" title="Zurück" style="opacity:0;pointer-events:none;transition:opacity .2s">
-            <svg viewBox="0 0 24 24"><path d="M19 20 9 12l10-8v16z"/><rect x="5" y="4" width="2.5" height="16" rx="1.25"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
           </button>
           <button class="bplay" id="btn-play">
-            <svg id="play-ico" viewBox="0 0 24 24"><path d="M8 5.5v13L19 12z"/></svg>
+            <svg id="play-ico" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </button>
           <button class="bsml" id="btn-stop" title="Stop">
-            <svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
           </button>
           <button class="bsml" id="btn-next" title="Weiter" style="opacity:0;pointer-events:none;transition:opacity .2s">
-            <svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4z"/><rect x="16.5" y="4" width="2.5" height="16" rx="1.25"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
           </button>
-        </div>
-        <!-- Premium Volume Slider -->
-        <div style="margin-top:18px;padding:0 4px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-            <div style="display:flex;align-items:center;gap:6px">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
-              <span style="font-size:.58rem;color:rgba(255,255,255,.35);font-weight:600;letter-spacing:.8px;text-transform:uppercase">Lautstärke</span>
-            </div>
-            <span id="vv-hdr" style="font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6);min-width:32px;text-align:right">–%</span>
-          </div>
-          <div id="vol-wrap" style="padding:8px 0 12px">
-            <div style="position:relative;height:44px;display:flex;align-items:center">
-              <div style="position:absolute;left:0;right:0;height:5px;background:rgba(255,255,255,.15);border-radius:3px">
-                <div id="vfill" style="height:100%;width:40%;background:linear-gradient(90deg,#0a84ff,rgba(10,132,255,.7));border-radius:3px;transition:width .08s"></div>
-                <div id="vthumb" style="position:absolute;left:40%;top:50%;width:24px;height:24px;background:#fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.45),0 0 0 3px rgba(10,132,255,.3);transform:translate(-50%,-50%);pointer-events:none;transition:left .08s"></div>
-              </div>
-              <input type="range" id="vol-range" min="0" max="100" value="40"
-                style="position:absolute;left:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;padding:0;touch-action:none">
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:0 2px;margin-top:4px">
-              <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Leise</span>
-              <span id="vv" style="font-size:.7rem;font-weight:600;color:rgba(255,255,255,.6)">40%</span>
-              <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Laut</span>
+          <!-- Sleep Timer inline -->
+          <div id="sleep-timer-row" style="margin-left:4px">
+            <button id="sleep-timer-btn" title="Sleep-Timer" class="bsml">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              <span id="sleep-btn-lbl" style="display:none">Sleep</span>
+            </button>
+            <div id="sleep-pill" style="display:none;align-items:center;gap:4px;background:rgba(10,132,255,.2);border-radius:20px;padding:3px 8px">
+              <div id="sleep-pill-dot" style="width:6px;height:6px;border-radius:50%;background:#0a84ff"></div>
+              <span id="sleep-pill-txt" style="font-size:.65rem;color:#0a84ff;font-weight:600">00:00</span>
+              <button id="sleep-cancel" title="Abbrechen" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:.7rem;cursor:pointer;padding:0 0 0 2px">✕</button>
             </div>
           </div>
         </div>
-        <!-- Sleep Timer -->
-        <div id="sleep-timer-row">
-          <button id="sleep-timer-btn" title="Sleep-Timer">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            <span id="sleep-btn-lbl">Sleep-Timer</span>
-          </button>
-          <div id="sleep-pill">
-            <div id="sleep-pill-dot"></div>
-            <span id="sleep-pill-txt">00:00</span>
-            <button id="sleep-cancel" title="Abbrechen">✕</button>
+
+        <!-- Volume -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <div style="flex:1;position:relative;height:36px;display:flex;align-items:center">
+            <div style="position:absolute;left:0;right:0;height:4px;background:rgba(255,255,255,.12);border-radius:2px">
+              <div id="vfill" style="height:100%;width:40%;background:linear-gradient(90deg,#0a84ff,rgba(10,132,255,.6));border-radius:2px;transition:width .08s"></div>
+              <div id="vthumb" style="position:absolute;left:40%;top:50%;width:18px;height:18px;background:#fff;border-radius:50%;box-shadow:0 1px 6px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none;transition:left .08s"></div>
+            </div>
+            <input type="range" id="vol-range" min="0" max="100" value="40" style="position:absolute;left:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;padding:0;touch-action:none">
+          </div>
+          <span id="vv-hdr" style="font-size:.65rem;font-weight:600;color:rgba(255,255,255,.45);min-width:30px;text-align:right">40%</span>
+        </div>
+        <div id="vol-wrap" style="display:none">
+          <div style="display:flex;justify-content:space-between;padding:0 2px">
+            <span style="font-size:.58rem;color:rgba(255,255,255,.25)">Leise</span>
+            <span id="vv" style="font-size:.65rem;font-weight:600;color:rgba(255,255,255,.5)">40%</span>
+            <span style="font-size:.58rem;color:rgba(255,255,255,.25)">Laut</span>
           </div>
         </div>
-      </div>
-      <!-- Track History -->
-      <div id="track-history">
-        <div id="track-history-lbl">🎵 Zuletzt gespielt</div>
-        <div id="track-history-list"></div>
-      </div>
-      <!-- Radio / Podcast Fallback Card -->
-      <div id="radio-fallback-card" style="position:relative;z-index:1;margin:0 16px 10px">
+      </div><!-- /np-card -->
+
+      <!-- ── Radio Fallback Card (only when radio playing) ── -->
+      <div id="radio-fallback-card" style="position:relative;z-index:1;margin:0 0 8px;display:none;background:rgba(28,28,30,.92);border-radius:16px;border:1px solid rgba(255,255,255,.08);padding:12px 14px;overflow:hidden">
         <div id="rfc-bg"></div>
-        <div style="position:relative;z-index:1">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:2px">
-            <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,159,10,.13);border:1px solid rgba(255,159,10,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg id="rfc-antenna-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round"><path d="M3.5 18.5L12 5l8.5 13.5"/><circle cx="12" cy="5" r="1.5" fill="#ff9f0a" stroke="none"/><path d="M8 18.5h8"/></svg>
-            </div>
-            <div style="flex:1;min-width:0">
-              <div id="rfc-type-badge">📻 RADIO</div>
-              <div id="rfc-title">–</div>
-              <div id="rfc-sub">Almando Wohnzimmer</div>
-            </div>
+        <div style="position:relative;z-index:1;display:flex;align-items:center;gap:10px">
+          <div id="rfc-antenna-ico" style="width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.8" stroke-linecap="round"><path d="M12 1v5m0 0c-5.5 0-9 4.5-9 9h18c0-4.5-3.5-9-9-9z"/><path d="M8 23v-4h8v4"/><line x1="12" y1="6" x2="12" y2="15"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div id="rfc-type-badge" style="font-size:.58rem;font-weight:700;letter-spacing:.6px;color:rgba(255,255,255,.4)">📻 RADIO</div>
+            <div id="rfc-title" style="font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">–</div>
+            <div id="rfc-sub" style="font-size:.65rem;color:rgba(255,255,255,.4)">Almando Wohnzimmer</div>
           </div>
           <div id="rfc-freq-row">
-            <div id="rfc-wave-bars">
-              <span style="height:6px"></span>
-              <span style="height:10px"></span>
-              <span style="height:14px"></span>
-              <span style="height:9px"></span>
-              <span style="height:5px"></span>
+            <div id="rfc-wave-bars" style="display:flex;align-items:flex-end;gap:2px;height:14px">
+              <span style="width:3px;height:6px;background:rgba(255,255,255,.3);border-radius:2px"></span>
+              <span style="width:3px;height:10px;background:rgba(255,255,255,.3);border-radius:2px"></span>
+              <span style="width:3px;height:14px;background:rgba(255,255,255,.3);border-radius:2px"></span>
+              <span style="width:3px;height:9px;background:rgba(255,255,255,.3);border-radius:2px"></span>
+              <span style="width:3px;height:5px;background:rgba(255,255,255,.3);border-radius:2px"></span>
             </div>
-            <span id="rfc-cid"></span>
+            <span id="rfc-cid" style="display:none"></span>
           </div>
         </div>
       </div>
-      <span class="lbl">Radio</span>
-      <div class="rg" id="rg"></div>
-      <div style="position:relative;z-index:2;background:var(--c1);border-radius:22px;margin-bottom:10px">
-      <div class="spotcard" id="spotcard" style="margin-bottom:0">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 0 1-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 0 1-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.622.622 0 0 1 .207.857zm1.223-2.722a.779.779 0 0 1-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 0 1-.543-1.312c3.632-1.102 8.147-.568 11.233 1.328a.779.779 0 0 1 .257 1.073zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.935.935 0 1 1-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 0 1-.954 1.608z"/></svg>
-        <div style="flex:1;min-width:0">
-          <div class="spott" id="sp-t">Spotify</div>
-          <div class="spots" id="sp-s" style="cursor:pointer" title="Gerät wechseln">–</div>
-        </div>
-        <select id="sp-dev" style="background:rgba(255,255,255,.08);border:none;border-radius:8px;color:rgba(255,255,255,.5);font-size:.6rem;padding:4px 6px;cursor:pointer;max-width:90px;outline:none;-webkit-appearance:none;text-align:center" title="Spotify-Gerät"></select>
-        <div id="sp-arrow" style="margin-left:auto;transition:transform .25s;color:rgba(255,255,255,.3);flex-shrink:0">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <!-- Playlist Dropdown -->
-      <div id="sp-playlists" style="max-height:0;overflow-y:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch">
-        <div style="padding:4px 0 4px">
-          <div id="sp-pl-list" style="display:flex;flex-direction:column;gap:4px">
-            <div style="padding:14px;color:rgba(255,255,255,.3);font-size:.8rem;text-align:center">Lade Playlists…</div>
-          </div>
-        </div>
-      </div>
-      </div><!-- /spotify wrapper -->
-    </div><!-- /musik -->
 
-    <!-- ═══ LICHT ═══ -->
+      <!-- Track History (shown when tracks available) -->
+      <div id="track-history" style="display:none;flex-direction:column;gap:5px;margin:0 0 10px;position:relative;z-index:1">
+        <div id="track-history-lbl" style="font-size:.6rem;font-weight:700;letter-spacing:.7px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:4px">🎵 Zuletzt gespielt</div>
+        <div id="track-history-list"></div>
+      </div>
+
+      <!-- ── Radio ── -->
+      <span class="lbl" style="position:relative;z-index:1">Radio</span>
+      <div class="rg" id="rg" style="position:relative;z-index:1"></div>
+
+      <!-- ── Spotify ── -->
+      <div style="position:relative;z-index:1;margin-bottom:0">
+        <div class="spotcard c" id="spotcard">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#1db954"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 0 1-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 0 1-.277-1.215c3.809-.87 7.077-.496 9.712 1.115.293.18.387.563.207.857zm1.223-2.723a.78.78 0 0 1-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 0 1-.973-.519.781.781 0 0 1 .519-.972c3.632-1.102 8.147-.568 11.234 1.328a.78.78 0 0 1 .257 1.072zm.105-2.835C14.69 8.956 9.954 8.8 7.034 9.608a.937.937 0 1 1-.543-1.794c3.353-.998 8.936-.792 12.457 1.349a.937.937 0 0 1-.034 1.703z"/></svg>
+          <div style="flex:1;min-width:0">
+            <div class="spott" id="sp-t">Spotify</div>
+            <div class="spots" id="sp-s" style="cursor:pointer" title="Gerät wechseln">–</div>
+          </div>
+          <select id="sp-dev" style="display:none" title="Spotify-Gerät"></select>
+          <div id="sp-arrow" style="color:rgba(255,255,255,.3)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div id="sp-playlists" style="display:none;padding:0 4px 4px">
+          <div style="padding:4px 0 4px">
+            <div id="sp-pl-list" style="display:flex;flex-direction:column;gap:4px">
+              <div style="color:rgba(255,255,255,.4);font-size:.8rem;padding:8px">Lade Playlists…</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /spotify -->
+    </div><!-- /pg-musik -->
+
     <div class="page" id="pg-licht">
       <span class="lbl">Licht</span>
       <div id="lt-bri-meter" aria-label="Gesamt-Helligkeit">
