@@ -1,5 +1,41 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-28 16:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — 7-Tage Wochentag-Strip
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#week-strip` Div im Home-Tab, direkt nach `#outdoor-chip` (vor `#wx-rec-pill`)
+- **Konzept**: Horizontale scrollbare Chip-Reihe zeigt alle 7 Tage (heute + nächste 6) mit Wetter-Dot + Höchsttemperatur — auf einen Blick sieht man welche Wochentage schön/regnerisch werden
+- **7 `.ws-chip` Elemente**: je 48px breite flex-Column Card, staggered `@keyframes wsChipIn` (0.06s Delay pro Chip) → Wellen-Einblend-Effekt
+- **Heute-Chip** `.ws-today`: amber `rgba(255,159,10,.10)` Hintergrund + `.32` Border + Glow — sofort erkennbar
+- **Wetter-Dot** `.ws-dot`: 10px farbiger Kreis, Farbe = WMO-Code-Kategorie:
+  - WMO 0-1: gelb `#ffd60a` (klar)
+  - WMO 2-3: hellblaugrau `#8ec5e8` (bewölkt)
+  - WMO 45-48: grau `#a0a0b0` (neblig)
+  - WMO 51-82: blau `#4fc3f7` (Regen/Niesel)
+  - WMO 71-86: eisblau `#b0dcff` (Schnee)
+  - WMO 95+: rot `#ff453a` (Gewitter)
+  - Dot hat passendes `box-shadow` Glow in dot-Farbe → subtile Leucht-Aura
+- **Hover**: Dot-Scale 1.25 via CSS-Transition → micro-Interaktion
+- **Detail-Popup** `#ws-popup`: erscheint beim Tap auf einen Chip, positioniert sich automatisch über dem Chip (oder darunter wenn kein Platz):
+  - `#ws-popup-day`: Tagesname + Datum (z.B. "Di (1.4.)")
+  - `#ws-popup-cond`: Wetterbedingung auf Deutsch (z.B. "Teilweise bewölkt")
+  - `#ws-popup-hi/lo`: Höchst-/Tiefstemperatur nebeneinander (1.1rem bold weiß)
+  - `#ws-popup-prec`: Niederschlag in mm — nur sichtbar wenn >0.2mm
+- Popup erscheint mit `scale(.88)→scale(1)` spring-Animation (cubic-bezier .34,1.15,.64,1)
+- Popup verschwindet automatisch nach 2.8s oder beim nächsten Klick außerhalb
+- `wmoShort(code)` Hilfsfunktion: 9 Stufen DE-Kurztext für WMO-Code
+- `wmoColor(code)` Hilfsfunktion: 6 Farbkategorien
+- `drawWeekStrip()` liest aus `_wx.daily.time`, `.weather_code`, `.temperature_2m_max/.min`, `.precipitation_sum`
+- Strip verschwindet (`classList.remove('show')`) wenn weniger als 2 Tage verfügbar
+- `drawWeekStrip()` in `renderWeather()` nach `drawOutdoorChip()` eingehängt
+- `#week-strip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Overrides: `.ws-chip` dunklere Border-Farbe, `.ws-today` warmorange Tönung, Popup weiß mit schwarzem Text
+- **Kein extra API-Call** — nutzt bereits vorhandene `_wx.daily` Daten
+- Effekt: Der Home-Tab zeigt jetzt direkt unter dem Beste-Außenzeit-Chip eine kompakte Wochenübersicht — Wetter-Farb-Dots machen sofort klar wann Regen/Sonne zu erwarten ist
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 553414 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-28 12:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — "Guter Moment zum Lüften?" Empfehlung-Card
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert

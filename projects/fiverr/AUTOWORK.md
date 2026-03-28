@@ -299,6 +299,9 @@
 ## Neue Ideen (2026-03-28 15:45 UTC)
 - [x] wz.html: Home-Tab — "Beste Außenzeit" Chip (scannt stündliche Wetterdaten für heute: Score je Stunde aus Temperatur-Komfort + Regenwahrsch. + Wind + WMO-Code, ermittelt bestes 2h-Fenster für Outdoor, zeigt "Beste Außenzeit: 14:00–16:00 Uhr" grüner/amber/roter Chip je Score, unter Mini-Forecast-Strip)
 
+## Neue Ideen (2026-03-28 16:03 UTC)
+- [x] wz.html: Home-Tab — 7-Tage Wochentag-Strip (horizontale Chip-Reihe nach outdoor-chip: Mo–So mit farbigem Wetter-Dot + Höchsttemperatur, Heute hervorgehoben mit amber Glow, Tap → Detail-Popup mit Hi/Lo + Wetterbedingung + Niederschlag mm, staggered wsChipIn Animation, blendet nur ein wenn _wx.daily vorhanden)
+
 ## Neue Ideen (2026-03-28 08:43 UTC)
 - [x] wz.html: Musik-Tab — "Zuletzt gespielt" History Chips (localStorage speichert letzte 5 Tracks bei Track-Wechsel; Chip-Row mit 🎵 Ikon + Titel + Artist + relative Zeit; amber Glass-Style; staggered fade-in; erscheint unter Sleep-Timer wenn History vorhanden)
 
