@@ -154,13 +154,17 @@ html,body{height:100%;background:var(--bg);
 .page.prev{opacity:0;pointer-events:none}
 /* ── Page-enter staggered card animation ── */
 @keyframes pgCardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dsgPop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+#dev-status-gauge.pop #dsg-svg{animation:dsgPop .42s cubic-bezier(.34,1.28,.64,1)}
+:root.light #dev-status-gauge{background:var(--c1)}
+:root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
-.page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow{
+.page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
 }
 /* stagger: nth-child 1–8 */
@@ -294,6 +298,28 @@ html,body{height:100%;background:var(--bg);
 #lt-circ-val{font-size:.68rem;font-weight:700;color:rgba(48,209,88,.9);white-space:nowrap}
 @keyframes circApply{0%{background:rgba(48,209,88,.38)}100%{background:rgba(48,209,88,.07)}}
 #lt-circ-btn.circ-flash{animation:circApply .65s ease forwards}
+/* ── Sonnenuntergang-Simulator ── */
+#lt-sunset-sim{margin:0 14px 10px;opacity:0;transition:opacity .5s ease}
+#lt-sunset-sim.show{opacity:1}
+#lt-ss-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,120,50,.28);background:rgba(255,100,30,.07);cursor:pointer;touch-action:manipulation;transition:background .18s,transform .15s;text-align:left}
+#lt-ss-btn:active{transform:scale(.97);background:rgba(255,100,30,.16)}
+#lt-ss-ico{font-size:1.1rem;flex-shrink:0}
+@keyframes ssSunSet{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(2px) scale(.93)}}
+#lt-ss-btn.ss-running #lt-ss-ico{animation:ssSunSet 3s ease-in-out infinite}
+#lt-ss-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-ss-val{font-size:.68rem;font-weight:700;color:rgba(255,140,60,.9);white-space:nowrap}
+#lt-ss-pill{display:none;align-items:center;gap:8px;padding:7px 12px;margin-top:7px;border-radius:12px;background:rgba(255,100,30,.09);border:1px solid rgba(255,120,50,.2)}
+#lt-ss-pill.show{display:flex}
+#lt-ss-dot{width:7px;height:7px;border-radius:50%;background:#ff8c3c;flex-shrink:0}
+@keyframes ssDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,140,60,.6)}60%{box-shadow:0 0 0 5px rgba(255,140,60,0)}}
+#lt-ss-dot{animation:ssDotPulse 1.6s ease-in-out infinite}
+#lt-ss-cd{font-size:.72rem;font-weight:600;color:rgba(255,180,100,.9);flex:1}
+#lt-ss-cancel{font-size:.7rem;padding:3px 8px;border-radius:8px;border:1px solid rgba(255,100,30,.35);background:rgba(255,60,30,.1);color:rgba(255,160,100,.85);cursor:pointer;touch-action:manipulation;transition:background .15s}
+#lt-ss-cancel:active{background:rgba(255,60,30,.25)}
+@keyframes ssApply{0%{background:rgba(255,100,30,.35)}100%{background:rgba(255,100,30,.07)}}
+#lt-ss-btn.ss-flash{animation:ssApply .55s ease forwards}
+:root.light #lt-sunset-sim{background:transparent}
+:root.light #lt-ss-pill{background:rgba(255,100,30,.06)}
 .lt-cp-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin-bottom:7px}
 .lt-cp-chips{display:flex;gap:8px;flex-wrap:wrap}
 .lt-cp-chip{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.13);background:radial-gradient(circle at 38% 32%,var(--cc,#888) 0%,rgba(0,0,0,.55) 100%);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;box-shadow:0 0 0 0 transparent;position:relative;overflow:hidden}
@@ -702,6 +728,20 @@ html,body{height:100%;background:var(--bg);
 #batt-chip .bc-dot{width:6px;height:6px;border-radius:50%;background:#ff453a;flex-shrink:0;
   box-shadow:0 0 5px 1px rgba(255,69,58,.6);animation:bcDotPulse 2.4s ease-in-out infinite}
 @keyframes bcDotPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.5);opacity:1}}
+/* ───────────── HEIZUNGS-STATUS CHIP ───────────── */
+#hvac-chip{display:none;align-items:center;gap:8px;margin:0 0 8px;padding:8px 14px;border-radius:100px;font-size:.74rem;font-weight:600;cursor:default;opacity:0;transform:scale(.88) translateY(-4px);transition:opacity .38s cubic-bezier(.34,1.28,.64,1),transform .38s cubic-bezier(.34,1.28,.64,1)}
+#hvac-chip.show{display:flex;opacity:1;transform:scale(1) translateY(0)}
+#hvac-chip.hvac-heat{background:rgba(255,100,50,.12);border:1px solid rgba(255,100,50,.3);color:rgba(255,160,100,.95)}
+#hvac-chip.hvac-cool{background:rgba(10,132,255,.09);border:1px solid rgba(10,132,255,.25);color:rgba(100,185,255,.95)}
+#hvac-chip.hvac-idle{background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.22);color:rgba(100,220,140,.95)}
+.hvac-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;animation:hvacDotPulse 2.2s ease-in-out infinite}
+#hvac-chip.hvac-heat .hvac-dot{background:#ff6432;box-shadow:0 0 6px rgba(255,100,50,.7)}
+#hvac-chip.hvac-cool .hvac-dot{background:#0a84ff;box-shadow:0 0 6px rgba(10,132,255,.7)}
+#hvac-chip.hvac-idle .hvac-dot{background:#30d158;box-shadow:0 0 6px rgba(48,209,88,.7)}
+@keyframes hvacDotPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.55);opacity:1}}
+:root.light #hvac-chip.hvac-heat{background:rgba(200,60,10,.07);border-color:rgba(200,60,10,.22);color:rgba(140,40,10,.9)}
+:root.light #hvac-chip.hvac-cool{background:rgba(0,100,210,.07);border-color:rgba(0,100,210,.22);color:rgba(0,80,180,.9)}
+:root.light #hvac-chip.hvac-idle{background:rgba(30,160,60,.07);border-color:rgba(30,160,60,.22);color:rgba(20,120,50,.9)}
 /* ───────────── KONTEXT-EMPFEHLUNGS-CHIP ───────────── */
 #ctx-suggest{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 12px;
   border-radius:16px;border:1px solid rgba(255,255,255,.1);
@@ -972,6 +1012,22 @@ html,body{height:100%;background:var(--bg);
 #sleep-pill.show #sleep-pill-dot{animation:stDotPulse 1.6s ease-in-out infinite}
 #sleep-cancel{background:none;border:none;color:rgba(255,255,255,.3);font-size:.9rem;cursor:pointer;padding:2px 4px;line-height:1;touch-action:manipulation}
 #sleep-cancel:active{color:rgba(255,255,255,.7)}
+/* Track History */
+#track-history{display:none;flex-direction:column;gap:6px;margin:10px 16px 0;position:relative;z-index:1}
+#track-history.show{display:flex}
+#track-history-lbl{font-size:.62rem;font-weight:600;letter-spacing:.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:2px}
+.th-chip{display:flex;align-items:center;gap:8px;padding:7px 11px;background:rgba(255,159,10,.06);border:1px solid rgba(255,159,10,.14);border-radius:11px;cursor:pointer;touch-action:manipulation;opacity:0;transform:translateY(6px);animation:thChipIn .32s cubic-bezier(.34,1.15,.64,1) both}
+.th-chip:active{background:rgba(255,159,10,.14);transform:scale(.97)}
+.th-chip-ico{font-size:.9rem;flex-shrink:0}
+.th-chip-info{flex:1;min-width:0}
+.th-chip-title{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th-chip-artist{font-size:.62rem;color:rgba(255,159,10,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th-chip-time{font-size:.58rem;color:rgba(255,255,255,.22);flex-shrink:0}
+@keyframes thChipIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+:root.light .th-chip{background:rgba(180,90,0,.05);border-color:rgba(180,90,0,.14)}
+:root.light .th-chip-title{color:rgba(0,0,0,.78)}
+:root.light .th-chip-artist{color:rgba(150,70,0,.75)}
+:root.light .th-chip-time{color:rgba(0,0,0,.25)}
 
 /* Player controls */
 .pctrl{padding:16px 22px}
@@ -1566,6 +1622,25 @@ input[type=range] { touch-action: none; }
           <g id="hero-wave-p2" style="transform:translateX(-50%)">
             <path d="M0 55 C133 38,267 70,400 55 C533 40,667 68,800 55 C933 40,1067 68,1200 55 C1333 40,1467 68,1600 55 C1733 40,1867 68,2000 55 L2000 72 L0 72 Z" fill="url(#wv2Grad)"/>
           </g>
+          <!-- Reactive light-color wave overlays -->
+          <defs>
+            <linearGradient id="wv1GradR" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="rgba(255,159,10,0.10)"/>
+              <stop offset="50%" stop-color="rgba(255,159,10,0.20)"/>
+              <stop offset="100%" stop-color="rgba(255,159,10,0.10)"/>
+            </linearGradient>
+            <linearGradient id="wv2GradR" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="rgba(10,132,255,0.08)"/>
+              <stop offset="50%" stop-color="rgba(10,132,255,0.16)"/>
+              <stop offset="100%" stop-color="rgba(10,132,255,0.08)"/>
+            </linearGradient>
+          </defs>
+          <g id="hero-wave-r1" style="opacity:0;transition:opacity 3s ease">
+            <path d="M0 48 C100 28,200 68,300 48 C400 28,500 68,600 48 C700 28,800 68,900 48 C1000 28,1100 68,1200 48 C1300 28,1400 68,1500 48 C1600 28,1700 68,1800 48 L1800 72 L0 72 Z" fill="url(#wv1GradR)"/>
+          </g>
+          <g id="hero-wave-r2" style="transform:translateX(-50%);opacity:0;transition:opacity 3s ease">
+            <path d="M0 55 C133 38,267 70,400 55 C533 40,667 68,800 55 C933 40,1067 68,1200 55 C1333 40,1467 68,1600 55 C1733 40,1867 68,2000 55 L2000 72 L0 72 Z" fill="url(#wv2GradR)"/>
+          </g>
         </svg>
         <div class="hcont">
           <div class="htop">
@@ -1732,6 +1807,11 @@ input[type=range] { touch-action: none; }
       <div id="batt-chip" role="alert" aria-live="polite">
         <span class="bc-dot"></span>
         <span id="batt-chip-txt">🔋 Batterie schwach</span>
+      </div>
+      <!-- Heizungs-Status Chip -->
+      <div id="hvac-chip" role="status" aria-live="polite">
+        <span class="hvac-dot"></span>
+        <span id="hvac-chip-txt">🔥 Heizung aktiv</span>
       </div>
       <!-- Kontext-Empfehlungs-Chip -->
       <div id="ctx-suggest" role="complementary" aria-label="Empfehlung">
@@ -2020,6 +2100,11 @@ input[type=range] { touch-action: none; }
           </div>
         </div>
       </div>
+      <!-- Track History -->
+      <div id="track-history">
+        <div id="track-history-lbl">🎵 Zuletzt gespielt</div>
+        <div id="track-history-list"></div>
+      </div>
       <!-- Radio / Podcast Fallback Card -->
       <div id="radio-fallback-card" style="position:relative;z-index:1;margin:0 16px 10px">
         <div id="rfc-bg"></div>
@@ -2101,6 +2186,19 @@ input[type=range] { touch-action: none; }
           <span id="lt-circ-label">Circadian</span>
           <span id="lt-circ-val">--K · --%</span>
         </button>
+      </div>
+      <!-- Sonnenuntergang-Simulator -->
+      <div id="lt-sunset-sim" aria-label="Sonnenuntergang simulieren">
+        <button id="lt-ss-btn" title="Lichter sanft auf Sonnenuntergang-Stimmung dimmen (30 min)">
+          <span id="lt-ss-ico">🌇</span>
+          <span id="lt-ss-label">Sonnenuntergang</span>
+          <span id="lt-ss-val">3000K → 1900K</span>
+        </button>
+        <div id="lt-ss-pill">
+          <div id="lt-ss-dot"></div>
+          <span id="lt-ss-cd">Dimmt…</span>
+          <button id="lt-ss-cancel">✕ Stop</button>
+        </div>
       </div>
       <!-- Schnellfarben-Palette -->
       <div id="lt-color-palette" aria-label="Licht-Schnellfarben">
@@ -2715,6 +2813,28 @@ input[type=range] { touch-action: none; }
   <div class="page" id="pg-geraete">
     <span class="lbl">Geräte</span>
 
+    <!-- Status-Übersicht Donut-Gauge -->
+    <div id="dev-status-gauge" style="display:flex;align-items:center;gap:16px;background:var(--c1);border-radius:16px;padding:14px 16px;margin-bottom:14px;opacity:0;transition:opacity .5s ease">
+      <svg id="dsg-svg" width="72" height="72" viewBox="0 0 72 72" style="flex-shrink:0">
+        <defs>
+          <linearGradient id="dsgGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#30d158"/>
+            <stop offset="100%" stop-color="#34e05a"/>
+          </linearGradient>
+        </defs>
+        <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="6"/>
+        <circle id="dsg-fill" cx="36" cy="36" r="28" fill="none" stroke="url(#dsgGrad)" stroke-width="6" stroke-linecap="round" stroke-dasharray="175.93" stroke-dashoffset="175.93" transform="rotate(-90 36 36)" style="transition:stroke-dashoffset 1s cubic-bezier(.34,1.1,.64,1)"/>
+        <text id="dsg-num" x="36" y="41" text-anchor="middle" fill="white" font-size="15" font-weight="700" font-family="-apple-system,sans-serif">0</text>
+      </svg>
+      <div style="flex:1;min-width:0">
+        <div id="dsg-label" style="font-size:.9rem;font-weight:600;color:var(--txt);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">0 von 0 aktiv</div>
+        <div style="height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden">
+          <div id="dsg-bar" style="height:100%;background:linear-gradient(90deg,#30d158,#34e05a);border-radius:4px;width:0%;transition:width 1s cubic-bezier(.34,1.1,.64,1)"></div>
+        </div>
+        <div id="dsg-sub" style="font-size:.67rem;color:var(--dim);margin-top:6px">😴 Alles aus</div>
+      </div>
+    </div>
+
     <!-- Zuletzt genutzt Timeline -->
     <div id="dev-recent-wrap" style="background:var(--c1);border-radius:14px;padding:13px 14px 10px;margin-bottom:14px;display:none">
       <div style="font-size:.72rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px">⏱ Zuletzt genutzt</div>
@@ -3278,6 +3398,45 @@ async function fetchStates(){
 let _offlineCount=0, _wsOk=false;
 let _lastAlbumPic=null;
 let _lastTrackTitle=null;
+// Track History helpers
+function _saveTrackHistory(title,artist){
+  try{
+    const key='wz_track_history';
+    let hist=JSON.parse(localStorage.getItem(key)||'[]');
+    // Remove duplicate titles
+    hist=hist.filter(t=>t.title!==title);
+    hist.unshift({title,artist,ts:Date.now()});
+    if(hist.length>5)hist=hist.slice(0,5);
+    localStorage.setItem(key,JSON.stringify(hist));
+  }catch(e){}
+}
+function _renderTrackHistory(){
+  try{
+    const wrap=document.getElementById('track-history');
+    const list=document.getElementById('track-history-list');
+    if(!wrap||!list)return;
+    const hist=JSON.parse(localStorage.getItem('wz_track_history')||'[]');
+    if(!hist.length){wrap.classList.remove('show');return;}
+    wrap.classList.add('show');
+    list.innerHTML='';
+    hist.forEach((t,i)=>{
+      const ago=_relTime(t.ts);
+      const chip=document.createElement('div');
+      chip.className='th-chip';
+      chip.style.animationDelay=(i*0.06)+'s';
+      chip.innerHTML=`<span class="th-chip-ico">🎵</span><div class="th-chip-info"><div class="th-chip-title">${t.title}</div>${t.artist?`<div class="th-chip-artist">${t.artist}</div>`:''}</div><span class="th-chip-time">${ago}</span>`;
+      chip.addEventListener('click',()=>{if(typeof showToast==='function')showToast('🎵 '+t.title+(t.artist?' – '+t.artist:''));});
+      list.appendChild(chip);
+    });
+  }catch(e){}
+}
+function _relTime(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60)return 'gerade';
+  if(s<3600)return Math.floor(s/60)+'min';
+  if(s<86400)return Math.floor(s/3600)+'h';
+  return Math.floor(s/86400)+'d';
+}
 // ═══ Regen-Warnung ═══
 let _rainWarnShown=false;
 function checkRainWarning(){
@@ -6490,7 +6649,53 @@ function patchDevRecent(){
 }
 // Hook in patchDevCards-Cycle
 const _origPatchDevCards=patchDevCards;
-patchDevCards=function(){_origPatchDevCards();patchDevRecent();};
+patchDevCards=function(){_origPatchDevCards();patchDevRecent();window._updateDevGauge&&window._updateDevGauge();};
+
+// ── Geräte-Tab: Status-Übersicht Donut-Gauge ──
+window._updateDevGauge=(function(){
+  const CIRC=175.93;
+  let _prevOn;
+  return function(){
+    const g=document.getElementById('dev-status-gauge');
+    if(!g||typeof _S==='undefined')return;
+    const allIds=[...(CFG.lights||[]),...(CFG.devs||[])];
+    const total=allIds.length;
+    if(!total)return;
+    const on=allIds.filter(id=>{
+      const s=_S[id];
+      if(!s)return false;
+      return s.state==='on'||s.state==='playing'||s.state==='open';
+    }).length;
+    const pct=on/total;
+    const fill=document.getElementById('dsg-fill');
+    const num=document.getElementById('dsg-num');
+    const lbl=document.getElementById('dsg-label');
+    const bar=document.getElementById('dsg-bar');
+    const sub=document.getElementById('dsg-sub');
+    const dsgGrad=document.getElementById('dsgGrad');
+    if(fill)fill.style.strokeDashoffset=CIRC*(1-pct);
+    if(num)num.textContent=on;
+    if(lbl)lbl.textContent=on+' von '+total+' aktiv';
+    if(bar)bar.style.width=(pct*100)+'%';
+    // sub-label
+    const subTxt=on===0?'😴 Alles aus':on===total?'⚡ Alles aktiv':on<=2?'🌙 Wenig aktiv':pct<0.5?'💡 Teilweise aktiv':'🏠 Viel los';
+    if(sub)sub.textContent=subTxt;
+    // gradient color: amber when many on, green otherwise
+    if(dsgGrad){
+      const c1=on===0?'rgba(255,255,255,.2)':pct>0.75?'#ff9f0a':'#30d158';
+      const c2=on===0?'rgba(255,255,255,.1)':pct>0.75?'#ffcc02':'#34e05a';
+      dsgGrad.querySelectorAll('stop')[0].setAttribute('stop-color',c1);
+      dsgGrad.querySelectorAll('stop')[1].setAttribute('stop-color',c2);
+      if(bar)bar.style.background='linear-gradient(90deg,'+c1+','+c2+')';
+    }
+    // pop animation on change
+    if(_prevOn!==undefined&&_prevOn!==on){
+      g.classList.remove('pop');void g.offsetWidth;g.classList.add('pop');
+    }
+    _prevOn=on;
+    g.style.opacity='1';
+  };
+})();
 
   startClock();
   setTimeout(()=>toast('✓ Bereit'),600);
@@ -7509,6 +7714,34 @@ function updateAll(){
     orb.style.setProperty('--amb-orb-c',orbColor);
     orb.classList.add('show');
   })();
+  // ── Licht-reaktive Wellen-Farbverschiebung ──
+  (function(){
+    const g1=document.getElementById('wv1GradR');
+    const g2=document.getElementById('wv2GradR');
+    const r1=document.getElementById('hero-wave-r1');
+    const r2=document.getElementById('hero-wave-r2');
+    if(!g1||!g2||!r1||!r2)return;
+    const onLights=CFG.lights.filter(l=>st(l.id)==='on');
+    if(onLights.length===0){r1.style.opacity='0';r2.style.opacity='0';return;}
+    let rS=0,gS=0,bS=0,cnt=0;
+    onLights.forEach(l=>{
+      const rgb=_S[l.id]?.attributes?.rgb_color;
+      if(rgb&&Array.isArray(rgb)&&rgb.length===3){rS+=rgb[0];gS+=rgb[1];bS+=rgb[2];cnt++;}
+    });
+    if(cnt===0){r1.style.opacity='0';r2.style.opacity='0';return;}
+    const rr=Math.round(rS/cnt),gg=Math.round(gS/cnt),bb=Math.round(bS/cnt);
+    // Complementary tint for wave 2 (rotated hue approx)
+    const r2c=Math.round((bb*0.6+rr*0.4)),g2c=Math.round((rr*0.3+gg*0.4+bb*0.3)),b2c=Math.round((gg*0.6+bb*0.4));
+    const s1=g1.querySelectorAll('stop');
+    s1[0]?.setAttribute('stop-color',`rgba(${rr},${gg},${bb},0.10)`);
+    s1[1]?.setAttribute('stop-color',`rgba(${rr},${gg},${bb},0.22)`);
+    s1[2]?.setAttribute('stop-color',`rgba(${rr},${gg},${bb},0.10)`);
+    const s2=g2.querySelectorAll('stop');
+    s2[0]?.setAttribute('stop-color',`rgba(${r2c},${g2c},${b2c},0.08)`);
+    s2[1]?.setAttribute('stop-color',`rgba(${r2c},${g2c},${b2c},0.18)`);
+    s2[2]?.setAttribute('stop-color',`rgba(${r2c},${g2c},${b2c},0.08)`);
+    r1.style.opacity='1';r2.style.opacity='1';
+  })();
   // Lichter-Summary unter Grid
   (function(){
     const total=CFG.lights.length;
@@ -7621,6 +7854,37 @@ function updateAll(){
     chip.classList.add('show');
   })();
   window._updateDevCards&&window._updateDevCards();
+  // ── Heizungs-Status Chip ──
+  (function(){
+    const chip=document.getElementById('hvac-chip');
+    const txt=document.getElementById('hvac-chip-txt');
+    if(!chip||!txt)return;
+    // Find first climate entity in states
+    const climates=Object.values(_S).filter(s=>s&&s.entity_id&&s.entity_id.startsWith('climate.'));
+    if(!climates.length){chip.classList.remove('show');return;}
+    const cl=climates[0];
+    const attr=cl.attributes||{};
+    const mode=cl.state;
+    const hvacAction=attr.hvac_action||'';
+    const curT=attr.current_temperature!=null?+(attr.current_temperature).toFixed(1):null;
+    const setT=attr.temperature!=null?+(attr.temperature).toFixed(1):null;
+    if(mode==='off'||!mode||mode==='unavailable'){chip.classList.remove('show');return;}
+    chip.classList.remove('hvac-heat','hvac-cool','hvac-idle');
+    let label='';
+    if(hvacAction==='heating'||(hvacAction===''&&(mode==='heat'||mode==='auto'))){
+      chip.classList.add('hvac-heat');
+      label=`🔥 Heizend${curT!=null?' · '+curT+'°':''}${setT!=null?' → '+setT+'°':''}`;
+    } else if(hvacAction==='cooling'||(hvacAction===''&&mode==='cool')){
+      chip.classList.add('hvac-cool');
+      label=`❄️ Kühlung${curT!=null?' · '+curT+'°':''}${setT!=null?' → '+setT+'°':''}`;
+    } else {
+      chip.classList.add('hvac-idle');
+      const name=attr.friendly_name||'Klima';
+      label=`🌡 ${name.replace(/klima|thermostat|heizung/i,'Klima').trim()}${curT!=null?' · '+curT+'°':''}${setT!=null?' / '+setT+'°':''}`;
+    }
+    txt.textContent=label;
+    chip.classList.add('show');
+  })();
   // Quick-Actions Bar state
   window._updateQaBar&&window._updateQaBar(on, playing);
   // ── Kontext-Empfehlungs-Chip ──
@@ -7628,6 +7892,7 @@ function updateAll(){
   // Schnellfarben-Palette
   window._updateColorPalette&&window._updateColorPalette(on);
   window._updateCircadian&&window._updateCircadian(on);
+  window._updateSunsetSim&&window._updateSunsetSim(on);
   // ── Stunde der Stille Chip ──
   (function(){
     const chip=document.getElementById('silence-chip');
@@ -7720,8 +7985,15 @@ function updateAll(){
       nn._hideT=setTimeout(()=>nn.classList.remove('show'),4200);
     })();
   }
-  if(playing&&titleStr!=='Läuft…')_lastTrackTitle=titleStr;
-  else if(!playing)_lastTrackTitle=null;
+  if(playing&&titleStr!=='Läuft…'){
+    if(_lastTrackTitle!==titleStr){
+      // Save to track history
+      const artist=s?.attributes?.media_artist||s?.attributes?.media_channel||'';
+      _saveTrackHistory(titleStr,artist);
+      _renderTrackHistory();
+    }
+    _lastTrackTitle=titleStr;
+  } else if(!playing)_lastTrackTitle=null;
   if(titleStr.length>22){
     titleEl.classList.add('scroll');
     titleEl.innerHTML=`<span>${titleStr}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${titleStr}</span>`;
@@ -8386,6 +8658,8 @@ setInterval(checkAutoTheme, 60_000);
 // 5-Tap Easter Egg auf die Uhr → Theme toggle
 let _tapCount=0,_tapTimer=null;
 document.addEventListener('DOMContentLoaded',()=>{
+  // Render track history on start
+  setTimeout(_renderTrackHistory,600);
   // Nav-Icons Staggered Bounce-In beim App-Start
   (function(){
     const niAll=document.querySelectorAll('.ni');
@@ -9498,6 +9772,80 @@ const _origSetWxMode=setWxMode;
 
     window._updateCircadian=function(onCount){
       wrap.classList.toggle('show',onCount>0);
+    };
+  })();
+
+  // ── Sonnenuntergang-Simulator ──
+  (function(){
+    const simWrap = document.getElementById('lt-sunset-sim');
+    const ssBtn   = document.getElementById('lt-ss-btn');
+    const ssIco   = document.getElementById('lt-ss-ico');
+    const ssVal   = document.getElementById('lt-ss-val');
+    const ssPill  = document.getElementById('lt-ss-pill');
+    const ssCd    = document.getElementById('lt-ss-cd');
+    const ssStop  = document.getElementById('lt-ss-cancel');
+    if(!simWrap||!ssBtn)return;
+
+    const TOTAL_MS = 30*60*1000; // 30 Minuten
+    let _endMs = null;
+    let _tickIv = null;
+    let _tickCount = 0;
+
+    function getActiveDimmables(){
+      return (CFG.lights||[]).filter(id=>{
+        const s=_S[id];
+        return s && s.state==='on' && s.attributes && s.attributes.color_temp_kelvin!==undefined;
+      });
+    }
+
+    function lerp(a,b,t){return Math.round(a+(b-a)*t);}
+
+    function applyStep(){
+      const elapsed = Date.now() - (_endMs - TOTAL_MS);
+      const t = Math.min(elapsed/TOTAL_MS, 1);
+      const ct  = lerp(3000, 1900, t);
+      const bri = lerp(80,   15,   t);
+      const lights = getActiveDimmables();
+      lights.forEach(id=>{
+        svc('light','turn_on',{entity_id:id,color_temp_kelvin:ct,brightness_pct:bri,transition:55});
+      });
+      if(t>=1){ stopSim(false); return; }
+      const remain = _endMs - Date.now();
+      const rm = Math.floor(remain/60000);
+      const rs = Math.floor((remain%60000)/1000);
+      ssCd.textContent = 'Dimmt sanft… noch '+rm+'m '+String(rs).padStart(2,'0')+'s · '+ct+'K / '+bri+'%';
+    }
+
+    function startSim(){
+      if(_tickIv) return;
+      _endMs = Date.now() + TOTAL_MS;
+      _tickCount = 0;
+      applyStep();
+      _tickIv = setInterval(()=>{ _tickCount++; applyStep(); }, 60*1000);
+      ssBtn.classList.add('ss-running','ss-flash');
+      ssVal.textContent = '● Läuft…';
+      ssPill.classList.add('show');
+      ssIco.textContent = '🌆';
+      showToast('🌇 Sonnenuntergang gestartet — dimmt über 30 min');
+      hap&&hap();
+    }
+
+    function stopSim(cancelled){
+      if(_tickIv){ clearInterval(_tickIv); _tickIv=null; }
+      _endMs=null;
+      ssBtn.classList.remove('ss-running');
+      ssVal.textContent = '3000K → 1900K';
+      ssPill.classList.remove('show');
+      ssIco.textContent = '🌇';
+      if(cancelled) showToast('🌇 Sonnenuntergang-Simulator gestoppt');
+    }
+
+    ssBtn.addEventListener('click',()=>{ if(_tickIv){stopSim(true);}else{startSim();} },{passive:true});
+    ssStop.addEventListener('click',(e)=>{ e.stopPropagation(); stopSim(true); },{passive:true});
+
+    window._updateSunsetSim = function(onCount){
+      simWrap.classList.toggle('show', onCount>0);
+      if(onCount===0 && _tickIv) stopSim(false);
     };
   })();
 </script>

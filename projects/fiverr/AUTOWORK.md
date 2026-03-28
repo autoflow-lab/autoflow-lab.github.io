@@ -281,5 +281,20 @@
 ## Neue Ideen (2026-03-28 00:03 UTC)
 - [x] wz.html: Wetter-Tab — Gewitter-Alarm-Card (⚡ scannt stündliche WMO-Codes ≥95 in den nächsten 12h, animierter Blitz-Flash, rote Warn-Card mit Intensitäts-Badge + Zeit-Chips, spring-in Animation)
 
+## Neue Ideen (2026-03-28 02:03 UTC)
+- [x] wz.html: Home-Tab — Heizungs-Status Chip (🔥/❄️/🌡 zeigt climate.* Entity: Ist-Temp vs. Soll-Temp, Heizend/Kühlend/Idle Modus, pulsierender Dot in Akzentfarbe, spring-in Animation, Light-Mode Overrides)
+
+## Neue Ideen (2026-03-28 04:03 UTC)
+- [x] wz.html: Geräte-Tab — Status-Übersicht Donut-Gauge (animierter SVG-Donut zeigt ON/OFF Verhältnis aller Lichter + Geräte als Kreisbogen, grün→amber je Aktivitätsgrad, Zahl in der Mitte, Spring-Pop-Animation bei State-Änderung, Sub-Label "Alles aus/Wenig aktiv/Viel los")
+
+## Neue Ideen (2026-03-28 06:03 UTC)
+- [x] wz.html: Licht-Tab — Sonnenuntergang-Simulator Button (🌇 Tap startet 30-min Dimm-Kurve von 3000K/80% → 1900K/15%, sanfter Übergang mit 55s-Transition je Schritt, Countdown-Pill + pulsierender Dot + Cancel-Button, setzt alle aktiven Lichter die color_temp unterstützen, orange/warmes Farbschema)
+
+## Neue Ideen (2026-03-28 08:03 UTC)
+- [x] wz.html: Home-Hero — Licht-reaktive Wellen-Farbverschiebung (Hero-SVG-Wellen wechseln Gradientfarbe passend zu aktivem RGB-Licht-Durchschnitt, 3s ease Opacity-Transition, komplementäre Farbe für Welle 2, Fallback auf Standard-Amber/Blau wenn keine RGB-Lichter)
+
+## Neue Ideen (2026-03-28 08:43 UTC)
+- [x] wz.html: Musik-Tab — "Zuletzt gespielt" History Chips (localStorage speichert letzte 5 Tracks bei Track-Wechsel; Chip-Row mit 🎵 Ikon + Titel + Artist + relative Zeit; amber Glass-Style; staggered fade-in; erscheint unter Sleep-Timer wenn History vorhanden)
+
 ## Neue Ideen (2026-03-27 08:03 UTC)
 - [x] demo.html: Floating Live-Chat FAQ Widget (🦀 Bot unten rechts, 3 klickbare FAQ-Fragen mit Antworten, Fiverr-CTA, Badge-Notification nach 4s, DE+EN i18n, schliessbar) (🌿 Tageszeit-optimierter Einzel-Tap-Button zwischen Global-Dimmer und Schnellfarben-Palette: berechnet ideale Farbtemperatur 1900K–6500K + Helligkeit 18%–100% je Tagesphase Nacht/Morgengrauen/Morgen/Mittag/Nachmittag/Abend/Spätabend, zeigt aktuellen Tageszeit-Emoji + Zielwerte live, setzt alle aktiven Lichter per svc('light','turn_on',{color_temp_kelvin, brightness_pct}), grüner Flash-Animation bei Tap, Toast "🌅 Circadian auf X Lichter · 2700K / 45%")

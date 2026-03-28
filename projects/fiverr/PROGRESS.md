@@ -1,5 +1,101 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-28 08:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — Licht-reaktive Wellen-Farbverschiebung
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Zwei neue Overlay-Wellen-Gruppen (`#hero-wave-r1`, `#hero-wave-r2`) als zusätzliche Schicht über den bestehenden Default-Wellen im `#hero-wave-svg`
+- Neue linearGradients `#wv1GradR` und `#wv2GradR` mit dynamisch per JS aktualisierten `stop-color` Attributen
+- `style="opacity:0;transition:opacity 3s ease"` auf beiden Overlay-Gruppen → sanftes 3-Sekunden Ein-/Ausblenden
+- **JS-IIFE in `updateAll()`** nach Ambient-Orb-Block:
+  - Filtert aktive Lichter nach `rgb_color` Attribut (nur echte RGB-Lichter, kein CT-Fallback)
+  - Berechnet Durchschnitts-RGB aller aktiven RGB-Lichter (`rS/cnt, gS/cnt, bS/cnt`)
+  - Welle 1 = exakte Licht-Farbe (rgba mit 0.22 max-Opacity — dezent)
+  - Welle 2 = komplementärer Farbton (leichte Verschiebung: blaue Anteil erhöht, rote Anteil verschoben → natürliches Gegenstück)
+  - Bei 0 RGB-Lichtern → beide Overlay-Wellen auf `opacity:'0'` → Standard-Wellen (amber/blau) dominieren
+- Wenn Lichter von RGB → kein RGB wechseln: 3s Fade-out, kein harter Cut
+- Wenn neue Farbe aktiv: `stop-color` Attribute sofort gesetzt + `opacity:'1'` → neues Farbschema blendet in 3s ein
+- CSS: bestehende `#hero-wave-p1`, `#hero-wave-p2` default Wellen unverändert im Hintergrund → Overlay liegt on top
+- **Kein Konflikt** mit bestehendem Ambient Orb (separates DOM-Element), heroWave1/2 Animationen (CSS-Animation auf Parent-Gruppen unberührt), Star-Canvas, Precip-Canvas
+- Effekt: Wenn RGB-Lichter (z.B. rote Hue Play Bar oder grüne Govee) aktiv sind, schimmern die Hero-Wellen langsam in der Lichtfarbe — wie ein Spiegelbild der Raumstimmung am Horizont des Dashboards
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 524328 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-28 06:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Sonnenuntergang-Simulator Button (🌇)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#lt-sunset-sim` Div im Licht-Tab, direkt zwischen `#lt-circadian` und `#lt-color-palette`
+- **Konzept**: Ein Tap startet eine 30-minütige Dimm-Kurve von warmen 3000K/80% bis zur tiefsten Kerzenstimmung 1900K/15% — ideal zum Abschalten vor dem Schlafen
+- **Button-Design**: Orange-warmes Farbschema `rgba(255,100,30)` Border + Background (bewusst von grün=Circadian und amber=Dimmer unterscheidbar)
+- `#lt-ss-ico` (🌇): läuft wenn aktiv mit `@keyframes ssSunSet` — Sonne sinkt sanft ab (translateY+scale, 3s loop)
+- `#lt-ss-val`: zeigt "3000K → 1900K" im Ruhezustand, "● Läuft…" während Simulation
+- `#lt-ss-pill`: Countdown-Pill mit pulsierendem orangem Dot (`@keyframes ssDotPulse`, 1.6s) + Live-Countdown + ✕ Stop-Button
+- **Dimm-Logik** `applyStep()`: 
+  - `t = elapsed/TOTAL_MS` (0..1) → `lerp(3000, 1900, t)` für Kelvin, `lerp(80, 15, t)` für Helligkeit
+  - `svc('light','turn_on', {color_temp_kelvin, brightness_pct, transition:55})` → 55-Sekunden Übergänge zwischen Schritten → absolut flüssiger Verlauf
+  - Iteriert nur Lichter mit `color_temp_kelvin` Attribut (Fallback-sichere Filter-Funktion `getActiveDimmables()`)
+  - Countdown-Anzeige: "Dimmt sanft… noch Xm Ys · 2600K / 52%"
+- **Toggle-Verhalten**: zweiter Tap auf Button stoppt sofort (`stopSim(true)`)
+- **Auto-Stop**: nach 30 min (TOTAL_MS) stoppt Timer automatisch und ruft `stopSim(false)` auf
+- **Schutz**: wenn alle Lichter extern ausgeschaltet werden (`onCount===0`) → `stopSim(false)` aufgerufen
+- CSS `@keyframes ssApply`: orange Flash beim Tap-Start (Bestätigung ohne aufdringlichen Effect)
+- Light-Mode Overrides: transparenter Hintergrund, dunklere Pill-Farbe
+- `#lt-sunset-sim` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Kein Konflikt mit Circadian-Button (unterschiedliche States), Global-Dimmer, Fade-Out-Timer
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 521469 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-28 04:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Geräte-Tab — Status-Übersicht Donut-Gauge
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#dev-status-gauge` Div im Geräte-Tab, direkt unter der "Geräte" Überschrift (vor Zuletzt-genutzt Timeline)
+- **Konzept**: Zeigt auf einen Blick wie viele der konfigurierten Lichter + Geräte gerade aktiv sind — als animierter SVG-Kreisbogen + kompakter Infobereich
+- **SVG Donut-Gauge** (`#dsg-svg`, 72×72px): innerer Track-Ring `rgba(255,255,255,.07)` + animierter Fill-Arc `#dsg-fill`
+- Kreisumfang: r=28 → `stroke-dasharray:175.93`, `stroke-dashoffset = 175.93 × (1 - on/total)` → Arc füllt sich proportional
+- `linearGradient #dsgGrad`: grün (#30d158→#34e05a) wenn <75% aktiv, amber (#ff9f0a→#ffcc02) wenn >75% — warnt subtil bei hoher Aktivität
+- `#dsg-num`: Zahl der aktiven Geräte als Text-Element in der Kreismitte (15px bold weiß)
+- `transition:stroke-dashoffset 1s cubic-bezier(.34,1.1,.64,1)` → weiche federnde Animation bei jedem State-Update
+- **Rechter Info-Bereich**: `#dsg-label` "X von Y aktiv" + schmaler Fortschrittsbalken + `#dsg-sub` Sub-Label
+- 5 Sub-Label-Zustände: 😴 Alles aus / 🌙 Wenig aktiv / 💡 Teilweise aktiv / 🏠 Viel los / ⚡ Alles aktiv
+- Balken-Gradient synchronisiert sich mit Arc-Farbe (grün↔amber je Aktivitätsgrad)
+- `@keyframes dsgPop`: scale 1→1.06→1, 0.42s cubic-bezier — spring-Bounce wenn sich die Anzahl ändert
+- Pop-Animation via `classList.remove('pop') + offsetWidth reflow + classList.add('pop')` — sauber re-triggerable
+- **Zähler-Logik** `window._updateDevGauge` IIFE: iteriert `CFG.lights + CFG.devs`, filtert nach `state==='on'||'playing'||'open'`
+- Gauge erscheint (`opacity:1`) erst nach erstem State-Load — kein leeres Flackern beim Start
+- **Hook**: `patchDevCards` Wrapper ruft `window._updateDevGauge()` nach jeder Card-Aktualisierung auf
+- Light-Mode Overrides: `background:var(--c1)`, `color:var(--txt)` — lesbar in beiden Themes
+- `#dev-status-gauge` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Kein extra API-Call — nutzt bereits vorhandene `_S` State-Daten
+- Effekt: Wer den Geräte-Tab öffnet, sieht sofort einen grünen/amberfarbenen Kreisbogen der zeigt ob 2/10 oder 8/10 Geräte aktiv sind — wie ein Aktivitäts-Herzschlag des Smart-Homes
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 516065 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-28 02:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Heizungs-Status Chip (🔥/❄️/🌡)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#hvac-chip` Div im Home-Tab, direkt nach `#batt-chip` (vor Kontext-Empfehlungs-Chip)
+- **Konzept**: Scannt alle `_S` States nach `climate.*` Entities — wenn eine vorhanden und nicht `off/unavailable` → zeigt Chip
+- **3 Modi**:
+  - 🔥 Heizend: `hvac_action=heating` oder `mode=heat/auto` → orangerot Farbschema `rgba(255,100,50)`
+  - ❄️ Kühlung: `hvac_action=cooling` oder `mode=cool` → blaues Farbschema `rgba(10,132,255)`
+  - 🌡 Klima (Idle): alle anderen aktiven Modi → grünes Farbschema `rgba(48,209,88)`
+- **Temperatur-Label**: `current_temperature` + `temperature` aus `attributes` → "🔥 Heizend · 18.5° → 21°"
+- `.hvac-dot`: pulsierender 6px Kreis mit farbpassendem Box-Shadow (`@keyframes hvacDotPulse` 2.2s loop)
+- **CSS-Farbvarianten**: `.hvac-heat` / `.hvac-cool` / `.hvac-idle` — jeweils eigener Hintergrund, Border, Textfarbe
+- `#hvac-chip.show`: spring-in via `cubic-bezier(.34,1.28,.64,1)` — erscheint smooth beim Aktivieren
+- Chip verschwindet (`classList.remove('show')`) wenn keine climate Entity vorhanden, `mode=off` oder `unavailable`
+- **Light-Mode Overrides**: alle 3 Modi haben eigene `:root.light` Regeln (dunklere Farben für Lesbarkeit)
+- `#hvac-chip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- **Kein extra API-Call** — nutzt bereits vorhandene `_S` (fetchStates) Daten
+- **Graceful fallback**: bei fehlenden `current_temperature` / `temperature` Attributen nur Modus-Text ohne Zahlen
+- IIFE in `updateAll()` nach Batterie-Chip, vor `_updateQaBar` eingehängt
+- Effekt: Wenn Janis eine Thermostat/Klimaanlage in HA hat, erscheint ein kompakter Chip der auf einen Blick zeigt ob geheizt/gekühlt wird und bei welcher Temperatur — ähnlich wie iOS Home-App Thermostat-Kachel
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 512039 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-28 00:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — Gewitter-Alarm-Card (⚡)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -1693,3 +1789,13 @@ Gewählte Tasks aus NIGHTPLAN_2.md:
 - Kalender-Ereignistitel sind jetzt im Tages-/Light-Mode lesbar
 
 wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git commit 6766cb9
+
+## 2026-03-28 08:43 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Musik-Tab — "Zuletzt gespielt" History Chips
+- localStorage speichert letzte 5 Tracks bei jedem Track-Wechsel (title + artist + timestamp)
+- Chip-Row `#track-history` erscheint nach Sleep-Timer sobald History vorhanden
+- Jeder Chip: 🎵 + Titel + Artist + relativer Zeitstempel (gerade/Xmin/Xh/Xd)
+- amber Glass-Style, staggered fade-in Animation (0.06s Delay pro Chip)
+- Tap → Toast mit vollständigem Track-Info
+- Funktionen: `_saveTrackHistory()`, `_renderTrackHistory()`, `_relTime()`
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
