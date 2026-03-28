@@ -1,5 +1,20 @@
 # HA Security Log
 
+## 2026-03-28 23:00 UTC — Security OK
+
+Prüfzeitraum: seit 22:30 UTC (letzter Check)
+
+### Log-Zugriff:
+Via HA API `/api/error_log` — erfolgreich.
+
+### Login-Versuche:
+Keine neuen Einträge. Letzter bekannter Eintrag bleibt `84.72.122.4` (hispeed.ch) um 20:50 UTC — bereits geloggt.
+
+**→ Keine neue Aktivität. Stille = alles OK.**
+
+---
+
+
 ## 2026-03-28 22:30 UTC — Security OK
 
 Prüfzeitraum: seit 22:00 UTC (letzter Check)
