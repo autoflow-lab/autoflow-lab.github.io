@@ -7457,8 +7457,13 @@ function doScene(s){
     setTimeout(()=>showFilmPicker(),350);
   }
   else if(s==='hell'){
-    // Hell: alles an, Tageslicht 4000K
-    CFG.lights.forEach(l=>svc('light','turn_on',{entity_id:l.id,brightness_pct:100,color_temp_kelvin:4000}));
+    // Hell: alles an — Govees mit RGB (Warmweiss), Hue mit color_temp
+    // Govees sind RGB-only → color_temp_kelvin erzeugt sonst weissen Fallback
+    const GOV=['light.h61e1','light.h618a','light.h618a_2'];
+    GOV.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:100,rgb_color:[255,220,160]}));
+    // Hue + andere Lichter: color_temp ok
+    CFG.lights.filter(l=>!GOV.includes(l.id)).forEach(l=>
+      svc('light','turn_on',{entity_id:l.id,brightness_pct:100,color_temp_kelvin:4000}));
     svc('switch','turn_on',{entity_id:'switch.shelly1_98cdac0ca9b2'});
     toast('Volle Helligkeit ☀️');
   }
@@ -7539,8 +7544,14 @@ function showFilmPicker(){
       const m=MOODS[selMood];
       if(m.rgb){
         // Sofort setzen + nochmal nach 2.5s (überschreibt HA-Automation die bei TV-on feuert)
-        GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:m.bri,rgb_color:m.rgb}));
-        setTimeout(()=>GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:m.bri,rgb_color:m.rgb})),2500);
+        // Erst kurz ausschalten damit keine Übergangs-Weiss durch vorherigen Zustand
+        GOVEES.forEach(id=>svc('light','turn_off',{entity_id:id}));
+        // Dann nach 300ms mit gewählter Farbe an
+        setTimeout(()=>{
+          GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:m.bri,rgb_color:m.rgb}));
+        },300);
+        // Re-send nach 2.5s gegen HA-Automation-Override
+        setTimeout(()=>GOVEES.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:m.bri,rgb_color:m.rgb})),2800);
       } else {
         // "Aus lassen" — aber HA-Automationen feuern wenn TV angeht (warn delay)
         // Nochmal nach 3.5s ausschalten um Automation-Override zu verhindern
