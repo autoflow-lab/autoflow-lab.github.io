@@ -7450,11 +7450,12 @@ function doScene(s){
     launchKonfetti();
   }
   else if(s==='film'){
-    // Film: Alle aus außer Govees, TV an → dann Farb-Picker
-    CFG.lights.forEach(l=>svc('light','turn_off',{entity_id:l.id}));
-    svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    // Film: TV an, Shelly+Hue aus — Govees NICHT vorab (verhindert Weiss-Flash durch HA-Automation)
     svc('media_player','turn_on',{entity_id:TV});
-    setTimeout(()=>showFilmPicker(),350);
+    svc('switch','turn_off',{entity_id:'switch.shelly1_98cdac0ca9b2'});
+    svc('light','turn_off',{entity_id:'light.hue_play_l'});
+    // Picker sofort — Govee-Lichter erst nach Mood-Wahl
+    setTimeout(()=>showFilmPicker(),200);
   }
   else if(s==='hell'){
     // Hell: alles an — Govees mit RGB (Warmweiss), Hue mit color_temp
