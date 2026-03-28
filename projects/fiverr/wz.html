@@ -9510,3 +9510,14 @@ const _origSetWxMode=setWxMode;
   if(volDown){volDown.addEventListener('click',()=>{hap();const v=Math.max(0,(parseInt(document.getElementById('vv')?.textContent)||40)-5);syncVolUI(v);_sendVol2(v);});}
   if(volUp){volUp.addEventListener('click',()=>{hap();const v=Math.min(100,(parseInt(document.getElementById('vv')?.textContent)||40)+5);syncVolUI(v);_sendVol2(v);});}
   
+  // Volume Slider — vol-track (touch-action:none → nur Track-Berühren ändert Vol)
+  const volTrack=document.getElementById('vol-track');
+  if(volTrack){
+    let _vDrag=false;
+    function _vpct(cx){const r=volTrack.getBoundingClientRect();return Math.max(0,Math.min(100,Math.round((cx-r.left)/r.width*100)));}
+    volTrack.addEventListener('pointerdown',function(e){e.stopPropagation();_vDrag=true;volTrack.setPointerCapture(e.pointerId);syncVolUI(_vpct(e.clientX));});
+    volTrack.addEventListener('pointermove',function(e){if(!_vDrag)return;var p=_vpct(e.clientX);syncVolUI(p);clearTimeout(_volTimer);_volTimer=setTimeout(function(){svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});},150);});
+    volTrack.addEventListener('pointerup',function(e){if(!_vDrag)return;_vDrag=false;var p=_vpct(e.clientX);syncVolUI(p);svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});});
+    volTrack.addEventListener('pointercancel',function(){_vDrag=false;});
+  }
+
