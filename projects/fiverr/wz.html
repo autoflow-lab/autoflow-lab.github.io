@@ -3407,7 +3407,13 @@ function wsConnect(tok){
       updateAll();
     } else if(d.type==='event'&&d.event?.event_type==='state_changed'){
       const s=d.event.data.new_state;
-      if(s){_S[s.entity_id]=s;updateAll()}
+      if(s){
+        _S[s.entity_id]=s;
+        // Pending sofort aufheben wenn HA den Zustand bestätigt
+        const p=_pending[s.entity_id];
+        if(p&&(p.on===(s.state==='on')||Date.now()>p.until-500)) delete _pending[s.entity_id];
+        updateAll();
+      }
     }
   };
   _ws.onclose=(ev)=>{
