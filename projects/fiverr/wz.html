@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- v4.1 -->
+<!DOCTYPE html><!-- v4.2 -->
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -825,7 +825,7 @@ html,body{height:100%;background:var(--bg);
 .cal-event:last-child{border-bottom:none;padding-bottom:0}
 .cal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
 .cal-body{flex:1;min-width:0}
-.cal-title{font-size:.8rem;font-weight:600;color:#fff;
+.cal-title{font-size:.8rem;font-weight:600;color:var(--txt);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cal-time{font-size:.65rem;color:var(--on-dim);margin-top:2px}
 .cal-empty{font-size:.72rem;color:var(--on-dim2);padding:4px 0;text-align:center}
@@ -1200,8 +1200,8 @@ html,body{height:100%;background:var(--bg);
   opacity:0;
 }
 .lt.on .lt-bri-arc circle.bri-fill{opacity:1}
-.ltico svg{width:20px;height:20px;stroke:var(--dim2);stroke-width:1.8;
-  fill:none;stroke-linecap:round;stroke-linejoin:round;transition:stroke .35s}
+.ltico svg{width:20px;height:20px;fill:var(--dim2);stroke:none;
+  transition:fill .35s}
 input[type=range].ls-rng{width:100%;height:36px;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
 input[type=range].ls-rng{touch-action:pan-x!important}
 input[type=range].ls-rng::-webkit-slider-runnable-track{height:36px;border-radius:18px;border:1px solid rgba(255,255,255,.08);border-top-color:var(--on-dim3);background:transparent!important}
@@ -5082,7 +5082,7 @@ function buildUI(){try{
       tile.style.borderTopColor=`rgba(${c},.35)`;
       tile.style.boxShadow=`0 0 22px rgba(${c},.18),0 1px 0 rgba(255,255,255,.06) inset`;
       if(ico)ico.style.background=`rgba(${c},.2)`;
-      if(sv)sv.style.stroke=`rgb(${c})`;
+      if(sv){sv.style.fill=`rgb(${c})`;sv.style.stroke='none';}
       // Farbbalken unten
       const fill=tile.querySelector('.bfil');
       if(fill)fill.style.background=`linear-gradient(90deg,rgba(${c},.6),rgb(${c}))`;
@@ -5090,7 +5090,7 @@ function buildUI(){try{
       tile.style.borderTopColor='';
       tile.style.boxShadow='';
       if(ico)ico.style.background='rgba(255,255,255,.08)';
-      if(sv)sv.style.stroke='rgba(255,255,255,.4)';
+      if(sv){sv.style.fill='rgba(255,255,255,.4)';sv.style.stroke='none';}
       const fill=tile.querySelector('.bfil');
       if(fill){fill.style.background='';fill.style.width='0%';fill.style.opacity='0';}
     }
