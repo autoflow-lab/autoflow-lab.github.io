@@ -1156,23 +1156,17 @@ html,body{height:100%;background:var(--bg);
 .vval{font-size:.72rem;font-weight:700;color:var(--on-dim);min-width:36px;text-align:right}
 
 /* Radio */
-.rg{display:flex;flex-direction:row;gap:8px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px}.rg::-webkit-scrollbar{display:none}
+.rg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;position:relative;z-index:1}.rg::-webkit-scrollbar{display:none}
 .rb{
   padding:14px 6px 12px;border-radius:16px;cursor:pointer;border:none;
   display:flex;flex-direction:column;align-items:center;gap:6px;
   background:var(--c2);border:1px solid rgba(255,255,255,.06);
   transition:transform .2s cubic-bezier(.34,1.56,.64,1),background .2s;
   position:relative;overflow:hidden;
-  min-width:75px;flex-shrink:0;
 }
 .rb:active{transform:scale(.83)}
 .rb.on{background:rgba(10,132,255,.18);border:1px solid rgba(10,132,255,.35);box-shadow:0 0 16px rgba(10,132,255,.15)}
-.rbico{
-  width:38px;height:38px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.08);transition:background .2s,box-shadow .2s;
-  font-size:1.15rem;
-}
+.rbico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;overflow:hidden;flex-shrink:0}
 .rb.on .rbico{background:rgba(10,132,255,.3);box-shadow:0 0 10px rgba(10,132,255,.4)}
 .rbn{font-size:.58rem;font-weight:600;color:var(--dim2);transition:color .2s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
 .rb.on .rbn{color:#60b8ff;font-weight:700}
@@ -2972,12 +2966,12 @@ const CFG = {
      remote:'sunrise'},
   ],
   radio:[
-    {n:'SRF 1',     c:'#38bdf8', r:'56,189,248',   u:'http://stream.srg-ssr.ch/m/drs1/mp3_128'},
-    {n:'SRF 3',     c:'#fb923c', r:'251,146,60',    u:'http://stream.srg-ssr.ch/m/drs3/mp3_128'},
-    {n:'Swiss Pop', c:'#34d399', r:'52,211,153',    u:'http://stream.srg-ssr.ch/m/rsp/mp3_128'},
-    {n:'Kiss FM',  c:'#e11d48', r:'225,29,72',     u:'http://stream.kissfm.de/kissfm/mp3-128/internetradio/'},
-    {n:'U1 Tirol',  c:'#f472b6', r:'244,114,182',   u:'https://livestream.u1.at/u1tirol',     blocked:true},
-    {n:'Melody',    c:'#c084fc', r:'192,132,252',   u:'https://cdn.melodyfm.at/melodyfm.mp3', blocked:true},
+    {n:'SRF 1',logo:'https://www.google.com/s2/favicons?domain=srf.ch&sz=128',     c:'#38bdf8', r:'56,189,248',   u:'http://stream.srg-ssr.ch/m/drs1/mp3_128'},
+    {n:'SRF 3',logo:'https://www.google.com/s2/favicons?domain=srf3.ch&sz=128',     c:'#fb923c', r:'251,146,60',    u:'http://stream.srg-ssr.ch/m/drs3/mp3_128'},
+    {n:'Swiss Pop',logo:'https://www.google.com/s2/favicons?domain=swissradio.ch&sz=128', c:'#34d399', r:'52,211,153',    u:'http://stream.srg-ssr.ch/m/rsp/mp3_128'},
+    {n:'Kiss FM',logo:'https://www.google.com/s2/favicons?domain=kissfm.de&sz=128',  c:'#e11d48', r:'225,29,72',     u:'http://stream.kissfm.de/kissfm/mp3-128/internetradio/'},
+    {n:'U1 Tirol',logo:'https://u1-radio.at/wp-content/uploads/2022/03/u1_favicon512x512-150x150.png',  c:'#f472b6', r:'244,114,182',   u:'https://livestream.u1.at/u1tirol',     blocked:true},
+    {n:'Melody',logo:'https://cdn.radiobrowser.info/img/radio-melody.png',    c:'#c084fc', r:'192,132,252',   u:'https://cdn.melodyfm.at/melodyfm.mp3', blocked:true},
   ],
   janis_home_entities:['device_tracker.iphone_von_janis_2','device_tracker.iphone_von_janis'],
   // Spotify Favoriten — Playlist-URI von Spotify (spotify:playlist:xxx oder Link)
@@ -5378,8 +5372,9 @@ function buildUI(){try{
   };
   document.getElementById('rg').innerHTML=CFG.radio.map(r=>`
     <div class="rb" data-u="${r.u}" data-n="${r.n}" style="--rc:${r.c};--rr:${r.r}">
-      <div class="rbico" style="background:rgba(${r.r},.12);border:1px solid rgba(${r.r},.18)">
-        ${_radioEmoji[r.n]||'📻'}
+      <div class="rbico" style="background:rgba(${r.r},.15);border:1px solid rgba(${r.r},.25);position:relative;overflow:hidden">
+        ${r.logo?`<img src="${r.logo}" alt="${r.n}" style="width:100%;height:100%;object-fit:contain;border-radius:10px;image-rendering:auto" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+        <span style="font-size:1.3rem;${r.logo?'display:none':''}display:flex;align-items:center;justify-content:center;width:100%;height:100%">${_radioEmoji[r.n]||'📻'}</span>
       </div>
       <span class="rbn">${r.n}</span>
       ${r.blocked?'<span style="font-size:.4rem;color:rgba(255,255,255,.2);position:absolute;top:5px;right:5px">🏠</span>':''}
