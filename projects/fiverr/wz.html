@@ -9969,34 +9969,7 @@ const _origSetWxMode=setWxMode;
   }
 })();
 
-  // ═══════════════════════════════════════════════
-  // HORIZONTAL SWIPE BETWEEN TABS
-  // Swipe left → next tab, right → previous tab
-  // ═══════════════════════════════════════════════
-  (function(){
-    const TABS=['home','musik','licht','wetter','geraete'];
-    const app=document.getElementById('app');
-    if(!app) return;
-    let sx=0,sy=0,st2=0,swiping=false;
-    const MIN_DX=65, MAX_DY=80, MAX_MS=480;
 
-    // Swipe hint overlay
-    const hint=document.createElement('div');
-    hint.id='tab-swipe-hint';
-    hint.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.7);opacity:0;pointer-events:none;z-index:9998;font-size:2.2rem;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.28,.64,1);background:rgba(28,28,30,.85);backdrop-filter:blur(12px);border-radius:18px;padding:14px 22px;color:#fff;border:1px solid rgba(255,255,255,.10)';
-    document.body.appendChild(hint);
-    let hintTimer=null;
-    function showHint(dir){
-      hint.textContent=dir>0?'▶':'◀';
-      hint.style.opacity='1';
-      hint.style.transform='translate(-50%,-50%) scale(1)';
-      clearTimeout(hintTimer);
-      hintTimer=setTimeout(()=>{hint.style.opacity='0';hint.style.transform='translate(-50%,-50%) scale(.7)'},600);
-    }
-
-    // Swipe-Navigation deaktiviert (iPad: nur Tab-Klicks)
-    // app.addEventListener('touchstart'... — entfernt
-  })();
 
   // ── Licht-Tab Schnellfarben-Palette ──
   (function(){
