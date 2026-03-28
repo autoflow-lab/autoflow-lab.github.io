@@ -159,7 +159,7 @@ html,body{height:100%;background:var(--bg);
 #dev-status-gauge.pop #dsg-svg{animation:dsgPop .42s cubic-bezier(.34,1.28,.64,1)}
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
-.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,
+.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
@@ -978,6 +978,21 @@ html,body{height:100%;background:var(--bg);
 :root.light #act-rings{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08)}
 :root.light .ar-label{color:rgba(0,0,0,.5)}
 :root.light .ar-val{color:rgba(0,0,0,.85)}
+/* ── Zitat des Tages ── */
+#quote-card{display:none;margin:0 0 12px;padding:15px 16px 12px;background:rgba(255,159,10,.04);border:1px solid rgba(255,159,10,.10);border-radius:16px;position:relative;overflow:hidden}
+#quote-card.show{display:block;animation:quoteCardIn .5s cubic-bezier(.32,0,.15,1) both}
+@keyframes quoteCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#quote-card::before{content:'\201C';position:absolute;top:-6px;left:11px;font-size:4rem;font-family:Georgia,serif;color:rgba(255,159,10,.15);line-height:1;pointer-events:none;user-select:none}
+#quote-txt{font-size:.76rem;line-height:1.52;color:var(--txt);font-style:italic;padding-left:6px;position:relative;z-index:1}
+#quote-author{font-size:.61rem;color:rgba(255,159,10,.65);font-weight:600;margin-top:7px;padding-left:6px;letter-spacing:.4px}
+#quote-label{font-size:.56rem;font-weight:700;letter-spacing:1px;color:rgba(255,159,10,.5);text-transform:uppercase;margin-bottom:7px;padding-left:6px}
+#quote-refresh{position:absolute;top:10px;right:11px;background:none;border:1px solid rgba(255,159,10,.18);color:rgba(255,159,10,.55);font-size:.75rem;cursor:pointer;padding:3px 7px;border-radius:8px;transition:color .2s,border-color .2s;line-height:1.2;touch-action:manipulation}
+#quote-refresh:active{color:rgba(255,159,10,.95);border-color:rgba(255,159,10,.5)}
+:root.light #quote-card{background:rgba(180,80,0,.04);border-color:rgba(180,80,0,.11)}
+:root.light #quote-txt{color:var(--txt)}
+:root.light #quote-author{color:rgba(140,60,0,.75)}
+:root.light #quote-label{color:rgba(140,60,0,.5)}
+:root.light #quote-refresh{color:rgba(140,60,0,.5);border-color:rgba(140,60,0,.2)}
 
 /* ───────────── ENERGIE-WIDGET ───────────── */
 .energie-card{display:none;margin:0 0 10px;padding:13px 16px;
@@ -2079,6 +2094,14 @@ input[type=range] { touch-action: none; }
           </div>
           <div class="ar-sub" id="ar-sub-text"></div>
         </div>
+      </div>
+
+      <!-- Zitat des Tages -->
+      <div id="quote-card">
+        <button id="quote-refresh" title="Anderes Zitat">↺</button>
+        <div id="quote-label">💬 Zitat des Tages</div>
+        <div id="quote-txt"></div>
+        <div id="quote-author"></div>
       </div>
 
       <!-- Energie-Widget -->
