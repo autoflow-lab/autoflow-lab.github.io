@@ -8179,6 +8179,78 @@ function updateOverview(){
   };
 })();
 
+// ── Zitat des Tages IIFE ──
+(function(){
+  const QUOTES=[
+    {t:"Das Geheimnis des Vorwärtskommens ist, anzufangen.",a:"Mark Twain"},
+    {t:"Wer nicht weiß wohin er will, darf sich nicht wundern, wenn er woanders ankommt.",a:"Mark Twain"},
+    {t:"Jeder Tag ist eine neue Chance, ein besseres Leben zu beginnen.",a:"Unbekannt"},
+    {t:"Die Qualität eines Lebens wird von seiner Intensität bestimmt, nicht von seiner Dauer.",a:"Blaise Pascal"},
+    {t:"Handle stets so, als ob das, was du tust, einen Unterschied macht – denn das tut es.",a:"William James"},
+    {t:"Einfachheit ist die höchste Form der Vollkommenheit.",a:"Leonardo da Vinci"},
+    {t:"Wer aufhört, besser werden zu wollen, hat aufgehört, gut zu sein.",a:"Oliver Cromwell"},
+    {t:"Der beste Zeitpunkt, einen Baum zu pflanzen, war vor 20 Jahren. Der zweitbeste ist heute.",a:"Chinesisches Sprichwort"},
+    {t:"Kleine Schritte führen auch ans Ziel.",a:"Konfuzius"},
+    {t:"Das Morgen gehört denen, die sich heute darauf vorbereiten.",a:"Malcolm X"},
+    {t:"Nicht weil es schwer ist, wagen wir es nicht, sondern weil wir es nicht wagen, ist es schwer.",a:"Seneca"},
+    {t:"In der Ruhe liegt die Kraft.",a:"Deutsches Sprichwort"},
+    {t:"Sei du selbst die Veränderung, die du dir wünschst für diese Welt.",a:"Mahatma Gandhi"},
+    {t:"Wer kämpft, kann verlieren. Wer nicht kämpft, hat schon verloren.",a:"Bertolt Brecht"},
+    {t:"Das Glück ist das einzige, das sich verdoppelt, wenn man es teilt.",a:"Albert Schweitzer"},
+    {t:"Es ist nicht genug zu wissen – man muss auch anwenden. Es ist nicht genug zu wollen – man muss auch tun.",a:"Johann Wolfgang von Goethe"},
+    {t:"Kreativität ist Intelligenz, die Spaß hat.",a:"Albert Einstein"},
+    {t:"Man sieht nur mit dem Herzen gut. Das Wesentliche ist für die Augen unsichtbar.",a:"Antoine de Saint-Exupéry"},
+    {t:"Du hast Macht über deinen Geist, nicht über äußere Ereignisse. Erkenne das, und du wirst Stärke finden.",a:"Marc Aurel"},
+    {t:"Stärke wächst nicht aus körperlicher Kraft, sondern aus unbeugsamen Willen.",a:"Mahatma Gandhi"},
+    {t:"Der Erfolg ist die Summe kleiner Anstrengungen, die Tag für Tag wiederholt werden.",a:"Robert Collier"},
+    {t:"Träume groß, fange klein an, aber vor allem: Fange an.",a:"Unbekannt"},
+    {t:"Wenn du es nicht siehst, träume es. Wenn du es träumst, glaube es. Wenn du es glaubst, tue es.",a:"Walt Disney"},
+    {t:"Die Zukunft gehört denen, die an die Schönheit ihrer Träume glauben.",a:"Eleanor Roosevelt"},
+    {t:"Wer nichts weiß, muss alles glauben.",a:"Marie von Ebner-Eschenbach"},
+    {t:"Das Leben ist das, was passiert, während du beschäftigt bist, andere Pläne zu machen.",a:"John Lennon"},
+    {t:"Zwei Dinge sind unendlich: das Universum und die menschliche Dummheit. Beim Universum bin ich mir nicht sicher.",a:"Albert Einstein"},
+    {t:"Alles Große in der Welt geschieht, weil jemand mehr tut, als er muss.",a:"Hermann Gmeiner"},
+    {t:"Der Mensch wird erst am Widerstand groß.",a:"Viktor Frankl"},
+    {t:"Nicht die Dinge beunruhigen die Menschen, sondern die Meinungen über die Dinge.",a:"Epiktet"}
+  ];
+  const card=document.getElementById('quote-card');
+  const txt=document.getElementById('quote-txt');
+  const auth=document.getElementById('quote-author');
+  const btn=document.getElementById('quote-refresh');
+  if(!card||!txt||!auth)return;
+  function todayKey(){const d=new Date();return`qt_${d.getFullYear()}_${String(d.getMonth()).padStart(2,'0')}_${String(d.getDate()).padStart(2,'0')}`}
+  function showQuote(idx){
+    const q=QUOTES[((idx%QUOTES.length)+QUOTES.length)%QUOTES.length];
+    txt.textContent=q.t;
+    auth.textContent='— '+q.a;
+    card.classList.add('show');
+  }
+  function loadQuote(forceNext){
+    const key=todayKey();
+    let idx=parseInt(localStorage.getItem(key));
+    if(isNaN(idx)){
+      // Base daily index on day-of-year
+      const now=new Date();
+      const start=new Date(now.getFullYear(),0,0);
+      idx=Math.floor((now-start)/86400000)%QUOTES.length;
+      localStorage.setItem(key,idx);
+    } else if(forceNext){
+      idx=(idx+1)%QUOTES.length;
+      localStorage.setItem(key,idx);
+    }
+    showQuote(idx);
+  }
+  loadQuote(false);
+  if(btn){
+    btn.addEventListener('click',function(){
+      loadQuote(true);
+      btn.style.transition='transform .4s ease';
+      btn.style.transform='rotate(180deg)';
+      setTimeout(()=>{btn.style.transform='rotate(360deg)';setTimeout(()=>{btn.style.transform='';btn.style.transition=''},200);},200);
+    });
+  }
+})();
+
 function updateAll(){
   updateGeraeteCards();
   // ── Radio-Erkennung am Anfang, damit alle nachfolgenden Stellen _radActive korrekt haben ──
