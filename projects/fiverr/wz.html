@@ -249,6 +249,22 @@ html,body{height:100%;background:var(--bg);
 .allerg-chip.ac-high{background:rgba(255,159,10,.12);border-color:rgba(255,159,10,.35)}
 .allerg-chip.ac-vhigh{background:rgba(255,69,58,.12);border-color:rgba(255,69,58,.4);animation:allergChipWarn 2.2s ease-in-out infinite}
 @keyframes allergChipWarn{0%,100%{box-shadow:0 0 0 0 rgba(255,69,58,0)}50%{box-shadow:0 0 0 3px rgba(255,69,58,.18)}}
+/* ══ GEWITTER-ALARM-CARD ══ */
+#storm-warn-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-8px);transition:opacity .55s cubic-bezier(.34,1.15,.64,1),transform .55s cubic-bezier(.34,1.15,.64,1)}
+#storm-warn-card.show{opacity:1;transform:translateY(0)}
+#storm-warn-inner{background:linear-gradient(135deg,rgba(30,8,8,.95),rgba(50,14,8,.95));border-radius:18px;border:1px solid rgba(255,69,58,.35);border-top-color:rgba(255,100,58,.55);padding:16px 18px;position:relative;overflow:hidden}
+#storm-warn-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(255,69,58,.12),transparent 65%);pointer-events:none}
+#storm-bolt-ico{font-size:2.2rem;line-height:1;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(255,200,0,.7));animation:stormBoltFlash 2.4s ease-in-out infinite}
+@keyframes stormBoltFlash{0%,85%,100%{opacity:1;filter:drop-shadow(0 0 12px rgba(255,200,0,.7))}88%{opacity:.1;filter:drop-shadow(0 0 0 transparent)}91%{opacity:1;filter:drop-shadow(0 0 20px rgba(255,220,50,1))}94%{opacity:.2;filter:drop-shadow(0 0 0 transparent)}97%{opacity:1;filter:drop-shadow(0 0 12px rgba(255,200,0,.7))}}
+@keyframes stormCardGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,69,58,0)}50%{box-shadow:0 0 20px 2px rgba(255,69,58,.18)}}
+#storm-warn-inner{animation:stormCardGlow 3s ease-in-out infinite}
+#storm-intensity{display:inline-flex;align-items:center;padding:3px 8px;border-radius:10px;font-size:.58rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-top:4px}
+#storm-intensity.sev-mod{background:rgba(255,159,10,.18);border:1px solid rgba(255,159,10,.4);color:#ff9f0a}
+#storm-intensity.sev-high{background:rgba(255,69,58,.18);border:1px solid rgba(255,69,58,.4);color:#ff453a}
+.storm-chip{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:12px;font-size:.58rem;font-weight:600;background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.25);margin:2px 2px 0 0}
+:root.light #storm-warn-inner{background:linear-gradient(135deg,rgba(255,235,230,.97),rgba(255,220,210,.97));border-color:rgba(200,50,30,.3)}
+:root.light #storm-warn-bg{background:radial-gradient(ellipse at 80% 30%,rgba(200,50,30,.08),transparent 65%)}
+:root.light #storm-warn-card .storm-chip{background:rgba(200,50,30,.08);border-color:rgba(200,50,30,.2);color:rgba(80,20,10,.8)}
 #wxt-feel-arrow{display:inline-block;font-size:.95rem;font-weight:700;margin-left:5px;vertical-align:middle;transition:color .6s ease,opacity .6s ease;opacity:0}
 #wxt-feel-arrow.up{color:#30d158;opacity:1;animation:feelArrowUp 1.8s ease-in-out infinite}
 #wxt-feel-arrow.down{color:#ff453a;opacity:1;animation:feelArrowDown 1.8s ease-in-out infinite}
@@ -1976,7 +1992,18 @@ input[type=range] { touch-action: none; }
             </div>
             <span id="vv" style="font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6);min-width:32px;text-align:right">–%</span>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:6px 0"><button id="vol-down" style="width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:1.5rem;line-height:1;display:flex;align-items:center;justify-content:center;touch-action:manipulation;cursor:pointer;flex-shrink:0">&#8722;</button><div style="flex:1;position:relative;height:5px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden"><div id="vfill" style="height:100%;width:40%;background:#0a84ff;border-radius:3px;transition:width .2s"></div></div><span id="vv" style="font-size:.78rem;font-weight:600;color:rgba(255,255,255,.55);min-width:34px;text-align:center">40%</span><button id="vol-up" style="width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:1.5rem;line-height:1;display:flex;align-items:center;justify-content:center;touch-action:manipulation;cursor:pointer;flex-shrink:0">+</button><input id="vol-range" type="range" min="0" max="100" value="40" style="display:none"></div>
+          <div id="vol-wrap" style="padding:12px 0 8px;touch-action:pan-y">
+            <div id="vol-track" style="position:relative;height:5px;background:rgba(255,255,255,.15);border-radius:3px;margin:16px 0;touch-action:none;cursor:pointer">
+              <div id="vfill" style="height:100%;width:40%;background:linear-gradient(90deg,rgba(10,132,255,.8),#0a84ff);border-radius:3px;pointer-events:none"></div>
+              <div id="vthumb" style="position:absolute;left:40%;top:50%;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.5),0 0 0 3px rgba(10,132,255,.3);transform:translate(-50%,-50%);touch-action:none;pointer-events:none"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:0 1px">
+              <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Leise</span>
+              <span id="vv" style="font-size:.68rem;font-weight:600;color:rgba(255,255,255,.5)">40%</span>
+              <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Laut</span>
+            </div>
+            <input id="vol-range" type="range" min="0" max="100" value="40" style="display:none">
+          </div>
         </div>
         <!-- Sleep Timer -->
         <div id="sleep-timer-row">
@@ -2685,6 +2712,13 @@ input[type=range] { touch-action: none; }
   <!-- ═══ GERÄTE ═══ -->
   <div class="page" id="pg-geraete">
     <span class="lbl">Geräte</span>
+
+    <!-- Zuletzt genutzt Timeline -->
+    <div id="dev-recent-wrap" style="background:var(--c1);border-radius:14px;padding:13px 14px 10px;margin-bottom:14px;display:none">
+      <div style="font-size:.72rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px">⏱ Zuletzt genutzt</div>
+      <div id="dev-recent-list" style="display:flex;flex-direction:column;gap:0"></div>
+    </div>
+
     <div id="dev-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:8px"></div>
   </div>
 </div>
@@ -5974,7 +6008,7 @@ function buildUI(){try{
     const thumb=document.getElementById('vthumb');
     const vv=document.getElementById('vv');
     if(fill)fill.style.width=pct+'%';
-    if(thumb)thumb.style.left=pct+'%';
+    if(thumb){thumb.style.left=pct+'%';}
     if(vv)vv.textContent=pct+'%';
     if(volRange)volRange.value=pct;
   }
@@ -6395,6 +6429,66 @@ function patchDevCards(){
   });
 }
 window._updateDevCards=patchDevCards;
+
+// ─── Zuletzt genutzt Timeline ───────────────────
+function patchDevRecent(){
+  const wrap=document.getElementById('dev-recent-wrap');
+  const list=document.getElementById('dev-recent-list');
+  if(!wrap||!list)return;
+
+  // Sammle alle bekannten Entities (devs + lichter)
+  const allIds=[
+    ...CFG.devs.map(d=>d.id),
+    ...(LIGHT_GROUPS||[]).flatMap(g=>g.ids)
+  ];
+  const names={};
+  CFG.devs.forEach(d=>names[d.id]=d.name);
+  (LIGHT_GROUPS||[]).forEach(g=>g.ids.forEach(id=>{ if(!names[id]) names[id]=g.name+' Licht'; }));
+
+  const now=Date.now();
+  const items=allIds
+    .map(id=>{
+      const s=_S[id];
+      if(!s?.last_changed)return null;
+      const ms=now-new Date(s.last_changed).getTime();
+      return{id,ms,name:names[id]||id,state:s.state};
+    })
+    .filter(Boolean)
+    .sort((a,b)=>a.ms-b.ms)
+    .slice(0,5);
+
+  if(!items.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+
+  function relTime(ms){
+    const s=Math.floor(ms/1000);
+    if(s<60)return 'gerade eben';
+    if(s<3600)return`vor ${Math.floor(s/60)} min`;
+    if(s<86400)return`vor ${Math.floor(s/3600)} h`;
+    return`vor ${Math.floor(s/86400)} Tagen`;
+  }
+  function stateColor(state){
+    if(state==='on'||state==='playing')return'#30d158';
+    if(state==='off')return'var(--dim)';
+    return'#ff9f0a';
+  }
+  function stateIcon(state){
+    if(state==='on'||state==='playing')return'●';
+    if(state==='off')return'○';
+    return'◐';
+  }
+
+  list.innerHTML=items.map((it,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0;${i<items.length-1?'border-bottom:1px solid rgba(255,255,255,.05)':''}">
+      <span style="font-size:.75rem;color:${stateColor(it.state)};flex-shrink:0;min-width:10px;text-align:center">${stateIcon(it.state)}</span>
+      <span style="font-size:.8rem;color:rgba(255,255,255,.85);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${it.name}</span>
+      <span style="font-size:.72rem;color:var(--dim);flex-shrink:0">${relTime(it.ms)}</span>
+    </div>
+  `).join('');
+}
+// Hook in patchDevCards-Cycle
+const _origPatchDevCards=patchDevCards;
+patchDevCards=function(){_origPatchDevCards();patchDevRecent();};
 
   startClock();
   setTimeout(()=>toast('✓ Bereit'),600);

@@ -135,6 +135,13 @@
 
 
 
+## 2026-03-28 00:02 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Geräte-Tab — "Zuletzt genutzt" Timeline Card
+- Top-5 Entities (devs + Lichtgruppen) sortiert nach last_changed ASC
+- State-Icon ●/○/◐ in grün/grau/amber + relative Zeit "vor X min / h / Tagen"
+- patchDevRecent() gehookt in patchDevCards-Cycle → live aktualisiert
+- JS-Check: OK | Deployed via SSH (paramiko, 505504 bytes, DEPLOY_OK)
+
 ## 2026-03-27 08:08 UTC — Heartbeat Auto-Improve
 - ✅ demo.html: Floating Live-Chat FAQ Widget implementiert
 - 🦀 Amber Chat-Bubble unten rechts, öffnet Popup mit 3 FAQ-Fragen + Antworten + Fiverr-CTA

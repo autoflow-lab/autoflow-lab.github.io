@@ -275,5 +275,8 @@
 ## Neue Ideen (2026-03-27 14:03 UTC)
 - [x] wz.html: Licht-Tab — Party Mode Button (🪩 Disco-Modus: alle aktiven RGB-Lichter wechseln jede 500ms zu einer anderen Zufallsfarbe, 120 BPM, 10min Auto-Stop, Countdown-Pill mit Puls-Dot, ✕ Cancel, Disco-Ball-Icon rotiert, lila Farbschema)
 
+## Neue Ideen (2026-03-28 00:02 UTC)
+- [x] wz.html: Geräte-Tab — "Zuletzt genutzt" Timeline (Top-5 Entities sortiert nach last_changed, relative Zeit "vor X min", State-Icon grün/grau/amber, eingeblendet über Dev-Cards)
+
 ## Neue Ideen (2026-03-27 08:03 UTC)
 - [x] demo.html: Floating Live-Chat FAQ Widget (🦀 Bot unten rechts, 3 klickbare FAQ-Fragen mit Antworten, Fiverr-CTA, Badge-Notification nach 4s, DE+EN i18n, schliessbar) (🌿 Tageszeit-optimierter Einzel-Tap-Button zwischen Global-Dimmer und Schnellfarben-Palette: berechnet ideale Farbtemperatur 1900K–6500K + Helligkeit 18%–100% je Tagesphase Nacht/Morgengrauen/Morgen/Mittag/Nachmittag/Abend/Spätabend, zeigt aktuellen Tageszeit-Emoji + Zielwerte live, setzt alle aktiven Lichter per svc('light','turn_on',{color_temp_kelvin, brightness_pct}), grüner Flash-Animation bei Tap, Toast "🌅 Circadian auf X Lichter · 2700K / 45%")
