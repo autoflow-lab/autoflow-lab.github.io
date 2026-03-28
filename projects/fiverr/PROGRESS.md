@@ -1,5 +1,63 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-28 20:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Activity Rings Card (Apple Watch Style)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#act-rings` Div im Home-Tab, direkt nach `#tagsum` (Tages-Zusammenfassung)
+- **Konzept**: Apple Watch Activity Rings Optik — 3 konzentrische SVG-Kreisbogen zeigen auf einen Blick die Tagesaktivität im Smart Home
+- **Ring 1 (outer, amber r=50)**: 💡 Lichter — wieviele verschiedene Lichter heute genutzt wurden (max=6 für vollen Ring)
+- **Ring 2 (middle, blau r=38)**: 🎵 Musik — Musik-Minuten heute vs. 60 Min Ziel
+- **Ring 3 (inner, grün r=26)**: 😊 Stimmung — via existierendem Mood-Tracker localStorage (`mood_YYYY_MM_DD`)
+- **SVG Technik**: `stroke-dasharray` + `stroke-dashoffset` Methode, `transform="rotate(-90)"` → Arc beginnt bei 12 Uhr
+- 3 `linearGradient` Definitionen: amber (#ff9f0a→#ffcc02) / blau (#0a84ff→#5ac8fa) / grün (#30d158→#34e05a)
+- Background Track-Ringe: `rgba(.1)` für dezenten Unterton
+- `transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)` mit gestaffelten Delays (0/0.1/0.2s) → weiche federnde Einblende-Animation
+- **Rechte Info-Sektion**: 3 Zeilen mit farbigen Dots (glow box-shadow) + Label + Wert
+  - Lichter: "X genutzt" / "—" wenn noch keine
+  - Musik: "Xh Ymin" / "Xmin" / "—"
+  - Stimmung: 😊 Gut / 😐 Ok / 😔 Nicht so gut / "—" wenn kein Mood gesetzt
+- **Sub-Text** `#ar-sub-text`: kontextsensitiver Motivationstext je Gesamtscore: "Toller Tag! 🌟" (≥80%) / "Gut unterwegs 👍" (≥50%) / "Tag noch jung ⏳"
+- `getMoodPct()` Funktion: liest `mood_YYYY_MM_DD` aus localStorage, gibt 1.0/0.6/0.25/-1 zurück
+- `window._updateActRings(lightsCount, musikMin)` wird am Ende von `_tagsumUpdate()` aufgerufen → synchron mit Tages-Zusammenfassung
+- Card erscheint (`display:flex`) sobald irgendwelche Tagesdaten vorhanden, verborgen solange alles null
+- `#act-rings` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Overrides: `background:rgba(0,0,0,.03)`, dunklere Labels
+- **Kein extra API-Call** — rein aus localStorage-Daten (tagsum + mood)
+- Effekt: Wie bei der Apple Watch auf einen Blick sehen ob der Tag aktiv war — Lichter benutzt, Musik gehört, Stimmung geloggt — gamifiziert den Smart-Home-Alltag subtil
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 567782 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-28 18:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — "Atem-Licht" Meditations-Modus (🫁)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#lt-breathe` Div im Licht-Tab, direkt zwischen `#lt-night` und `#lt-color-palette`
+- **Konzept**: 4-7-8 Atemübungs-Rhythmus nach Dr. Andrew Weil → 4s Einatmen + 7s Halten + 8s Ausatmen = 19s/Zyklus → Lichter pulsieren synchron zur Atemübung, ideal für Meditation/Entspannung/Einschlafen
+- **Button-Design**: Türkises Farbschema `rgba(20,160,180)` Border + Background (klar von blau=Nachtlicht, orange=Sunset, grün=Circadian unterscheidbar)
+- `#lt-br-ico` (🫁): `@keyframes brIcoPulse` wenn aktiv — Lungen-Emoji pulsiert langsam (4s ease-in-out, scale 1→1.22, passend zum Einatem-Rhythmus)
+- **3 Step-Buttons**: 3× (ca. 57s) / 5× (ca. 95s) / ∞ Endlos — `.br-step-sel` Klasse markiert Auswahl; Endlos als Standard
+- `#lt-br-pill`: Countdown-Pill mit pulsierendem türkisen Dot (`@keyframes brDotPulse`, 4s loop = 1 Atemzyklus) + Phase-Text + ✕ Cancel
+- **Phase-Logik** `runPhase()` (rekursiv mit `setTimeout`):
+  - 🫁 **EINATMEN** (4s): alle dimmbaren Lichter auf 85% / `transition:3.6s` → sanfter Anstieg
+  - ⏸ **HALTEN** (7s): Helligkeit bleibt bei 85% — kein weiterer Svc-Call
+  - 😮‍💨 **AUSATMEN** (8s): alle Lichter auf 10% / `transition:7.2s` → sehr langsames Dimmen
+  - Nach Ausatmen: `_brCyclesDone++`, bei `maxCycles>0 && done>=max` → `stopBreathe(false)` + Toast
+- **Live-Tick** `setInterval(400ms)`: zeigt aktuelle Phase + verbleibende Sekunden + Restzyklen in `#lt-br-cd`
+  - Berechnung via `elapsed % CYCLE_MS` → immer korrekte Phase ohne extra Flags
+- **`startBreathe(maxCycles)`**: startet rekursiven Phase-Timer, setzt `_brTotalTimer` als Sicherheits-Fallback, `hap()` Feedback
+- **`stopBreathe(wasCancelled)`**: räumt alle Timer auf, resettet UI, optionaler Cancel-Toast "🫁 Atem-Licht gestoppt"
+- **Schutz**: wenn Lichter extern ausgeschaltet (`onCount===0`) → `stopBreathe(false)` automatisch via `_updateBreathe()`
+- `@keyframes brApply`: türkiser Flash beim Tap-Start als Bestätigung
+- `@keyframes brDotPulse`: türkise Puls-Aura um den Pill-Dot (4s — 1 Atemzyklus!)
+- Light-Mode Overrides: transparenter Hintergrund, dunklere Pill-Farbe
+- `#lt-breathe` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- `window._updateBreathe` in `updateAll()` nach `_updateNightLight` eingehängt
+- Kein Konflikt mit Party Mode (verwendet `getActiveDimmables()` statt RGB-Filter), Circadian, Sunset-Sim, Night Light
+- **CYCLE_MS = 19s** (`INHALE_MS:4000 + HOLD_MS:7000 + EXHALE_MS:8000`) → wissenschaftlicher 4-7-8 Standard
+- Effekt: Ein Tap startet eine geführte Atemübung bei der die Zimmerlichter exakt im Atemrhythmus aufleuchten und dimmen — wie ein natürlicher Atemcoach der den ganzen Raum einbezieht
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 560844 bytes, DEPLOY_OK)
+
+
 ## 2026-03-28 16:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — 7-Tage Wochentag-Strip
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -1895,4 +1953,15 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Zeigt "🌤 Beste Außenzeit: 14:00–16:00 Uhr · 87/100" grün/amber/rot je Score
 - Fallback: "🌧 Heute nicht ideal für draußen" wenn kein Fenster ≥30 Punkte
 - Chip erscheint unter fc3 Mini-Forecast, spring-in Animation, 3 Farbvarianten
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-28 20:36 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: Interaktiver Preis-Rechner
+- Schieberegler: Räume (1–10) + Smarte Geräte (1–50)
+- Checkboxen: KI-Assistent / Mobile-optimiert / Wetter-Widget / Energie-Monitor
+- Echtzeit-Score → Basic €49 / Standard €89 / Premium €149
+- Animierter Preisflip (calcPriceFlip), Lieferzeit-Badge
+- Direkt verknüpfter Fiverr CTA-Button
+- DE+EN i18n (hakt in bestehenden updateLang() ein)
+- Eingefügt zwischen "Warum jetzt" Section und FAQ
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)

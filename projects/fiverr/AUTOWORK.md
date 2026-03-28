@@ -296,6 +296,9 @@
 ## Neue Ideen (2026-03-28 12:03 UTC)
 - [x] wz.html: Wetter-Tab — "Guter Moment zum Lüften?" Empfehlung-Card (smart Ventilations-Empfehlung: grün wenn Temp 14–26°C + Regenprob <25% + Wind <35 km/h → "Jetzt lüften!"; blau bei Regen; kalt bei <8°C; amber bei Wind oder Grenztemperatur; animiertes Fenster-Icon, Temp + Feuchte Stats rechts)
 
+## Neue Ideen (2026-03-28 20:36 UTC)
+- [x] demo.html: Interaktiver Preis-Rechner (Schieberegler Räume 1–10 + Geräte 1–50, Checkboxen KI/Mobile/Wetter/Energie, Echtzeit-Preisberechnung → Basic €49 / Standard €89 / Premium €149, animierter Preisflip, Lieferzeit-Badge, DE+EN i18n, Fiverr CTA-Button)
+
 ## Neue Ideen (2026-03-28 15:45 UTC)
 - [x] wz.html: Home-Tab — "Beste Außenzeit" Chip (scannt stündliche Wetterdaten für heute: Score je Stunde aus Temperatur-Komfort + Regenwahrsch. + Wind + WMO-Code, ermittelt bestes 2h-Fenster für Outdoor, zeigt "Beste Außenzeit: 14:00–16:00 Uhr" grüner/amber/roter Chip je Score, unter Mini-Forecast-Strip)
 
@@ -310,6 +313,12 @@
 
 ## Neue Ideen (2026-03-27 08:03 UTC)
 - [x] demo.html: Floating Live-Chat FAQ Widget (🦀 Bot unten rechts, 3 klickbare FAQ-Fragen mit Antworten, Fiverr-CTA, Badge-Notification nach 4s, DE+EN i18n, schliessbar) (🌿 Tageszeit-optimierter Einzel-Tap-Button zwischen Global-Dimmer und Schnellfarben-Palette: berechnet ideale Farbtemperatur 1900K–6500K + Helligkeit 18%–100% je Tagesphase Nacht/Morgengrauen/Morgen/Mittag/Nachmittag/Abend/Spätabend, zeigt aktuellen Tageszeit-Emoji + Zielwerte live, setzt alle aktiven Lichter per svc('light','turn_on',{color_temp_kelvin, brightness_pct}), grüner Flash-Animation bei Tap, Toast "🌅 Circadian auf X Lichter · 2700K / 45%")
+
+## Neue Ideen (2026-03-28 18:03 UTC)
+- [x] wz.html: Licht-Tab — "Atem-Licht" Meditations-Modus (🫁 4-7-8 Rhythmus: 4s Einatmen hell → 7s Halten → 8s Ausatmen dunkel, wählbare Zyklen 3×/5×/∞, Countdown-Pill, Cancel, türkises Farbschema)
+
+## Neue Ideen (2026-03-28 20:03 UTC)
+- [x] wz.html: Home-Tab — Activity Rings Card (Apple Watch Style: 3 konzentrische SVG-Ringe für Lichter/Musik/Stimmung)
 
 ## Neue Ideen (2026-03-28 14:03 UTC)
 - [x] wz.html: Home-Tab — Wetterwarnung Banner (scannt _wx.daily der nächsten 3 Tage auf kritische Bedingungen: Gewitter WMO≥95, Hitzewelle ≥34°C, Starker Frost ≤-5°C, Starkregen ≥20mm, Sturmböen ≥70km/h — zeigt farbcodierten spring-in Banner mit Icon + Titel + Beschreibung, schliessbar mit × Button, 5 Farbvarianten je Warntyp, Light-Mode Overrides)
