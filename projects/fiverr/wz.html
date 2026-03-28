@@ -159,8 +159,8 @@ html,body{height:100%;background:var(--bg);
 #dev-status-gauge.pop #dsg-svg{animation:dsgPop .42s cubic-bezier(.34,1.28,.64,1)}
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
-.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,
+.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
@@ -413,6 +413,32 @@ html,body{height:100%;background:var(--bg);
 #lt-nl-btn.nl-flash{animation:nlApply .55s ease forwards}
 :root.light #lt-night{background:transparent}
 :root.light #lt-nl-pill{background:rgba(60,100,255,.06)}
+/* ── Breathing Light ── */
+#lt-breathe{margin:0 14px 10px;opacity:0;transition:opacity .5s ease}
+#lt-breathe.show{opacity:1}
+#lt-br-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(80,200,220,.28);background:rgba(20,160,180,.07);cursor:pointer;touch-action:manipulation;transition:background .18s,transform .15s;text-align:left}
+#lt-br-btn:active{transform:scale(.97);background:rgba(20,160,180,.18)}
+#lt-br-btn.br-active{border-color:rgba(80,200,220,.48);background:rgba(20,160,180,.13)}
+#lt-br-ico{font-size:1.1rem;flex-shrink:0}
+@keyframes brIcoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+#lt-br-btn.br-active #lt-br-ico{animation:brIcoPulse 4s ease-in-out infinite}
+#lt-br-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-br-val{font-size:.68rem;font-weight:700;color:rgba(80,220,230,.9);white-space:nowrap}
+#lt-br-steps{display:flex;gap:7px;margin-top:8px;padding:0 0 2px}
+#lt-br-steps button{flex:1;font-size:.68rem;padding:5px 4px;border-radius:9px;border:1px solid rgba(80,200,220,.22);background:rgba(20,160,180,.07);color:rgba(160,230,240,.8);cursor:pointer;touch-action:manipulation;transition:background .15s,border-color .15s}
+#lt-br-steps button.br-step-sel{background:rgba(20,160,180,.22);border-color:rgba(80,210,220,.55);color:rgba(200,240,245,.95);font-weight:700}
+#lt-br-pill{display:none;align-items:center;gap:8px;padding:7px 12px;margin-top:7px;border-radius:12px;background:rgba(20,160,180,.09);border:1px solid rgba(80,200,220,.2)}
+#lt-br-pill.show{display:flex}
+#lt-br-dot{width:7px;height:7px;border-radius:50%;background:#40c8d8;flex-shrink:0}
+@keyframes brDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(40,200,220,.6)}60%{box-shadow:0 0 0 5px rgba(40,200,220,0)}}
+#lt-br-dot{animation:brDotPulse 4s ease-in-out infinite}
+#lt-br-cd{font-size:.72rem;font-weight:600;color:rgba(160,230,240,.9);flex:1}
+#lt-br-cancel{font-size:.7rem;padding:3px 8px;border-radius:8px;border:1px solid rgba(80,200,220,.35);background:rgba(20,160,180,.1);color:rgba(160,230,240,.85);cursor:pointer;touch-action:manipulation;transition:background .15s}
+#lt-br-cancel:active{background:rgba(20,160,180,.25)}
+@keyframes brApply{0%{background:rgba(20,160,180,.35)}100%{background:rgba(20,160,180,.07)}}
+#lt-br-btn.br-flash{animation:brApply .55s ease forwards}
+:root.light #lt-breathe{background:transparent}
+:root.light #lt-br-pill{background:rgba(20,160,180,.06)}
 .lt-cp-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin-bottom:7px}
 .lt-cp-chips{display:flex;gap:8px;flex-wrap:wrap}
 .lt-cp-chip{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.13);background:radial-gradient(circle at 38% 32%,var(--cc,#888) 0%,rgba(0,0,0,.55) 100%);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;box-shadow:0 0 0 0 transparent;position:relative;overflow:hidden}
@@ -933,6 +959,25 @@ html,body{height:100%;background:var(--bg);
   font-size:.72rem;font-weight:500;color:var(--on-txt)}
 .tagsum-stat .ts-val{font-weight:700;color:var(--txt)}
 .tagsum-stat .ts-ico{font-size:.9rem}
+
+/* ───────────── ACTIVITY RINGS ───────────── */
+#act-rings{margin:0 0 12px;padding:14px 16px;
+  background:rgba(255,255,255,.04);border-radius:16px;
+  border:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:18px}
+#act-rings-svg{flex-shrink:0}
+#act-rings-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+.ar-row{display:flex;align-items:center;gap:8px}
+.ar-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ar-label{font-size:.68rem;font-weight:600;letter-spacing:.4px;color:var(--on-dim);flex:1}
+.ar-val{font-size:.72rem;font-weight:700;color:var(--txt)}
+.ar-sub{font-size:.6rem;color:var(--on-dim2);margin-top:1px}
+#act-rings-title{font-size:.6rem;font-weight:700;letter-spacing:1.1px;
+  text-transform:uppercase;color:var(--on-dim2);margin-bottom:2px}
+@keyframes arRingIn{from{stroke-dashoffset:var(--ar-circ)}to{stroke-dashoffset:var(--ar-off)}}
+:root.light #act-rings{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08)}
+:root.light .ar-label{color:rgba(0,0,0,.5)}
+:root.light .ar-val{color:rgba(0,0,0,.85)}
 
 /* ───────────── ENERGIE-WIDGET ───────────── */
 .energie-card{display:none;margin:0 0 10px;padding:13px 16px;
@@ -1982,6 +2027,60 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- Activity Rings -->
+      <div id="act-rings" style="display:none">
+        <svg id="act-rings-svg" viewBox="0 0 112 112" width="112" height="112">
+          <defs>
+            <linearGradient id="arGrad1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ff9f0a"/>
+              <stop offset="100%" stop-color="#ffcc02"/>
+            </linearGradient>
+            <linearGradient id="arGrad2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0a84ff"/>
+              <stop offset="100%" stop-color="#5ac8fa"/>
+            </linearGradient>
+            <linearGradient id="arGrad3" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#30d158"/>
+              <stop offset="100%" stop-color="#34e05a"/>
+            </linearGradient>
+          </defs>
+          <!-- Outer ring: Lights (amber) r=50 -->
+          <circle cx="56" cy="56" r="50" fill="none" stroke="rgba(255,159,10,.1)" stroke-width="7" stroke-linecap="round"/>
+          <circle id="ar-ring1" cx="56" cy="56" r="50" fill="none" stroke="url(#arGrad1)" stroke-width="7"
+            stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16"
+            transform="rotate(-90 56 56)" style="transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)"/>
+          <!-- Middle ring: Music (blue) r=38 -->
+          <circle cx="56" cy="56" r="38" fill="none" stroke="rgba(10,132,255,.1)" stroke-width="7" stroke-linecap="round"/>
+          <circle id="ar-ring2" cx="56" cy="56" r="38" fill="none" stroke="url(#arGrad2)" stroke-width="7"
+            stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="238.76"
+            transform="rotate(-90 56 56)" style="transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1) .1s"/>
+          <!-- Inner ring: Mood (green) r=26 -->
+          <circle cx="56" cy="56" r="26" fill="none" stroke="rgba(48,209,88,.1)" stroke-width="7" stroke-linecap="round"/>
+          <circle id="ar-ring3" cx="56" cy="56" r="26" fill="none" stroke="url(#arGrad3)" stroke-width="7"
+            stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36"
+            transform="rotate(-90 56 56)" style="transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1) .2s"/>
+        </svg>
+        <div id="act-rings-info">
+          <div id="act-rings-title">Tagesaktivität</div>
+          <div class="ar-row">
+            <div class="ar-dot" style="background:#ff9f0a;box-shadow:0 0 5px rgba(255,159,10,.6)"></div>
+            <span class="ar-label">Lichter</span>
+            <span class="ar-val" id="ar-val1">—</span>
+          </div>
+          <div class="ar-row">
+            <div class="ar-dot" style="background:#0a84ff;box-shadow:0 0 5px rgba(10,132,255,.6)"></div>
+            <span class="ar-label">Musik</span>
+            <span class="ar-val" id="ar-val2">—</span>
+          </div>
+          <div class="ar-row">
+            <div class="ar-dot" style="background:#30d158;box-shadow:0 0 5px rgba(48,209,88,.6)"></div>
+            <span class="ar-label">Stimmung</span>
+            <span class="ar-val" id="ar-val3">—</span>
+          </div>
+          <div class="ar-sub" id="ar-sub-text"></div>
+        </div>
+      </div>
+
       <!-- Energie-Widget -->
       <div class="energie-card" id="energie-card">
         <div class="energie-arc-wrap">
@@ -2294,6 +2393,24 @@ input[type=range] { touch-action: none; }
           <div id="lt-nl-dot"></div>
           <span id="lt-nl-cd">Aktiv…</span>
           <button id="lt-nl-cancel">✕</button>
+        </div>
+      </div>
+      <!-- Breathing Light -->
+      <div id="lt-breathe" aria-label="Atemübungs-Licht">
+        <button id="lt-br-btn" title="Lichter pulsieren im 4-7-8 Atem-Rhythmus für Entspannung/Meditation">
+          <span id="lt-br-ico">🫁</span>
+          <span id="lt-br-label">Atem-Licht</span>
+          <span id="lt-br-val">4-7-8 Rhythmus</span>
+        </button>
+        <div id="lt-br-steps">
+          <button data-br-cycles="3" title="3 Zyklen (~3 min)">3×</button>
+          <button data-br-cycles="5" title="5 Zyklen (~5 min)">5×</button>
+          <button data-br-cycles="0" class="br-step-sel" title="Endlos">∞</button>
+        </div>
+        <div id="lt-br-pill">
+          <div id="lt-br-dot"></div>
+          <span id="lt-br-cd">Einatmen…</span>
+          <button id="lt-br-cancel">✕</button>
         </div>
       </div>
       <!-- Schnellfarben-Palette -->
@@ -7968,6 +8085,74 @@ function updateOverview(){
     if(parts.length===0) parts.push(`<div class="tagsum-stat" style="color:var(--dim2)">Noch keine Aktivität heute</div>`);
     stats.innerHTML=parts.join('');
     el.style.display='flex';
+    // update activity rings too
+    if(window._updateActRings) window._updateActRings(lc, mm);
+  };
+})();
+
+// ─── Activity Rings ───────────────────────────────────────
+(function initActRings(){
+  const CIRC1=314.16, CIRC2=238.76, CIRC3=163.36;
+  const LIGHTS_MAX=6, MUSIC_MAX=60; // "full ring" thresholds
+
+  function getMoodPct(){
+    // Check today's mood from localStorage (set by mood tracker if present)
+    const key='mood_'+new Date().toISOString().slice(0,10).replace(/-/g,'_');
+    const v=localStorage.getItem(key);
+    if(!v) return -1; // not set
+    if(v==='good') return 1;
+    if(v==='ok') return 0.6;
+    if(v==='bad') return 0.25;
+    return -1;
+  }
+
+  window._updateActRings=function(lightsCount, musikMin){
+    const card=document.getElementById('act-rings');
+    if(!card) return;
+
+    const pct1=Math.min(lightsCount/LIGHTS_MAX,1);
+    const pct2=Math.min(musikMin/MUSIC_MAX,1);
+    const moodPct=getMoodPct();
+    const pct3=moodPct>=0?moodPct:0;
+    const moodSet=moodPct>=0;
+
+    // Show card as soon as any data exists
+    const hasData=lightsCount>0||musikMin>0||moodSet;
+    card.style.display=hasData?'flex':'none';
+    if(!hasData) return;
+
+    // Animate rings
+    const r1=document.getElementById('ar-ring1');
+    const r2=document.getElementById('ar-ring2');
+    const r3=document.getElementById('ar-ring3');
+    if(r1) r1.style.strokeDashoffset=CIRC1*(1-pct1);
+    if(r2) r2.style.strokeDashoffset=CIRC2*(1-pct2);
+    if(r3) r3.style.strokeDashoffset=CIRC3*(1-pct3);
+
+    // Labels
+    const v1=document.getElementById('ar-val1');
+    const v2=document.getElementById('ar-val2');
+    const v3=document.getElementById('ar-val3');
+    const sub=document.getElementById('ar-sub-text');
+    if(v1) v1.textContent=lightsCount>0?lightsCount+' genutzt':'—';
+    if(v2){
+      if(musikMin>=60){
+        const h=Math.floor(musikMin/60),m=Math.round(musikMin%60);
+        v2.textContent=h+'h'+(m>0?' '+m+'min':'');
+      } else {
+        v2.textContent=musikMin>0?Math.round(musikMin)+'min':'—';
+      }
+    }
+    if(v3){
+      if(!moodSet){ v3.textContent='—'; }
+      else if(moodPct>=0.9){ v3.textContent='😊 Gut'; }
+      else if(moodPct>=0.5){ v3.textContent='😐 Ok'; }
+      else { v3.textContent='😔 Nicht so gut'; }
+    }
+    if(sub){
+      const total=Math.round((pct1+pct2+(moodSet?pct3:0))/(moodSet?3:2)*100);
+      sub.textContent=total>=80?'Toller Tag! 🌟':total>=50?'Gut unterwegs 👍':'Tag noch jung ⏳';
+    }
   };
 })();
 
@@ -8281,6 +8466,7 @@ function updateAll(){
   window._updateCircadian&&window._updateCircadian(on);
   window._updateSunsetSim&&window._updateSunsetSim(on);
   window._updateNightLight&&window._updateNightLight(on);
+  window._updateBreathe&&window._updateBreathe(on);
   // ── Stunde der Stille Chip ──
   (function(){
     const chip=document.getElementById('silence-chip');
@@ -10260,6 +10446,136 @@ const _origSetWxMode=setWxMode;
     window._updateNightLight=function(onCount){
       nlWrap.classList.toggle('show',onCount>0);
       if(onCount===0&&_nlIv)stopNightLight(false);
+    };
+  })();
+
+  // ── Breathing Light (4-7-8 Atem-Rhythmus) ──
+  (function(){
+    const brWrap=document.getElementById('lt-breathe');
+    if(!brWrap)return;
+    const brBtn=document.getElementById('lt-br-btn');
+    const brIco=document.getElementById('lt-br-ico');
+    const brVal=document.getElementById('lt-br-val');
+    const brPill=document.getElementById('lt-br-pill');
+    const brDot=document.getElementById('lt-br-dot');
+    const brCd=document.getElementById('lt-br-cd');
+    const brCancel=document.getElementById('lt-br-cancel');
+    const stepBtns=[...brWrap.querySelectorAll('[data-br-cycles]')];
+
+    // 4-7-8 Atem-Rhythmus in ms
+    const INHALE_MS=4000, HOLD_MS=7000, EXHALE_MS=8000;
+    const CYCLE_MS=INHALE_MS+HOLD_MS+EXHALE_MS; // 19s/Zyklus
+
+    let _brRunning=false, _brCyclesDone=0, _brMaxCycles=0;
+    let _brPhaseTimer=null, _brTotalTimer=null, _brTickIv=null;
+    let _brStartMs=0;
+
+    function getActiveDimmables(){
+      return (CFG.lights||[]).filter(id=>{
+        const s=_S[id];
+        return s&&s.state==='on'&&s.attributes&&s.attributes.brightness!==undefined;
+      });
+    }
+
+    function setBrightnessSlow(ids, pct, transMs){
+      ids.forEach(id=>svc('light','turn_on',{entity_id:id,brightness_pct:Math.round(pct),transition:transMs/1000}));
+    }
+
+    function runPhase(){
+      if(!_brRunning)return;
+      // INHALE: hell (85%, warmweiß 3000K)
+      const ids=getActiveDimmables();
+      brIco.textContent='🫁';
+      brCd.textContent='Einatmen… (4s)';
+      setBrightnessSlow(ids,85,INHALE_MS*0.9);
+      _brPhaseTimer=setTimeout(()=>{
+        if(!_brRunning)return;
+        // HOLD: gedimmt halten (85% bleibt)
+        brCd.textContent='Halten… (7s)';
+        _brPhaseTimer=setTimeout(()=>{
+          if(!_brRunning)return;
+          // EXHALE: dunkel (10%, sehr warm 2000K)
+          brCd.textContent='Ausatmen… (8s)';
+          setBrightnessSlow(ids,10,EXHALE_MS*0.9);
+          _brPhaseTimer=setTimeout(()=>{
+            if(!_brRunning)return;
+            _brCyclesDone++;
+            if(_brMaxCycles>0&&_brCyclesDone>= _brMaxCycles){
+              stopBreathe(false);
+              showToast('🫁 Atemübung abgeschlossen · '+_brCyclesDone+' Zyklen');
+            } else {
+              runPhase();
+            }
+          }, EXHALE_MS);
+        }, HOLD_MS);
+      }, INHALE_MS);
+    }
+
+    function startBreathe(maxCycles){
+      if(_brRunning)return;
+      _brRunning=true; _brCyclesDone=0; _brMaxCycles=maxCycles;
+      _brStartMs=Date.now();
+      brBtn.classList.add('br-active');
+      brBtn.classList.remove('br-flash');
+      void brBtn.offsetWidth;
+      brBtn.classList.add('br-flash');
+      brPill.classList.add('show');
+      brVal.textContent='Läuft…';
+      hap&&hap();
+      runPhase();
+      if(maxCycles>0){
+        const totalMs=CYCLE_MS*maxCycles;
+        _brTotalTimer=setTimeout(()=>{if(_brRunning)stopBreathe(false);},totalMs+2000);
+      }
+      // Tick for live label updates
+      _brTickIv=setInterval(()=>{
+        if(!_brRunning)return;
+        const elapsed=Date.now()-_brStartMs;
+        const cyclePos=elapsed%CYCLE_MS;
+        let phase, rem;
+        if(cyclePos<INHALE_MS){phase='Einatmen';rem=INHALE_MS-cyclePos;}
+        else if(cyclePos<INHALE_MS+HOLD_MS){phase='Halten';rem=INHALE_MS+HOLD_MS-cyclePos;}
+        else{phase='Ausatmen';rem=CYCLE_MS-cyclePos;}
+        brCd.textContent=phase+'… '+Math.ceil(rem/1000)+'s';
+        if(_brMaxCycles>0){
+          const remaining=_brMaxCycles-_brCyclesDone;
+          brCd.textContent+=(' · noch '+remaining+' Zyklen');
+        }
+      },400);
+    }
+
+    function stopBreathe(wasCancelled){
+      if(!_brRunning&&!_brPhaseTimer)return;
+      _brRunning=false;
+      clearTimeout(_brPhaseTimer); _brPhaseTimer=null;
+      clearTimeout(_brTotalTimer); _brTotalTimer=null;
+      clearInterval(_brTickIv); _brTickIv=null;
+      brBtn.classList.remove('br-active');
+      brPill.classList.remove('show');
+      brVal.textContent='4-7-8 Rhythmus';
+      brIco.textContent='🫁';
+      if(wasCancelled)showToast('🫁 Atem-Licht gestoppt');
+    }
+
+    // Step-Buttons
+    stepBtns.forEach(b=>{
+      b.addEventListener('click',()=>{
+        stepBtns.forEach(x=>x.classList.remove('br-step-sel'));
+        b.classList.add('br-step-sel');
+      });
+    });
+
+    brBtn.addEventListener('click',()=>{
+      if(_brRunning){stopBreathe(true);return;}
+      const selBtn=brWrap.querySelector('[data-br-cycles].br-step-sel');
+      const cycles=selBtn?parseInt(selBtn.dataset.brCycles):0;
+      startBreathe(cycles);
+    });
+    brCancel.addEventListener('click',()=>stopBreathe(true));
+
+    window._updateBreathe=function(onCount){
+      brWrap.classList.toggle('show',onCount>0);
+      if(onCount===0&&_brRunning)stopBreathe(false);
     };
   })();
 
