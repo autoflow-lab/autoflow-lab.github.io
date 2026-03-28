@@ -3106,6 +3106,9 @@ function wsConnect(tok){
     const d=JSON.parse(e.data);
     if(d.type==='auth_required'){
       _ws.send(JSON.stringify({type:'auth',access_token:tok}));
+    // Keepalive ping alle 50s (Cloudflare WS-Timeout = 100s)
+    if(window._wsPing)clearInterval(window._wsPing);
+    window._wsPing=setInterval(function(){try{if(ws.readyState===1)ws.send(JSON.stringify({type:'ping',id:99}));}catch(e){}},50000);
     } else if(d.type==='auth_ok'){
       conn(true);
       _offlineCount=0;_wsOk=true;const cd=document.getElementById('conn-dot');if(cd){cd.style.background='#32d74b';cd.style.opacity='.7';cd.title='WebSocket verbunden'}showOfflineBanner(false); // WS verbunden → Banner definitiv weg
@@ -3125,6 +3128,7 @@ function wsConnect(tok){
     }
   };
   _ws.onclose=(ev)=>{
+    if(window._wsPing){clearInterval(window._wsPing);window._wsPing=null;}
     conn(false);_wsOk=false;
     const cd2=document.getElementById('conn-dot');
     if(cd2){cd2.style.background='#ff453a';cd2.style.opacity='1';cd2.title='Verbindung getrennt';}
