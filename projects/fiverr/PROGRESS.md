@@ -1,5 +1,30 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-28 12:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Guter Moment zum Lüften?" Empfehlung-Card
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neue `#lueft-card` Section im Wetter-Tab, direkt ZWISCHEN `#wx-hero` und `#wc-card`
+- **Konzept**: Scannt Open-Meteo `current` Wetterdaten + stündliche `precipitation_probability` → gibt personalisierte Lüft-Empfehlung
+- **4 Zustands-Modi** mit eigenem Farbschema + Icon:
+  - ✅ **Jetzt lüften!** (grün `rgba(48,209,88)`) wenn Temp 14–26°C + Regenprob <25% + Wind <35 km/h — Ideal-Bedingungen, zeigt Gründe (angenehme Temp / trockene Luft / leichte Brise)
+  - 🌧 **Fenster besser zu** (blau `rgba(10,132,255)`) wenn Regenwahrscheinlichkeit ≥25% — zeigt % Wert
+  - 🥶 **Zu kalt zum Lüften** (indigo) wenn Temperatur <8°C — nennt Ist-Temperatur + Wärmeverlust-Hinweis
+  - 💨 **Windig — kurz lüften** / **Lüften möglich** (amber `rgba(255,159,10)`) bei Grenzwerten oder starkem Wind — empfiehlt Stosslüften 3–5 Min
+  - 🌤 **Aufpassen — Hitze draussen** (amber) wenn >26°C — Tipp morgens/abends lüften
+- `#lueft-inner` mit CSS-Klassen `lf-yes/lf-no-rain/lf-no-cold/lf-ok` → steuert Background-Gradient + Border-Farbe + Title-Farbe
+- `#lueft-ico`: Fenster/Wettericon-Emoji, animiertes `@keyframes lueftIcoBreeze` (sanftes Wackeln -4°/+4°, 3s loop) nur im `lf-yes` Modus
+- `#lueft-stats` rechts: Außentemperatur + Außenluftfeuchtigkeit als kompakte Stat-Labels
+- `drawLueftCard()` IIFE: liest `_wx.current.temperature_2m`, `windspeed_10m`, `relative_humidity_2m` + findet aktuelle Stunde in `_wx.hourly.precipitation_probability`
+- Stagger-Animation: `#lueft-card` zur `.page-entering>` CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- Light-Mode Overrides: `background:var(--c1)` für neutralen hellen Hintergrund
+- `drawLueftCard()` in `renderWeather()` direkt vor `drawWindChill()` aufgerufen
+- Graceful: Card bleibt verborgen wenn keine `_wx.current` Daten (kein API-Fehler)
+- **Kein extra API-Call** — nutzt bereits vorhandene Open-Meteo `current` + `hourly` Daten
+- Effekt: Im Wetter-Tab sieht man auf einen Blick ob es gerade sinnvoll ist die Fenster zu öffnen — praktischer Alltagsnutzen der über reine Wetterdaten hinausgeht
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 536672 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-28 10:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Licht-Tab — Nachtlicht-Modus Button (🌙)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
