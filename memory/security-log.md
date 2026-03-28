@@ -1,5 +1,29 @@
 # HA Security Log
 
+## 2026-03-28 11:00 UTC — Security OK
+
+Prüfzeitraum: seit 10:30 UTC (letzter Check)
+
+### Login-Versuche:
+Keine neuen Einträge. Letzter bekannter Eintrag bleibt `192.168.1.50` (intern) um 09:56 UTC — bereits geloggt.
+
+**→ Keine neue Aktivität. Stille = alles OK.**
+
+---
+
+
+## 2026-03-28 10:30 UTC — Security OK
+
+Prüfzeitraum: seit 10:00 UTC (letzter Check)
+
+### Login-Versuche:
+Keine neuen Einträge. Letzter bekannter Eintrag bleibt `192.168.1.50` (intern) um 09:56 UTC — bereits geloggt.
+
+**→ Keine neue Aktivität. Stille = alles OK.**
+
+---
+
+
 ## 2026-03-28 10:00 UTC — Security OK
 
 Prüfzeitraum: seit 09:30 UTC (letzter Check)

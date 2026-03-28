@@ -6021,78 +6021,8 @@ function buildUI(){try{
       sx=0;
     },{passive:true});
   })();
-  // Volume Swipe (vertikal) auf Album-Art — swipe up/down = vol +/-
-  (function(){
-    const al=document.querySelector('.album');
-    if(!al)return;
-    // Overlay erzeugen
-    const ol=document.createElement('div');
-    ol.id='vol-swipe-ol';
-    ol.style.cssText='position:absolute;bottom:16px;left:50%;transform:translateX(-50%);'+
-      'background:rgba(28,28,30,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);'+
-      'border-radius:30px;padding:8px 16px;display:flex;align-items:center;gap:8px;'+
-      'pointer-events:none;opacity:0;transition:opacity .25s ease;z-index:20;'+
-      'box-shadow:0 4px 24px rgba(0,0,0,.55);white-space:nowrap;';
-    ol.innerHTML=
-      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="2.5" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15 9a5 5 0 0 1 0 6"/><path d="M18.5 6a9 9 0 0 1 0 12"/></svg>'+
-      '<div style="width:72px;height:4px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden">'+
-      '<div id="vol-ol-bar" style="height:100%;background:#0a84ff;border-radius:4px;width:40%;transition:width .1s ease"></div></div>'+
-      '<span id="vol-ol-pct" style="font-size:.78rem;font-weight:700;color:#fff;min-width:28px;text-align:right">40%</span>';
-    al.appendChild(ol);
 
-    let vsx=0,vsy=0,vsVolStart=0,vsMoving=false,vsTimer=null;
-    function getCurVol(){const vr=document.getElementById('vol-range');return vr?parseInt(vr.value):40;}
-    function setVolUI(pct){
-      pct=Math.max(0,Math.min(100,Math.round(pct)));
-      const fill=document.getElementById('vfill');
-      const thumb=document.getElementById('vthumb');
-      const vv=document.getElementById('vv');
-      const vr=document.getElementById('vol-range');
-      if(fill)fill.style.width=pct+'%';
-      if(thumb)thumb.style.left=pct+'%';
-      if(vv)vv.textContent=pct+'%';
-      if(vr)vr.value=pct;
-      const olBar=document.getElementById('vol-ol-bar');
-      const olPct=document.getElementById('vol-ol-pct');
-      if(olBar)olBar.style.width=pct+'%';
-      if(olPct)olPct.textContent=pct+'%';
-      return pct;
-    }
-    function showOl(){
-      ol.style.opacity='1';
-      clearTimeout(vsTimer);
-      vsTimer=setTimeout(()=>{ol.style.opacity='0';},1300);
-    }
-    al.addEventListener('touchstart',e=>{
-      if(e.touches.length!==1)return;
-      vsx=e.touches[0].clientX;vsy=e.touches[0].clientY;
-      vsVolStart=getCurVol();vsMoving=false;
-    },{passive:true});
-    al.addEventListener('touchmove',e=>{
-      if(e.touches.length!==1)return;
-      const dx=Math.abs(e.touches[0].clientX-vsx);
-      const dy=e.touches[0].clientY-vsy;
-      if(!vsMoving&&dx<25&&Math.abs(dy)>14)vsMoving=true;
-      if(!vsMoving)return;
-      const delta=Math.round(-dy/1.8); // 180px → ~100% range
-      setVolUI(vsVolStart+delta);
-      showOl();
-    },{passive:true});
-    al.addEventListener('touchend',e=>{
-      if(!vsMoving)return;
-      const dx=Math.abs(e.changedTouches[0].clientX-vsx);
-      const dy=e.changedTouches[0].clientY-vsy;
-      if(dx>80){vsMoving=false;return;} // horizontal = Track-Skip, kein Vol
-      const delta=Math.round(-dy/1.8);
-      const newVol=Math.max(0,Math.min(100,Math.round(vsVolStart+delta)));
-      setVolUI(newVol);
-      svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:Math.min(newVol/100*0.6,0.6)});
-      hap&&hap();
-      vsMoving=false;
-    },{passive:true});
-  })();
-
-  document.getElementById('mini-np')?.addEventListener('click',()=>navTo('musik'));
+    document.getElementById('mini-np')?.addEventListener('click',()=>navTo('musik'));
 
   // Radio quick on home page
   const rqEl=document.getElementById('rq');
