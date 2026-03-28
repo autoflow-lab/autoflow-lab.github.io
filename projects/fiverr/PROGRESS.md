@@ -1,5 +1,32 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-28 00:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Gewitter-Alarm-Card (⚡)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#storm-warn-card` Div im Wetter-Tab, direkt VOR dem `#wc-card` (Wind-Chill) — prominente Position zwischen wx-hero und den Detail-Karten
+- **Konzept**: Scannt stündliche WMO-Codes der nächsten 12h — wenn ≥95 (Gewitter) → zeigt dramatische Warn-Card mit Blitz-Animation
+- **HTML**: `#storm-warn-inner` (Gradient-Hintergrund dunkelrot) + `#storm-warn-bg` (radialer Rot-Orb) + `#storm-bolt-ico` (⚡ animiert) + Text + Intensitäts-Badge + Stunden-Chips
+- **CSS `@keyframes stormBoltFlash`**: Blitz flackert realistisch — 85% normal, 88% fast unsichtbar, 91% mega-glow, 94% wieder dunkel, 2.4s infinite — simuliert echtes Gewitterleuchten
+- **CSS `@keyframes stormCardGlow`**: ganzer Card-Rand pulsiert subtil rot (3s loop) — zieht Aufmerksamkeit
+- **`drawStormWarning()` Funktion**: liest `_wx.hourly.weather_code` + `time` + `precipitation_probability`
+- Findet Start-Index für aktuelle Stunde via ISO-Datetime-Matching
+- Iteriert i=si bis si+12 (12h Vorschaufenster) nach WMO code ≥95
+- **3 Intensitätsstufen**: code==95 → "Mäßig" (amber), code>=96 → "Stark" (rot), code>=99 → "Sehr stark ⚡⚡" (rot)
+- **Text-Logik**: first.h===0 → "Gewitter aktuell möglich — bleib drinnen." / sonst → "Gewitter in ~Xh (um HH:00) möglich. Bleib auf der Hut!"
+- **Typ-Namen**: 95=Gewitter / 96=Gewitter mit Hagel / 99=Schweres Gewitter mit Hagel
+- **Stunden-Chips** `#storm-chips`: bis zu 4 "⚡ HH:00" Pills, max +N weitere Chip
+- **spring-in Animation**: `opacity:0 + translateY(-8px)` → `opacity:1 + translateY(0)`, `.55s cubic-bezier(.34,1.15,.64,1)`
+- Card verschwindet smooth (`classList.remove('show')` + `setTimeout display:none`) wenn kein Gewitter in 12h
+- `drawStormWarning()` in `renderWeather()` nach `updateWxPrecipCanvas` aufgerufen
+- `#storm-warn-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Override: warmes Rosa statt dunkelrot (lesbar auf hellem Hintergrund)
+- Graceful: keine Anzeige wenn keine Hourly-Daten oder kein Gewitter in Sicht
+- Kein extra API-Call — nutzt bereits vorhandene `_wx.hourly` Daten
+- Effekt: Wenn Gewitter geplant sind, erscheint eine dramatische blitzende Warn-Card oben im Wetter-Tab — kann man nicht übersehen
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 508963 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-27 22:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — "Stunde der Stille" Nacht-Chip (🌙)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -1651,3 +1678,18 @@
 - Hover: translateY(-4px) + box-shadow Lift-Effekt
 - CTA "Mein Projekt anfragen →" unter der Galerie
 - demo.html: 369.0KB + index.html deployed → GitHub Pages
+
+## 2026-03-28 01:05 UTC — Nacht-Improvement Run (Cron)
+
+Gewählte Tasks aus NIGHTPLAN_2.md:
+
+### Task 1: fill vs stroke – Hue Icons in ltico
+- `.ltico svg` CSS: `fill:var(--dim2);stroke:none` statt `stroke:var(--dim2);fill:none`
+- `applyTileState()`: `sv.style.fill=...` statt `sv.style.stroke=...`
+- Hass-hue-icons sind für `fill` designed, nicht für `stroke` → Icons jetzt korrekt gerendert
+
+### Task 4: Light-Mode Fix – cal-title
+- `.cal-title { color:#fff }` → `color:var(--txt)`
+- Kalender-Ereignistitel sind jetzt im Tages-/Light-Mode lesbar
+
+wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git commit 6766cb9

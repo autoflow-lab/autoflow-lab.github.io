@@ -145,7 +145,7 @@ html,body{height:100%;background:var(--bg);
 .page{
   position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
-  padding:max(env(safe-area-inset-top),16px) 15px 10px;
+  padding:max(env(safe-area-inset-top),16px) 15px calc(max(env(safe-area-inset-bottom),0px) + 80px);
   opacity:0;pointer-events:none;
   transition:opacity .22s ease;
   will-change:opacity;
@@ -3142,7 +3142,7 @@ function wsConnect(tok){
       _ws.send(JSON.stringify({type:'auth',access_token:tok}));
     // Keepalive ping alle 50s (Cloudflare WS-Timeout = 100s)
     if(window._wsPing)clearInterval(window._wsPing);
-    window._wsPing=setInterval(function(){try{if(ws.readyState===1)ws.send(JSON.stringify({type:'ping',id:99}));}catch(e){}},50000);
+    window._wsPing=setInterval(function(){try{if(_ws&&_ws.readyState===1)_ws.send(JSON.stringify({type:'ping',id:99}));}catch(e){}},50000);
     } else if(d.type==='auth_ok'){
       conn(true);
       _offlineCount=0;_wsOk=true;const cd=document.getElementById('conn-dot');if(cd){cd.style.background='#32d74b';cd.style.opacity='.7';cd.title='WebSocket verbunden'}showOfflineBanner(false); // WS verbunden → Banner definitiv weg
@@ -7460,7 +7460,7 @@ function updateAll(){
       // Show only short cid fragment (no full URL)
       let cidShort=cid;
       try{const u=new URL(cid);cidShort=u.hostname+(u.pathname!=='/'?u.pathname:'');}catch(e){}
-      cidEl.textContent=cidShort.length>40?cidShort.slice(0,37)+'…':cidShort;
+      if(cidEl) cidEl.textContent=''; // URL versteckt
     }
     const waveBars=document.getElementById('rfc-wave-bars');
     if(waveBars)waveBars.classList.toggle('playing',playing);
@@ -9513,11 +9513,11 @@ const _origSetWxMode=setWxMode;
   // Volume Slider — vol-track (touch-action:none → nur Track-Berühren ändert Vol)
   const volTrack=document.getElementById('vol-track');
   if(volTrack){
-    let _vDrag=false;
+    let _volDrag=false;
     function _vpct(cx){const r=volTrack.getBoundingClientRect();return Math.max(0,Math.min(100,Math.round((cx-r.left)/r.width*100)));}
-    volTrack.addEventListener('pointerdown',function(e){e.stopPropagation();_vDrag=true;volTrack.setPointerCapture(e.pointerId);syncVolUI(_vpct(e.clientX));});
-    volTrack.addEventListener('pointermove',function(e){if(!_vDrag)return;var p=_vpct(e.clientX);syncVolUI(p);clearTimeout(_volTimer);_volTimer=setTimeout(function(){svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});},150);});
-    volTrack.addEventListener('pointerup',function(e){if(!_vDrag)return;_vDrag=false;var p=_vpct(e.clientX);syncVolUI(p);svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});});
-    volTrack.addEventListener('pointercancel',function(){_vDrag=false;});
+    volTrack.addEventListener('pointerdown',function(e){e.stopPropagation();_volDrag=true;volTrack.setPointerCapture(e.pointerId);syncVolUI(_vpct(e.clientX));});
+    volTrack.addEventListener('pointermove',function(e){if(!_volDrag)return;var p=_vpct(e.clientX);syncVolUI(p);clearTimeout(_volTimer);_volTimer=setTimeout(function(){svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});},150);});
+    volTrack.addEventListener('pointerup',function(e){if(!_volDrag)return;_volDrag=false;var p=_vpct(e.clientX);syncVolUI(p);svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});});
+    volTrack.addEventListener('pointercancel',function(){_volDrag=false;});
   }
 

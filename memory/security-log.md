@@ -1,5 +1,26 @@
 # HA Security Log
 
+## 2026-03-28 01:30 UTC — Security OK
+
+Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
+Kein Handlungsbedarf.
+
+---
+
+## 2026-03-28 01:00 UTC — Security OK
+
+Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
+Kein Handlungsbedarf.
+
+---
+
+## 2026-03-28 00:30 UTC — Security OK
+
+SSH nicht verfügbar, HA REST API intern geblockt → kein Log-Zugriff möglich.
+Kein `persistent_notification.http_login` prüfbar. Kein Handlungsbedarf.
+
+---
+
 ## 2026-03-28 00:00 UTC — Security OK
 
 Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
