@@ -1,5 +1,31 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-28 10:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Nachtlicht-Modus Button (🌙)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#lt-night` Div im Licht-Tab, direkt zwischen `#lt-sunset-sim` und `#lt-color-palette`
+- **Konzept**: Ein Tap dimmt alle aktiven Lichter sofort auf minimales warmes Nachtlicht (1900K / 3%) — ideal für den Gang zum Bad nachts ohne geblendet zu werden; nach 15 Minuten automatische Wiederherstellung
+- **Button-Design**: Blaues Farbschema `rgba(60,100,255)` Border + Background — klar von orange=Sunset-Sim und grün=Circadian unterscheidbar
+- `#lt-nl-ico` (🌙): `@keyframes nlMoonRock` wenn aktiv — Mond schwingt sanft -12°/+8°/0° (4s ease-in-out loop)
+- `#lt-nl-val`: zeigt "1900K · 3%" statisch
+- `#lt-nl-pill`: Countdown-Pill mit pulsierendem blauen Dot (`@keyframes nlDotPulse`, 2s loop) + Live-Countdown + ✕ Cancel-Button
+- **State-Save Logik** `startNightLight()`:
+  - Vor Aktivierung: speichert `color_temp_kelvin`, `brightness`, `rgb_color` je Licht in `_nlPrev{}`
+  - Setzt alle aktiven Lichter auf `{color_temp_kelvin:1900, brightness_pct:3, transition:2}`
+- **Countdown-Format**: "🌙 noch 14m 52s · Auto-Restore" — sekündlich aktualisiert via `setInterval`
+- **Cancel-Logik** `stopNightLight(true)`: liest `_nlPrev` → sendet `svc('light','turn_on',{...prev_state, transition:2})` für jedes Licht
+- **Auto-Stop** `setTimeout(NL_MS)`: nach 15min stoppt Timer automatisch (kein Restore, da Nacht)
+- **Schutz**: wenn alle Lichter extern ausgeschaltet (`onCount===0`) → Timer automatisch gestoppt
+- Toggle-Verhalten: zweiter Tap auf Button → `stopNightLight(true)` mit Restore
+- `@keyframes nlApply`: blauer Flash beim Tap-Start als Feedback
+- `@keyframes nlDotPulse`: blaue Puls-Aura um den Dot (2s loop)
+- Light-Mode Overrides: transparenter Hintergrund, dunklere Pill-Farbe
+- `#lt-night` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Kein Konflikt mit Circadian-Button, Sunset-Sim, Fade-Out-Timer (separates IIFE, eigener State)
+- JS-Check: OK | Deployed via SSH (paramiko stdin-pipe, 534107 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-28 08:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Hero — Licht-reaktive Wellen-Farbverschiebung
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert

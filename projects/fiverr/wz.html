@@ -76,6 +76,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;
   -webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;
   touch-action:manipulation}
+input[type=range]{touch-action:none}
 html,body{height:100%;background:var(--bg);
   font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif;
   -webkit-font-smoothing:antialiased;color:var(--txt);overflow:hidden;
@@ -159,7 +160,7 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
@@ -320,6 +321,29 @@ html,body{height:100%;background:var(--bg);
 #lt-ss-btn.ss-flash{animation:ssApply .55s ease forwards}
 :root.light #lt-sunset-sim{background:transparent}
 :root.light #lt-ss-pill{background:rgba(255,100,30,.06)}
+/* ── Nachtlicht-Modus ── */
+#lt-night{margin:0 14px 10px;opacity:0;transition:opacity .5s ease}
+#lt-night.show{opacity:1}
+#lt-nl-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(100,150,255,.28);background:rgba(60,100,255,.07);cursor:pointer;touch-action:manipulation;transition:background .18s,transform .15s;text-align:left}
+#lt-nl-btn:active{transform:scale(.97);background:rgba(60,100,255,.16)}
+#lt-nl-btn.nl-active{border-color:rgba(100,160,255,.45);background:rgba(60,100,255,.13)}
+#lt-nl-ico{font-size:1.1rem;flex-shrink:0}
+@keyframes nlMoonRock{0%,100%{transform:rotate(0deg)}30%{transform:rotate(-12deg)}70%{transform:rotate(8deg)}}
+#lt-nl-btn.nl-active #lt-nl-ico{animation:nlMoonRock 4s ease-in-out infinite}
+#lt-nl-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-nl-val{font-size:.68rem;font-weight:700;color:rgba(130,180,255,.9);white-space:nowrap}
+#lt-nl-pill{display:none;align-items:center;gap:8px;padding:7px 12px;margin-top:7px;border-radius:12px;background:rgba(60,100,255,.09);border:1px solid rgba(100,150,255,.2)}
+#lt-nl-pill.show{display:flex}
+#lt-nl-dot{width:7px;height:7px;border-radius:50%;background:#6496ff;flex-shrink:0}
+@keyframes nlDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(100,150,255,.6)}60%{box-shadow:0 0 0 5px rgba(100,150,255,0)}}
+#lt-nl-dot{animation:nlDotPulse 2s ease-in-out infinite}
+#lt-nl-cd{font-size:.72rem;font-weight:600;color:rgba(160,200,255,.9);flex:1}
+#lt-nl-cancel{font-size:.7rem;padding:3px 8px;border-radius:8px;border:1px solid rgba(100,150,255,.35);background:rgba(60,80,255,.1);color:rgba(160,200,255,.85);cursor:pointer;touch-action:manipulation;transition:background .15s}
+#lt-nl-cancel:active{background:rgba(60,80,255,.25)}
+@keyframes nlApply{0%{background:rgba(60,100,255,.35)}100%{background:rgba(60,100,255,.07)}}
+#lt-nl-btn.nl-flash{animation:nlApply .55s ease forwards}
+:root.light #lt-night{background:transparent}
+:root.light #lt-nl-pill{background:rgba(60,100,255,.06)}
 .lt-cp-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin-bottom:7px}
 .lt-cp-chips{display:flex;gap:8px;flex-wrap:wrap}
 .lt-cp-chip{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.13);background:radial-gradient(circle at 38% 32%,var(--cc,#888) 0%,rgba(0,0,0,.55) 100%);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;box-shadow:0 0 0 0 transparent;position:relative;overflow:hidden}
@@ -1495,6 +1519,21 @@ html, body { height: 100%; overflow: hidden; }
 * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 input[type=range] { touch-action: none; }
 
+
+/* ── Volume Slider ── */
+.vol-slider{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:5px;border-radius:3px;outline:none;
+  background:linear-gradient(90deg,#0a84ff 40%,rgba(255,255,255,.15) 40%);
+  touch-action:none;cursor:pointer;display:block;
+}
+.vol-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:28px;height:28px;border-radius:50%;background:#fff;
+  box-shadow:0 2px 10px rgba(0,0,0,.55),0 0 0 3px rgba(10,132,255,.35);
+  cursor:grab;margin-top:-12px;
+}
+.vol-slider:active::-webkit-slider-thumb{cursor:grabbing;transform:scale(1.1);}
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
@@ -2072,19 +2111,15 @@ input[type=range] { touch-action: none; }
             </div>
             <span id="vv" style="font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6);min-width:32px;text-align:right">–%</span>
           </div>
-          <div id="vol-wrap" style="padding:12px 0 8px;touch-action:pan-y">
-            <div id="vol-track" style="position:relative;height:44px;display:flex;align-items:center;touch-action:none;cursor:pointer;margin:4px 0">
-              <div style="position:absolute;left:0;right:0;height:5px;background:rgba(255,255,255,.15);border-radius:3px;pointer-events:none">
-                <div id="vfill" style="height:100%;width:40%;background:linear-gradient(90deg,rgba(10,132,255,.8),#0a84ff);border-radius:3px;transition:width .1s"></div>
-              </div>
-              <div id="vthumb" style="position:absolute;left:40%;top:50%;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.5),0 0 0 3px rgba(10,132,255,.3);transform:translate(-50%,-50%);pointer-events:none;transition:left .1s"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:0 1px">
+          <div id="vol-wrap" style="padding:6px 0 10px">
+            <input type="range" class="vol-slider" id="vol-range"
+              min="0" max="100" value="40"
+              style="width:100%;margin:10px 0 6px">
+            <div style="display:flex;justify-content:space-between;padding:0 2px">
               <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Leise</span>
-              <span id="vv" style="font-size:.68rem;font-weight:600;color:rgba(255,255,255,.5)">40%</span>
+              <span id="vv" style="font-size:.7rem;font-weight:600;color:rgba(255,255,255,.6)">40%</span>
               <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Laut</span>
             </div>
-            <input id="vol-range" type="range" min="0" max="100" value="40" style="display:none">
           </div>
         </div>
         <!-- Sleep Timer -->
@@ -2198,6 +2233,19 @@ input[type=range] { touch-action: none; }
           <div id="lt-ss-dot"></div>
           <span id="lt-ss-cd">Dimmt…</span>
           <button id="lt-ss-cancel">✕ Stop</button>
+        </div>
+      </div>
+      <!-- Nachtlicht-Modus -->
+      <div id="lt-night" aria-label="Nachtlicht-Modus">
+        <button id="lt-nl-btn" title="Alle aktiven Lichter auf minimales Nachtlicht (1900K / 3%), Auto-Restore nach 15 min">
+          <span id="lt-nl-ico">🌙</span>
+          <span id="lt-nl-label">Nachtlicht</span>
+          <span id="lt-nl-val">1900K · 3%</span>
+        </button>
+        <div id="lt-nl-pill">
+          <div id="lt-nl-dot"></div>
+          <span id="lt-nl-cd">Aktiv…</span>
+          <button id="lt-nl-cancel">✕</button>
         </div>
       </div>
       <!-- Schnellfarben-Palette -->
@@ -6165,13 +6213,10 @@ function buildUI(){try{
   let _volDrag=false,_volTimer=null,_pendingVol=null;
   const volRange=document.getElementById('vol-range');
   function syncVolUI(pct){
-    const fill=document.getElementById('vfill');
-    const thumb=document.getElementById('vthumb');
+    const vr=document.getElementById('vol-range');
+    if(vr){vr.value=pct;vr.style.background='linear-gradient(90deg,#0a84ff '+pct+'%,rgba(255,255,255,.15) '+pct+'%)';}
     const vv=document.getElementById('vv');
-    if(fill)fill.style.width=pct+'%';
-    if(thumb){thumb.style.left=pct+'%';}
     if(vv)vv.textContent=pct+'%';
-    if(volRange)volRange.value=pct;
   }
   // Volume Slider — nur horizontal steuert Lautstärke — +/- Buttons (kein Slider)
   // _volTrack entfernt
@@ -7893,6 +7938,7 @@ function updateAll(){
   window._updateColorPalette&&window._updateColorPalette(on);
   window._updateCircadian&&window._updateCircadian(on);
   window._updateSunsetSim&&window._updateSunsetSim(on);
+  window._updateNightLight&&window._updateNightLight(on);
   // ── Stunde der Stille Chip ──
   (function(){
     const chip=document.getElementById('silence-chip');
@@ -9849,15 +9895,123 @@ const _origSetWxMode=setWxMode;
     };
   })();
 
-  // Volume Slider via vol-track (touch-action:none auf Track, pan-y auf Wrapper)
-  const volTrack=document.getElementById('vol-track');
-  if(volTrack){
-    let _volDrag=false;
-    function _vpct(cx){const r=volTrack.getBoundingClientRect();return Math.max(0,Math.min(100,Math.round((cx-r.left)/r.width*100)));}
-    volTrack.addEventListener('pointerdown',function(e){e.stopPropagation();_volDrag=true;volTrack.setPointerCapture(e.pointerId);syncVolUI(_vpct(e.clientX));});
-    volTrack.addEventListener('pointermove',function(e){if(!_volDrag)return;var p=_vpct(e.clientX);syncVolUI(p);clearTimeout(_volTimer);_volTimer=setTimeout(function(){svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});},150);});
-    volTrack.addEventListener('pointerup',function(e){if(!_volDrag)return;_volDrag=false;var p=_vpct(e.clientX);syncVolUI(p);svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});});
-    volTrack.addEventListener('pointercancel',function(){_volDrag=false;});
+  // ── Nachtlicht-Modus ──
+  (function(){
+    const nlWrap=document.getElementById('lt-night');
+    const nlBtn=document.getElementById('lt-nl-btn');
+    const nlPill=document.getElementById('lt-nl-pill');
+    const nlCd=document.getElementById('lt-nl-cd');
+    const nlCancel=document.getElementById('lt-nl-cancel');
+    const nlVal=document.getElementById('lt-nl-val');
+    if(!nlWrap||!nlBtn)return;
+
+    let _nlIv=null, _nlTimeout=null, _nlEndMs=0;
+    const NL_MS=15*60*1000; // 15 Minuten
+    const _nlPrev={}; // gespeicherte Licht-States vor Aktivierung
+
+    function getActiveLights(){
+      return CFG.lights.filter(id=>{
+        const s=_S[id];
+        return s&&s.state==='on';
+      });
+    }
+
+    function fmtNl(ms){
+      const tot=Math.max(0,ms);
+      const m=Math.floor(tot/60000);
+      const s=Math.floor((tot%60000)/1000);
+      return m+'m '+String(s).padStart(2,'0')+'s';
+    }
+
+    function startNightLight(){
+      const lights=getActiveLights();
+      if(!lights.length)return;
+      // Speichere aktuelle States für Restore
+      lights.forEach(id=>{
+        const a=_S[id]?.attributes||{};
+        _nlPrev[id]={
+          ct:a.color_temp_kelvin||a.color_temperature||null,
+          bri:a.brightness??null,
+          rgb:a.rgb_color||null,
+          has_ct:a.supported_color_modes?.includes('color_temp')||a.color_temp_kelvin
+        };
+      });
+      // Setze alle auf 1900K / 3%
+      lights.forEach(id=>{
+        svc('light','turn_on',{entity_id:id,color_temp_kelvin:1900,brightness_pct:3,transition:2});
+      });
+      // UI aktivieren
+      _nlEndMs=Date.now()+NL_MS;
+      nlBtn.classList.add('nl-active','nl-flash');
+      setTimeout(()=>nlBtn.classList.remove('nl-flash'),600);
+      nlPill.classList.add('show');
+      if(_nlIv)clearInterval(_nlIv);
+      _nlIv=setInterval(()=>{
+        const rem=_nlEndMs-Date.now();
+        if(rem<=0){stopNightLight(false);return;}
+        nlCd.textContent='🌙 noch '+fmtNl(rem)+' · Auto-Restore';
+      },1000);
+      if(_nlTimeout)clearTimeout(_nlTimeout);
+      _nlTimeout=setTimeout(()=>stopNightLight(false),NL_MS);
+      nlCd.textContent='🌙 noch 15m 00s · Auto-Restore';
+      if(typeof showToast==='function')showToast('🌙 Nachtlicht aktiv · '+lights.length+' Lichter · 1900K / 3%');
+      if(typeof hap==='function')hap();
+    }
+
+    function stopNightLight(wasCancelled){
+      if(_nlIv){clearInterval(_nlIv);_nlIv=null;}
+      if(_nlTimeout){clearTimeout(_nlTimeout);_nlTimeout=null;}
+      nlBtn.classList.remove('nl-active');
+      nlPill.classList.remove('show');
+      nlCd.textContent='Aktiv…';
+      if(wasCancelled){
+        // Restore vorherige Licht-States
+        Object.entries(_nlPrev).forEach(([id,prev])=>{
+          if(!_S[id]||_S[id].state!=='on')return;
+          const opts={entity_id:id,transition:2};
+          if(prev.rgb){opts.rgb_color=prev.rgb;}
+          else if(prev.ct){opts.color_temp_kelvin=Math.max(1900,Math.min(6535,prev.ct));}
+          if(prev.bri!=null){opts.brightness=prev.bri;}
+          svc('light','turn_on',opts);
+        });
+        if(typeof showToast==='function')showToast('🌙 Nachtlicht beendet · Lichter wiederhergestellt');
+      }
+    }
+
+    nlBtn.addEventListener('click',()=>{
+      if(_nlIv){stopNightLight(true);}
+      else{startNightLight();}
+    },{passive:true});
+
+    nlCancel.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      stopNightLight(true);
+    },{passive:true});
+
+    window._updateNightLight=function(onCount){
+      nlWrap.classList.toggle('show',onCount>0);
+      if(onCount===0&&_nlIv)stopNightLight(false);
+    };
+  })();
+
+  // Volume — nativer range input (iOS-kompatibel, kein Scroll-Konflikt)
+  const _vr=document.getElementById('vol-range');
+  if(_vr){
+    _vr.addEventListener('input',function(){
+      var p=parseInt(this.value);
+      syncVolUI(p);
+      _volDrag=true;
+      clearTimeout(_volTimer);
+      _volTimer=setTimeout(function(){
+        svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});
+      },200);
+    });
+    _vr.addEventListener('pointerdown',function(){_volDrag=true;});
+    _vr.addEventListener('pointerup',function(){
+      _volDrag=false;
+      svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:parseInt(_vr.value)/100*0.6});
+    });
+    _vr.addEventListener('pointercancel',function(){_volDrag=false;});
   }
 </script>
 <div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>
