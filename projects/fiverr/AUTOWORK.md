@@ -304,3 +304,6 @@
 
 ## Neue Ideen (2026-03-27 08:03 UTC)
 - [x] demo.html: Floating Live-Chat FAQ Widget (🦀 Bot unten rechts, 3 klickbare FAQ-Fragen mit Antworten, Fiverr-CTA, Badge-Notification nach 4s, DE+EN i18n, schliessbar) (🌿 Tageszeit-optimierter Einzel-Tap-Button zwischen Global-Dimmer und Schnellfarben-Palette: berechnet ideale Farbtemperatur 1900K–6500K + Helligkeit 18%–100% je Tagesphase Nacht/Morgengrauen/Morgen/Mittag/Nachmittag/Abend/Spätabend, zeigt aktuellen Tageszeit-Emoji + Zielwerte live, setzt alle aktiven Lichter per svc('light','turn_on',{color_temp_kelvin, brightness_pct}), grüner Flash-Animation bei Tap, Toast "🌅 Circadian auf X Lichter · 2700K / 45%")
+
+## Neue Ideen (2026-03-28 14:03 UTC)
+- [x] wz.html: Home-Tab — Wetterwarnung Banner (scannt _wx.daily der nächsten 3 Tage auf kritische Bedingungen: Gewitter WMO≥95, Hitzewelle ≥34°C, Starker Frost ≤-5°C, Starkregen ≥20mm, Sturmböen ≥70km/h — zeigt farbcodierten spring-in Banner mit Icon + Titel + Beschreibung, schliessbar mit × Button, 5 Farbvarianten je Warntyp, Light-Mode Overrides)

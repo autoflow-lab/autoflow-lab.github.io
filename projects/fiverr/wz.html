@@ -160,7 +160,7 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
@@ -791,6 +791,23 @@ html,body{height:100%;background:var(--bg);
 :root.light #hvac-chip.hvac-heat{background:rgba(200,60,10,.07);border-color:rgba(200,60,10,.22);color:rgba(140,40,10,.9)}
 :root.light #hvac-chip.hvac-cool{background:rgba(0,100,210,.07);border-color:rgba(0,100,210,.22);color:rgba(0,80,180,.9)}
 :root.light #hvac-chip.hvac-idle{background:rgba(30,160,60,.07);border-color:rgba(30,160,60,.22);color:rgba(20,120,50,.9)}
+#wx-warn-banner{display:none;align-items:center;gap:10px;margin:0 0 10px;padding:10px 14px;border-radius:14px;font-size:.73rem;opacity:0;transform:translateY(-6px) scale(.95);transition:opacity .4s cubic-bezier(.34,1.28,.64,1),transform .4s cubic-bezier(.34,1.28,.64,1)}
+#wx-warn-banner.show{display:flex;opacity:1;transform:translateY(0) scale(1)}
+.wxwb-heat{background:rgba(255,69,58,.13);border:1px solid rgba(255,69,58,.38);color:rgba(255,140,110,.95)}
+.wxwb-frost{background:rgba(100,180,255,.1);border:1px solid rgba(100,180,255,.3);color:rgba(160,210,255,.95)}
+.wxwb-storm{background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.3);color:rgba(255,200,80,.95)}
+.wxwb-rain{background:rgba(10,132,255,.09);border:1px solid rgba(10,132,255,.25);color:rgba(100,185,255,.95)}
+.wxwb-thunder{background:rgba(180,30,255,.12);border:1px solid rgba(180,30,255,.3);color:rgba(220,140,255,.95)}
+#wx-warn-ico{font-size:1.25rem;flex-shrink:0}
+#wx-warn-body{flex:1;min-width:0}
+#wx-warn-title{font-weight:700;margin-bottom:1px}
+#wx-warn-sub{opacity:.72;font-size:.66rem}
+#wx-warn-close{opacity:.45;font-size:.95rem;padding:2px 6px;cursor:pointer;border:none;background:none;color:inherit;flex-shrink:0;line-height:1}
+:root.light .wxwb-heat{background:rgba(200,40,10,.07);border-color:rgba(200,40,10,.25);color:rgba(160,30,10,.9)}
+:root.light .wxwb-frost{background:rgba(0,80,180,.07);border-color:rgba(0,80,180,.22);color:rgba(0,60,160,.9)}
+:root.light .wxwb-storm{background:rgba(180,100,0,.07);border-color:rgba(180,100,0,.22);color:rgba(140,70,0,.9)}
+:root.light .wxwb-rain{background:rgba(0,80,200,.07);border-color:rgba(0,80,200,.22);color:rgba(0,60,180,.9)}
+:root.light .wxwb-thunder{background:rgba(120,0,200,.07);border-color:rgba(120,0,200,.22);color:rgba(90,0,160,.9)}
 /* ───────────── KONTEXT-EMPFEHLUNGS-CHIP ───────────── */
 #ctx-suggest{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 12px;
   border-radius:16px;border:1px solid rgba(255,255,255,.1);
@@ -956,7 +973,7 @@ html,body{height:100%;background:var(--bg);
 
 /* ───────────── MUSIC PAGE ───────────── */
 .album{
-  border-radius:18px;overflow:hidden;margin-bottom:10px;
+  border-radius:18px;overflow:hidden;margin-bottom:6px;
   background:var(--c1);position:relative;
   transition:background 2.5s ease, box-shadow 2.5s ease;
 }
@@ -966,7 +983,7 @@ html,body{height:100%;background:var(--bg);
 }
 .album::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.7) 100%);pointer-events:none;z-index:0}
 .album-orb1,.album-orb2{display:none}
-.np{padding:6px 20px 20px;position:relative;z-index:1;text-align:center;width:100%}
+.np{padding:4px 16px 12px;position:relative;z-index:1;text-align:center;width:100%}
 .nplbl{font-size:.52rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
   color:var(--dim2);margin-bottom:8px}
 .nptitle{font-size:1.22rem;font-weight:700;color:var(--txt);
@@ -1079,7 +1096,7 @@ html,body{height:100%;background:var(--bg);
 :root.light .th-chip-time{color:rgba(0,0,0,.25)}
 
 /* Player controls */
-.pctrl{padding:16px 22px}
+.pctrl{padding:8px 16px}
 .btns{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:20px}
 .bsml{
   width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;
@@ -1546,6 +1563,9 @@ html, body { height: 100%; overflow: hidden; }
 input[type=range] { touch-action: none; }
 
 
+
+/* iOS Tap-Feedback via .pressing Klasse */
+.lt.pressing{transform:scale(.93)!important;transition:transform .06s ease!important}
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
@@ -1864,6 +1884,15 @@ input[type=range] { touch-action: none; }
         <span class="hvac-dot"></span>
         <span id="hvac-chip-txt">🔥 Heizung aktiv</span>
       </div>
+      <!-- Wetterwarnung Banner -->
+      <div id="wx-warn-banner" role="alert" aria-live="assertive">
+        <div id="wx-warn-ico">⚠️</div>
+        <div id="wx-warn-body">
+          <div id="wx-warn-title">Wetterwarnung</div>
+          <div id="wx-warn-sub">Kritische Bedingungen</div>
+        </div>
+        <button id="wx-warn-close" aria-label="Schliessen">✕</button>
+      </div>
       <!-- Kontext-Empfehlungs-Chip -->
       <div id="ctx-suggest" role="complementary" aria-label="Empfehlung">
         <div id="ctx-suggest-ico">🌅</div>
@@ -2008,7 +2037,7 @@ input[type=range] { touch-action: none; }
           </svg>
         </div>
         <!-- Rotating Album Disc -->
-        <div id="alb-tilt-wrap" style="display:block;width:clamp(110px,28vw,145px);height:clamp(110px,28vw,145px);margin:10px auto 8px;flex-shrink:0;perspective:700px;transform-style:preserve-3d">
+        <div id="alb-tilt-wrap" style="display:block;width:clamp(80px,20vw,110px);height:clamp(80px,20vw,110px);margin:6px auto 6px;flex-shrink:0;perspective:700px;transform-style:preserve-3d">
         <div id="alb-disc" style="position:relative;width:100%;height:100%;transform-style:preserve-3d">
           <!-- Track Progress Arc -->
           <svg id="track-prog-arc-svg" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
@@ -3468,11 +3497,14 @@ async function fetchStates(){
     console.warn('fetchStates err:',e);
     _offlineCount=(_offlineCount||0)+1;
     // Banner: sofort wenn WS schon weg, sonst nach 2 Fehlern
-    if(!_wsOk || _offlineCount>=2)showOfflineBanner(true,_offlineCount);
-    // Retry-Backoff: 5s, 15s, 30s
-    const delay=[5000,15000,30000][Math.min(_offlineCount-1,2)];
-    _offlineNextRetry=Date.now()+delay;
-    setTimeout(fetchStates, delay);
+    // Nur Banner + Retry wenn WS NICHT verbunden
+    if(!_wsOk){
+      if(_offlineCount>=2) showOfflineBanner(true,_offlineCount);
+      const delay=[5000,15000,30000][Math.min(_offlineCount-1,2)];
+      _offlineNextRetry=Date.now()+delay;
+      setTimeout(fetchStates, delay);
+    }
+    // Wenn WS läuft, werden States via get_states geholt — kein HTTP-Retry nötig
   }
 }
 let _offlineCount=0, _wsOk=false;
@@ -3619,7 +3651,7 @@ async function fetchWeather(){
     const u=`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CFG.lon}`+
       `&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day,surface_pressure,visibility,cloud_cover`+
       `&hourly=temperature_2m,weather_code,precipitation_probability,precipitation,windspeed_10m`+
-      `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,precipitation_sum,uv_index_max`+
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,precipitation_sum,uv_index_max,windgusts_10m_max`+
       `&forecast_days=7&timezone=Europe%2FZurich&models=best_match`;
     const r=await fetch(u,{signal:AbortSignal.timeout(8000)});
     _wx=await r.json();
@@ -7229,6 +7261,14 @@ function navTo(page){
   const title=document.getElementById('ctx-suggest-title');
   const sub=document.getElementById('ctx-suggest-sub');
   const actBtn=document.getElementById('ctx-suggest-act');
+  // ── Wetterwarnung Close ──
+  document.getElementById('wx-warn-close')?.addEventListener('click',function(){
+    const b=document.getElementById('wx-warn-banner');
+    if(!b)return;
+    b._dismissed=true;
+    b.classList.remove('show');
+    setTimeout(()=>{if(!b.classList.contains('show'))b.style.display='none'},400);
+  },{once:true});
   const closeBtn=document.getElementById('ctx-suggest-close');
   if(!wrap||!actBtn||!closeBtn)return;
 
@@ -7991,6 +8031,37 @@ function updateAll(){
   })();
   // Quick-Actions Bar state
   window._updateQaBar&&window._updateQaBar(on, playing);
+  // ── Wetterwarnung Banner ──
+  (function(){
+    const b=document.getElementById('wx-warn-banner');
+    if(!b||!window._wx?.daily)return;
+    if(b._dismissed)return;
+    const d=_wx.daily;
+    const days=Math.min(3,(d.temperature_2m_max||[]).length);
+    let warn=null;
+    for(let i=0;i<days;i++){
+      const tmax=d.temperature_2m_max?.[i]??0;
+      const tmin=d.temperature_2m_min?.[i]??0;
+      const rain=d.precipitation_sum?.[i]??0;
+      const gust=d.windgusts_10m_max?.[i]??0;
+      const wmo=(d.weather_code||d.weathercode)?.[i]??0;
+      const day=i===0?'Heute':i===1?'Morgen':'Übermorgen';
+      if(wmo>=95&&!warn)warn={cls:'wxwb-thunder',ico:'⛈',t:`Gewitter – ${day}`,s:'Drinnen bleiben, Gewitter möglich'};
+      if(tmax>=34&&!warn)warn={cls:'wxwb-heat',ico:'🥵',t:`Hitzewelle – ${day}: ${Math.round(tmax)}°C`,s:'Viel trinken, direkte Sonne meiden'};
+      if(tmin<=-5&&!warn)warn={cls:'wxwb-frost',ico:'🥶',t:`Starker Frost – ${day}: ${Math.round(tmin)}°C`,s:'Frostschutz für Pflanzen & Leitungen prüfen'};
+      if(rain>=20&&!warn)warn={cls:'wxwb-rain',ico:'🌧',t:`Starkregen – ${day}: ${rain.toFixed(0)} mm`,s:'Keller & Dachrinnen auf Überflutung prüfen'};
+      if(gust>=70&&!warn)warn={cls:'wxwb-storm',ico:'💨',t:`Sturmböen – ${day}: ${gust.toFixed(0)} km/h`,s:'Lose Gegenstände sichern, vorsichtig fahren'};
+    }
+    if(warn){
+      b.className='show '+warn.cls;
+      document.getElementById('wx-warn-ico').textContent=warn.ico;
+      document.getElementById('wx-warn-title').textContent=warn.t;
+      document.getElementById('wx-warn-sub').textContent=warn.s;
+    }else{
+      b.classList.remove('show');
+      setTimeout(()=>{if(!b.classList.contains('show'))b.style.display='none'},400);
+    }
+  })();
   // ── Kontext-Empfehlungs-Chip ──
   window._updateCtxSuggest&&window._updateCtxSuggest(on, playing);
   // Schnellfarben-Palette
@@ -10074,6 +10145,14 @@ const _origSetWxMode=setWxMode;
     vr.addEventListener('pointerup',function(){_volDrag=false;});
     vr.addEventListener('pointercancel',function(){_volDrag=false;});
   })();
+
+  // Licht-Feedback: .pressing Klasse für zuverlässiges iOS Touch-Feedback
+  document.querySelectorAll('.lt').forEach(function(tile){
+    tile.addEventListener('touchstart',function(){tile.classList.add('pressing');},{passive:true});
+    tile.addEventListener('touchend',function(){setTimeout(function(){tile.classList.remove('pressing');},120);},{passive:true});
+    tile.addEventListener('touchcancel',function(){tile.classList.remove('pressing');},{passive:true});
+  });
+
 </script>
 <div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>
 </body>
