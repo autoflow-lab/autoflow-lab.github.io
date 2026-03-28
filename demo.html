@@ -791,6 +791,22 @@ audio{display:none}
 .wn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
 .wn-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:36px 28px;text-align:center;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
 .wn-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.35)}
+/* Price Calculator */
+.calc-row{margin-bottom:22px}
+.calc-lbl-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.calc-lbl{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.75)}
+.calc-val{font-size:.9rem;font-weight:800;color:#ff9f0a;min-width:24px;text-align:right}
+.calc-slider{width:100%;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:rgba(255,255,255,.1);outline:none;cursor:pointer}
+.calc-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#ff9f0a;cursor:pointer;box-shadow:0 0 8px rgba(255,159,10,.5);transition:transform .15s}
+.calc-slider::-webkit-slider-thumb:active{transform:scale(1.2)}
+.calc-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#ff9f0a;cursor:pointer;border:none;box-shadow:0 0 8px rgba(255,159,10,.5)}
+.calc-hints{display:flex;justify-content:space-between;margin-top:4px;font-size:.6rem;color:rgba(255,255,255,.25)}
+.calc-checks{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.calc-check{display:flex;align-items:center;gap:6px;font-size:.77rem;color:rgba(255,255,255,.65);cursor:pointer;padding:6px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);transition:background .15s,border-color .15s;user-select:none}
+.calc-check:has(input:checked){background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.28);color:rgba(255,220,140,.9)}
+.calc-check input{accent-color:#ff9f0a;width:14px;height:14px}
+@keyframes calcPriceFlip{0%{opacity:0;transform:translateY(-6px)}100%{opacity:1;transform:translateY(0)}}
+.calc-price-anim{animation:calcPriceFlip .22s ease both}
 .wn-card--accent{border-color:rgba(255,159,10,.35);background:linear-gradient(145deg,var(--card),rgba(255,159,10,.07))}
 .wn-card--accent::before{content:'';position:absolute;inset:0;border-radius:var(--r);box-shadow:inset 0 0 0 1px rgba(255,159,10,.2);pointer-events:none}
 .wn-icon-wrap{width:60px;height:60px;border-radius:50%;background:rgba(255,159,10,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;border:1px solid rgba(255,159,10,.2)}
@@ -2697,6 +2713,58 @@ input[type=range]{touch-action:pan-x}
           <div class="wn-stat" data-target="3000" data-suffix="+">0+</div>
           <div class="wn-label" data-i="wnCard3Label">Kompatible Geräte</div>
           <p class="wn-desc" data-i="wnCard3Desc">Home Assistant unterstützt über 3000 Integrationen — von Ikea bis Tesla, alles in einem Dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICE CALCULATOR -->
+  <div id="preisrechner" style="padding:72px 24px;background:linear-gradient(180deg,rgba(255,159,10,.03) 0%,transparent 100%)">
+    <div style="max-width:720px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" id="calc-title">🧮 Preisrechner</h2>
+      <p class="sec-sub sec-center reveal" id="calc-sub">Wie viel würde dein Dashboard kosten? Berechne es selbst.</p>
+      <div class="reveal" id="calc-card" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:32px 28px;backdrop-filter:blur(12px)">
+        <!-- Slider: Räume -->
+        <div class="calc-row">
+          <div class="calc-lbl-row">
+            <span class="calc-lbl" id="lbl-rooms">🏠 Räume / Bereiche</span>
+            <span class="calc-val" id="val-rooms">3</span>
+          </div>
+          <input class="calc-slider" id="sl-rooms" type="range" min="1" max="10" value="3">
+          <div class="calc-hints"><span>1</span><span>5</span><span>10</span></div>
+        </div>
+        <!-- Slider: Geräte -->
+        <div class="calc-row">
+          <div class="calc-lbl-row">
+            <span class="calc-lbl" id="lbl-devices">💡 Smarte Geräte</span>
+            <span class="calc-val" id="val-devices">10</span>
+          </div>
+          <input class="calc-slider" id="sl-devices" type="range" min="1" max="50" value="10">
+          <div class="calc-hints"><span>1</span><span>25</span><span>50</span></div>
+        </div>
+        <!-- Checkboxes: Features -->
+        <div class="calc-row">
+          <span class="calc-lbl" id="lbl-extras">✨ Extras</span>
+          <div class="calc-checks" id="calc-checks">
+            <label class="calc-check"><input type="checkbox" id="chk-ai"> <span id="lbl-ai">KI-Assistent</span></label>
+            <label class="calc-check"><input type="checkbox" id="chk-mobile" checked> <span id="lbl-mobile">Mobile-optimiert</span></label>
+            <label class="calc-check"><input type="checkbox" id="chk-weather"> <span id="lbl-weather">Wetter-Widget</span></label>
+            <label class="calc-check"><input type="checkbox" id="chk-energy"> <span id="lbl-energy">Energie-Monitor</span></label>
+          </div>
+        </div>
+        <!-- Result -->
+        <div id="calc-result" style="margin-top:28px;padding:20px 24px;border-radius:14px;background:rgba(255,159,10,.08);border:1px solid rgba(255,159,10,.22);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div>
+            <div id="calc-pkg-name" style="font-size:.72rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,159,10,.75);margin-bottom:4px">Basic</div>
+            <div id="calc-price" style="font-size:2rem;font-weight:800;color:#ff9f0a;letter-spacing:-.5px">€49</div>
+            <div id="calc-desc" style="font-size:.75rem;color:rgba(255,255,255,.5);margin-top:2px">Einmalige Zahlung · sofort lieferbar</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <div id="calc-time" style="font-size:.78rem;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:5px">⏱ <span id="calc-time-val">24–48h Lieferzeit</span></div>
+            <a id="calc-cta" href="https://www.fiverr.com/autoflow-lab" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;font-size:.82rem;font-weight:700;padding:10px 18px;border-radius:11px;text-decoration:none;transition:transform .15s,opacity .15s;white-space:nowrap" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+              <span id="calc-cta-lbl">Jetzt beauftragen →</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -5556,6 +5624,81 @@ if(_origGetPos){
   }, 4000);
 
   updateLang();
+})();
+</script>
+<script>
+// ── Price Calculator ──────────────────────────────────────────────
+(function(){
+  var TIERS=[
+    {name:'Basic',nameEn:'Basic',price:49,priceStr:'€49',time:'24–48h',timeEn:'24–48h delivery'},
+    {name:'Standard',nameEn:'Standard',price:89,priceStr:'€89',time:'3 Tage',timeEn:'3 days delivery'},
+    {name:'Premium',nameEn:'Premium',price:149,priceStr:'€149',time:'5–7 Tage',timeEn:'5–7 days delivery'}
+  ];
+  function calcTier(){
+    var rooms=parseInt(document.getElementById('sl-rooms').value)||3;
+    var devs=parseInt(document.getElementById('sl-devices').value)||10;
+    var ai=document.getElementById('chk-ai').checked;
+    var mobile=document.getElementById('chk-mobile').checked;
+    var weather=document.getElementById('chk-weather').checked;
+    var energy=document.getElementById('chk-energy').checked;
+    var score=0;
+    score+=rooms*6;
+    score+=devs*1.8;
+    if(ai)score+=30;
+    if(mobile)score+=5;
+    if(weather)score+=8;
+    if(energy)score+=12;
+    var idx=score<50?0:score<90?1:2;
+    return TIERS[idx];
+  }
+  function updateCalc(){
+    var tier=calcTier();
+    var isEn=document.documentElement.lang==='en'||document.documentElement.getAttribute('data-lang')==='en';
+    var priceEl=document.getElementById('calc-price');
+    var pkgEl=document.getElementById('calc-pkg-name');
+    var descEl=document.getElementById('calc-desc');
+    var timeEl=document.getElementById('calc-time-val');
+    var rooms=document.getElementById('sl-rooms').value;
+    var devs=document.getElementById('sl-devices').value;
+    document.getElementById('val-rooms').textContent=rooms;
+    document.getElementById('val-devices').textContent=devs;
+    if(priceEl){
+      priceEl.classList.remove('calc-price-anim');
+      void priceEl.offsetWidth;
+      priceEl.classList.add('calc-price-anim');
+      priceEl.textContent=tier.priceStr;
+    }
+    if(pkgEl)pkgEl.textContent=isEn?tier.nameEn:tier.name;
+    if(descEl)descEl.textContent=isEn?'One-time payment · fast delivery':'Einmalige Zahlung · sofort lieferbar';
+    if(timeEl)timeEl.textContent=isEn?tier.timeEn:('⏱ '+tier.time+' Lieferzeit').replace('⏱ ','');
+    // Update CTA label
+    var ctaLbl=document.getElementById('calc-cta-lbl');
+    if(ctaLbl)ctaLbl.textContent=isEn?'Order now →':'Jetzt beauftragen →';
+    // i18n labels
+    document.getElementById('lbl-rooms').textContent=isEn?'🏠 Rooms / Zones':'🏠 Räume / Bereiche';
+    document.getElementById('lbl-devices').textContent=isEn?'💡 Smart Devices':'💡 Smarte Geräte';
+    document.getElementById('lbl-extras').textContent=isEn?'✨ Extras':'✨ Extras';
+    document.getElementById('lbl-ai').textContent=isEn?'AI Assistant':'KI-Assistent';
+    document.getElementById('lbl-mobile').textContent=isEn?'Mobile-optimized':'Mobile-optimiert';
+    document.getElementById('lbl-weather').textContent=isEn?'Weather Widget':'Wetter-Widget';
+    document.getElementById('lbl-energy').textContent=isEn?'Energy Monitor':'Energie-Monitor';
+    if(document.getElementById('calc-title'))document.getElementById('calc-title').textContent=isEn?'🧮 Price Calculator':'🧮 Preisrechner';
+    if(document.getElementById('calc-sub'))document.getElementById('calc-sub').textContent=isEn?'How much would your dashboard cost? Calculate it yourself.':'Wie viel würde dein Dashboard kosten? Berechne es selbst.';
+  }
+  ['sl-rooms','sl-devices'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.addEventListener('input',updateCalc);
+  });
+  ['chk-ai','chk-mobile','chk-weather','chk-energy'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.addEventListener('change',updateCalc);
+  });
+  // Hook into lang switch
+  var origUpdateLang=window.updateLang;
+  if(typeof origUpdateLang==='function'){
+    window.updateLang=function(){origUpdateLang();updateCalc();};
+  }
+  setTimeout(updateCalc,100);
 })();
 </script>
 
