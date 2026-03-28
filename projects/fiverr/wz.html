@@ -186,7 +186,7 @@ html,body{height:100%;background:var(--bg);
   position:fixed;bottom:0;left:0;right:0;z-index:200;
   overflow:hidden;
 }
-#nav-slide-pill{
+#nav-slide-pill{display:none!important;
   position:absolute;
   top:4px;height:calc(100% - max(env(safe-area-inset-bottom),8px) - 8px);
   border-radius:13px;
@@ -2892,7 +2892,7 @@ input[type=range] { touch-action: none; }
     </span>
   </div>
   <nav class="nav">
-    <div id="nav-slide-pill"></div>
+    
     <button class="ni on" data-p="home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/></svg>
       <span>Home</span>
@@ -3337,8 +3337,18 @@ let _tok,_ws,_wsId=1,_S={},_page='home',_radActive=null,_connected=false;
 const _lastColor={}; // cache last known color per entity
 const _lastBri={}; // cache last known brightness per entity (for optimistic feedback)
 const _pending={}; // {id:{on,until}} — optimistic state, overrides _S for 4s
-function effOn(id){const p=_pending[id];return(p&&p.until>Date.now())?p.on:_S[id]?.state==='on';}
-function quickRefresh(){if(window._authFailed)return;[500,1200,2500].forEach(ms=>setTimeout(fetchStates,ms));}
+function effOn(id){
+  const p=_pending[id];
+  if(p&&p.until>Date.now()) return p.on;
+  const st=_S[id]?.state;
+  return st==='on';  // direct HA state
+}
+function quickRefresh(){
+  if(window._authFailed)return;
+  // Wenn WS verbunden: WS state_changed reicht, kein HTTP nötig (würde race conditions verursachen)
+  if(_wsOk){setTimeout(fetchStates,1500);return;}
+  [500,1200,2500].forEach(ms=>setTimeout(fetchStates,ms));
+}
 
 function conn(show){
   _connected=show;
@@ -5782,7 +5792,7 @@ function buildUI(){try{
     });
     document.getElementById('ls-tog').addEventListener('click',()=>{
       hap();
-      const dom2=CFG.lights.find(l=>l.id===lid)?.domain||'light'; svc(dom2,'toggle',{entity_id:lid});
+      svc(lid.split('.')[0],'toggle',{entity_id:lid});
       ov.remove();
     });
     // ── Timer: Auto-off nach X Minuten ──
@@ -6080,13 +6090,13 @@ function buildUI(){try{
       setTimeout(()=>t.classList.remove('lt-switching','tile-flash'),400);
       const wasOn=effOn(lid);
       const newOn=!wasOn;
-      _pending[lid]={on:newOn,until:Date.now()+4000};
+      _pending[lid]={on:newOn,until:Date.now()+2500};
       const lc=_lastColor[lid]||'255,193,141';
       applyTileState(t,newOn,lc);
       const se=t.querySelector('[data-lst]');
       if(se)se.textContent=newOn?'An':'Aus';
       updateBriBar(newOn?getBri():0);
-      const dom2=CFG.lights.find(l=>l.id===lid)?.domain||'light'; svc(dom2,'toggle',{entity_id:lid});
+      svc(lid.split('.')[0],'toggle',{entity_id:lid});
     });
 
     // Brightness bar initial sync
