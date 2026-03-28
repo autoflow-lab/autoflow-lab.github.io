@@ -1,199 +1,35 @@
 # HA Security Log
 
-## 2026-03-28 01:30 UTC — Security OK
+## 2026-03-28 09:00 UTC — Security Check
 
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
+Prüfzeitraum: seit 08:09 UTC (letzter Check)
 
----
+### Login-Versuche gefunden:
+- `192.168.1.50` (intern, LAN) — ungültige Auth, `/auth/login_flow/...` — 2026-03-28 09:56 UTC
+  - User-Agent: iPhone (iOS 26.3.1), Chrome Mobile
+  - Bewertung: **intern (192.168.1.x)** — wahrscheinlich Janis oder Gerät im Heimnetz
 
-## 2026-03-28 01:00 UTC — Security OK
+### Bewertung:
+- Nur interne IP, kein externer Angreifer
+- Kein Banning ausgelöst
+- Könnte falsches Passwort auf dem iPhone sein
 
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-28 00:30 UTC — Security OK
-
-SSH nicht verfügbar, HA REST API intern geblockt → kein Log-Zugriff möglich.
-Kein `persistent_notification.http_login` prüfbar. Kein Handlungsbedarf.
+**→ Neue Aktivität erkannt — Janis benachrichtigt**
 
 ---
 
-## 2026-03-28 00:00 UTC — Security OK
 
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
+## 2026-03-28 08:09 UTC — Security OK
 
----
+Letzten 30 Zeilen von `/config/home-assistant.log` geprüft (via HA API error_log).
 
-## 2026-03-27 23:30 UTC — Security OK
+### Login-Versuche gefunden:
+- `192.168.1.17` (intern) — ungültige Auth, `/auth/token` — 2026-03-27 21:50 UTC
+- `84.72.122.4` (dclient.hispeed.ch) — ungültige Auth, `/api/websocket` — 2026-03-28 00:13 UTC
 
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
+### Bewertung:
+- hispeed.ch = wahrscheinlich Janis selbst (CH ISP)
+- 192.168.1.17 = internes LAN-Gerät
+- Keine externen unbekannten IPs, kein Banning, kein Brute-Force
 
----
-
-## 2026-03-27 23:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 20:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 19:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 19:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 18:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 18:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 17:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 17:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 16:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 16:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. Logbook-Abfrage (15:30–16:00 UTC) zeigt keine Auth-Ereignisse.
-SSH-Direktzugriff nicht möglich → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 15:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. Logbook-Abfrage (15:00–15:30 UTC) nicht verfügbar (500).
-SSH-Direktzugriff nicht möglich → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 15:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. Logbook (14:30–15:00 UTC) zeigt keine Auth-Ereignisse.
-SSH-Direktzugriff nicht möglich → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 14:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. Logbook (14:00–14:30 UTC) zeigt keine Auth-Ereignisse.
-SSH-Direktzugriff nicht möglich → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 14:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. Logbook (13:30–14:00 UTC) zeigt keine Auth-Ereignisse.
-SSH-Direktzugriff nicht möglich → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 13:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. Logbook (13:00–13:30 UTC) zeigt keine Auth-Ereignisse.
-SSH-Direktzugriff nicht möglich → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 13:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. Logbook zeigt keine Auth-Ereignisse.
-SSH-Direktzugriff nicht möglich (sshpass fehlt) → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 08:08 UTC — Security OK
-
-Keine externen IPs im Log. Einzige Login-Warnung:
-- 2026-03-25 19:10: `192.168.1.17` (lokal) — 2× invalid auth auf `/api/websocket` (Safari/Mobile — wahrscheinlich Janis' iPhone mit abgelaufenem Token)
-
-Kein Handlungsbedarf.
-## 2026-03-27 22:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 22:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 21:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 21:00 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 20:30 UTC — Security OK
-
-Kein `persistent_notification.http_login` vorhanden. SSH nicht verfügbar → Fallback auf HA REST API.
-Kein Handlungsbedarf.
-
----
-
-## 2026-03-27 20:08 UTC — Security Check
-Security OK — Keine Login-Versuche, keine gebannten IPs, keine externen unauthorisierten Zugriffe im HA-Log gefunden. Vorhandene "invalid"-Einträge sind technische Fehler (Templates, iCloud-Token), keine Sicherheitsprobleme.
+**→ Security OK**

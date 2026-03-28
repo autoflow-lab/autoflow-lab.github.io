@@ -9848,12 +9848,8 @@ const _origSetWxMode=setWxMode;
       if(onCount===0 && _tickIv) stopSim(false);
     };
   })();
-</script>
-<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>
-</body>
-</html>
-  // Volume — +/- Buttons
-  // Volume Slider — vol-track (touch-action:none → nur Track-Berühren ändert Vol)
+
+  // Volume Slider via vol-track (touch-action:none auf Track, pan-y auf Wrapper)
   const volTrack=document.getElementById('vol-track');
   if(volTrack){
     let _volDrag=false;
@@ -9863,4 +9859,7 @@ const _origSetWxMode=setWxMode;
     volTrack.addEventListener('pointerup',function(e){if(!_volDrag)return;_volDrag=false;var p=_vpct(e.clientX);syncVolUI(p);svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});});
     volTrack.addEventListener('pointercancel',function(){_volDrag=false;});
   }
-
+</script>
+<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>
+</body>
+</html>
