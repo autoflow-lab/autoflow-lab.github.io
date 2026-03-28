@@ -6080,25 +6080,12 @@ function buildUI(){try{
       else if(wandOn&&sofaOn) activeScene='🌆 Abend';
       const sc=document.getElementById('scene-hint');
       if(sc){sc.textContent=activeScene;sc.style.opacity=activeScene?'1':'0';}
-      // Aktive Szene Chip updaten
+      // Unified: setActiveScene (fromDetection=true respektiert 10s-Lock)
       (function(){
-        const chip=document.getElementById('scene-chip');
-        const chipTxt=document.getElementById('scene-chip-txt');
-        if(!chip||!chipTxt) return;
-        if(!activeScene){chip.classList.remove('show');chip.removeAttribute('data-scene');return;}
-        // Szene → key+label+text
-        const scMap={
-          '🎬 Film':  {key:'film',  label:'Film-Szene aktiv'},
-          '🌙 Nacht': {key:'nacht', label:'Nacht-Szene aktiv'},
-          '☀️ Hell':  {key:'hell',  label:'Hell-Szene aktiv'},
-          '🌆 Abend': {key:'abend', label:'Abend-Szene aktiv'},
-        };
-        const meta=scMap[activeScene]||{key:'abend',label:activeScene+' aktiv'};
-        chipTxt.textContent=activeScene+'\u2009—\u2009'+meta.label.replace(activeScene+' ','');
-        chip.dataset.scene=meta.key;
-        if(!chip.classList.contains('show')){
-          chip.classList.remove('show'); void chip.offsetWidth; chip.classList.add('show');
-        }
+        var _m={'\U0001F3AC Film':'film','\U0001F319 Nacht':'nacht'};
+        _m['\u2600\uFE0F Hell']='hell';
+        _m['\U0001F306 Abend']='abend';
+        setActiveScene(activeScene?(_m[activeScene]||null):null, true);
       })();
     })();
       const offBtn = qaBar.querySelector('[data-qa="off"]');
