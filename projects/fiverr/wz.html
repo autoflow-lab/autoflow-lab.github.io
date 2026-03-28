@@ -9954,54 +9954,8 @@ const _origSetWxMode=setWxMode;
   window._specShow=show;
 
   // 3D Perspective Tilt on Album Disc (gyroscope mobile / mouse desktop)
-  (function(){
-    const wrap=document.getElementById('alb-tilt-wrap');
-    const album=document.querySelector('.album');
-    if(!wrap||!album) return;
-    const MAX=9;
-    let tX=0,tY=0,gX=0,gY=0,raf=null,gyroActive=false;
-    function spring(){
-      tX+=(gX-tX)*.11;
-      tY+=(gY-tY)*.11;
-      wrap.style.transform=`rotateX(${tX.toFixed(2)}deg) rotateY(${tY.toFixed(2)}deg)`;
-      if(Math.abs(gX-tX)>.04||Math.abs(gY-tY)>.04){
-        raf=requestAnimationFrame(spring);
-      } else {
-        tX=gX;tY=gY;
-        wrap.style.transform=`rotateX(${tX.toFixed(2)}deg) rotateY(${tY.toFixed(2)}deg)`;
-        raf=null;
-        if(!gX&&!gY) wrap.classList.remove('tilted');
-      }
-    }
-    function aim(x,y){
-      gX=Math.max(-MAX,Math.min(MAX,x));
-      gY=Math.max(-MAX,Math.min(MAX,y));
-      if(gX||gY) wrap.classList.add('tilted'); else wrap.classList.remove('tilted');
-      if(!raf) raf=requestAnimationFrame(spring);
-    }
-    // Desktop mouse
-    album.addEventListener('mousemove',e=>{
-      if(gyroActive) return;
-      const r=wrap.getBoundingClientRect();
-      aim(-(e.clientY-(r.top+r.height/2))/(r.height/2)*MAX,(e.clientX-(r.left+r.width/2))/(r.width/2)*MAX);
-    },{passive:true});
-    album.addEventListener('mouseleave',()=>{if(!gyroActive) aim(0,0);},{passive:true});
-    // Mobile touch tilt
-    album.addEventListener('touchmove',e=>{
-      if(gyroActive) return;
-      const t=e.touches[0],r=wrap.getBoundingClientRect();
-      aim(-(t.clientY-(r.top+r.height/2))/(r.height/2)*MAX*.65,(t.clientX-(r.left+r.width/2))/(r.width/2)*MAX*.65);
-    },{passive:true});
-    album.addEventListener('touchend',()=>{if(!gyroActive) aim(0,0);},{passive:true});
-    // Gyroscope (mobile)
-    if(window.DeviceOrientationEvent){
-      window.addEventListener('deviceorientation',e=>{
-        if(e.beta==null||e.gamma==null) return;
-        gyroActive=true;
-        aim((Math.max(-30,Math.min(30,e.beta-45))/30)*MAX*.7,(Math.max(-30,Math.min(30,e.gamma))/30)*MAX*.7);
-      },{passive:true});
-    }
-  })();
+  // Tab-Swipe Navigation: deaktiviert (iPad)
+
 
   // patch: intercept playing state changes
   const origToggle=document.getElementById('spk-wrap')?.classList.toggle.bind(document.getElementById('spk-wrap'));
