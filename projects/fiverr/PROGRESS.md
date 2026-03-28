@@ -1,5 +1,30 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-28 22:07 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — "Zitat des Tages" Card (💬)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neue `#quote-card` Div im Home-Tab, direkt VOR dem Energie-Widget (zwischen act-rings und energie-card)
+- **Konzept**: Täglich wechselndes Motivationszitat auf dem Home-Screen — wie ein persönlicher Assistent der morgens eine Inspiration parat hat; localStorage-persistiert so dass täglich ein neues Zitat erscheint
+- **30 lokale Zitate** aus der deutschsprachigen Weisheits-Tradition: Mark Twain, Goethe, Einstein, Gandhi, Seneca, Marc Aurel, da Vinci, Konfuzius u.v.m. — keine externen API nötig, 100% offline-fähig
+- **Design**: amber Akzentfarbe `rgba(255,159,10,.04)` Hintergrund + `.10` Border, großes CSS-`::before` Anführungszeichen `rgba(255,159,10,.15)` als dekoratives Element — klassisches Zitat-Layout
+- `#quote-label`: "💬 ZITAT DES TAGES" in Uppercase-Micro-Font (0.56rem, Amber, letter-spacing:1px)
+- `#quote-txt`: kursiver Zitat-Text (0.76rem, italic, `color:var(--txt)`) — zentriert lesbar in beiden Modi
+- `#quote-author`: "— Autor" Zeile in amber (0.61rem, font-weight:600, letter-spacing:.4px)
+- `#quote-refresh` Button ↺: Amber-Border-Pill rechts oben, Touch-action:manipulation — erlaubt manuelles Durchblättern
+- **Refresh-Animation**: Tap → `rotate(180deg)` + `rotate(360deg)` in sequence → authentische Drehbewegung (kein CSS-@keyframes nötig, inline `style.transform`)
+- **Tagesrotation-Logik** `loadQuote(forceNext)`: 
+  - Basis-Index = Day-of-Year % 30 → jeden Tag anderes Zitat automatisch
+  - `localStorage.setItem(todayKey, idx)` → Zitat bleibt den ganzen Tag konstant
+  - `forceNext=true` → Index+1, neues Zitat sofort sichtbar + localStorage update
+  - `todayKey = qt_YYYY_MM_DD` → täglich frischer Schlüssel
+- `@keyframes quoteCardIn`: `opacity:0; translateY(10px)` → `opacity:1; translateY(0)`, 0.5s cubic-bezier(.32,0,.15,1) — smooth einblenden beim ersten Load
+- `.show` Klasse: `display:block + animation` — Card erscheint erst nach Zitat-Load (kein leeres Flackern)
+- **Light-Mode Overrides**: alle Farben mit `rgba(180,80,0,...)` statt amber → lesbar auf hellem Hintergrund
+- `#quote-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- **Kein API-Call** — rein lokal, funktioniert vollständig offline (ideal für den Fall dass HA nicht erreichbar ist)
+- Effekt: Im Home-Tab erscheint täglich ein anderes Motivationszitat mit elegantem Anführungszeichen-Design — wie ein persönlicher Inspirations-Feed der den Tag einläutet
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 574335 bytes, DEPLOY_OK)
+
 ## 2026-03-28 20:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — Activity Rings Card (Apple Watch Style)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert

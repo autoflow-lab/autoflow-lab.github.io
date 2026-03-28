@@ -317,6 +317,9 @@
 ## Neue Ideen (2026-03-28 18:03 UTC)
 - [x] wz.html: Licht-Tab — "Atem-Licht" Meditations-Modus (🫁 4-7-8 Rhythmus: 4s Einatmen hell → 7s Halten → 8s Ausatmen dunkel, wählbare Zyklen 3×/5×/∞, Countdown-Pill, Cancel, türkises Farbschema)
 
+## Neue Ideen (2026-03-28 22:03 UTC)
+- [x] wz.html: Home-Tab — "Zitat des Tages" Card (💬 täglich wechselndes Motivationszitat aus 30 lokalen Zitaten, ↺ Refresh-Button, amber Anführungszeichen-Design, quoteCardIn Animation)
+
 ## Neue Ideen (2026-03-28 20:03 UTC)
 - [x] wz.html: Home-Tab — Activity Rings Card (Apple Watch Style: 3 konzentrische SVG-Ringe für Lichter/Musik/Stimmung)
 
