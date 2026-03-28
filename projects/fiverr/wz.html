@@ -163,7 +163,7 @@ html,body{height:100%;background:var(--bg);
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -254,6 +254,31 @@ html,body{height:100%;background:var(--bg);
 .allerg-chip.ac-high{background:rgba(255,159,10,.12);border-color:rgba(255,159,10,.35)}
 .allerg-chip.ac-vhigh{background:rgba(255,69,58,.12);border-color:rgba(255,69,58,.4);animation:allergChipWarn 2.2s ease-in-out infinite}
 @keyframes allergChipWarn{0%,100%{box-shadow:0 0 0 0 rgba(255,69,58,0)}50%{box-shadow:0 0 0 3px rgba(255,69,58,.18)}}
+/* ══ LÜFT-EMPFEHLUNG CARD ══ */
+#lueft-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#lueft-card.show{opacity:1;transform:translateY(0)}
+#lueft-inner{border-radius:18px;border:1px solid rgba(255,255,255,.07);border-top-color:rgba(255,255,255,.13);padding:14px 18px;position:relative;overflow:hidden;display:flex;align-items:center;gap:14px}
+#lueft-inner.lf-yes{background:linear-gradient(135deg,rgba(5,35,15,.92),rgba(10,55,25,.92));border-color:rgba(48,209,88,.3);border-top-color:rgba(48,209,88,.5)}
+#lueft-inner.lf-no-rain{background:linear-gradient(135deg,rgba(5,20,40,.92),rgba(10,35,65,.92));border-color:rgba(10,132,255,.25);border-top-color:rgba(10,132,255,.4)}
+#lueft-inner.lf-no-cold{background:linear-gradient(135deg,rgba(20,25,45,.92),rgba(30,40,70,.92));border-color:rgba(100,130,200,.2);border-top-color:rgba(100,130,200,.35)}
+#lueft-inner.lf-ok{background:linear-gradient(135deg,rgba(35,25,5,.92),rgba(55,40,10,.92));border-color:rgba(255,159,10,.25);border-top-color:rgba(255,159,10,.4)}
+#lueft-bg{position:absolute;inset:0;pointer-events:none}
+#lueft-ico{font-size:1.9rem;line-height:1;flex-shrink:0;transition:filter .6s ease}
+#lueft-inner.lf-yes #lueft-ico{filter:drop-shadow(0 0 8px rgba(48,209,88,.5));animation:lueftIcoBreeze 3s ease-in-out infinite}
+@keyframes lueftIcoBreeze{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.06)}}
+#lueft-texts{flex:1;min-width:0}
+#lueft-title{font-size:.82rem;font-weight:600;margin-bottom:2px}
+#lueft-inner.lf-yes #lueft-title{color:#30d158}
+#lueft-inner.lf-no-rain #lueft-title{color:#0a84ff}
+#lueft-inner.lf-no-cold #lueft-title{color:rgba(140,170,255,.9)}
+#lueft-inner.lf-ok #lueft-title{color:#ff9f0a}
+#lueft-sub{font-size:.65rem;color:rgba(255,255,255,.38);line-height:1.3}
+#lueft-stats{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.lueft-stat{font-size:.6rem;color:rgba(255,255,255,.35);white-space:nowrap}
+.lueft-stat span{font-weight:700;color:rgba(255,255,255,.65)}
+:root.light #lueft-inner{background:var(--c1)!important}
+:root.light #lueft-title{color:inherit!important}
+:root.light #lueft-sub,.lueft-stat{color:var(--dim)!important}
 /* ══ GEWITTER-ALARM-CARD ══ */
 #storm-warn-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-8px);transition:opacity .55s cubic-bezier(.34,1.15,.64,1),transform .55s cubic-bezier(.34,1.15,.64,1)}
 #storm-warn-card.show{opacity:1;transform:translateY(0)}
@@ -1520,20 +1545,6 @@ html, body { height: 100%; overflow: hidden; }
 input[type=range] { touch-action: none; }
 
 
-/* ── Volume Slider ── */
-.vol-slider{
-  -webkit-appearance:none;appearance:none;
-  width:100%;height:5px;border-radius:3px;outline:none;
-  background:linear-gradient(90deg,#0a84ff 40%,rgba(255,255,255,.15) 40%);
-  touch-action:none;cursor:pointer;display:block;
-}
-.vol-slider::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;
-  width:28px;height:28px;border-radius:50%;background:#fff;
-  box-shadow:0 2px 10px rgba(0,0,0,.55),0 0 0 3px rgba(10,132,255,.35);
-  cursor:grab;margin-top:-12px;
-}
-.vol-slider:active::-webkit-slider-thumb{cursor:grabbing;transform:scale(1.1);}
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
@@ -2111,11 +2122,16 @@ input[type=range] { touch-action: none; }
             </div>
             <span id="vv" style="font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6);min-width:32px;text-align:right">–%</span>
           </div>
-          <div id="vol-wrap" style="padding:6px 0 10px">
-            <input type="range" class="vol-slider" id="vol-range"
-              min="0" max="100" value="40"
-              style="width:100%;margin:10px 0 6px">
-            <div style="display:flex;justify-content:space-between;padding:0 2px">
+          <div id="vol-wrap" style="padding:8px 0 12px">
+            <div style="position:relative;height:44px;display:flex;align-items:center">
+              <div style="position:absolute;left:0;right:0;height:5px;background:rgba(255,255,255,.15);border-radius:3px">
+                <div id="vfill" style="height:100%;width:40%;background:linear-gradient(90deg,#0a84ff,rgba(10,132,255,.7));border-radius:3px;transition:width .08s"></div>
+                <div id="vthumb" style="position:absolute;left:40%;top:50%;width:24px;height:24px;background:#fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.45),0 0 0 3px rgba(10,132,255,.3);transform:translate(-50%,-50%);pointer-events:none;transition:left .08s"></div>
+              </div>
+              <input type="range" id="vol-range" min="0" max="100" value="40"
+                style="position:absolute;left:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0;padding:0;touch-action:none">
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:0 2px;margin-top:4px">
               <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Leise</span>
               <span id="vv" style="font-size:.7rem;font-weight:600;color:rgba(255,255,255,.6)">40%</span>
               <span style="font-size:.62rem;color:rgba(255,255,255,.28)">Laut</span>
@@ -2331,6 +2347,21 @@ input[type=range] { touch-action: none; }
           <span id="allerg-chip-birke"  class="allerg-chip" style="display:none"><span class="ac-emoji">🌲</span><span class="ac-name">Birke</span><span class="ac-level" id="allerg-lv-birke">–</span></span>
           <span id="allerg-chip-gras"   class="allerg-chip" style="display:none"><span class="ac-emoji">🌾</span><span class="ac-name">Gräser</span><span class="ac-level" id="allerg-lv-gras">–</span></span>
           <span id="allerg-chip-ambros" class="allerg-chip" style="display:none"><span class="ac-emoji">⚠️</span><span class="ac-name">Ambrosia</span><span class="ac-level" id="allerg-lv-ambros">–</span></span>
+        </div>
+      </div>
+      <!-- Lüft-Empfehlung Card -->
+      <div id="lueft-card">
+        <div id="lueft-inner">
+          <div id="lueft-bg"></div>
+          <div id="lueft-ico">🪟</div>
+          <div id="lueft-texts">
+            <div id="lueft-title">Jetzt lüften!</div>
+            <div id="lueft-sub">Ideale Bedingungen für Frischluft</div>
+          </div>
+          <div id="lueft-stats">
+            <div class="lueft-stat">🌡 <span id="lueft-temp">–°</span></div>
+            <div class="lueft-stat">💧 <span id="lueft-hum">–%</span></div>
+          </div>
         </div>
       </div>
       <!-- Wind-Chill / Heat-Index Komfort-Karte -->
@@ -3956,6 +3987,7 @@ function renderWeather(){
   drawBarometer();
   drawHumidity();
   updateWxScore();
+  drawLueftCard();
   drawWindChill();
   drawVisCloud();
   drawGoldenHour();
@@ -4344,6 +4376,96 @@ function drawWindChill(){
   // Dot on bar
   const dot=document.getElementById('wc-bar-dot');
   if(dot) dot.style.left=(pct*100).toFixed(1)+'%';
+}
+
+// ═══════════════════════════════════════════════
+// LÜFT-EMPFEHLUNG CARD
+// ═══════════════════════════════════════════════
+function drawLueftCard(){
+  const card=document.getElementById('lueft-card');
+  if(!card||!_wx?.current) return;
+  const c=_wx.current;
+  const t=c.temperature_2m;
+  const wind=c.windspeed_10m;
+  const hum=c.relative_humidity_2m;
+  // Rain probability: use first hourly value
+  let rainProb=0;
+  if(_wx.hourly?.precipitation_probability?.length){
+    // find current hour index
+    const now=new Date();
+    const si=(_wx.hourly.time||[]).findIndex(ts=>{
+      const d=new Date(ts); return d.getHours()===now.getHours()&&d.getDate()===now.getDate();
+    });
+    rainProb=si>=0?_wx.hourly.precipitation_probability[si]:(_wx.hourly.precipitation_probability[0]||0);
+  }
+  const inner=document.getElementById('lueft-inner');
+  const titleEl=document.getElementById('lueft-title');
+  const subEl=document.getElementById('lueft-sub');
+  const tempEl=document.getElementById('lueft-temp');
+  const humEl=document.getElementById('lueft-hum');
+  if(!inner||!titleEl) return;
+
+  // Set stats
+  if(tempEl) tempEl.textContent=(t!=null?Math.round(t):'-')+'°';
+  if(humEl) humEl.textContent=(hum!=null?Math.round(hum):'-')+'%';
+
+  // Determine mode and message
+  const tempOk = t!=null && t>=14 && t<=26;
+  const tempCold = t!=null && t<14;
+  const windOk = wind<35;
+  const rainOk = rainProb<25;
+  const humOk = hum!=null && hum<70; // outdoor hum ok (not too humid outside)
+
+  // Remove all mode classes
+  inner.classList.remove('lf-yes','lf-no-rain','lf-no-cold','lf-ok');
+
+  let ico='🪟', title='', sub='', mode='';
+
+  if(!rainOk){
+    // Rain — don't ventilate
+    mode='lf-no-rain'; ico='🌧';
+    title='Fenster besser zu';
+    sub=`Regenwahrscheinlichkeit ${rainProb}% — kein guter Zeitpunkt zum Lüften`;
+  } else if(tempCold && t<8){
+    // Very cold
+    mode='lf-no-cold'; ico='🥶';
+    title='Zu kalt zum Lüften';
+    sub=`Nur ${Math.round(t)}°C draussen — Wärmeverlust wäre zu hoch`;
+  } else if(!windOk){
+    // Windy but otherwise ok
+    mode='lf-ok'; ico='💨';
+    title='Windig — kurz lüften';
+    sub=`Wind ${Math.round(wind)} km/h — Stosslüften für 3–5 Min empfohlen`;
+  } else if(tempOk && rainOk && windOk){
+    // Ideal conditions
+    mode='lf-yes'; ico='✅';
+    title='Jetzt lüften!';
+    const reasons=[];
+    if(t>=18) reasons.push(`angenehme ${Math.round(t)}°`);
+    else reasons.push(`frische ${Math.round(t)}°`);
+    if(hum!=null&&hum<50) reasons.push('trockene Luft');
+    if(wind>5&&wind<15) reasons.push('leichte Brise');
+    sub='Ideale Bedingungen'+(reasons.length?` · ${reasons.join(', ')}`:'');
+  } else {
+    // Marginal (temp slightly low but ok, or high)
+    mode='lf-ok'; ico='🌤';
+    if(t!=null&&t>26){
+      title='Aufpassen — Hitze draussen';
+      sub=`${Math.round(t)}°C — nur abends / morgens lüften für Kühleffekt`;
+    } else {
+      title='Lüften möglich';
+      sub=`${Math.round(t)}°C, ${Math.round(rainProb)}% Regenrisiko — kurz stosslüften`;
+    }
+  }
+
+  inner.classList.add(mode);
+  document.getElementById('lueft-ico').textContent=ico;
+  titleEl.textContent=title;
+  subEl.textContent=sub;
+
+  // Show card
+  card.style.display='block';
+  requestAnimationFrame(()=>{ card.classList.add('show'); });
 }
 
 function drawBarometer(){
@@ -6143,10 +6265,14 @@ function buildUI(){try{
   let _volDrag=false,_volTimer=null,_pendingVol=null;
   const volRange=document.getElementById('vol-range');
   function syncVolUI(pct){
-    const vr=document.getElementById('vol-range');
-    if(vr){vr.value=pct;vr.style.background='linear-gradient(90deg,#0a84ff '+pct+'%,rgba(255,255,255,.15) '+pct+'%)';}
+    const fill=document.getElementById('vfill');
+    const thumb=document.getElementById('vthumb');
     const vv=document.getElementById('vv');
-    if(vv)vv.textContent=pct+'%';
+    const vr=document.getElementById('vol-range');
+    if(fill) fill.style.width=pct+'%';
+    if(thumb) thumb.style.left=pct+'%';
+    if(vv) vv.textContent=pct+'%';
+    if(vr) vr.value=pct;
   }
   // Volume Slider — nur horizontal steuert Lautstärke — +/- Buttons (kein Slider)
   // _volTrack entfernt
@@ -9924,25 +10050,27 @@ const _origSetWxMode=setWxMode;
     };
   })();
 
-  // Volume — nativer range input (iOS-kompatibel, kein Scroll-Konflikt)
-  const _vr=document.getElementById('vol-range');
-  if(_vr){
-    _vr.addEventListener('input',function(){
+  // Volume — opacity:0 native input über visual vfill/vthumb
+  (function(){
+    var vr=document.getElementById('vol-range');
+    if(!vr) return;
+    vr.addEventListener('input',function(){
       var p=parseInt(this.value);
       syncVolUI(p);
       _volDrag=true;
       clearTimeout(_volTimer);
       _volTimer=setTimeout(function(){
         svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:p/100*0.6});
-      },200);
+      },250);
     });
-    _vr.addEventListener('pointerdown',function(){_volDrag=true;});
-    _vr.addEventListener('pointerup',function(){
+    vr.addEventListener('change',function(){
       _volDrag=false;
-      svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:parseInt(_vr.value)/100*0.6});
+      svc('media_player','volume_set',{entity_id:CFG.alm,volume_level:parseInt(vr.value)/100*0.6});
     });
-    _vr.addEventListener('pointercancel',function(){_volDrag=false;});
-  }
+    vr.addEventListener('pointerdown',function(){_volDrag=true;});
+    vr.addEventListener('pointerup',function(){_volDrag=false;});
+    vr.addEventListener('pointercancel',function(){_volDrag=false;});
+  })();
 </script>
 <div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>
 </body>

@@ -1,5 +1,32 @@
 # HA Security Log
 
+## 2026-03-28 12:00 UTC — Security OK (SSH nicht erreichbar)
+
+Prüfzeitraum: seit 11:30 UTC (letzter Check)
+
+### SSH-Zugriff:
+Fehlgeschlagen — kein Key hinterlegt, sshpass nicht verfügbar. Kein direkter Log-Zugriff möglich.
+
+### Login-Versuche:
+Nicht prüfbar. Letzter bekannter Eintrag bleibt `192.168.1.50` (intern) um 09:56 UTC — bereits geloggt.
+
+**→ Keine neue verifizierte Aktivität. SSH-Zugang weiterhin nicht möglich.**
+
+---
+
+
+## 2026-03-28 11:30 UTC — Security OK
+
+Prüfzeitraum: seit 11:00 UTC (letzter Check)
+
+### Login-Versuche:
+Keine neuen Einträge. Letzter bekannter Eintrag bleibt `192.168.1.50` (intern) um 09:56 UTC — bereits geloggt.
+
+**→ Keine neue Aktivität. Stille = alles OK.**
+
+---
+
+
 ## 2026-03-28 11:00 UTC — Security OK
 
 Prüfzeitraum: seit 10:30 UTC (letzter Check)
