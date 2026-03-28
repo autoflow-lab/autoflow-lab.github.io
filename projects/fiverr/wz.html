@@ -7373,27 +7373,47 @@ function navTo(page){
 // ═══════════════════════════════════════════════
 // SCENES
 // ═══════════════════════════════════════════════
+// ── Szenen-System (unified) ──────────────────────────────────
 let _activeScene=null;
-function setActiveScene(s){
-  _activeScene=s;
-  document.querySelectorAll('.sb2[data-s]').forEach(el=>{
-    const active=el.dataset.s===s;
-    el.style.boxShadow=active?'0 0 0 2px rgba(255,159,10,.6)':'';
-    el.style.transform=active?'scale(1.03)':'';
+let _sceneLockUntil=0; // ms timestamp: nach manuellem Trigger kein Auto-Override
+
+function setActiveScene(key, fromDetection){
+  // fromDetection=true: aus updateAll() → 10s nach manuellem Trigger ignorieren
+  if(fromDetection && Date.now()<_sceneLockUntil) return;
+  if(_activeScene===key) return; // keine Änderung nötig
+
+  _activeScene=key;
+
+  // .sb2 Buttons updaten
+  document.querySelectorAll('.sb2[data-s]').forEach(function(el){
+    const on=el.dataset.s===key;
+    el.style.boxShadow=on?'0 0 0 2px rgba(255,159,10,.6)':'';
+    el.style.transform=on?'scale(1.03)':'';
   });
-  // Chip sofort bei manuellem Szenen-Trigger aktualisieren
+  // home-scenes Zeile (.home-scene-btn falls vorhanden)
+  document.querySelectorAll('[data-scene-key]').forEach(function(el){
+    el.classList.toggle('active', el.dataset.sceneKey===key);
+  });
+
+  // Chip updaten
   const chip=document.getElementById('scene-chip');
   const chipTxt=document.getElementById('scene-chip-txt');
   if(!chip||!chipTxt) return;
-  const sceneEmoji={abend:'🌆',hell:'☀️',film:'🎬',nacht:'🌙'};
-  const sceneLabel={abend:'Abend-Szene aktiv',hell:'Hell-Szene aktiv',film:'Film-Szene aktiv',nacht:'Nacht-Szene aktiv'};
-  if(!s){chip.classList.remove('show');chip.removeAttribute('data-scene');return;}
-  const key=s.toLowerCase();
-  chipTxt.textContent=(sceneEmoji[key]||'✦')+'\u2009'+( sceneLabel[key]||s+'-Szene aktiv');
+  if(!key){chip.classList.remove('show');chip.removeAttribute('data-scene');return;}
+  const EMOJI={abend:'🌆',hell:'☀️',film:'🎬',nacht:'🌙',morgen:'🌅',nacht2:'🌙✨',off:'🌑'};
+  const LABEL={abend:'Abend',hell:'Hell',film:'Film',nacht:'Nacht',morgen:'Guten Morgen',nacht2:'Gute Nacht',off:'Alles aus'};
+  chipTxt.textContent=(EMOJI[key]||'✦')+' — '+(LABEL[key]||key)+' aktiv';
   chip.dataset.scene=key;
-  chip.classList.remove('show'); void chip.offsetWidth; chip.classList.add('show');
+  chip.classList.remove('show');
+  void chip.offsetWidth;
+  chip.classList.add('show');
 }
+
+
 function doScene(s){
+  // 10s Lock: auto-Szenen-Erkennung überschreibt nicht direkt nach Trigger
+  _sceneLockUntil=Date.now()+10000;
+
   if(s==='morgen'){
     hap();
     toast('🌅 Guten Morgen, Janis!',3500);
