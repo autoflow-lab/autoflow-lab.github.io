@@ -2197,3 +2197,12 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Bestes Zeitfenster-Anzeige (stündliche Scan wenn Risiko vorhanden)
 - Akzentfarbe grün/amber/blau je Bedingung, Orb-Hintergrund
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-29 18:38 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Musik-Tab — Stimmungs-Szenen Buttons (🎭)
+- 4 Presets in 2×2 Grid: 🌿 Entspannen / 🪩 Party / 🧠 Fokus / 🕯 Romantisch
+- Setzt Licht (Helligkeit + Farbtemperatur/RGB) + Mediaplayer-Lautstärke gleichzeitig
+- Toggle-Logik: aktive Szene hervorgehoben, nochmaliger Tap deaktiviert
+- Toast-Bestätigung 3s nach Aktivierung
+- CSS Custom Properties für Akzentfarbe je Stimmung
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
