@@ -1,5 +1,99 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-29 08:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Licht-Aktivitäts-Heatmap (🗓)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neue `#lheat-card` im Home-Tab, direkt VOR dem Energie-Widget (nach Pomodoro-Timer)
+- **Konzept**: GitHub Contribution Graph-Stil für Smart-Home-Lichtnutzung — 7 Zeilen (Tage) × 24 Spalten (Stunden), zeigt wann in der letzten Woche Lichter aktiv waren
+- **Datenerfassung**: `window._lheatRecord(onCount)` wird bei jedem `updateAll()` aufgerufen — speichert `Math.max(onCount, prev)` pro Stunde in `localStorage('lheat_v1')` als `{ 'YYYY-MM-DD': [h0..h23] }` (max 5 Lichter pro Zelle)
+- **Grid-Rendering**: 24 `.lh-col` Divs (eine pro Stunde), jede mit 7 `.lh-cell` Kinder (eine pro Tag); Höhe fixiert 8px; border-radius:2px
+- **Amber Farbskala (6 Stufen)**:
+  - 0 Lichter: `rgba(255,255,255,.05)` — fast unsichtbar
+  - 1 Licht: `rgba(255,159,10,.22)` — sanftes Amber
+  - 2 Lichter: `rgba(255,159,10,.42)` — mittleres Amber
+  - 3 Lichter: `rgba(255,159,10,.62)` — deutliches Amber
+  - 4 Lichter: `rgba(255,159,10,.80)` — sattes Amber
+  - 5+ Lichter: `rgba(255,159,10,1.0)` — volles Amber (#ff9f0a)
+- **Zukunftsstunden dimmen**: Heutige Stunden die noch nicht eingetreten sind → `opacity:.35` → klar erkennbar was History ist
+- **Tooltip** `title`-Attribut: "Mo 14:00 – 3 Lichter aktiv" auf jeder Zelle
+- **Zeitachse** `#lheat-time-row`: 9 Labels (00, 03, 06, 09, 12, 15, 18, 21, 23) über dem Grid
+- **Legende** `#lheat-legend`: 5 Farbstufen von leer bis voll, DE-Beschriftung "Weniger / Mehr"
+- **Summary** `#lheat-summary`: "Heute: 6h Licht aktiv · Max 3 Lichter gleichzeitig · 5/7 Tage mit Daten"
+- **Pruning**: Daten älter als 8 Tage werden beim nächsten Record automatisch gelöscht → kein localStorage-Overflow
+- **Show-Logik**: Card bleibt `display:none` bis mindestens 1 Stunde mit Aktivität in den letzten 7 Tagen vorhanden — kein leeres Widget beim ersten Tag
+- `#lheat-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- `@keyframes lheatIn`: fade+translateY(10px), .5s cubic-bezier(.32,0,.15,1)
+- Light-Mode Overrides: gedämpftere Farben, angepasste Textfarben
+- **Kein extra API-Call** — rein lokal, offline-fähig, 100% aus localStorage
+- Effekt: Im Home-Tab erscheint nach dem ersten Tag eine kompakte Wochenheatmap — auf einen Blick sieht man die eigenen Schlaf-/Wachrhythmen, Abendaktivität und Nutzungsmuster als farbiges 7×24 Raster
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 624077 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-29 04:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Regenschirm-Check" Karte (☂️)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neue `#umbrella-card` im Wetter-Tab, direkt ZWISCHEN `#lueft-card` und `#wc-card`
+- **Konzept**: Ein animierter SVG-Regenschirm öffnet oder schließt sich je nach heutiger maximaler Regenwahrscheinlichkeit — auf einen Blick erkennbar ob man den Schirm einpacken soll
+- **SVG-Regenschirm** (68×78px):
+  - `#umb-canopy` Path: morpht von geschlossen (dünner Punkt `M33 36 L34 34 L35 36 Z`) bis voll geöffnet (Halbkreis-Dome `M2 36 C2 14 66 14 66 36 Z`) via `setAttribute('d',path)` nach `requestAnimationFrame`
+  - `linearGradient umbGrad`: hellblau #4fc3f7 → royalblau #0a84ff (Schirm-Farbe)
+  - Stiel: `<line>` rgba .55, Handle: kleiner `<path>` Bogen unten, Spitze: `<circle>` amber
+  - Regentropfen-Canvas `#umbrella-rain-cv` (68×78px, `position:absolute` über SVG): animierter Canvas mit `requestAnimationFrame`-Loop, DROP_N = 4–18 Tropfen je nach Wahrscheinlichkeit, diagonale blaue Linien (`rgba(100,190,255,α)`) mit `elapsed*speed/12 % H` Wrapping
+  - Canvas erscheint (`opacity:0→1` via `.show` Klasse) wenn maxProb ≥ 45%
+  - `cv._rainRaf` speichert rAF-Handle → kein Memory-Leak beim erneuten Aufruf
+- **4 Verdikt-Stufen** je nach `Math.max(...probs)`:
+  - ≥75%: 🌧 "Schirm mitnehmen!" — blau `#4fc3f7`, Gradient-Bar `#0a84ff → #4fc3f7`
+  - ≥45%: ☂ "Besser mitnehmen" — mittelblau `#64b5f6`
+  - ≥20%: 🌤 "Eventuell Regen" — gedimmt weiß
+  - <20%: ☀️ "Kein Schirm nötig" — grün `#30d158`, Gradient-Bar grün
+- **Peak-Regen-Uhrzeit**: `hours[peakIdx]` aus `h.time` ISO-String → `HH:00 Uhr` im Sub-Text
+- **Fortschrittsbalken** `#umbrella-bar`: `width: pct*100%` mit `transition:width 1.3s` + farbpassendem Gradient
+- **Hintergrund-Orb** `#umbrella-bg`: `radial-gradient` in `rgba(10,132,255,pct*0.13)` → subtiler blauer Hauch der mit Regenrisiko intensiver wird
+- **Daten-Logik** `drawUmbrellaCard()`:
+  - Findet aktuellen Stunden-Index via `h.time[i].startsWith(todayStr)` 
+  - Sammelt bis zu 24 Hourly-Werte des heutigen Tages aus `_wx.hourly.precipitation_probability`
+  - Bricht bei Datumswechsel ab (nur heute, kein Morgen-Overflow)
+- `#umbrella-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- `drawUmbrellaCard()` in `renderWeather()` vor `drawLueftCard()` eingehängt
+- Card bleibt `display:none` wenn <6 Hourly-Werte verfügbar (graceful fallback)
+- Light-Mode Overrides: `background:var(--c1)`, dezentere Farben für Titel und Labels
+- **Kein extra API-Call** — nutzt bereits vorhandene `_wx.hourly.precipitation_probability` Daten
+- Effekt: Im Wetter-Tab erscheint eine charmante Regenschirm-Karte — wenn Regen wahrscheinlich ist öffnet sich der Schirm animiert und Regentropfen fallen darüber, bei Schönwetter bleibt er geschlossen und grüner Text bestätigt "Kein Schirm nötig"
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 606036 bytes, DEPLOY_OK)
+
+
+## 2026-03-29 02:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Sonnenstunden-Karte (☀️)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#sunshine-card` Div im Wetter-Tab, direkt ZWISCHEN `#biowetter-card` und `#frost-card`
+- **Konzept**: Zeigt wie viele Sonnenstunden der heutige Tag bietet — als animierter SVG-Sonnenkreis + Fortschrittsbalken, sofort erkennbar ob ein sonniger oder bewölkter Tag wird
+- **Open-Meteo**: `sunshine_duration` zu `&daily=` Parameter hinzugefügt (Sekunden pro Tag, kein extra API-Call)
+- **SVG-Sonnenscheibe** (80×80px, viewBox 0 0 80 80):
+  - Track-Circle (`r=28`, rgba .06) + Fill-Arc `#sun-arc-fill` mit `linearGradient sunArcGrad` (#ff9f0a→#ffd60a→#fff9a0)
+  - `stroke-dasharray:175.93` + `stroke-dashoffset = 175.93×(1-pct)` → Arc zeigt sunshine/maxHrs
+  - `transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)` → weiche Einblend-Animation
+  - 10 Sonnenstrahlen (`<line>`) als radiäre Linien im `#sun-ray-grp`
+  - `transform:scale(0.7+pct*0.5)` → Strahlen wachsen mit Sonnenscheinanteil (0.7× bei bedeckt → 1.2× bei Vollsonne)
+  - Strahloppacity: `0.2+pct*0.7` → Strahlen werden heller je mehr Sonne
+  - Zentraler Wert `#sun-h-val` (10px bold, gelb): zeigt Stunden gerundet
+- **Rechts**: `#sun-main-label` (1.35rem, gelb) + `#sun-sub-label` (Stunden von möglicher Tageslichtdauer)
+- **Fortschrittsbalken** `#sun-pct-bar`: amber→gelb→weiß Gradient, `transition:width 1.4s ease`
+- **Tageslichtzeitberechnung**: `(sunset[0]-sunrise[0])/3600000` aus bereits vorhandenen Open-Meteo daily-Daten → exakte standortbasierte Tageslichtdauer (keine Näherung)
+- **5 Condition-Badges**: "Herrlicher Sonnentag" gelb (≥80%) / "Viel Sonne" amber (≥55%) / "Teils sonnig" weiß (≥30%) / "Wenig Sonne" blassblau (≥10%) / "Bedeckt" gedimmt (<10%)
+- `@keyframes sunCorePulse`: gesamte SVG pulsiert sanft (drop-shadow 6→14px amber, 3.5s loop) → wirkt lebendig
+- `@keyframes sunRayGrow`: definiert für optionale Einzelstrahl-Animation
+- `drawSunshine()` Funktion: liest `_wx.daily.sunshine_duration[0]` + `sunrise/sunset[0]`, berechnet `pct`, setzt alle DOM-Elemente
+- Doppelter `requestAnimationFrame` für alle Transition-Elemente → sauberes Einblenden nach DOM-Mount
+- `drawSunshine()` in `renderWeather()` nach `drawBiowetter()` eingehängt
+- `#sunshine-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Card bleibt `display:none` wenn `sunshine_duration` nicht verfügbar (graceful fallback)
+- **Kein extra API-Call** — `sunshine_duration` wurde zu bestehendem `&daily=` Parameter hinzugefügt
+- Effekt: Im Wetter-Tab erscheint eine elegante Sonnenscheibe die zeigt wieviel Sonnenlicht heute zu erwarten ist — die Strahlen wachsen mit dem Sonnenscheinanteil, der Arc füllt sich animiert
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 596411 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-29 00:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — "Biowetter" Karte (🧬)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2028,4 +2122,8 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - 🗑 Clear-Button (löscht Notiz + localStorage)
 - Spring-in Animation, Focus-Glow amber
 - Light-Mode-kompatibel
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-29 09:10 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Geräte-Tab — Sleep-All Timer (🌙 15/30/60/90 min, schaltet alle Lichter + Geräte ab)
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
