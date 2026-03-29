@@ -1,5 +1,59 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-29 22:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Anwesenheits-Chips (device_tracker.* Entities) 👥
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Zeigt alle `device_tracker.*` Entities aus Home Assistant als kompakte Person-Chips auf dem Home-Tab — auf einen Blick sichtbar wer zuhause ist und wer unterwegs
+- **HTML**: `#presence-strip` Flex-Wrap Container direkt nach `#silence-chip` im Home-Tab
+- **3 Zustands-Klassen**:
+  - `.pres-home` (grün `rgba(48,209,88,.09)` + Border `.26`): Gerät/Person ist Zuhause
+  - `.pres-away` (gedimmt `rgba(255,255,255,.05)` + Border `.10`): Unterwegs / `not_home`
+  - `.pres-zone` (blau `rgba(10,132,255,.09)` + Border `.24`): Befindet sich in benannter Zone
+- **`.pres-avatar`** (22×22px Kreis): zeigt Initialen der Person (z.B. "JA" für Janis) — automatisch aus `friendly_name` oder Entity-ID generiert (`initials()` Funktion)
+- **`.pres-dot`** (6px Kreis): 
+  - Home → `#30d158` grün + `@keyframes presHomeDot` pulsiert (0 → 8px Glow → 0, 2.4s loop) → lebendiger Herzschlag
+  - Away → `rgba(255,255,255,.2)` gedimmt, kein Pulse
+  - Zone → `#0a84ff` blau, statischer Glow
+- **Status-Label**: `🏠 Zuhause` / `Unterwegs` / `Zone-Name` (kapitalisiert, Unterstriche entfernt)
+- **`friendlyName()` Funktion**: bevorzugt `attributes.friendly_name`, entfernt `person.` / `device_tracker.` Präfix, macht `_` zu Leerzeichen + Title Case
+- **`stateClass()` + `stateLabel()`**: mappt HA-State-String zu CSS-Klasse + DE-Label
+- **Render-Optimierung**: `strip._lastSig` Signatur aus `id|state` aller Tracker — re-render nur wenn sich etwas ändert (kein DOM-Flimmern)
+- **`@keyframes presChipIn`**: scale(.82)+translateY(4px) → scale(1)+translateY(0), staggered `0.07s` pro Chip → Chips erscheinen wie eine Welle
+- **Kein extra API-Call** — nutzt bereits vorhandene `_S` (fetchStates) Daten
+- **Graceful**: Strip bleibt versteckt wenn keine `device_tracker.*` Entities in HA vorhanden
+- Strip verschwindet (`classList.remove('show')`) wenn 0 Tracker → kein leerer Leerraum
+- `#presence-strip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Overrides: alle 3 Chip-Varianten mit eigenen dunklen Farben (lesbar auf hellem BG)
+- Effekt: Wenn Janis (oder andere Personen mit device_tracker) konfiguriert sind, erscheinen oben im Home-Tab elegante Person-Chips — grün pulsierend wenn Zuhause, gedimmt wenn unterwegs — wie eine Smart-Home-Anwesenheits-Übersicht auf einen Blick
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 679928 bytes, DEPLOY_OK)
+
+
+## 2026-03-29 20:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — Floating Music Note Particles (🎵)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Wenn Musik spielt, steigen kleine Musik-Noten (♩♪♫♬) vom Album-Disc-Bereich auf — subtil, kontinuierlich, wie ein visueller "Klang-Atem"
+- **HTML**: `#music-note-layer` als erstes Kind von `#pg-musik` (position:absolute, inset:0, z-index:2, pointer-events:none, overflow:hidden)
+- **CSS `.mnp`**: `font-size:var(--mnp-sz)`, `animation:mnpFloat var(--mnp-dur) forwards` — jede Note als individuell gestyltes Span-Element
+- **`@keyframes mnpFloat`**: 
+  - 0%: opacity:0 + scale(.5) + rotate(r0) — unsichtbar, kompakt
+  - 12%: opacity:.9 + scale(1.1) + rotate(r1) — schnell erscheinen, kleiner Pop
+  - 80%: opacity:.45 — beginnt zu verblassen
+  - 100%: opacity:0 + translate(ex,ey) + rotate(r2) — aufsteigen, verblassen, weg
+- **CSS-Variablen pro Note**: `--mnp-sz` (0.75–1.45rem), `--mnp-dur` (2.8–4.6s), `--mnp-sx/ex/ey` (Start/End X/Y-Jitter), `--mnp-r0/r1/r2` (Rotations-Keyframes)
+- **Spawn-Logik** `spawnNote()`:
+  - Origin: `baseX rand(22,88)px`, `baseY rand(56,118)px` — über den Album-Disc-Bereich verteilt
+  - Throttle: min. 380ms zwischen Spawns — kein visueller Spam
+  - 45% Chance amber `rgba(255,159,10,.82)`, 55% weiß `rgba(255,255,255,.65)` — dezenter Duo-Ton
+  - `setTimeout(el.remove(), ...)` — automatisches DOM-Cleanup, kein Memory-Leak
+- **`startNotes()`**: startet `setInterval(900ms)` → spawnt 1-2 Noten pro Zyklus (zweite Note mit 120-320ms zufälligem Delay → organisch)
+- **`stopNotes()`**: räumt Interval auf, bestehende Noten floaten natürlich weiter bis Ablauf
+- **MutationObserver**: beobachtet `alb-disc` auf `class`-Änderungen → `startNotes()` wenn `playing` hinzugefügt, `stopNotes()` beim Entfernen — sofortige Reaktion ohne Polling-Overhead
+- **Init-Check**: wenn `alb-disc.playing` beim Laden bereits gesetzt → `startNotes()` sofort
+- **Kein Konflikt** mit: `eq-ring` Puls-Animationen (andere DOM-Elemente), `alb-tilt-wrap` 3D-Effekt (anderer Layer), `spec-cv` Visualizer (anderes Canvas), Swipe-Gesten (pointer-events:none)
+- **Graceful**: IIFE prüft `layer && disc` — kein Fehler wenn Elemente fehlen
+- Effekt: Wenn Musik spielt, steigen sanft Musik-Noten vom Album-Art nach oben auf — wie ein subtiler Klang-Dampf der zeigt dass Musik "lebt". Bei Pause hören die Spawns sofort auf
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, DEPLOY_OK)
+
 ## 2026-03-29 12:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Musik-Tab — 3D Holographic Tilt Effect auf Album-Art (🌈)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2205,4 +2259,12 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Toggle-Logik: aktive Szene hervorgehoben, nochmaliger Tap deaktiviert
 - Toast-Bestätigung 3s nach Aktivierung
 - CSS Custom Properties für Akzentfarbe je Stimmung
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-29 22:38 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Home-Tab — "Energie-Sparcheck" Chip (⚡)
+- Erscheint wenn ≥1 Licht/Schalter seit ≥2h aktiv ist ohne Interaktion
+- Zeigt Anzahl Geräte + Laufzeit ("3 Geräte seit 2h 15min aktiv")
+- "Alle aus"-Button schaltet alle betroffenen Geräte direkt ab + Toast
+- Amber Puls-Dot, Spring-in Animation, Light-Mode kompatibel
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
