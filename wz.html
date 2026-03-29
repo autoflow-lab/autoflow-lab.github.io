@@ -159,11 +159,11 @@ html,body{height:100%;background:var(--bg);
 #dev-status-gauge.pop #dsg-svg{animation:dsgPop .42s cubic-bezier(.34,1.28,.64,1)}
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
-.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,
+.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#pomo-card,.page-entering>#lheat-card,
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -299,6 +299,30 @@ html,body{height:100%;background:var(--bg);
 .allerg-chip.ac-vhigh{background:rgba(255,69,58,.12);border-color:rgba(255,69,58,.4);animation:allergChipWarn 2.2s ease-in-out infinite}
 @keyframes allergChipWarn{0%,100%{box-shadow:0 0 0 0 rgba(255,69,58,0)}50%{box-shadow:0 0 0 3px rgba(255,69,58,.18)}}
 /* ══ LÜFT-EMPFEHLUNG CARD ══ */
+/* ☂ Regenschirm-Check Card */
+#umbrella-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#umbrella-card.show{opacity:1;transform:translateY(0)}
+#umbrella-inner{background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.10);padding:16px 18px;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden}
+#umbrella-bg{position:absolute;inset:0;transition:background 1.2s ease;pointer-events:none}
+#umbrella-svg-wrap{position:relative;flex-shrink:0;width:68px;height:78px}
+#umbrella-rain-cv{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1s ease}
+#umbrella-rain-cv.show{opacity:1}
+#umbrella-texts{flex:1;min-width:0}
+#umbrella-title{font-size:.6rem;font-weight:700;letter-spacing:1.3px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:7px}
+#umbrella-verdict{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.2}
+#umbrella-sub{font-size:.7rem;color:rgba(255,255,255,.45);line-height:1.4;margin-bottom:8px}
+#umbrella-prob-row{display:flex;align-items:center;gap:8px}
+#umbrella-prob-num{font-size:1.45rem;font-weight:800}
+#umbrella-prob-lbl{font-size:.65rem;color:rgba(255,255,255,.38);line-height:1.3}
+#umbrella-bar-wrap{width:100%;height:4px;background:rgba(255,255,255,.07);border-radius:3px;margin-top:7px}
+#umbrella-bar{height:4px;border-radius:3px;width:0%;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+/* SVG canopy animation */
+#umb-canopy{transition:d 1s cubic-bezier(.34,1.15,.64,1),opacity .8s ease}
+@keyframes umbDropFall{0%{transform:translateY(0);opacity:.75}100%{transform:translateY(78px);opacity:0}}
+:root.light #umbrella-inner{background:var(--c1)}
+:root.light #umbrella-title{color:rgba(0,0,0,.35)}
+:root.light #umbrella-sub{color:rgba(0,0,0,.45)}
+:root.light #umbrella-prob-lbl{color:rgba(0,0,0,.38)}
 #lueft-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #lueft-card.show{opacity:1;transform:translateY(0)}
 #lueft-inner{border-radius:18px;border:1px solid rgba(255,255,255,.07);border-top-color:rgba(255,255,255,.13);padding:14px 18px;position:relative;overflow:hidden;display:flex;align-items:center;gap:14px}
@@ -342,6 +366,9 @@ html,body{height:100%;background:var(--bg);
 /* ── BIOWETTER ── */
 #biowetter-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #biowetter-card.show{opacity:1;transform:translateY(0)}
+#sunshine-card{display:none;margin-bottom:12px}
+@keyframes sunRayGrow{0%{r:0;opacity:0}60%{opacity:1}100%{opacity:.6}}
+@keyframes sunCorePulse{0%,100%{filter:drop-shadow(0 0 6px rgba(255,214,10,.5))}50%{filter:drop-shadow(0 0 14px rgba(255,214,10,.9))}}
 #biowetter-bg{position:absolute;inset:0;pointer-events:none;border-radius:18px;transition:background 1.5s ease}
 .biow-factor{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .biow-factor-ico{font-size:.9rem;flex-shrink:0;width:20px;text-align:center}
@@ -370,6 +397,25 @@ html,body{height:100%;background:var(--bg);
 #lt-bri-meter-label .lt-bri-count{letter-spacing:.02em}
 /* ── Globaler Dimmer-Slider ── */
 #lt-global-dimmer{margin:4px 14px 10px;opacity:0;transition:opacity .5s ease;display:flex;align-items:center;gap:10px}
+/* Sleep-All Timer */
+#sleep-all-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
+#sleep-all-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+#sleep-all-title{font-size:.7rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+#sleep-all-btns{display:flex;gap:7px;flex-wrap:wrap}
+.sa-btn{font-size:.7rem;padding:5px 12px;border-radius:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.55);cursor:pointer;touch-action:manipulation;transition:background .15s,color .15s,border-color .15s;font-weight:600}
+.sa-btn:active,.sa-btn.sa-active{background:rgba(10,132,255,.15);border-color:rgba(10,132,255,.35);color:rgba(100,200,255,.9)}
+#sleep-all-pill{display:none;align-items:center;gap:8px;margin-top:9px;background:rgba(10,132,255,.12);border:1px solid rgba(10,132,255,.25);border-radius:10px;padding:7px 12px}
+#sleep-all-pill.on{display:flex}
+#sleep-all-dot{width:7px;height:7px;border-radius:50%;background:#0a84ff;animation:saDotPulse 1.6s ease-in-out infinite}
+@keyframes saDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+#sleep-all-cd{font-size:.78rem;color:rgba(100,200,255,.9);font-variant-numeric:tabular-nums;flex:1}
+#sleep-all-cancel{background:none;border:none;color:rgba(255,255,255,.25);font-size:.8rem;cursor:pointer;padding:0 2px;touch-action:manipulation;transition:color .15s}
+#sleep-all-cancel:active{color:rgba(255,69,58,.8)}
+:root.light #sleep-all-wrap{background:var(--c1)}
+:root.light .sa-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.09);color:rgba(0,0,0,.45)}
+:root.light .sa-btn.sa-active{background:rgba(0,80,200,.08);border-color:rgba(0,80,200,.2);color:rgba(0,80,200,.8)}
+:root.light #sleep-all-pill{background:rgba(0,80,200,.07);border-color:rgba(0,80,200,.2)}
+:root.light #sleep-all-cd{color:rgba(0,80,200,.85)}
 /* Schnell-Notiz */
 #quick-note-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
 @keyframes qnIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -1025,6 +1071,67 @@ html,body{height:100%;background:var(--bg);
 :root.light #quote-author{color:rgba(140,60,0,.75)}
 :root.light #quote-label{color:rgba(140,60,0,.5)}
 :root.light #quote-refresh{color:rgba(140,60,0,.5);border-color:rgba(140,60,0,.2)}
+
+/* ───────────── POMODORO FOCUS TIMER ───────────── */
+#pomo-card{display:none;margin:0 0 12px;padding:14px 16px 13px;background:rgba(48,209,88,.04);border:1px solid rgba(48,209,88,.12);border-radius:16px;position:relative;overflow:hidden}
+#pomo-card.show{display:block;animation:pomoCardIn .45s cubic-bezier(.32,0,.15,1) both}
+@keyframes pomoCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#pomo-header{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+#pomo-ico{font-size:1.3rem;line-height:1;flex-shrink:0}
+#pomo-title{font-size:.62rem;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:rgba(48,209,88,.7)}
+#pomo-count-badge{margin-left:auto;font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(48,209,88,.10);border:1px solid rgba(48,209,88,.18);color:rgba(48,209,88,.75);letter-spacing:.4px}
+#pomo-body{display:flex;align-items:center;gap:14px}
+#pomo-arc-wrap{position:relative;flex-shrink:0;width:72px;height:72px}
+#pomo-arc-svg{transform:rotate(-90deg)}
+#pomo-arc-track{fill:none;stroke:rgba(255,255,255,.06);stroke-width:4.5}
+#pomo-arc-fill{fill:none;stroke-width:4.5;stroke-linecap:round;stroke-dasharray:175.93;stroke-dashoffset:175.93;transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)}
+#pomo-arc-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#pomo-time{font-size:1.05rem;font-weight:700;color:#fff;line-height:1}
+#pomo-phase-lbl{font-size:.5rem;font-weight:600;letter-spacing:.6px;text-transform:uppercase;margin-top:2px}
+#pomo-right{flex:1;min-width:0}
+#pomo-desc{font-size:.72rem;color:var(--txt);line-height:1.4;margin-bottom:8px}
+#pomo-btns{display:flex;gap:7px;flex-wrap:wrap}
+.pomo-btn{flex:1;min-width:60px;padding:7px 10px;border-radius:10px;font-size:.68rem;font-weight:600;cursor:pointer;touch-action:manipulation;border:1px solid rgba(48,209,88,.22);background:rgba(48,209,88,.08);color:rgba(180,255,200,.85);transition:background .18s,transform .1s}
+.pomo-btn:active{transform:scale(.96)}
+#pomo-cancel-btn{display:none;flex:0 0 auto;padding:7px 11px;border-radius:10px;font-size:.68rem;cursor:pointer;touch-action:manipulation;border:1px solid rgba(255,69,58,.2);background:rgba(255,69,58,.07);color:rgba(255,150,140,.7);transition:background .18s}
+#pomo-cancel-btn:active{background:rgba(255,69,58,.15)}
+#pomo-pill{display:none;align-items:center;gap:8px;margin-top:10px;padding:6px 12px;border-radius:12px;background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.16);font-size:.65rem;color:rgba(180,255,200,.8)}
+#pomo-pill.show{display:flex}
+#pomo-pill-dot{width:7px;height:7px;border-radius:50%;background:#30d158;flex-shrink:0}
+@keyframes pomoDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,.5)}50%{box-shadow:0 0 0 4px rgba(48,209,88,0)}}
+#pomo-pill.show #pomo-pill-dot{animation:pomoDotPulse 2.2s ease-in-out infinite}
+#pomo-bg{position:absolute;top:-30px;right:-40px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(48,209,88,.07) 0%,transparent 65%);pointer-events:none}
+:root.light #pomo-card{background:rgba(30,160,60,.04);border-color:rgba(30,160,60,.14)}
+:root.light #pomo-title{color:rgba(0,120,40,.6)}
+:root.light #pomo-desc{color:var(--txt)}
+:root.light .pomo-btn{background:rgba(30,160,60,.06);border-color:rgba(30,160,60,.2);color:rgba(0,100,30,.8)}
+:root.light #pomo-count-badge{background:rgba(30,160,60,.08);border-color:rgba(30,160,60,.18);color:rgba(0,100,30,.7)}
+
+/* ───────────── LICHT-HEATMAP ───────────── */
+#lheat-card{display:none;margin:0 0 12px;padding:13px 16px 12px;background:rgba(255,159,10,.04);border:1px solid rgba(255,159,10,.10);border-radius:16px;position:relative;overflow:hidden}
+#lheat-card.show{display:block;animation:lheatIn .5s cubic-bezier(.32,0,.15,1) both}
+@keyframes lheatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#lheat-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+#lheat-title{font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,159,10,.7)}
+#lheat-subtitle{font-size:.6rem;color:rgba(255,255,255,.3)}
+#lheat-grid{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;margin-bottom:7px}
+#lheat-grid-wrap{overflow:hidden;border-radius:6px}
+.lh-col{display:flex;flex-direction:column;gap:2px}
+.lh-cell{height:8px;border-radius:2px;transition:opacity .4s ease,background .6s ease;cursor:default}
+.lh-cell[title]{cursor:pointer}
+#lheat-time-row{display:flex;justify-content:space-between;padding:0 1px;margin-bottom:2px}
+#lheat-time-row span{font-size:.48rem;color:rgba(255,255,255,.22);font-variant-numeric:tabular-nums}
+#lheat-legend{display:flex;align-items:center;gap:6px;margin-top:6px}
+#lheat-legend-label{font-size:.55rem;color:rgba(255,255,255,.3);margin-right:2px}
+.lh-leg-cell{width:9px;height:9px;border-radius:2px}
+#lheat-summary{font-size:.62rem;color:rgba(255,255,255,.5);margin-top:5px;font-style:italic}
+:root.light #lheat-card{background:rgba(180,80,0,.04);border-color:rgba(180,80,0,.10)}
+:root.light #lheat-title{color:rgba(160,70,0,.65)}
+:root.light #lheat-subtitle{color:rgba(0,0,0,.3)}
+:root.light .lh-cell{opacity:.85}
+:root.light #lheat-summary{color:rgba(0,0,0,.4)}
+:root.light #lheat-time-row span{color:rgba(0,0,0,.25)}
+:root.light #lheat-legend-label{color:rgba(0,0,0,.3)}
 
 /* ───────────── ENERGIE-WIDGET ───────────── */
 .energie-card{display:none;margin:0 0 10px;padding:13px 16px;
@@ -2146,6 +2253,67 @@ input[type=range] { touch-action: none; }
         <div id="quote-author"></div>
       </div>
 
+      <!-- Pomodoro Focus Timer -->
+      <div id="pomo-card">
+        <div id="pomo-bg"></div>
+        <div id="pomo-header">
+          <div id="pomo-ico">🍅</div>
+          <div id="pomo-title">Focus Timer</div>
+          <div id="pomo-count-badge" style="display:none">0 heute</div>
+        </div>
+        <div id="pomo-body">
+          <div id="pomo-arc-wrap">
+            <svg id="pomo-arc-svg" width="72" height="72" viewBox="0 0 60 60">
+              <defs>
+                <linearGradient id="pomoGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#30d158"/>
+                  <stop offset="100%" stop-color="#34e05a"/>
+                </linearGradient>
+              </defs>
+              <circle id="pomo-arc-track" cx="30" cy="30" r="28"/>
+              <circle id="pomo-arc-fill" cx="30" cy="30" r="28" stroke="url(#pomoGrad)"/>
+            </svg>
+            <div id="pomo-arc-center">
+              <div id="pomo-time">25:00</div>
+              <div id="pomo-phase-lbl" style="color:rgba(48,209,88,.7)">FOCUS</div>
+            </div>
+          </div>
+          <div id="pomo-right">
+            <div id="pomo-desc">Konzentrations-Timer: 25 Minuten Fokus + 5 Minuten Pause. Lichter passen sich automatisch an.</div>
+            <div id="pomo-btns">
+              <button class="pomo-btn" id="pomo-start-btn">▶ Starten</button>
+              <button id="pomo-cancel-btn">✕ Stop</button>
+            </div>
+          </div>
+        </div>
+        <div id="pomo-pill">
+          <div id="pomo-pill-dot"></div>
+          <span id="pomo-pill-txt">Focus läuft…</span>
+        </div>
+      </div>
+
+      <!-- Licht-Aktivitäts-Heatmap -->
+      <div id="lheat-card">
+        <div id="lheat-header">
+          <div id="lheat-title">🗓 Licht-Aktivität</div>
+          <div id="lheat-subtitle">7 Tage × 24 Stunden</div>
+        </div>
+        <div id="lheat-time-row">
+          <span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span><span>23</span>
+        </div>
+        <div id="lheat-grid-wrap"><div id="lheat-grid"></div></div>
+        <div id="lheat-legend">
+          <span id="lheat-legend-label">Weniger</span>
+          <div class="lh-leg-cell" style="background:rgba(255,159,10,.08)"></div>
+          <div class="lh-leg-cell" style="background:rgba(255,159,10,.25)"></div>
+          <div class="lh-leg-cell" style="background:rgba(255,159,10,.5)"></div>
+          <div class="lh-leg-cell" style="background:rgba(255,159,10,.75)"></div>
+          <div class="lh-leg-cell" style="background:#ff9f0a"></div>
+          <span style="font-size:.55rem;color:rgba(255,255,255,.3)">Mehr</span>
+        </div>
+        <div id="lheat-summary"></div>
+      </div>
+
       <!-- Energie-Widget -->
       <div class="energie-card" id="energie-card">
         <div class="energie-arc-wrap">
@@ -2578,6 +2746,43 @@ input[type=range] { touch-action: none; }
           </div>
         </div>
       </div>
+      <!-- Regenschirm-Check Card -->
+      <div id="umbrella-card">
+        <div id="umbrella-inner">
+          <div id="umbrella-bg"></div>
+          <!-- Umbrella SVG -->
+          <div id="umbrella-svg-wrap">
+            <canvas id="umbrella-rain-cv" width="68" height="78"></canvas>
+            <svg id="umbrella-svg" viewBox="0 0 68 78" width="68" height="78" style="display:block;position:relative;z-index:1">
+              <defs>
+                <linearGradient id="umbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#4fc3f7" stop-opacity=".9"/>
+                  <stop offset="100%" stop-color="#0a84ff" stop-opacity=".8"/>
+                </linearGradient>
+              </defs>
+              <!-- Canopy — path morphs from closed arc to open dome -->
+              <path id="umb-canopy" fill="url(#umbGrad)" stroke="rgba(10,132,255,.6)" stroke-width="1.2" d="M34 38 L34 38 Z"/>
+              <!-- Spine (vertical line) -->
+              <line x1="34" y1="36" x2="34" y2="70" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-linecap="round"/>
+              <!-- Handle arc -->
+              <path d="M34 70 Q34 76 28 76 Q22 76 22 70" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"/>
+              <!-- Tip -->
+              <circle cx="34" cy="36" r="2" fill="rgba(255,255,255,.7)"/>
+            </svg>
+          </div>
+          <!-- Text side -->
+          <div id="umbrella-texts">
+            <div id="umbrella-title">☂ REGEN HEUTE</div>
+            <div id="umbrella-verdict">–</div>
+            <div id="umbrella-sub">–</div>
+            <div id="umbrella-prob-row">
+              <span id="umbrella-prob-num">–%</span>
+              <span id="umbrella-prob-lbl">max.<br>Regenrisiko</span>
+            </div>
+            <div id="umbrella-bar-wrap"><div id="umbrella-bar"></div></div>
+          </div>
+        </div>
+      </div>
       <!-- Wind-Chill / Heat-Index Komfort-Karte -->
       <div id="wc-card" style="display:none;margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">🌬 GEFÜHLTE BEDINGUNGEN</div>
@@ -2921,6 +3126,58 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- Sonnenstunden -->
+      <div id="sunshine-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,214,10,.65);text-transform:uppercase;margin-bottom:8px">☀️ SONNENSTUNDEN HEUTE</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,214,10,.18);border-top-color:rgba(255,214,10,.3);padding:16px 18px;display:flex;align-items:center;gap:18px">
+          <div style="flex-shrink:0;width:80px;height:80px;position:relative">
+            <svg id="sun-rays-svg" viewBox="0 0 80 80" width="80" height="80" style="animation:sunCorePulse 3.5s ease-in-out infinite">
+              <defs>
+                <linearGradient id="sunArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff9f0a"/>
+                  <stop offset="50%" stop-color="#ffd60a"/>
+                  <stop offset="100%" stop-color="#fff9a0"/>
+                </linearGradient>
+              </defs>
+              <!-- Track arc -->
+              <circle cx="40" cy="40" r="28" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="5"/>
+              <!-- Fill arc -->
+              <circle id="sun-arc-fill" cx="40" cy="40" r="28" fill="none" stroke="url(#sunArcGrad)" stroke-width="5" stroke-linecap="round"
+                stroke-dasharray="175.93" stroke-dashoffset="175.93" transform="rotate(-90 40 40)"
+                style="transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)"/>
+              <!-- Sun rays (8 lines) -->
+              <g id="sun-ray-grp" style="transform-origin:40px 40px;transition:transform 1.5s cubic-bezier(.34,1.28,.64,1)">
+                <line x1="40" y1="7"  x2="40" y2="2"  stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="57" y1="12" x2="61" y2="8"  stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="68" y1="29" x2="73" y2="27" stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="68" y1="51" x2="73" y2="53" stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="57" y1="68" x2="61" y2="72" stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="40" y1="73" x2="40" y2="78" stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="23" y1="68" x2="19" y2="72" stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="51" x2="7"  y2="53" stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="29" x2="7"  y2="27" stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="23" y1="12" x2="19" y2="8"  stroke="rgba(255,214,10,.6)" stroke-width="2" stroke-linecap="round"/>
+              </g>
+              <!-- Core -->
+              <circle cx="40" cy="40" r="13" fill="rgba(255,214,10,.15)" stroke="rgba(255,214,10,.4)" stroke-width="1.5"/>
+              <text x="40" y="37" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="800" fill="#ffd60a" id="sun-h-val">–</text>
+              <text x="40" y="48" text-anchor="middle" font-size="6" fill="rgba(255,255,255,.35)">Std</text>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:1.35rem;font-weight:700;color:#ffd60a;margin-bottom:2px" id="sun-main-label">–</div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.4);margin-bottom:10px" id="sun-sub-label">–</div>
+            <div style="height:4px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:6px">
+              <div id="sun-pct-bar" style="height:100%;border-radius:3px;background:linear-gradient(90deg,#ff9f0a,#ffd60a,#fff9a0);width:0%;transition:width 1.4s ease"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:.62rem;color:rgba(255,255,255,.28)" id="sun-max-label">–</div>
+              <div id="sun-cond-badge" style="padding:2px 8px;border-radius:10px;font-size:.6rem;font-weight:700;background:rgba(255,214,10,.12);border:1px solid rgba(255,214,10,.25);color:#ffd60a">–</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Frostwarnung -->
       <div id="frost-card" style="display:none;margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(50,200,255,.65);text-transform:uppercase;margin-bottom:8px">❄️ FROSTWARNUNG</div>
@@ -3159,6 +3416,24 @@ input[type=range] { touch-action: none; }
     <div id="dev-recent-wrap" style="background:var(--c1);border-radius:14px;padding:13px 14px 10px;margin-bottom:14px;display:none">
       <div style="font-size:.72rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px">⏱ Zuletzt genutzt</div>
       <div id="dev-recent-list" style="display:flex;flex-direction:column;gap:0"></div>
+    </div>
+
+    <!-- Sleep-All Timer -->
+    <div id="sleep-all-wrap">
+      <div id="sleep-all-header">
+        <span id="sleep-all-title">🌙 Alles aus in …</span>
+      </div>
+      <div id="sleep-all-btns">
+        <button class="sa-btn" data-min="15" style="touch-action:manipulation">15 min</button>
+        <button class="sa-btn" data-min="30" style="touch-action:manipulation">30 min</button>
+        <button class="sa-btn" data-min="60" style="touch-action:manipulation">60 min</button>
+        <button class="sa-btn" data-min="90" style="touch-action:manipulation">90 min</button>
+      </div>
+      <div id="sleep-all-pill">
+        <div id="sleep-all-dot"></div>
+        <span id="sleep-all-cd">—</span>
+        <button id="sleep-all-cancel" title="Abbrechen" style="touch-action:manipulation">✕</button>
+      </div>
     </div>
 
     <!-- Schnell-Notiz -->
@@ -3894,7 +4169,7 @@ async function fetchWeather(){
     const u=`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CFG.lon}`+
       `&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day,surface_pressure,visibility,cloud_cover`+
       `&hourly=temperature_2m,weather_code,precipitation_probability,precipitation,windspeed_10m`+
-      `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,precipitation_sum,uv_index_max,windgusts_10m_max`+
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,precipitation_sum,uv_index_max,windgusts_10m_max,sunshine_duration`+
       `&forecast_days=7&timezone=Europe%2FZurich&models=best_match`;
     const r=await fetch(u,{signal:AbortSignal.timeout(8000)});
     _wx=await r.json();
@@ -4254,6 +4529,7 @@ function renderWeather(){
   checkRainWarning();
   drawWeeklyRain();
   drawBiowetter();
+  drawSunshine();
   drawFrostWarning();
   drawOutdoorChip();
   drawWeekStrip();
@@ -4266,6 +4542,7 @@ function renderWeather(){
   drawBarometer();
   drawHumidity();
   updateWxScore();
+  drawUmbrellaCard();
   drawLueftCard();
   drawWindChill();
   drawVisCloud();
@@ -4660,6 +4937,142 @@ function drawWindChill(){
 // ═══════════════════════════════════════════════
 // LÜFT-EMPFEHLUNG CARD
 // ═══════════════════════════════════════════════
+function drawUmbrellaCard(){
+  const card=document.getElementById('umbrella-card');
+  if(!card)return;
+  const h=window._wx&&window._wx.hourly;
+  if(!h||!h.precipitation_probability||h.precipitation_probability.length<6){card.style.display='none';return;}
+  // Find current hour index
+  const now=new Date();
+  const todayStr=now.toISOString().slice(0,10);
+  let si=0;
+  if(h.time){
+    for(let i=0;i<h.time.length;i++){if(h.time[i]&&h.time[i].startsWith(todayStr)){si=i;break;}}
+  }
+  // Collect today's probabilities (from si, up to 24h or end-of-day)
+  const probs=[];
+  const hours=[];
+  for(let i=si;i<Math.min(si+24,h.precipitation_probability.length);i++){
+    const t=h.time?h.time[i]:null;
+    if(t&&!t.startsWith(todayStr))break;
+    probs.push(h.precipitation_probability[i]||0);
+    hours.push(t?parseInt(t.slice(11,13)):i-si);
+  }
+  if(!probs.length){card.style.display='none';return;}
+  const maxProb=Math.max(...probs);
+  const pct=maxProb/100;
+  // Peak rain hour
+  let peakIdx=0;
+  for(let i=1;i<probs.length;i++){if(probs[i]>probs[peakIdx])peakIdx=i;}
+  const peakH=hours[peakIdx];
+  const peakStr=peakH!=null?String(peakH).padStart(2,'0')+':00':null;
+  // Current prob
+  const curProb=probs[0]||0;
+  // Verdict
+  let verdict,sub,color,barColor;
+  if(maxProb>=75){
+    verdict='🌧 Schirm mitnehmen!';
+    sub=peakStr?`Stärkster Regen ca. ${peakStr} Uhr. Auf jeden Fall einpacken.`:'Hohe Regenwahrscheinlichkeit heute.';
+    color='#4fc3f7';barColor='linear-gradient(90deg,#0a84ff,#4fc3f7)';
+  }else if(maxProb>=45){
+    verdict='☂ Besser mitnehmen';
+    sub=peakStr?`Gegen ${peakStr} Uhr leichter Regen möglich.`:'Regen vereinzelt möglich.';
+    color='#64b5f6';barColor='linear-gradient(90deg,#1e88e5,#64b5f6)';
+  }else if(maxProb>=20){
+    verdict='🌤 Eventuell Regen';
+    sub='Geringe Chance auf einzelne Schauer. Entscheidung je nach Tour.';
+    color='rgba(255,255,255,.75)';barColor='linear-gradient(90deg,rgba(100,180,255,.7),rgba(200,230,255,.6))';
+  }else{
+    verdict='☀️ Kein Schirm nötig';
+    sub='Heute kaum Niederschlag erwartet. Schirm kann zuhause bleiben.';
+    color='#30d158';barColor='linear-gradient(90deg,#28a349,#30d158)';
+  }
+  // Set UI
+  card.style.display='block';
+  const el=id=>document.getElementById(id);
+  el('umbrella-verdict').textContent=verdict;
+  el('umbrella-verdict').style.color=color;
+  el('umbrella-sub').textContent=sub;
+  el('umbrella-prob-num').textContent=Math.round(maxProb)+'%';
+  el('umbrella-prob-num').style.color=color;
+  el('umbrella-bar').style.background=barColor;
+  // Background orb
+  const orbAlpha=pct*0.13;
+  el('umbrella-bg').style.background=`radial-gradient(ellipse at 20% 50%,rgba(10,132,255,${orbAlpha}),transparent 65%)`;
+  // SVG Canopy morph: closed (prob=0) → open dome (prob=1)
+  // Canopy: path from closed (very thin arc at top) to fully open parachute
+  requestAnimationFrame(()=>{
+    const svg=document.getElementById('umbrella-svg');
+    const canopy=document.getElementById('umb-canopy');
+    if(!canopy)return;
+    // openness: 0 = just a thin spike, 1 = full dome 68×32
+    const op=Math.min(1,Math.max(0,pct));
+    // Dome: M cx-r,cy A r r 0 0 1 cx+r,cy Z  (top half circle)
+    // cx=34, cy=36, half-width scales with op, height scales
+    const hw=Math.round(2+op*32); // half-width: 2→34
+    const dh=Math.round(1+op*22); // dome height: 1→23
+    const cx=34,cy=36;
+    // SVG arc path for umbrella canopy (semicircle-ish)
+    // Start at left edge, arc up to top, arc to right edge
+    const lx=cx-hw, rx=cx+hw;
+    // Control points for a dome shape via cubic bezier
+    // Full dome: M2 36 C2 14 66 14 66 36 Z
+    const ctrlY=cy-dh;
+    const path=op<0.05
+      ?`M${cx-1} ${cy} L${cx} ${cy-2} L${cx+1} ${cy} Z`
+      :`M${lx} ${cy} C${lx} ${ctrlY} ${rx} ${ctrlY} ${rx} ${cy} Z`;
+    canopy.setAttribute('d',path);
+    // Ribs: draw radial lines from center of canopy bottom to edge
+    // (handled by just the canopy shape + spine)
+    // Tip: reposition to top of dome
+    const tip=svg.querySelector('circle');
+    if(tip){tip.setAttribute('cx',String(cx));tip.setAttribute('cy',String(cy-dh-2));}
+    const spine=svg.querySelector('line');
+    if(spine){spine.setAttribute('y1',String(cy-dh+2));}
+  });
+  // Rain drops canvas
+  const cv=document.getElementById('umbrella-rain-cv');
+  if(cv){
+    cv.classList.toggle('show',maxProb>=45);
+    if(maxProb>=45){
+      const ctx=cv.getContext('2d');
+      const W=cv.width,H=cv.height;
+      const DROP_N=Math.round(4+pct*14);
+      const drops=Array.from({length:DROP_N},()=>({
+        x:Math.random()*W,y:Math.random()*H,
+        l:5+Math.random()*9,s:1.2+Math.random()*1.8,
+        a:0.3+Math.random()*0.45,delay:Math.random()*1200
+      }));
+      let rStart=null,rRaf=null;
+      function animRain(ts){
+        if(!rStart)rStart=ts;
+        ctx.clearRect(0,0,W,H);
+        drops.forEach(d=>{
+          const elapsed=(ts-rStart+d.delay)%1200;
+          const y=((d.y+elapsed*d.s/12))%H;
+          ctx.beginPath();
+          ctx.moveTo(d.x,y);
+          ctx.lineTo(d.x-1,y+d.l);
+          ctx.strokeStyle=`rgba(100,190,255,${d.a})`;
+          ctx.lineWidth=1.2;
+          ctx.stroke();
+        });
+        rRaf=requestAnimationFrame(animRain);
+      }
+      if(cv._rainRaf)cancelAnimationFrame(cv._rainRaf);
+      rRaf=requestAnimationFrame(animRain);
+      cv._rainRaf=rRaf;
+    }else{
+      if(cv._rainRaf){cancelAnimationFrame(cv._rainRaf);cv._rainRaf=null;}
+    }
+  }
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      el('umbrella-bar').style.width=Math.round(pct*100)+'%';
+      card.classList.add('show');
+    });
+  });
+}
 function drawLueftCard(){
   const card=document.getElementById('lueft-card');
   if(!card||!_wx?.current) return;
@@ -5286,6 +5699,91 @@ function drawBiowetter(){
   requestAnimationFrame(()=>{ card.classList.add('show'); });
 }
 
+// ═══════════════════════════════════════════════
+// SONNENSTUNDEN HEUTE
+// ═══════════════════════════════════════════════
+function drawSunshine(){
+  const card=document.getElementById('sunshine-card');
+  if(!card||!_wx?.daily)return;
+  const d=_wx.daily;
+  // sunshine_duration is in seconds per day
+  const secRaw=d.sunshine_duration?.[0];
+  if(secRaw==null){card.style.display='none';return;}
+  card.style.display='block';
+
+  const sunshineHrs=secRaw/3600; // convert to hours
+
+  // Calculate max possible sunshine (daylight duration)
+  let maxHrs=12; // fallback
+  if(d.sunrise?.[0]&&d.sunset?.[0]){
+    const sr=new Date(d.sunrise[0]).getTime();
+    const ss=new Date(d.sunset[0]).getTime();
+    maxHrs=Math.max((ss-sr)/3600000,1);
+  }
+  const pct=Math.min(sunshineHrs/maxHrs,1);
+
+  // Update arc fill
+  const arcFill=document.getElementById('sun-arc-fill');
+  if(arcFill){
+    const CIRC=175.93;
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        arcFill.style.strokeDashoffset=String(CIRC*(1-pct));
+      });
+    });
+  }
+
+  // Update center value
+  const hVal=document.getElementById('sun-h-val');
+  if(hVal)hVal.textContent=sunshineHrs>=1?Math.round(sunshineHrs):sunshineHrs.toFixed(1);
+
+  // Main label
+  const mainLbl=document.getElementById('sun-main-label');
+  if(mainLbl){
+    const hh=sunshineHrs;
+    if(hh<0.5) mainLbl.textContent='Kaum Sonne heute';
+    else if(hh<2) mainLbl.textContent=`${hh.toFixed(1)}h Sonnenschein`;
+    else mainLbl.textContent=`${Math.round(hh)}h Sonnenschein`;
+  }
+
+  // Sub label
+  const subLbl=document.getElementById('sun-sub-label');
+  if(subLbl)subLbl.textContent=`von ${maxHrs.toFixed(1)}h möglicher Tageslichtzeit`;
+
+  // Progress bar
+  const bar=document.getElementById('sun-pct-bar');
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{if(bar)bar.style.width=(pct*100)+'%';});});
+
+  // Max label
+  const maxLbl=document.getElementById('sun-max-label');
+  if(maxLbl)maxLbl.textContent=`${Math.round(pct*100)}% der Tageslichtzeit`;
+
+  // Condition badge
+  const badge=document.getElementById('sun-cond-badge');
+  if(badge){
+    let cond,bg,clr;
+    if(pct>=0.8){cond='Herrlicher Sonnentag';bg='rgba(255,214,10,.18)';clr='#ffd60a';}
+    else if(pct>=0.55){cond='Viel Sonne';bg='rgba(255,159,10,.14)';clr='#ff9f0a';}
+    else if(pct>=0.3){cond='Teils sonnig';bg='rgba(255,255,255,.08)';clr='rgba(255,255,255,.6)';}
+    else if(pct>=0.1){cond='Wenig Sonne';bg='rgba(150,150,200,.1)';clr='rgba(180,180,255,.6)';}
+    else{cond='Bedeckt';bg='rgba(100,100,150,.1)';clr='rgba(150,150,200,.5)';}
+    badge.textContent=cond;
+    badge.style.background=bg;
+    badge.style.borderColor=clr.replace('rgba(','rgba(').replace(',1)',',.25)');
+    badge.style.color=clr;
+  }
+
+  // Rotate sun rays based on percentage (more sun = rays extend further, simulated by scale)
+  const rayGrp=document.getElementById('sun-ray-grp');
+  if(rayGrp){
+    const scl=0.7+pct*0.5; // scale 0.7 (no sun) to 1.2 (full sun)
+    requestAnimationFrame(()=>{requestAnimationFrame(()=>{
+      rayGrp.style.transform=`scale(${scl})`;
+      rayGrp.querySelectorAll('line').forEach(l=>{l.style.opacity=String(0.2+pct*0.7);});
+    });});
+  }
+}
+
 function drawFrostWarning(){
   const card=document.getElementById('frost-card');
   if(!card||!_wx?.daily) return;
@@ -5514,6 +6012,77 @@ function drawWeekStrip(){
       localStorage.setItem(KEY,inp.value);
       inp.focus();
     });
+  });
+})();
+
+// ── Sleep-All Timer ──────────────────────────────
+(function(){
+  var _saTimer=null, _saEnd=0;
+  var pill=document.getElementById('sleep-all-pill');
+  var cdEl=document.getElementById('sleep-all-cd');
+  var cancelBtn=document.getElementById('sleep-all-cancel');
+
+  function fmtMs(ms){
+    var s=Math.max(0,Math.round(ms/1000));
+    var m=Math.floor(s/60); s=s%60;
+    return m+'min '+String(s).padStart(2,'0')+'s';
+  }
+
+  function allOff(){
+    // Turn off all lights
+    var allLightIds=[];
+    if(typeof LIGHT_GROUPS!=='undefined'){
+      LIGHT_GROUPS.forEach(function(g){allLightIds=allLightIds.concat(g.ids||[]);});
+    }
+    var seen={};
+    allLightIds.forEach(function(id){
+      if(seen[id])return; seen[id]=1;
+      if(id.startsWith('light.')){
+        svc('light','turn_off',{entity_id:id}).catch(function(){});
+      } else if(id.startsWith('switch.')){
+        svc('switch','turn_off',{entity_id:id}).catch(function(){});
+      }
+    });
+    // Also turn off media player if defined
+    if(typeof CFG!=='undefined'&&CFG.media){
+      svc('media_player','turn_off',{entity_id:CFG.media}).catch(function(){});
+    }
+    showToast('🌙 Alles ausgeschaltet — Gute Nacht!');
+  }
+
+  function startTimer(mins){
+    if(_saTimer) clearInterval(_saTimer);
+    _saEnd=Date.now()+mins*60000;
+    // highlight active btn
+    document.querySelectorAll('.sa-btn').forEach(function(b){
+      b.classList.toggle('sa-active',parseInt(b.getAttribute('data-min'))===mins);
+    });
+    pill.classList.add('on');
+    _saTimer=setInterval(function(){
+      var rem=_saEnd-Date.now();
+      if(rem<=0){
+        clearInterval(_saTimer); _saTimer=null;
+        pill.classList.remove('on');
+        document.querySelectorAll('.sa-btn').forEach(function(b){b.classList.remove('sa-active');});
+        allOff();
+      } else {
+        cdEl.textContent='Alles aus in '+fmtMs(rem);
+      }
+    },500);
+    cdEl.textContent='Alles aus in '+fmtMs(mins*60000);
+  }
+
+  document.querySelectorAll('.sa-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var mins=parseInt(btn.getAttribute('data-min'));
+      startTimer(mins);
+    });
+  });
+
+  if(cancelBtn) cancelBtn.addEventListener('click',function(){
+    if(_saTimer){clearInterval(_saTimer);_saTimer=null;}
+    pill.classList.remove('on');
+    document.querySelectorAll('.sa-btn').forEach(function(b){b.classList.remove('sa-active');});
   });
 })();
 
@@ -8502,6 +9071,252 @@ function updateOverview(){
   }
 })();
 
+// ───────────── POMODORO FOCUS TIMER ─────────────
+(function(){
+  const FOCUS_MS = 25*60*1000;
+  const BREAK_MS = 5*60*1000;
+  const ARC_LEN = 2 * Math.PI * 28; // r=28 → 175.93px
+
+  const card = document.getElementById('pomo-card');
+  const arcFill = document.getElementById('pomo-arc-fill');
+  const timeEl = document.getElementById('pomo-time');
+  const phaseEl = document.getElementById('pomo-phase-lbl');
+  const descEl = document.getElementById('pomo-desc');
+  const startBtn = document.getElementById('pomo-start-btn');
+  const cancelBtn = document.getElementById('pomo-cancel-btn');
+  const pill = document.getElementById('pomo-pill');
+  const pillTxt = document.getElementById('pomo-pill-txt');
+  const countBadge = document.getElementById('pomo-count-badge');
+  const pomoIco = document.getElementById('pomo-ico');
+
+  if(!card) return;
+
+  let _phase = null; // 'focus'|'break'|null
+  let _endMs = 0;
+  let _interval = null;
+  let _totalMs = FOCUS_MS;
+  let _prevState = {}; // saved light states for restore
+
+  function getTodayCount(){
+    const k='pomo_count_'+new Date().toISOString().slice(0,10);
+    return parseInt(localStorage.getItem(k)||'0',10);
+  }
+  function incTodayCount(){
+    const k='pomo_count_'+new Date().toISOString().slice(0,10);
+    localStorage.setItem(k, getTodayCount()+1);
+  }
+  function updateBadge(){
+    const c=getTodayCount();
+    if(c>0){countBadge.textContent='🍅 '+c+' heute';countBadge.style.display='';}
+    else countBadge.style.display='none';
+  }
+
+  function fmtMs(ms){
+    if(ms<0)ms=0;
+    const s=Math.ceil(ms/1000);
+    const m=Math.floor(s/60),sec=s%60;
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  function setArc(pct){
+    arcFill.style.strokeDashoffset = ARC_LEN*(1-Math.max(0,Math.min(1,pct)));
+  }
+
+  function setFocusLights(){
+    // Cool white: 6500K, 90% brightness for focus
+    CFG.lights.forEach(function(id){
+      const s=_S[id];
+      if(!s||s.state!=='on')return;
+      const a=s.attributes||{};
+      _prevState[id]={ct:a.color_temp_kelvin,bri:a.brightness,rgb:a.rgb_color,state:'on'};
+    });
+    const ids=CFG.lights.filter(function(id){return _S[id]&&_S[id].state==='on';});
+    if(ids.length) svc('light','turn_on',{entity_id:ids,color_temp_kelvin:6500,brightness_pct:90,transition:3});
+  }
+
+  function setBreakLights(){
+    // Warm: 2700K, 55% for break
+    const ids=CFG.lights.filter(function(id){return _S[id]&&_S[id].state==='on';});
+    if(ids.length) svc('light','turn_on',{entity_id:ids,color_temp_kelvin:2700,brightness_pct:55,transition:5});
+  }
+
+  function restoreLights(){
+    Object.keys(_prevState).forEach(function(id){
+      const p=_prevState[id];
+      if(!p)return;
+      if(p.rgb) svc('light','turn_on',{entity_id:id,rgb_color:p.rgb,brightness_pct:Math.round((p.bri||255)/255*100),transition:3});
+      else if(p.ct) svc('light','turn_on',{entity_id:id,color_temp_kelvin:p.ct,brightness_pct:Math.round((p.bri||255)/255*100),transition:3});
+    });
+    _prevState={};
+  }
+
+  function startFocus(){
+    _phase='focus';
+    _totalMs=FOCUS_MS;
+    _endMs=Date.now()+FOCUS_MS;
+    setFocusLights();
+    pomoIco.textContent='🍅';
+    phaseEl.textContent='FOCUS';
+    phaseEl.style.color='rgba(48,209,88,.7)';
+    arcFill.style.stroke='url(#pomoGrad)';
+    descEl.textContent='Fokus-Phase: Ablenkungen minimieren. Lichter auf kühles Weiß gesetzt.';
+    startBtn.style.display='none';
+    cancelBtn.style.display='';
+    pill.classList.add('show');
+    hap&&hap();
+    _interval=setInterval(tick,500);
+    tick();
+  }
+
+  function startBreak(){
+    _phase='break';
+    _totalMs=BREAK_MS;
+    _endMs=Date.now()+BREAK_MS;
+    incTodayCount();
+    updateBadge();
+    setBreakLights();
+    pomoIco.textContent='☕';
+    phaseEl.textContent='PAUSE';
+    phaseEl.style.color='rgba(90,200,250,.8)';
+    arcFill.style.stroke='#5ac8fa';
+    descEl.textContent='Pause! Steh kurz auf, streck dich. Lichter auf warmes Weiß gesetzt.';
+    pillTxt.textContent='☕ Kurze Pause…';
+    showToast('🍅 Fokus-Phase abgeschlossen! Zeit für eine Pause ☕');
+    hap&&hap();
+    _endMs=Date.now()+BREAK_MS;
+    tick();
+  }
+
+  function stopPomo(restore){
+    clearInterval(_interval); _interval=null;
+    _phase=null;
+    if(restore) restoreLights();
+    startBtn.style.display='';
+    startBtn.textContent='▶ Starten';
+    cancelBtn.style.display='none';
+    pill.classList.remove('show');
+    pomoIco.textContent='🍅';
+    phaseEl.textContent='FOCUS';
+    phaseEl.style.color='rgba(48,209,88,.7)';
+    arcFill.style.stroke='url(#pomoGrad)';
+    arcFill.style.strokeDashoffset=ARC_LEN;
+    timeEl.textContent='25:00';
+    descEl.textContent='Konzentrations-Timer: 25 Minuten Fokus + 5 Minuten Pause. Lichter passen sich automatisch an.';
+  }
+
+  function tick(){
+    const remaining=_endMs-Date.now();
+    const pct=remaining/_totalMs;
+    setArc(pct);
+    timeEl.textContent=fmtMs(remaining);
+    if(_phase==='focus') pillTxt.textContent='🍅 Fokus… '+fmtMs(remaining)+' verbleibend';
+    else pillTxt.textContent='☕ Pause… '+fmtMs(remaining)+' verbleibend';
+    if(remaining<=0){
+      clearInterval(_interval); _interval=null;
+      if(_phase==='focus'){
+        startBreak();
+        _interval=setInterval(tick,500);
+      } else {
+        stopPomo(true);
+        updateBadge();
+        showToast('✅ Pomodoro abgeschlossen! Gut gemacht 🌟');
+        hap&&hap();
+      }
+    }
+  }
+
+  startBtn.addEventListener('click',function(){
+    if(_phase) return;
+    startFocus();
+  },{passive:true});
+  cancelBtn.addEventListener('click',function(){
+    stopPomo(true);
+    showToast('🍅 Timer abgebrochen');
+  },{passive:true});
+
+  // Show card always (it's a static tool)
+  card.classList.add('show');
+  updateBadge();
+  setArc(0); // start arc empty
+  // init arc to full for idle state
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      arcFill.style.strokeDashoffset=ARC_LEN;
+    });
+  });
+})();
+
+// ───────────── LICHT-AKTIVITÄTS-HEATMAP ─────────────
+(function(){
+  const STORE_KEY = 'lheat_v1';
+  const DAYS = 7;
+  const HOURS = 24;
+  // data format: { 'YYYY-MM-DD': [h0,h1,...,h23] } — each cell = 0..5 (active light count)
+  function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function loadData(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')}catch(e){return{}}}
+  function saveData(d){try{localStorage.setItem(STORE_KEY,JSON.stringify(d))}catch(e){}}
+  // Prune data older than 8 days
+  function pruneData(d){
+    const cutoff=new Date();cutoff.setDate(cutoff.getDate()-8);
+    const cutStr=cutoff.getFullYear()+'-'+String(cutoff.getMonth()+1).padStart(2,'0')+'-'+String(cutoff.getDate()).padStart(2,'0');
+    Object.keys(d).forEach(k=>{if(k<cutStr)delete d[k];});
+    return d;
+  }
+  // Record current light state
+  window._lheatRecord = function(onCount){
+    const d = pruneData(loadData());
+    const day = todayStr();
+    if(!d[day]) d[day] = new Array(HOURS).fill(0);
+    const h = new Date().getHours();
+    // Record max lights seen this hour
+    if(onCount > d[day][h]) d[day][h] = Math.min(onCount, 5);
+    saveData(d);
+    renderHeatmap(d);
+  };
+  function renderHeatmap(data){
+    const card = document.getElementById('lheat-card');
+    const grid = document.getElementById('lheat-grid');
+    const summary = document.getElementById('lheat-summary');
+    if(!card||!grid) return;
+    // Build last DAYS sorted list
+    const days = [];
+    for(let i=DAYS-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));}
+    // Check if any data exists
+    const hasData = days.some(day=>data[day]&&data[day].some(v=>v>0));
+    if(!hasData){card.classList.remove('show');return;}
+    card.classList.add('show');
+    // Render: columns=hours, rows=days (7 rows each col)
+    const cols = [];
+    for(let h=0;h<HOURS;h++){
+      const cells = days.map((day,di)=>{
+        const val = (data[day]&&data[day][h])||0;
+        const alpha = val===0?0.06:val===1?0.22:val===2?0.42:val===3?0.62:val===4?0.80:1.0;
+        const bg = val===0?`rgba(255,255,255,.05)`:`rgba(255,159,10,${alpha})`;
+        const now=new Date();const isToday=(di===DAYS-1);const isPast=h<now.getHours();const isCurrent=isToday&&h===now.getHours();
+        const dayNames=['So','Mo','Di','Mi','Do','Fr','Sa'];const dow=new Date(day).getDay();
+        const tip=`${dayNames[dow]} ${h}:00 – ${val>0?val+' Licht'+(val>1?'er':'')+' aktiv':'Kein Licht'}`;
+        const dimmed=(isToday&&!isPast&&!isCurrent)?'opacity:.35;':'';
+        return`<div class="lh-cell" style="background:${bg};${dimmed}" title="${tip}"></div>`;
+      });
+      cols.push(`<div class="lh-col">${cells.join('')}</div>`);
+    }
+    grid.innerHTML = cols.join('');
+    // Summary
+    const today = todayStr();
+    const todayData = data[today]||[];
+    const activeHoursToday = todayData.filter(v=>v>0).length;
+    const peakToday = Math.max(...todayData,0);
+    const totalDays = days.filter(d=>data[d]&&data[d].some(v=>v>0)).length;
+    if(activeHoursToday>0){
+      summary.textContent=`Heute: ${activeHoursToday}h Licht aktiv · Max ${peakToday} Licht${peakToday>1?'er':''} gleichzeitig · ${totalDays}/${DAYS} Tage mit Daten`;
+    } else {
+      summary.textContent=`${totalDays} von ${DAYS} Tagen mit Licht-Daten`;
+    }
+  }
+  // Initial render on load
+  renderHeatmap(pruneData(loadData()));
+})();
+
 function updateAll(){
   updateGeraeteCards();
   // ── Radio-Erkennung am Anfang, damit alle nachfolgenden Stellen _radActive korrekt haben ──
@@ -8582,6 +9397,8 @@ function updateAll(){
   })();
   // FAB visibility
   window._updateFab&&window._updateFab(on);
+  // Licht-Aktivitäts-Heatmap record
+  window._lheatRecord&&window._lheatRecord(on);
   // ── Lichtstimmung Ambient Orb ──
   (function(){
     const orb=document.getElementById('amb-orb');
