@@ -159,11 +159,11 @@ html,body{height:100%;background:var(--bg);
 #dev-status-gauge.pop #dsg-svg{animation:dsgPop .42s cubic-bezier(.34,1.28,.64,1)}
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
-.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#pomo-card,.page-entering>#lheat-card,
+.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#lheat-card,
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -1080,6 +1080,23 @@ html,body{height:100%;background:var(--bg);
 :root.light #quote-label{color:rgba(140,60,0,.5)}
 :root.light #quote-refresh{color:rgba(140,60,0,.5);border-color:rgba(140,60,0,.2)}
 
+/* ───────────── SMART HOME TIPP DES TAGES ───────────── */
+#tip-card{display:none;margin:0 0 12px;padding:14px 16px 12px;background:rgba(10,132,255,.04);border:1px solid rgba(10,132,255,.10);border-radius:16px;position:relative;overflow:hidden}
+#tip-card.show{display:block;animation:tipCardIn .5s cubic-bezier(.32,0,.15,1) both}
+@keyframes tipCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#tip-card::before{content:'💡';position:absolute;top:-4px;right:12px;font-size:3.2rem;opacity:.07;pointer-events:none;user-select:none;line-height:1}
+#tip-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#tip-label{font-size:.58rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(10,132,255,.7);flex:1}
+#tip-refresh{background:none;border:1px solid rgba(10,132,255,.22);border-radius:20px;padding:3px 9px;font-size:.65rem;cursor:pointer;color:rgba(100,180,255,.65);touch-action:manipulation;transition:background .18s,color .18s;flex-shrink:0}
+#tip-refresh:active{background:rgba(10,132,255,.12)}
+#tip-txt{font-size:.76rem;line-height:1.5;color:var(--txt);position:relative;z-index:1}
+#tip-category{display:inline-block;margin-top:8px;font-size:.58rem;font-weight:600;padding:2px 8px;border-radius:8px;background:rgba(10,132,255,.10);border:1px solid rgba(10,132,255,.18);color:rgba(80,160,255,.75);letter-spacing:.3px}
+:root.light #tip-card{background:rgba(0,80,210,.04);border-color:rgba(0,80,210,.11)}
+:root.light #tip-txt{color:var(--txt)}
+:root.light #tip-label{color:rgba(0,70,180,.55)}
+:root.light #tip-refresh{color:rgba(0,70,180,.5);border-color:rgba(0,70,180,.2)}
+:root.light #tip-category{background:rgba(0,80,210,.07);border-color:rgba(0,80,210,.15);color:rgba(0,70,180,.7)}
+
 /* ───────────── POMODORO FOCUS TIMER ───────────── */
 #pomo-card{display:none;margin:0 0 12px;padding:14px 16px 13px;background:rgba(48,209,88,.04);border:1px solid rgba(48,209,88,.12);border-radius:16px;position:relative;overflow:hidden}
 #pomo-card.show{display:block;animation:pomoCardIn .45s cubic-bezier(.32,0,.15,1) both}
@@ -1262,6 +1279,11 @@ html,body{height:100%;background:var(--bg);
 #alb-disc{transition:transform .3s ease}
 @keyframes discSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 #alb-disc.playing{animation:discSpin 8s linear infinite}
+/* 3D Holographic Tilt */
+#alb-tilt-wrap{transform-style:preserve-3d;will-change:transform}
+#alb-tilt-glare{position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:15;opacity:0;transition:opacity .4s ease;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.28) 0%,rgba(255,255,255,.08) 38%,transparent 66%)}
+#alb-tilt-wrap.tilt-active #alb-tilt-glare{opacity:1}
+@keyframes tiltReset{to{transform:perspective(420px) rotateX(0deg) rotateY(0deg)}}
 #alb-disc.playing #alb-glow{opacity:1}
 .eq-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(255,159,10,.55);opacity:0;inset:0;pointer-events:none;z-index:1}
 @keyframes eqRingPulse{0%{transform:scale(1);opacity:.55}70%{opacity:.15}100%{transform:scale(1.6);opacity:0}}
@@ -2263,6 +2285,16 @@ input[type=range] { touch-action: none; }
         <div id="quote-author"></div>
       </div>
 
+      <!-- Smart Home Tipp des Tages -->
+      <div id="tip-card">
+        <div id="tip-header">
+          <div id="tip-label">💡 Smart Home Tipp des Tages</div>
+          <button id="tip-refresh" title="Nächster Tipp">↺</button>
+        </div>
+        <div id="tip-txt"></div>
+        <div id="tip-category"></div>
+      </div>
+
       <!-- Pomodoro Focus Timer -->
       <div id="pomo-card">
         <div id="pomo-bg"></div>
@@ -2442,6 +2474,8 @@ input[type=range] { touch-action: none; }
             </div>
             <!-- Glow ring when playing -->
             <div id="alb-glow" style="position:absolute;inset:-3px;border-radius:50%;background:transparent;transition:box-shadow .8s ease;pointer-events:none"></div>
+            <!-- Holographic glare overlay -->
+            <div id="alb-tilt-glare"></div>
             <!-- Hidden tonearm (kept for JS compat) -->
             <div id="alb-tonearm-wrap" style="display:none"><svg></svg></div>
           </div>
@@ -3220,6 +3254,45 @@ input[type=range] { touch-action: none; }
             </div>
           </div>
           <div id="outfit-chips" style="display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;position:relative;z-index:1"></div>
+        </div>
+      </div>
+
+      <!-- Wäsche trocknen Card -->
+      <div id="laundry-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">👕 WÄSCHE TROCKNEN?</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.06);border-top-color:rgba(255,255,255,.1);padding:14px 18px;position:relative;overflow:hidden">
+          <div id="laundry-orb" style="position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;opacity:.14;filter:blur(32px);pointer-events:none;transition:background 2s ease"></div>
+          <div style="display:flex;align-items:center;gap:14px;position:relative;z-index:1">
+            <!-- Animated shirt SVG -->
+            <div id="laundry-icon-wrap" style="width:52px;height:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative">
+              <svg id="laundry-svg" viewBox="0 0 52 52" width="52" height="52">
+                <defs>
+                  <linearGradient id="lndGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop id="lnd-g1" offset="0%" stop-color="#30d158"/>
+                    <stop id="lnd-g2" offset="100%" stop-color="#30d158" stop-opacity=".5"/>
+                  </linearGradient>
+                </defs>
+                <!-- T-Shirt shape -->
+                <path id="laundry-shirt" d="M16 8 L8 16 L14 18 L14 42 L38 42 L38 18 L44 16 L36 8 Q31 14 26 14 Q21 14 16 8 Z" fill="url(#lndGrad)" opacity=".9"/>
+                <!-- Drip drops (shown when rain) -->
+                <g id="laundry-drips" style="display:none">
+                  <circle cx="22" cy="46" r="2" fill="#0a84ff" opacity=".7"><animate attributeName="cy" values="46;52;46" dur="1.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0;.7" dur="1.4s" repeatCount="indefinite"/></circle>
+                  <circle cx="30" cy="46" r="2" fill="#0a84ff" opacity=".7"><animate attributeName="cy" values="46;52;46" dur="1.8s" repeatCount="indefinite" begin="0.4s"/><animate attributeName="opacity" values=".7;0;.7" dur="1.8s" repeatCount="indefinite" begin="0.4s"/></circle>
+                </g>
+                <!-- Wind lines (shown when windy) -->
+                <g id="laundry-wind" style="display:none;opacity:.7">
+                  <line x1="2" y1="22" x2="10" y2="22" stroke="#fff" stroke-width="1.5" stroke-linecap="round"><animate attributeName="x1" values="2;6;2" dur="1s" repeatCount="indefinite"/></line>
+                  <line x1="2" y1="27" x2="8" y2="27" stroke="#fff" stroke-width="1.5" stroke-linecap="round"><animate attributeName="x1" values="2;5;2" dur="1.3s" repeatCount="indefinite"/></line>
+                </g>
+              </svg>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div id="laundry-title" style="font-size:.92rem;font-weight:700;color:#fff;margin-bottom:3px">–</div>
+              <div id="laundry-sub" style="font-size:.7rem;color:rgba(255,255,255,.45);line-height:1.5">–</div>
+            </div>
+          </div>
+          <div id="laundry-chips" style="display:flex;gap:6px;margin-top:11px;flex-wrap:wrap;position:relative;z-index:1"></div>
+          <div id="laundry-window" style="display:none;margin-top:9px;font-size:.7rem;color:rgba(255,255,255,.35);position:relative;z-index:1">⏱ Bestes Fenster: <span id="laundry-window-text" style="color:rgba(255,255,255,.65);font-weight:600">–</span></div>
         </div>
       </div>
 
@@ -4544,6 +4617,7 @@ function renderWeather(){
   drawOutdoorChip();
   drawWeekStrip();
   drawOutfitCard();
+  drawLaundryCard();
   drawDaylightCard();
   drawTempCurve();
   drawWindCurve();
@@ -6150,6 +6224,108 @@ function drawOutfitCard(){
   // Chips
   const cd=document.getElementById('outfit-chips');
   cd.innerHTML=chips.map(ch=>`<div style="display:inline-flex;align-items:center;gap:5px;background:${ch.clr};border:1px solid ${ch.bc};border-radius:10px;padding:4px 10px;font-size:.68rem;color:rgba(255,255,255,.8)">${ch.ic} ${ch.lbl}</div>`).join('');
+}
+
+function drawLaundryCard(){
+  const card=document.getElementById('laundry-card');
+  if(!card||!_wx?.current) return;
+  const c=_wx.current;
+  const temp=c.temperature_2m??15;
+  const wind=c.windspeed_10m??0;
+  const wmo=c.weathercode??0;
+  // Get max rain probability today from hourly
+  var maxRainProb=0, bestWindowStart=-1, bestWindowScore=0;
+  if(_wx.hourly){
+    var now=new Date(); var nowH=now.getHours();
+    (_wx.hourly.precipitation_probability||[]).forEach(function(p,i){
+      if(p>maxRainProb) maxRainProb=p;
+    });
+    // Find best 3h window today with low rain + good conditions
+    var hourlyLen=Math.min(24,(_wx.hourly.precipitation_probability||[]).length);
+    for(var i=nowH;i<hourlyLen-2;i++){
+      var pp=_wx.hourly.precipitation_probability;
+      var tt=_wx.hourly.temperature_2m||[];
+      var ww=_wx.hourly.windspeed_10m||[];
+      var cc=_wx.hourly.cloudcover||[];
+      var avgRain=(pp[i]+pp[i+1]+pp[i+2])/3;
+      var avgTemp=(tt[i]||15+tt[i+1]||15+tt[i+2]||15)/3;
+      var avgWind=(ww[i]||0+ww[i+1]||0+ww[i+2]||0)/3;
+      var avgCloud=(cc[i]||50+cc[i+1]||50+cc[i+2]||50)/3;
+      // Score: low rain=good, warm=good, some wind=good, low cloud=good
+      var score=(100-avgRain)*0.5+(Math.min(30,avgTemp)/30)*20+(Math.min(40,avgWind)/40)*20+(100-avgCloud)*0.1;
+      if(score>bestWindowScore){bestWindowScore=score;bestWindowStart=i;}
+    }
+  }
+  const isRaining=(wmo>=51&&wmo<=99)||maxRainProb>=70;
+  const hasRisk=maxRainProb>=40&&maxRainProb<70;
+  const isWarm=temp>=14;
+  const isWindy=wind>=10&&wind<=40;
+  const isHotWind=wind>40;
+
+  var level, title, sub, accentColor, chips=[];
+  var showDrips=false, showWind=false;
+
+  if(isRaining||wmo>=80){
+    level=0; title='Drinnen trocknen 🏠'; sub='Regen erwartet — Wäsche nicht draußen lassen';
+    accentColor='#0a84ff'; showDrips=true;
+    chips.push({t:'🌧 Regen',c:'rgba(10,132,255,.18)',tc:'rgba(100,200,255,.9)'});
+  } else if(isHotWind){
+    level=1; title='Risiko durch Sturm ⚠️'; sub='Böen über 40 km/h — Wäsche könnte davonfliegen';
+    accentColor='#ff9f0a'; showWind=true;
+    chips.push({t:'💨 Sturmböen',c:'rgba(255,159,10,.18)',tc:'rgba(255,210,100,.9)'});
+  } else if(hasRisk){
+    level=2; title='Eher drinnen trocknen 🤔'; sub=`${Math.round(maxRainProb)}% Regenrisiko — lieber auf der sicheren Seite`;
+    accentColor='#ff9f0a';
+    chips.push({t:`🌦 ${Math.round(maxRainProb)}% Regenrisiko`,c:'rgba(255,159,10,.18)',tc:'rgba(255,210,100,.9)'});
+  } else if(!isWarm){
+    level=2; title='Langsames Trocknen 🌡'; sub=`Nur ${Math.round(temp)}°C — Trocknung dauert länger`;
+    accentColor='#64d2ff';
+    chips.push({t:`🌡 ${Math.round(temp)}°C`,c:'rgba(100,210,255,.15)',tc:'rgba(100,210,255,.85)'});
+  } else {
+    level=3;
+    if(isWarm&&isWindy){
+      title='Ideal zum Draußentrocknen! 🌟'; sub='Warm + Wind = perfekte Trocknungsbedingungen';
+    } else if(isWarm){
+      title='Gut geeignet zum Trocknen ✅'; sub=`${Math.round(temp)}°C, kein Regen erwartet`;
+    } else {
+      title='Gute Bedingungen ✅'; sub='Wenig Regenrisiko heute';
+    }
+    accentColor='#30d158';
+    if(isWindy) chips.push({t:'💨 Guter Wind',c:'rgba(48,209,88,.15)',tc:'rgba(48,209,88,.85)'});
+    chips.push({t:`🌡 ${Math.round(temp)}°C`,c:'rgba(48,209,88,.1)',tc:'rgba(48,209,88,.7)'});
+    if(maxRainProb<20) chips.push({t:'☀️ Kein Regen',c:'rgba(255,204,0,.12)',tc:'rgba(255,220,80,.85)'});
+    showWind=isWindy;
+  }
+
+  // Update SVG gradient colors
+  const g1=card.querySelector('#lnd-g1');
+  const g2=card.querySelector('#lnd-g2');
+  if(g1) g1.setAttribute('stop-color',accentColor);
+  if(g2) g2.setAttribute('stop-color',accentColor);
+  const orb=document.getElementById('laundry-orb');
+  if(orb) orb.style.background=accentColor;
+  const drips=card.querySelector('#laundry-drips');
+  const windEl=card.querySelector('#laundry-wind');
+  if(drips) drips.style.display=showDrips?'':'none';
+  if(windEl) windEl.style.display=showWind?'':'none';
+
+  document.getElementById('laundry-title').textContent=title;
+  document.getElementById('laundry-sub').textContent=sub;
+  const chipEl=document.getElementById('laundry-chips');
+  if(chipEl) chipEl.innerHTML=chips.map(ch=>`<span style="font-size:.65rem;padding:3px 9px;border-radius:8px;background:${ch.c};color:${ch.tc};border:1px solid ${ch.c.replace('.15',',.3').replace('.18',',.3').replace('.12',',.25').replace('.1',',.2')}">${ch.t}</span>`).join('');
+
+  // Best window display
+  const winEl=document.getElementById('laundry-window');
+  const winTxt=document.getElementById('laundry-window-text');
+  if(winEl&&winTxt&&bestWindowStart>=0&&level>=2){
+    var end=bestWindowStart+3;
+    winTxt.textContent=`${String(bestWindowStart).padStart(2,'0')}:00–${String(end).padStart(2,'0')}:00 Uhr`;
+    winEl.style.display='block';
+  } else if(winEl){
+    winEl.style.display='none';
+  }
+
+  card.style.display='block';
 }
 
 function drawDaylightCard(){
@@ -9081,6 +9257,68 @@ function updateOverview(){
   }
 })();
 
+// ───────────── SMART HOME TIPP DES TAGES ─────────────
+(function(){
+  const TIPS = [
+    {t:'Nutze den "Urlaubs-Modus" in Home Assistant: Automatisierungen simulieren Anwesenheit — Lichter gehen zu zufälligen Zeiten an/aus, um Einbrecher abzuschrecken.',c:'🔒 Sicherheit'},
+    {t:'Setze Bewegungssensoren im Flur ein: Die Lichter schalten sich automatisch ein wenn du nach Hause kommst — kein Tasten-Suchen im Dunkeln.',c:'💡 Automatisierung'},
+    {t:'Nutze die HA Energie-Integration: Mit smart Steckdosen und einem Hauptzähler siehst du genau wofür du Strom verbrauchst — und sparst bis zu 20%.',c:'⚡ Energie'},
+    {t:'Erstelle eine "Gute Nacht"-Szene: Alle Lichter aus, Türen prüfen, Thermostat auf Nachtabsenkung — alles mit einem Tap.',c:'🌙 Komfort'},
+    {t:'Verbinde dein Smart Home mit dem Kalender: Wenn du morgens früher aufstehen musst, wacht auch das Haus früher auf — Heizung, Licht und Kaffeemaschine.',c:'📅 Integration'},
+    {t:'Nutze Conditional Cards in Lovelace: Zeige Entities nur dann an wenn sie relevant sind — z.B. die Klimaanlage nur im Sommer.',c:'🖥 Dashboard'},
+    {t:'Setze Zigbee statt WiFi für Sensoren ein: Zigbee-Geräte brauchen keine eigene SSID, verbrauchen weniger Strom und sind zuverlässiger im Netzwerk.',c:'📡 Netzwerk'},
+    {t:'Verwende Blueprints für gängige Automationen: Die HA-Community hat tausende fertige Blueprints — spare Zeit und lerne dabei best practices.',c:'🤖 Automation'},
+    {t:'Erstelle einen "Abend-Einblend-Timer": Lichter gehen ab 17 Uhr automatisch auf 30% — kein harter Schnitt, sondern ein sanfter Übergang zum Abend.',c:'💡 Licht'},
+    {t:'Nutze Presence Detection clever: Kombiniere WiFi-Presence, BLE-Beacons und GPS für zuverlässige Anwesenheitserkennung ohne False-Positives.',c:'📍 Präsenz'},
+    {t:'Aktiviere die HA Mobile App Benachrichtigungen: Wichtige Events (Türklingel, Wassersensor, Rauchmelder) kommen direkt aufs Handy.',c:'📱 Benachrichtigungen'},
+    {t:'Stelle einen Hysterese-Wert für Temperatursensoren ein: Verhindert, dass die Heizung bei minimalen Schwankungen ständig an/aus schaltet.',c:'🌡 Heizung'},
+    {t:'Nutze Node-RED für komplexe Logik: Wenn deine Automationen zu verschachtelt werden, ist Node-RED die elegantere Lösung als YAML-Conditionals.',c:'🔀 Fortgeschritten'},
+    {t:'Erstelle regelmäßige Snapshots: HA Backup-Automationen laufen täglich und speichern auf externem Speicher — so verlierst du nie deine Konfiguration.',c:'💾 Backup'},
+    {t:'Verwende Template-Sensoren: Kombiniere mehrere Entities zu einer — z.B. "Fenster offen" wenn mindestens ein Fenster in einem Raum offen ist.',c:'🔧 Templates'},
+    {t:'Nutze die Lux-Sensor Steuerung: Schalte Lichter erst ein wenn es wirklich dunkel wird — nicht nach der Uhrzeit, sondern nach der gemessenen Helligkeit.',c:'☀️ Lichtsensor'},
+    {t:'Aktiviere HomeKit-Integration: Mit dem HA HomeKit Bridge Plugin steuere alle deine HA-Geräte via Siri und der Apple Home App.',c:'🍎 Integration'},
+    {t:'Setze einen Wasseralarm ein: Günstiger Zigbee-Wassersensor unter Spülmaschine und Waschbecken — eine Benachrichtigung kann einen Wasserschaden verhindern.',c:'💧 Sicherheit'},
+    {t:'Nutze adaptive Lichter-Routinen: Morgens kühles helles Licht (6500K), abends warmes gedimmtes Licht (2700K) — unterstützt deinen natürlichen Schlafrhythmus.',c:'🌅 Circadian'},
+    {t:'Erstelle "Mini-Apps" mit Browser-Mod: Custom popups, sidebar-Widgets und Overlays machen dein Dashboard noch persönlicher.',c:'🖥 Dashboard'},
+    {t:'Verwende Rate-Limit-Sensing: Wenn viele Geräte gleichzeitig abfragen, nutze Polling-Intervall und State-Caching — entlastet dein Netzwerk.',c:'⚡ Performance'},
+    {t:'Setze Shelly-Relais als Bridge ein: Vorhandene normale Schalter bleiben funktionsfähig UND smart — perfekt für Mietwohnungen ohne Umbau.',c:'🔌 Geräte'},
+    {t:'Nutze HACS (Home Assistant Community Store): Hunderte Community-Integrationen und Cards die offiziell nicht verfügbar sind — immer mit Vorsicht installieren.',c:'🛒 HACS'},
+    {t:'Erstelle einen "Fokus-Modus": Lichter auf kühles Weiß, Do-Not-Disturb auf Handy, alle unnötigen Automationen pausiert — ideale Arbeitsumgebung.',c:'🎯 Produktivität'},
+    {t:'Verbinde Smart Plugs mit Energie-Monitoring: Erkenne Standby-Verbraucher (oft 5-15W pro Gerät) und schalte sie mit einer Automation nachts aus.',c:'⚡ Energie'},
+    {t:'Nutze die Google Assistant oder Alexa Integration: Sprachbefehle für häufige Aktionen — auch wenn du keine Hände frei hast.',c:'🗣 Sprachsteuerung'},
+    {t:'Setze History Graphs geschickt ein: Zeige nur die letzten 24h statt einer Woche — sauberes Dashboard ohne Datenmüll.',c:'📊 Dashboard'},
+    {t:'Erstelle Gruppen für gleichartige Lichter: Steuer alle Wohnzimmer-Lichter auf einmal statt einzeln — übersichtlicher und effizienter.',c:'💡 Organisation'},
+    {t:'Nutze Conditional Logic für Jahreszeiten: Im Winter andere Schwellwerte für Außenbeleuchtung als im Sommer — passt sich automatisch ans Tageslicht an.',c:'🗓 Saisonal'},
+    {t:'Teste regelmäßig deine Alarme und Automationen: Überprüfe einmal im Monat ob alle Benachrichtigungen und Automationen noch korrekt funktionieren.',c:'✅ Wartung'}
+  ];
+  const card = document.getElementById('tip-card');
+  const txtEl = document.getElementById('tip-txt');
+  const catEl = document.getElementById('tip-category');
+  const refreshBtn = document.getElementById('tip-refresh');
+  if(!card||!txtEl) return;
+  function todayKey(){ const d=new Date(); return 'tip_'+d.getFullYear()+'_'+(d.getMonth()+1)+'_'+d.getDate(); }
+  function loadTip(forceNext){
+    const key = todayKey();
+    let idx = parseInt(localStorage.getItem(key)||'-1');
+    if(idx<0) idx = new Date().getDay()*4 % TIPS.length; // stable daily default
+    if(forceNext){ idx = (idx+1) % TIPS.length; localStorage.setItem(key, idx); }
+    else if(!localStorage.getItem(key)){ localStorage.setItem(key, idx); }
+    const tip = TIPS[idx];
+    txtEl.textContent = tip.t;
+    catEl.textContent = tip.c;
+    card.classList.add('show');
+  }
+  loadTip(false);
+  if(refreshBtn){
+    refreshBtn.addEventListener('click', function(){
+      loadTip(true);
+      refreshBtn.style.transition='transform .4s ease';
+      refreshBtn.style.transform='rotate(180deg)';
+      setTimeout(()=>{ refreshBtn.style.transform='rotate(360deg)'; setTimeout(()=>{ refreshBtn.style.transform=''; refreshBtn.style.transition=''; },200); },200);
+    });
+  }
+})();
+
 // ───────────── POMODORO FOCUS TIMER ─────────────
 (function(){
   const FOCUS_MS = 25*60*1000;
@@ -11839,6 +12077,97 @@ const _origSetWxMode=setWxMode;
     tile.addEventListener('touchend',function(){setTimeout(function(){tile.classList.remove('pressing');},120);},{passive:true});
     tile.addEventListener('touchcancel',function(){tile.classList.remove('pressing');},{passive:true});
   });
+
+
+  // ── Album Art 3D Holographic Tilt Effect ──
+  (function(){
+    var wrap = document.getElementById('alb-tilt-wrap');
+    var glare = document.getElementById('alb-tilt-glare');
+    var disc = document.getElementById('alb-disc');
+    var pgMusik = document.getElementById('pg-musik');
+    if(!wrap||!disc||!pgMusik) return;
+
+    var MAX_ROT = 13; // degrees
+    var targetRX=0,targetRY=0,curRX=0,curRY=0,rafId=null;
+    var isPlaying=false;
+
+    function lerp(a,b,t){return a+(b-a)*t;}
+
+    function applyTilt(){
+      curRX=lerp(curRX,targetRX,0.10);
+      curRY=lerp(curRY,targetRY,0.10);
+      if(isPlaying && wrap){
+        wrap.style.transform='perspective(420px) rotateX('+curRX.toFixed(2)+'deg) rotateY('+curRY.toFixed(2)+'deg)';
+        if(glare){
+          // Glare moves opposite to tilt → hotspot where light would hit
+          var gx = (50 - curRY/MAX_ROT*38).toFixed(1);
+          var gy = (50 + curRX/MAX_ROT*38).toFixed(1);
+          glare.style.setProperty('--gx',gx+'%');
+          glare.style.setProperty('--gy',gy+'%');
+        }
+      }
+      var stillMoving = Math.abs(curRX-targetRX)>0.05 || Math.abs(curRY-targetRY)>0.05;
+      if(stillMoving) rafId=requestAnimationFrame(applyTilt);
+      else rafId=null;
+    }
+
+    function startRaf(){
+      if(!rafId) rafId=requestAnimationFrame(applyTilt);
+    }
+
+    function setTarget(rx,ry){
+      targetRX=Math.max(-MAX_ROT,Math.min(MAX_ROT,rx));
+      targetRY=Math.max(-MAX_ROT,Math.min(MAX_ROT,ry));
+      startRaf();
+    }
+
+    // Pointer events on the music page
+    pgMusik.addEventListener('pointermove',function(e){
+      if(!isPlaying) return;
+      var rect=wrap.getBoundingClientRect();
+      var cx=rect.left+rect.width/2;
+      var cy=rect.top+rect.height/2;
+      // Only react when pointer is near album (within 120px)
+      var dx=e.clientX-cx, dy=e.clientY-cy;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist>120){setTarget(0,0);return;}
+      var rx = -(dy/60)*MAX_ROT;
+      var ry = (dx/60)*MAX_ROT;
+      setTarget(rx,ry);
+      wrap.classList.add('tilt-active');
+    },{passive:true});
+
+    pgMusik.addEventListener('pointerleave',function(){
+      setTarget(0,0);
+      wrap.classList.remove('tilt-active');
+    },{passive:true});
+
+    // Device orientation for mobile
+    if(window.DeviceOrientationEvent){
+      window.addEventListener('deviceorientation',function(e){
+        if(!isPlaying) return;
+        // beta = front/back tilt (-180..180), gamma = left/right (-90..90)
+        var rx = Math.max(-MAX_ROT,Math.min(MAX_ROT,(e.beta||0)*0.18));
+        var ry = Math.max(-MAX_ROT,Math.min(MAX_ROT,(e.gamma||0)*0.22));
+        setTarget(rx,ry);
+        if(Math.abs(rx)>1||Math.abs(ry)>1) wrap.classList.add('tilt-active');
+      },{passive:true});
+    }
+
+    // Sync playing state
+    var _origAlbDiscUpdate = window._albDiscUpdate;
+    // Poll disc class for playing state
+    setInterval(function(){
+      var playing = disc.classList.contains('playing');
+      if(playing!==isPlaying){
+        isPlaying=playing;
+        if(!playing){
+          setTarget(0,0);
+          wrap.classList.remove('tilt-active');
+        }
+      }
+    },400);
+  })();
 
 </script>
 <div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>

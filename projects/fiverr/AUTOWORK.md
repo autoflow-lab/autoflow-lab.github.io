@@ -346,3 +346,6 @@
 
 ## Neue Ideen (2026-03-29 00:03 UTC)
 - [x] wz.html: Wetter-Tab — "Biowetter" Karte (🧬 Einfluss des Wetters auf das Wohlbefinden: Kopfdruck-Risiko aus Luftdruckabfall + Feuchte, Gelenk-Risiko aus Kälte + Druckabfall, Energie-Level aus Sonnenschein + Temperatur + Luftdruck, Kreislauf-Belastung aus Tagesschwankung + Feuchte — 4 animierte Faktor-Balken, Gesamt-Emoji + Label + Empfehlungs-Tip, amber/grün/rot je Belastung, Orb-Hintergrund)
+
+## Neue Ideen (2026-03-29 12:03 UTC)
+- [x] wz.html: Musik-Tab — 3D Holographic Tilt Effect auf Album-Art (pointer/DeviceOrientation → perspective rotateX/Y, spring damping, glare-Overlay)
