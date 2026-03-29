@@ -82,6 +82,14 @@ html,body{height:100%;background:var(--bg);
   -webkit-font-smoothing:antialiased;color:var(--txt);overflow:hidden;
   transition:var(--theme-transition);}
 
+/* ───────────── APP BG ORBS ───────────── */
+#app-bg-orb1,#app-bg-orb2{position:fixed;border-radius:50%;pointer-events:none;z-index:0;will-change:transform,background;filter:blur(90px)}
+#app-bg-orb1{width:420px;height:420px;top:-120px;left:-100px;opacity:0;transition:background 45s ease,opacity 8s ease;animation:bgOrb1Drift 34s ease-in-out infinite alternate}
+#app-bg-orb2{width:380px;height:380px;bottom:-80px;right:-80px;opacity:0;transition:background 45s ease,opacity 8s ease;animation:bgOrb2Drift 26s ease-in-out infinite alternate}
+@keyframes bgOrb1Drift{0%{transform:translate(0,0) scale(1)}30%{transform:translate(28px,18px) scale(1.07)}60%{transform:translate(-14px,32px) scale(.96)}100%{transform:translate(20px,-22px) scale(1.05)}}
+@keyframes bgOrb2Drift{0%{transform:translate(0,0) scale(1)}40%{transform:translate(-22px,-18px) scale(1.08)}70%{transform:translate(18px,14px) scale(.95)}100%{transform:translate(-10px,20px) scale(1.04)}}
+:root.light #app-bg-orb1,:root.light #app-bg-orb2{opacity:0!important}
+
 /* ───────────── AMBIENT ───────────── */
 #amb{
   position:fixed;inset:0;z-index:400;display:none;
@@ -160,7 +168,7 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
@@ -517,6 +525,32 @@ html,body{height:100%;background:var(--bg);
 #lt-br-btn.br-flash{animation:brApply .55s ease forwards}
 :root.light #lt-breathe{background:transparent}
 :root.light #lt-br-pill{background:rgba(20,160,180,.06)}
+/* ── Licht-Snapshot ── */
+#lt-snapshot{margin:0 14px 12px;opacity:0;transition:opacity .5s ease}
+#lt-snapshot.show{opacity:1}
+#lt-snap-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+#lt-snap-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,159,10,.7)}
+#lt-snap-save{padding:5px 12px;border-radius:10px;border:1px solid rgba(255,159,10,.36);background:rgba(255,159,10,.1);color:rgba(255,159,10,.9);font-size:.68rem;font-weight:700;cursor:pointer;touch-action:manipulation;transition:background .15s,transform .15s}
+#lt-snap-save:active{background:rgba(255,159,10,.25);transform:scale(.94)}
+#lt-snap-save.disabled{opacity:.35;pointer-events:none}
+#lt-snap-list{display:flex;flex-direction:column;gap:7px}
+.lsnap-card{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;border:1px solid rgba(255,159,10,.18);background:rgba(255,159,10,.05);animation:lsnapIn .38s cubic-bezier(.32,0,.15,1) both}
+@keyframes lsnapIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+.lsnap-dots{display:flex;gap:4px;flex-shrink:0}
+.lsnap-dot{width:9px;height:9px;border-radius:50%;border:1px solid rgba(255,255,255,.1)}
+.lsnap-info{flex:1;min-width:0}
+.lsnap-name{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.78);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lsnap-meta{font-size:.58rem;color:rgba(255,255,255,.35);margin-top:1px}
+.lsnap-restore{padding:4px 10px;border-radius:8px;border:1px solid rgba(255,159,10,.3);background:rgba(255,159,10,.08);color:rgba(255,159,10,.85);font-size:.65rem;font-weight:700;cursor:pointer;touch-action:manipulation;transition:background .15s,transform .12s;white-space:nowrap}
+.lsnap-restore:active{background:rgba(255,159,10,.22);transform:scale(.94)}
+.lsnap-del{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.35);font-size:.65rem;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;flex-shrink:0}
+.lsnap-del:active{background:rgba(255,69,58,.2);color:rgba(255,69,58,.9)}
+.lsnap-empty{font-size:.64rem;color:rgba(255,255,255,.25);text-align:center;padding:6px 0;font-style:italic}
+@keyframes lsnapRestoreFlash{0%{background:rgba(255,159,10,.32)}100%{background:rgba(255,159,10,.05)}}
+.lsnap-card.lsnap-flashing{animation:lsnapRestoreFlash .5s ease forwards}
+:root.light #lt-snapshot .lsnap-card{background:rgba(200,100,0,.04);border-color:rgba(200,100,0,.15)}
+:root.light .lsnap-name{color:rgba(0,0,0,.72)}
+:root.light .lsnap-meta{color:rgba(0,0,0,.38)}
 .lt-cp-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin-bottom:7px}
 .lt-cp-chips{display:flex;gap:8px;flex-wrap:wrap}
 .lt-cp-chip{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.13);background:radial-gradient(circle at 38% 32%,var(--cc,#888) 0%,rgba(0,0,0,.55) 100%);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;box-shadow:0 0 0 0 transparent;position:relative;overflow:hidden}
@@ -1341,6 +1375,17 @@ html,body{height:100%;background:var(--bg);
 @keyframes rfcBar{from{height:4px;opacity:.4}to{height:16px;opacity:1}}
 #rfc-cid{font-size:.52rem;color:rgba(255,255,255,.22);margin-left:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
 #sleep-timer-row{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:14px;border:1px solid rgba(255,255,255,.06)}
+/* Mood Scenes */
+.mood-btn{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:11px 13px;cursor:pointer;touch-action:manipulation;transition:background .18s,border-color .18s,transform .12s;text-align:left}
+.mood-btn:active{transform:scale(.95)}
+.mood-btn.mood-active{border-color:var(--mood-color,rgba(255,159,10,.5));background:rgba(var(--mood-rgb,255,159,10),.1)}
+.mood-ico{font-size:1.3rem;line-height:1;flex-shrink:0}
+.mood-label{font-size:.76rem;font-weight:600;color:rgba(255,255,255,.75);line-height:1.2}
+.mood-sub{font-size:.6rem;color:rgba(255,255,255,.35);margin-top:2px;line-height:1.3}
+@keyframes msToastIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+:root.light .mood-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08)}
+:root.light .mood-label{color:rgba(0,0,0,.65)}
+:root.light .mood-sub{color:rgba(0,0,0,.35)}
 #sleep-timer-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:none;border-radius:10px;padding:7px 12px;color:rgba(255,255,255,.7);font-size:.68rem;font-weight:600;cursor:pointer;letter-spacing:.3px;touch-action:manipulation;transition:background .15s,transform .12s}
 #sleep-timer-btn:active{transform:scale(.93);background:rgba(255,255,255,.14)}
 #sleep-timer-btn.st-active{background:rgba(10,132,255,.18);color:#0a84ff;border:1px solid rgba(10,132,255,.3)}
@@ -1901,6 +1946,10 @@ input[type=range] { touch-action: none; }
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Oxanium:wght@200;300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<!-- APP BG ORBS -->
+<div id="app-bg-orb1"></div>
+<div id="app-bg-orb2"></div>
 
 <!-- AMBIENT -->
 <div id="amb">
@@ -2589,6 +2638,13 @@ input[type=range] { touch-action: none; }
         <div id="track-history-list"></div>
       </div>
 
+      <!-- Mood Scenes -->
+      <div id="mood-scene-wrap" style="margin-bottom:14px;position:relative;z-index:1">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.07em;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:9px">🎭 Stimmung</div>
+        <div id="mood-scene-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+        <div id="mood-scene-toast" style="display:none;margin-top:8px;font-size:.7rem;color:rgba(255,255,255,.45);text-align:center;animation:msToastIn .3s ease both">–</div>
+      </div>
+
       <!-- ── Radio ── -->
       <span class="lbl" style="position:relative;z-index:1">Radio</span>
       <div class="rg" id="rg" style="position:relative;z-index:1"></div>
@@ -2703,6 +2759,14 @@ input[type=range] { touch-action: none; }
           <button class="lt-cp-chip" data-rgb="50,210,80" style="--cc:#32d250" title="Grün">💚</button>
           <button class="lt-cp-chip" data-rgb="190,60,255" style="--cc:#be3cff" title="Lila">💜</button>
         </div>
+      </div>
+      <!-- Licht-Snapshots -->
+      <div id="lt-snapshot" aria-label="Licht-Snapshots">
+        <div id="lt-snap-header">
+          <span id="lt-snap-lbl">📸 SCHNAPPSCHÜSSE</span>
+          <button id="lt-snap-save" title="Aktuellen Lichtzustand speichern">+ Speichern</button>
+        </div>
+        <div id="lt-snap-list"></div>
       </div>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
@@ -6099,6 +6163,96 @@ function drawWeekStrip(){
   });
 })();
 
+// ── Mood Scenes ──────────────────────────────────
+(function(){
+  var MOODS=[
+    {
+      id:'relax',emoji:'🌿',label:'Entspannen',sub:'Warm & gedimmt',
+      color:'rgba(255,159,10,.5)',rgb:'255,159,10',
+      light:{brightness_pct:30,color_temp_kelvin:2700},
+      vol:25
+    },
+    {
+      id:'party',emoji:'🪩',label:'Party',sub:'Bunt & laut',
+      color:'rgba(191,90,242,.5)',rgb:'191,90,242',
+      light:{brightness_pct:100,hs_color:[300,90]},
+      vol:80
+    },
+    {
+      id:'focus',emoji:'🧠',label:'Fokus',sub:'Hell & klar',
+      color:'rgba(100,210,255,.5)',rgb:'100,210,255',
+      light:{brightness_pct:100,color_temp_kelvin:5000},
+      vol:35
+    },
+    {
+      id:'romantic',emoji:'🕯',label:'Romantisch',sub:'Kerzenrot & leise',
+      color:'rgba(255,55,95,.5)',rgb:'255,55,95',
+      light:{brightness_pct:20,color_temp_kelvin:2200},
+      vol:20
+    }
+  ];
+
+  var activeId=null;
+  var wrap=document.getElementById('mood-scene-btns');
+  var toastEl=document.getElementById('mood-scene-toast');
+  if(!wrap) return;
+
+  wrap.innerHTML=MOODS.map(function(m){
+    return`<button class="mood-btn" data-mood="${m.id}" style="--mood-color:${m.color};--mood-rgb:${m.rgb}" title="${m.label}">
+      <span class="mood-ico">${m.emoji}</span>
+      <div><div class="mood-label">${m.label}</div><div class="mood-sub">${m.sub}</div></div>
+    </button>`;
+  }).join('');
+
+  function applyMood(m){
+    // Set lights
+    var allLightIds=[];
+    if(typeof LIGHT_GROUPS!=='undefined'){
+      LIGHT_GROUPS.forEach(function(g){allLightIds=allLightIds.concat(g.ids||[]);});
+    }
+    var seen={};
+    allLightIds.forEach(function(id){
+      if(seen[id])return; seen[id]=1;
+      if(id.startsWith('light.')){
+        svc('light','turn_on',Object.assign({entity_id:id},m.light)).catch(function(){});
+      }
+    });
+    // Set volume
+    if(typeof CFG!=='undefined'&&CFG.media){
+      svc('media_player','volume_set',{entity_id:CFG.media,volume_level:m.vol/100}).catch(function(){});
+    }
+    // Toast
+    if(toastEl){
+      toastEl.textContent=m.emoji+' '+m.label+' aktiviert';
+      toastEl.style.display='block';
+      toastEl.style.animation='none';
+      void toastEl.offsetWidth;
+      toastEl.style.animation='msToastIn .3s ease both';
+      clearTimeout(toastEl._t);
+      toastEl._t=setTimeout(function(){toastEl.style.display='none';},3000);
+    }
+  }
+
+  wrap.addEventListener('click',function(e){
+    var btn=e.target.closest('.mood-btn');
+    if(!btn) return;
+    var id=btn.getAttribute('data-mood');
+    var m=MOODS.find(function(x){return x.id===id;});
+    if(!m) return;
+    if(activeId===id){
+      // deactivate
+      activeId=null;
+      wrap.querySelectorAll('.mood-btn').forEach(function(b){b.classList.remove('mood-active');});
+    } else {
+      activeId=id;
+      wrap.querySelectorAll('.mood-btn').forEach(function(b){
+        b.classList.toggle('mood-active',b.getAttribute('data-mood')===id);
+      });
+      applyMood(m);
+    }
+  });
+})();
+
 // ── Sleep-All Timer ──────────────────────────────
 (function(){
   var _saTimer=null, _saEnd=0;
@@ -8279,6 +8433,68 @@ function getGreeting(hour){
   const arr=greetings[key];
   return arr[Math.floor(min/10)%arr.length];
 }
+/* ── App Background Ambient Orbs ── */
+(function(){
+  const TIME_COLORS=[
+    // [hour, orb1-rgba, orb2-rgba]
+    [0,  'rgba(20,10,80,.14)',  'rgba(60,10,120,.11)'],   // Nacht: blau/lila
+    [5,  'rgba(80,20,60,.13)',  'rgba(120,40,30,.12)'],   // Vormorgen: lila/dunkelrot
+    [7,  'rgba(180,80,20,.12)', 'rgba(100,30,80,.11)'],   // Morgenröte: amber/pink
+    [9,  'rgba(20,60,120,.10)', 'rgba(30,80,60,.09)'],    // Morgen: blau/grün
+    [12, 'rgba(10,50,100,.09)', 'rgba(20,70,50,.08)'],    // Mittag: neutral dunkelblau/grün
+    [16, 'rgba(140,70,10,.11)', 'rgba(60,30,100,.10)'],   // Nachmittag: amber/lila
+    [18, 'rgba(200,80,10,.13)', 'rgba(100,20,80,.12)'],   // Abend: orange/lila
+    [20, 'rgba(120,40,20,.13)', 'rgba(60,10,100,.12)'],   // Spätabend: dunkelorange/lila
+    [22, 'rgba(20,10,80,.14)',  'rgba(60,10,120,.11)'],   // Nacht: zurück zu blau/lila
+  ];
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function lerpColor(c1,c2,t){
+    // parse rgba strings
+    const parse=s=>{const m=s.match(/[\d.]+/g);return m.map(Number);};
+    const [r1,g1,b1,a1]=parse(c1);
+    const [r2,g2,b2,a2]=parse(c2);
+    return `rgba(${Math.round(lerp(r1,r2,t))},${Math.round(lerp(g1,g2,t))},${Math.round(lerp(b1,b2,t))},${(lerp(a1,a2,t)).toFixed(3)})`;
+  }
+  window._updateAppBgOrbs = function(h, m){
+    const o1=document.getElementById('app-bg-orb1');
+    const o2=document.getElementById('app-bg-orb2');
+    if(!o1||!o2)return;
+    const t=h+m/60;
+    let c1,c2;
+    for(let i=0;i<TIME_COLORS.length-1;i++){
+      const [t1,oc1,oc2]=TIME_COLORS[i];
+      const [t2,nc1,nc2]=TIME_COLORS[i+1];
+      if(t>=t1&&t<t2){
+        const p=(t-t1)/(t2-t1);
+        c1=lerpColor(oc1,nc1,p);
+        c2=lerpColor(oc2,nc2,p);
+        break;
+      }
+    }
+    if(!c1){[,c1,c2]=TIME_COLORS[0];}
+    // Check for active RGB lights to blend
+    if(window._S){
+      let rSum=0,gSum=0,bSum=0,cnt=0;
+      (window.CFG?.lights||[]).forEach(id=>{
+        const s=window._S[id];
+        if(s&&s.state==='on'&&s.attributes?.rgb_color){
+          const [r,g,b]=s.attributes.rgb_color;
+          rSum+=r;gSum+=g;bSum+=b;cnt++;
+        }
+      });
+      if(cnt>0){
+        const rf=Math.round(rSum/cnt),gf=Math.round(gSum/cnt),bf=Math.round(bSum/cnt);
+        // Blend 30% towards light color for orb2
+        c2=lerpColor(c2,`rgba(${rf},${gf},${bf},.14)`,.3);
+      }
+    }
+    o1.style.background=`radial-gradient(circle,${c1} 0%,transparent 70%)`;
+    o2.style.background=`radial-gradient(circle,${c2} 0%,transparent 70%)`;
+    o1.style.opacity='1';
+    o2.style.opacity='1';
+  };
+})();
+
 function updateHeroGradient(h, m) {
   const hbg = document.getElementById('hbg');
   const hglow = document.querySelector('.hglow');
@@ -8433,6 +8649,8 @@ function updateClock(){
 
   // ── Time-of-day hero gradient ──
   updateHeroGradient(n.getHours(), n.getMinutes());
+  // ── App background ambient orbs ──
+  if(typeof window._updateAppBgOrbs==='function') window._updateAppBgOrbs(n.getHours(),n.getMinutes());
   const hgreet=document.getElementById('hgreet');
   if(hgreet){const g=getGreeting(n.getHours());if(!window._greetTyped){window._greetTyped=true;window._greetLast=g;typeGreet(hgreet,g);}else if(g!==window._greetLast){window._greetLast=g;typeGreet(hgreet,g);}}
   updateDayArc();
@@ -9839,6 +10057,8 @@ function updateAll(){
   })();
   // Quick-Actions Bar state
   window._updateQaBar&&window._updateQaBar(on, playing);
+  // ── App BG Orbs: react to active lights ──
+  {const n=new Date();if(typeof window._updateAppBgOrbs==='function')window._updateAppBgOrbs(n.getHours(),n.getMinutes());}
   // ── Wetterwarnung Banner ──
   (function(){
     const b=document.getElementById('wx-warn-banner');
@@ -9874,6 +10094,7 @@ function updateAll(){
   window._updateCtxSuggest&&window._updateCtxSuggest(on, playing);
   // Schnellfarben-Palette
   window._updateColorPalette&&window._updateColorPalette(on);
+  window._updateSnapshot&&window._updateSnapshot(on);
   window._updateCircadian&&window._updateCircadian(on);
   window._updateSunsetSim&&window._updateSunsetSim(on);
   window._updateNightLight&&window._updateNightLight(on);
@@ -11987,6 +12208,172 @@ const _origSetWxMode=setWxMode;
     window._updateBreathe=function(onCount){
       brWrap.classList.toggle('show',onCount>0);
       if(onCount===0&&_brRunning)stopBreathe(false);
+    };
+  })();
+
+  // ── Licht-Snapshot Feature ──
+  (function(){
+    const wrap=document.getElementById('lt-snapshot');
+    const saveBtn=document.getElementById('lt-snap-save');
+    const listEl=document.getElementById('lt-snap-list');
+    if(!wrap||!saveBtn||!listEl)return;
+
+    const LS_KEY='lt_snapshots_v1';
+    const MAX_SNAPS=3;
+
+    function fmtTime(ts){
+      const d=new Date(ts);
+      const pad=n=>String(n).padStart(2,'0');
+      return `${pad(d.getDate())}.${pad(d.getMonth()+1)} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function getDotColor(light){
+      const attr=window._S&&window._S[light.id]&&window._S[light.id].attributes;
+      if(!attr)return null;
+      if(light.saved_rgb){const[r,g,b]=light.saved_rgb;return`rgb(${r},${g},${b})`;}
+      if(light.saved_ct){
+        const k=light.saved_ct;
+        if(k<=2200)return'#ff7b1a';
+        if(k<=3000)return'#ffb347';
+        if(k<=4500)return'#ffe8c0';
+        return'#cce8ff';
+      }
+      return'rgba(255,159,10,.8)';
+    }
+
+    function renderSnaps(){
+      const snaps=JSON.parse(localStorage.getItem(LS_KEY)||'[]');
+      listEl.innerHTML='';
+      if(snaps.length===0){
+        const e=document.createElement('div');
+        e.className='lsnap-empty';
+        e.textContent='Noch keine Schnappschüsse — Lichter einschalten und speichern!';
+        listEl.appendChild(e);
+        return;
+      }
+      snaps.forEach((snap,idx)=>{
+        const card=document.createElement('div');
+        card.className='lsnap-card';
+
+        // Dots
+        const dotsEl=document.createElement('div');
+        dotsEl.className='lsnap-dots';
+        const cols=snap.lights.slice(0,4).map(l=>{
+          if(l.saved_rgb){const[r,g,b]=l.saved_rgb;return`rgb(${r},${g},${b})`;}
+          if(l.saved_ct){const k=l.saved_ct;return k<=2200?'#ff7b1a':k<=3000?'#ffb347':k<=4500?'#ffe8c0':'#cce8ff';}
+          return'rgba(255,159,10,.8)';
+        });
+        cols.forEach(c=>{
+          const dot=document.createElement('div');
+          dot.className='lsnap-dot';
+          dot.style.background=c;
+          dot.style.boxShadow=`0 0 4px ${c}`;
+          dotsEl.appendChild(dot);
+        });
+        card.appendChild(dotsEl);
+
+        // Info
+        const info=document.createElement('div');
+        info.className='lsnap-info';
+        const nm=document.createElement('div');
+        nm.className='lsnap-name';
+        nm.textContent=snap.name||`Schnappschuss ${idx+1}`;
+        const meta=document.createElement('div');
+        meta.className='lsnap-meta';
+        const lightNames=snap.lights.slice(0,3).map(l=>l.name||l.id.split('.').pop()).join(', ');
+        meta.textContent=`${snap.lights.length} Lichter · ${lightNames}${snap.lights.length>3?'…':''}`;
+        info.appendChild(nm);
+        info.appendChild(meta);
+        card.appendChild(info);
+
+        // Restore button
+        const restBtn=document.createElement('button');
+        restBtn.className='lsnap-restore';
+        restBtn.textContent='Anwenden';
+        restBtn.title='Lichtzustand wiederherstellen';
+        restBtn.addEventListener('click',()=>{
+          restoreSnapshot(snap);
+          card.classList.remove('lsnap-flashing');
+          void card.offsetWidth;
+          card.classList.add('lsnap-flashing');
+        });
+        card.appendChild(restBtn);
+
+        // Delete button
+        const delBtn=document.createElement('button');
+        delBtn.className='lsnap-del';
+        delBtn.textContent='✕';
+        delBtn.title='Löschen';
+        delBtn.addEventListener('click',()=>{
+          const all=JSON.parse(localStorage.getItem(LS_KEY)||'[]');
+          all.splice(idx,1);
+          localStorage.setItem(LS_KEY,JSON.stringify(all));
+          renderSnaps();
+          updateSaveBtn(all.length);
+        });
+        card.appendChild(delBtn);
+
+        listEl.appendChild(card);
+      });
+    }
+
+    function updateSaveBtn(count){
+      saveBtn.classList.toggle('disabled',count>=MAX_SNAPS);
+      saveBtn.title=count>=MAX_SNAPS?`Max. ${MAX_SNAPS} Schnappschüsse (ältesten löschen)`:'Aktuellen Lichtzustand speichern';
+    }
+
+    function saveSnapshot(){
+      const snaps=JSON.parse(localStorage.getItem(LS_KEY)||'[]');
+      if(snaps.length>=MAX_SNAPS){window.showToast&&window.showToast(`Max. ${MAX_SNAPS} Schnappschüsse erreicht — erst einen löschen.`);return;}
+      const S=window._S||{};
+      const lights=(window.CFG&&window.CFG.lights)||[];
+      const captured=lights.filter(id=>{
+        const s=S[id];
+        return s&&s.state==='on';
+      }).map(id=>{
+        const a=(S[id]&&S[id].attributes)||{};
+        const entry={id,name:id.split('.').pop().replace(/_/g,' ')};
+        if(a.rgb_color)entry.saved_rgb=a.rgb_color;
+        else if(a.color_temp_kelvin)entry.saved_ct=a.color_temp_kelvin;
+        if(a.brightness!=null)entry.saved_bri=Math.round(a.brightness/2.55);
+        return entry;
+      });
+      if(captured.length===0){window.showToast&&window.showToast('Keine Lichter eingeschaltet — nichts zu speichern.');return;}
+      const now=Date.now();
+      snaps.push({name:fmtTime(now),ts:now,lights:captured});
+      localStorage.setItem(LS_KEY,JSON.stringify(snaps));
+      renderSnaps();
+      updateSaveBtn(snaps.length);
+      window.showToast&&window.showToast(`📸 Schnappschuss gespeichert · ${captured.length} Lichter`);
+      // Brief flash animation on save btn
+      saveBtn.style.transform='scale(.92)';
+      setTimeout(()=>{saveBtn.style.transform='';},180);
+    }
+
+    function restoreSnapshot(snap){
+      if(!snap||!snap.lights)return;
+      let applied=0;
+      snap.lights.forEach(l=>{
+        const params={entity_id:l.id,transition:1.2};
+        if(l.saved_rgb)params.rgb_color=l.saved_rgb;
+        else if(l.saved_ct)params.color_temp_kelvin=l.saved_ct;
+        if(l.saved_bri!=null)params.brightness_pct=l.saved_bri;
+        window.svc&&window.svc('light','turn_on',params);
+        applied++;
+      });
+      window.showToast&&window.showToast(`📸 ${snap.name} wiederhergestellt · ${applied} Lichter`);
+      window.hap&&window.hap();
+    }
+
+    saveBtn.addEventListener('click',saveSnapshot);
+
+    // Init
+    const initSnaps=JSON.parse(localStorage.getItem(LS_KEY)||'[]');
+    renderSnaps();
+    updateSaveBtn(initSnaps.length);
+
+    window._updateSnapshot=function(onCount){
+      wrap.classList.toggle('show',true); // always visible in light tab
     };
   })();
 
