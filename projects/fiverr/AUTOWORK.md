@@ -296,6 +296,9 @@
 ## Neue Ideen (2026-03-28 12:03 UTC)
 - [x] wz.html: Wetter-Tab — "Guter Moment zum Lüften?" Empfehlung-Card (smart Ventilations-Empfehlung: grün wenn Temp 14–26°C + Regenprob <25% + Wind <35 km/h → "Jetzt lüften!"; blau bei Regen; kalt bei <8°C; amber bei Wind oder Grenztemperatur; animiertes Fenster-Icon, Temp + Feuchte Stats rechts)
 
+## Neue Ideen (2026-03-29 01:10 UTC)
+- [x] wz.html: Geräte-Tab — Schnell-Notiz Widget (📝 localStorage-Textarea im Geräte-Tab; 5 Quick-Chips: Wäsche/Ofen/Tür/Medizin/Einkauf setzen Vorlagen-Text; Auto-Save 400ms Debounce; 🗑 Clear-Button; spring-in Animation; Light-Mode-kompatibel)
+
 ## Neue Ideen (2026-03-28 20:36 UTC)
 - [x] demo.html: Interaktiver Preis-Rechner (Schieberegler Räume 1–10 + Geräte 1–50, Checkboxen KI/Mobile/Wetter/Energie, Echtzeit-Preisberechnung → Basic €49 / Standard €89 / Premium €149, animierter Preisflip, Lieferzeit-Badge, DE+EN i18n, Fiverr CTA-Button)
 
@@ -325,3 +328,6 @@
 
 ## Neue Ideen (2026-03-28 14:03 UTC)
 - [x] wz.html: Home-Tab — Wetterwarnung Banner (scannt _wx.daily der nächsten 3 Tage auf kritische Bedingungen: Gewitter WMO≥95, Hitzewelle ≥34°C, Starker Frost ≤-5°C, Starkregen ≥20mm, Sturmböen ≥70km/h — zeigt farbcodierten spring-in Banner mit Icon + Titel + Beschreibung, schliessbar mit × Button, 5 Farbvarianten je Warntyp, Light-Mode Overrides)
+
+## Neue Ideen (2026-03-29 00:03 UTC)
+- [x] wz.html: Wetter-Tab — "Biowetter" Karte (🧬 Einfluss des Wetters auf das Wohlbefinden: Kopfdruck-Risiko aus Luftdruckabfall + Feuchte, Gelenk-Risiko aus Kälte + Druckabfall, Energie-Level aus Sonnenschein + Temperatur + Luftdruck, Kreislauf-Belastung aus Tagesschwankung + Feuchte — 4 animierte Faktor-Balken, Gesamt-Emoji + Label + Empfehlungs-Tip, amber/grün/rot je Belastung, Orb-Hintergrund)

@@ -370,6 +370,23 @@ html,body{height:100%;background:var(--bg);
 #lt-bri-meter-label .lt-bri-count{letter-spacing:.02em}
 /* ── Globaler Dimmer-Slider ── */
 #lt-global-dimmer{margin:4px 14px 10px;opacity:0;transition:opacity .5s ease;display:flex;align-items:center;gap:10px}
+/* Schnell-Notiz */
+#quick-note-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
+@keyframes qnIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+#quick-note-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+#quick-note-title{font-size:.7rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+#quick-note-clear{background:none;border:none;color:rgba(255,255,255,.22);font-size:.75rem;cursor:pointer;padding:0 2px;line-height:1;touch-action:manipulation;transition:color .15s}
+#quick-note-clear:active{color:rgba(255,69,58,.8)}
+#quick-note-input{width:100%;box-sizing:border-box;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:9px 12px;color:rgba(255,255,255,.85);font-size:.78rem;line-height:1.5;resize:none;outline:none;font-family:-apple-system,sans-serif;min-height:58px;transition:border-color .2s,background .2s}
+#quick-note-input:focus{border-color:rgba(255,159,10,.4);background:rgba(255,159,10,.05)}
+#quick-note-input::placeholder{color:rgba(255,255,255,.2)}
+#quick-note-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.qn-chip{font-size:.65rem;padding:4px 9px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5);cursor:pointer;touch-action:manipulation;transition:background .15s,color .15s}
+.qn-chip:active{background:rgba(255,159,10,.12);color:rgba(255,220,130,.8)}
+:root.light #quick-note-input{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.78)}
+:root.light #quick-note-input::placeholder{color:rgba(0,0,0,.25)}
+:root.light #quick-note-input:focus{border-color:rgba(180,90,0,.35);background:rgba(180,90,0,.04)}
+:root.light .qn-chip{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.45)}
 #lt-global-dimmer.show{opacity:1}
 /* ── Licht Schnellfarben-Palette ── */
 #lt-color-palette{margin:0 14px 12px;opacity:0;transition:opacity .5s ease;pointer-events:none}
@@ -3144,6 +3161,22 @@ input[type=range] { touch-action: none; }
       <div id="dev-recent-list" style="display:flex;flex-direction:column;gap:0"></div>
     </div>
 
+    <!-- Schnell-Notiz -->
+    <div id="quick-note-wrap">
+      <div id="quick-note-header">
+        <span id="quick-note-title">📝 Notiz</span>
+        <button id="quick-note-clear" title="Notiz löschen">🗑</button>
+      </div>
+      <textarea id="quick-note-input" rows="2" placeholder="Kurze Haushalts-Notiz…"></textarea>
+      <div id="quick-note-chips">
+        <span class="qn-chip" data-t="🧺 Wäsche läuft">🧺 Wäsche</span>
+        <span class="qn-chip" data-t="🍕 Pizza im Ofen">🍕 Ofen</span>
+        <span class="qn-chip" data-t="🔑 Tür abgesperrt">🔑 Tür</span>
+        <span class="qn-chip" data-t="💊 Medizin nehmen">💊 Medizin</span>
+        <span class="qn-chip" data-t="🛒 Einkaufen nicht vergessen">🛒 Einkauf</span>
+      </div>
+    </div>
+
     <div id="dev-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:8px"></div>
   </div>
 </div>
@@ -5452,6 +5485,37 @@ function drawWeekStrip(){
   });
   document.addEventListener('click',()=>{popup.classList.remove('show');clearTimeout(_wsHideTimer);},{passive:true,once:false});
 }
+
+// ── Schnell-Notiz ────────────────────────────────────────────────
+(function(){
+  var KEY='wz_quick_note';
+  var inp=document.getElementById('quick-note-input');
+  var clearBtn=document.getElementById('quick-note-clear');
+  if(!inp)return;
+  // Load saved note
+  inp.value=localStorage.getItem(KEY)||'';
+  // Save on input (debounced)
+  var saveT;
+  inp.addEventListener('input',function(){
+    clearTimeout(saveT);
+    saveT=setTimeout(function(){localStorage.setItem(KEY,inp.value);},400);
+  });
+  // Clear button
+  if(clearBtn)clearBtn.addEventListener('click',function(){
+    inp.value='';
+    localStorage.removeItem(KEY);
+    inp.focus();
+  });
+  // Quick-chips
+  document.querySelectorAll('.qn-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      var t=chip.getAttribute('data-t')||'';
+      inp.value=inp.value?inp.value+'\n'+t:t;
+      localStorage.setItem(KEY,inp.value);
+      inp.focus();
+    });
+  });
+})();
 
 function drawOutfitCard(){
   const card=document.getElementById('outfit-card');

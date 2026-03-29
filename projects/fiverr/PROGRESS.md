@@ -1,5 +1,35 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-29 00:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Biowetter" Karte (🧬)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neue `#biowetter-card` im Wetter-Tab, direkt zwischen `#wx-score-card` und `#frost-card`
+- **Konzept**: Zeigt wie das aktuelle Wetter das menschliche Wohlbefinden beeinflusst — "Biowetter" ist ein Begriff aus der deutschen Meteorologie (DWD nutzt ihn aktiv)
+- **4 animierte Faktor-Balken**:
+  - 🧠 **Kopfdruck**: aus Luftdruckabfall (`_baroHistory` Trend) + tiefem Luftdruck (<1000 hPa) + hoher Luftfeuchte (>80%) — steigt bei Wettertiefs
+  - 💪 **Gelenke**: aus Kältestress (temp <10°C) + Druckabfall — klassisches Barometer-Gelenk-Risiko
+  - ⚡ **Energie**: steigt bei klarem Wetter (WMO 0-1) + Idealtemperatur (18-24°C) + steigendem Druck; sinkt bei Regen/Gewitter/Hitze/Kälte
+  - 🫀 **Kreislauf**: aus großer Tages-Temperaturschwankung (>7°C) + Gefühlt/Tatsächlich-Differenz (>5°C) + Gewitter + extremer Feuchte
+- **Farb-Kodierung der Balken**: grün (<35% Stress) / amber (<65%) / rot (>65%) — sofort ablesar
+- **Gesamt-Score** `overallGood` = 1 − Durchschnitt aller Stressfaktoren → 4 Stufen:
+  - 😊 Optimal – Körper in Balance (≥75%)
+  - 🙂 Angenehm – leichte Belastung (≥55%)
+  - 😐 Mittelmäßig – spürbare Belastung (≥38%)
+  - 😩 Belastend – erhöhte Wetterempfindlichkeit (<38%)
+- **Badge** oben rechts: "Sehr gut" / "Gut" / "Mäßig" / "Ungünstig" in passender Akzentfarbe
+- **Empfehlungs-Tip** `#biow-tip`: kontextsensitiver Italics-Text am Kartenende (z.B. "💡 Guter Tag für Sport und mentale Arbeit")
+- **Hintergrund-Orb** `#biowetter-bg`: radialer Gradient (grün/türkis/amber je Gesamtwert) — subtiler Stimmungshinweis
+- `drawBiowetter()` liest: `_wx.current.temperature_2m/apparent_temperature/relative_humidity_2m/surface_pressure/weathercode` + `_wx.daily.temperature_2m_max/min[0]` + `window._baroHistory[]`
+- Doppelter `requestAnimationFrame` für Balken-Einblende-Transition → bars animieren nach DOM-Mount
+- `.show`-Klasse mit `opacity:0 + translateY(-6px)` → `.show{opacity:1;translateY(0)}` spring-in
+- `#biowetter-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Overrides: alle Faktor-Beschriftungen mit `rgba(0,0,0,.42)`, dunklere Bar-Tracks
+- **Kein extra API-Call** — nutzt vollständig vorhandene Open-Meteo `current` + `daily` Daten + `_baroHistory`
+- Effekt: Im Wetter-Tab erscheint eine persönliche Wohlbefindens-Karte die auf einen Blick zeigt ob heute ein guter Tag für Sport ist oder ob Kopfschmerz-Kandidaten aufpassen sollten
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 584049 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-28 22:07 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — "Zitat des Tages" Card (💬)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -1989,4 +2019,13 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Direkt verknüpfter Fiverr CTA-Button
 - DE+EN i18n (hakt in bestehenden updateLang() ein)
 - Eingefügt zwischen "Warum jetzt" Section und FAQ
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-29 01:10 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Geräte-Tab — Schnell-Notiz Widget
+- Textarea mit localStorage Auto-Save (400ms Debounce)
+- 5 Quick-Chips: 🧺 Wäsche / 🍕 Ofen / 🔑 Tür / 💊 Medizin / 🛒 Einkauf
+- 🗑 Clear-Button (löscht Notiz + localStorage)
+- Spring-in Animation, Focus-Glow amber
+- Light-Mode-kompatibel
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
