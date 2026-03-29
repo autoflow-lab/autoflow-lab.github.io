@@ -299,6 +299,15 @@
 ## Neue Ideen (2026-03-29 01:10 UTC)
 - [x] wz.html: Geräte-Tab — Schnell-Notiz Widget (📝 localStorage-Textarea im Geräte-Tab; 5 Quick-Chips: Wäsche/Ofen/Tür/Medizin/Einkauf setzen Vorlagen-Text; Auto-Save 400ms Debounce; 🗑 Clear-Button; spring-in Animation; Light-Mode-kompatibel)
 
+## Neue Ideen (2026-03-29 02:03 UTC)
+- [x] wz.html: Wetter-Tab — Sonnenstunden-Karte (☀️ sunshine_duration von Open-Meteo als neue daily-Variable, animierter SVG-Sonnen-Arc + 10 Sonnenstrahlen die je nach % skalieren, Fortschrittsbalken, Condition-Badge von "Bedeckt" bis "Herrlicher Sonnentag", Stunden vs. mögliche Tageslichtzeit)
+
+## Neue Ideen (2026-03-29 08:03 UTC)
+- [x] wz.html: Home-Tab — Licht-Aktivitäts-Heatmap (🗓 GitHub-Stil: 7×24 Raster Tage × Stunden, amber Farbskala, localStorage-Persistenz)
+
+## Neue Ideen (2026-03-29 04:03 UTC)
+- [x] wz.html: Wetter-Tab — "Regenschirm-Check" Karte (☂ animierter SVG-Regenschirm öffnet/schließt sich je nach max. täglicher Regenwahrscheinlichkeit aus hourly.precipitation_probability; 4 Stufen: ≥75% "Schirm mitnehmen!" blau / ≥45% "Besser mitnehmen" / ≥20% "Eventuell Regen" / <20% "Kein Schirm nötig" grün; Canvas-Regentropfen-Animation wenn Prob ≥45%; animierter Fortschrittsbalken; Peak-Regen-Uhrzeit im Sub-Text)
+
 ## Neue Ideen (2026-03-28 20:36 UTC)
 - [x] demo.html: Interaktiver Preis-Rechner (Schieberegler Räume 1–10 + Geräte 1–50, Checkboxen KI/Mobile/Wetter/Energie, Echtzeit-Preisberechnung → Basic €49 / Standard €89 / Premium €149, animierter Preisflip, Lieferzeit-Badge, DE+EN i18n, Fiverr CTA-Button)
 
