@@ -163,7 +163,7 @@ html,body{height:100%;background:var(--bg);
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -339,6 +339,21 @@ html,body{height:100%;background:var(--bg);
 :root.light #storm-warn-inner{background:linear-gradient(135deg,rgba(255,235,230,.97),rgba(255,220,210,.97));border-color:rgba(200,50,30,.3)}
 :root.light #storm-warn-bg{background:radial-gradient(ellipse at 80% 30%,rgba(200,50,30,.08),transparent 65%)}
 :root.light #storm-warn-card .storm-chip{background:rgba(200,50,30,.08);border-color:rgba(200,50,30,.2);color:rgba(80,20,10,.8)}
+/* ── BIOWETTER ── */
+#biowetter-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#biowetter-card.show{opacity:1;transform:translateY(0)}
+#biowetter-bg{position:absolute;inset:0;pointer-events:none;border-radius:18px;transition:background 1.5s ease}
+.biow-factor{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.biow-factor-ico{font-size:.9rem;flex-shrink:0;width:20px;text-align:center}
+.biow-factor-lbl{font-size:.58rem;color:rgba(255,255,255,.38);width:62px;flex-shrink:0;line-height:1.2}
+.biow-factor-bar-wrap{flex:1;height:4px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+.biow-factor-fill{height:100%;border-radius:4px;transition:width 1.4s cubic-bezier(.4,0,.2,1),background 1s ease}
+.biow-factor-val{font-size:.6rem;font-weight:700;min-width:28px;text-align:right;flex-shrink:0;transition:color 1s ease}
+:root.light .biow-factor-lbl{color:rgba(0,0,0,.42)}
+:root.light .biow-factor-bar-wrap{background:rgba(0,0,0,.07)}
+:root.light #biowetter-card .biow-factor-lbl{color:rgba(0,0,0,.42)}
+:root.light #biow-desc{color:rgba(0,0,0,.5)!important}
+@keyframes biowCardIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 #wxt-feel-arrow{display:inline-block;font-size:.95rem;font-weight:700;margin-left:5px;vertical-align:middle;transition:color .6s ease,opacity .6s ease;opacity:0}
 #wxt-feel-arrow.up{color:#30d158;opacity:1;animation:feelArrowUp 1.8s ease-in-out infinite}
 #wxt-feel-arrow.down{color:#ff453a;opacity:1;animation:feelArrowDown 1.8s ease-in-out infinite}
@@ -1627,6 +1642,16 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 /* Home-Hero: Uhrzzeit + Greeting */
 :root.light .htime, :root.light #aclock-wrap { color:var(--txt) !important; }
 :root.light .hgreet { color:var(--dim) !important; }
+/* Wetter-Detail-Karten: hardcoded #fff → theme-aware */
+:root.light #wc-val,
+:root.light #baro-val,
+:root.light #hum-val,
+:root.light #bh-label,
+:root.light #wx-score-label,
+:root.light #biow-label,
+:root.light #outfit-title,
+:root.light #dl-hours { color:var(--txt) !important; }
+:root.light #wc-bar-dot { background:var(--txt) !important; box-shadow:0 0 6px rgba(0,0,0,.3) !important; }
 /* Geräte Pulse-Dot: off state im Light Mode */
 :root.light .g-pulse-dot.off { background:rgba(0,0,0,.2); }
 :root.light .g-last-changed { color:var(--dim2); }
@@ -2855,6 +2880,26 @@ input[type=range] { touch-action: none; }
               <div id="wx-score-bar" style="height:100%;border-radius:2px;background:linear-gradient(90deg,#ff453a,#ff9f0a,#30d158);transition:width 1.6s ease;width:0%"></div>
             </div>
             <div style="display:flex;gap:8px;margin-top:7px;flex-wrap:wrap" id="wx-score-chips"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Biowetter -->
+      <div id="biowetter-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(52,200,245,.6);text-transform:uppercase;margin-bottom:8px">🧬 BIOWETTER HEUTE</div>
+        <div id="biowetter-inner" style="background:var(--c1);border-radius:18px;border:1px solid rgba(52,200,245,.18);border-top-color:rgba(52,200,245,.3);padding:16px 18px;position:relative;overflow:hidden">
+          <div id="biowetter-bg"></div>
+          <div style="position:relative;z-index:1">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+              <div id="biow-emoji" style="font-size:2.2rem;line-height:1;flex-shrink:0">😊</div>
+              <div style="flex:1;min-width:0">
+                <div id="biow-label" style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px">–</div>
+                <div id="biow-desc" style="font-size:.66rem;color:rgba(255,255,255,.4);line-height:1.45">–</div>
+              </div>
+              <div id="biow-badge" style="padding:3px 9px;border-radius:20px;font-size:.62rem;font-weight:700;background:rgba(52,200,245,.14);border:1px solid rgba(52,200,245,.3);color:#34c8f5;flex-shrink:0">–</div>
+            </div>
+            <div id="biow-factors"></div>
+            <div id="biow-tip" style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);font-size:.62rem;color:rgba(255,255,255,.35);line-height:1.5;font-style:italic"></div>
           </div>
         </div>
       </div>
@@ -4175,6 +4220,7 @@ function renderWeather(){
   }
   checkRainWarning();
   drawWeeklyRain();
+  drawBiowetter();
   drawFrostWarning();
   drawOutdoorChip();
   drawWeekStrip();
@@ -5066,6 +5112,147 @@ function drawWeeklyRain(){
 
 // ═══════════════════════════════════════════════
 // FROSTWARNUNG
+// ═══════════════════════════════════════════════════════════════
+// BIOWETTER KARTE — Einfluss des Wetters auf das Wohlbefinden
+// ═══════════════════════════════════════════════════════════════
+function drawBiowetter(){
+  const card=document.getElementById('biowetter-card');
+  if(!card||!_wx?.current) return;
+  const c=_wx.current;
+  const temp=c.temperature_2m??null;
+  const feels=c.apparent_temperature??temp;
+  const rh=c.relative_humidity_2m??50;
+  const pressure=c.surface_pressure??null;
+  const wc=c.weathercode??0;
+
+  if(temp===null){ card.style.display='none'; card.classList.remove('show'); return; }
+
+  // Barometer trend: use _baroHistory if available
+  const hist=window._baroHistory||[];
+  const baroTrend = hist.length>=2 ? hist[hist.length-1]-(hist[0]) : 0; // hPa change
+
+  // Daily temp range
+  const hiArr=_wx?.daily?.temperature_2m_max;
+  const loArr=_wx?.daily?.temperature_2m_min;
+  const hi=hiArr?hiArr[0]:temp+5;
+  const lo=loArr?loArr[0]:temp-5;
+  const tempRange=Math.abs(hi-lo);
+
+  // ── FACTOR 1: Kopfdruck (headache risk)
+  // High risk: fast pressure drop (>3hPa), OR low pressure + high humidity
+  let kopfPct=0;
+  if(pressure!==null){
+    const pressureLow = pressure<1000 ? (1000-pressure)/40 : 0; // 0→1 for 1000→960
+    const trendPenalty = baroTrend<-2 ? Math.min(1,Math.abs(baroTrend)/10) : 0;
+    const humidPenalty = rh>80 ? (rh-80)/40 : 0;
+    kopfPct = Math.min(1, pressureLow*0.5 + trendPenalty*0.6 + humidPenalty*0.3);
+  } else {
+    // No pressure data: estimate from conditions
+    kopfPct = rh>80 ? 0.5 : (wc>=95 ? 0.6 : 0.2);
+  }
+
+  // ── FACTOR 2: Gelenke (joint pain)
+  // Risk: cold + pressure drop
+  const coldFactor = temp<10 ? (10-temp)/15 : 0;
+  const dropFactor = baroTrend<-1 ? Math.min(1,Math.abs(baroTrend)/8) : 0;
+  const gelenkPct = Math.min(1, coldFactor*0.6 + dropFactor*0.55);
+
+  // ── FACTOR 3: Energie-Level (opposite of fatigue)
+  // Good energy: sunny + mild temp + normal humidity + rising pressure
+  let energiePct=0.5;
+  if(wc<=1) energiePct+=0.25; // clear
+  else if(wc<=3) energiePct+=0.1;
+  else if(wc>=51) energiePct-=0.2; // rain
+  if(wc>=95) energiePct-=0.3; // storm
+  if(temp>=18&&temp<=24) energiePct+=0.15; // ideal temp
+  else if(temp<5||temp>30) energiePct-=0.2;
+  if(rh>75) energiePct-=0.15;
+  if(baroTrend>1) energiePct+=0.1; // rising pressure
+  else if(baroTrend<-2) energiePct-=0.15;
+  energiePct = Math.max(0.05, Math.min(1, energiePct));
+
+  // ── FACTOR 4: Kreislauf (circulation)
+  // High temp swings + humidity strain the circulatory system
+  let kreislaufPct=0.5;
+  if(tempRange>12) kreislaufPct+=0.3;
+  else if(tempRange>7) kreislaufPct+=0.15;
+  if(feels!==null&&Math.abs(feels-temp)>5) kreislaufPct+=0.2; // big feels/actual gap
+  if(wc>=95) kreislaufPct+=0.2;
+  if(rh<30||rh>80) kreislaufPct+=0.15;
+  kreislaufPct = Math.min(1, kreislaufPct);
+
+  // ── Overall Biowetter Score (0=bad, 1=great)
+  const badFactors = (kopfPct + gelenkPct + (1-energiePct) + kreislaufPct) / 4;
+  const overallGood = 1 - badFactors;
+
+  // ── Labels
+  let emoji, label, desc, tip, badgeColor, badgeText;
+  if(overallGood>=0.75){
+    emoji='😊'; label='Optimal – Körper in Balance'; badgeText='Sehr gut'; badgeColor='rgba(48,209,88,1)';
+    desc='Das Wetter begünstigt Wohlbefinden, Konzentration und körperliche Aktivität.';
+    tip='💡 Guter Tag für Sport, Outdoor-Aktivitäten und mentale Arbeit.';
+  } else if(overallGood>=0.55){
+    emoji='🙂'; label='Angenehm – leichte Belastung'; badgeText='Gut'; badgeColor='rgba(52,200,245,1)';
+    desc='Insgesamt gutes Biowetter mit geringen Einschränkungen.';
+    tip='💡 Normal aktiv bleiben, Flüssigkeitshaushalt beachten.';
+  } else if(overallGood>=0.38){
+    emoji='😐'; label='Mittelmäßig – spürbare Belastung'; badgeText='Mäßig'; badgeColor='rgba(255,159,10,1)';
+    desc='Wetterwechsel oder ungünstige Bedingungen können sich bemerkbar machen.';
+    tip='💡 Empfindliche Personen sollten Belastungen reduzieren und mehr trinken.';
+  } else {
+    emoji='😩'; label='Belastend – erhöhte Wetterempfindlichkeit'; badgeText='Ungünstig'; badgeColor='rgba(255,69,58,1)';
+    desc='Starke Wetterfaktoren können Kopfschmerzen, Müdigkeit oder Gelenkbeschwerden auslösen.';
+    tip='💡 Ruhe gönnen, auf intensive Aktivitäten verzichten, viel trinken.';
+  }
+
+  // ── Render factors
+  const factors=[
+    {ico:'🧠', lbl:'Kopfdruck', pct:kopfPct, invert:true},
+    {ico:'💪', lbl:'Gelenke', pct:gelenkPct, invert:true},
+    {ico:'⚡', lbl:'Energie', pct:energiePct, invert:false},
+    {ico:'🫀', lbl:'Kreislauf', pct:kreislaufPct, invert:true},
+  ];
+
+  const factorsEl=document.getElementById('biow-factors');
+  if(!factorsEl) return;
+  factorsEl.innerHTML='';
+  factors.forEach(f=>{
+    const stress = f.invert ? f.pct : (1-f.pct);
+    const color = stress<0.35 ? '#30d158' : stress<0.65 ? '#ff9f0a' : '#ff453a';
+    const pctNum = Math.round(f.pct*100);
+    const barWidth = f.invert ? Math.round(f.pct*100) : Math.round(f.pct*100);
+    const row=document.createElement('div');
+    row.className='biow-factor';
+    row.innerHTML=`<span class="biow-factor-ico">${f.ico}</span>`+
+      `<span class="biow-factor-lbl">${f.lbl}</span>`+
+      `<div class="biow-factor-bar-wrap"><div class="biow-factor-fill" style="width:0%;background:${color}"></div></div>`+
+      `<span class="biow-factor-val" style="color:${color}">${pctNum}%</span>`;
+    factorsEl.appendChild(row);
+    // Animate bars after render
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      row.querySelector('.biow-factor-fill').style.width=barWidth+'%';
+    }));
+  });
+
+  // ── Set header elements
+  document.getElementById('biow-emoji').textContent=emoji;
+  document.getElementById('biow-label').textContent=label;
+  document.getElementById('biow-desc').textContent=desc;
+  document.getElementById('biow-tip').textContent=tip;
+  const badge=document.getElementById('biow-badge');
+  badge.textContent=badgeText;
+  badge.style.background=badgeColor.replace(',1)',', .15)');
+  badge.style.borderColor=badgeColor.replace(',1)',', .4)');
+  badge.style.color=badgeColor;
+
+  // Background orb
+  const orbC = overallGood>=0.7 ? 'rgba(48,209,88,.07)' : overallGood>=0.45 ? 'rgba(52,200,245,.07)' : 'rgba(255,159,10,.07)';
+  document.getElementById('biowetter-bg').style.background=`radial-gradient(ellipse at 85% 20%,${orbC},transparent 65%)`;
+
+  card.style.display='block';
+  requestAnimationFrame(()=>{ card.classList.add('show'); });
+}
+
 function drawFrostWarning(){
   const card=document.getElementById('frost-card');
   if(!card||!_wx?.daily) return;
@@ -7320,7 +7507,7 @@ function updateHeroGradient(h, m) {
     if(hglow) hglow.style.setProperty('--hglc', glowColor);
   } else {
     // Light theme: use time-aware pastel sky
-    const lt = h + 0/60;
+    const lt = h + m/60;
     let lightGrad;
     if(lt < 7 || lt >= 21) lightGrad='linear-gradient(160deg,#1a2840,#0d1e38)'; // light theme at night = still slightly dark
     else if(lt < 9) lightGrad='linear-gradient(160deg,#fde8cc,#f5d4a8,#f0c880)'; // sunrise warm
