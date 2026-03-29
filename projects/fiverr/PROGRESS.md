@@ -1,5 +1,28 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-29 12:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — 3D Holographic Tilt Effect auf Album-Art (🌈)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Das Album-Art-Disc reagiert auf Pointer-Bewegungen (Desktop) und Geräteneigung (Mobile) mit einem holographischen 3D-Kipp-Effekt — wie ein Handelskarte oder Apple AirPods-Pro Verpackung
+- **CSS**:
+  - `#alb-tilt-wrap { transform-style:preserve-3d; will-change:transform }` → GPU-beschleunigt
+  - `#alb-tilt-glare`: `position:absolute; inset:0; border-radius:50%` als Glanz-Overlay mit `radial-gradient(circle at var(--gx) var(--gy), rgba(255,255,255,.28)...)`
+  - CSS-Variablen `--gx`/`--gy` für Lichtpunkt-Position → verschiebt sich entgegengesetzt zur Neigung (simuliert Lichtquelle oben-links)
+  - `#alb-tilt-wrap.tilt-active #alb-tilt-glare { opacity:1 }` → Glare erscheint nur bei aktivem Tilt
+- **JS IIFE**:
+  - `MAX_ROT = 13°` → sanfte aber sichtbare Neigung ohne Übelkeit
+  - `lerp(a, b, 0.10)` per `requestAnimationFrame` → spring-gedämpfte Bewegung (träge, flüssig)
+  - `pointermove` auf `#pg-musik`: berechnet Distanz vom Albumzentrum, reagiert nur innerhalb 120px
+  - `rx = -(dy/60)*MAX_ROT, ry = (dx/60)*MAX_ROT` → natürliche Perspektivenverschiebung
+  - `pointerleave` → `setTarget(0,0)` + Glare ausblenden → Disc federt sanft zurück zu neutral
+  - `DeviceOrientationEvent` → `beta*0.18` / `gamma*0.22` → Handy-Neigung als Tilt-Input
+  - `setInterval(400ms)` → sync mit `disc.classList.contains('playing')` → Tilt nur aktiv wenn Musik läuft
+- **Glare-Berechnung**: `gx = 50 - curRY/MAX_ROT*38` → Hotspot wandert mit Neigung (Licht von oben-links simuliert)
+- **Graceful**: kein Fehler wenn `alb-tilt-wrap` nicht gefunden (Element-Guards)
+- **Kein Konflikt** mit `discSpin` Animation (CSS `transform` vs. wrapper `transform`), `eq-ring` Pulsen, Tonearm-Element (display:none)
+- Effekt: Wenn Musik spielt und man die Hand über das Album-Art bewegt, kippt die Disc leicht in 3D und ein weißer Glanzpunkt wandert über die Oberfläche — wie ein holographisches Sticker oder eine Physical-Media-Disc unter Licht
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 636317 bytes, DEPLOY_OK)
+
 ## 2026-03-29 10:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Hero — Tap-Burst Emoji Particles (🎆)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2164,4 +2187,13 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 
 ## 2026-03-29 09:10 UTC — Heartbeat Auto-Improve
 - ✅ wz.html: Geräte-Tab — Sleep-All Timer (🌙 15/30/60/90 min, schaltet alle Lichter + Geräte ab)
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-29 14:38 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Wetter-Tab — "Wäsche trocknen?" Empfehlung-Card (👕)
+- 4 Stufen: Ideal / Gut / Risiko / Drinnen trocknen
+- Animierter SVG-Shirt mit Regentropfen-Animation bei Regen + Wind-Linien bei Wind
+- Intelligente Berechnung aus WMO-Code + Regenwahrsch. + Temperatur + Wind
+- Bestes Zeitfenster-Anzeige (stündliche Scan wenn Risiko vorhanden)
+- Akzentfarbe grün/amber/blau je Bedingung, Orb-Hintergrund
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
