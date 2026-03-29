@@ -1,5 +1,43 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-29 10:03 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — Tap-Burst Emoji Particles (🎆)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- Neues `#hero-tap-layer` Div als letztes Kind der `.hero` Section (position:absolute, inset:0, z-index:6, pointer-events:none, overflow:hidden)
+- **Konzept**: Wenn man auf den Home-Hero tippt, explodieren 6-8 kleine Emoji-Partikel vom Touch-Punkt und schweben animiert nach oben weg — wie ein Konfetti-Burst, aber wetter-passend
+- **Emoji-Sets je WMO-Code**:
+  - WMO 0-1 (klar): ☀️🌟✨💛🌞 — Sonnen-Party
+  - WMO 2-3 (bewölkt): ⛅🌤🌥☁️ — Wolken-Mix
+  - WMO 45-48 (Nebel): 🌫☁️😶‍🌫️🌁🌥 — Nebel-Feeling
+  - WMO 51-82 (Regen): 🌧💧☔💦🌂 — Regen-Drops
+  - WMO 71-77 (Schnee): ❄️⛄🌨☃️ — Schnee-Flöckchen
+  - WMO ≥95 (Gewitter): ⚡🌩⛈🌀💥 — Blitz-Chaos
+  - Fallback: ✨💫🌈⭐🌟 — Magic
+- **`.hero-burst-p` CSS**: `position:absolute; font-size:1.35rem; will-change:transform,opacity; animation:heroBurstUp var(--bp-dur,900ms)`
+- **`@keyframes heroBurstUp`**:
+  - 0%: `opacity:0; translate(sx,0) scale(.4)` — unsichtbar, komprimiert
+  - 12%: `opacity:1; translate(sx*.3,-12px) scale(1.15)` — schnell erscheinen, leichter Pop
+  - 100%: `opacity:0; translate(ex,ey) scale(.7)` — aufsteigen und verschwinden
+- **CSS-Variablen pro Partikel**: `--bp-sx` (Start-X-Jitter ±7px), `--bp-ex` (End-X-Spread ±40px), `--bp-ey` (Float-Up 60-120px), `--bp-dur` (Dauer 700-1100ms)
+- **`burst(x, y)` Funktion**: 
+  - Throttle: min. 220ms zwischen Bursts (kein Spam)
+  - `getBurstEmojis()`: liest `window._wx.current.weathercode` für passende Emoji-Liste
+  - Erzeugt 6-8 Partikel-Divs mit je eigenem Zufalls-Styling (Größe, Richtung, Dauer)
+  - `animation-delay: idx*60 + rand(40)ms` → gestaffeltes Starburst-Timing
+  - `setTimeout(el.remove(), dur+delay+100)` → automatisches DOM-Cleanup, kein Memory-Leak
+- **Event-Handler**:
+  - `hero.addEventListener('touchstart', ...)` passive → iOS-optimiert, kein Scroll-Konflikt
+  - `hero.addEventListener('click', ...)` → Desktop-Testing-Support
+  - Multitouch guard: `if(e.touches.length>1) return` — kein Trigger bei Pinch/Zoom
+- **Throttle 220ms**: verhindert excessive Particle-Spawning bei schnellen Taps
+- `#hero-tap-layer` ist `pointer-events:none` → blockt keine Touch-Events auf darunterliegenden Elementen (Szenen-Buttons, Licht-Tiles etc. bleiben funktional)
+- **Graceful**: IIFE prüft `layer && hero` — kein Fehler wenn DOM-Elemente fehlen
+- **Kein extra API-Call** — nutzt bereits vorhandene `_wx.current.weathercode` Daten
+- Effekt: Das Home-Hero fühlt sich "lebendig" an — ein Tipp in die Sonne lässt Sonnensymbole aufsteigen, ein Tipp im Regen lässt Regentropfen hochwirbeln — pure joy interaction
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 632572 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-29 08:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — Licht-Aktivitäts-Heatmap (🗓)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert

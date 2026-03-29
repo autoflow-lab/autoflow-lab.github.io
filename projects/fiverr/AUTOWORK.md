@@ -332,6 +332,9 @@
 ## Neue Ideen (2026-03-29 09:10 UTC)
 - [x] wz.html: Geräte-Tab — "Alles aus"-Sleep-Timer Card (⏰ 4 Timer-Buttons 15/30/60/90 min, schalten alle Lichter + Geräte ab, Countdown-Pill mit Puls-Dot, Cancel-Button, blaues Farbschema)
 
+## Neue Ideen (2026-03-29 10:03 UTC)
+- [x] wz.html: Home-Hero — Tap-Burst Emoji Particles (🎆 touchstart/click auf Hero erzeugt 6-8 wetter-passende Emoji-Partikel vom Tap-Punkt, animiertes Aufsteigen mit random Trajektorie, WMO-codierte Emoji-Sets ☀️/🌧/❄️/⚡/✨)
+
 ## Neue Ideen (2026-03-28 22:03 UTC)
 - [x] wz.html: Home-Tab — "Zitat des Tages" Card (💬 täglich wechselndes Motivationszitat aus 30 lokalen Zitaten, ↺ Refresh-Button, amber Anführungszeichen-Design, quoteCardIn Animation)
 

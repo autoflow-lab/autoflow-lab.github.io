@@ -705,6 +705,14 @@ html,body{height:100%;background:var(--bg);
 @keyframes greetCursor{0%,100%{opacity:1}50%{opacity:0}}
 .hgreet-cursor{display:inline-block;width:1.5px;height:.8em;background:rgba(255,255,255,.5);border-radius:1px;vertical-align:middle;margin-left:2px;animation:greetCursor .8s ease-in-out infinite}
 .hgreet-cursor.gc-hide{display:none}
+/* ── Hero Tap-Burst Emoji Particles ── */
+#hero-tap-layer{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+.hero-burst-p{position:absolute;pointer-events:none;will-change:transform,opacity;font-size:1.35rem;line-height:1;user-select:none;animation:heroBurstUp var(--bp-dur,900ms) var(--bp-ease,cubic-bezier(.2,.8,.4,1)) both}
+@keyframes heroBurstUp{
+  0%{opacity:0;transform:translate(var(--bp-sx,0px),0) scale(.4)}
+  12%{opacity:1;transform:translate(calc(var(--bp-sx,0px)*.3),calc(-12px)) scale(1.15)}
+  100%{opacity:0;transform:translate(var(--bp-ex,0px),var(--bp-ey,-88px)) scale(.7)}
+}
 /* ── Analog Clock Mini ── */
 #aclock-wrap{display:flex;align-items:center;gap:10px}
 #aclock{flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,159,10,.25))}
@@ -2061,6 +2069,8 @@ input[type=range] { touch-action: none; }
           <div class="hourly" id="hourly"></div>
         </div>
       </div>
+      <!-- Tap-Burst Particle Layer -->
+      <div id="hero-tap-layer"></div>
 
       <!-- Weather details 2×2 -->
       <div class="c wg">
@@ -11757,6 +11767,71 @@ const _origSetWxMode=setWxMode;
     });
   })();
 
+
+  // ── Home-Hero Tap-Burst Emoji Particles ──
+  (function(){
+    var layer=document.getElementById('hero-tap-layer');
+    var hero=document.querySelector('.hero');
+    if(!layer||!hero)return;
+
+    // Emoji sets per WMO category
+    function getBurstEmojis(){
+      var code=window._wx&&window._wx.current?window._wx.current.weathercode:-1;
+      if(code>=95)return['⚡','🌩','⛈','🌀','💥'];
+      if(code>=71&&code<=77||code===85||code===86)return['❄️','⛄','🌨','☃️','❄️'];
+      if(code>=51&&code<=82)return['🌧','💧','☔','💦','🌂'];
+      if(code>=45&&code<=48)return['🌫','☁️','😶‍🌫️','🌁','🌥'];
+      if(code>=2&&code<=3)return['⛅','🌤','🌥','☁️','🌤'];
+      if(code===0||code===1)return['☀️','🌟','✨','💛','🌞'];
+      return['✨','💫','🌈','⭐','🌟'];
+    }
+
+    var _lastBurst=0;
+    function burst(x,y){
+      var now=Date.now();
+      if(now-_lastBurst<220)return; // throttle
+      _lastBurst=now;
+      var emojis=getBurstEmojis();
+      var count=6+Math.floor(Math.random()*3); // 6-8 particles
+      var rect=layer.getBoundingClientRect();
+      for(var i=0;i<count;i++){
+        (function(idx){
+          var el=document.createElement('div');
+          el.className='hero-burst-p';
+          el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+          // Random trajectory
+          var sx=(Math.random()-.5)*14; // start x jitter
+          var ex=(Math.random()-.5)*80; // end x spread
+          var ey=-(60+Math.random()*60); // float up 60-120px
+          var dur=700+Math.floor(Math.random()*400); // 700-1100ms
+          var delay=idx*60+Math.floor(Math.random()*40); // stagger
+          el.style.cssText=[
+            'left:'+(x-rect.left-12)+'px',
+            'top:'+(y-rect.top-12)+'px',
+            '--bp-sx:'+sx+'px',
+            '--bp-ex:'+ex+'px',
+            '--bp-ey:'+ey+'px',
+            '--bp-dur:'+dur+'ms',
+            'animation-delay:'+delay+'ms'
+          ].join(';');
+          layer.appendChild(el);
+          setTimeout(function(){el.remove();},dur+delay+100);
+        })(i);
+      }
+    }
+
+    // Touch support
+    hero.addEventListener('touchstart',function(e){
+      if(e.touches.length>1)return;
+      var t=e.touches[0];
+      burst(t.clientX,t.clientY);
+    },{passive:true});
+
+    // Mouse support (desktop testing)
+    hero.addEventListener('click',function(e){
+      burst(e.clientX,e.clientY);
+    },{passive:true});
+  })();
 
   // Licht-Feedback: .pressing Klasse für zuverlässiges iOS Touch-Feedback
   document.querySelectorAll('.lt').forEach(function(tile){
