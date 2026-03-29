@@ -168,7 +168,7 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#presence-strip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
@@ -293,6 +293,26 @@ html,body{height:100%;background:var(--bg);
 #silence-cd{font-weight:700;color:#90caff;margin-left:3px}
 :root.light #silence-chip{background:rgba(10,100,220,.06);border-color:rgba(10,100,220,.15);color:rgba(0,60,140,.8)}
 :root.light #silence-cd{color:rgba(0,80,180,.9)}
+/* ── Anwesenheits-Chips ── */
+#presence-strip{display:none;flex-wrap:wrap;gap:7px;margin:0 0 10px}
+#presence-strip.show{display:flex}
+@keyframes presChipIn{from{opacity:0;transform:scale(.82) translateY(4px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.pres-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px 6px 8px;border-radius:100px;font-size:.72rem;font-weight:600;cursor:default;animation:presChipIn .36s cubic-bezier(.34,1.15,.64,1) both}
+.pres-chip.pres-home{background:rgba(48,209,88,.09);border:1px solid rgba(48,209,88,.26);color:rgba(160,255,190,.9)}
+.pres-chip.pres-away{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.45)}
+.pres-chip.pres-zone{background:rgba(10,132,255,.09);border:1px solid rgba(10,132,255,.24);color:rgba(120,190,255,.9)}
+.pres-avatar{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;letter-spacing:0}
+.pres-chip.pres-home .pres-avatar{background:rgba(48,209,88,.22);color:#30d158}
+.pres-chip.pres-away .pres-avatar{background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)}
+.pres-chip.pres-zone .pres-avatar{background:rgba(10,132,255,.2);color:#0a84ff}
+.pres-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.pres-chip.pres-home .pres-dot{background:#30d158;box-shadow:0 0 5px rgba(48,209,88,.7);animation:presHomeDot 2.4s ease-in-out infinite}
+.pres-chip.pres-away .pres-dot{background:rgba(255,255,255,.2)}
+.pres-chip.pres-zone .pres-dot{background:#0a84ff;box-shadow:0 0 5px rgba(10,132,255,.6)}
+@keyframes presHomeDot{0%,100%{box-shadow:0 0 4px rgba(48,209,88,.6)}50%{box-shadow:0 0 8px 2px rgba(48,209,88,.9)}}
+:root.light .pres-chip.pres-home{background:rgba(30,160,60,.07);border-color:rgba(30,160,60,.22);color:rgba(0,80,30,.85)}
+:root.light .pres-chip.pres-away{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.38)}
+:root.light .pres-chip.pres-zone{background:rgba(0,100,210,.07);border-color:rgba(0,100,210,.2);color:rgba(0,70,170,.85)}
 @keyframes feelArrowUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes feelArrowDown{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
 /* Allergiker-Warnung Chips */
@@ -981,6 +1001,15 @@ html,body{height:100%;background:var(--bg);
 :root.light #hvac-chip.hvac-heat{background:rgba(200,60,10,.07);border-color:rgba(200,60,10,.22);color:rgba(140,40,10,.9)}
 :root.light #hvac-chip.hvac-cool{background:rgba(0,100,210,.07);border-color:rgba(0,100,210,.22);color:rgba(0,80,180,.9)}
 :root.light #hvac-chip.hvac-idle{background:rgba(30,160,60,.07);border-color:rgba(30,160,60,.22);color:rgba(20,120,50,.9)}
+/* Energie-Sparcheck Chip */
+#esave-chip{display:none;align-items:center;gap:8px;margin:0 0 8px;padding:7px 12px 7px 10px;border-radius:100px;font-size:.72rem;font-weight:600;background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.28);color:rgba(255,210,100,.95);opacity:0;transform:scale(.88) translateY(-4px);transition:opacity .38s cubic-bezier(.34,1.28,.64,1),transform .38s cubic-bezier(.34,1.28,.64,1)}
+#esave-chip.show{display:flex;opacity:1;transform:scale(1) translateY(0)}
+.esave-dot{width:6px;height:6px;border-radius:50%;background:#ff9f0a;flex-shrink:0;box-shadow:0 0 6px rgba(255,159,10,.7);animation:esavePulse 2s ease-in-out infinite}
+@keyframes esavePulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+#esave-off-btn{margin-left:4px;background:rgba(255,159,10,.18);border:1px solid rgba(255,159,10,.35);border-radius:8px;color:rgba(255,220,120,.9);font-size:.65rem;font-weight:700;padding:3px 9px;cursor:pointer;touch-action:manipulation;transition:background .15s}
+#esave-off-btn:active{background:rgba(255,159,10,.35)}
+:root.light #esave-chip{background:rgba(180,90,0,.07);border-color:rgba(180,90,0,.22);color:rgba(130,60,0,.85)}
+:root.light #esave-off-btn{background:rgba(180,90,0,.1);border-color:rgba(180,90,0,.25);color:rgba(120,50,0,.8)}
 #wx-warn-banner{display:none;align-items:center;gap:10px;margin:0 0 10px;padding:10px 14px;border-radius:14px;font-size:.73rem;opacity:0;transform:translateY(-6px) scale(.95);transition:opacity .4s cubic-bezier(.34,1.28,.64,1),transform .4s cubic-bezier(.34,1.28,.64,1)}
 #wx-warn-banner.show{display:flex;opacity:1;transform:translateY(0) scale(1)}
 .wxwb-heat{background:rgba(255,69,58,.13);border:1px solid rgba(255,69,58,.38);color:rgba(255,140,110,.95)}
@@ -1888,6 +1917,16 @@ input[type=range] { touch-action: none; }
 
 /* iOS Tap-Feedback via .pressing Klasse */
 .lt.pressing{transform:scale(.93)!important;transition:transform .06s ease!important}
+
+/* ── Musik-Tab: Floating Music Note Particles ── */
+#music-note-layer{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.mnp{position:absolute;pointer-events:none;user-select:none;will-change:transform,opacity;font-size:var(--mnp-sz,1.1rem);line-height:1;animation:mnpFloat var(--mnp-dur,3.4s) var(--mnp-ease,cubic-bezier(.2,.6,.4,1)) forwards}
+@keyframes mnpFloat{
+  0%{opacity:0;transform:translate(var(--mnp-sx,0),0) scale(.5) rotate(var(--mnp-r0,0deg))}
+  12%{opacity:.9;transform:translate(var(--mnp-sx,0),-14px) scale(1.1) rotate(var(--mnp-r1,6deg))}
+  80%{opacity:.45}
+  100%{opacity:0;transform:translate(var(--mnp-ex,0),var(--mnp-ey,-90px)) scale(.7) rotate(var(--mnp-r2,18deg))}
+}
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
@@ -2212,6 +2251,12 @@ input[type=range] { touch-action: none; }
         <span class="hvac-dot"></span>
         <span id="hvac-chip-txt">🔥 Heizung aktiv</span>
       </div>
+      <!-- Energie-Sparcheck Chip -->
+      <div id="esave-chip" role="alert" aria-live="polite" style="display:none">
+        <span class="esave-dot"></span>
+        <span id="esave-chip-txt">⚡ Geräte laufen schon lange</span>
+        <button id="esave-off-btn" aria-label="Alle ausschalten" style="touch-action:manipulation">Alle aus</button>
+      </div>
       <!-- Wetterwarnung Banner -->
       <div id="wx-warn-banner" role="alert" aria-live="assertive">
         <div id="wx-warn-ico">⚠️</div>
@@ -2461,6 +2506,9 @@ input[type=range] { touch-action: none; }
         <span id="silence-txt">🌙 Ruhezeit aktiv<span id="silence-cd"></span></span>
       </div>
 
+      <!-- Anwesenheits-Chips (device_tracker.*) -->
+      <div id="presence-strip"></div>
+
       <!-- Scenes 2x2 -->
       <span class="lbl">Szenen</span>
       <div class="sg2">
@@ -2489,6 +2537,8 @@ input[type=range] { touch-action: none; }
 
     <!-- ═══ MUSIK ═══ -->
     <div class="page" id="pg-musik">
+      <!-- Floating Music Note Particles Layer -->
+      <div id="music-note-layer"></div>
       <!-- Blurred album-art background layer -->
       <div id="album-page-bg" style="position:absolute;inset:0;z-index:0;overflow:hidden;border-radius:0;pointer-events:none">
         <img id="album-page-bg-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;transform:scale(1.15);filter:blur(40px) brightness(.35) saturate(1.8);transition:opacity 1.8s ease">
@@ -10055,6 +10105,45 @@ function updateAll(){
     txt.textContent=label;
     chip.classList.add('show');
   })();
+  // ── Energie-Sparcheck Chip ──
+  (function(){
+    const chip=document.getElementById('esave-chip');
+    const txt=document.getElementById('esave-chip-txt');
+    const btn=document.getElementById('esave-off-btn');
+    if(!chip||!txt)return;
+    const THRESH_H=2; // hours threshold
+    var longOn=[];
+    var now=new Date();
+    Object.values(_S).forEach(function(s){
+      if(!s||!s.entity_id||!s.last_changed)return;
+      var id=s.entity_id;
+      if(!id.startsWith('light.')&&!id.startsWith('switch.'))return;
+      if(s.state!=='on')return;
+      var changed=new Date(s.last_changed);
+      var diffH=(now-changed)/3600000;
+      if(diffH>=THRESH_H) longOn.push({id:id,h:diffH});
+    });
+    if(longOn.length>0){
+      var maxH=Math.max.apply(null,longOn.map(function(x){return x.h;}));
+      var hStr=maxH>=10?Math.round(maxH)+'h':Math.floor(maxH)+'h '+Math.round((maxH%1)*60)+'min';
+      txt.textContent='⚡ '+longOn.length+(longOn.length===1?' Gerät':' Geräte')+' seit '+hStr+' aktiv';
+      chip.classList.add('show');
+    } else {
+      chip.classList.remove('show');
+    }
+    if(btn&&!btn._bound){
+      btn._bound=true;
+      btn.addEventListener('click',function(){
+        // Turn off all long-running lights/switches
+        longOn.forEach(function(x){
+          var dom=x.id.startsWith('light.')?'light':'switch';
+          svc(dom,'turn_off',{entity_id:x.id}).catch(function(){});
+        });
+        chip.classList.remove('show');
+        showToast('⚡ '+longOn.length+' Gerät'+(longOn.length===1?'':'e')+' ausgeschaltet');
+      });
+    }
+  })();
   // Quick-Actions Bar state
   window._updateQaBar&&window._updateQaBar(on, playing);
   // ── App BG Orbs: react to active lights ──
@@ -10099,6 +10188,55 @@ function updateAll(){
   window._updateSunsetSim&&window._updateSunsetSim(on);
   window._updateNightLight&&window._updateNightLight(on);
   window._updateBreathe&&window._updateBreathe(on);
+  // ── Anwesenheits-Chips ──
+  (function(){
+    const strip=document.getElementById('presence-strip');
+    if(!strip)return;
+    // Gather device_tracker entities
+    const trackers=Object.entries(_S||{}).filter(([id])=>id.startsWith('device_tracker.'));
+    if(!trackers.length){strip.classList.remove('show');return;}
+    // Build chips only when data changes (compare last render)
+    const sig=trackers.map(([id,s])=>id+'|'+(s.state||'')).join(',');
+    if(strip._lastSig===sig)return;
+    strip._lastSig=sig;
+    // Helpers
+    function initials(name){
+      const words=(name||'').split(/[\s_-]+/).filter(Boolean);
+      if(words.length>=2)return(words[0][0]+words[1][0]).toUpperCase();
+      return(name||'?').substring(0,2).toUpperCase();
+    }
+    function friendlyName(id,attr){
+      if(attr&&attr.friendly_name)return attr.friendly_name.replace(/^person\.|^device_tracker\./i,'').trim();
+      return id.replace('device_tracker.','').replace(/_/g,' ').replace(/\w/g,c=>c.toUpperCase());
+    }
+    function stateClass(st){
+      if(st==='home')return'pres-home';
+      if(st==='not_home')return'pres-away';
+      return'pres-zone'; // named zone
+    }
+    function stateLabel(st){
+      if(st==='home')return'🏠 Zuhause';
+      if(st==='not_home')return'Unterwegs';
+      // Named zone: capitalize
+      return st.replace(/_/g,' ').replace(/\w/g,c=>c.toUpperCase());
+    }
+    // Render
+    strip.innerHTML='';
+    trackers.forEach(([id,s],i)=>{
+      const st=s.state||'not_home';
+      const attr=s.attributes||{};
+      const name=friendlyName(id,attr);
+      const cls=stateClass(st);
+      const lbl=stateLabel(st);
+      const ini=initials(name);
+      const chip=document.createElement('div');
+      chip.className='pres-chip '+cls;
+      chip.style.animationDelay=(i*0.07)+'s';
+      chip.innerHTML=`<div class="pres-avatar">${ini}</div><span>${name}</span><div class="pres-dot"></div><span style="font-size:.65rem;opacity:.7">${lbl}</span>`;
+      strip.appendChild(chip);
+    });
+    strip.classList.toggle('show', trackers.length>0);
+  })();
   // ── Stunde der Stille Chip ──
   (function(){
     const chip=document.getElementById('silence-chip');
@@ -12554,6 +12692,93 @@ const _origSetWxMode=setWxMode;
         }
       }
     },400);
+  })();
+
+  // ── Musik-Tab: Floating Music Note Particles ──
+  (function(){
+    var layer = document.getElementById('music-note-layer');
+    var disc  = document.getElementById('alb-disc');
+    if(!layer || !disc) return;
+
+    var NOTES   = ['♩','♪','♫','♬','♩','♪','♫'];
+    var _active = false;
+    var _itv    = null;
+    var _lastSpawn = 0;
+
+    function rand(a,b){ return a + Math.random()*(b-a); }
+    function ri(a,b){ return Math.floor(rand(a,b+1)); }
+
+    function spawnNote(){
+      var now = Date.now();
+      if(now - _lastSpawn < 380) return;  // throttle
+      _lastSpawn = now;
+
+      // Origin: album disc area — top-left of pg-musik, disc is roughly at x:18-90, y:50-122
+      var baseX = rand(22, 88);   // horizontal spread across disc
+      var baseY = rand(56, 118);  // vertical start near disc
+
+      var el = document.createElement('span');
+      el.className = 'mnp';
+      el.textContent = NOTES[ri(0, NOTES.length-1)];
+
+      // Random styling
+      var sz   = rand(.75, 1.45);
+      var dur  = rand(2.8, 4.6);
+      var ex   = rand(-30, 30);       // end x drift
+      var ey   = -rand(70, 130);      // float up distance
+      var r0   = rand(-20, 20);
+      var r1   = rand(-12, 12);
+      var r2   = rand(-28, 28);
+
+      // Amber / white color mix
+      var amber = Math.random() > .45;
+      el.style.color = amber ? 'rgba(255,159,10,.82)' : 'rgba(255,255,255,.65)';
+      el.style.left  = baseX + 'px';
+      el.style.top   = baseY + 'px';
+      el.style.setProperty('--mnp-sz',  sz + 'rem');
+      el.style.setProperty('--mnp-dur', dur + 's');
+      el.style.setProperty('--mnp-ease','cubic-bezier(.2,.65,.4,1)');
+      el.style.setProperty('--mnp-sx',  rand(-8,8) + 'px');
+      el.style.setProperty('--mnp-ex',  ex + 'px');
+      el.style.setProperty('--mnp-ey',  ey + 'px');
+      el.style.setProperty('--mnp-r0',  r0 + 'deg');
+      el.style.setProperty('--mnp-r1',  r1 + 'deg');
+      el.style.setProperty('--mnp-r2',  r2 + 'deg');
+
+      layer.appendChild(el);
+      setTimeout(function(){ el.remove(); }, (dur + .3) * 1000);
+    }
+
+    function startNotes(){
+      if(_active) return;
+      _active = true;
+      // Spawn up to 4 notes at staggered times
+      spawnNote();
+      _itv = setInterval(function(){
+        if(!disc.classList.contains('playing')){ stopNotes(); return; }
+        // spawn 1-2 notes per interval with slight jitter
+        spawnNote();
+        if(Math.random() > .55) setTimeout(spawnNote, rand(120, 320));
+      }, 900);
+    }
+
+    function stopNotes(){
+      if(!_active) return;
+      _active = false;
+      clearInterval(_itv);
+      _itv = null;
+    }
+
+    // Observe disc class changes
+    var obs = new MutationObserver(function(){
+      var playing = disc.classList.contains('playing');
+      if(playing && !_active) startNotes();
+      else if(!playing && _active) stopNotes();
+    });
+    obs.observe(disc, {attributes:true, attributeFilter:['class']});
+
+    // Init check
+    if(disc.classList.contains('playing')) startNotes();
   })();
 
 </script>
