@@ -1883,6 +1883,16 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 /* Geräte Pulse-Dot: off state im Light Mode */
 :root.light .g-pulse-dot.off { background:rgba(0,0,0,.2); }
 :root.light .g-last-changed { color:var(--dim2); }
+/* Musik-Tab: Now-Playing & RFC Titel */
+:root.light .nptitle, :root.light #np-t { color:var(--txt) !important; }
+:root.light #rfc-title { color:var(--txt) !important; }
+/* Übersicht-Tab: Außen-Temp */
+:root.light #ov-temp { color:var(--txt) !important; }
+/* Wetter-Tab: Mond-Name, Laundry-Titel */
+:root.light #moon-name { color:var(--txt) !important; }
+:root.light #laundry-title { color:var(--txt) !important; }
+/* Hero Glow: im Light-Mode deaktivieren */
+:root.light .hglow { opacity:0 !important; }
 
 /* Geräte-Tab — Pulse Dot */
 .g-pulse-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;flex-shrink:0;transition:background .4s,box-shadow .4s}
@@ -8600,6 +8610,7 @@ function updateHeroGradient(h, m) {
     else if(lt < 20) lightGrad='linear-gradient(160deg,#f5d4a8,#f0b880,#e89060)'; // golden afternoon
     else lightGrad='linear-gradient(160deg,#1a2840,#0d1e38)';
     hbg.style.background = lightGrad;
+    if(hglow) hglow.style.setProperty('--hglc', 'rgba(0,0,0,0)');
   }
   // Star canvas: show at night/dawn, never in light theme
   const stars = document.getElementById('star-cv');
