@@ -168,10 +168,10 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#presence-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#sport-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -317,6 +317,20 @@ html,body{height:100%;background:var(--bg);
 #silence-cd{font-weight:700;color:#90caff;margin-left:3px}
 :root.light #silence-chip{background:rgba(10,100,220,.06);border-color:rgba(10,100,220,.15);color:rgba(0,60,140,.8)}
 :root.light #silence-cd{color:rgba(0,80,180,.9)}
+/* ── Wetter-Licht Sync ── */
+#wx-light-sync{display:none;margin:0 0 10px}
+#wx-light-sync.show{display:block}
+#wls-btn{width:100%;display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;cursor:pointer;touch-action:manipulation;text-align:left;transition:background .2s,border-color .2s;animation:wlsIn .45s cubic-bezier(.34,1.15,.64,1) both}
+#wls-btn:active{background:rgba(255,255,255,.09)}
+#wls-ico{font-size:1.35rem;flex-shrink:0;line-height:1}
+#wls-label{flex:1;font-size:.75rem;color:rgba(255,255,255,.75);font-weight:500}
+#wls-val{font-size:.67rem;color:rgba(255,255,255,.38);font-weight:400;white-space:nowrap}
+@keyframes wlsIn{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes wlsFlash{0%{background:rgba(255,159,10,.22)}100%{background:rgba(255,255,255,.05)}}
+#wls-btn.wls-tap{animation:wlsFlash .55s ease both}
+:root.light #wls-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}
+:root.light #wls-label{color:rgba(0,0,0,.65)}
+:root.light #wls-val{color:rgba(0,0,0,.35)}
 /* ── Anwesenheits-Chips ── */
 #presence-strip{display:none;flex-wrap:wrap;gap:7px;margin:0 0 10px}
 #presence-strip.show{display:flex}
@@ -422,6 +436,33 @@ html,body{height:100%;background:var(--bg);
 /* ── Outdoor-Sport Card ── */
 #sport-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #sport-card.show{opacity:1;transform:translateY(0)}
+#clim-card{display:none;margin-bottom:12px;padding:14px 14px 12px;border-radius:16px;background:rgba(48,200,192,.05);border:1px solid rgba(48,200,192,.18);position:relative;overflow:hidden;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#clim-card.show{opacity:1;transform:translateY(0)}
+#clim-inner{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+#clim-bg{position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(48,200,192,.14) 0%,transparent 70%);pointer-events:none}
+#clim-label{position:absolute;top:0;left:0;font-size:.52rem;font-weight:700;letter-spacing:1px;color:rgba(48,200,192,.7);padding:3px 8px}
+#clim-thermo-wrap{flex-shrink:0;margin-top:14px}
+#clim-stats{flex:1;display:flex;flex-direction:column;gap:6px;margin-top:14px}
+#clim-now-row,#clim-avg-row,#clim-delta-row{display:flex;justify-content:space-between;align-items:center;font-size:.72rem}
+#clim-now-lbl,#clim-avg-lbl{color:rgba(255,255,255,.45)}
+#clim-now-val{font-weight:600;font-size:.95rem;color:#fff}
+#clim-avg-val{font-weight:500;color:rgba(255,255,255,.6)}
+#clim-delta-row{margin-top:2px}
+#clim-delta-arrow{font-size:1.1rem;transition:color .6s}
+#clim-delta-val{font-weight:700;font-size:.88rem;transition:color .6s}
+#clim-bar-section{flex:1.2;display:flex;flex-direction:column;gap:5px;margin-top:18px}
+#clim-month-name{font-size:.6rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px}
+#clim-bar-track{position:relative;height:38px;background:rgba(255,255,255,.04);border-radius:8px;overflow:hidden;display:flex;align-items:flex-end;padding:4px 6px;gap:4px}
+#clim-bar-avg,#clim-bar-now{border-radius:5px 5px 0 0;width:30%;transition:height 1.4s cubic-bezier(.4,0,.2,1),background .6s}
+#clim-bar-avg{background:rgba(255,255,255,.2);align-self:flex-end}
+#clim-bar-now{background:rgba(48,200,192,.6);align-self:flex-end}
+#clim-verdict{font-size:.65rem;color:rgba(255,255,255,.55);font-style:italic;margin-top:2px;transition:color .6s}
+:root.light #clim-card{background:rgba(0,160,150,.06);border-color:rgba(0,160,150,.2)}
+:root.light #clim-label{color:rgba(0,140,130,.8)}
+:root.light #clim-now-lbl,:root.light #clim-avg-lbl{color:rgba(0,0,0,.45)}
+:root.light #clim-now-val{color:rgba(0,0,0,.9)}
+:root.light #clim-avg-val{color:rgba(0,0,0,.55)}
+:root.light #clim-verdict{color:rgba(0,0,0,.45)}
 #sport-inner{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(48,209,88,.22);background:rgba(48,209,88,.06);padding:14px 14px 10px}
 #sport-bg{position:absolute;inset:0;background:radial-gradient(circle at 75% 20%,rgba(48,209,88,.10) 0%,transparent 60%);pointer-events:none}
 #sport-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -498,6 +539,27 @@ html,body{height:100%;background:var(--bg);
 /* ── BIOWETTER ── */
 #biowetter-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #biowetter-card.show{opacity:1;transform:translateY(0)}
+/* ── UV-Schutz Card ── */
+#uv-protect-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#uv-protect-card.show{opacity:1;transform:translateY(0)}
+#uvp-inner{position:relative;overflow:hidden;border-radius:18px;padding:14px 14px 12px;border:1px solid rgba(255,214,10,.22);background:rgba(255,214,10,.05)}
+#uvp-bg{position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,rgba(255,159,10,.12) 0%,transparent 55%);pointer-events:none}
+#uvp-label{font-size:.58rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,214,10,.7);margin-bottom:8px}
+#uvp-main-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+#uvp-arc-wrap{position:relative;flex-shrink:0}
+#uvp-arc-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#uvp-val{font-size:1.4rem;font-weight:700;color:rgba(255,255,255,.9)}
+#uvp-max-lbl{font-size:.5rem;color:rgba(255,255,255,.4);letter-spacing:.5px}
+#uvp-info{flex:1;min-width:0}
+#uvp-status{font-size:.85rem;font-weight:600;color:rgba(255,255,255,.88);margin-bottom:3px}
+#uvp-cd{font-size:.65rem;color:rgba(255,255,255,.5);margin-bottom:6px}
+#uvp-spf-row{display:flex;flex-wrap:wrap;gap:5px}
+.uvp-chip{font-size:.58rem;font-weight:600;padding:3px 9px;border-radius:20px}
+.uvp-chip.spf{background:rgba(255,214,10,.15);color:#ffd60a}
+.uvp-chip.tip{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+:root.light #uvp-val{color:rgba(0,0,0,.8)}
+:root.light #uvp-status{color:rgba(0,0,0,.75)}
+:root.light #uvp-cd{color:rgba(0,0,0,.45)}
 #sunshine-card{display:none;margin-bottom:12px}
 @keyframes sunRayGrow{0%{r:0;opacity:0}60%{opacity:1}100%{opacity:.6}}
 @keyframes sunCorePulse{0%,100%{filter:drop-shadow(0 0 6px rgba(255,214,10,.5))}50%{filter:drop-shadow(0 0 14px rgba(255,214,10,.9))}}
@@ -680,6 +742,27 @@ html,body{height:100%;background:var(--bg);
 :root.light #lt-breathe{background:transparent}
 :root.light #lt-br-pill{background:rgba(20,160,180,.06)}
 /* ── Licht-Snapshot ── */
+/* Farb-Mixer Color Wheel */
+#lt-color-wheel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px 14px;margin:0 14px 12px}
+#lt-color-wheel.show{display:block;animation:cwCardIn .45s cubic-bezier(.32,0,.15,1) both}
+@keyframes cwCardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#lt-cw-label{font-size:.56rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px}
+#lt-cw-inner{display:flex;gap:14px;align-items:center}
+#lt-cw-canvas-wrap{position:relative;flex-shrink:0;width:140px;height:140px;border-radius:50%;overflow:hidden;cursor:crosshair;touch-action:none;box-shadow:0 0 0 1.5px rgba(255,255,255,.09)}
+#lt-cw-cv{display:block;border-radius:50%}
+#lt-cw-cursor{position:absolute;width:14px;height:14px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 0 6px rgba(0,0,0,.7);transform:translate(-50%,-50%);pointer-events:none;left:50%;top:50%;transition:background .12s}
+#lt-cw-controls{flex:1;display:flex;flex-direction:column;gap:8px;align-items:center}
+#lt-cw-preview{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.2);transition:background .18s,box-shadow .18s;background:#ff9f0a;box-shadow:0 0 14px rgba(255,159,10,.5)}
+#lt-cw-hex{font-size:.55rem;color:rgba(255,255,255,.35);margin-top:3px;font-family:monospace;letter-spacing:.04em}
+#lt-cw-bri{width:100%;height:4px;border-radius:2px;cursor:pointer;-webkit-appearance:none;appearance:none;outline:none;background:linear-gradient(90deg,rgba(255,255,255,.15) 0%,#ff9f0a 100%);touch-action:manipulation}
+#lt-cw-bri::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 5px rgba(255,159,10,.5);cursor:pointer}
+#lt-cw-bri-label{font-size:.58rem;color:rgba(255,255,255,.35)}
+#lt-cw-apply{background:rgba(255,159,10,.14);border:1px solid rgba(255,159,10,.35);color:#ff9f0a;font-size:.65rem;font-weight:700;border-radius:20px;padding:6px 18px;cursor:pointer;touch-action:manipulation;transition:background .18s,transform .12s}
+#lt-cw-apply:active{transform:scale(.93)}
+@keyframes cwApply{0%{background:rgba(255,159,10,.55)}100%{background:rgba(255,159,10,.14)}}
+:root.light #lt-color-wheel{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1)}
+:root.light #lt-cw-label{color:rgba(0,0,0,.35)}
+:root.light #lt-cw-bri-label,:root.light #lt-cw-hex{color:rgba(0,0,0,.4)}
 #lt-snapshot{margin:0 14px 12px;opacity:0;transition:opacity .5s ease}
 #lt-snapshot.show{opacity:1}
 #lt-snap-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
@@ -2789,6 +2872,15 @@ input[type=range] { touch-action: none; }
       <!-- Anwesenheits-Chips (device_tracker.*) -->
       <div id="presence-strip"></div>
 
+      <!-- Wetter-Licht Sync Button -->
+      <div id="wx-light-sync">
+        <button id="wls-btn" aria-label="Licht an Wetter anpassen">
+          <span id="wls-ico">🌤</span>
+          <span id="wls-label">Licht ans Wetter anpassen</span>
+          <span id="wls-val">–</span>
+        </button>
+      </div>
+
       <!-- Scenes 2x2 -->
       <span class="lbl">Szenen</span>
       <div class="sg2">
@@ -3124,6 +3216,25 @@ input[type=range] { touch-action: none; }
           <button class="lt-cp-chip" data-rgb="190,60,255" style="--cc:#be3cff" title="Lila">💜</button>
         </div>
       </div>
+      <!-- Farb-Mixer Color Wheel -->
+      <div id="lt-color-wheel" aria-label="Farb-Mixer">
+        <div id="lt-cw-label">🎨 FARB-MIXER</div>
+        <div id="lt-cw-inner">
+          <div id="lt-cw-canvas-wrap" title="Farbe wählen">
+            <canvas id="lt-cw-cv" width="140" height="140"></canvas>
+            <div id="lt-cw-cursor"></div>
+          </div>
+          <div id="lt-cw-controls">
+            <div id="lt-cw-preview-wrap">
+              <div id="lt-cw-preview"></div>
+              <div id="lt-cw-hex">#FF9F0A</div>
+            </div>
+            <input type="range" id="lt-cw-bri" min="5" max="100" value="80" step="1">
+            <div id="lt-cw-bri-label">80%</div>
+            <button id="lt-cw-apply">Anwenden</button>
+          </div>
+        </div>
+      </div>
       <!-- Licht-Snapshots -->
       <div id="lt-snapshot" aria-label="Licht-Snapshots">
         <div id="lt-snap-header">
@@ -3295,6 +3406,64 @@ input[type=range] { touch-action: none; }
               <div class="dhl-cond" id="dhl-worst-cond">–</div>
               <div class="dhl-chips" id="dhl-worst-chips"></div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Temperatur-Klimavergleich Card -->
+      <div id="clim-card">
+        <div id="clim-inner">
+          <div id="clim-bg"></div>
+          <div id="clim-label">🌡 KLIMAVERGLEICH</div>
+          <!-- Thermometer SVG -->
+          <div id="clim-thermo-wrap">
+            <svg id="clim-thermo-svg" viewBox="0 0 36 110" width="36" height="110">
+              <defs>
+                <linearGradient id="climThermGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ff453a"/>
+                  <stop offset="50%" stop-color="#ff9f0a"/>
+                  <stop offset="100%" stop-color="#30c8c0"/>
+                </linearGradient>
+              </defs>
+              <!-- Tube track -->
+              <rect x="14" y="6" width="8" height="74" rx="4" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+              <!-- Avg line marker -->
+              <rect id="clim-avg-marker" x="10" y="50" width="16" height="1.5" rx="1" fill="rgba(255,255,255,.35)"/>
+              <!-- Fill bar for current temp -->
+              <rect id="clim-fill-bar" x="16" y="60" width="4" height="18" rx="2" fill="url(#climThermGrad)" style="transition:y 1.4s cubic-bezier(.4,0,.2,1),height 1.4s cubic-bezier(.4,0,.2,1)"/>
+              <!-- Bulb -->
+              <circle cx="18" cy="86" r="9" fill="url(#climThermGrad)" opacity=".9"/>
+              <circle cx="18" cy="86" r="6" fill="rgba(255,255,255,.15)"/>
+              <!-- Tick marks -->
+              <line x1="22" y1="20" x2="26" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <line x1="22" y1="35" x2="26" y2="35" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <line x1="22" y1="50" x2="28" y2="50" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+              <line x1="22" y1="65" x2="26" y2="65" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+            </svg>
+          </div>
+          <!-- Stats -->
+          <div id="clim-stats">
+            <div id="clim-now-row">
+              <span id="clim-now-lbl">Aktuell</span>
+              <span id="clim-now-val">–</span>
+            </div>
+            <div id="clim-avg-row">
+              <span id="clim-avg-lbl">Ø Monat</span>
+              <span id="clim-avg-val">–</span>
+            </div>
+            <div id="clim-delta-row">
+              <span id="clim-delta-arrow">→</span>
+              <span id="clim-delta-val">–</span>
+            </div>
+          </div>
+          <!-- Bar comparison -->
+          <div id="clim-bar-section">
+            <div id="clim-month-name"></div>
+            <div id="clim-bar-track">
+              <div id="clim-bar-avg" title="Monatsmittel"></div>
+              <div id="clim-bar-now" title="Aktuell"></div>
+            </div>
+            <div id="clim-verdict"></div>
           </div>
         </div>
       </div>
@@ -3521,6 +3690,50 @@ input[type=range] { touch-action: none; }
           <div id="wnd-max-row" style="font-size:.58rem;color:rgba(255,255,255,.28);margin-top:6px;text-align:right"></div>
         </div>
       </div>
+      <!-- Windrose 24H -->
+      <div id="windrose-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">🌬 WINDROSE · 24H VERTEILUNG</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.06);padding:14px 16px 12px;display:flex;align-items:center;gap:16px">
+          <div style="flex:0 0 auto;position:relative">
+            <svg id="wr-svg" viewBox="0 0 120 120" width="120" height="120" style="overflow:visible">
+              <defs>
+                <radialGradient id="wrBgGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="rgba(10,132,255,.08)"/>
+                  <stop offset="100%" stop-color="transparent"/>
+                </radialGradient>
+              </defs>
+              <!-- Background circles -->
+              <circle cx="60" cy="60" r="48" fill="url(#wrBgGrad)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+              <circle cx="60" cy="60" r="32" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+              <circle cx="60" cy="60" r="16" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+              <!-- Cross-hairs -->
+              <line x1="60" y1="12" x2="60" y2="108" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+              <line x1="12" y1="60" x2="108" y2="60" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+              <line x1="26" y1="26" x2="94" y2="94" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+              <line x1="94" y1="26" x2="26" y2="94" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+              <!-- Direction bars (8 wedges) - filled by JS -->
+              <g id="wr-bars"></g>
+              <!-- Current wind needle -->
+              <g id="wr-needle" style="transform-origin:60px 60px;transition:transform 1.2s cubic-bezier(.34,1.28,.64,1)">
+                <line x1="60" y1="60" x2="60" y2="20" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+                <circle cx="60" cy="19" r="3" fill="#ff9f0a" opacity=".9"/>
+                <circle cx="60" cy="60" r="4" fill="rgba(255,159,10,.6)"/>
+              </g>
+              <!-- Direction labels -->
+              <text x="60" y="9" text-anchor="middle" font-size="8" font-weight="700" fill="rgba(255,255,255,.55)">N</text>
+              <text x="60" y="116" text-anchor="middle" font-size="8" fill="rgba(255,255,255,.35)">S</text>
+              <text x="113" y="63" text-anchor="middle" font-size="8" fill="rgba(255,255,255,.35)">O</text>
+              <text x="7" y="63" text-anchor="middle" font-size="8" fill="rgba(255,255,255,.35)">W</text>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div id="wr-main-dir" style="font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:4px">–</div>
+            <div id="wr-main-sub" style="font-size:.65rem;color:rgba(255,255,255,.4);margin-bottom:10px">Häufigste Windrichtung</div>
+            <div id="wr-dir-list" style="display:flex;flex-direction:column;gap:5px"></div>
+            <div id="wr-calm" style="font-size:.6rem;color:rgba(255,255,255,.28);margin-top:8px;display:none">🍃 Überwiegend windstill</div>
+          </div>
+        </div>
+      </div>
       <!-- Regen-Wahrscheinlichkeit 24h Heatmap -->
       <div id="rain-hm-card" style="display:none;margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">🌂 REGENRISIKO · 24H</div>
@@ -3735,6 +3948,40 @@ input[type=range] { touch-action: none; }
             </div>
             <div id="biow-factors"></div>
             <div id="biow-tip" style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);font-size:.62rem;color:rgba(255,255,255,.35);line-height:1.5;font-style:italic"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UV-Schutz Card -->
+      <div id="uv-protect-card">
+        <div id="uvp-inner">
+          <div id="uvp-bg"></div>
+          <div id="uvp-label">☀️ UV-SCHUTZ</div>
+          <div id="uvp-main-row">
+            <div id="uvp-arc-wrap">
+              <svg width="64" height="64" viewBox="0 0 64 64">
+                <defs>
+                  <linearGradient id="uvpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#30d158"/>
+                    <stop offset="40%" stop-color="#ffd60a"/>
+                    <stop offset="75%" stop-color="#ff9f0a"/>
+                    <stop offset="100%" stop-color="#ff453a"/>
+                  </linearGradient>
+                </defs>
+                <path d="M9 52 A26 26 0 1 1 55 52" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="5" stroke-linecap="round"/>
+                <path id="uvp-arc-fill" d="M9 52 A26 26 0 1 1 55 52" fill="none" stroke="url(#uvpGrad)" stroke-width="5" stroke-linecap="round"
+                  style="stroke-dasharray:145;stroke-dashoffset:145;transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)"/>
+              </svg>
+              <div id="uvp-arc-center">
+                <div id="uvp-val">0</div>
+                <div id="uvp-max-lbl">UV MAX</div>
+              </div>
+            </div>
+            <div id="uvp-info">
+              <div id="uvp-status">–</div>
+              <div id="uvp-cd"></div>
+              <div id="uvp-spf-row"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -4860,7 +5107,7 @@ async function fetchWeather(){
   try{
     const u=`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CFG.lon}`+
       `&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day,surface_pressure,visibility,cloud_cover`+
-      `&hourly=temperature_2m,weather_code,precipitation_probability,precipitation,windspeed_10m`+
+      `&hourly=temperature_2m,weather_code,precipitation_probability,precipitation,windspeed_10m,wind_direction_10m,uv_index`+
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,precipitation_sum,uv_index_max,windgusts_10m_max,sunshine_duration`+
       `&forecast_days=7&timezone=Europe%2FZurich&models=best_match`;
     const r=await fetch(u,{signal:AbortSignal.timeout(8000)});
@@ -5222,6 +5469,7 @@ function renderWeather(){
   drawWeeklyRain();
   drawBiowetter();
   drawSunshine();
+  drawUvProtect();
   drawFrostWarning();
   drawOutdoorChip();
   drawWeekStrip();
@@ -5230,6 +5478,7 @@ function renderWeather(){
   drawDaylightCard();
   drawTempCurve();
   drawWindCurve();
+  drawWindRose();
   drawRainHeatmap();
   drawStargazing();
   drawMoonPhase();
@@ -5238,6 +5487,7 @@ function renderWeather(){
   updateWxScore();
   drawBbqCard();
   drawSportCard();
+  drawClimCard();
   drawDayHighlight();
   drawUmbrellaCard();
   drawLueftCard();
@@ -5330,6 +5580,120 @@ function drawTempCurve(){
 // ═══════════════════════════════════════════════
 // WIND-KURVE 24H (SVG area chart)
 // ═══════════════════════════════════════════════
+function drawWindRose(){
+  const card=document.getElementById('windrose-card');
+  if(!card||!_wx?.hourly?.windspeed_10m||!_wx?.hourly?.wind_direction_10m)return;
+  const hrs=_wx.hourly, N=24;
+  const times=hrs.time||[];
+  const now=new Date(), nowStr=now.toISOString().slice(0,13);
+  let si=times.findIndex(t=>t&&t.startsWith(nowStr));
+  if(si<0)si=0;
+  const speeds=hrs.windspeed_10m.slice(si,si+N);
+  const dirs=hrs.wind_direction_10m.slice(si,si+N);
+  if(speeds.length<6){card.style.display='none';return;}
+
+  // 8 direction bins: N,NE,E,SE,S,SW,W,NW (each 45deg)
+  const DIRS=['N','NO','O','SO','S','SW','W','NW'];
+  const ANGLES=[0,45,90,135,180,225,270,315]; // center angles
+  const bins=DIRS.map(()=>({count:0,totalSpeed:0}));
+  let calmCount=0;
+  speeds.forEach((spd,i)=>{
+    if(spd<2){calmCount++;return;} // calm
+    const d=dirs[i]??0;
+    const bi=Math.round(d/45)%8;
+    bins[bi].count++;
+    bins[bi].totalSpeed+=spd;
+  });
+  const maxCount=Math.max(...bins.map(b=>b.count),1);
+  const totalActive=speeds.filter(s=>s>=2).length||1;
+
+  // Draw wedges
+  const barsG=document.getElementById('wr-bars');
+  barsG.innerHTML='';
+  const CX=60,CY=60,MAX_R=44,MIN_R=6;
+  bins.forEach((b,i)=>{
+    const pct=b.count/maxCount;
+    if(pct<0.01)return;
+    const r=MIN_R+pct*(MAX_R-MIN_R);
+    const angle=ANGLES[i];
+    // Wedge half-width = 18deg
+    const a1=(angle-18)*Math.PI/180;
+    const a2=(angle+18)*Math.PI/180;
+    const x1=CX+Math.sin(a1)*r, y1=CY-Math.cos(a1)*r;
+    const x2=CX+Math.sin(a2)*r, y2=CY-Math.cos(a2)*r;
+    const xi=CX+Math.sin(a1)*MIN_R, yi=CY-Math.cos(a1)*MIN_R;
+    const xj=CX+Math.sin(a2)*MIN_R, yj=CY-Math.cos(a2)*MIN_R;
+    const freq=b.count/totalActive;
+    // Color: blue-low to amber-high based on avg speed
+    const avgSpd=b.count>0?b.totalSpeed/b.count:0;
+    let col;
+    if(avgSpd<10)col=`rgba(10,132,255,${0.35+pct*.45})`;
+    else if(avgSpd<20)col=`rgba(10,132,255,${0.4+pct*.4})`;
+    else if(avgSpd<35)col=`rgba(255,159,10,${0.45+pct*.45})`;
+    else col=`rgba(255,69,58,${0.5+pct*.4})`;
+    // Path: inner arc -> outer wedge
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d',`M${xi.toFixed(1)},${yi.toFixed(1)} L${x1.toFixed(1)},${y1.toFixed(1)} A${r.toFixed(1)},${r.toFixed(1)} 0 0,1 ${x2.toFixed(1)},${y2.toFixed(1)} L${xj.toFixed(1)},${yj.toFixed(1)} A${MIN_R},${MIN_R} 0 0,0 ${xi.toFixed(1)},${yi.toFixed(1)} Z`);
+    path.setAttribute('fill',col);
+    path.setAttribute('stroke','rgba(255,255,255,.06)');
+    path.setAttribute('stroke-width','0.5');
+    path.style.transition=`opacity .8s ease ${i*0.07}s`;
+    path.style.opacity='0';
+    barsG.appendChild(path);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.opacity='1';}));
+  });
+
+  // Current wind needle
+  const needle=document.getElementById('wr-needle');
+  const curDir=_wx.current?.wind_direction_10m??0;
+  needle.style.transform=`rotate(${curDir}deg)`;
+
+  // Dominant direction
+  const maxBin=bins.reduce((a,b,i)=>b.count>bins[a].count?i:a,0);
+  const dom=document.getElementById('wr-main-dir');
+  const domSub=document.getElementById('wr-main-sub');
+  if(bins[maxBin].count>0){
+    const avgSpd=bins[maxBin].count>0?(bins[maxBin].totalSpeed/bins[maxBin].count).toFixed(0):0;
+    dom.textContent=`${DIRS[maxBin]} · ${avgSpd} km/h`;
+    domSub.textContent=`${Math.round(bins[maxBin].count/totalActive*100)}% der Zeit aus ${DIRS[maxBin]}`;
+  }
+
+  // Direction list (top 3)
+  const dirList=document.getElementById('wr-dir-list');
+  dirList.innerHTML='';
+  const sorted=[...bins.map((b,i)=>({...b,i}))].sort((a,b)=>b.count-a.count).slice(0,3).filter(b=>b.count>0);
+  sorted.forEach(b=>{
+    const pct=Math.round(b.count/totalActive*100);
+    const avgSpd=b.count>0?(b.totalSpeed/b.count).toFixed(0):0;
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:6px';
+    div.innerHTML=`<span style="font-size:.62rem;font-weight:600;color:rgba(255,255,255,.7);width:22px">${DIRS[b.i]}</span>`+
+      `<div style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.07);overflow:hidden">`+
+        `<div style="height:100%;width:0;background:linear-gradient(90deg,#0a84ff,#ff9f0a);border-radius:2px;transition:width 1s ease ${b.i*.08}s" data-wr-w="${pct}"></div>`+
+      `</div>`+
+      `<span style="font-size:.58rem;color:rgba(255,255,255,.35);white-space:nowrap">${pct}% · ${avgSpd}km/h</span>`;
+    dirList.appendChild(div);
+  });
+  // Animate bars after mount
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    dirList.querySelectorAll('[data-wr-w]').forEach(el=>el.style.width=el.dataset.wrW+'%');
+  }));
+
+  // Calm indicator
+  const calm=document.getElementById('wr-calm');
+  calm.style.display=calmCount>speeds.length*0.5?'block':'none';
+
+  card.style.display='block';
+  if(!card.classList.contains('show')){
+    card.style.opacity='0';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      card.style.transition='opacity .5s ease';
+      card.style.opacity='1';
+      card.classList.add('show');
+    }));
+  }
+}
+
 function drawWindCurve(){
   const card=document.getElementById('wind-curve-card');
   const svg=document.getElementById('wind-curve-svg');
@@ -5839,6 +6203,101 @@ function drawDayHighlight(){
   applyEntry('dhl-worst-time','dhl-worst-emoji','dhl-worst-cond','dhl-worst-chips',worst);
   card.style.display='block';
   requestAnimationFrame(function(){card.classList.add('show');});
+}
+
+// ═══════════════════════════════════════════════
+// KLIMAVERGLEICH CARD — Temperatur vs. Monatsmittel
+// ═══════════════════════════════════════════════
+function drawClimCard(){
+  const card=document.getElementById('clim-card');
+  if(!card||!window._wx||!window._wx.current) return;
+  const c=window._wx.current;
+  const temp=c.temperature_2m;
+  if(temp==null){card.style.display='none';return;}
+
+  // German DWD monthly averages (°C) Jan–Dec
+  const AVG=[2.5,3.8,7.2,12.0,16.5,20.0,22.1,21.8,17.5,12.5,7.0,3.8];
+  const MONTHS=['Januar','Februar','März','April','Mai','Juni',
+                'Juli','August','September','Oktober','November','Dezember'];
+  const now=new Date();
+  const mo=now.getMonth(); // 0-based
+  const avg=AVG[mo];
+  const delta=+(temp-avg).toFixed(1);
+
+  // Thermometer SVG update
+  // Scale: -10°C = y=72 (bottom), 40°C = y=8 (top) → range 50°, 64px
+  const PX_PER_DEG=64/50;
+  const tempY=Math.max(8,Math.min(72, 72-(temp+10)*PX_PER_DEG));
+  const avgY= Math.max(8,Math.min(72, 72-(avg+10)*PX_PER_DEG));
+  const fillH=Math.max(2, 72-tempY);
+  const fillBar=document.getElementById('clim-fill-bar');
+  const avgMarker=document.getElementById('clim-avg-marker');
+  if(fillBar){ requestAnimationFrame(()=>{ fillBar.setAttribute('y',tempY); fillBar.setAttribute('height',fillH); }); }
+  if(avgMarker){ avgMarker.setAttribute('y',avgY); }
+
+  // Bulb + fill color based on delta
+  let accentColor,accentRgb;
+  if(delta>3){accentColor='#ff453a';accentRgb='255,69,58';}
+  else if(delta>1){accentColor='#ff9f0a';accentRgb='255,159,10';}
+  else if(delta>=-1){accentColor='#30c8c0';accentRgb='48,200,192';}
+  else if(delta>=-3){accentColor='#5ac8fa';accentRgb='90,200,250';}
+  else{accentColor='#0a84ff';accentRgb='10,132,255';}
+
+  // Update CSS
+  card.style.borderColor='rgba('+accentRgb+',.22)';
+  const bg=document.getElementById('clim-bg');
+  if(bg) bg.style.background='radial-gradient(circle,rgba('+accentRgb+',.16) 0%,transparent 70%)';
+
+  // Stats
+  const nowVal=document.getElementById('clim-now-val');
+  const avgVal=document.getElementById('clim-avg-val');
+  const deltaArrow=document.getElementById('clim-delta-arrow');
+  const deltaVal=document.getElementById('clim-delta-val');
+  if(nowVal) nowVal.textContent=temp.toFixed(1)+'°C';
+  if(avgVal) avgVal.textContent=avg.toFixed(1)+'°C';
+  if(deltaArrow){
+    deltaArrow.textContent=delta>0.5?'↑':delta<-0.5?'↓':'→';
+    deltaArrow.style.color=accentColor;
+  }
+  if(deltaVal){
+    const sign=delta>0?'+':'';
+    deltaVal.textContent=sign+delta+'° vs. Mittel';
+    deltaVal.style.color=accentColor;
+  }
+
+  // Bar chart
+  const barSection=document.getElementById('clim-bar-section');
+  const monthName=document.getElementById('clim-month-name');
+  const barAvg=document.getElementById('clim-bar-avg');
+  const barNow=document.getElementById('clim-bar-now');
+  const verdict=document.getElementById('clim-verdict');
+  const maxT=Math.max(temp,avg,30);
+  const minT=Math.min(temp,avg,-5);
+  const range=maxT-minT||1;
+  const avgPct=((avg-minT)/range)*100;
+  const nowPct=((temp-minT)/range)*100;
+  if(barAvg) requestAnimationFrame(()=>{ barAvg.style.height=Math.max(5,avgPct*0.34)+'px'; });
+  if(barNow){
+    barNow.style.background='rgba('+accentRgb+',.65)';
+    requestAnimationFrame(()=>{ barNow.style.height=Math.max(5,nowPct*0.34)+'px'; });
+  }
+  if(monthName) monthName.textContent=MONTHS[mo]+' – Ø '+avg.toFixed(1)+'°C';
+
+  // Verdict text
+  const verdicts=[
+    [5,'🔥 Deutlich wärmer als üblich'],
+    [3,'☀️ Wärmer als der Monatsdurchschnitt'],
+    [1,'🌤 Leicht über dem Mittel'],
+    [-1,'✅ Typische '+MONTHS[mo]+'-Temperatur'],
+    [-3,'🧥 Leicht kühler als gewöhnlich'],
+    [-5,'❄️ Spürbar kälter als der Durchschnitt'],
+    [-99,'🥶 Deutlich unter dem Monatsmittel']
+  ];
+  const verd=verdicts.find(([t])=>delta>t)||verdicts[verdicts.length-1];
+  if(verdict){verdict.textContent=verd[1];verdict.style.color=accentColor;}
+
+  card.style.display='block';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('show')));
 }
 
 // ═══════════════════════════════════════════════
@@ -6802,6 +7261,90 @@ function drawBiowetter(){
 
   card.style.display='block';
   requestAnimationFrame(()=>{ card.classList.add('show'); });
+}
+
+// ═══════════════════════════════════════════════
+// UV-SCHUTZ CARD
+// ═══════════════════════════════════════════════
+function drawUvProtect(){
+  var card=document.getElementById('uv-protect-card');
+  if(!card||!window._wx)return;
+  var uvMax=(_wx.daily&&_wx.daily.uv_index_max)?_wx.daily.uv_index_max[0]:null;
+  if(uvMax==null||uvMax===undefined){card.classList.remove('show');card.style.display='none';return;}
+
+  // Find peak hourly UV and countdown to UV≥3
+  var now=new Date(), todayStr=now.toDateString(), nowH=now.getHours();
+  var hrUV=(_wx.hourly&&_wx.hourly.uv_index)||[];
+  var hrTimes=(_wx.hourly&&_wx.hourly.time)||[];
+  var currentUV=0, hoursToProtect=null, peakUV=uvMax;
+
+  for(var i=0;i<hrTimes.length;i++){
+    var d=new Date(hrTimes[i]);
+    if(d.toDateString()!==todayStr)continue;
+    if(d.getHours()===nowH)currentUV=hrUV[i]||0;
+    if(d.getHours()>=nowH&&hrUV[i]>=3&&hoursToProtect===null){
+      hoursToProtect=d.getHours()-nowH;
+    }
+  }
+
+  // UV level classification
+  function uvInfo(uv){
+    if(uv<1)return{label:'Minimal',color:'#30d158',spf:null};
+    if(uv<3)return{label:'Niedrig',color:'#30d158',spf:null};
+    if(uv<6)return{label:'Mäßig',color:'#ffd60a',spf:'LSF 15–30'};
+    if(uv<8)return{label:'Hoch',color:'#ff9f0a',spf:'LSF 30–50'};
+    if(uv<11)return{label:'Sehr hoch',color:'#ff453a',spf:'LSF 50+'};
+    return{label:'Extrem',color:'#bf5af2',spf:'LSF 50+ · Meiden!'};
+  }
+
+  var info=uvInfo(currentUV);
+  var maxInfo=uvInfo(peakUV);
+
+  // Countdown text
+  var cdTxt='';
+  if(currentUV>=3){
+    cdTxt='☀️ Sonnenschutz jetzt empfohlen';
+  } else if(hoursToProtect!==null&&hoursToProtect===0){
+    cdTxt='⚡ Schutz in weniger als 1h nötig';
+  } else if(hoursToProtect!==null){
+    cdTxt='⏱ Schutz empfohlen in ~'+hoursToProtect+'h (UV≥3)';
+  } else {
+    cdTxt='✅ Heute kein UV-Schutz nötig';
+  }
+
+  // Tips
+  var tips=[];
+  if(peakUV>=6)tips.push('Schatten suchen');
+  if(peakUV>=8)tips.push('Schutzkleidung');
+  if(peakUV>=3)tips.push('11–15 Uhr meiden');
+  if(!tips.length)tips.push('Keine besonderen Maßnahmen');
+
+  // Update DOM
+  var arcFill=document.getElementById('uvp-arc-fill');
+  if(arcFill){
+    var ARC_LEN=145;
+    var pct=Math.min(peakUV/12,1);
+    arcFill.style.strokeDashoffset=ARC_LEN*(1-pct);
+  }
+  var valEl=document.getElementById('uvp-val');
+  if(valEl)valEl.textContent=Math.round(peakUV);
+
+  var statusEl=document.getElementById('uvp-status');
+  if(statusEl){statusEl.textContent=maxInfo.label+' (max heute)';statusEl.style.color=maxInfo.color;}
+
+  var cdEl=document.getElementById('uvp-cd');
+  if(cdEl)cdEl.textContent=cdTxt;
+
+  var spfEl=document.getElementById('uvp-spf-row');
+  if(spfEl){
+    var chips='';
+    if(maxInfo.spf)chips+='<span class="uvp-chip spf">'+maxInfo.spf+'</span>';
+    tips.forEach(function(t){chips+='<span class="uvp-chip tip">'+t+'</span>';});
+    spfEl.innerHTML=chips;
+  }
+
+  card.style.display='block';
+  requestAnimationFrame(function(){card.classList.add('show');});
 }
 
 // ═══════════════════════════════════════════════
@@ -11179,6 +11722,7 @@ function updateAll(){
   window._updateCtxSuggest&&window._updateCtxSuggest(on, playing);
   // Schnellfarben-Palette
   window._updateColorPalette&&window._updateColorPalette(on);
+  window._updateColorWheel&&window._updateColorWheel(on);
   window._updateSnapshot&&window._updateSnapshot(on);
   window._updateCircadian&&window._updateCircadian(on);
   window._updateSunriseSim&&window._updateSunriseSim(on);
@@ -11236,6 +11780,66 @@ function updateAll(){
       strip.appendChild(chip);
     });
     strip.classList.toggle('show', trackers.length>0);
+  })();
+  // ── Wetter-Licht Sync ──
+  (function(){
+    const wrap=document.getElementById('wx-light-sync');
+    const btn=document.getElementById('wls-btn');
+    const ico=document.getElementById('wls-ico');
+    const lbl=document.getElementById('wls-label');
+    const val=document.getElementById('wls-val');
+    if(!wrap||!btn)return;
+    if(!_wx||!_wx.current){wrap.classList.remove('show');return;}
+    const c=_wx.current;
+    const code=c.weathercode||c.weather_code||0;
+    const isDay=c.is_day!==undefined?c.is_day:1;
+    const temp=c.apparent_temperature??c.temperature_2m??12;
+    const hour=new Date().getHours();
+    // Compute target CT + brightness from weather conditions
+    let ct=3500,bri=70,emoji='🌤',desc='Licht ans Wetter anpassen';
+    if(!isDay){
+      ct=1900;bri=15;emoji='🌙';desc='Nachtlicht – ruhige Stimmung';
+    } else if(code>=95){
+      ct=3000;bri=85;emoji='⛈';desc='Cosy Gewitter-Licht – warm & hell';
+    } else if(code>=71&&code<=86){
+      ct=5000;bri=72;emoji='❄️';desc='Winterlicht – klares kühles Weiß';
+    } else if(code>=51&&code<=82){
+      ct=4500;bri=68;emoji='🌧';desc='Regenlicht – kompensiert Dunkelheit';
+    } else if(code>=45&&code<=48){
+      ct=3500;bri=55;emoji='🌫';desc='Nebelstimmung – gedimmt & warm';
+    } else if(code>=2){
+      ct=4200;bri=72;emoji='⛅';desc='Bewölkt – ausgewogenes Licht';
+    } else {
+      // Clear sky – vary by time of day
+      if(hour>=6&&hour<10){ct=5000;bri=80;emoji='🌅';desc='Morgenfrisch – klares Tageslicht';}
+      else if(hour>=10&&hour<16){ct=6000;bri=100;emoji='☀️';desc='Volles Tageslicht – energetisch';}
+      else if(hour>=16&&hour<19){ct=4200;bri=78;emoji='🌤';desc='Nachmittag – warmes Tageslicht';}
+      else{ct=2700;bri=45;emoji='🌆';desc='Abenddämmerung – warm & gemütlich';}
+    }
+    // Adjust for temperature extremes
+    if(temp<5)ct=Math.max(1800,ct-400);
+    if(temp>28)ct=Math.min(6500,ct+300);
+    ico.textContent=emoji;
+    lbl.textContent=desc;
+    val.textContent=`${ct}K · ${bri}%`;
+    wrap.classList.toggle('show',on>0);
+    if(!btn._wlsInited){
+      btn._wlsInited=true;
+      btn.addEventListener('click',function(){
+        const lights=CFG.lights.filter(id=>{
+          const s=_S[id];
+          return s&&s.state==='on'&&s.attributes&&(s.attributes.color_temp_kelvin!=null||s.attributes.color_temp!=null||s.attributes.brightness!=null);
+        });
+        if(!lights.length){showToast('💡 Keine aktiven Lichter');return;}
+        lights.forEach(id=>svc('light','turn_on',{entity_id:id,color_temp_kelvin:ct,brightness_pct:bri,transition:2}));
+        showToast(`${emoji} Wetter-Licht auf ${lights.length} Lichter · ${ct}K / ${bri}%`);
+        hap&&hap();
+        btn.classList.remove('wls-tap');
+        void btn.offsetWidth;
+        btn.classList.add('wls-tap');
+        btn.addEventListener('animationend',()=>btn.classList.remove('wls-tap'),{once:true});
+      });
+    }
   })();
   // ── Stunde der Stille Chip ──
   (function(){
@@ -12975,6 +13579,109 @@ const _origSetWxMode=setWxMode;
     };
   })();
 
+  // ── Farb-Mixer Color Wheel ──
+  (function(){
+    const card = document.getElementById('lt-color-wheel');
+    const cv   = document.getElementById('lt-cw-cv');
+    const cursor = document.getElementById('lt-cw-cursor');
+    const preview = document.getElementById('lt-cw-preview');
+    const hexLbl = document.getElementById('lt-cw-hex');
+    const briSlider = document.getElementById('lt-cw-bri');
+    const briLabel  = document.getElementById('lt-cw-bri-label');
+    const applyBtn  = document.getElementById('lt-cw-apply');
+    if(!card||!cv) return;
+
+    const ctx = cv.getContext('2d');
+    const W=140, H=140, CX=70, CY=70, R=68;
+    let _rgb = [255,159,10];
+
+    function drawWheel(){
+      for(let a=0;a<360;a++){
+        const start=(a-1)*Math.PI/180, end=(a+1)*Math.PI/180;
+        const grad=ctx.createRadialGradient(CX,CY,0,CX,CY,R);
+        grad.addColorStop(0,'rgba(255,255,255,1)');
+        grad.addColorStop(0.45,'hsl('+a+',100%,50%)');
+        grad.addColorStop(1,'hsl('+a+',100%,10%)');
+        ctx.beginPath();ctx.moveTo(CX,CY);
+        ctx.arc(CX,CY,R,start,end);ctx.closePath();
+        ctx.fillStyle=grad;ctx.fill();
+      }
+    }
+
+    function pickColor(x,y){
+      const dx=x-CX, dy=y-CY;
+      let dist=Math.sqrt(dx*dx+dy*dy);
+      const angle=(Math.atan2(dy,dx)*180/Math.PI+360)%360;
+      const satPct=Math.min(dist/R,1);
+      if(dist>R){dist=R;}
+      // Sample pixel for true color
+      try{
+        const pd=ctx.getImageData(Math.round(CX+dx*(R/Math.max(dist,0.1))*satPct),Math.round(CY+dy*(R/Math.max(dist,0.1))*satPct),1,1).data;
+        _rgb=[pd[0],pd[1],pd[2]];
+      }catch(e){
+        // fallback
+        const hue=angle/360;
+        function h2r(p,q,t){t=((t%1)+1)%1;if(t<1/6)return p+(q-p)*6*t;if(t<.5)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;}
+        const l=0.5,s=satPct,q=l<.5?l*(1+s):l+s-l*s,p=2*l-q;
+        _rgb=[Math.round(h2r(p,q,hue+1/3)*255),Math.round(h2r(p,q,hue)*255),Math.round(h2r(p,q,hue-1/3)*255)];
+      }
+      // clamp cursor
+      const cx2=CX+Math.cos(angle*Math.PI/180)*Math.min(dist,R);
+      const cy2=CY+Math.sin(angle*Math.PI/180)*Math.min(dist,R);
+      cursor.style.left=cx2+'px';cursor.style.top=cy2+'px';
+      cursor.style.background='rgb('+_rgb.join(',')+')';
+      preview.style.background='rgb('+_rgb.join(',')+')';
+      preview.style.boxShadow='0 0 14px rgba('+_rgb.join(',')+',.55)';
+      hexLbl.textContent='#'+_rgb.map(v=>('0'+v.toString(16)).slice(-2)).join('').toUpperCase();
+    }
+
+    function evPos(e,el){
+      const r=el.getBoundingClientRect();
+      const t=e.touches?e.touches[0]:e;
+      return [t.clientX-r.left,t.clientY-r.top];
+    }
+
+    let _drag=false;
+    cv.addEventListener('mousedown',e=>{_drag=true;const p=evPos(e,cv);pickColor(p[0],p[1]);});
+    cv.addEventListener('touchstart',e=>{_drag=true;const p=evPos(e,cv);pickColor(p[0],p[1]);},{passive:true});
+    window.addEventListener('mousemove',e=>{if(!_drag)return;const p=evPos(e,cv);pickColor(p[0],p[1]);});
+    cv.addEventListener('touchmove',e=>{const p=evPos(e,cv);pickColor(p[0],p[1]);},{passive:true});
+    window.addEventListener('mouseup',()=>{_drag=false;});
+    cv.addEventListener('touchend',()=>{_drag=false;});
+
+    briSlider.addEventListener('input',()=>{ briLabel.textContent=briSlider.value+'%'; });
+
+    applyBtn.addEventListener('click',()=>{
+      const bri=parseInt(briSlider.value)||80;
+      const lights=(CFG.lights||[]).filter(id=>{
+        const s=_S[id];
+        if(!s||s.state!=='on') return false;
+        const modes=(s.attributes&&s.attributes.supported_color_modes)||[];
+        return modes.includes('rgb')||modes.includes('hs')||modes.includes('xy')||modes.includes('rgbw');
+      });
+      const allOn=(CFG.lights||[]).filter(id=>_S[id]&&_S[id].state==='on');
+      const targets=lights.length?lights:allOn;
+      targets.forEach(id=>svc('light','turn_on',{entity_id:id,rgb_color:_rgb,brightness_pct:bri}));
+      applyBtn.style.animation='none';void applyBtn.offsetWidth;applyBtn.style.animation='cwApply .5s ease';
+      typeof hap==='function'&&hap();
+      typeof showToast==='function'&&showToast('🎨 Farbe auf '+targets.length+' Licht'+(targets.length!==1?'er':''));
+    });
+
+    // Init
+    drawWheel();
+    requestAnimationFrame(()=>pickColor(CX+R*0.62,CY+2));
+
+    window._updateColorWheel=function(onCount){
+      const hasRgb=(CFG.lights||[]).some(id=>{
+        const s=_S[id];
+        if(!s||s.state!=='on') return false;
+        const modes=(s.attributes&&s.attributes.supported_color_modes)||[];
+        return modes.includes('rgb')||modes.includes('hs')||modes.includes('xy')||modes.includes('rgbw');
+      });
+      card.classList.toggle('show', onCount>0 && hasRgb);
+    };
+  })();
+
   // ── Circadian Lighting ──
   (function(){
     const wrap = document.getElementById('lt-circadian');
@@ -14359,6 +15066,6 @@ const _origSetWxMode=setWxMode;
     </div>
   </div>
 </div>
-<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7782</div>
+<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7783</div>
 </body>
 </html>
