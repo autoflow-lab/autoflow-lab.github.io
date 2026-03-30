@@ -347,5 +347,29 @@
 ## Neue Ideen (2026-03-29 00:03 UTC)
 - [x] wz.html: Wetter-Tab — "Biowetter" Karte (🧬 Einfluss des Wetters auf das Wohlbefinden: Kopfdruck-Risiko aus Luftdruckabfall + Feuchte, Gelenk-Risiko aus Kälte + Druckabfall, Energie-Level aus Sonnenschein + Temperatur + Luftdruck, Kreislauf-Belastung aus Tagesschwankung + Feuchte — 4 animierte Faktor-Balken, Gesamt-Emoji + Label + Empfehlungs-Tip, amber/grün/rot je Belastung, Orb-Hintergrund)
 
+## Neue Ideen (2026-03-29 20:03 UTC)
+- [x] wz.html: Musik-Tab — Floating Music Note Particles (♩♪♫♬ Noten-Partikel steigen vom Album-Art auf wenn Musik spielt, amber/weiß, staggered spawn, MutationObserver auf alb-disc.playing)
+
 ## Neue Ideen (2026-03-29 12:03 UTC)
 - [x] wz.html: Musik-Tab — 3D Holographic Tilt Effect auf Album-Art (pointer/DeviceOrientation → perspective rotateX/Y, spring damping, glare-Overlay)
+
+## Neue Ideen (2026-03-29 18:03 UTC)
+- [x] wz.html: Licht-Tab — "Licht-Snapshot" Feature (📸 Lichtzustand speichern & wiederherstellen, bis zu 3 Schnappschüsse in localStorage, Farbdot-Vorschau, Apply/Delete)
+
+## Neue Ideen (2026-03-29 16:03 UTC)
+- [x] wz.html: App — "Lebendiger Hintergrund" Tageszeit-reaktive Ambient-Orbs (2 große, sehr sanft driftende radial-gradient Orbs hinter dem App-Inhalt, Orb1 oben-links/Orb2 unten-rechts, Farbe wechselt je Tageszeit: nachts blau/lila → morgens rose/amber → tags neutral → abends orange/lila, Orb2 reagiert zusätzlich 30% auf aktive RGB-Lichtfarben via lerp, filter:blur(90px), opacity 0→1 beim Initialisieren, CSS drift-Animationen 26s/34s alternate, Light-Mode: opacity:0!important)
+
+## Neue Ideen (2026-03-29 22:03 UTC)
+- [x] wz.html: Home-Tab — Anwesenheits-Chips (device_tracker.* Entities: Person-Chips mit Initialen-Avatar + Name + Zuhause/Unterwegs/Zone Status, grün/gedimmt/blau Farbschema, pulsierender Dot bei "Zuhause", staggered presChipIn Animation)
+
+## Neue Ideen (2026-03-30 00:04 UTC)
+- [x] wz.html: Home-Tab — Raumklima-Card (🌡 Indoor Temperatur + Luftfeuchtigkeit aus HA sensor.* Entities, zwei animierte SVG-Arcs nebeneinander, Komfort-Indikator-Badge, ∆ Außentemperatur-Vergleich)
+
+## Neue Ideen (2026-03-30 02:04 UTC)
+- [x] wz.html: Wetter-Tab — Sternbeobachtungs-Score Karte (🔭 Score 0–100 aus cloud_cover + precipitation + Mondphase + Sichtweite, SVG Arc-Gauge blau/lila Gradient, twinkling Stars Canvas-Animation, 4 farbige Condition-Chips, beste Beobachtungszeit heute Nacht, erscheint nur bei Nacht / 90min vor Sonnenuntergang)
+
+## Neue Ideen (2026-03-30 06:08 UTC)
+- [x] wz.html: App — Bildschirm-Schlaf Inaktivitäts-Dimmer (🌑 nach 2 min ohne Touch → Overlay blendet auf Schwarz, zeigt Uhrzeit dezent, Tap zum Aufwecken — ideal für Wand-Tablet/Panel)
+
+## Neue Ideen (2026-03-30 06:04 UTC)
+- [x] wz.html: Licht-Tab — Sonnenaufgang-Simulator Button (🌅 Komplementär zum Sonnenuntergang-Simulator: 30-min Helligkeits-Kurve von 1800K/5% → 5500K/95%, sanfte Übergänge mit 55s-Transition je Schritt, Countdown-Pill + pulsierender Dot + Cancel-Button, gelbes Farbschema, Sonne-steigt-Animation wenn aktiv, erscheint nur wenn Lichter mit color_temp aktiv)

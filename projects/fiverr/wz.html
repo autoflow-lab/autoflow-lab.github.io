@@ -167,11 +167,11 @@ html,body{height:100%;background:var(--bg);
 #dev-status-gauge.pop #dsg-svg{animation:dsgPop .42s cubic-bezier(.34,1.28,.64,1)}
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
-.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#silence-chip,.page-entering>#presence-strip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
+.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#presence-strip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -286,6 +286,30 @@ html,body{height:100%;background:var(--bg);
 @keyframes wxRecIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes silenceChipIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes silenceDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(100,180,255,.6)}60%{box-shadow:0 0 0 5px rgba(100,180,255,0)}}
+/* ── Indoor Climate Card ── */
+#indoor-climate-card{display:none;margin:0 0 12px;padding:13px 16px 12px;background:rgba(48,209,88,.04);border:1px solid rgba(48,209,88,.12);border-radius:16px;position:relative;overflow:hidden}
+#indoor-climate-card.show{display:block;animation:iclCardIn .5s cubic-bezier(.32,0,.15,1) both}
+@keyframes iclCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#icl-title{font-size:.58rem;letter-spacing:.9px;color:rgba(48,209,88,.8);text-transform:uppercase;font-weight:700;margin-bottom:10px}
+#icl-gauges{display:flex;align-items:center;gap:0}
+#icl-temp-wrap,#icl-hum-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+#icl-divider{width:1px;height:64px;background:rgba(255,255,255,.07);margin:0 4px}
+.icl-gauge-svg{overflow:visible}
+.icl-arc-track{fill:none;stroke:rgba(255,255,255,.07);stroke-width:5;stroke-linecap:round}
+#icl-temp-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1),stroke .8s ease}
+#icl-hum-fill{fill:none;stroke:url(#iclHumGrad);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)}
+.icl-gauge-val{font-size:1.1rem;font-weight:300;color:var(--txt);letter-spacing:-.5px}
+.icl-gauge-unit{font-size:.6rem;opacity:.55;vertical-align:super;margin-left:1px}
+.icl-gauge-lbl{font-size:.6rem;color:var(--dim2);text-transform:uppercase;letter-spacing:.5px}
+#icl-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)}
+#icl-comfort-badge{font-size:.65rem;padding:3px 9px;border-radius:20px;font-weight:600;background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.22);color:rgba(48,209,88,.9)}
+#icl-outdoor-delta{font-size:.65rem;color:var(--dim2);display:flex;align-items:center;gap:4px}
+.icl-delta-arrow{font-size:.7rem}
+#icl-bg-orb{position:absolute;top:-30px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(48,209,88,.08) 0%,transparent 70%);pointer-events:none}
+:root.light #indoor-climate-card{background:rgba(0,120,50,.04);border-color:rgba(0,120,50,.12)}
+:root.light #icl-title{color:rgba(0,120,50,.75)}
+:root.light #icl-comfort-badge{background:rgba(0,120,50,.08);border-color:rgba(0,120,50,.2);color:rgba(0,100,40,.9)}
+
 #silence-chip{display:none;align-items:center;gap:8px;margin:0 0 10px;padding:9px 14px;background:rgba(10,132,255,.06);border:1px solid rgba(10,132,255,.18);border-radius:14px;font-size:.75rem;color:rgba(180,220,255,.9);animation:silenceChipIn .42s cubic-bezier(.34,1.15,.64,1) both}
 #silence-chip.show{display:flex}
 #silence-dot{width:8px;height:8px;border-radius:50%;background:#64b0ff;flex-shrink:0;animation:silenceDotPulse 2s ease-in-out infinite}
@@ -376,6 +400,17 @@ html,body{height:100%;background:var(--bg);
 :root.light #lueft-title{color:inherit!important}
 :root.light #lueft-sub,.lueft-stat{color:var(--dim)!important}
 /* ══ GEWITTER-ALARM-CARD ══ */
+#stargazing-card{opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#stargazing-card.show{opacity:1;transform:translateY(0)}
+.sgz-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;font-size:.62rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.55)}
+.sgz-chip.sgz-good{border-color:rgba(48,209,88,.28);background:rgba(48,209,88,.08);color:rgba(48,209,88,.9)}
+.sgz-chip.sgz-mid{border-color:rgba(255,214,10,.28);background:rgba(255,214,10,.07);color:rgba(255,214,10,.9)}
+.sgz-chip.sgz-bad{border-color:rgba(255,69,58,.25);background:rgba(255,69,58,.07);color:rgba(255,69,58,.85)}
+:root.light #stargazing-card .sgz-chip{color:rgba(0,0,0,.5);background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}
+:root.light #stargazing-card .sgz-chip.sgz-good{color:rgba(20,140,50,.9);background:rgba(20,140,50,.08)}
+:root.light #stargazing-card .sgz-chip.sgz-mid{color:rgba(180,120,0,.9);background:rgba(180,120,0,.07)}
+:root.light #stargazing-card .sgz-chip.sgz-bad{color:rgba(200,40,30,.9);background:rgba(200,40,30,.07)}
+:root.light #stargazing-card{border-color:rgba(80,60,180,.15)}
 #storm-warn-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-8px);transition:opacity .55s cubic-bezier(.34,1.15,.64,1),transform .55s cubic-bezier(.34,1.15,.64,1)}
 #storm-warn-card.show{opacity:1;transform:translateY(0)}
 #storm-warn-inner{background:linear-gradient(135deg,rgba(30,8,8,.95),rgba(50,14,8,.95));border-radius:18px;border:1px solid rgba(255,69,58,.35);border-top-color:rgba(255,100,58,.55);padding:16px 18px;position:relative;overflow:hidden}
@@ -496,6 +531,27 @@ html,body{height:100%;background:var(--bg);
 #lt-ss-btn.ss-flash{animation:ssApply .55s ease forwards}
 :root.light #lt-sunset-sim{background:transparent}
 :root.light #lt-ss-pill{background:rgba(255,100,30,.06)}
+/* ── Sonnenaufgang-Simulator ── */
+#lt-sunrise-sim{margin:0 14px 10px;opacity:0;transition:opacity .5s ease}
+#lt-sunrise-sim.show{opacity:1}
+#lt-sr-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,210,0,.28);background:rgba(255,180,0,.07);cursor:pointer;touch-action:manipulation;transition:background .18s,transform .15s;text-align:left}
+#lt-sr-btn:active{transform:scale(.97);background:rgba(255,180,0,.16)}
+@keyframes srSunRise{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.1)}}
+#lt-sr-btn.sr-running #lt-sr-ico{animation:srSunRise 3s ease-in-out infinite}
+#lt-sr-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-sr-val{font-size:.68rem;font-weight:700;color:rgba(255,214,60,.9);white-space:nowrap}
+#lt-sr-pill{display:none;align-items:center;gap:8px;padding:7px 12px;margin-top:7px;border-radius:12px;background:rgba(255,180,0,.09);border:1px solid rgba(255,210,0,.2)}
+#lt-sr-pill.show{display:flex}
+#lt-sr-dot{width:7px;height:7px;border-radius:50%;background:#ffd60a;flex-shrink:0}
+@keyframes srDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,210,0,.65)}60%{box-shadow:0 0 0 5px rgba(255,210,0,0)}}
+#lt-sr-dot{animation:srDotPulse 1.6s ease-in-out infinite}
+#lt-sr-cd{font-size:.72rem;font-weight:600;color:rgba(255,230,100,.9);flex:1}
+#lt-sr-cancel{font-size:.7rem;padding:3px 8px;border-radius:8px;border:1px solid rgba(255,180,0,.35);background:rgba(255,160,0,.1);color:rgba(255,214,100,.85);cursor:pointer;touch-action:manipulation;transition:background .15s}
+#lt-sr-cancel:active{background:rgba(255,160,0,.25)}
+@keyframes srApply{0%{background:rgba(255,180,0,.32)}100%{background:rgba(255,180,0,.07)}}
+#lt-sr-btn.sr-flash{animation:srApply .55s ease forwards}
+:root.light #lt-sunrise-sim{background:transparent}
+:root.light #lt-sr-pill{background:rgba(255,180,0,.06)}
 /* ── Nachtlicht-Modus ── */
 #lt-night{margin:0 14px 10px;opacity:0;transition:opacity .5s ease}
 #lt-night.show{opacity:1}
@@ -1194,6 +1250,31 @@ html,body{height:100%;background:var(--bg);
 :root.light #pomo-desc{color:var(--txt)}
 :root.light .pomo-btn{background:rgba(30,160,60,.06);border-color:rgba(30,160,60,.2);color:rgba(0,100,30,.8)}
 :root.light #pomo-count-badge{background:rgba(30,160,60,.08);border-color:rgba(30,160,60,.18);color:rgba(0,100,30,.7)}
+
+/* ───────────── WOHNSTIMMUNG DIAL ───────────── */
+#wohnstimmung-card{display:none;margin:0 0 12px;padding:13px 16px 12px;border-radius:16px;position:relative;overflow:hidden;transition:background .8s ease,border-color .8s ease}
+#wohnstimmung-card.show{display:block;animation:wsCardIn .5s cubic-bezier(.32,0,.15,1) both}
+@keyframes wsCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#ws-bg-orb{position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;opacity:.22;filter:blur(38px);transition:background 1.2s ease;pointer-events:none}
+#ws-body{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+#ws-gauge-wrap{flex-shrink:0;width:72px;height:72px;position:relative}
+#ws-gauge-wrap svg{overflow:visible}
+#ws-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+#ws-score-val{font-size:14px;font-weight:700;color:#fff;line-height:1}
+#ws-score-unit{font-size:7px;color:rgba(255,255,255,.35);line-height:1.2}
+#ws-right{flex:1;min-width:0}
+#ws-label-row{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+#ws-label{font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:color .8s ease}
+#ws-zone-emoji{font-size:1.1rem;line-height:1;transition:all .5s ease}
+#ws-zone-name{font-size:.85rem;font-weight:700;color:rgba(255,255,255,.92);margin-bottom:3px;transition:color .8s ease}
+#ws-zone-desc{font-size:.66rem;color:rgba(255,255,255,.45);line-height:1.3}
+#ws-factors{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.ws-factor{font-size:.58rem;padding:2px 7px;border-radius:8px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.08)}
+.ws-factor.ws-f-on{background:rgba(255,159,10,.12);border-color:rgba(255,159,10,.22);color:rgba(255,200,100,.85)}
+:root.light #wohnstimmung-card{background:rgba(0,0,0,.03)!important;border-color:rgba(0,0,0,.09)!important}
+:root.light #ws-zone-name{color:rgba(0,0,0,.8)}
+:root.light #ws-zone-desc{color:rgba(0,0,0,.4)}
+:root.light .ws-factor{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.45)}
 
 /* ───────────── LICHT-HEATMAP ───────────── */
 #lheat-card{display:none;margin:0 0 12px;padding:13px 16px 12px;background:rgba(255,159,10,.04);border:1px solid rgba(255,159,10,.10);border-radius:16px;position:relative;overflow:hidden}
@@ -2438,6 +2519,44 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- Wohnstimmung Energie-Dial -->
+      <div id="wohnstimmung-card" aria-label="Wohnstimmung">
+        <div id="ws-bg-orb"></div>
+        <div id="ws-label-row"><div id="ws-label">🏠 WOHNSTIMMUNG</div></div>
+        <div id="ws-body">
+          <div id="ws-gauge-wrap">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <defs>
+                <linearGradient id="wsGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0a84ff"/>
+                  <stop offset="30%" stop-color="#30d158"/>
+                  <stop offset="60%" stop-color="#ff9f0a"/>
+                  <stop offset="100%" stop-color="#ff5a1e"/>
+                </linearGradient>
+              </defs>
+              <path d="M10.07 57.36 A30 30 0 1 1 61.93 57.36"
+                fill="none" stroke="rgba(255,255,255,.07)" stroke-width="6" stroke-linecap="round"/>
+              <path id="ws-arc-fill" d="M10.07 57.36 A30 30 0 1 1 61.93 57.36"
+                fill="none" stroke="url(#wsGrad)" stroke-width="6" stroke-linecap="round"
+                stroke-dasharray="188.5" stroke-dashoffset="188.5"
+                style="transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)"/>
+              <text x="36" y="41" text-anchor="middle" dominant-baseline="middle"
+                font-size="14" font-weight="700" fill="white" id="ws-score-val">0</text>
+              <text x="36" y="52" text-anchor="middle"
+                font-size="7" fill="rgba(255,255,255,.35)" id="ws-score-unit">/100</text>
+            </svg>
+          </div>
+          <div id="ws-right">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <span id="ws-zone-emoji">🛋</span>
+              <span id="ws-zone-name">Tiefentspannt</span>
+            </div>
+            <div id="ws-zone-desc">Alles ruhig — perfekt zum Entspannen</div>
+            <div id="ws-factors"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Licht-Aktivitäts-Heatmap -->
       <div id="lheat-card">
         <div id="lheat-header">
@@ -2511,6 +2630,56 @@ input[type=range] { touch-action: none; }
       </div>
 
       <!-- Stunde der Stille Chip -->
+      <!-- Raumklima-Card (Indoor Temp + Humidity) -->
+      <div id="indoor-climate-card">
+        <div id="icl-bg-orb"></div>
+        <div id="icl-title">🌡 Raumklima</div>
+        <div id="icl-gauges">
+          <!-- Temperature Arc -->
+          <div id="icl-temp-wrap">
+            <svg class="icl-gauge-svg" width="68" height="68" viewBox="0 0 68 68">
+              <defs>
+                <linearGradient id="iclTempGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0a84ff"/>
+                  <stop offset="40%" stop-color="#30d158"/>
+                  <stop offset="70%" stop-color="#ff9f0a"/>
+                  <stop offset="100%" stop-color="#ff453a"/>
+                </linearGradient>
+              </defs>
+              <path class="icl-arc-track" d="M10 54 A26 26 0 1 1 58 54"/>
+              <path id="icl-temp-fill" d="M10 54 A26 26 0 1 1 58 54"/>
+              <text id="icl-temp-val" x="34" y="36" text-anchor="middle" dominant-baseline="middle"
+                font-size="13" font-weight="500" fill="var(--txt)">--</text>
+              <text x="34" y="50" text-anchor="middle" fill="rgba(255,255,255,.35)" font-size="7">°C</text>
+            </svg>
+            <div class="icl-gauge-lbl">Temperatur</div>
+          </div>
+          <div id="icl-divider"></div>
+          <!-- Humidity Arc -->
+          <div id="icl-hum-wrap">
+            <svg class="icl-gauge-svg" width="68" height="68" viewBox="0 0 68 68">
+              <defs>
+                <linearGradient id="iclHumGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff9f0a"/>
+                  <stop offset="40%" stop-color="#30d158"/>
+                  <stop offset="100%" stop-color="#0a84ff"/>
+                </linearGradient>
+              </defs>
+              <path class="icl-arc-track" d="M10 54 A26 26 0 1 1 58 54"/>
+              <path id="icl-hum-fill" d="M10 54 A26 26 0 1 1 58 54"/>
+              <text id="icl-hum-val" x="34" y="36" text-anchor="middle" dominant-baseline="middle"
+                font-size="13" font-weight="500" fill="var(--txt)">--</text>
+              <text x="34" y="50" text-anchor="middle" fill="rgba(255,255,255,.35)" font-size="7">%</text>
+            </svg>
+            <div class="icl-gauge-lbl">Luftfeuchtigkeit</div>
+          </div>
+        </div>
+        <div id="icl-bottom">
+          <span id="icl-comfort-badge">Lädt…</span>
+          <span id="icl-outdoor-delta"></span>
+        </div>
+      </div>
+
       <div id="silence-chip">
         <div id="silence-dot"></div>
         <span id="silence-txt">🌙 Ruhezeit aktiv<span id="silence-cd"></span></span>
@@ -2761,6 +2930,19 @@ input[type=range] { touch-action: none; }
           <span id="lt-circ-label">Circadian</span>
           <span id="lt-circ-val">--K · --%</span>
         </button>
+      </div>
+      <!-- Sonnenaufgang-Simulator -->
+      <div id="lt-sunrise-sim" aria-label="Sonnenaufgang simulieren">
+        <button id="lt-sr-btn" title="Lichter sanft auf Tageslicht aufhellen (30 min) – natürliches Aufwecklicht">
+          <span id="lt-sr-ico">🌅</span>
+          <span id="lt-sr-label">Sonnenaufgang</span>
+          <span id="lt-sr-val">1800K → 5500K</span>
+        </button>
+        <div id="lt-sr-pill">
+          <div id="lt-sr-dot"></div>
+          <span id="lt-sr-cd">Hellt auf…</span>
+          <button id="lt-sr-cancel">✕ Stop</button>
+        </div>
       </div>
       <!-- Sonnenuntergang-Simulator -->
       <div id="lt-sunset-sim" aria-label="Sonnenuntergang simulieren">
@@ -3482,6 +3664,46 @@ input[type=range] { touch-action: none; }
           <!-- Bar chart -->
           <div id="wr-bars" style="display:flex;align-items:flex-end;gap:5px;height:44px"></div>
           <div id="wr-xlabels" style="display:flex;gap:5px;margin-top:4px"></div>
+        </div>
+      </div>
+
+      <!-- Sternbeobachtungs-Score -->
+      <div id="stargazing-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">🔭 STERNBEOBACHTUNG</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(100,120,220,.18);border-top-color:rgba(150,160,255,.25);padding:16px 18px;position:relative;overflow:hidden">
+          <!-- Hintergrund-Orb -->
+          <div id="sgz-bg-orb" style="position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(100,80,220,.14) 0%,transparent 70%);pointer-events:none"></div>
+          <!-- Twinkling Stars Canvas -->
+          <canvas id="sgz-stars-cv" width="130" height="80" style="position:absolute;top:0;right:0;width:130px;height:80px;opacity:.55;pointer-events:none"></canvas>
+          <div style="display:flex;align-items:center;gap:16px;position:relative;z-index:1">
+            <!-- Arc Gauge -->
+            <div style="flex-shrink:0;position:relative;width:72px;height:72px">
+              <svg viewBox="0 0 72 72" width="72" height="72">
+                <defs>
+                  <linearGradient id="sgzGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#3a3adc"/>
+                    <stop offset="50%" stop-color="#8060ff"/>
+                    <stop offset="100%" stop-color="#e8e0ff"/>
+                  </linearGradient>
+                </defs>
+                <!-- Track (210° arc) -->
+                <path d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="5" stroke-linecap="round"/>
+                <!-- Fill -->
+                <path id="sgz-arc-fill" d="M10.07 57.36 A30 30 0 1 1 61.93 57.36" fill="none" stroke="url(#sgzGrad)" stroke-width="5" stroke-linecap="round"
+                  style="stroke-dasharray:188.5;stroke-dashoffset:188.5;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)"/>
+                <!-- Center score -->
+                <text id="sgz-score-txt" x="36" y="38" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="700" fill="#e8e0ff">–</text>
+                <text x="36" y="51" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,.3)">/100</text>
+              </svg>
+            </div>
+            <!-- Info -->
+            <div style="flex:1;min-width:0">
+              <div id="sgz-label" style="font-size:.88rem;font-weight:600;color:#c8c0ff;margin-bottom:6px">–</div>
+              <div id="sgz-chips" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+            </div>
+          </div>
+          <!-- Best window row -->
+          <div id="sgz-best-row" style="display:none;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);font-size:.67rem;color:rgba(200,192,255,.7);position:relative;z-index:1"></div>
         </div>
       </div>
 
@@ -4746,6 +4968,7 @@ function renderWeather(){
   drawTempCurve();
   drawWindCurve();
   drawRainHeatmap();
+  drawStargazing();
   drawMoonPhase();
   drawBarometer();
   drawHumidity();
@@ -5064,6 +5287,131 @@ function drawMoonPhase(){
   bar.style.width=pct+'%';
   emojiEl.textContent=phaseEmoji;
   ageEl.textContent=`Tag ${Math.floor(ageDays)+1}`;
+}
+
+// ═══════════════════════════════════════════════
+// STERNBEOBACHTUNGS-SCORE
+// ═══════════════════════════════════════════════
+function drawStargazing(){
+  const card=document.getElementById('stargazing-card');
+  if(!card) return;
+  const wx=window._wx;
+  if(!wx||!wx.current||!wx.daily) { card.style.display='none'; return; }
+
+  const now=new Date();
+  const sr0=wx.daily.sunrise&&wx.daily.sunrise[0]?new Date(wx.daily.sunrise[0]):null;
+  const ss0=wx.daily.sunset&&wx.daily.sunset[0]?new Date(wx.daily.sunset[0]):null;
+  const sr1=wx.daily.sunrise&&wx.daily.sunrise[1]?new Date(wx.daily.sunrise[1]):null;
+
+  // Only show at night or within 90min before sunset (so user can plan)
+  const isNight = sr0&&ss0 ? (now < sr0 || now > new Date(ss0.getTime()-90*60*1000)) : (now.getHours()>=21||now.getHours()<7);
+  if(!isNight){ card.style.display='none'; card.classList.remove('show'); return; }
+  card.style.display='';
+  requestAnimationFrame(function(){ card.classList.add('show'); });
+
+  // --- Score calculation ---
+  const cloud = wx.current.cloud_cover != null ? wx.current.cloud_cover : 80;
+  const precip = (function(){
+    var h=wx.hourly; if(!h||!h.precipitation_probability||!h.time) return 30;
+    var ts=now.toISOString().slice(0,13); var si=h.time.findIndex(function(t){return t.startsWith(ts);}); if(si<0)si=0;
+    return h.precipitation_probability[si]||0;
+  })();
+  const vis = wx.current.visibility != null ? Math.min(wx.current.visibility/10000,1)*100 : 70;
+  // Moon illumination
+  const JD=now.getTime()/86400000+2440587.5;
+  const moonPhase=((JD-2451549.76)%29.53058868)/29.53058868;
+  const moonIllum=0.5*(1-Math.cos(2*Math.PI*(moonPhase<0?moonPhase+1:moonPhase)))*100;
+
+  const cloudScore=(100-cloud);
+  const precipScore=(100-precip);
+  const moonScore=(100-moonIllum);
+  const visScore=vis;
+  const total=Math.round(cloudScore*0.50 + precipScore*0.25 + moonScore*0.15 + visScore*0.10);
+
+  // Update arc
+  const ARC=188.5;
+  const fill=document.getElementById('sgz-arc-fill');
+  const scoreTxt=document.getElementById('sgz-score-txt');
+  if(fill) requestAnimationFrame(function(){ fill.style.strokeDashoffset=ARC*(1-total/100); });
+  if(scoreTxt) scoreTxt.textContent=total;
+
+  // Label
+  const labelEl=document.getElementById('sgz-label');
+  if(labelEl){
+    if(total>=80) labelEl.textContent='🌟 Hervorragend — Klarer Nachthimmel';
+    else if(total>=65) labelEl.textContent='✨ Gut — Gute Sichtbedingungen';
+    else if(total>=45) labelEl.textContent='🔭 Mäßig — Teilweise bewölkt';
+    else if(total>=25) labelEl.textContent='⛅ Schlecht — Zu viel Bewölkung';
+    else labelEl.textContent='☁️ Kaum möglich — Stark bedeckt';
+  }
+
+  // Condition chips
+  const chipsEl=document.getElementById('sgz-chips');
+  if(chipsEl){
+    function mkChip(txt, cls){ var s=document.createElement('span'); s.className='sgz-chip '+cls; s.textContent=txt; return s; }
+    chipsEl.innerHTML='';
+    // Cloud
+    var cc=cloud<20?'sgz-good':cloud<50?'sgz-mid':'sgz-bad';
+    chipsEl.appendChild(mkChip('☁ '+cloud+'% Wolken', cc));
+    // Moon
+    var mc=moonIllum<20?'sgz-good':moonIllum<60?'sgz-mid':'sgz-bad';
+    chipsEl.appendChild(mkChip('🌙 '+Math.round(moonIllum)+'% Mond', mc));
+    // Precip
+    var pc=precip<15?'sgz-good':precip<40?'sgz-mid':'sgz-bad';
+    chipsEl.appendChild(mkChip('🌧 '+precip+'% Regen', pc));
+    // Visibility (only if available from API)
+    if(wx.current.visibility!=null){
+      var km=Math.round(wx.current.visibility/1000);
+      var vc=km>=20?'sgz-good':km>=8?'sgz-mid':'sgz-bad';
+      chipsEl.appendChild(mkChip('👁 '+km+' km Sicht', vc));
+    }
+  }
+
+  // Best window tonight
+  const bestRow=document.getElementById('sgz-best-row');
+  if(bestRow&&wx.hourly&&wx.hourly.cloud_cover&&wx.hourly.time){
+    var h=wx.hourly;
+    var ssMs=ss0?ss0.getTime():now.getTime();
+    var srMs=(now<sr0&&sr0)?sr0.getTime():(sr1?sr1.getTime():now.getTime()+10*3600000);
+    var bestScore=-1, bestH=-1;
+    for(var i=0;i<h.time.length;i++){
+      var t2=new Date(h.time[i]).getTime();
+      if(t2<ssMs||t2>srMs) continue;
+      var cc2=h.cloud_cover[i]||80;
+      var pp2=(h.precipitation_probability?h.precipitation_probability[i]:30)||0;
+      var s2=(100-cc2)*0.65+(100-pp2)*0.35;
+      if(s2>bestScore){bestScore=s2;bestH=new Date(h.time[i]).getHours();}
+    }
+    if(bestH>=0){
+      bestRow.style.display='';
+      bestRow.innerHTML='🌃 Beste Sicht heute Nacht: <strong style="color:rgba(200,190,255,.9)">'+(bestH<10?'0':'')+bestH+':00 Uhr</strong>';
+    } else { bestRow.style.display='none'; }
+  }
+
+  // Twinkling stars canvas
+  (function(){
+    var cv=document.getElementById('sgz-stars-cv');
+    if(!cv||cv._sgzInit) return;
+    cv._sgzInit=true;
+    var ctx=cv.getContext('2d');
+    var stars=[];
+    for(var i=0;i<38;i++){
+      stars.push({x:Math.random()*130,y:Math.random()*80,r:Math.random()*1.5+0.4,phase:Math.random()*Math.PI*2,speed:0.4+Math.random()*1.2});
+    }
+    function draw(){
+      ctx.clearRect(0,0,130,80);
+      var t=Date.now()/1000;
+      stars.forEach(function(s){
+        var alpha=0.3+0.7*Math.abs(Math.sin(t*s.speed+s.phase));
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(220,215,255,'+alpha.toFixed(2)+')';
+        ctx.fill();
+      });
+      cv._sgzRaf=requestAnimationFrame(draw);
+    }
+    draw();
+  })();
 }
 
 // ═══════════════════════════════════════════════
@@ -10155,6 +10503,94 @@ function updateAll(){
       });
     }
   })();
+  // ── Indoor Climate Card ──
+  (function(){
+    var card=document.getElementById('indoor-climate-card');
+    if(!card)return;
+    // Arc geometry: path "M10 54 A26 26 0 1 1 58 54" → 270° sweep, full arc length
+    var ARC_LEN=175.93; // 2π*26*(270/360) ≈ 138.2 but empirical for this path ~175
+    // Empirical for viewBox 68: r=26, 270° arc ≈ 2*π*26*0.75 = 122.5; let's use 122.5
+    var ARC=122.5;
+    // Find indoor temperature sensor
+    var tempVal=null, humVal=null;
+    var tempCandidates=['sensor.temperature','sensor.innen_temperatur','sensor.indoor_temperature',
+      'sensor.wohnzimmer_temperatur','sensor.living_room_temperature','sensor.temp_indoor',
+      'sensor.raumtemperatur','sensor.thermometer'];
+    var humCandidates=['sensor.humidity','sensor.innen_luftfeuchtigkeit','sensor.indoor_humidity',
+      'sensor.wohnzimmer_luftfeuchtigkeit','sensor.relative_humidity','sensor.luftfeuchtigkeit',
+      'sensor.raumluftfeuchtigkeit'];
+    // Scan _S for candidates
+    for(var id in (_S||{})){
+      var s=_S[id];if(!s)continue;
+      var v=parseFloat(s.state);if(isNaN(v))continue;
+      var lc=id.toLowerCase();
+      var dc=(s.attributes||{}).device_class||'';
+      if(tempVal===null&&(dc==='temperature'||tempCandidates.some(c=>lc.includes(c.replace('sensor.','')))))tempVal=v;
+      if(humVal===null&&(dc==='humidity'||humCandidates.some(c=>lc.includes(c.replace('sensor.','')))))humVal=v;
+    }
+    // Also check climate entities for current_temp
+    if(tempVal===null){
+      for(var id in (_S||{})){
+        if(!id.startsWith('climate.'))continue;
+        var ct=parseFloat((_S[id].attributes||{}).current_temperature);
+        if(!isNaN(ct)){tempVal=ct;break;}
+      }
+    }
+    if(tempVal===null&&humVal===null){card.classList.remove('show');return;}
+    card.classList.add('show');
+    // Temp arc: scale -10°C to 40°C → 0%–100%
+    var tempPct=tempVal!==null?Math.max(0,Math.min(1,(tempVal+10)/50)):null;
+    // Hum arc: 0–100%
+    var humPct=humVal!==null?Math.max(0,Math.min(1,humVal/100)):null;
+    var tempFill=document.getElementById('icl-temp-fill');
+    var humFill=document.getElementById('icl-hum-fill');
+    var tempValEl=document.getElementById('icl-temp-val');
+    var humValEl=document.getElementById('icl-hum-val');
+    if(tempFill&&tempPct!==null){
+      var offset=ARC*(1-tempPct);
+      tempFill.style.strokeDasharray=ARC;
+      tempFill.style.strokeDashoffset=offset;
+      // Color by temp range
+      var tc=tempVal<10?'#0a84ff':tempVal<18?'#30d158':tempVal<25?'#ff9f0a':'#ff453a';
+      tempFill.style.stroke=tc;
+      if(tempValEl)tempValEl.textContent=tempVal.toFixed(1);
+    } else if(tempFill){
+      tempFill.style.strokeDasharray=ARC;tempFill.style.strokeDashoffset=ARC;
+    }
+    if(humFill&&humPct!==null){
+      var hoffset=ARC*(1-humPct);
+      humFill.style.strokeDasharray=ARC;
+      humFill.style.strokeDashoffset=hoffset;
+      if(humValEl)humValEl.textContent=Math.round(humVal);
+    } else if(humFill){
+      humFill.style.strokeDasharray=ARC;humFill.style.strokeDashoffset=ARC;
+    }
+    // Comfort badge
+    var badge=document.getElementById('icl-comfort-badge');
+    if(badge){
+      var comfort='Unbekannt';var bClr='rgba(255,255,255,.12)';var bBrd='rgba(255,255,255,.15)';var bTxt='var(--dim)';
+      if(tempVal!==null&&humVal!==null){
+        var tOk=tempVal>=18&&tempVal<=24;
+        var hOk=humVal>=30&&humVal<=60;
+        if(tOk&&hOk){comfort='😊 Optimal';bClr='rgba(48,209,88,.12)';bBrd='rgba(48,209,88,.22)';bTxt='rgba(48,209,88,.9)';}
+        else if(tOk&&!hOk){comfort=humVal<30?'💨 Zu trocken':'💧 Zu feucht';bClr='rgba(255,159,10,.10)';bBrd='rgba(255,159,10,.22)';bTxt='rgba(255,159,10,.9)';}
+        else if(!tOk){comfort=tempVal<18?'🥶 Etwas kühl':'🥵 Etwas warm';bClr='rgba(10,132,255,.10)';bBrd='rgba(10,132,255,.22)';bTxt='rgba(140,200,255,.9)';}
+      } else if(tempVal!==null){
+        comfort=tempVal<18?'🥶 Kühl':tempVal<=24?'🌡 Angenehm':'🥵 Warm';
+      }
+      badge.textContent=comfort;
+      badge.style.background=bClr;badge.style.borderColor=bBrd;badge.style.color=bTxt;
+    }
+    // Outdoor delta
+    var deltaEl=document.getElementById('icl-outdoor-delta');
+    if(deltaEl&&tempVal!==null&&window._wx?.current?.temperature_2m!=null){
+      var outT=window._wx.current.temperature_2m;
+      var diff=(tempVal-outT);
+      var arrow=diff>0?'↑':'↓';
+      var absDiff=Math.abs(diff).toFixed(1);
+      deltaEl.innerHTML='<span class="icl-delta-arrow">'+arrow+'</span>'+absDiff+'° vs. draußen ('+outT.toFixed(1)+'°)';
+    } else if(deltaEl){deltaEl.textContent='';}
+  })();
   // Quick-Actions Bar state
   window._updateQaBar&&window._updateQaBar(on, playing);
   // ── App BG Orbs: react to active lights ──
@@ -10196,9 +10632,12 @@ function updateAll(){
   window._updateColorPalette&&window._updateColorPalette(on);
   window._updateSnapshot&&window._updateSnapshot(on);
   window._updateCircadian&&window._updateCircadian(on);
+  window._updateSunriseSim&&window._updateSunriseSim(on);
   window._updateSunsetSim&&window._updateSunsetSim(on);
   window._updateNightLight&&window._updateNightLight(on);
   window._updateBreathe&&window._updateBreathe(on);
+  // ── Wohnstimmung Dial ──
+  window._updateWohnstimmung&&window._updateWohnstimmung(on, playing);
   // ── Anwesenheits-Chips ──
   (function(){
     const strip=document.getElementById('presence-strip');
@@ -12131,6 +12570,77 @@ const _origSetWxMode=setWxMode;
     };
   })();
 
+  // ── Sonnenaufgang-Simulator ──
+  (function(){
+    const srWrap = document.getElementById('lt-sunrise-sim');
+    const srBtn  = document.getElementById('lt-sr-btn');
+    const srIco  = document.getElementById('lt-sr-ico');
+    const srVal  = document.getElementById('lt-sr-val');
+    const srPill = document.getElementById('lt-sr-pill');
+    const srCd   = document.getElementById('lt-sr-cd');
+    const srStop = document.getElementById('lt-sr-cancel');
+    if(!srWrap||!srBtn) return;
+
+    const SR_TOTAL_MS = 30*60*1000; // 30 Minuten
+    let _srEnd = null;
+    let _srIv  = null;
+
+    function getSrDimmables(){
+      return (CFG.lights||[]).filter(id=>{
+        const s=_S[id];
+        return s && s.state==='on' && s.attributes && s.attributes.color_temp_kelvin!==undefined;
+      });
+    }
+    function srLerp(a,b,t){return Math.round(a+(b-a)*t);}
+
+    function srApplyStep(){
+      const elapsed = Date.now() - (_srEnd - SR_TOTAL_MS);
+      const t = Math.min(elapsed/SR_TOTAL_MS, 1);
+      const ct  = srLerp(1800, 5500, t);
+      const bri = srLerp(5,    95,   t);
+      const lights = getSrDimmables();
+      lights.forEach(id=>{
+        svc('light','turn_on',{entity_id:id,color_temp_kelvin:ct,brightness_pct:bri,transition:55});
+      });
+      if(t>=1){ stopSunrise(false); return; }
+      const remain = _srEnd - Date.now();
+      const rm = Math.floor(remain/60000);
+      const rs = Math.floor((remain%60000)/1000);
+      srCd.textContent = 'Hellt auf… noch '+rm+'m '+String(rs).padStart(2,'0')+'s · '+ct+'K / '+bri+'%';
+    }
+
+    function startSunrise(){
+      if(_srIv) return;
+      _srEnd = Date.now() + SR_TOTAL_MS;
+      srApplyStep();
+      _srIv = setInterval(srApplyStep, 60*1000);
+      srBtn.classList.add('sr-running','sr-flash');
+      srVal.textContent = '● Läuft…';
+      srPill.classList.add('show');
+      srIco.textContent = '☀️';
+      showToast('🌅 Sonnenaufgang gestartet — hellt über 30 min auf');
+      hap&&hap();
+    }
+
+    function stopSunrise(cancelled){
+      if(_srIv){ clearInterval(_srIv); _srIv=null; }
+      _srEnd=null;
+      srBtn.classList.remove('sr-running');
+      srVal.textContent = '1800K → 5500K';
+      srPill.classList.remove('show');
+      srIco.textContent = '🌅';
+      if(cancelled) showToast('🌅 Sonnenaufgang-Simulator gestoppt');
+    }
+
+    srBtn.addEventListener('click',()=>{ if(_srIv){stopSunrise(true);}else{startSunrise();} },{passive:true});
+    srStop.addEventListener('click',(e)=>{ e.stopPropagation(); stopSunrise(true); },{passive:true});
+
+    window._updateSunriseSim = function(onCount){
+      srWrap.classList.toggle('show', onCount>0);
+      if(onCount===0 && _srIv) stopSunrise(false);
+    };
+  })();
+
   // ── Nachtlicht-Modus ──
   (function(){
     const nlWrap=document.getElementById('lt-night');
@@ -12792,7 +13302,205 @@ const _origSetWxMode=setWxMode;
     if(disc.classList.contains('playing')) startNotes();
   })();
 
+// ═══════════════════════════════════════════════
+// WOHNSTIMMUNG ENERGIE-DIAL
+// ═══════════════════════════════════════════════
+(function(){
+  var card = document.getElementById('wohnstimmung-card');
+  var arcFill = document.getElementById('ws-arc-fill');
+  var scoreVal = document.getElementById('ws-score-val');
+  var zoneEmoji = document.getElementById('ws-zone-emoji');
+  var zoneName = document.getElementById('ws-zone-name');
+  var zoneDesc = document.getElementById('ws-zone-desc');
+  var factorsEl = document.getElementById('ws-factors');
+  var bgOrb = document.getElementById('ws-bg-orb');
+  if(!card||!arcFill) return;
+
+  var ARC_LEN = 188.5;
+  var _lastScore = -1;
+
+  var ZONES = [
+    {min:0,  max:20,  emoji:'🛋', name:'Tiefentspannt', desc:'Alles ruhig — perfekt zum Entspannen',         color:'rgba(10,132,255,.14)',  border:'rgba(10,132,255,.22)',  orb:'rgba(10,132,255,.7)'},
+    {min:20, max:40,  emoji:'🌿', name:'Gemütlich',     desc:'Angenehme Stimmung — Zuhause fühlt sich gut an', color:'rgba(50,180,130,.12)',  border:'rgba(50,180,130,.20)',  orb:'rgba(50,180,130,.7)'},
+    {min:40, max:60,  emoji:'⚖️', name:'Ausgeglichen',  desc:'Alles im Gleichgewicht — aktiv und entspannt',   color:'rgba(48,209,88,.11)',   border:'rgba(48,209,88,.20)',   orb:'rgba(48,209,88,.7)'},
+    {min:60, max:80,  emoji:'✨', name:'Lebendig',       desc:'Energie liegt in der Luft — volle Aktivität',   color:'rgba(255,159,10,.12)',  border:'rgba(255,159,10,.22)', orb:'rgba(255,159,10,.7)'},
+    {min:80, max:101, emoji:'⚡', name:'Hochenergie',    desc:'Volle Power — Musik, Lichter, Leben!',           color:'rgba(255,90,30,.12)',   border:'rgba(255,90,30,.22)',  orb:'rgba(255,90,30,.7)'}
+  ];
+
+  function getZone(score){
+    for(var i=0;i<ZONES.length;i++){
+      if(score < ZONES[i].max) return ZONES[i];
+    }
+    return ZONES[ZONES.length-1];
+  }
+
+  function calcScore(onCount, playing){
+    var score = 0;
+    var factors = [];
+
+    // Lights on contribution (up to 50 pts)
+    var lightPts = Math.min(onCount * 10, 50);
+    if(onCount > 0){
+      score += lightPts;
+      // Average brightness bonus (up to 10 pts)
+      var briSum=0, briCnt=0;
+      if(typeof CFG !== 'undefined' && typeof _S !== 'undefined'){
+        CFG.lights.forEach(function(l){
+          if(_S[l.id]&&_S[l.id].state==='on'){
+            var bri=_S[l.id].attributes&&_S[l.id].attributes.brightness;
+            if(bri!=null){briSum+=(bri/255*100);briCnt++;}
+          }
+        });
+      }
+      var avgBri = briCnt>0 ? (briSum/briCnt) : 60;
+      score += Math.round(avgBri/10);
+      factors.push({t:'💡 '+onCount+' Licht'+(onCount>1?'er':''), on:true});
+    }
+
+    // Music (up to 20 pts)
+    if(playing){
+      score += 20;
+      factors.push({t:'🎵 Musik', on:true});
+    }
+
+    // Time of day energy (0-15 pts)
+    var h = new Date().getHours();
+    var timeE = 0;
+    if(h>=6&&h<9){timeE=8; factors.push({t:'🌅 Morgen', on:false});}
+    else if(h>=9&&h<12){timeE=12; factors.push({t:'☀️ Vormittag', on:false});}
+    else if(h>=12&&h<17){timeE=10; factors.push({t:'🌤 Nachmittag', on:false});}
+    else if(h>=17&&h<22){timeE=8; factors.push({t:'🌆 Abend', on:false});}
+    else{timeE=3; factors.push({t:'🌙 Nacht', on:false});}
+    score += timeE;
+
+    // Mood tracker (0-15 pts)
+    var today=new Date();
+    var mKey='mood_'+today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate();
+    var mood=localStorage.getItem(mKey);
+    if(mood==='good'){score+=15; factors.push({t:'😊 Gute Stimmung', on:true});}
+    else if(mood==='ok'){score+=8; factors.push({t:'😐 Ok', on:false});}
+    else if(mood==='bad'){score+=2;}
+
+    return {score:Math.min(Math.max(Math.round(score),0),100), factors:factors};
+  }
+
+  window._updateWohnstimmung = function(onCount, playing){
+    var res = calcScore(onCount, playing);
+    var s = res.score;
+
+    // Only update DOM if score changed meaningfully
+    if(Math.abs(s - _lastScore) < 1) {
+      card.classList.add('show');
+      return;
+    }
+    _lastScore = s;
+
+    var zone = getZone(s);
+
+    // Update arc
+    var offset = ARC_LEN * (1 - s/100);
+    arcFill.style.strokeDashoffset = offset;
+    scoreVal.textContent = s;
+
+    // Update zone
+    zoneEmoji.textContent = zone.emoji;
+    zoneName.textContent = zone.name;
+    zoneDesc.textContent = zone.desc;
+
+    // Update card colors
+    card.style.background = zone.color;
+    card.style.border = '1px solid ' + zone.border;
+    if(bgOrb) bgOrb.style.background = 'radial-gradient(circle, '+zone.orb+' 0%, transparent 70%)';
+
+    // Update label color
+    var labelEl = document.getElementById('ws-label');
+    if(labelEl) labelEl.style.color = zone.border.replace('.20',',.7').replace('.22',',.7');
+
+    // Update factor chips
+    if(factorsEl){
+      factorsEl.innerHTML = res.factors.map(function(f){
+        return '<span class="ws-factor'+(f.on?' ws-f-on':'')+'">'+f.t+'</span>';
+      }).join('');
+    }
+
+    card.classList.add('show');
+  };
+})();
+
 </script>
-<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7778</div>
+<!-- ===== SCREEN SLEEP / INACTIVITY DIMMER ===== -->
+<div id="sleep-overlay" style="
+  position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;
+  z-index:9999;transition:opacity 1.8s ease;display:flex;align-items:center;
+  justify-content:center;flex-direction:column;gap:12px;
+">
+  <div id="sleep-time" style="font-size:3.2rem;font-weight:300;color:rgba(255,255,255,.12);letter-spacing:4px;font-variant-numeric:tabular-nums"></div>
+  <div style="font-size:.65rem;color:rgba(255,255,255,.08);letter-spacing:2px;text-transform:uppercase">Tippen zum Aufwecken</div>
+</div>
+<script>
+(function(){
+  var SLEEP_MS = 2 * 60 * 1000; // 2 minutes
+  var DIM_MS   = 30 * 1000;     // partial dim after 30s extra
+  var overlay  = document.getElementById('sleep-overlay');
+  var sleepTime= document.getElementById('sleep-time');
+  var sleeping = false;
+  var lastTouch= Date.now();
+  var timer    = null;
+  var clockInt = null;
+
+  function fmt2(n){ return n<10?'0'+n:n; }
+
+  function showSleepClock(){
+    if(!clockInt) clockInt = setInterval(function(){
+      var d=new Date();
+      sleepTime.textContent = fmt2(d.getHours())+':'+fmt2(d.getMinutes());
+    }, 1000);
+    var d=new Date();
+    sleepTime.textContent = fmt2(d.getHours())+':'+fmt2(d.getMinutes());
+  }
+
+  function sleep(){
+    if(sleeping) return;
+    sleeping = true;
+    overlay.style.pointerEvents = 'auto';
+    overlay.style.opacity = '1';
+    showSleepClock();
+  }
+
+  function wake(e){
+    if(!sleeping) return;
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    sleeping = false;
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+    if(clockInt){ clearInterval(clockInt); clockInt=null; }
+    lastTouch = Date.now();
+    resetTimer();
+  }
+
+  function resetTimer(){
+    if(timer) clearTimeout(timer);
+    timer = setTimeout(sleep, SLEEP_MS);
+  }
+
+  // Wake on tap
+  overlay.addEventListener('touchstart', wake, {passive:false});
+  overlay.addEventListener('click', wake);
+
+  // Track activity
+  ['touchstart','touchend','touchmove','click','keydown','mousemove'].forEach(function(ev){
+    document.addEventListener(ev, function(){
+      if(sleeping) return;
+      lastTouch = Date.now();
+      resetTimer();
+    }, {passive:true});
+  });
+
+  // Start timer on load
+  resetTimer();
+})();
+</script>
+
+<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7779</div>
 </body>
 </html>

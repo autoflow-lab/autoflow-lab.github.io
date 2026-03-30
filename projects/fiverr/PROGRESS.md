@@ -1,5 +1,94 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-30 06:08 UTC — Heartbeat
+- ✅ wz.html: App — Bildschirm-Schlaf Inaktivitäts-Dimmer (🌑)
+- **Konzept**: Wand-Tablet-freundlicher Screen-Sleep. Nach 2 min ohne Touch (touchstart/end/move/click/keydown/mousemove) blendet ein schwarzes Fullscreen-Overlay ein. Im "Schlaf" wird dezent die aktuelle Uhrzeit in HH:MM gezeigt (`#sleep-time`, opacity:0.12). Tippen auf den Overlay → Aufwachen, Inaktivitäts-Timer wird zurückgesetzt.
+- **Technisch**: IIFE, `SLEEP_MS=120000`, `overlay.style.transition='opacity 1.8s ease'`, `clockInt` per `setInterval` sekündlich aktualisiert, wird beim Aufwachen via `clearInterval` gestoppt. Alle Event-Listener `{passive:true}` für Performance. `z-index:9999` (über allem).
+- **Version**: v4.7778 → v4.7779
+- **Deploy**: SSH nicht verfügbar (kein Passwort) — lokal committed, manuelle Übertragung erforderlich.
+
+## 2026-03-30 02:04 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Sternbeobachtungs-Score Karte (🔭)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Zeigt die Qualität des Nachthimmels für Sternbeobachtungen auf einem Blick — erscheint nur Nachts (nach Sonnenuntergang) oder 90min vor Sonnenuntergang zur Planung
+- **Score 0–100** aus 4 Faktoren:
+  - ☁ Cloud Cover (50% Gewicht): `(100 - cloud_cover)` → Wolken sind größter Faktor
+  - 🌧 Niederschlag (25% Gewicht): `(100 - precipitation_probability[jetzt])`
+  - 🌙 Mondphase (15% Gewicht): `(100 - moon_illumination)` — Neumond ideal, Vollmond schlecht
+  - 👁 Sichtweite (10% Gewicht): `min(visibility/10km, 1)*100` aus Open-Meteo `current.visibility`
+- **SVG Arc-Gauge** (72×72px, 210°-Bogen analog zu anderen Gauges):
+  - `linearGradient sgzGrad`: blau (#3a3adc) → lila (#8060ff) → weißlich (#e8e0ff) — Nacht-Farbschema
+  - `stroke-dashoffset = 188.5*(1-score/100)`, `transition 1.4s cubic-bezier(.4,0,.2,1)` → weiche Animation
+  - Score-Zahl + "/100" als SVG-Text-Elemente zentral im Arc
+- **5 Bewertungsstufen**:
+  - ≥80: "🌟 Hervorragend — Klarer Nachthimmel"
+  - ≥65: "✨ Gut — Gute Sichtbedingungen"
+  - ≥45: "🔭 Mäßig — Teilweise bewölkt"
+  - ≥25: "⛅ Schlecht — Zu viel Bewölkung"
+  - <25: "☁️ Kaum möglich — Stark bedeckt"
+- **4 farbige Condition-Chips** (`.sgz-chip`):
+  - ☁ Wolken-% (grün <20% / gelb <50% / rot ≥50%)
+  - 🌙 Mondbeleuchtung-% (grün <20% / gelb <60% / rot ≥60%)
+  - 🌧 Regenwahrscheinlichkeit (grün <15% / gelb <40% / rot ≥40%)
+  - 👁 Sichtweite km (grün ≥20km / gelb ≥8km / rot <8km) — nur wenn API-Daten verfügbar
+- **Twinkling Stars Canvas** (`#sgz-stars-cv`, 130×80px, `position:absolute` rechts oben im Card):
+  - 38 Sterne mit zufälliger Position, Größe (r 0.4–1.9px), Phase + Speed
+  - `alpha = 0.3 + 0.7*|sin(t*speed+phase)|` → jeder Stern blinkt individuell
+  - rAF-Loop, `cv._sgzInit` Flag verhindert doppelten Start
+  - Farbe `rgba(220,215,255,α)` — leicht bläuliches Weiß (Sternenlicht-Ton)
+- **Hintergrund-Orb** `#sgz-bg-orb`: radialer lila Glow `rgba(100,80,220,.14)` oben-rechts → Nacht-Atmosphäre
+- **Beste Beobachtungszeit** `#sgz-best-row` (if available):
+  - Scannt `_wx.hourly.cloud_cover` zwischen Sonnenuntergang und nächstem Sonnenaufgang
+  - Score je Stunde: `(100-cloud)*0.65 + (100-precip)*0.35` → gewichtet Wolken am stärksten
+  - Zeigt "🌃 Beste Sicht heute Nacht: HH:00 Uhr" unter Trennlinie
+  - Nur sichtbar wenn mindestens eine Nachtstunde in den Hourly-Daten gefunden
+- **Night-Detection** `isNight`: prüft `now > ss0 - 90min` (nach Sonnenuntergang oder kurz davor)
+  - Fallback wenn keine Sunrise/Sunset-Daten: `hour >= 21 || hour < 7`
+  - Card faded smooth aus (`classList.remove('show')`) wenn es Tag ist
+- **Mondphasen-Berechnung** inline: Julianisches Datum → phase (0..1) → `illum = 0.5*(1-cos(2π*phase))` — gleiche Astronomie-Formel wie `drawMoonPhase()`
+- **Kein extra API-Call** — nutzt `cloud_cover`, `visibility` aus `current`, `precipitation_probability` aus `hourly`, `sunrise/sunset` aus `daily`
+- CSS: `.sgz-chip` Klassen (gut/mittel/schlecht), `#stargazing-card.show` Transition, `:root.light` Overrides
+- `#stargazing-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- `drawStargazing()` in `renderWeather()` nach `drawMoonPhase()` eingehängt (thematisch passend)
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 703173 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-30 00:04 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Raumklima-Card (🌡)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Zeigt Indoor-Temperatur + Luftfeuchtigkeit aus beliebigen HA sensor.* Entities als kompakte Karte im Home-Tab — sofort auf einen Blick erkennbar wie es im Zimmer ist
+- **HTML**: `#indoor-climate-card` direkt vor `#silence-chip` im Home-Tab, mit grünem Farbschema
+- **Zwei SVG-Arc-Gauges** (68×68px, 270°-Bogen `M10 54 A26 26 0 1 1 58 54`):
+  - `#icl-temp-fill`: 4-Farb-Gradient je Temperaturstufe (blau<10°C / grün<18°C / amber<25°C / rot≥25°C), dynamische `stroke`-Farbe
+  - `#icl-hum-fill`: `url(#iclHumGrad)` amber→grün→blau (trocken→optimal→feucht)
+  - `stroke-dashoffset` Animation: `ARC*(1-pct)`, `transition 1.3s cubic-bezier(.4,0,.2,1)` → weiche Einblend-Animation
+  - Zentraler SVG-Textwert (13px, font-weight:500) + Einheit als 7px Text
+- **Sensor-Discovery** (kein extra API-Call, nutzt vorhandene `_S` fetchStates Daten):
+  - `device_class='temperature'` → bevorzugt (HA-Standard)
+  - Kandidaten-Liste: `sensor.temperature`, `sensor.innen_temperatur`, `sensor.wohnzimmer_temperatur` etc.
+  - Fallback auf `climate.*` entities → `attributes.current_temperature`
+  - Gleiche Logik für Humidity mit `device_class='humidity'`
+- **Komfort-Badge** `#icl-comfort-badge`:
+  - 😊 **Optimal** (18–24°C + 30–60% Feuchte) → grünes Farbschema `rgba(48,209,88)`
+  - 💨 Zu trocken / 💧 Zu feucht → amber wenn Feuchte out-of-range
+  - 🥶 Kühl / 🥵 Warm → blau wenn Temperatur außerhalb Komfortzone
+  - Dynamische `background/borderColor/color` Styles → farbpassend je Zustand
+- **∆ Outdoor-Vergleich** `#icl-outdoor-delta`: zeigt "↑/↓ X.X° vs. draußen (Y.Y°)" wenn `_wx.current.temperature_2m` verfügbar — auf einen Blick: wie viel wärmer/kühler ist es innen
+- **Grünes Farbschema** `rgba(48,209,88)` Border + Background (klar von amber=Licht, blau=Nacht unterscheidbar — Grün = Natur/Klima/Gesundheit)
+- `#icl-bg-orb`: subtiler radialer Grün-Glow oben-rechts im Card → dezenter Hintergrund-Effekt
+- `#icl-divider`: 1px vertikale Trennlinie zwischen den zwei Gauges (rgba .07)
+- `@keyframes iclCardIn`: fade+translateY(10px) → normal, 0.5s cubic-bezier(.32,0,.15,1)
+- Card bleibt `display:none` wenn KEINE relevanten Sensor-Entities in HA gefunden (graceful fallback → kein leerer Widget-Slot)
+- Card erscheint erst wenn ≥1 Sensor verfügbar (temp ODER humidity ausreichend)
+- `#indoor-climate-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Overrides: dunkleres Grün-Schema, lesbar auf hellem Hintergrund
+- **Kein extra API-Call** — 100% aus vorhandenen `_S` State-Daten
+- Effekt: Im Home-Tab erscheint eine elegante Raumklima-Karte die sofort zeigt wie warm/feucht es innen ist — mit farbigem Komfort-Indikator und Vergleich zur Außentemperatur
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 693322 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-29 22:03 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — Anwesenheits-Chips (device_tracker.* Entities) 👥
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2268,3 +2357,10 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - "Alle aus"-Button schaltet alle betroffenen Geräte direkt ab + Toast
 - Amber Puls-Dot, Spring-in Animation, Light-Mode kompatibel
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io)
+
+## 2026-03-30 00:00 UTC — Nacht-Improvement Run (Cron)
+- ✅ wz.html: Light-Mode Fixes (Task 4 aus NIGHTPLAN_2.md)
+- Fehlende :root.light Overrides ergänzt: #np-t, #rfc-title, #ov-temp, #moon-name, #laundry-title
+- .hglow: opacity:0 im Light-Mode (dunkler Glow-Blob nicht mehr im hellen UI sichtbar)
+- updateHeroGradient(): --hglc wird auf transparent gesetzt beim Wechsel in Light-Mode
+- JS-Check: OK | Deployed → HA 192.168.1.123 /config/www/wz.html | Git: 0b2326f
