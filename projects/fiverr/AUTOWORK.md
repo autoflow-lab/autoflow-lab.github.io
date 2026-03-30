@@ -374,6 +374,12 @@
 ## Neue Ideen (2026-03-30 14:37 UTC)
 - [x] wz.html: Wetter-Tab — Tages-Highlight Karte (🌟 Beste & schlechteste Stunde heute als 2-Spalten Card — Score aus Temp-Komfort + Regenwahrsch. + Wind + WMO-Code, grün/rot Farbschema, Uhrzeit + Emoji + Cond-Text + 3 Chips je Spalte, scannt nur noch ausstehende Stunden des Tages)
 
+## Neue Ideen (2026-03-30 22:37 UTC)
+- [x] wz.html: Wetter-Tab — UV-Schutz Countdown Card (☀️ SVG Arc-Gauge 0–12 UV grün→gelb→orange→rot Gradient, tagesaktueller UV-Max aus daily.uv_index_max, stündliche uv_index Hourly-Variable neu hinzugefügt, Countdown bis UV≥3 "In ~Xh Schutz empfohlen", SPF-Empfehlung + Verhaltens-Chips, 6 UV-Stufen Minimal→Extrem)
+
+## Neue Ideen (2026-03-30 18:04 UTC)
+- [x] wz.html: Wetter-Tab — Temperatur-Klimavergleich Card (🌡 aktuelle Temperatur vs. langjährigem Monatsmittel DE, animierter Thermometer-SVG + Balkenvergleich, farbiges Delta ↑↓, Verdikt-Text, Cyan/Teal Farbschema)
+
 ## Neue Ideen (2026-03-30 10:04 UTC)
 - [x] wz.html: Wetter-Tab — "Grillwetter-Check" Karte (🔥 Score 0–100 aus Temperatur + Regenwahrsch. + Wind + WMO-Code, SVG-Grill mit animierten Flammen bei Score >60, 5 Verdikt-Stufen von "Perfekt zum Grillen!" bis "Besser drinnen essen", Condition-Chips für Temp/Wind/Regen/Gewitter, kontextsensitiver Grill-Tipp)
 
@@ -381,3 +387,9 @@
 - [x] wz.html: Wetter-Tab — "Outdoor-Sport" Empfehlungs-Card (🏃 Score 0–100 für Joggen/Radfahren/Wandern/Schwimmen je nach Temp+Wind+Regen+WMO, beste Sportart + optimale Uhrzeit, grüner Farbakzent)
 
 - [x] wz.html: Licht-Tab — Sonnenaufgang-Simulator Button (🌅 Komplementär zum Sonnenuntergang-Simulator: 30-min Helligkeits-Kurve von 1800K/5% → 5500K/95%, sanfte Übergänge mit 55s-Transition je Schritt, Countdown-Pill + pulsierender Dot + Cancel-Button, gelbes Farbschema, Sonne-steigt-Animation wenn aktiv, erscheint nur wenn Lichter mit color_temp aktiv)
+
+## Neue Ideen (2026-03-30 20:04 UTC)
+- [x] wz.html: Home-Tab — "Wetter-Licht Sync" Button (🌤→💡 Ein Tap setzt alle aktiven Lichter passend zur aktuellen Wetterlage
+
+## Neue Ideen (2026-03-30 22:04 UTC)
+- [x] wz.html: Licht-Tab — "Farb-Mixer" Canvas Color Wheel (🎨 interaktives HSL-Farbrad aus Canvas 140px, Cursor-Tracking via mousedown/touchmove, Sättigung durch Distanz vom Zentrum, Farbton durch Winkel, Helligkeits-Slider, Vorschau-Orb + Hex-Code, Anwenden-Button setzt alle aktiven RGB-Lichter, Fallback auf alle aktiven Lichter wenn keine RGB erkannt, cwApply Flash-Animation, spring-in cwCardIn, erscheint nur wenn RGB-Lichter an): Sonne=Tageslicht 5500K-6000K/80-100%, Regen=Kompensations-Licht 4500K/68%, Bewölkt=ausgewogen 4200K/72%, Nebel=warm-gedimmt 3500K/55%, Gewitter=Cosy 3000K/85%, Nacht=Kerzenschimmer 1900K/15%, Morgengrauen/Abend individuell — Temperaturkorrektur ±CT bei Kälte/Hitze, Beschriftung zeigt aktuelles Ziel live, verschwindet wenn keine Lichter an)

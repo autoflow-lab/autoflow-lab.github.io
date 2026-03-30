@@ -1,5 +1,38 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-30 22:37 UTC — Heartbeat
+- ✅ wz.html: Wetter-Tab — UV-Schutz Countdown Card (☀️)
+- SVG Arc-Gauge grün→gelb→orange→rot, UV-Max daily + stündliche UV-Daten (neu in API), Countdown bis UV≥3, SPF-Chips + Verhaltens-Tips, 6 UV-Stufen
+- Version: v4.7783 | Deploy: SSH nicht verfügbar — lokal committed
+
+## 2026-03-30 18:04 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Temperatur-Klimavergleich Card (🌡)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Zeigt auf einen Blick ob es heute wärmer oder kälter als typisch für diesen Monat ist — basiert auf deutschen DWD-Monatsmittelwerten (keine extra API)
+- **HTML**: `#clim-card` zwischen `#bbq-card` und `#day-highlight-card` im Wetter-Tab
+- **Thermometer-SVG** (36×110px):
+  - Animierter `#clim-fill-bar` Rect: Y-Position + Höhe berechnet aus Temperaturskala -10°C (unten) bis +40°C (oben), `transition 1.4s cubic-bezier(.4,0,.2,1)` → weiche Einblende-Animation
+  - `#clim-avg-marker` horizontale Linie auf der Y-Position des Monatsdurchschnitts → sofort erkennbar ob aktuell über/unter Mittel
+  - `linearGradient climThermGrad`: rot→amber→cyan (heiß→warm→kühl)
+  - Warm glühende Bulb-Ellipse, 4 Tick-Marks für Skala
+- **Stats-Bereich**: Aktuell °C + Ø Monat °C + Delta-Pfeil ↑/↓/→ mit Farbkodierung
+- **5 Farbschemata** je Delta:
+  - `>3°` → rot `#ff453a` "Deutlich wärmer als üblich 🔥"
+  - `>1°` → amber `#ff9f0a` "Wärmer als der Monatsdurchschnitt ☀️"
+  - `>-1°` → cyan `#30c8c0` "Typische [Monat]-Temperatur ✅"
+  - `>-3°` → hellblau `#5ac8fa` "Leicht kühler als gewöhnlich 🧥"
+  - `<-3°` → blau `#0a84ff` "Kälter als der Durchschnitt ❄️"
+- **Balken-Vergleich** `#clim-bar-track`: zwei Bars (Ø weiß-gedimmt / Aktuell in Akzentfarbe), Höhe normalisiert auf gemeinsame Skala, `transition height 1.4s`
+- **Monatsmittel-Daten** (DWD): Jan=2.5 / Feb=3.8 / Mär=7.2 / Apr=12.0 / Mai=16.5 / Jun=20.0 / Jul=22.1 / Aug=21.8 / Sep=17.5 / Okt=12.5 / Nov=7.0 / Dez=3.8 — lokal hardcoded, kein API-Call
+- **Cyan/Teal Farbschema** `rgba(48,200,192)` — klar unterscheidbar von amber=Licht, blau=Media, grün=Klima
+- `drawClimCard()` in `renderWeather()` zwischen `drawSportCard()` und `drawDayHighlight()`
+- `#clim-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Card bleibt `display:none` wenn keine `_wx.current.temperature_2m` vorhanden (graceful fallback)
+- **Kein extra API-Call** — nutzt `_wx.current.temperature_2m` + lokale Monatsdaten
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 781892 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-30 14:37 UTC — Heartbeat
 - ✅ wz.html: Wetter-Tab — Tages-Highlight Karte (🌟)
 - **Konzept**: 2-Spalten Card im Wetter-Tab zeigt sofort scanbar die beste und schwierigste Stunde des restlichen Tages — erspart das Durchsuchen der Stundenkurve
