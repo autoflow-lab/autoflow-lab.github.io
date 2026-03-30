@@ -371,6 +371,9 @@
 ## Neue Ideen (2026-03-30 06:08 UTC)
 - [x] wz.html: App — Bildschirm-Schlaf Inaktivitäts-Dimmer (🌑 nach 2 min ohne Touch → Overlay blendet auf Schwarz, zeigt Uhrzeit dezent, Tap zum Aufwecken — ideal für Wand-Tablet/Panel)
 
+## Neue Ideen (2026-03-30 14:37 UTC)
+- [x] wz.html: Wetter-Tab — Tages-Highlight Karte (🌟 Beste & schlechteste Stunde heute als 2-Spalten Card — Score aus Temp-Komfort + Regenwahrsch. + Wind + WMO-Code, grün/rot Farbschema, Uhrzeit + Emoji + Cond-Text + 3 Chips je Spalte, scannt nur noch ausstehende Stunden des Tages)
+
 ## Neue Ideen (2026-03-30 10:04 UTC)
 - [x] wz.html: Wetter-Tab — "Grillwetter-Check" Karte (🔥 Score 0–100 aus Temperatur + Regenwahrsch. + Wind + WMO-Code, SVG-Grill mit animierten Flammen bei Score >60, 5 Verdikt-Stufen von "Perfekt zum Grillen!" bis "Besser drinnen essen", Condition-Chips für Temp/Wind/Regen/Gewitter, kontextsensitiver Grill-Tipp)
 

@@ -1,5 +1,49 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-30 14:37 UTC — Heartbeat
+- ✅ wz.html: Wetter-Tab — Tages-Highlight Karte (🌟)
+- **Konzept**: 2-Spalten Card im Wetter-Tab zeigt sofort scanbar die beste und schwierigste Stunde des restlichen Tages — erspart das Durchsuchen der Stundenkurve
+- **Score** aus Temp-Komfort + Regenwahrsch. + Wind + WMO-Penalty, scannt nur noch ausstehende Stunden heute
+- **Beste Spalte** (grün) + **Schlechteste Spalte** (rot): je WMO-Emoji + Uhrzeit + Kurztext + 3 Chips
+- **Version**: v4.7782 | Deploy: SSH nicht verfügbar — lokal committed
+
+## 2026-03-30 10:04 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Grillwetter-Check" Karte (🔥)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Zeigt auf einen Blick ob heute ein guter Grillabend wird — ein sehr praktisches Feature für den Frühling/Sommer, das über reine Wetterdaten hinausgeht
+- **Score 0–100** aus 4 Faktoren:
+  - 🌡 Temperatur (40% Gewicht): 18–26°C = 40Pkt / 14–18°C = 30Pkt / 26–30°C = 28Pkt / >30°C = 15Pkt / >34°C = 5Pkt
+  - 🌧 Regenwahrscheinlichkeit (30%): <10% = 30Pkt / <25% = 22Pkt / <50% = 10Pkt / ≥50% = 0Pkt
+  - 💨 Wind (20%): <15 km/h = 20Pkt / <25 = 15Pkt / <40 = 7Pkt / ≥40 = 0Pkt
+  - ☀️ WMO-Code (10%): Klar = 10Pkt / Leicht bewölkt = 7Pkt / Bewölkt = 4Pkt / Regen = -5Pkt / Schnee = -10Pkt
+- **SVG-Grill** (72×72px):
+  - Halbtransparenter Grill-Körper: Ellipse + Rost-Gitter (4 vertikale Linien), Beine mit Querstrebe
+  - `#bbq-flames` Gruppe mit 3 Flammen-Pfaden, `linearGradient` orange→gelb je Flamme
+  - `@keyframes bbqFlameWave`: scaleY + skewX Wellenanimation (1.2s loop, transform-origin:bottom) — nur aktiv wenn `.show` Klasse gesetzt
+  - Flammen erscheinen wenn Score >60 (opacity .6) oder >80 (opacity .9)
+  - **Score Arc**: halbkreisförmiger Pfad am unteren Grillrand, `stroke-dasharray:81.7`, `strokeDashoffset=81.7*(1-score/100)`, Gradient rot→amber→gelb→grün
+- **5 Verdikt-Stufen**:
+  - ≥80: "🔥 Perfekt zum Grillen!" (amber #ff9f0a)
+  - ≥65: "😊 Gutes Grillwetter" (gelb #ffd60a)
+  - ≥45: "😐 Geht so... kleine Einschränkungen" (weiß gedimmt)
+  - ≥25: "😕 Eher nicht ideal" (weiß sehr gedimmt)
+  - <25: "❌ Besser drinnen essen" (rot rgba(255,90,80,.8))
+- **3 Condition-Chips** (`.bbq-chip`):
+  - 🌡 Temperatur (gut/ok/schlecht je Bereich)
+  - 💨 Wind (grün <15 / gelb <35 / rot ≥35 km/h)
+  - ☀️/🌦/🌧 Regenwahrscheinlichkeit + optionale Sonder-Chips für Gewitter oder Schnee
+- **Tipp-Zeile** `#bbq-tip`: kontextsensitiver Kursiv-Text (z.B. "💡 Heute ist der perfekte Grillabend — Anzünder bereit?" / "💡 Regen wahrscheinlich — Überdachter Grill oder Plan B?")
+- **Hintergrund-Orb** `#bbq-bg`: radialer amber Glow oben-rechts im Card — wärmendes Feeling
+- **Amber Farbschema**: konsistent mit Licht-Tab-Akzentfarbe, aber mit rot→gelb→grün Arc-Gradient
+- Card bleibt `display:none` wenn keine `_wx.current` Daten (graceful fallback)
+- `drawBbqCard()` in `renderWeather()` als erste Draw-Funktion eingehängt (nach Hauptdaten, vor Umbrella)
+- `#bbq-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Light-Mode Overrides: dunklere amber-Farben für Lesbarkeit auf hellem Hintergrund
+- **Kein extra API-Call** — nutzt bereits vorhandene `_wx.current` + `_wx.hourly.precipitation_probability`
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, DEPLOY_OK)
+
+
+
 ## 2026-03-30 06:08 UTC — Heartbeat
 - ✅ wz.html: App — Bildschirm-Schlaf Inaktivitäts-Dimmer (🌑)
 - **Konzept**: Wand-Tablet-freundlicher Screen-Sleep. Nach 2 min ohne Touch (touchstart/end/move/click/keydown/mousemove) blendet ein schwarzes Fullscreen-Overlay ein. Im "Schlaf" wird dezent die aktuelle Uhrzeit in HH:MM gezeigt (`#sleep-time`, opacity:0.12). Tippen auf den Overlay → Aufwachen, Inaktivitäts-Timer wird zurückgesetzt.
