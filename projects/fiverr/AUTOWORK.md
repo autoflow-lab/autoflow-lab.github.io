@@ -371,5 +371,10 @@
 ## Neue Ideen (2026-03-30 06:08 UTC)
 - [x] wz.html: App — Bildschirm-Schlaf Inaktivitäts-Dimmer (🌑 nach 2 min ohne Touch → Overlay blendet auf Schwarz, zeigt Uhrzeit dezent, Tap zum Aufwecken — ideal für Wand-Tablet/Panel)
 
+## Neue Ideen (2026-03-30 10:04 UTC)
+- [x] wz.html: Wetter-Tab — "Grillwetter-Check" Karte (🔥 Score 0–100 aus Temperatur + Regenwahrsch. + Wind + WMO-Code, SVG-Grill mit animierten Flammen bei Score >60, 5 Verdikt-Stufen von "Perfekt zum Grillen!" bis "Besser drinnen essen", Condition-Chips für Temp/Wind/Regen/Gewitter, kontextsensitiver Grill-Tipp)
+
 ## Neue Ideen (2026-03-30 06:04 UTC)
+- [x] wz.html: Wetter-Tab — "Outdoor-Sport" Empfehlungs-Card (🏃 Score 0–100 für Joggen/Radfahren/Wandern/Schwimmen je nach Temp+Wind+Regen+WMO, beste Sportart + optimale Uhrzeit, grüner Farbakzent)
+
 - [x] wz.html: Licht-Tab — Sonnenaufgang-Simulator Button (🌅 Komplementär zum Sonnenuntergang-Simulator: 30-min Helligkeits-Kurve von 1800K/5% → 5500K/95%, sanfte Übergänge mit 55s-Transition je Schritt, Countdown-Pill + pulsierender Dot + Cancel-Button, gelbes Farbschema, Sonne-steigt-Animation wenn aktiv, erscheint nur wenn Lichter mit color_temp aktiv)

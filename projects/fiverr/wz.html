@@ -168,10 +168,10 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#presence-strip,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#presence-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-snapshot,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#sport-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -375,6 +375,75 @@ html,body{height:100%;background:var(--bg);
 :root.light #umbrella-title{color:rgba(0,0,0,.35)}
 :root.light #umbrella-sub{color:rgba(0,0,0,.45)}
 :root.light #umbrella-prob-lbl{color:rgba(0,0,0,.38)}
+/* ── BBQ Card ── */
+#bbq-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#bbq-card.show{opacity:1;transform:translateY(0)}
+#bbq-inner{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(255,159,10,.22);background:rgba(255,159,10,.06);padding:14px 14px 10px;display:flex;align-items:center;gap:12px}
+#bbq-bg{position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(255,159,10,.10) 0%,transparent 65%);pointer-events:none}
+#bbq-icon-wrap{flex-shrink:0;position:relative}
+#bbq-texts{flex:1;min-width:0}
+#bbq-label{font-size:.58rem;font-weight:700;letter-spacing:1px;color:rgba(255,159,10,.7);text-transform:uppercase;margin-bottom:3px}
+#bbq-verdict{font-size:.88rem;font-weight:600;color:var(--txt);margin-bottom:6px;line-height:1.25}
+#bbq-chips{display:flex;flex-wrap:wrap;gap:5px}
+.bbq-chip{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:.63rem;font-weight:600}
+.bbq-good{background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.28);color:rgba(100,230,140,.95)}
+.bbq-ok{background:rgba(255,214,10,.10);border:1px solid rgba(255,214,10,.28);color:rgba(255,220,80,.95)}
+.bbq-bad{background:rgba(255,69,58,.10);border:1px solid rgba(255,69,58,.26);color:rgba(255,120,110,.9)}
+#bbq-tip{font-size:.67rem;font-style:italic;color:rgba(255,255,255,.35);padding:4px 14px 6px;text-align:center}
+@keyframes bbqFlameWave{0%,100%{transform:scaleY(1) skewX(-1deg)}33%{transform:scaleY(1.15) skewX(2deg)}66%{transform:scaleY(.9) skewX(-2deg)}}
+#bbq-card.show #bbq-flames{animation:bbqFlameWave 1.2s ease-in-out infinite;transform-origin:bottom center}
+:root.light #bbq-inner{background:rgba(200,90,0,.05);border-color:rgba(200,90,0,.18)}
+:root.light #bbq-label{color:rgba(160,60,0,.7)}
+:root.light #bbq-verdict{color:rgba(0,0,0,.85)}
+:root.light #bbq-tip{color:rgba(0,0,0,.35)}
+/* ── Tages-Highlight Card ── */
+#day-highlight-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#day-highlight-card.show{opacity:1;transform:translateY(0)}
+#dhl-inner{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(255,159,10,.20);background:rgba(255,159,10,.05);padding:14px 14px 12px}
+#dhl-bg{position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,159,10,.08) 0%,transparent 55%);pointer-events:none}
+#dhl-label{font-size:.58rem;font-weight:700;letter-spacing:1px;color:rgba(255,159,10,.7);text-transform:uppercase;margin-bottom:10px}
+#dhl-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dhl-col{border-radius:13px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.dhl-col.best{background:rgba(48,209,88,.10);border:1px solid rgba(48,209,88,.20)}
+.dhl-col.worst{background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.18)}
+.dhl-col-head{font-size:.55rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.6}
+.dhl-col.best .dhl-col-head{color:#30d158}
+.dhl-col.worst .dhl-col-head{color:#ff453a}
+.dhl-time{font-size:1.35rem;font-weight:600;letter-spacing:-1px;color:rgba(255,255,255,.9)}
+.dhl-emoji{font-size:1.1rem;line-height:1}
+.dhl-cond{font-size:.65rem;color:rgba(255,255,255,.55);margin-top:2px}
+.dhl-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.dhl-chip{font-size:.56rem;padding:2px 7px;border-radius:20px;font-weight:600}
+.dhl-chip.temp{background:rgba(255,159,10,.15);color:#ff9f0a}
+.dhl-chip.rain{background:rgba(10,132,255,.15);color:#0a84ff}
+.dhl-chip.wind{background:rgba(99,230,255,.12);color:#63e6ff}
+:root.light .dhl-time{color:rgba(0,0,0,.8)}
+:root.light .dhl-cond{color:rgba(0,0,0,.45)}
+/* ── Outdoor-Sport Card ── */
+#sport-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#sport-card.show{opacity:1;transform:translateY(0)}
+#sport-inner{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(48,209,88,.22);background:rgba(48,209,88,.06);padding:14px 14px 10px}
+#sport-bg{position:absolute;inset:0;background:radial-gradient(circle at 75% 20%,rgba(48,209,88,.10) 0%,transparent 60%);pointer-events:none}
+#sport-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+#sport-label{font-size:.58rem;font-weight:700;letter-spacing:1px;color:rgba(48,209,88,.7);text-transform:uppercase}
+#sport-best-badge{font-size:.65rem;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(48,209,88,.15);border:1px solid rgba(48,209,88,.30);color:rgba(100,230,140,.95)}
+#sport-rows{display:flex;flex-direction:column;gap:7px}
+.sport-row{display:flex;align-items:center;gap:9px}
+.sport-row.sport-best .sport-icon-bg{box-shadow:0 0 10px rgba(48,209,88,.35)}
+.sport-icon-bg{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;transition:box-shadow .6s}
+.sport-texts{flex:1;min-width:0}
+.sport-name{font-size:.68rem;font-weight:600;color:var(--txt);margin-bottom:2px;display:flex;align-items:center;gap:5px}
+.sport-name-best-lbl{font-size:.55rem;background:rgba(48,209,88,.18);border:1px solid rgba(48,209,88,.30);color:rgba(100,230,140,.9);padding:1px 6px;border-radius:10px;font-weight:700}
+.sport-bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.sport-bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#30d158,#34e05a)}
+.sport-score-lbl{font-size:.7rem;font-weight:700;color:var(--txt);flex-shrink:0;width:28px;text-align:right}
+#sport-time-row{margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);font-size:.67rem;font-style:italic;color:rgba(255,255,255,.35);text-align:center}
+:root.light #sport-inner{background:rgba(20,120,60,.05);border-color:rgba(20,120,60,.18)}
+:root.light #sport-label{color:rgba(10,80,40,.7)}
+:root.light .sport-name{color:rgba(0,0,0,.85)}
+:root.light #sport-time-row{color:rgba(0,0,0,.35)}
+:root.light #sport-best-badge{background:rgba(20,120,60,.12);border-color:rgba(20,120,60,.25);color:rgba(10,80,40,.9)}
+:root.light .sport-name-best-lbl{background:rgba(20,120,60,.12);border-color:rgba(20,120,60,.25);color:rgba(10,80,40,.9)}
 #lueft-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #lueft-card.show{opacity:1;transform:translateY(0)}
 #lueft-inner{border-radius:18px;border:1px solid rgba(255,255,255,.07);border-top-color:rgba(255,255,255,.13);padding:14px 18px;position:relative;overflow:hidden;display:flex;align-items:center;gap:14px}
@@ -497,6 +566,15 @@ html,body{height:100%;background:var(--bg);
 :root.light #quick-note-input:focus{border-color:rgba(180,90,0,.35);background:rgba(180,90,0,.04)}
 :root.light .qn-chip{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.45)}
 #lt-global-dimmer.show{opacity:1}
+/* ── Licht-Fingerabdruck ── */
+#lt-fingerprint{margin:4px 14px 12px;opacity:0;transition:opacity .5s ease;display:flex;flex-direction:column;align-items:center;gap:5px}
+#lt-fingerprint.show{opacity:1}
+#lt-fp-label{font-size:.54rem;font-weight:700;letter-spacing:1.2px;color:rgba(255,159,10,.55);text-transform:uppercase}
+#lt-fp-svg{overflow:visible;filter:drop-shadow(0 0 10px rgba(255,159,10,.14))}
+#lt-fp-poly{fill:rgba(255,159,10,.13);stroke:rgba(255,159,10,.55);stroke-width:1.2;stroke-linejoin:round;transition:fill .9s ease,stroke .9s ease}
+@keyframes fpPulse{0%,100%{opacity:.85}50%{opacity:.38}}
+#lt-fingerprint.show #lt-fp-poly{animation:fpPulse 3.5s ease-in-out infinite}
+:root.light #lt-fingerprint #lt-fp-label{color:rgba(160,80,0,.6)}
 /* ── Licht Schnellfarben-Palette ── */
 #lt-color-palette{margin:0 14px 12px;opacity:0;transition:opacity .5s ease;pointer-events:none}
 #lt-color-palette.show{opacity:1;pointer-events:auto}
@@ -627,6 +705,29 @@ html,body{height:100%;background:var(--bg);
 :root.light #lt-snapshot .lsnap-card{background:rgba(200,100,0,.04);border-color:rgba(200,100,0,.15)}
 :root.light .lsnap-name{color:rgba(0,0,0,.72)}
 :root.light .lsnap-meta{color:rgba(0,0,0,.38)}
+/* === Color Wheel Overlay === */
+#lt-cw-overlay{position:fixed;inset:0;z-index:8000;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;opacity:0;transition:opacity .3s ease}
+#lt-cw-overlay.show{opacity:1;pointer-events:auto}
+#lt-cw-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(10px)}
+#lt-cw-card{position:relative;z-index:1;background:#1c1c1e;border-radius:22px 22px 0 0;padding:20px 20px calc(28px + env(safe-area-inset-bottom));width:100%;max-width:440px;transform:translateY(110%);transition:transform .42s cubic-bezier(.34,1.15,.64,1);box-shadow:0 -4px 40px rgba(0,0,0,.6)}
+#lt-cw-overlay.show #lt-cw-card{transform:translateY(0)}
+#lt-cw-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+#lt-cw-title{font-size:.8rem;font-weight:600;color:var(--txt);letter-spacing:.3px}
+#lt-cw-close{background:rgba(255,255,255,.1);border:none;color:var(--txt);border-radius:50%;width:28px;height:28px;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;flex-shrink:0}
+#lt-cw-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+#lt-cw-canvas-wrap{position:relative;flex-shrink:0}
+#lt-cw-canvas{border-radius:50%;cursor:crosshair;touch-action:none;display:block;box-shadow:0 0 32px rgba(0,0,0,.6)}
+#lt-cw-cursor{position:absolute;width:18px;height:18px;border-radius:50%;border:2.5px solid white;box-shadow:0 0 8px rgba(0,0,0,.8),0 0 0 1.5px rgba(0,0,0,.3);pointer-events:none;transform:translate(-50%,-50%);display:none;z-index:10;transition:background .1s ease}
+#lt-cw-bri-row{width:220px;display:flex;align-items:center;gap:10px;font-size:.95rem}
+#lt-cw-bri{flex:1;-webkit-appearance:none;height:5px;border-radius:3px;background:linear-gradient(90deg,#222 0%,#ff9f0a 100%);outline:none;touch-action:none}
+#lt-cw-bri::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 10px rgba(255,159,10,.65),0 0 0 2px rgba(255,255,255,.2);cursor:pointer}
+#lt-cw-bri::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 10px rgba(255,159,10,.65);border:none;cursor:pointer}
+#lt-cw-preview-row{display:flex;align-items:center;gap:12px}
+#lt-cw-preview{width:46px;height:46px;border-radius:50%;border:2px solid rgba(255,255,255,.15);transition:background .15s ease,box-shadow .2s ease;flex-shrink:0}
+#lt-cw-rgb-lbl{font-size:.62rem;color:var(--dim2);font-family:monospace;letter-spacing:.5px}
+#lt-cw-hint{font-size:.58rem;color:rgba(255,255,255,.22);text-align:center;margin-top:2px}
+:root.light #lt-cw-card{background:#f2f2f7}
+:root.light #lt-cw-hint{color:rgba(0,0,0,.22)}
 .lt-cp-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin-bottom:7px}
 .lt-cp-chips{display:flex;gap:8px;flex-wrap:wrap}
 .lt-cp-chip{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,255,255,.13);background:radial-gradient(circle at 38% 32%,var(--cc,#888) 0%,rgba(0,0,0,.55) 100%);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;box-shadow:0 0 0 0 transparent;position:relative;overflow:hidden}
@@ -2923,6 +3024,27 @@ input[type=range] { touch-action: none; }
         <input type="range" id="lt-gd-range" min="1" max="100" value="80" step="1">
         <span id="lt-gd-val">--%</span>
       </div>
+      <!-- Licht-Fingerabdruck Radial Chart -->
+      <div id="lt-fingerprint" aria-label="Licht-Fingerabdruck">
+        <div id="lt-fp-label">💡 Licht-Fingerabdruck</div>
+        <svg id="lt-fp-svg" viewBox="0 0 130 130" width="130" height="130">
+          <defs>
+            <radialGradient id="lt-fp-bg-grad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(255,159,10,.06)"/>
+              <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <circle cx="65" cy="65" r="39" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".8" stroke-dasharray="3,4"/>
+          <circle cx="65" cy="65" r="26" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".8" stroke-dasharray="2,4"/>
+          <circle cx="65" cy="65" r="13" fill="none" stroke="rgba(255,255,255,.03)" stroke-width=".8"/>
+          <circle cx="65" cy="65" r="50" fill="url(#lt-fp-bg-grad)"/>
+          <g id="lt-fp-spokes"></g>
+          <polygon id="lt-fp-poly" points="65,65"/>
+          <g id="lt-fp-dots"></g>
+          <circle cx="65" cy="65" r="3" fill="rgba(255,159,10,.7)"/>
+        </svg>
+      </div>
       <!-- Circadian Lighting -->
       <div id="lt-circadian" aria-label="Circadian Beleuchtung">
         <button id="lt-circ-btn" title="Tageszeit-optimierte Beleuchtung auf alle aktiven Lichter anwenden">
@@ -3082,6 +3204,147 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
       <!-- Lüft-Empfehlung Card -->
+      <!-- Grillwetter-Check Card -->
+      <div id="bbq-card">
+        <div id="bbq-inner">
+          <div id="bbq-bg"></div>
+          <!-- Grill SVG + Flammen -->
+          <div id="bbq-icon-wrap">
+            <svg id="bbq-svg" viewBox="0 0 72 72" width="72" height="72">
+              <!-- Flammen (sichtbar bei Score > 60) -->
+              <g id="bbq-flames" opacity="0">
+                <path id="bbq-fl1" d="M30 38 C28 32 32 28 30 22 C34 26 36 22 36 22 C36 28 40 30 38 38Z" fill="url(#flGrad1)" opacity="0.85"/>
+                <path id="bbq-fl2" d="M36 38 C34 30 38 26 36 20 C40 24 42 20 44 22 C42 28 44 32 42 38Z" fill="url(#flGrad2)" opacity="0.75"/>
+                <path id="bbq-fl3" d="M24 38 C22 34 26 30 24 26 C27 29 28 26 30 28 C28 32 30 34 28 38Z" fill="url(#flGrad3)" opacity="0.65"/>
+              </g>
+              <!-- Grill Körper -->
+              <ellipse cx="36" cy="44" rx="20" ry="6" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+              <!-- Rost -->
+              <line x1="20" y1="44" x2="52" y2="44" stroke="rgba(255,200,100,.5)" stroke-width="1.8"/>
+              <line x1="26" y1="41" x2="26" y2="47" stroke="rgba(255,200,100,.4)" stroke-width="1.2"/>
+              <line x1="32" y1="41" x2="32" y2="47" stroke="rgba(255,200,100,.4)" stroke-width="1.2"/>
+              <line x1="38" y1="41" x2="38" y2="47" stroke="rgba(255,200,100,.4)" stroke-width="1.2"/>
+              <line x1="44" y1="41" x2="44" y2="47" stroke="rgba(255,200,100,.4)" stroke-width="1.2"/>
+              <!-- Beine -->
+              <line x1="24" y1="48" x2="18" y2="62" stroke="rgba(255,255,255,.35)" stroke-width="1.8" stroke-linecap="round"/>
+              <line x1="48" y1="48" x2="54" y2="62" stroke="rgba(255,255,255,.35)" stroke-width="1.8" stroke-linecap="round"/>
+              <line x1="26" y1="56" x2="46" y2="56" stroke="rgba(255,255,255,.2)" stroke-width="1.4" stroke-linecap="round"/>
+              <!-- Score Arc Track -->
+              <path id="bbq-arc-track" d="M14 54 A26 26 0 0 1 58 54" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="3" stroke-linecap="round"/>
+              <!-- Score Arc Fill -->
+              <path id="bbq-arc-fill" d="M14 54 A26 26 0 0 1 58 54" fill="none" stroke="url(#bbqArcGrad)" stroke-width="3" stroke-linecap="round"
+                stroke-dasharray="81.7" stroke-dashoffset="81.7" style="transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)"/>
+              <defs>
+                <linearGradient id="bbqArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff453a"/>
+                  <stop offset="40%" stop-color="#ff9f0a"/>
+                  <stop offset="80%" stop-color="#ffd60a"/>
+                  <stop offset="100%" stop-color="#30d158"/>
+                </linearGradient>
+                <linearGradient id="flGrad1" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#ff6b00" stop-opacity="1"/>
+                  <stop offset="60%" stop-color="#ff9f0a" stop-opacity=".8"/>
+                  <stop offset="100%" stop-color="#ffd60a" stop-opacity=".3"/>
+                </linearGradient>
+                <linearGradient id="flGrad2" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#ff453a" stop-opacity="1"/>
+                  <stop offset="60%" stop-color="#ff6b00" stop-opacity=".7"/>
+                  <stop offset="100%" stop-color="#ff9f0a" stop-opacity=".2"/>
+                </linearGradient>
+                <linearGradient id="flGrad3" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#ff9f0a" stop-opacity=".9"/>
+                  <stop offset="100%" stop-color="#ffd60a" stop-opacity=".2"/>
+                </linearGradient>
+              </defs>
+              <!-- Score Zahl -->
+              <text id="bbq-score-txt" x="36" y="36" text-anchor="middle" font-size="13" font-weight="600" fill="white">–</text>
+              <text x="36" y="45" text-anchor="middle" font-size="6" fill="rgba(255,255,255,.4)">/100</text>
+            </svg>
+          </div>
+          <!-- Texte rechts -->
+          <div id="bbq-texts">
+            <div id="bbq-label">🔥 GRILLWETTER-CHECK</div>
+            <div id="bbq-verdict">Lädt…</div>
+            <div id="bbq-chips"></div>
+          </div>
+        </div>
+        <div id="bbq-tip"></div>
+      </div>
+
+      <!-- Tages-Highlight Card -->
+      <div id="day-highlight-card">
+        <div id="dhl-inner">
+          <div id="dhl-bg"></div>
+          <div id="dhl-label">🌟 TAGES-HIGHLIGHTS</div>
+          <div id="dhl-cols">
+            <div class="dhl-col best">
+              <div class="dhl-col-head">✅ Beste Stunde</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
+                <span class="dhl-emoji" id="dhl-best-emoji">☀️</span>
+                <span class="dhl-time" id="dhl-best-time">–</span>
+              </div>
+              <div class="dhl-cond" id="dhl-best-cond">–</div>
+              <div class="dhl-chips" id="dhl-best-chips"></div>
+            </div>
+            <div class="dhl-col worst">
+              <div class="dhl-col-head">⚠️ Schwierigste Stunde</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
+                <span class="dhl-emoji" id="dhl-worst-emoji">🌧</span>
+                <span class="dhl-time" id="dhl-worst-time">–</span>
+              </div>
+              <div class="dhl-cond" id="dhl-worst-cond">–</div>
+              <div class="dhl-chips" id="dhl-worst-chips"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outdoor-Sport Empfehlungs-Card -->
+      <div id="sport-card">
+        <div id="sport-inner">
+          <div id="sport-bg"></div>
+          <div id="sport-header-row">
+            <div id="sport-label">🏃 OUTDOOR-SPORT HEUTE</div>
+            <div id="sport-best-badge" style="display:none">–</div>
+          </div>
+          <div id="sport-rows">
+            <div class="sport-row" data-sport="jogging">
+              <div class="sport-icon-bg">🏃</div>
+              <div class="sport-texts">
+                <div class="sport-name">Joggen <span class="sport-name-best-lbl" style="display:none">★ Beste Wahl</span></div>
+                <div class="sport-bar-track"><div class="sport-bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="sport-score-lbl">–</div>
+            </div>
+            <div class="sport-row" data-sport="cycling">
+              <div class="sport-icon-bg">🚴</div>
+              <div class="sport-texts">
+                <div class="sport-name">Radfahren <span class="sport-name-best-lbl" style="display:none">★ Beste Wahl</span></div>
+                <div class="sport-bar-track"><div class="sport-bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="sport-score-lbl">–</div>
+            </div>
+            <div class="sport-row" data-sport="hiking">
+              <div class="sport-icon-bg">🥾</div>
+              <div class="sport-texts">
+                <div class="sport-name">Wandern <span class="sport-name-best-lbl" style="display:none">★ Beste Wahl</span></div>
+                <div class="sport-bar-track"><div class="sport-bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="sport-score-lbl">–</div>
+            </div>
+            <div class="sport-row" data-sport="swimming">
+              <div class="sport-icon-bg">🏊</div>
+              <div class="sport-texts">
+                <div class="sport-name">Schwimmen <span class="sport-name-best-lbl" style="display:none">★ Beste Wahl</span></div>
+                <div class="sport-bar-track"><div class="sport-bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="sport-score-lbl">–</div>
+            </div>
+          </div>
+          <div id="sport-time-row" style="display:none"></div>
+        </div>
+      </div>
+
       <div id="lueft-card">
         <div id="lueft-inner">
           <div id="lueft-bg"></div>
@@ -4973,6 +5236,9 @@ function renderWeather(){
   drawBarometer();
   drawHumidity();
   updateWxScore();
+  drawBbqCard();
+  drawSportCard();
+  drawDayHighlight();
   drawUmbrellaCard();
   drawLueftCard();
   drawWindChill();
@@ -5493,6 +5759,289 @@ function drawWindChill(){
 // ═══════════════════════════════════════════════
 // LÜFT-EMPFEHLUNG CARD
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// TAGES-HIGHLIGHT CARD — Beste & schlechteste Stunde
+// ═══════════════════════════════════════════════
+function drawDayHighlight(){
+  var card=document.getElementById('day-highlight-card');
+  if(!card||!window._wx||!_wx.hourly)return;
+  var h=_wx.hourly;
+  var now=new Date(), today=now.toDateString();
+
+  // WMO → emoji
+  function wmoEmoji(c){
+    if(c<=1)return'☀️'; if(c<=3)return'⛅'; if(c<=49)return'🌫️';
+    if(c<=67)return'🌧'; if(c<=77)return'❄️'; if(c<=82)return'🌦';
+    if(c<=86)return'🌨'; return'⛈';
+  }
+  // WMO → short text
+  function wmoTxt(c){
+    if(c<=1)return'Klar'; if(c<=3)return'Bewölkt'; if(c<=49)return'Nebelig';
+    if(c<=67)return'Regen'; if(c<=77)return'Schnee'; if(c<=82)return'Schauer';
+    if(c<=86)return'Schneeschauer'; return'Gewitter';
+  }
+
+  // Score per hour (higher = better)
+  function hourScore(temp,prec,wind,code){
+    var s=0;
+    // Temp comfort 0-40
+    if(temp>=16&&temp<=24)s+=40; else if(temp>=10&&temp<=28)s+=28; else if(temp>=5&&temp<=32)s+=15; else s+=3;
+    // Precip 0-30
+    s+=Math.round((100-Math.min(prec,100))*0.30);
+    // Wind 0-20
+    var wf=wind||0; if(wf<15)s+=20; else if(wf<30)s+=12; else if(wf<50)s+=5; else s+=0;
+    // WMO penalty
+    if(code>=95)s-=30; else if(code>=80)s-=15; else if(code>=61)s-=10;
+    return Math.max(0,Math.min(100,s));
+  }
+
+  var times=h.time||[], temps=h.temperature_2m||[], precs=h.precipitation_probability||[],
+      winds=h.wind_speed_10m||[], codes=h.weather_code||[];
+
+  // Only today's hours from now onwards
+  var nowH=now.getHours();
+  var best=null, worst=null;
+  for(var i=0;i<times.length;i++){
+    var d=new Date(times[i]);
+    if(d.toDateString()!==today)continue;
+    if(d.getHours()<nowH)continue;
+    var sc=hourScore(temps[i]||15,precs[i]||0,winds[i]||0,codes[i]||0);
+    var entry={h:d.getHours(),score:sc,temp:temps[i],prec:precs[i],wind:winds[i]||0,code:codes[i]||0};
+    if(!best||sc>best.score)best=entry;
+    if(!worst||sc<worst.score)worst=entry;
+  }
+  if(!best){card.classList.remove('show');card.style.display='none';return;}
+
+  function fmt(e){
+    return {
+      time:e.h+':00 Uhr',
+      emoji:wmoEmoji(e.code),
+      cond:wmoTxt(e.code)+' · '+Math.round(e.temp)+'°C',
+      chips:[
+        {cls:'temp',t:Math.round(e.temp)+'°'},
+        {cls:'rain',t:Math.round(e.prec)+'% 🌧'},
+        {cls:'wind',t:Math.round(e.wind)+' km/h 💨'}
+      ]
+    };
+  }
+
+  function applyEntry(timeId,emojiId,condId,chipsId,entry){
+    var f=fmt(entry);
+    document.getElementById(timeId).textContent=f.time;
+    document.getElementById(emojiId).textContent=f.emoji;
+    document.getElementById(condId).textContent=f.cond;
+    document.getElementById(chipsId).innerHTML=f.chips.map(function(c){
+      return'<span class="dhl-chip '+c.cls+'">'+c.t+'</span>';
+    }).join('');
+  }
+
+  applyEntry('dhl-best-time','dhl-best-emoji','dhl-best-cond','dhl-best-chips',best);
+  applyEntry('dhl-worst-time','dhl-worst-emoji','dhl-worst-cond','dhl-worst-chips',worst);
+  card.style.display='block';
+  requestAnimationFrame(function(){card.classList.add('show');});
+}
+
+// ═══════════════════════════════════════════════
+// BBQ CARD — Grillwetter-Check
+// ═══════════════════════════════════════════════
+function drawSportCard(){
+  const card=document.getElementById('sport-card');
+  if(!card||!window._wx||!_wx.current)return;
+  const c=_wx.current,h=_wx.hourly||{},d=_wx.daily||{};
+  const temp=c.temperature_2m,feel=c.apparent_temperature!=null?c.apparent_temperature:temp;
+  const wind=c.windspeed_10m||0;
+  const wmo=c.weathercode||0;
+  let precipNow=0;
+  if(h.precipitation_probability&&h.time){
+    const nowHr=new Date().toISOString().slice(0,13);
+    const si=h.time.findIndex(t=>t.startsWith(nowHr));
+    if(si>=0)precipNow=h.precipitation_probability[si]||0;
+  }
+  const wmoOk=wmo<=3?100:wmo<=48?60:wmo<=57?25:wmo<=82?10:wmo<=86?15:wmo>=95?0:20;
+  function tSc(min,ideal,max,t){if(t<min||t>max)return 0;return Math.round(100-Math.abs(t-ideal)/(Math.max(max-ideal,ideal-min))*70);}
+  function wSc(maxW,w){return w>=maxW?0:Math.round(100-(w/maxW)*100);}
+  function rSc(p){return p<10?100:p<30?70:p<55?30:p<75?10:0;}
+  const scores={
+    jogging:Math.min(100,Math.max(0,Math.round(tSc(-5,12,30,feel)*.35+wSc(45,wind)*.25+rSc(precipNow)*.30+wmoOk*.10))),
+    cycling:Math.min(100,Math.max(0,Math.round(tSc(-5,18,32,feel)*.30+wSc(35,wind)*.30+rSc(precipNow)*.30+wmoOk*.10))),
+    hiking:Math.min(100,Math.max(0,Math.round(tSc(-10,14,35,feel)*.35+wSc(55,wind)*.20+rSc(precipNow)*.30+wmoOk*.15))),
+    swimming:Math.min(100,Math.max(0,Math.round(tSc(18,26,40,feel)*.50+wSc(60,wind)*.15+rSc(precipNow)*.20+wmoOk*.15)))
+  };
+  const best=Object.entries(scores).reduce((a,b)=>b[1]>a[1]?b:a);
+  const sportNames={jogging:'Joggen',cycling:'Radfahren',hiking:'Wandern',swimming:'Schwimmen'};
+  const sportEmoji={jogging:'🏃',cycling:'🚴',hiking:'🥾',swimming:'🏊'};
+  const badge=document.getElementById('sport-best-badge');
+  if(badge){
+    badge.textContent=best[1]>=40?`${sportEmoji[best[0]]} ${sportNames[best[0]]} empfohlen`:'⚠️ Lieber drinnen bleiben';
+    badge.style.display='';
+  }
+  card.querySelectorAll('.sport-row').forEach(row=>{
+    const sp=row.dataset.sport,sc=scores[sp]||0;
+    const fill=row.querySelector('.sport-bar-fill'),lbl=row.querySelector('.sport-score-lbl'),bl=row.querySelector('.sport-name-best-lbl');
+    fill.style.background=sc>=70?'linear-gradient(90deg,#30d158,#34e05a)':sc>=45?'linear-gradient(90deg,#ffd60a,#ff9f0a)':'linear-gradient(90deg,#ff453a,#ff6961)';
+    lbl.style.color=sc>=70?'rgba(100,230,140,.95)':sc>=45?'rgba(255,210,80,.9)':'rgba(255,120,110,.9)';
+    lbl.textContent=sc;
+    if(sp===best[0]&&best[1]>=40){row.classList.add('sport-best');bl.style.display='';}
+    else{row.classList.remove('sport-best');bl.style.display='none';}
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{fill.style.width=sc+'%';}));
+  });
+  const timeRow=document.getElementById('sport-time-row');
+  if(timeRow&&h.time&&h.apparent_temperature&&h.precipitation_probability&&h.windspeed_10m){
+    const todayStr=new Date().toISOString().slice(0,10),nowH=new Date().getHours();
+    let bestH=-1,bestHSc=-1;
+    for(let i=0;i<Math.min(h.time.length,36);i++){
+      if(!h.time[i].startsWith(todayStr))continue;
+      const hh=parseInt(h.time[i].slice(11,13));
+      if(hh<=nowH||hh<6||hh>21)continue;
+      const ht=h.apparent_temperature[i]||feel,hw=h.windspeed_10m[i]||wind,hp=h.precipitation_probability[i]||0;
+      const sp=best[0];
+      let sc2=sp==='jogging'?tSc(-5,12,30,ht)*.35+wSc(45,hw)*.25+rSc(hp)*.40:
+               sp==='cycling'?tSc(-5,18,32,ht)*.30+wSc(35,hw)*.30+rSc(hp)*.40:
+               sp==='hiking'?tSc(-10,14,35,ht)*.35+wSc(55,hw)*.20+rSc(hp)*.45:
+               tSc(18,26,40,ht)*.50+wSc(60,hw)*.15+rSc(hp)*.35;
+      if(sc2>bestHSc){bestHSc=sc2;bestH=hh;}
+    }
+    if(bestH>=0&&best[1]>=35){timeRow.textContent=`⏰ Optimale Zeit für ${sportNames[best[0]]}: ${String(bestH).padStart(2,'0')}:00 Uhr`;timeRow.style.display='';}
+    else timeRow.style.display='none';
+  }
+  card.style.display='block';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('show')));
+}
+function drawBbqCard(){
+  const card=document.getElementById('bbq-card');
+  if(!card)return;
+  const wx=window._wx;
+  if(!wx||!wx.current){card.style.display='none';return;}
+  const c=wx.current;
+  const d=wx.daily||{};
+  const h=wx.hourly||{};
+  card.style.display='block';
+
+  // Temp (apparent)
+  const temp=c.apparent_temperature!=null?c.apparent_temperature:c.temperature_2m;
+  // Wind km/h
+  const wind=c.windspeed_10m||0;
+  // Rain prob (current hour)
+  let rainProb=0;
+  if(h.precipitation_probability&&h.time){
+    const now=new Date();const todayStr=now.toISOString().slice(0,13);
+    const idx=h.time.findIndex(t=>t.startsWith(todayStr));
+    rainProb=h.precipitation_probability[idx>=0?idx:0]||0;
+  }
+  // WMO code
+  const code=c.weathercode||0;
+  const isRain=code>=51&&code<=82||code===95||code>=96;
+  const isSnow=code>=71&&code<=86;
+  const isThunder=code>=95;
+
+  // Score berechnen (0–100)
+  // Temperatur: 18-26°C = ideal (+40), <10 oder >32 = schlecht
+  let tempScore=0;
+  if(temp>=18&&temp<=26) tempScore=40;
+  else if(temp>=14&&temp<18) tempScore=30;
+  else if(temp>26&&temp<=30) tempScore=28;
+  else if(temp>30&&temp<=34) tempScore=15;
+  else if(temp>34) tempScore=5;
+  else if(temp>=10) tempScore=10;
+  else tempScore=0;
+
+  // Regen: <10% = voll, <25% = gut, <50% = mäßig, >=50% = schlecht
+  let rainScore=0;
+  if(rainProb<10) rainScore=30;
+  else if(rainProb<25) rainScore=22;
+  else if(rainProb<50) rainScore=10;
+  else rainScore=0;
+
+  // Wind: <15 = voll, <25 = ok, <40 = mäßig, >=40 = schlecht
+  let windScore=0;
+  if(wind<15) windScore=20;
+  else if(wind<25) windScore=15;
+  else if(wind<40) windScore=7;
+  else windScore=0;
+
+  // Wetterlage WMO
+  let wmoScore=0;
+  if(code<=1) wmoScore=10;
+  else if(code<=3) wmoScore=7;
+  else if(code<=48) wmoScore=4;
+  else wmoScore=0;
+  if(isRain||isThunder) wmoScore=-5;
+  if(isSnow) wmoScore=-10;
+
+  const score=Math.max(0,Math.min(100,tempScore+rainScore+windScore+wmoScore));
+
+  // Arc füllen
+  const ARC=81.7;
+  const arcFill=document.getElementById('bbq-arc-fill');
+  const scoreTxt=document.getElementById('bbq-score-txt');
+  if(arcFill){
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        arcFill.style.strokeDashoffset=ARC*(1-score/100);
+      });
+    });
+  }
+  if(scoreTxt) scoreTxt.textContent=score;
+
+  // Flammen anzeigen wenn Score > 60
+  const flames=document.getElementById('bbq-flames');
+  if(flames){
+    const showFlames=score>60&&!isRain&&!isSnow;
+    flames.style.opacity=showFlames?(score>80?'0.9':'0.6'):'0';
+  }
+
+  // Verdict
+  const verdict=document.getElementById('bbq-verdict');
+  if(verdict){
+    let v='',col='rgba(255,255,255,.9)';
+    if(score>=80){v='🔥 Perfekt zum Grillen!';col='#ff9f0a';}
+    else if(score>=65){v='😊 Gutes Grillwetter';col='#ffd60a';}
+    else if(score>=45){v='😐 Geht so... kleine Einschränkungen';col='rgba(255,255,255,.8)';}
+    else if(score>=25){v='😕 Eher nicht ideal';col='rgba(200,200,200,.7)';}
+    else{v='❌ Besser drinnen essen';col='rgba(255,90,80,.8)';}
+    verdict.textContent=v;
+    verdict.style.color=col;
+  }
+
+  // Chips
+  const chipsEl=document.getElementById('bbq-chips');
+  if(chipsEl){
+    const chips=[];
+    // Temperatur Chip
+    if(temp>=18&&temp<=26) chips.push({t:`🌡 ${Math.round(temp)}°C`,cls:'bbq-good'});
+    else if(temp>=14) chips.push({t:`🌡 ${Math.round(temp)}°C`,cls:'bbq-ok'});
+    else chips.push({t:`🌡 ${Math.round(temp)}°C`,cls:'bbq-bad'});
+    // Wind Chip
+    if(wind<15) chips.push({t:`💨 ${Math.round(wind)} km/h`,cls:'bbq-good'});
+    else if(wind<35) chips.push({t:`💨 ${Math.round(wind)} km/h`,cls:'bbq-ok'});
+    else chips.push({t:`💨 ${Math.round(wind)} km/h`,cls:'bbq-bad'});
+    // Regen Chip
+    if(rainProb<20) chips.push({t:`☀️ Trocken`,cls:'bbq-good'});
+    else if(rainProb<50) chips.push({t:`🌦 ${rainProb}% Regen`,cls:'bbq-ok'});
+    else chips.push({t:`🌧 ${rainProb}% Regen`,cls:'bbq-bad'});
+    // Wetterlage
+    if(isThunder) chips.push({t:'⚡ Gewitter!',cls:'bbq-bad'});
+    else if(isSnow) chips.push({t:'❄️ Schnee',cls:'bbq-bad'});
+    chipsEl.innerHTML=chips.map(ch=>`<span class="bbq-chip ${ch.cls}">${ch.t}</span>`).join('');
+  }
+
+  // Tipp
+  const tipEl=document.getElementById('bbq-tip');
+  if(tipEl){
+    let tip='';
+    if(score>=80) tip='💡 Heute ist der perfekte Grillabend — Anzünder bereit?';
+    else if(score>=65) tip='💡 Grill anheizen! Leichte Einschränkungen aber machbar.';
+    else if(temp>30) tip='💡 Zu heiß für draußen? Frühmorgens oder abends besser.';
+    else if(rainProb>=50) tip='💡 Regen wahrscheinlich — Überdachter Grill oder Plan B?';
+    else if(wind>=40) tip='💡 Starker Wind erschwert das Grillen und erhöht Brandgefahr.';
+    else if(score>=45) tip='💡 Mit Vorbereitung möglich — Wettercheck vor dem Anzünden.';
+    else tip='💡 Heute lieber Backofen oder Restaurant wählen.';
+    tipEl.textContent=tip;
+  }
+
+  card.classList.add('show');
+}
+
 function drawUmbrellaCard(){
   const card=document.getElementById('umbrella-card');
   if(!card)return;
@@ -10636,6 +11185,7 @@ function updateAll(){
   window._updateSunsetSim&&window._updateSunsetSim(on);
   window._updateNightLight&&window._updateNightLight(on);
   window._updateBreathe&&window._updateBreathe(on);
+  window._updateFingerprint&&window._updateFingerprint(on);
   // ── Wohnstimmung Dial ──
   window._updateWohnstimmung&&window._updateWohnstimmung(on, playing);
   // ── Anwesenheits-Chips ──
@@ -13499,8 +14049,316 @@ const _origSetWxMode=setWxMode;
   // Start timer on load
   resetTimer();
 })();
+
+// ───────────── LICHT-FINGERABDRUCK RADIAL CHART ─────────────
+(function(){
+  const card = document.getElementById('lt-fingerprint');
+  if(!card) return;
+  const polyEl = document.getElementById('lt-fp-poly');
+  const spokeGrp = document.getElementById('lt-fp-spokes');
+  const dotsGrp = document.getElementById('lt-fp-dots');
+  if(!polyEl||!spokeGrp||!dotsGrp) return;
+
+  const CX=65, CY=65, MAX_R=52;
+  const NS='http://www.w3.org/2000/svg';
+
+  function ctToRgb(k){
+    k=Math.max(1800,Math.min(6500,k));
+    if(k<2500)return[255,130,40];
+    if(k<3200)return[255,185,95];
+    if(k<4200)return[255,225,165];
+    if(k<5500)return[255,248,225];
+    return[210,232,255];
+  }
+
+  window._updateFingerprint=function(onCount){
+    const lights=(window.CFG&&CFG.lights)||[];
+    if(!lights.length){card.classList.remove('show');return;}
+    const n=lights.length;
+    const angleStep=(2*Math.PI)/n;
+    const pts=[];
+    const dotData=[];
+    let rS=0,gS=0,bS=0,cnt=0;
+
+    lights.forEach(function(id,i){
+      const s=(_S&&_S[id])||{};
+      const on=s.state==='on';
+      const attr=s.attributes||{};
+      const bri=on?(attr.brightness!=null?Math.round(attr.brightness/2.55):85):0;
+      const pct=bri/100;
+      // minimum spoke baseline so off lights still appear as tiny inner ring
+      const rDist=pct*MAX_R+(on?0:4);
+      const angle=angleStep*i-Math.PI/2;
+      const px=CX+rDist*Math.cos(angle);
+      const py=CY+rDist*Math.sin(angle);
+      pts.push([px,py]);
+
+      let r,g,b;
+      if(on&&attr.rgb_color){[r,g,b]=attr.rgb_color;}
+      else if(on&&attr.color_temp_kelvin){[r,g,b]=ctToRgb(attr.color_temp_kelvin);}
+      else if(on){[r,g,b]=[255,159,10];}
+      else{[r,g,b]=[70,70,70];}
+
+      if(on){rS+=r;gS+=g;bS+=b;cnt++;}
+      dotData.push({px,py,r,g,b,on,pct});
+    });
+
+    // Polygon
+    polyEl.setAttribute('points',pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
+    const ar=cnt?Math.round(rS/cnt):255;
+    const ag=cnt?Math.round(gS/cnt):159;
+    const ab=cnt?Math.round(bS/cnt):10;
+    polyEl.setAttribute('fill','rgba('+ar+','+ag+','+ab+',.13)');
+    polyEl.setAttribute('stroke','rgba('+ar+','+ag+','+ab+',.52)');
+
+    // Spokes
+    spokeGrp.innerHTML='';
+    dotsGrp.innerHTML='';
+    dotData.forEach(function(d){
+      const line=document.createElementNS(NS,'line');
+      line.setAttribute('x1',CX);line.setAttribute('y1',CY);
+      line.setAttribute('x2',d.px.toFixed(1));line.setAttribute('y2',d.py.toFixed(1));
+      line.setAttribute('stroke','rgba('+d.r+','+d.g+','+d.b+','+(d.on?.42:.10)+')');
+      line.setAttribute('stroke-width','1.2');
+      spokeGrp.appendChild(line);
+
+      if(d.on&&d.pct>0.02){
+        const dot=document.createElementNS(NS,'circle');
+        dot.setAttribute('cx',d.px.toFixed(1));dot.setAttribute('cy',d.py.toFixed(1));
+        dot.setAttribute('r','3.8');
+        dot.setAttribute('fill','rgba('+d.r+','+d.g+','+d.b+',.92)');
+        dot.setAttribute('filter','drop-shadow(0 0 3px rgba('+d.r+','+d.g+','+d.b+',.7))');
+        dotsGrp.appendChild(dot);
+      }
+    });
+
+    card.classList.toggle('show',onCount>0);
+  };
+})();
+
+// ===== HSV Farbrad Overlay (Color Wheel) für RGB-Lichter =====
+(function(){
+  const SIZE=220;
+  let _cwEid=null,_cwR=255,_cwG=160,_cwB=60,_cwBri=80,_wheelDrawn=false;
+
+  const overlay=document.getElementById('lt-cw-overlay');
+  const canvas=document.getElementById('lt-cw-canvas');
+  const cursorEl=document.getElementById('lt-cw-cursor');
+  const previewEl=document.getElementById('lt-cw-preview');
+  const rgbLbl=document.getElementById('lt-cw-rgb-lbl');
+  const briSlider=document.getElementById('lt-cw-bri');
+  const closeBtn=document.getElementById('lt-cw-close');
+  const backdrop=document.getElementById('lt-cw-backdrop');
+  const titleEl=document.getElementById('lt-cw-title');
+  if(!overlay||!canvas)return;
+  const ctx2=canvas.getContext('2d');
+
+  function hsvToRgb(h,s,v){
+    const c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c;
+    let r,g,b;
+    if(h<60){r=c;g=x;b=0;}else if(h<120){r=x;g=c;b=0;}
+    else if(h<180){r=0;g=c;b=x;}else if(h<240){r=0;g=x;b=c;}
+    else if(h<300){r=x;g=0;b=c;}else{r=c;g=0;b=x;}
+    return[Math.round((r+m)*255),Math.round((g+m)*255),Math.round((b+m)*255)];
+  }
+
+  function drawWheel(){
+    const cx=SIZE/2,cy=SIZE/2,r=SIZE/2-2;
+    const img=ctx2.createImageData(SIZE,SIZE);
+    for(let y=0;y<SIZE;y++){
+      for(let x=0;x<SIZE;x++){
+        const dx=x-cx,dy=y-cy,dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist>r)continue;
+        const hue=((Math.atan2(dy,dx)/(Math.PI*2)+1)%1)*360;
+        const sat=dist/r;
+        const[rr,gg,bb]=hsvToRgb(hue,sat,1);
+        const idx=(y*SIZE+x)*4;
+        img.data[idx]=rr;img.data[idx+1]=gg;img.data[idx+2]=bb;img.data[idx+3]=255;
+      }
+    }
+    ctx2.putImageData(img,0,0);
+    // White centre fade
+    const grad=ctx2.createRadialGradient(cx,cy,0,cx,cy,r*0.52);
+    grad.addColorStop(0,'rgba(255,255,255,0.88)');
+    grad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx2.fillStyle=grad;ctx2.fillRect(0,0,SIZE,SIZE);
+    _wheelDrawn=true;
+  }
+
+  function getColorAt(x,y){
+    const cx=SIZE/2,cy=SIZE/2,r=SIZE/2-2;
+    const dx=x-cx,dy=y-cy,dist=Math.sqrt(dx*dx+dy*dy);
+    const clampDist=Math.min(dist,r);
+    const hue=((Math.atan2(dy,dx)/(Math.PI*2)+1)%1)*360;
+    const sat=clampDist/r;
+    return hsvToRgb(hue,sat,1);
+  }
+
+  function updatePreview(){
+    const[r,g,b]=[_cwR,_cwG,_cwB];
+    previewEl.style.background=`rgb(${r},${g},${b})`;
+    previewEl.style.boxShadow=`0 0 16px rgba(${r},${g},${b},.6)`;
+    rgbLbl.textContent=`rgb(${r}, ${g}, ${b})`;
+    if(cursorEl.style.display!=='none'){
+      cursorEl.style.background=`rgb(${r},${g},${b})`;
+      cursorEl.style.boxShadow=`0 0 8px rgba(${r},${g},${b},.7),0 0 0 2px white`;
+    }
+  }
+
+  function sendColor(){
+    if(!_cwEid)return;
+    const f=_cwBri/100;
+    const rgb=[Math.round(_cwR*f),Math.round(_cwG*f),Math.round(_cwB*f)];
+    if(rgb.every(v=>v<2))rgb[0]=2;
+    if(typeof svc==='function')svc('light','turn_on',{entity_id:_cwEid,rgb_color:rgb,brightness_pct:_cwBri});
+  }
+
+  function handlePick(clientX,clientY){
+    const rect=canvas.getBoundingClientRect();
+    const scale=SIZE/rect.width;
+    const x=(clientX-rect.left)*scale;
+    const y=(clientY-rect.top)*scale;
+    const cx=SIZE/2,cy=SIZE/2,r=SIZE/2-2;
+    const dx=x-cx,dy=y-cy,dist=Math.sqrt(dx*dx+dy*dy);
+    const cx2=dist>r?cx+dx/dist*r:x;
+    const cy2=dist>r?cy+dy/dist*r:y;
+    const[rr,gg,bb]=getColorAt(cx2,cy2);
+    _cwR=rr;_cwG=gg;_cwB=bb;
+    // Cursor position in CSS pixels
+    const cssScale=rect.width/SIZE;
+    cursorEl.style.left=(cx2*cssScale)+'px';
+    cursorEl.style.top=(cy2*cssScale)+'px';
+    cursorEl.style.display='block';
+    updatePreview();
+  }
+
+  canvas.addEventListener('pointerdown',e=>{
+    try{canvas.setPointerCapture(e.pointerId);}catch(e2){}
+    handlePick(e.clientX,e.clientY);
+  },{passive:true});
+  canvas.addEventListener('pointermove',e=>{
+    if(e.buttons===0)return;
+    handlePick(e.clientX,e.clientY);
+  },{passive:true});
+  canvas.addEventListener('pointerup',e=>{
+    handlePick(e.clientX,e.clientY);
+    sendColor();
+    if(typeof hap==='function')hap();
+  },{passive:true});
+
+  briSlider.addEventListener('input',()=>{
+    _cwBri=parseInt(briSlider.value);
+    updatePreview();
+  });
+  briSlider.addEventListener('change',()=>{sendColor();if(typeof hap==='function')hap();});
+
+  function openCW(eid,name,r,g,b,bri){
+    _cwEid=eid;
+    _cwR=r||255;_cwG=g||160;_cwB=b||60;
+    _cwBri=bri||80;
+    briSlider.value=_cwBri;
+    titleEl.textContent='🎨 '+(name||'Farbe wählen');
+    if(!_wheelDrawn)drawWheel();
+    updatePreview();
+    // Reverse-map current color to cursor position
+    const maxV=Math.max(_cwR,_cwG,_cwB);
+    if(maxV>0){
+      const rn=_cwR/maxV,gn=_cwG/maxV,bn=_cwB/maxV;
+      const mi=Math.min(rn,gn,bn),ma=Math.max(rn,gn,bn),d=ma-mi;
+      let h60=0;
+      if(d>0.01){
+        if(ma===rn)h60=(60*((gn-bn)/d)+360)%360;
+        else if(ma===gn)h60=60*((bn-rn)/d)+120;
+        else h60=60*((rn-gn)/d)+240;
+      }
+      const sat=ma>0.01?(ma-mi)/ma:0;
+      const hRad=h60/180*Math.PI;
+      const r2=SIZE/2-2;
+      const cx=SIZE/2,cy=SIZE/2;
+      const px=cx+Math.cos(hRad)*sat*r2;
+      const py=cy+Math.sin(hRad)*sat*r2;
+      const rect=canvas.getBoundingClientRect();
+      const cssScale=rect.width>0?rect.width/SIZE:1;
+      cursorEl.style.left=(px*cssScale)+'px';
+      cursorEl.style.top=(py*cssScale)+'px';
+      cursorEl.style.display='block';
+      cursorEl.style.background=`rgb(${_cwR},${_cwG},${_cwB})`;
+    } else {
+      cursorEl.style.display='none';
+    }
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+
+  function closeCW(){
+    overlay.classList.remove('show');
+    document.body.style.overflow='';
+  }
+
+  closeBtn.addEventListener('click',closeCW);
+  backdrop.addEventListener('click',closeCW);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCW();});
+
+  window.openCW=openCW;
+
+  // Long-press on light tiles to open color wheel
+  let _cwLpTimer=null,_cwLpMoved=false;
+  document.addEventListener('touchstart',e=>{
+    const tile=e.target.closest('.lt');
+    if(!tile)return;
+    const eid=tile.dataset.id;
+    if(!eid)return;
+    const s=typeof _S!=='undefined'?_S[eid]:null;
+    const modes=s?.attributes?.supported_color_modes||[];
+    const canRgb=modes.some(m=>m==='rgb'||m==='hs'||m==='xy');
+    if(!canRgb)return;
+    _cwLpMoved=false;
+    _cwLpTimer=setTimeout(()=>{
+      _cwLpTimer=null;
+      if(_cwLpMoved)return;
+      const name=tile.querySelector('.ltnm')?.textContent||eid.split('.')[1]||'Licht';
+      const rgb=s?.attributes?.rgb_color;
+      const bri=Math.round((s?.attributes?.brightness||200)/2.55);
+      openCW(eid,name,rgb?.[0]||255,rgb?.[1]||160,rgb?.[2]||60,Math.max(1,bri));
+      if(typeof hap==='function')hap();
+    },600);
+  },{passive:true});
+  document.addEventListener('touchmove',()=>{
+    _cwLpMoved=true;
+    if(_cwLpTimer){clearTimeout(_cwLpTimer);_cwLpTimer=null;}
+  },{passive:true});
+  document.addEventListener('touchend',()=>{
+    if(_cwLpTimer){clearTimeout(_cwLpTimer);_cwLpTimer=null;}
+  },{passive:true});
+})();
 </script>
 
-<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7779</div>
+<!-- Color Wheel Overlay -->
+<div id="lt-cw-overlay" role="dialog" aria-modal="true" aria-label="Farbe wählen">
+  <div id="lt-cw-backdrop"></div>
+  <div id="lt-cw-card">
+    <div id="lt-cw-header">
+      <span id="lt-cw-title">🎨 Farbe wählen</span>
+      <button id="lt-cw-close" aria-label="Schließen">✕</button>
+    </div>
+    <div id="lt-cw-wrap">
+      <div id="lt-cw-canvas-wrap">
+        <canvas id="lt-cw-canvas" width="220" height="220"></canvas>
+        <div id="lt-cw-cursor"></div>
+      </div>
+      <div id="lt-cw-bri-row">
+        <span title="Dunkel">🔅</span>
+        <input type="range" id="lt-cw-bri" min="1" max="100" value="80" aria-label="Helligkeit">
+        <span title="Hell">🔆</span>
+      </div>
+      <div id="lt-cw-preview-row">
+        <div id="lt-cw-preview"></div>
+        <span id="lt-cw-rgb-lbl">rgb(255, 160, 60)</span>
+      </div>
+      <div id="lt-cw-hint">Lang drücken auf RGB-Licht öffnet Farbrad</div>
+    </div>
+  </div>
+</div>
+<div id="vtag" style="position:fixed;bottom:6px;right:10px;font-size:.5rem;color:rgba(255,255,255,.2);z-index:5;pointer-events:none">v4.7782</div>
 </body>
 </html>
