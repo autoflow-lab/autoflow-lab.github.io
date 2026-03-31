@@ -1,5 +1,38 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-31 12:04 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — "Zufalls-Palette" Shuffle Button (🎲)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Ein Tap auf den neuen Shuffle-Button setzt alle aktiven Lichter auf eine harmonisch berechnete Zufalls-Farbpalette — kein manuelles Einstellen, sofortige neue Stimmung per Zufall
+- **HTML**: `#lt-shuffle` Div nach `#lt-snapshot`, vor `.lg` Grid — konsistenter Platz zwischen den Licht-Tools
+- **Button-Design**: Lila Farbschema `rgba(191,90,242,.07)` Border + Background — bewusst von amber/grün/orange/türkis der anderen Buttons unterschiedlich
+- **Farb-Algorithmus** (`hsl2rgb` Hilfsfunktion):
+  - `baseHue = Math.random()*360` → zufälliger Startfarbton
+  - `spread = 360 / max(n,3)` → Lichter gleichmäßig über den Farbkreis verteilt (Dreiklang bei 1-2 Lichtern, etc.)
+  - `jitter = ±9°` pro Licht → leichte Variation damit es natürlich wirkt, nicht mechanisch
+  - `saturation = 83-95%` (random) → kräftige, gesättigte Farben
+  - `lightness = 50-62%` (random) → mittelhellige Farben (nicht zu dunkel/pastell)
+  - HSL→RGB Konversion via reiner Mathematik (keine Bibliothek)
+- **Tap-Logik**:
+  - Filtert alle `CFG.lights` nach `state==='on'`
+  - Kein Check auf rgb_color in _S — sendet rgb_color an alle Lichter (HA ignoriert es bei CT-only Lichtern graceful)
+  - `svc('light','turn_on',{entity_id, rgb_color:[r,g,b], brightness_pct:65, transition:0.8})` je Licht
+  - `transition:0.8` → schnelle aber nicht harte Farbänderung
+  - Toast: "🎲 Palette auf X Lichter · 180° Basisfarbton"
+  - `hap()` Feedback
+- **Icon-Animation** `@keyframes sfIcoSpin`: 🎲 rotiert beim Tap 360° (0.5s ease) → haptisches Feedback für die Zufallsgeste
+- **Flash-Animation** `@keyframes sfApply`: lila Flash beim Tap-Start als Bestätigung
+- `#lt-shuffle-val`: aktualisiert sich nach jedem Tap mit Anzahl Lichter + Basisfarbton-Grad
+- `window._updateShuffle(onCount)`: zeigt Card wenn ≥1 Licht an, versteckt wenn alle aus
+- Hook in `updateAll()` nach `_updatePresets` eingehängt
+- `#lt-shuffle` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Graceful: `showToast('🎲 Keine Lichter aktiv')` wenn Tap ohne aktive Lichter
+- **Kein extra API-Call** — nutzt `CFG.lights`, `_S`, `svc()` aus vorhandener Infrastruktur
+- Effekt: Im Licht-Tab erscheint ein lila Würfel-Button — ein Tap und alle Lichter wechseln in eine zufällig harmonische Farbkombination, ideal um schnell eine neue Atmosphäre zu schaffen
+- JS-Check: OK | Deployed via SSH (paramiko b64, 845004 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-31 06:04 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Licht-Tab — Szenen-Preset Karussell (⚡)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2546,3 +2579,10 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Staggered IntersectionObserver fadein (translateY 22px → 0, 0/120/240ms delays)
 - DE+EN i18n via data-i + applyLang() querySelectorAll('[data-i]')
 - JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io) | Git: 165376e
+
+## 2026-03-31 08:37 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Home-Tab — "Wochenende-Countdown" Chip (📅/🎉)
+- Werktag: amber Chip "Noch Xd Yh bis zum Wochenende" / Wochenende: grüner Chip "🎉 Wochenende!"
+- Pulsierender Dot (amber/grün je Zustand), spring-in wkendChipIn Animation
+- Erscheint unter #silence-chip, Light-Mode kompatibel
+- JS-Check: OK | Git: 57a5ac1 | HA Deploy: SSH nicht verfügbar

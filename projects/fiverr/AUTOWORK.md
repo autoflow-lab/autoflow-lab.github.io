@@ -405,3 +405,12 @@
 
 ## Neue Ideen (2026-03-31 04:37 UTC)
 - [x] demo.html: "Empfohlene Hardware" Section (🖥️ 3 Cards vor Contact: Raspberry Pi 5 / Intel NUC / Synology NAS — Preis + 4 Vorteile + Empfehlung-Badge, grüner/amber/blauer Farbakzent je Option, hover-lift, staggered IntersectionObserver fadein, DE+EN i18n via data-i + applyLang())
+
+## Neue Ideen (2026-03-31 08:37 UTC)
+- [x] wz.html: Home-Tab — "Wochenende-Countdown" Chip
+
+## Neue Ideen (2026-03-31 12:04 UTC)
+- [x] wz.html: Licht-Tab — "Zufalls-Palette" Shuffle Button (🎲 ein Tap setzt alle aktiven Lichter auf harmonische Zufallsfarben: zufälliger Basis-Hue + gleichmäßige Winkelverteilung je Licht, Sättigung 83-95%, Helligkeit 50-62%, Spin-Animation am Icon, Toast mit Basisfarbton)
+
+## Neue Ideen (2026-03-31 10:04 UTC)
+- [x] wz.html: Musik-Tab — Album-Cover Dominante Farben Palette (🎨 Canvas-Extraktion der 5 markantesten Farben aus dem aktuellen Album-Art, Swatch-Row unter Track History, Tap auf Swatch setzt alle aktiven Lichter auf diese RGB-Farbe mit 1.2s Transition) (📅/🎉 zeigt Tage+Stunden bis Samstag 00:00, während Sa/So grüner "🎉 Wochenende!"-Chip, Werktag = amber mit Countdown "Noch Xd Yh bis zum Wochenende", pulsierender Dot, spring-in Animation, DE Light-Mode kompatibel, aktualisiert sich mit jedem updateAll()-Poll)

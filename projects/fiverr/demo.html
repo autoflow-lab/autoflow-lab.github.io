@@ -5790,5 +5790,97 @@ if(_origGetPos){
 })();
 </script>
 
+<!-- ── Demo Interaction Counter ── -->
+<style>
+#demo-ictr{position:fixed;bottom:88px;left:16px;z-index:8800;display:none;align-items:center;gap:7px;
+  background:rgba(30,30,32,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:7px 13px 7px 10px;
+  font-size:.73rem;font-weight:600;color:rgba(255,255,255,.82);cursor:default;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+  animation:ictrIn .4s cubic-bezier(.34,1.15,.64,1) both}
+#demo-ictr.show{display:flex}
+#demo-ictr.milestone{animation:ictrPop .45s cubic-bezier(.34,1.56,.64,1) both}
+#ictr-dot{width:7px;height:7px;border-radius:50%;background:#ff9f0a;flex-shrink:0;animation:ictrDot 1.8s ease-in-out infinite}
+#ictr-txt{white-space:nowrap}
+@keyframes ictrIn{from{opacity:0;transform:translateY(12px) scale(.88)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes ictrPop{0%{transform:scale(1)}40%{transform:scale(1.18)}70%{transform:scale(.95)}100%{transform:scale(1)}}
+@keyframes ictrDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+:root[data-theme="light"] #demo-ictr{background:rgba(255,255,255,.92);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.75);box-shadow:0 4px 16px rgba(0,0,0,.12)}
+</style>
+<div id="demo-ictr">
+  <div id="ictr-dot"></div>
+  <span id="ictr-txt">1 Element ausprobiert 🎯</span>
+</div>
+<script>
+(function(){
+  var count=0,shown=false,confettiFired=false;
+  var el=document.getElementById('demo-ictr');
+  var txt=document.getElementById('ictr-txt');
+  if(!el||!txt)return;
+  var labels_de=['Element','Elemente'];
+  var labels_en=['element','elements'];
+  function getLabel(n){
+    var isEN=(document.documentElement.lang==='en');
+    var arr=isEN?labels_en:labels_de;
+    return n===1?arr[0]:arr[1];
+  }
+  function update(){
+    count++;
+    var lbl=getLabel(count);
+    var emoji=count>=15?'🏆':count>=10?'🎯':count>=5?'✨':'🎯';
+    var prefix=(document.documentElement.lang==='en')?count+' '+lbl+' tried ':count+' '+lbl+' ausprobiert ';
+    txt.textContent=prefix+emoji;
+    if(!shown){el.classList.add('show');shown=true;}
+    else{el.classList.remove('milestone');void el.offsetWidth;el.classList.add('milestone');}
+    // Confetti at 10
+    if(count===10&&!confettiFired){confettiFired=true;fireConfetti();}
+  }
+  function fireConfetti(){
+    var emojis=['🎉','✨','🌟','🎊','💡','🏠'];
+    for(var i=0;i<18;i++){
+      (function(idx){
+        setTimeout(function(){
+          var p=document.createElement('div');
+          p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+          p.style.cssText='position:fixed;font-size:1.1rem;pointer-events:none;z-index:9999;left:'+(8+Math.random()*180)+'px;bottom:110px;animation:ictrConfetti .9s ease-out forwards';
+          document.body.appendChild(p);
+          setTimeout(function(){p.remove();},950);
+        },idx*55);
+      })(i);
+    }
+    var s=document.createElement('style');
+    s.textContent='@keyframes ictrConfetti{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(-'+(60+Math.random()*80)+'px) rotate('+(Math.random()>0.5?'':'-')+(30+Math.random()*90)+'deg) scale(.5)}}';
+    document.head.appendChild(s);
+  }
+  // Track interactive elements in demo cards
+  var targets=[
+    '#light-slider','#hue-slider','.scene-btn','#music-play-btn','#music-prev','#music-next',
+    '#vol-down','#vol-up','.tab-btn','.nav-tab','.demo-tab-btn',
+    '#thermo-minus','#thermo-plus','#arm-btn','.light-toggle','#news-refresh',
+    '.room-item','.room-btn','#ba-handle','#calc-rooms','#calc-devices','.calc-check',
+    '#lang-btn','#theme-btn','.radio-btn','#radio-stop-btn','.faq-item'
+  ];
+  document.addEventListener('click',function(e){
+    var hit=targets.some(function(sel){try{return e.target.closest(sel)!==null;}catch(x){return false;}});
+    if(hit)update();
+  });
+  document.addEventListener('input',function(e){
+    var hit=['.calc-range','#calc-rooms','#calc-devices','#ba-handle','#light-slider'].some(function(sel){
+      try{return e.target.matches(sel)||e.target.closest(sel)!==null;}catch(x){return false;}
+    });
+    if(hit)update();
+  });
+  // Update label on lang change
+  document.addEventListener('langChange',function(){
+    if(shown&&txt&&count>0){
+      var lbl=getLabel(count);
+      var emoji=count>=15?'🏆':count>=10?'🎯':count>=5?'✨':'🎯';
+      var prefix=(document.documentElement.lang==='en')?count+' '+lbl+' tried ':count+' '+lbl+' ausprobiert ';
+      txt.textContent=prefix+emoji;
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
