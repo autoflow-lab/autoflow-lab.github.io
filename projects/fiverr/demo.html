@@ -3152,6 +3152,82 @@ input[type=range]{touch-action:pan-x}
   </div>
 </div>
 
+<!-- HARDWARE SECTION -->
+<div id="hardware-section" style="padding:72px 24px;max-width:960px;margin:0 auto">
+  <div style="text-align:center;margin-bottom:48px">
+    <div style="display:inline-block;padding:4px 14px;border-radius:100px;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.25);font-size:.72rem;font-weight:700;color:#30d158;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px" data-i="hwBadge">Hardware</div>
+    <h2 style="font-size:clamp(1.7rem,4.5vw,2.4rem);font-weight:800;letter-spacing:-.03em;margin-bottom:12px" data-i="hwTitle">Welche Hardware brauchst du?</h2>
+    <p style="color:var(--text2);max-width:520px;margin:0 auto;font-size:.97rem;line-height:1.7" data-i="hwSub">Home Assistant läuft auf günstiger Hardware. Hier die drei beliebtesten Optionen — ich helfe dir bei der Wahl.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+
+    <!-- Raspberry Pi 5 -->
+    <div class="hw-card" style="background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:28px 24px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;cursor:default">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#30d158,#0a84ff)"></div>
+      <div style="font-size:2.2rem;margin-bottom:14px">🥧</div>
+      <div style="font-size:1.15rem;font-weight:700;margin-bottom:4px" data-i="hw1Name">Raspberry Pi 5</div>
+      <div style="font-size:.8rem;color:#30d158;font-weight:600;margin-bottom:14px" data-i="hw1Badge">⭐ Empfohlen für Einsteiger</div>
+      <div style="font-size:1.5rem;font-weight:800;color:#ff9f0a;margin-bottom:16px" data-i="hw1Price">~€90</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px">
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#30d158;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw1f1">Leise, stromsparend (5–10W)</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#30d158;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw1f2">Kompakt, überall platzierbar</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#30d158;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw1f3">Offiziell unterstütztes HA OS</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#30d158;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw1f4">Ideale Homelab-Größe</span></li>
+      </ul>
+    </div>
+
+    <!-- Mini-PC / NUC -->
+    <div class="hw-card" style="background:var(--surface);border:1.5px solid rgba(255,159,10,.35);border-radius:20px;padding:28px 24px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;cursor:default;box-shadow:0 0 0 1px rgba(255,159,10,.15),0 8px 32px rgba(255,159,10,.08)">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff9f0a,#ff6b35)"></div>
+      <div style="position:absolute;top:16px;right:16px;background:rgba(255,159,10,.12);border:1px solid rgba(255,159,10,.3);color:#ff9f0a;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:100px" data-i="hw2TopBadge">POWER USER</div>
+      <div style="font-size:2.2rem;margin-bottom:14px">🖥️</div>
+      <div style="font-size:1.15rem;font-weight:700;margin-bottom:4px" data-i="hw2Name">Intel NUC / Mini-PC</div>
+      <div style="font-size:.8rem;color:#ff9f0a;font-weight:600;margin-bottom:14px" data-i="hw2Badge">🚀 Mehr Leistung, mehr Möglichkeiten</div>
+      <div style="font-size:1.5rem;font-weight:800;color:#ff9f0a;margin-bottom:16px" data-i="hw2Price">~€120–200</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px">
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#ff9f0a;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw2f1">Mehrere Add-ons parallel laufen</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#ff9f0a;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw2f2">Schnellere Verarbeitung, mehr RAM</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#ff9f0a;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw2f3">Gut für KI-Integrationen & LLM</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#ff9f0a;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw2f4">Auch als bestehender Mini-PC nutzbar</span></li>
+      </ul>
+    </div>
+
+    <!-- NAS / Synology -->
+    <div class="hw-card" style="background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:28px 24px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;cursor:default">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#0a84ff,#5e5ce6)"></div>
+      <div style="font-size:2.2rem;margin-bottom:14px">📦</div>
+      <div style="font-size:1.15rem;font-weight:700;margin-bottom:4px" data-i="hw3Name">Synology NAS</div>
+      <div style="font-size:.8rem;color:#0a84ff;font-weight:600;margin-bottom:14px" data-i="hw3Badge">💡 Wenn du sowieso ein NAS hast</div>
+      <div style="font-size:1.5rem;font-weight:800;color:#ff9f0a;margin-bottom:16px" data-i="hw3Price">~€200–400</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px">
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#0a84ff;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw3f1">HA via Docker/VM laufen lassen</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#0a84ff;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw3f2">Backups direkt auf NAS-Storage</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#0a84ff;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw3f3">Alles-in-einem Server</span></li>
+        <li style="display:flex;align-items:flex-start;gap:9px;font-size:.87rem;color:var(--text2)"><span style="color:#0a84ff;font-size:.9rem;margin-top:1px">✓</span><span data-i="hw3f4">RAID-Redundanz für Ausfallsicherheit</span></li>
+      </ul>
+    </div>
+
+  </div>
+  <p style="text-align:center;color:var(--text2);font-size:.83rem;margin-top:28px;line-height:1.6" data-i="hwNote">💬 Noch unsicher? Schreib mir — ich helfe dir gratis bei der Hardware-Wahl.</p>
+</div>
+<style>
+.hw-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.18)!important}
+</style>
+<script>
+(function(){
+  var hwObserver=new IntersectionObserver(function(entries){
+    entries.forEach(function(e,i){
+      if(e.isIntersecting){
+        e.target.style.opacity='0';e.target.style.transform='translateY(22px)';
+        setTimeout(function(){e.target.style.transition='opacity .5s,transform .5s';e.target.style.opacity='1';e.target.style.transform='translateY(0)'},i*120);
+        hwObserver.unobserve(e.target);
+      }
+    });
+  },{threshold:.15});
+  document.querySelectorAll('.hw-card').forEach(function(c){hwObserver.observe(c);});
+})();
+</script>
+
 <div id="contact-section" style="padding:72px 24px;max-width:600px;margin:0 auto;text-align:center">
   <div style="display:inline-block;padding:4px 14px;border-radius:100px;background:rgba(0,113,227,.1);border:1px solid rgba(0,113,227,.25);font-size:.72rem;font-weight:700;color:#0071e3;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px">Kontakt</div>
   <h2 style="font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin-bottom:14px">Projekt anfragen</h2>
@@ -4528,6 +4604,11 @@ const T={
     tech7d:'Leichtgewichtiges Echtzeit-Messaging zwischen Geräten — der Klebstoff des IoT.',
     tech8d:'Dedizierter Home Server — stromsparend, leise, 24/7 zuverlässig.',
     techLocal:'Lokal',techStd:'Standard',techHw:'Hardware',
+    hwBadge:'Hardware',hwTitle:'Welche Hardware brauchst du?',hwSub:'Home Assistant läuft auf günstiger Hardware. Hier die drei beliebtesten Optionen — ich helfe dir bei der Wahl.',
+    hw1Name:'Raspberry Pi 5',hw1Badge:'⭐ Empfohlen für Einsteiger',hw1Price:'~€90',hw1f1:'Leise, stromsparend (5–10W)',hw1f2:'Kompakt, überall platzierbar',hw1f3:'Offiziell unterstütztes HA OS',hw1f4:'Ideale Homelab-Größe',
+    hw2Name:'Intel NUC / Mini-PC',hw2Badge:'🚀 Mehr Leistung, mehr Möglichkeiten',hw2Price:'~€120–200',hw2TopBadge:'POWER USER',hw2f1:'Mehrere Add-ons parallel laufen',hw2f2:'Schnellere Verarbeitung, mehr RAM',hw2f3:'Gut für KI-Integrationen & LLM',hw2f4:'Auch als bestehender Mini-PC nutzbar',
+    hw3Name:'Synology NAS',hw3Badge:'💡 Wenn du sowieso ein NAS hast',hw3Price:'~€200–400',hw3f1:'HA via Docker/VM laufen lassen',hw3f2:'Backups direkt auf NAS-Storage',hw3f3:'Alles-in-einem Server',hw3f4:'RAID-Redundanz für Ausfallsicherheit',
+    hwNote:'💬 Noch unsicher? Schreib mir — ich helfe dir gratis bei der Hardware-Wahl.',
     faqTtl:'Häufige Fragen',faqSub:'Alles was du wissen musst',
     faq1q:'Was ist Home Assistant?',faq1a:'Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla.',
     faq2q:'Brauche ich technisches Vorwissen?',faq2a:'Nein. Du bekommst fertige Lösungen mit Dokumentation und Einrichtungsanleitung.',
@@ -4624,6 +4705,11 @@ const T={
     tech7d:'Lightweight real-time messaging between devices — the glue of IoT.',
     tech8d:'Dedicated home server — energy-efficient, quiet, reliable 24/7.',
     techLocal:'Local',techStd:'Standard',techHw:'Hardware',
+    hwBadge:'Hardware',hwTitle:'Which hardware do you need?',hwSub:'Home Assistant runs on affordable hardware. Here are the three most popular options — I help you choose.',
+    hw1Name:'Raspberry Pi 5',hw1Badge:'⭐ Recommended for beginners',hw1Price:'~€90',hw1f1:'Quiet, low power (5–10W)',hw1f2:'Compact, place anywhere',hw1f3:'Officially supported HA OS',hw1f4:'Perfect homelab size',
+    hw2Name:'Intel NUC / Mini-PC',hw2Badge:'🚀 More power, more possibilities',hw2Price:'~€120–200',hw2TopBadge:'POWER USER',hw2f1:'Run multiple add-ons in parallel',hw2f2:'Faster processing, more RAM',hw2f3:'Great for AI integrations & LLM',hw2f4:'Works as an existing mini-PC too',
+    hw3Name:'Synology NAS',hw3Badge:'💡 If you already have a NAS',hw3Price:'~€200–400',hw3f1:'Run HA via Docker/VM',hw3f2:'Backups directly to NAS storage',hw3f3:'All-in-one server',hw3f4:'RAID redundancy for reliability',
+    hwNote:'💬 Still unsure? Message me — I help you pick hardware for free.',
     faqTtl:'Frequently Asked Questions',faqSub:'Everything you need to know',
     faq1q:'What is Home Assistant?',faq1a:'Home Assistant is an open-source platform connecting 3000+ smart home devices — from Philips Hue to Tesla.',
     faq2q:'Do I need technical knowledge?',faq2a:'No. You get a ready solution with full documentation and setup guide.',
@@ -4771,6 +4857,8 @@ function applyLang(){
   buildRoomList();
   // Reload news in correct lang
   loadNews();
+  // Hardware section
+  document.querySelectorAll('[data-i]').forEach(function(el){var k=el.dataset.i;if(t[k])el.textContent=t[k];});
 }
 
 // ── AIR QUALITY WIDGET ──
