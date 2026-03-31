@@ -1,5 +1,89 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-03-31 06:04 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — Szenen-Preset Karussell (⚡)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: 6 horizontale Ein-Tap Preset-Cards im Licht-Tab — sofort alle aktiven Lichter auf eine vordefinierte Stimmung setzen, kein manuelles Ziehen an Reglern
+- **6 Presets**:
+  - 🌅 **Morgen** (5500K / 75%) — warmes Tageslicht zum Aufwachen, orange→gelb Gradient-Orb
+  - 💼 **Arbeit** (6500K / 100%) — maximale Konzentration, kühles Tageslicht, hellblau Orb
+  - 🛋️ **Relax** (3000K / 55%) — entspanntes Abendlicht, warm-orange Orb
+  - 🎬 **Film** (2200K / 22%) — sehr gedimmtes warmes Ambilight, tiefblau Orb
+  - 🕯️ **Romantik** (RGB 255,70,55 / 18%) — rötlich-warmes Kerzenlicht, dunkelrot Orb
+  - 🌙 **Nacht** (1900K / 8%) — minimalstes Nachtlicht, dunkelblau Orb
+- **HTML**: `#lt-presets` mit `#lt-presets-scroll` (horizontaler Overflow-Scroll, kein Scrollbar sichtbar) — zwischen `#lt-breathe` und `#lt-color-palette` eingefügt
+- **`.lt-preset-card`** (74px fixe Breite, flex:0 0 auto):
+  - `border:1.5px solid rgba(255,255,255,.09)` → `.active`: amber Border + Hintergrund
+  - `.lt-prc-orb` (40px Kreis): `background:linear-gradient(135deg,...)` je Preset-Stimmung
+  - `.lt-prc-emoji`: absolut zentriert im Orb, 1.18rem
+  - `.lt-prc-name` + `.lt-prc-sub`: Name + CT/BRI-Info unter dem Orb
+  - `.active .lt-prc-orb`: `box-shadow:0 0 20px 5px var(--prc-glow)` — Glow in Preset-Farbe
+  - `.lt-preset-card.active .lt-prc-name`: amber Text-Highlight
+- **CSS-Variable `--prc-glow`**: pro Card gesetzt (rgba passend zur Preset-Farbe) → Glow-Farbe beim Aktivieren
+- **Tap-Logik**:
+  - Filtert alle `CFG.lights` mit `state==='on'` → schickt `svc('light','turn_on',{ct/rgb, brightness_pct, transition:1.2})` je Licht
+  - `transition:1.2` → sanfter 1.2s Übergang (kein harter Farbwechsel)
+  - Toast: "🌅 Morgen auf 3 Lichter · 5500K · 75%"
+  - `hap()` Feedback
+  - `localStorage.setItem('lt_preset_active', p.id)` → merkt gewähltes Preset
+  - Alle Cards: `active`-Klasse entfernen, aktive Card: hinzufügen
+  - `ltp-tap` flash-Animation
+- **`@keyframes ltPresetsIn`**: fade+translateY(8px) → normal, .45s cubic-bezier → smooth Einblenden
+- **`@keyframes ltpFlash`**: kurzer opacity-Flicker als Tap-Feedback
+- **`window._updatePresets(onCount)`**: in `updateAll()` eingehängt → Strip zeigt/versteckt sich je nach aktiven Lichtern
+- **localStorage-Restore**: beim Initialisieren wird gespeichertes Preset aus `localStorage('lt_preset_active')` geladen und als `.active` markiert
+- **Graceful**: kein Toast / kein Senden wenn keine Lichter an (wird gar nicht angezeigt)
+- **Light-Mode Overrides**: dunklere Farben für Karten, lesbar auf hellem Hintergrund
+- **page-entering**: `#lt-presets` zur Stagger-Animations-Liste hinzugefügt → Tab-Wechsel Animation
+- **Kein extra API-Call** — nutzt vorhandene `CFG.lights`, `_S`, `svc()` Funktionen
+- Effekt: Im Licht-Tab erscheint eine elegante horizontale Karussell-Zeile mit 6 farbigen Preset-Cards — ein Tap setzt sofort alle aktiven Lichter auf die gewünschte Stimmung, das gewählte Preset bleibt amber hervorgehoben
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 825453 bytes, DEPLOY_OK)
+
+
+
+## 2026-03-31 00:04 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Pflanzengieß-Check" Karte (🌱)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Praktisches Garten/Balkon-Feature — auf einen Blick sehen ob man heute seine Pflanzen gießen muss, basierend auf Echtzeit-Wetterdaten ohne extra API
+- **Soil-Moisture-Score 0–100** (100=nass, 0=trocken):
+  - 💧 `recentRainMm`: Summe stündlicher `precipitation` der letzten 24h aus `_wx.hourly` (oder Fallback auf `daily[0]*0.4`)
+  - ☀️ Verdunstungsschätzung `evapMmPerDay`: vereinfachte Hargreaves-Formel: `(0.15*(temp-5)+0.03*wind)*sunFactor` — steigt mit Temperatur, Wind und Sonnenstunden
+  - `sunFactor = (100-cloud_cover)/100` → wolkiger Tag = weniger Verdunstung
+  - `balance = combinedRain - evapToday` → Nettowasserbilanz
+  - `score = min(100, max(0, 50 + balance*4))` → linear um 50% zentriert
+- **4 Verdikt-Stufen** mit dynamischer Farbkodierung:
+  - ≥75: "Nicht nötig 💧" → blau `#5ac8fa` — Regen hat gewässert
+  - ≥50: "Prüfen 🌿" → grün `#30d158` — kurze Sichtkontrolle empfohlen
+  - ≥25: "Jetzt gießen! 🪣" → amber `#ff9f0a` — hohe Verdunstung, wenig Regen
+  - <25: "Dringend gießen! 🆘" → rot `#ff453a` — Gefahr von Trockenschäden
+- **SVG-Wassertropfen** (54×70px):
+  - Tropfen-Konturpfad: klassische Tear-Drop-Form `M27 4 C27 4 6 28 6 42 A21 21 0 0 0 48 42 Z`
+  - `#plant-drop-fill` Rect mit `clipPath="url(#plantDropClip)"` — füllt Tropfen von unten
+  - `y`-Position animiert: `y = 70 - 66*(score/100)` → bei 100% komplett voll (y=4), bei 0% leer (y=70)
+  - `transition:y 1.4s cubic-bezier(.4,0,.2,1)` auf SVG-Rect → sanfte Füllanimation
+  - `linearGradient plantDropFillGrad`: grün→blau bei score≥50, amber→orange bei score<50 → Farbe wechselt je Dringlichkeit
+  - Shimmer-Highlight: halbopaque Ellipse oben-links im Tropfen → 3D-Glasoptic
+  - Prozent-Wert als SVG-Text-Element zentriert im Tropfen
+  - `@keyframes plantDropWave`: SVG schwebt sanft auf und ab (3.5s ease-in-out loop) → wirkt lebendig
+- **Condition-Chips** (`.plant-chip`): dynamisch befüllt je Situation:
+  - "🌧 Regen ausreichend" (grün) / "🔥 Heiß — bald prüfen" (amber) / "☀️ Viel Sonne" / "💧 Wenig Regen" / "🌬 Wind trocknet aus" etc.
+  - 3 CSS-Klassen: `.plant-chip-good` grün / `.plant-chip-mid` amber / `.plant-chip-bad` rot
+- **Stats-Row** (3 Spalten mit Trennlinien):
+  - 💧 Regen letzte Tage (mm aus Hourly-Summe)
+  - ☁ Verdunstung (mm/Tag nach Formel)
+  - ☀️ Sonnenstunden (aus `daily.sunshine_duration` wenn verfügbar, sonst Cloud-Cover-Schätzung)
+- **Gieß-Tipp** `#plant-tip`: kontextsensitiver Kursiv-Text je Stufe (z.B. "💡 Morgens oder abends gießen um Verdunstungsverluste zu minimieren.")
+- **Background Orb** `#plant-bg-orb`: radial gradient in Akzentfarbe oben-rechts → subtiler Farbton
+- Grünes Farbschema `rgba(48,209,88)` Border + Background — passend zur Natur-Semantik
+- **Kein extra API-Call** — nutzt ausschließlich vorhandene `_wx.hourly.precipitation` + `_wx.current` + `_wx.daily.sunshine_duration` Daten
+- `drawPlantCard()` in `renderWeather()` nach `drawUmbrellaCard()` eingehängt
+- `#plant-card` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → Tab-Wechsel Animation
+- Card bleibt `display:none` wenn keine `_wx.daily.precipitation_sum` Daten vorhanden (graceful fallback)
+- Light-Mode Overrides: dunklere Grün-Farben für Lesbarkeit auf hellem Hintergrund
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 813812 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-30 22:37 UTC — Heartbeat
 - ✅ wz.html: Wetter-Tab — UV-Schutz Countdown Card (☀️)
 - SVG Arc-Gauge grün→gelb→orange→rot, UV-Max daily + stündliche UV-Daten (neu in API), Countdown bis UV≥3, SPF-Chips + Verhaltens-Tips, 6 UV-Stufen
@@ -2441,3 +2525,24 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - .hglow: opacity:0 im Light-Mode (dunkler Glow-Blob nicht mehr im hellen UI sichtbar)
 - updateHeroGradient(): --hglc wird auf transparent gesetzt beim Wechsel in Light-Mode
 - JS-Check: OK | Deployed → HA 192.168.1.123 /config/www/wz.html | Git: 0b2326f
+
+## 2026-03-31 00:xx — Nacht-Run: wz.html Light-Mode Fixes
+
+**Task:** Light-Mode Farb-Korrekturen (NIGHTPLAN_2 Task 4)
+**Änderungen (v4.3):**
+- Neue CSS-Klasse `.wxt-sublbl` für Wetter-Subzeilen (↑/↓/💨/💧) → theme-aware
+- `#wr-main-dir` Windrichtung: `color:var(--txt)` im Light-Mode
+- `#pomo-time` Pomodoro-Timer: `color:var(--txt)` im Light-Mode
+- `#ws-score-val` (SVG): `fill:var(--txt)` im Light-Mode
+- Version: v4.7783 → v4.7784 / v4.2 → v4.3
+**Deploy:** SSH → /config/www/wz.html ✅
+**Git:** 9ff41b0
+
+
+## 2026-03-31 04:37 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: "Empfohlene Hardware" Section (🖥️ 3 Hardware-Cards)
+- Raspberry Pi 5 (grün, "Empfohlen für Einsteiger", ~€90), Intel NUC (amber, "POWER USER" Badge, ~€120–200), Synology NAS (blau, "Wenn du sowieso ein NAS hast", ~€200–400)
+- Je 4 Feature-Bullets, top-border Gradient-Stripe, hover-lift Transition
+- Staggered IntersectionObserver fadein (translateY 22px → 0, 0/120/240ms delays)
+- DE+EN i18n via data-i + applyLang() querySelectorAll('[data-i]')
+- JS-Check: OK | Deployed → GitHub Pages (autoflow-lab.github.io) | Git: 165376e

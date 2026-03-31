@@ -168,10 +168,10 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -317,6 +317,18 @@ html,body{height:100%;background:var(--bg);
 #silence-cd{font-weight:700;color:#90caff;margin-left:3px}
 :root.light #silence-chip{background:rgba(10,100,220,.06);border-color:rgba(10,100,220,.15);color:rgba(0,60,140,.8)}
 :root.light #silence-cd{color:rgba(0,80,180,.9)}
+#wkend-chip{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 14px;border-radius:14px;font-size:.75rem;animation:wkendChipIn .4s cubic-bezier(.34,1.15,.64,1) both}
+#wkend-chip.show{display:flex}
+#wkend-chip.wkend-soon{background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.2);color:rgba(255,220,150,.9)}
+#wkend-chip.wkend-now{background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.2);color:rgba(160,255,190,.9)}
+#wkend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;animation:wkendDotPulse 2.2s ease-in-out infinite}
+#wkend-chip.wkend-soon #wkend-dot{background:#ff9f0a}
+#wkend-chip.wkend-now #wkend-dot{background:#30d158}
+#wkend-txt{flex:1;line-height:1.3}
+@keyframes wkendChipIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes wkendDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.75)}}
+:root.light #wkend-chip.wkend-soon{background:rgba(200,120,0,.06);border-color:rgba(200,120,0,.18);color:rgba(100,55,0,.8)}
+:root.light #wkend-chip.wkend-now{background:rgba(30,160,60,.06);border-color:rgba(30,160,60,.18);color:rgba(0,70,25,.8)}
 /* ── Wetter-Licht Sync ── */
 #wx-light-sync{display:none;margin:0 0 10px}
 #wx-light-sync.show{display:block}
@@ -485,6 +497,38 @@ html,body{height:100%;background:var(--bg);
 :root.light #sport-time-row{color:rgba(0,0,0,.35)}
 :root.light #sport-best-badge{background:rgba(20,120,60,.12);border-color:rgba(20,120,60,.25);color:rgba(10,80,40,.9)}
 :root.light .sport-name-best-lbl{background:rgba(20,120,60,.12);border-color:rgba(20,120,60,.25);color:rgba(10,80,40,.9)}
+/* ── Plant Card ── */
+#plant-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#plant-card.show{opacity:1;transform:translateY(0)}
+#plant-inner{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(48,209,88,.22);background:rgba(48,209,88,.06);padding:14px 14px 12px}
+#plant-bg-orb{position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(48,209,88,.12) 0%,transparent 68%);pointer-events:none}
+#plant-label{font-size:.52rem;font-weight:700;letter-spacing:1px;color:rgba(48,209,88,.7);margin-bottom:10px;text-transform:uppercase}
+#plant-body{display:flex;align-items:flex-start;gap:14px;position:relative;z-index:1}
+#plant-drop-wrap{flex-shrink:0}
+@keyframes plantDropWave{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+#plant-drop-svg{animation:plantDropWave 3.5s ease-in-out infinite}
+#plant-info{flex:1;display:flex;flex-direction:column;gap:5px}
+#plant-verdict{font-size:1.0rem;font-weight:700;color:#30d158;transition:color .6s}
+#plant-desc{font-size:.68rem;color:rgba(255,255,255,.55);line-height:1.35;transition:color .6s}
+#plant-chips-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
+.plant-chip{font-size:.59rem;padding:2px 8px;border-radius:12px;font-weight:600;border:1px solid transparent}
+.plant-chip-good{background:rgba(48,209,88,.14);border-color:rgba(48,209,88,.28);color:rgba(100,230,140,.9)}
+.plant-chip-mid{background:rgba(255,214,10,.12);border-color:rgba(255,214,10,.28);color:rgba(255,220,60,.9)}
+.plant-chip-bad{background:rgba(255,69,58,.12);border-color:rgba(255,69,58,.28);color:rgba(255,100,90,.9)}
+#plant-tip{font-size:.64rem;font-style:italic;color:rgba(255,255,255,.35);margin-top:4px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);transition:color .6s}
+#plant-stats-row{display:flex;align-items:center;justify-content:space-around;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1}
+.plant-stat{display:flex;flex-direction:column;align-items:center;gap:3px}
+.plant-stat>span{font-size:.85rem;font-weight:700;color:#30d158;transition:color .6s}
+.plant-stat-lbl{font-size:.54rem;color:rgba(255,255,255,.35)}
+.plant-stat-div{width:1px;height:28px;background:rgba(255,255,255,.08)}
+:root.light #plant-inner{background:rgba(20,120,60,.05);border-color:rgba(20,120,60,.18)}
+:root.light #plant-label{color:rgba(10,80,40,.7)}
+:root.light #plant-verdict{color:rgba(10,100,50,.9)}
+:root.light #plant-desc{color:rgba(0,0,0,.55)}
+:root.light #plant-tip{color:rgba(0,0,0,.35)}
+:root.light .plant-stat-lbl{color:rgba(0,0,0,.4)}
+:root.light .plant-stat>span{color:rgba(10,100,50,.9)}
+/* ── end Plant Card ── */
 #lueft-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #lueft-card.show{opacity:1;transform:translateY(0)}
 #lueft-inner{border-radius:18px;border:1px solid rgba(255,255,255,.07);border-top-color:rgba(255,255,255,.13);padding:14px 18px;position:relative;overflow:hidden;display:flex;align-items:center;gap:14px}
@@ -628,6 +672,23 @@ html,body{height:100%;background:var(--bg);
 :root.light #quick-note-input:focus{border-color:rgba(180,90,0,.35);background:rgba(180,90,0,.04)}
 :root.light .qn-chip{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.45)}
 #lt-global-dimmer.show{opacity:1}
+/* ── CT-Spektrum Visualizer ── */
+#lt-ct-strip{margin:2px 14px 12px;opacity:0;transition:opacity .5s ease}
+#lt-ct-strip.show{opacity:1}
+#lt-ct-bar-wrap{position:relative;height:22px;margin-bottom:18px}
+#lt-ct-gradient-bar{height:22px;border-radius:11px;background:linear-gradient(90deg,#ff7b1a 0%,#ffb347 14%,#ffcc88 30%,#fff5e0 50%,#d0eaff 70%,#a8d4ff 85%,#6fa8dc 100%);opacity:.5;border:1px solid rgba(255,255,255,.08)}
+#lt-ct-dots-layer{position:absolute;top:50%;transform:translateY(-50%);left:0;width:100%;height:0;pointer-events:auto}
+.ct-light-dot{position:absolute;width:12px;height:12px;border-radius:50%;transform:translateX(-50%);border:2px solid rgba(255,255,255,.75);cursor:pointer;transition:left 1s cubic-bezier(.4,0,.2,1),background .8s ease,box-shadow .8s ease;top:-6px}
+.ct-light-dot:hover{z-index:20;transform:translateX(-50%) scale(1.4)}
+.ct-light-dot .ct-dot-tip{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(22,22,28,.94);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:2px 8px;font-size:.58rem;white-space:nowrap;color:rgba(255,255,255,.88);pointer-events:none;opacity:0;transition:opacity .18s;backdrop-filter:blur(12px);z-index:30}
+.ct-light-dot:hover .ct-dot-tip{opacity:1}
+#lt-ct-scale{display:flex;justify-content:space-between;font-size:.5rem;color:rgba(255,255,255,.22);margin-top:2px;padding:0 2px}
+#lt-ct-info{font-size:.62rem;color:rgba(255,255,255,.28);text-align:center;margin-top:4px;font-style:italic;min-height:14px;transition:color .5s}
+@keyframes ctDotIn{from{transform:translateX(-50%) scale(0);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+:root.light #lt-ct-gradient-bar{opacity:.7;border-color:rgba(0,0,0,.1)}
+:root.light #lt-ct-scale{color:rgba(0,0,0,.28)}
+:root.light #lt-ct-info{color:rgba(0,0,0,.32)}
+:root.light .ct-light-dot .ct-dot-tip{background:rgba(250,250,255,.96);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.8)}
 /* ── Licht-Fingerabdruck ── */
 #lt-fingerprint{margin:4px 14px 12px;opacity:0;transition:opacity .5s ease;display:flex;flex-direction:column;align-items:center;gap:5px}
 #lt-fingerprint.show{opacity:1}
@@ -741,6 +802,51 @@ html,body{height:100%;background:var(--bg);
 #lt-br-btn.br-flash{animation:brApply .55s ease forwards}
 :root.light #lt-breathe{background:transparent}
 :root.light #lt-br-pill{background:rgba(20,160,180,.06)}
+/* ── Kerzen-Flacker Modus ── */
+#lt-candle{margin:0 14px 10px;opacity:0;transition:opacity .5s ease}
+#lt-candle.show{opacity:1}
+#lt-candle-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,149,30,.28);background:rgba(255,149,30,.07);cursor:pointer;touch-action:manipulation;transition:background .18s,transform .15s;text-align:left}
+#lt-candle-btn:active{transform:scale(.97);background:rgba(255,149,30,.18)}
+#lt-candle-btn.cnd-active{border-color:rgba(255,149,30,.55);background:rgba(255,149,30,.12)}
+#lt-candle-ico{font-size:1.1rem;flex-shrink:0;display:inline-block}
+@keyframes cndFlicker{0%,100%{transform:scaleX(1) scaleY(1) rotate(-1deg)}25%{transform:scaleX(0.92) scaleY(1.08) rotate(1.5deg)}50%{transform:scaleX(1.06) scaleY(0.96) rotate(-0.8deg)}75%{transform:scaleX(0.96) scaleY(1.04) rotate(1deg)}}
+#lt-candle-btn.cnd-active #lt-candle-ico{animation:cndFlicker 1.2s ease-in-out infinite}
+#lt-candle-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-candle-val{font-size:.68rem;font-weight:700;color:rgba(255,160,60,.9);white-space:nowrap}
+#lt-candle-pill{display:none;align-items:center;gap:8px;padding:7px 12px;margin-top:7px;border-radius:12px;background:rgba(255,149,30,.08);border:1px solid rgba(255,149,30,.2)}
+#lt-candle-pill.show{display:flex}
+#lt-candle-dot{width:7px;height:7px;border-radius:50%;background:#ff9520;flex-shrink:0}
+@keyframes cndDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,149,30,.7)}55%{box-shadow:0 0 0 5px rgba(255,149,30,0)}}
+#lt-candle-dot{animation:cndDotPulse 1.8s ease-in-out infinite}
+#lt-candle-cd{font-size:.72rem;font-weight:600;color:rgba(255,190,100,.9);flex:1}
+#lt-candle-cancel{font-size:.7rem;padding:3px 8px;border-radius:8px;border:1px solid rgba(255,149,30,.38);background:rgba(255,149,30,.1);color:rgba(255,180,80,.85);cursor:pointer;touch-action:manipulation;transition:background .15s}
+#lt-candle-cancel:active{background:rgba(255,149,30,.25)}
+@keyframes cndApply{0%{background:rgba(255,149,30,.35)}100%{background:rgba(255,149,30,.07)}}
+#lt-candle-btn.cnd-flash{animation:cndApply .5s ease forwards}
+:root.light #lt-candle{background:transparent}
+:root.light #lt-candle-pill{background:rgba(255,149,30,.05)}
+/* ── Licht Preset Karussell ── */
+#lt-presets{margin:0 0 12px;opacity:0;transition:opacity .5s ease;pointer-events:none}
+#lt-presets.show{opacity:1;pointer-events:auto;animation:ltPresetsIn .45s cubic-bezier(.32,0,.15,1) both}
+#lt-presets-label{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin:0 14px 8px;display:block}
+#lt-presets-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 14px 6px;scrollbar-width:none;-ms-overflow-style:none}
+#lt-presets-scroll::-webkit-scrollbar{display:none}
+.lt-preset-card{flex:0 0 74px;border-radius:14px;border:1.5px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:transform .2s,border-color .35s,background .35s;touch-action:manipulation;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.lt-preset-card:active{transform:scale(.91)}
+.lt-preset-card.active{border-color:rgba(255,159,10,.54);background:rgba(255,159,10,.09)}
+.lt-preset-card.active .lt-prc-name{color:#ff9f0a}
+.lt-prc-orb{width:40px;height:40px;border-radius:50%;flex-shrink:0;position:relative;transition:box-shadow .4s}
+.lt-preset-card.active .lt-prc-orb{box-shadow:0 0 20px 5px var(--prc-glow,rgba(255,159,10,.4))}
+.lt-prc-emoji{font-size:1.18rem;line-height:1;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.lt-prc-name{font-size:.62rem;font-weight:600;color:rgba(255,255,255,.8);text-align:center;letter-spacing:.02em}
+.lt-prc-sub{font-size:.50rem;color:rgba(255,255,255,.27);text-align:center;letter-spacing:.01em;line-height:1.3}
+@keyframes ltpFlash{0%{opacity:.7}100%{opacity:1}}
+.lt-preset-card.ltp-tap{animation:ltpFlash .35s ease forwards}
+@keyframes ltPresetsIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+:root.light .lt-preset-card{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}
+:root.light .lt-prc-name{color:rgba(0,0,0,.7)}
+:root.light .lt-prc-sub{color:rgba(0,0,0,.32)}
+:root.light #lt-presets-label{color:rgba(0,0,0,.32)}
 /* ── Licht-Snapshot ── */
 /* Farb-Mixer Color Wheel */
 #lt-color-wheel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px 14px;margin:0 14px 12px}
@@ -2881,6 +2987,9 @@ input[type=range] { touch-action: none; }
         <span id="silence-txt">🌙 Ruhezeit aktiv<span id="silence-cd"></span></span>
       </div>
 
+      <!-- Wochenende-Countdown Chip -->
+      <div id="wkend-chip"></div>
+
       <!-- Anwesenheits-Chips (device_tracker.*) -->
       <div id="presence-strip"></div>
 
@@ -3128,6 +3237,17 @@ input[type=range] { touch-action: none; }
         <input type="range" id="lt-gd-range" min="1" max="100" value="80" step="1">
         <span id="lt-gd-val">--%</span>
       </div>
+      <!-- CT-Spektrum Visualizer -->
+      <div id="lt-ct-strip" aria-label="Farbtemperatur-Spektrum">
+        <div id="lt-ct-bar-wrap">
+          <div id="lt-ct-gradient-bar"></div>
+          <div id="lt-ct-dots-layer"></div>
+        </div>
+        <div id="lt-ct-scale">
+          <span>🕯 1800K</span><span>2700K</span><span>4000K</span><span>5500K</span><span>☀️ 6500K</span>
+        </div>
+        <div id="lt-ct-info">— Farbtemperatur aktiver Lichter —</div>
+      </div>
       <!-- Licht-Fingerabdruck Radial Chart -->
       <div id="lt-fingerprint" aria-label="Licht-Fingerabdruck">
         <div id="lt-fp-label">💡 Licht-Fingerabdruck</div>
@@ -3213,6 +3333,24 @@ input[type=range] { touch-action: none; }
           <span id="lt-br-cd">Einatmen…</span>
           <button id="lt-br-cancel">✕</button>
         </div>
+      </div>
+      <!-- Kerzen-Flacker Modus -->
+      <div id="lt-candle" aria-label="Kerzen-Flacker Modus">
+        <button id="lt-candle-btn" title="Lichter flackern wie echte Kerzen (1800–2200K, 15–45%)">
+          <span id="lt-candle-ico">🕯️</span>
+          <span id="lt-candle-label">Kerzen-Flacker</span>
+          <span id="lt-candle-val">1800–2200K · Organisch</span>
+        </button>
+        <div id="lt-candle-pill">
+          <div id="lt-candle-dot"></div>
+          <span id="lt-candle-cd">Flackert…</span>
+          <button id="lt-candle-cancel">✕</button>
+        </div>
+      </div>
+      <!-- Szenen-Preset Karussell -->
+      <div id="lt-presets" aria-label="Licht-Presets">
+        <span id="lt-presets-label">⚡ PRESETS</span>
+        <div id="lt-presets-scroll"></div>
       </div>
       <!-- Schnellfarben-Palette -->
       <div id="lt-color-palette" aria-label="Licht-Schnellfarben">
@@ -3523,6 +3661,57 @@ input[type=range] { touch-action: none; }
             </div>
           </div>
           <div id="sport-time-row" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- Pflanzengieß-Check Card -->
+      <div id="plant-card">
+        <div id="plant-inner">
+          <div id="plant-bg-orb"></div>
+          <div id="plant-label">🌱 PFLANZENGIESS-CHECK</div>
+          <div id="plant-body">
+            <!-- Animated water drop SVG -->
+            <div id="plant-drop-wrap">
+              <svg id="plant-drop-svg" viewBox="0 0 54 70" width="54" height="70">
+                <defs>
+                  <linearGradient id="plantDropGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#5ac8fa" stop-opacity=".9"/>
+                    <stop offset="100%" stop-color="#0a84ff" stop-opacity=".8"/>
+                  </linearGradient>
+                  <linearGradient id="plantDropFillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#30d158" stop-opacity=".9"/>
+                    <stop offset="100%" stop-color="#0a84ff" stop-opacity=".85"/>
+                  </linearGradient>
+                  <clipPath id="plantDropClip">
+                    <path d="M27 4 C27 4 6 28 6 42 A21 21 0 0 0 48 42 C48 28 27 4 27 4 Z"/>
+                  </clipPath>
+                </defs>
+                <!-- Drop outline -->
+                <path d="M27 4 C27 4 6 28 6 42 A21 21 0 0 0 48 42 C48 28 27 4 27 4 Z"
+                      fill="rgba(255,255,255,.05)" stroke="rgba(100,180,255,.35)" stroke-width="1.5"/>
+                <!-- Fill level rect (clipped to drop shape) -->
+                <rect id="plant-drop-fill" x="0" y="70" width="54" height="70" fill="url(#plantDropFillGrad)" clip-path="url(#plantDropClip)" style="transition:y 1.4s cubic-bezier(.4,0,.2,1)"/>
+                <!-- Shimmer highlight -->
+                <ellipse cx="20" cy="30" rx="5" ry="8" fill="rgba(255,255,255,.13)" transform="rotate(-20,20,30)"/>
+                <!-- Percentage label in drop -->
+                <text id="plant-drop-pct" x="27" y="50" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(255,255,255,.9)" style="font-family:system-ui">–</text>
+              </svg>
+            </div>
+            <!-- Right side info -->
+            <div id="plant-info">
+              <div id="plant-verdict">Prüfen</div>
+              <div id="plant-desc">Berechne Bodenzustand…</div>
+              <div id="plant-chips-row"></div>
+              <div id="plant-tip"></div>
+            </div>
+          </div>
+          <div id="plant-stats-row">
+            <div class="plant-stat"><span id="plant-stat-rain">–</span><div class="plant-stat-lbl">Regen letzte Tage</div></div>
+            <div class="plant-stat-div"></div>
+            <div class="plant-stat"><span id="plant-stat-evap">–</span><div class="plant-stat-lbl">Verdunstung</div></div>
+            <div class="plant-stat-div"></div>
+            <div class="plant-stat"><span id="plant-stat-sun">–</span><div class="plant-stat-lbl">Sonnenstunden</div></div>
+          </div>
         </div>
       </div>
 
@@ -5502,6 +5691,7 @@ function renderWeather(){
   drawClimCard();
   drawDayHighlight();
   drawUmbrellaCard();
+  drawPlantCard();
   drawLueftCard();
   drawWindChill();
   drawVisCloud();
@@ -6649,6 +6839,139 @@ function drawUmbrellaCard(){
     });
   });
 }
+// ═══════════════════════════════════════════════
+// PFLANZENGIES-CHECK CARD
+// ═══════════════════════════════════════════════
+function drawPlantCard(){
+  const card=document.getElementById('plant-card');
+  if(!card||!window._wx||!_wx.current||!_wx.daily)return;
+  const c=_wx.current,d=_wx.daily;
+  if(!d.precipitation_sum||d.precipitation_sum.length<1){card.style.display='none';return;}
+
+  // --- Soil moisture score: rain last 3 days minus evaporation ---
+  // precipitation_sum[0]=today, [1]=tomorrow (forecast)
+  // Use negative indices not available; use first 3 values as rough estimate
+  // Actually daily[0] = today. We want past rain. Use _wx.hourly precipitation last 24h as fallback.
+  const h=_wx.hourly||{};
+  let recentRainMm=0;
+  // Sum hourly precipitation of the last 24 hours
+  if(h.time&&h.precipitation){
+    const cutoff=Date.now()-24*3600*1000;
+    h.time.forEach((t,i)=>{
+      if(new Date(t).getTime()>=cutoff&&new Date(t).getTime()<=Date.now()){
+        recentRainMm+=(h.precipitation[i]||0);
+      }
+    });
+  } else if(d.precipitation_sum[0]!=null){
+    // Use today's forecast as rough proxy
+    recentRainMm=d.precipitation_sum[0]*0.5;
+  }
+  // Also factor in last 3 days forecast (index 0=today, we approximate past rain from daily)
+  // Use daily[0] (today) as representative of recent conditions
+  const todayRain=d.precipitation_sum[0]||0;
+  const combinedRain=Math.min(recentRainMm+todayRain*0.4, 30); // cap at 30mm
+
+  // Evaporation estimate: based on temperature + sunshine + wind
+  const temp=c.temperature_2m||15;
+  const wind=c.windspeed_10m||10;
+  const cloud=c.cloud_cover!=null?c.cloud_cover:50;
+  // Simplified Hargreaves evaporation: higher temp + sun + wind = more evaporation
+  const sunFactor=(100-cloud)/100;
+  const evapMmPerDay=Math.max(0, (0.15*(temp-5)+0.03*wind)*sunFactor).toFixed(1);
+  const evapToday=parseFloat(evapMmPerDay);
+
+  // Sunshine hours today (if available)
+  let sunHours='–';
+  if(d.sunshine_duration&&d.sunshine_duration[0]!=null){
+    sunHours=Math.round(d.sunshine_duration[0]/3600)+'h';
+  } else {
+    sunHours=Math.round(sunFactor*14)+'h~';
+  }
+
+  // Net water balance: rain - evap (needs ~4mm/day for most garden plants)
+  const balance=combinedRain - evapToday;
+  // Score 0-100: 100=very wet (no need), 0=very dry (urgent)
+  const score=Math.min(100,Math.max(0,Math.round(50+balance*4)));
+
+  // Determine verdict + color + tips
+  let verdict,desc,accentColor,tipText,fillPct;
+  const chips=[];
+  if(score>=75){
+    verdict='Nicht nötig 💧';
+    desc='Boden ist noch ausreichend feucht — Regen hat die Arbeit übernommen.';
+    accentColor='#5ac8fa';
+    fillPct=score;
+    tipText='💡 Gieße erst wieder wenn die obersten 3 cm Erde trocken sind.';
+    chips.push({t:'🌧 Regen ausreichend',cls:'plant-chip-good'});
+    if(temp>28)chips.push({t:'🔥 Heiß — bald prüfen',cls:'plant-chip-mid'});
+  } else if(score>=50){
+    verdict='Prüfen 🌿';
+    desc='Boden könnte anfangen auszutrocknen — kurz prüfen empfohlen.';
+    accentColor='#30d158';
+    fillPct=score;
+    tipText='💡 Stecke einen Finger 3cm tief in die Erde — fühlt sie sich trocken an? Dann gießen.';
+    chips.push({t:'🌡 '+Math.round(temp)+'°C Außen',cls:temp>24?'plant-chip-mid':'plant-chip-good'});
+    chips.push({t:'🌬 '+Math.round(wind)+' km/h Wind',cls:wind>25?'plant-chip-mid':'plant-chip-good'});
+  } else if(score>=25){
+    verdict='Jetzt gießen! 🪣';
+    desc='Hohe Verdunstung und wenig Niederschlag — Pflanzen brauchen Wasser.';
+    accentColor='#ff9f0a';
+    fillPct=score;
+    tipText='💡 Morgens oder abends gießen um Verdunstungsverluste zu minimieren.';
+    chips.push({t:'☀️ Viel Sonne',cls:'plant-chip-bad'});
+    chips.push({t:'💧 Wenig Regen',cls:'plant-chip-bad'});
+    if(wind>20)chips.push({t:'🌬 Wind trocknet aus',cls:'plant-chip-mid'});
+  } else {
+    verdict='Dringend gießen! 🆘';
+    desc='Sehr hoher Wasserbedarf — Pflanzen könnten Trockenschäden erleiden!';
+    accentColor='#ff453a';
+    fillPct=Math.max(score,8);
+    tipText='💡 Sofort gründlich wässern, idealerweise 2× täglich bei >30°C.';
+    chips.push({t:'🥵 Hitze & Trockenheit',cls:'plant-chip-bad'});
+    chips.push({t:'⚠️ Dringend handeln',cls:'plant-chip-bad'});
+  }
+
+  // Update DOM
+  const verdictEl=card.querySelector('#plant-verdict');
+  const descEl=card.querySelector('#plant-desc');
+  const chipsRow=card.querySelector('#plant-chips-row');
+  const tipEl=card.querySelector('#plant-tip');
+  const dropFill=card.querySelector('#plant-drop-fill');
+  const dropPct=card.querySelector('#plant-drop-pct');
+  const statRain=card.querySelector('#plant-stat-rain');
+  const statEvap=card.querySelector('#plant-stat-evap');
+  const statSun=card.querySelector('#plant-stat-sun');
+  const bgOrb=card.querySelector('#plant-bg-orb');
+
+  if(verdictEl){verdictEl.textContent=verdict;verdictEl.style.color=accentColor;}
+  if(descEl)descEl.textContent=desc;
+  if(tipEl)tipEl.textContent=tipText;
+  if(chipsRow){
+    chipsRow.innerHTML=chips.map(ch=>`<span class="plant-chip ${ch.cls}">${ch.t}</span>`).join('');
+  }
+  // Fill drop: y=70 means empty, y=70-66*(pct/100) fills from bottom
+  if(dropFill){
+    const yPos=70-Math.round(66*(fillPct/100));
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      dropFill.setAttribute('y',yPos);
+    }));
+  }
+  if(dropPct)dropPct.textContent=Math.round(fillPct)+'%';
+  if(statRain)statRain.textContent=combinedRain.toFixed(1)+'mm';
+  if(statEvap){statEvap.textContent=evapToday.toFixed(1)+'mm';statEvap.style.color=evapToday>3?'#ff9f0a':accentColor;}
+  if(statSun)statSun.textContent=sunHours;
+  if(bgOrb)bgOrb.style.background=`radial-gradient(circle,${accentColor}1e 0%,transparent 68%)`;
+
+  // Update drop gradient color
+  const fillGrad=card.querySelector('#plantDropFillGrad stop:first-child');
+  const fillGrad2=card.querySelector('#plantDropFillGrad stop:last-child');
+  if(fillGrad)fillGrad.setAttribute('stop-color',score>=50?'#30d158':'#ff9f0a');
+  if(fillGrad2)fillGrad2.setAttribute('stop-color',score>=50?'#0a84ff':'#ff6b35');
+
+  card.style.display='block';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('show')));
+}
+
 function drawLueftCard(){
   const card=document.getElementById('lueft-card');
   if(!card||!_wx?.current) return;
@@ -11741,7 +12064,10 @@ function updateAll(){
   window._updateSunsetSim&&window._updateSunsetSim(on);
   window._updateNightLight&&window._updateNightLight(on);
   window._updateBreathe&&window._updateBreathe(on);
+  window._updateCandle&&window._updateCandle(on);
+  window._updatePresets&&window._updatePresets(on);
   window._updateFingerprint&&window._updateFingerprint(on);
+  window._updateCtStrip&&window._updateCtStrip(on);
   // ── Wohnstimmung Dial ──
   window._updateWohnstimmung&&window._updateWohnstimmung(on, playing);
   // ── Anwesenheits-Chips ──
@@ -11872,6 +12198,35 @@ function updateAll(){
     const minLeft=minsUntil%60;
     const fmt=hLeft>0?` · noch ${hLeft}h ${minLeft}min`:(minLeft>1?` · noch ${minLeft}min`:' · gleich vorbei');
     cdEl.textContent=fmt;
+  })();
+  // ── Wochenende-Countdown Chip ──
+  (function(){
+    const chip=document.getElementById("wkend-chip");
+    if(!chip)return;
+    const now=new Date();
+    const day=now.getDay(); // 0=Sun,6=Sat
+    const isWeekend=(day===0||day===6);
+    chip.innerHTML="";
+    const dot=document.createElement("div");dot.id="wkend-dot";
+    const txt=document.createElement("span");txt.id="wkend-txt";
+    chip.appendChild(dot);chip.appendChild(txt);
+    if(isWeekend){
+      chip.className="show wkend-now";
+      txt.textContent="🎉 Wochenende!";
+    } else {
+      chip.className="show wkend-soon";
+      // mins until next Saturday 00:00
+      const daysToSat=day===0?6:(6-day);
+      const h=now.getHours(),m=now.getMinutes();
+      const totalMins=daysToSat*1440+(0-h)*60-m;
+      const dLeft=Math.floor(totalMins/1440);
+      const hLeft=Math.floor((totalMins%1440)/60);
+      let label;
+      if(dLeft>=2){label=`📅 Noch ${dLeft}d ${hLeft}h bis zum Wochenende`;}
+      else if(dLeft===1){label=`📅 Morgen ist Wochenende! noch ${hLeft}h`;}
+      else{label=`🥳 Heute Nacht: Wochenende! noch ${hLeft}h`;}
+      txt.textContent=label;
+    }
   })();
   // ── Wetter-Empfehlung Pill ──
   (function(){
@@ -14139,6 +14494,113 @@ const _origSetWxMode=setWxMode;
     };
   })();
 
+  // ── Kerzen-Flacker Modus ──
+  (function(){
+    const cndWrap=document.getElementById('lt-candle');
+    if(!cndWrap)return;
+    const cndBtn=document.getElementById('lt-candle-btn');
+    const cndIco=document.getElementById('lt-candle-ico');
+    const cndVal=document.getElementById('lt-candle-val');
+    const cndPill=document.getElementById('lt-candle-pill');
+    const cndCd=document.getElementById('lt-candle-cd');
+    const cndCancel=document.getElementById('lt-candle-cancel');
+
+    const CND_TOTAL_MS=10*60*1000; // 10 Minuten Auto-Stop
+    let _cndRunning=false, _cndStartMs=0;
+    let _cndFlickerTimer=null, _cndStopTimer=null, _cndTickIv=null;
+
+    // Liefert alle aktiven Lichter mit color_temp Unterstützung
+    function getCandleLights(){
+      return (CFG.lights||[]).filter(id=>{
+        const s=_S[id];
+        return s&&s.state==='on';
+      });
+    }
+
+    // Berechnet zufälligen Kerzen-Flacker-Wert
+    function randCandle(){
+      // Kerze: 1800–2200K, Helligkeit 18–45%
+      // Gelegentlich "Windstoß": kurz auf 8–14% abfallen
+      const gust=Math.random()<0.12; // 12% Chance für Windstoß
+      if(gust){
+        return{ct:Math.round(1800+Math.random()*200), bri:Math.round(8+Math.random()*6), trans:0.2};
+      }
+      return{
+        ct:Math.round(1800+Math.random()*400),
+        bri:Math.round(18+Math.random()*27),
+        trans:0.25+Math.random()*0.4
+      };
+    }
+
+    function doFlicker(){
+      if(!_cndRunning)return;
+      const lights=getCandleLights();
+      lights.forEach(id=>{
+        const v=randCandle();
+        const s=_S[id];
+        const attrs=s&&s.attributes||{};
+        // CT-fähige Lichter: color_temp_kelvin senden; RGB-only: brightness
+        if(attrs.color_temp_kelvin!==undefined||attrs.min_color_temp_kelvin!==undefined){
+          const minCT=attrs.min_color_temp_kelvin||1500;
+          const maxCT=attrs.max_color_temp_kelvin||6500;
+          const ct=Math.max(minCT,Math.min(maxCT,v.ct));
+          svc('light','turn_on',{entity_id:id,color_temp_kelvin:ct,brightness_pct:v.bri,transition:v.trans});
+        } else {
+          // RGB-Lichter: warmes Orange simulieren
+          const r=255, g=Math.round(90+Math.random()*50), b=Math.round(5+Math.random()*15);
+          svc('light','turn_on',{entity_id:id,rgb_color:[r,g,b],brightness_pct:v.bri,transition:v.trans});
+        }
+      });
+      // Nächsten Flacker unregelmäßig planen (600–1400ms)
+      const nextMs=600+Math.random()*800;
+      _cndFlickerTimer=setTimeout(doFlicker, nextMs);
+    }
+
+    function startCandle(){
+      if(_cndRunning)return;
+      _cndRunning=true;
+      _cndStartMs=Date.now();
+      cndBtn.classList.add('cnd-active');
+      void cndBtn.offsetWidth;
+      cndBtn.classList.add('cnd-flash');
+      cndPill.classList.add('show');
+      cndVal.textContent='Flackert…';
+      hap&&hap();
+      doFlicker();
+      _cndStopTimer=setTimeout(()=>stopCandle(false), CND_TOTAL_MS);
+      _cndTickIv=setInterval(()=>{
+        if(!_cndRunning)return;
+        const rem=CND_TOTAL_MS-(Date.now()-_cndStartMs);
+        if(rem<=0){stopCandle(false);return;}
+        const m=Math.floor(rem/60000), s=Math.floor((rem%60000)/1000);
+        cndCd.textContent='🕯️ Kerze brennt · noch '+m+'m '+String(s).padStart(2,'0')+'s';
+      },1000);
+    }
+
+    function stopCandle(wasCancelled){
+      if(!_cndRunning&&!_cndFlickerTimer)return;
+      _cndRunning=false;
+      clearTimeout(_cndFlickerTimer); _cndFlickerTimer=null;
+      clearTimeout(_cndStopTimer); _cndStopTimer=null;
+      clearInterval(_cndTickIv); _cndTickIv=null;
+      cndBtn.classList.remove('cnd-active');
+      cndPill.classList.remove('show');
+      cndVal.textContent='1800–2200K · Organisch';
+      if(wasCancelled)showToast('🕯️ Kerzen-Flacker gestoppt');
+    }
+
+    cndBtn.addEventListener('click',()=>{
+      if(_cndRunning){stopCandle(true);return;}
+      startCandle();
+    });
+    cndCancel.addEventListener('click',()=>stopCandle(true));
+
+    window._updateCandle=function(onCount){
+      cndWrap.classList.toggle('show',onCount>0);
+      if(onCount===0&&_cndRunning)stopCandle(false);
+    };
+  })();
+
   // ── Licht-Snapshot Feature ──
   (function(){
     const wrap=document.getElementById('lt-snapshot');
@@ -14855,6 +15317,106 @@ const _origSetWxMode=setWxMode;
   };
 })();
 
+// ───────────── CT-SPEKTRUM VISUALIZER ─────────────
+(function(){
+  const strip=document.getElementById('lt-ct-strip');
+  if(!strip)return;
+  const dotsLayer=document.getElementById('lt-ct-dots-layer');
+  const infoEl=document.getElementById('lt-ct-info');
+  if(!dotsLayer||!infoEl)return;
+
+  const MIN_K=1800, MAX_K=6500;
+
+  function kelvinToRgb(k){
+    k=Math.max(MIN_K,Math.min(MAX_K,k));
+    // Simple perceptual mapping for display
+    if(k<=2000)return[255,110,20];
+    if(k<=2700)return[255,165,60];
+    if(k<=3200)return[255,200,110];
+    if(k<=4000)return[255,235,185];
+    if(k<=5000)return[240,245,255];
+    if(k<=5800)return[200,225,255];
+    return[160,200,255];
+  }
+
+  window._updateCtStrip=function(onCount){
+    const lights=(window.CFG&&CFG.lights)||[];
+    if(!lights.length||!onCount){strip.classList.remove('show');return;}
+
+    // Collect active lights with CT data
+    const active=[];
+    lights.forEach(function(id){
+      const s=(_S&&_S[id])||{};
+      if(s.state!=='on')return;
+      const a=s.attributes||{};
+      let kt=a.color_temp_kelvin;
+      if(!kt&&a.color_temp)kt=Math.round(1e6/a.color_temp);
+      const name=(a.friendly_name||id).replace(/^(light\.|switch\.)/,'').replace(/_/g,' ');
+      const shortName=name.length>16?name.slice(0,14)+'…':name;
+      if(kt&&kt>=1500&&kt<=7000){
+        active.push({id,kt,name:shortName,rgb:a.rgb_color});
+      } else if(a.rgb_color){
+        // RGB-only light — estimate CT from hue
+        const [r,g,b]=a.rgb_color;
+        const maxC=Math.max(r,g,b);
+        const warmth=r/Math.max(1,maxC)-b/Math.max(1,maxC);
+        const estKt=warmth>0.4?2200:warmth>0?4000:6000;
+        active.push({id,kt:estKt,name:shortName+' (RGB)',rgb:a.rgb_color});
+      }
+    });
+
+    if(!active.length){strip.classList.remove('show');return;}
+    strip.classList.add('show');
+
+    // Build sig for change detection
+    const sig=active.map(d=>d.id+'|'+d.kt).join(',');
+    if(strip._sig===sig)return;
+    strip._sig=sig;
+
+    // Render dots
+    dotsLayer.innerHTML='';
+    let ktSum=0, ktCnt=0;
+    active.forEach(function(d,i){
+      const pct=(Math.min(MAX_K,Math.max(MIN_K,d.kt))-MIN_K)/(MAX_K-MIN_K)*100;
+      const dot=document.createElement('div');
+      dot.className='ct-light-dot';
+      dot.style.left=pct+'%';
+      // Color: use rgb_color if available, else compute from kt
+      let r,g,b;
+      if(d.rgb){[r,g,b]=d.rgb;}
+      else{[r,g,b]=kelvinToRgb(d.kt);}
+      dot.style.background='rgb('+r+','+g+','+b+')';
+      dot.style.boxShadow='0 0 6px 2px rgba('+r+','+g+','+b+',.52)';
+      // Tooltip
+      const tip=document.createElement('div');
+      tip.className='ct-dot-tip';
+      tip.textContent=d.name+' · '+d.kt+'K';
+      dot.appendChild(tip);
+      // Staggered entrance
+      dot.style.animationDelay=(i*0.07)+'s';
+      dot.style.animation='ctDotIn .45s cubic-bezier(.34,1.28,.64,1) both';
+      dotsLayer.appendChild(dot);
+      if(!d.rgb||(d.kt&&d.kt>0)){ktSum+=d.kt;ktCnt++;}
+    });
+
+    // Info line
+    if(ktCnt===1){
+      infoEl.textContent=active[0].name+' · '+active[0].kt+'K';
+      infoEl.style.color='rgba(255,255,255,.42)';
+    } else {
+      const avg=ktCnt?Math.round(ktSum/ktCnt):0;
+      const minKt=Math.min(...active.map(d=>d.kt));
+      const maxKt=Math.max(...active.map(d=>d.kt));
+      if(maxKt-minKt>400){
+        infoEl.textContent=active.length+' Lichter · '+minKt+'K – '+maxKt+'K · Ø '+avg+'K';
+      } else {
+        infoEl.textContent=active.length+' Lichter · Ø '+avg+'K';
+      }
+      infoEl.style.color='rgba(255,220,130,.55)';
+    }
+  };
+})();
+
 // ===== HSV Farbrad Overlay (Color Wheel) für RGB-Lichter =====
 (function(){
   const SIZE=220;
@@ -15049,6 +15611,69 @@ const _origSetWxMode=setWxMode;
   document.addEventListener('touchend',()=>{
     if(_cwLpTimer){clearTimeout(_cwLpTimer);_cwLpTimer=null;}
   },{passive:true});
+})();
+
+/* ── Licht Preset Karussell ── */
+(()=>{
+  const LT_PRESETS=[
+    {id:'morgen',  name:'Morgen',  emoji:'🌅', ct:5500, bri:75,  glowC:'rgba(255,200,100,.45)', bg:'linear-gradient(135deg,#e67e22,#f39c12,#f1c40f)'},
+    {id:'arbeit',  name:'Arbeit',  emoji:'💼', ct:6500, bri:100, glowC:'rgba(180,220,255,.45)', bg:'linear-gradient(135deg,#acd6f7,#d4ecff,#e8f6ff)'},
+    {id:'entspannen',name:'Relax', emoji:'🛋️', ct:3000, bri:55,  glowC:'rgba(255,150,50,.4)',  bg:'linear-gradient(135deg,#c0572a,#e8843c,#f5b97a)'},
+    {id:'film',    name:'Film',    emoji:'🎬', ct:2200, bri:22,  glowC:'rgba(10,132,255,.38)', bg:'linear-gradient(135deg,#0a2a6e,#0a4faa,#1a74cc)'},
+    {id:'romantik',name:'Romantik',emoji:'🕯️', rgb:[255,70,55], bri:18, glowC:'rgba(255,70,55,.38)', bg:'linear-gradient(135deg,#6e0020,#c0203a,#e84060)'},
+    {id:'nacht',   name:'Nacht',   emoji:'🌙', ct:1900, bri:8,   glowC:'rgba(100,100,220,.35)', bg:'linear-gradient(135deg,#0a0a2e,#1a1a60,#1e2070)'},
+  ];
+  const SK='lt_preset_active';
+  const scroll=document.getElementById('lt-presets-scroll');
+  const wrap=document.getElementById('lt-presets');
+  if(!scroll||!wrap) return;
+
+  // Build cards
+  LT_PRESETS.forEach(p=>{
+    const sub=p.ct?`${p.ct}K · ${p.bri}%`:`RGB · ${p.bri}%`;
+    const card=document.createElement('div');
+    card.className='lt-preset-card';
+    card.dataset.preset=p.id;
+    card.style.setProperty('--prc-glow',p.glowC);
+    card.innerHTML=`<div class="lt-prc-orb" style="background:${p.bg}"><span class="lt-prc-emoji">${p.emoji}</span></div><div class="lt-prc-name">${p.name}</div><div class="lt-prc-sub">${sub}</div>`;
+    card.addEventListener('click',()=>{
+      // Apply preset to all active dimmable lights
+      const ids=(window.CFG&&CFG.lights||[]).filter(id=>{
+        const s=window._S&&_S[id];
+        return s&&s.state==='on';
+      });
+      if(!ids.length){window.showToast&&showToast('Keine Lichter an');return;}
+      ids.forEach(id=>{
+        const svcData={entity_id:id,brightness_pct:p.bri,transition:1.2};
+        if(p.ct) svcData.color_temp_kelvin=p.ct;
+        else if(p.rgb) svcData.rgb_color=p.rgb;
+        window.svc&&svc('light','turn_on',svcData);
+      });
+      const label=p.ct?`${p.ct}K · ${p.bri}%`:`RGB · ${p.bri}%`;
+      window.showToast&&showToast(`${p.emoji} ${p.name} auf ${ids.length} Licht${ids.length>1?'er':''} · ${label}`);
+      window.hap&&hap();
+      // save active
+      localStorage.setItem(SK,p.id);
+      // update highlight
+      document.querySelectorAll('.lt-preset-card').forEach(c=>c.classList.toggle('active',c.dataset.preset===p.id));
+      // tap flash
+      card.classList.remove('ltp-tap');
+      void card.offsetWidth;
+      card.classList.add('ltp-tap');
+    });
+    scroll.appendChild(card);
+  });
+
+  // restore saved active
+  const saved=localStorage.getItem(SK);
+  if(saved){
+    const ac=scroll.querySelector(`[data-preset="${saved}"]`);
+    if(ac) ac.classList.add('active');
+  }
+
+  window._updatePresets=function(onCount){
+    wrap.classList.toggle('show',onCount>0);
+  };
 })();
 </script>
 

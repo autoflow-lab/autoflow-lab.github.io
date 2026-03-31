@@ -392,4 +392,16 @@
 - [x] wz.html: Home-Tab — "Wetter-Licht Sync" Button (🌤→💡 Ein Tap setzt alle aktiven Lichter passend zur aktuellen Wetterlage
 
 ## Neue Ideen (2026-03-30 22:04 UTC)
-- [x] wz.html: Licht-Tab — "Farb-Mixer" Canvas Color Wheel (🎨 interaktives HSL-Farbrad aus Canvas 140px, Cursor-Tracking via mousedown/touchmove, Sättigung durch Distanz vom Zentrum, Farbton durch Winkel, Helligkeits-Slider, Vorschau-Orb + Hex-Code, Anwenden-Button setzt alle aktiven RGB-Lichter, Fallback auf alle aktiven Lichter wenn keine RGB erkannt, cwApply Flash-Animation, spring-in cwCardIn, erscheint nur wenn RGB-Lichter an): Sonne=Tageslicht 5500K-6000K/80-100%, Regen=Kompensations-Licht 4500K/68%, Bewölkt=ausgewogen 4200K/72%, Nebel=warm-gedimmt 3500K/55%, Gewitter=Cosy 3000K/85%, Nacht=Kerzenschimmer 1900K/15%, Morgengrauen/Abend individuell — Temperaturkorrektur ±CT bei Kälte/Hitze, Beschriftung zeigt aktuelles Ziel live, verschwindet wenn keine Lichter an)
+- [x] wz.html: Licht-Tab — "Farb-Mixer" Canvas Color Wheel
+
+## Neue Ideen (2026-03-31 04:04 UTC)
+- [x] wz.html: Licht-Tab — Farbtemperatur-Spektrum Visualizer (🌡→💡 horizontaler Gradient-Balken 1800K→6500K, positionierte Dots für jedes aktive Licht, Hover-Tooltip mit Name+CT, Durchschnitts-Anzeige, smooth Transition)
+
+## Neue Ideen (2026-03-31 00:04 UTC)
+- [x] wz.html: Wetter-Tab — "Pflanzengieß-Check" Karte (🌱 Soil-moisture Score aus Regen letzte 24h + Verdunstungsschätzung + Temperatur + Sonne → animierter SVG-Wassertropfen füllt sich je Bodenzustand, 4 Stufen von "Nicht nötig" bis "Dringend gießen!", Condition-Chips, Gieß-Tipp) (🎨 interaktives HSL-Farbrad aus Canvas 140px, Cursor-Tracking via mousedown/touchmove, Sättigung durch Distanz vom Zentrum, Farbton durch Winkel, Helligkeits-Slider, Vorschau-Orb + Hex-Code, Anwenden-Button setzt alle aktiven RGB-Lichter, Fallback auf alle aktiven Lichter wenn keine RGB erkannt, cwApply Flash-Animation, spring-in cwCardIn, erscheint nur wenn RGB-Lichter an): Sonne=Tageslicht 5500K-6000K/80-100%, Regen=Kompensations-Licht 4500K/68%, Bewölkt=ausgewogen 4200K/72%, Nebel=warm-gedimmt 3500K/55%, Gewitter=Cosy 3000K/85%, Nacht=Kerzenschimmer 1900K/15%, Morgengrauen/Abend individuell — Temperaturkorrektur ±CT bei Kälte/Hitze, Beschriftung zeigt aktuelles Ziel live, verschwindet wenn keine Lichter an)
+
+## Neue Ideen (2026-03-31 06:04 UTC)
+- [x] wz.html: Licht-Tab — Szenen-Preset Karussell (⚡ 6 Ein-Tap Presets: Morgen/Arbeit/Relax/Film/Romantik/Nacht, horizontaler Scroll, Gradient-Preview-Orb, CT+Brightness-Info, localStorage merkt letztes Preset, spring-in Animation)
+
+## Neue Ideen (2026-03-31 04:37 UTC)
+- [x] demo.html: "Empfohlene Hardware" Section (🖥️ 3 Cards vor Contact: Raspberry Pi 5 / Intel NUC / Synology NAS — Preis + 4 Vorteile + Empfehlung-Badge, grüner/amber/blauer Farbakzent je Option, hover-lift, staggered IntersectionObserver fadein, DE+EN i18n via data-i + applyLang())
