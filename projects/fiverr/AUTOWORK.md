@@ -414,3 +414,6 @@
 
 ## Neue Ideen (2026-03-31 10:04 UTC)
 - [x] wz.html: Musik-Tab — Album-Cover Dominante Farben Palette (🎨 Canvas-Extraktion der 5 markantesten Farben aus dem aktuellen Album-Art, Swatch-Row unter Track History, Tap auf Swatch setzt alle aktiven Lichter auf diese RGB-Farbe mit 1.2s Transition) (📅/🎉 zeigt Tage+Stunden bis Samstag 00:00, während Sa/So grüner "🎉 Wochenende!"-Chip, Werktag = amber mit Countdown "Noch Xd Yh bis zum Wochenende", pulsierender Dot, spring-in Animation, DE Light-Mode kompatibel, aktualisiert sich mit jedem updateAll()-Poll)
+
+## Neue Ideen (2026-03-31 17:08 UTC)
+- [x] demo.html: "Demo Interaction Counter" Floating Pill (🎯 zählt Klicks/Inputs auf interaktive Demo-Elemente — Szenen, Regler, Tabs, Karten; floating badge links unten zeigt "X Elemente ausprobiert 🎯"; Konfetti-Burst bei genau 10 Interaktionen; Milestone-Pop-Animation; DE+EN i18n via langChange-Event; Light-Mode kompatibel)

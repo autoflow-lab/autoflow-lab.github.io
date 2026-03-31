@@ -2586,3 +2586,12 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Pulsierender Dot (amber/grün je Zustand), spring-in wkendChipIn Animation
 - Erscheint unter #silence-chip, Light-Mode kompatibel
 - JS-Check: OK | Git: 57a5ac1 | HA Deploy: SSH nicht verfügbar
+
+## 2026-03-31 17:08 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: "Demo Interaction Counter" Floating Pill (🎯)
+- Floating Badge links unten: erscheint beim 1. Klick auf Demo-Element, zählt hoch
+- Tracked: Licht/Szenen/Musik/Klima/Tabs/Regler/FAQ/Sprache/Theme/Kalkulator
+- Emoji-Progression: 🎯 (1–4) → ✨ (5–9) → 🎯 (10–14) → 🏆 (15+)
+- Konfetti-Burst aus 18 Emoji-Partikeln bei genau 10 Interaktionen
+- Milestone-Pop via CSS-Animation, DE+EN i18n via langChange-Event
+- JS-Check: OK | GitHub Pages: cc5b325
