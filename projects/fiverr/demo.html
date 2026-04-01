@@ -1299,6 +1299,20 @@ input[type=range]{touch-action:pan-x}
 </head>
 <body>
 
+<!-- SCROLL PROGRESS INDICATOR -->
+<div id="scroll-prog" style="position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,#ff9f0a,#ffcc02);z-index:10000;pointer-events:none;transition:width .1s linear;border-radius:0 2px 2px 0;box-shadow:0 0 8px rgba(255,159,10,.6)"></div>
+<script>
+(function(){
+  var bar=document.getElementById('scroll-prog');
+  window.addEventListener('scroll',function(){
+    var doc=document.documentElement;
+    var scrolled=doc.scrollTop||document.body.scrollTop;
+    var total=doc.scrollHeight-doc.clientHeight;
+    bar.style.width=(total>0?(scrolled/total*100):0)+'%';
+  },{passive:true});
+})();
+</script>
+
 <!-- SCARCITY BANNER -->
 <div id="scarcity-banner" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#ff6b00,#ff9f0a);color:#fff;text-align:center;padding:10px 40px 10px 16px;font-size:.82rem;font-weight:600;letter-spacing:.02em;box-shadow:0 2px 12px rgba(255,107,0,.35);transform:translateY(-100%);transition:transform .5s cubic-bezier(.34,1.56,.64,1)">
   🔥 <span data-i18n="scarcity_text">Nur noch <strong>3 Plätze</strong> diese Woche verfügbar — jetzt sichern!</span>
