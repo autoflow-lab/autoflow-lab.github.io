@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Examples — autoflow-lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Oxanium:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:root{
+  --bg:#000;--c1:#1c1c1e;--c2:#2c2c2e;--c3:#3a3a3c;
+  --sep:rgba(255,255,255,.08);--txt:#fff;--dim:rgba(255,255,255,.5);--dim2:rgba(255,255,255,.28);
+  --acc:#ff9f0a;--blue:#0a84ff;--grn:#30d158;--red:#ff453a;--pink:#ff2d55;
+  --cyan:#64d2ff;--purple:#bf5af2;
+  --r20:20px;--r14:14px;--r10:10px;
+  --sh:0 8px 32px rgba(0,0,0,.6);
+}
+body{font-family:'Outfit',-apple-system,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:-0.5px;color:#fff;text-decoration:none}
+.nav-logo span{color:var(--acc)}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-links a{font-size:.82rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:7px 18px;font-size:.82rem;color:#fff;text-decoration:none;transition:all .2s}
+.nav-btn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.2)}
+
+/* HERO */
+.hero{padding:120px 24px 60px;text-align:center;max-width:800px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,159,10,.12);border:1px solid rgba(255,159,10,.3);border-radius:20px;padding:6px 14px;font-size:.78rem;color:var(--acc);font-weight:600;margin-bottom:24px;letter-spacing:.5px}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;letter-spacing:-2px;line-height:1.1;margin-bottom:16px}
+.hero h1 span{background:linear-gradient(135deg,var(--acc),#ff6b00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:36px;max-width:560px;margin-left:auto;margin-right:auto}
+
+/* TABS */
+.tab-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;padding:0 24px}
+.tab-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:8px 20px;font-size:.85rem;font-family:'Outfit',sans-serif;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.tab-btn.act{background:var(--acc);border-color:var(--acc);color:#000;font-weight:600}
+
+/* DEMO CONTAINER */
+.demo-wrap{max-width:420px;margin:0 auto;padding:0 16px}
+.demo-device{background:var(--bg);border-radius:40px;overflow:hidden;border:2px solid rgba(255,255,255,.08);box-shadow:0 32px 80px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04);min-height:700px;position:relative}
+.demo-inner{padding:0 0 80px;overflow:hidden}
+
+/* DEMO PANELS */
+.demo-panel{display:none;padding:20px 16px}
+.demo-panel.cur{display:block}
+
+/* CLOCK WIDGET */
+.clock-widget{background:var(--c1);border-radius:var(--r20);padding:20px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.cw-time{font-family:'Oxanium',sans-serif;font-size:3rem;font-weight:700;letter-spacing:-1px;line-height:1}
+.cw-date{font-size:.78rem;color:var(--dim);margin-top:4px}
+.cw-wx{text-align:right}
+.cw-temp{font-family:'Oxanium',sans-serif;font-size:1.8rem;font-weight:700;color:var(--acc)}
+.cw-desc{font-size:.72rem;color:var(--dim);margin-top:2px}
+
+/* SCENE ROW */
+.sc-row{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.sc-row::-webkit-scrollbar{display:none}
+.sc-chip{background:var(--c1);border:1px solid var(--sep);border-radius:12px;padding:8px 14px;font-size:.78rem;color:var(--dim);cursor:pointer;transition:all .25s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.sc-chip.act{background:rgba(255,159,10,.18);border-color:var(--acc);color:var(--acc);font-weight:600}
+.sc-chip span{font-size:1rem}
+
+/* PRESENCE */
+.presence-row{display:flex;gap:8px;margin-bottom:12px}
+.prs-pill{background:var(--c1);border:1px solid var(--sep);border-radius:20px;padding:6px 12px;font-size:.76rem;display:flex;align-items:center;gap:6px}
+.prs-dot{width:7px;height:7px;border-radius:50%;background:var(--grn)}
+.prs-dot.away{background:var(--dim2)}
+
+/* LIGHT TILES */
+.lt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.lt{background:var(--c1);border-radius:var(--r20);padding:14px;cursor:pointer;transition:all .25s;border:1px solid transparent;position:relative;overflow:hidden;min-height:90px;display:flex;flex-direction:column;justify-content:space-between}
+.lt.on{background:rgba(255,159,10,.13);border-color:rgba(255,159,10,.3)}
+.lt.on.blue{background:rgba(10,132,255,.13);border-color:rgba(10,132,255,.3)}
+.lt.on.grn{background:rgba(48,209,88,.12);border-color:rgba(48,209,88,.3)}
+.lt-ico{font-size:1.4rem;margin-bottom:8px}
+.lt-name{font-size:.78rem;font-weight:600;color:var(--dim)}
+.lt.on .lt-name{color:#fff}
+.lt-state{font-size:.7rem;color:var(--dim2)}
+.lt.on .lt-state{color:var(--acc)}
+.lt.on.blue .lt-state{color:var(--blue)}
+.lt.on.grn .lt-state{color:var(--grn)}
+.lt-glow{position:absolute;inset:-20px;background:radial-gradient(circle at 50% 0%,rgba(255,159,10,.15),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.lt.on .lt-glow{opacity:1}
+.lt.on.blue .lt-glow{background:radial-gradient(circle at 50% 0%,rgba(10,132,255,.15),transparent 60%)}
+.lt.on.grn .lt-glow{background:radial-gradient(circle at 50% 0%,rgba(48,209,88,.12),transparent 60%)}
+
+/* QA TILES */
+.qa-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.qa{background:var(--c1);border-radius:var(--r14);padding:14px;cursor:pointer;transition:all .2s;text-align:left;border:1px solid var(--sep)}
+.qa:active{transform:scale(.96)}
+.qa-ico{font-size:1.3rem;margin-bottom:6px}
+.qa-lbl{font-size:.76rem;font-weight:600;color:var(--dim)}
+
+/* MUSIK PANEL */
+.music-card{background:var(--c1);border-radius:var(--r20);padding:20px;margin-bottom:12px}
+.disc-wrap{width:120px;height:120px;margin:0 auto 16px;position:relative}
+.disc{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,#2d1b69,#11998e);display:flex;align-items:center;justify-content:center;transition:transform .1s;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.disc.spin{animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.disc-hole{width:20px;height:20px;border-radius:50%;background:var(--bg);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.np-t{font-weight:700;font-size:1rem;text-align:center;margin-bottom:2px}
+.np-s{font-size:.82rem;color:var(--dim);text-align:center;margin-bottom:16px}
+.prog-bar{height:4px;background:var(--c3);border-radius:2px;margin-bottom:8px;cursor:pointer;position:relative}
+.prog-fill{height:100%;border-radius:2px;background:var(--acc);width:38%;transition:width .3s}
+.prog-times{display:flex;justify-content:space-between;font-size:.68rem;color:var(--dim2);margin-bottom:16px}
+.controls{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:16px}
+.ctrl-btn{background:none;border:none;color:var(--dim);font-size:1.5rem;cursor:pointer;transition:all .2s;padding:4px}
+.ctrl-btn:hover{color:#fff}
+.ctrl-btn.play{background:var(--acc);color:#000;width:48px;height:48px;border-radius:50%;font-size:1.2rem;display:flex;align-items:center;justify-content:center}
+.ctrl-btn.play:hover{background:#ffb340;transform:scale(1.05)}
+.vol-row{display:flex;align-items:center;gap:10px}
+.vol-ico{font-size:1rem;color:var(--dim)}
+.vol-track{flex:1;height:4px;background:var(--c3);border-radius:2px;position:relative;cursor:pointer}
+.vol-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));width:65%}
+
+/* RADIO GRID */
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.radio-card{background:var(--c1);border-radius:var(--r14);padding:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;border:1px solid transparent}
+.radio-card.act{background:rgba(10,132,255,.15);border-color:rgba(10,132,255,.4)}
+.radio-logo{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;font-family:monospace}
+.radio-name{font-size:.78rem;font-weight:600}
+.radio-genre{font-size:.68rem;color:var(--dim2)}
+
+/* EQ BARS */
+.eq{display:flex;align-items:flex-end;gap:2px;height:20px;margin:0 auto 0;width:fit-content}
+.eq-b{width:3px;border-radius:2px;background:var(--acc);transform-origin:bottom;animation:eqb 0.8s ease-in-out infinite alternate}
+@keyframes eqb{0%{height:4px}100%{height:18px}}
+
+/* LICHT PANEL */
+.room-section{margin-bottom:16px}
+.room-title{font-size:.72rem;font-weight:600;color:var(--dim2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;padding:0 2px}
+.bri-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.bri-track{flex:1;height:6px;background:var(--c3);border-radius:3px;position:relative;cursor:pointer;overflow:hidden}
+.bri-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,rgba(255,159,10,.4),var(--acc));width:75%;transition:width .2s}
+.color-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;transition:transform .2s;border:2px solid transparent}
+.color-dot:hover,.color-dot.act{transform:scale(1.2);border-color:#fff}
+
+/* WEATHER PANEL */
+.wx-hero{background:linear-gradient(135deg,rgba(10,132,255,.2),rgba(100,210,255,.08));border-radius:var(--r20);padding:20px;margin-bottom:12px;border:1px solid rgba(10,132,255,.2)}
+.wx-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.wx-temp{font-family:'Oxanium',sans-serif;font-size:3.5rem;font-weight:700}
+.wx-ico{font-size:3rem}
+.wx-desc{font-size:.9rem;color:var(--dim);margin-bottom:4px}
+.wx-hl{font-size:.8rem;color:var(--dim2)}
+.wx-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.wx-stat{background:var(--c1);border-radius:12px;padding:10px;text-align:center}
+.wx-stat-val{font-size:.9rem;font-weight:700;margin-bottom:2px}
+.wx-stat-lbl{font-size:.68rem;color:var(--dim2)}
+.wx-hourly{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none}
+.wx-hourly::-webkit-scrollbar{display:none}
+.wx-hr{background:var(--c1);border-radius:12px;padding:8px 10px;text-align:center;min-width:52px;flex-shrink:0}
+.wx-hr-t{font-size:.68rem;color:var(--dim2);margin-bottom:4px}
+.wx-hr-ico{font-size:1rem;margin-bottom:4px}
+.wx-hr-deg{font-size:.8rem;font-weight:600}
+
+/* BOTTOM NAV */
+.demo-nav{position:absolute;bottom:0;left:0;right:0;background:rgba(28,28,30,.95);backdrop-filter:blur(20px);border-top:1px solid var(--sep);display:flex;padding:8px 0 16px}
+.dn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:all .2s;padding:4px 0}
+.dn-item .ico{font-size:1.3rem;opacity:.4;transition:all .2s}
+.dn-item .lbl{font-size:.6rem;color:rgba(255,255,255,.4);transition:all .2s}
+.dn-item.act .ico{opacity:1}
+.dn-item.act .lbl{color:var(--acc)}
+
+/* STAT BAR */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-card{background:var(--c1);border-radius:var(--r14);padding:14px;display:flex;align-items:center;gap:10px}
+.stat-ico{font-size:1.4rem}
+.stat-val{font-size:1.1rem;font-weight:700}
+.stat-lbl{font-size:.7rem;color:var(--dim2)}
+
+/* MAIN PAGE LAYOUT */
+main{padding-top:70px}
+.section{padding:60px 24px;max-width:1100px;margin:0 auto}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:700;letter-spacing:-1px;margin-bottom:12px;text-align:center}
+.section-sub{color:rgba(255,255,255,.5);font-size:.95rem;line-height:1.7;text-align:center;margin-bottom:48px;max-width:500px;margin-left:auto;margin-right:auto}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:48px}
+.feat-card{background:#111118;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px;transition:border-color .2s}
+.feat-card:hover{border-color:rgba(255,159,10,.3)}
+.feat-ico{font-size:2rem;margin-bottom:12px}
+.feat-title{font-weight:700;margin-bottom:6px}
+.feat-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.6}
+.cta-section{text-align:center;padding:80px 24px;background:radial-gradient(ellipse at center,rgba(255,159,10,.08),transparent 70%)}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:#000;font-weight:700;font-size:1rem;padding:16px 36px;border-radius:50px;text-decoration:none;transition:all .2s;font-family:'Outfit',sans-serif}
+.cta-btn:hover{background:#ffb340;transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,159,10,.4)}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.4);font-size:.85rem;text-decoration:none;margin-bottom:32px;transition:color .2s}
+.back-link:hover{color:#fff}
+footer{text-align:center;padding:40px 24px;color:rgba(255,255,255,.3);font-size:.8rem;border-top:1px solid rgba(255,255,255,.06)}
+footer a{color:var(--acc);text-decoration:none}
+
+/* FILM OVERLAY */
+.film-ov{position:absolute;inset:0;background:rgba(0,0,0,.85);z-index:50;display:none;align-items:flex-end;padding:20px}
+.film-ov.show{display:flex}
+.film-sheet{background:var(--c1);border-radius:24px 24px 20px 20px;padding:20px;width:100%}
+.film-title{font-weight:700;margin-bottom:14px;font-size:.9rem}
+.film-moods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.film-mood{background:var(--c2);border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:all .2s;border:1px solid transparent}
+.film-mood.act{border-color:var(--acc)}
+.film-mood-ico{font-size:1.3rem;margin-bottom:4px}
+.film-mood-lbl{font-size:.72rem}
+.film-close{background:var(--c3);border:none;color:var(--dim);border-radius:12px;padding:10px;width:100%;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.85rem}
+
+/* LIGHT SHEET */
+.ls-ov{position:absolute;inset:0;background:rgba(0,0,0,.7);z-index:40;display:none;align-items:flex-end;padding:20px}
+.ls-ov.show{display:flex}
+.ls-sheet{background:var(--c1);border-radius:24px 24px 20px 20px;padding:20px;width:100%}
+.ls-title{font-weight:700;margin-bottom:14px}
+.ls-close{background:none;border:none;color:var(--dim);font-size:1.5rem;cursor:pointer;float:right;margin-top:-2px}
+
+/* REVEAL ANIM */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s}
+.reveal.vis{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">autoflow<span>-lab</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="demo.html">AI Demo</a>
+    <a href="dashboard.html" style="color:#fff">Dashboards</a>
+    <a href="https://www.fiverr.com/autoflow_lab" target="_blank" class="nav-btn">Hire Me →</a>
+  </div>
+</nav>
+
+<main>
+<!-- HERO -->
+<section class="hero reveal">
+  <a href="index.html" class="back-link">← Back to Home</a>
+  <div class="hero-badge">✦ LIVE INTERACTIVE DEMO</div>
+  <h1>Smart Home<br><span>Dashboard Examples</span></h1>
+  <p>Fully interactive previews of real dashboard components. Tap, toggle, and explore — all running in your browser with mock data.</p>
+</section>
+
+<!-- DEMO SECTION -->
+<section class="section" style="padding-top:0">
+  <div class="tab-bar">
+    <button class="tab-btn act" data-panel="home">🏠 Home</button>
+    <button class="tab-btn" data-panel="musik">🎵 Music</button>
+    <button class="tab-btn" data-panel="licht">💡 Lights</button>
+    <button class="tab-btn" data-panel="wetter">🌤 Weather</button>
+  </div>
+
+  <div class="demo-wrap reveal">
+    <div class="demo-device">
+      <div class="demo-inner">
+
+        <!-- HOME PANEL -->
+        <div class="demo-panel cur" id="panel-home">
+          <!-- Clock -->
+          <div class="clock-widget" style="margin-top:16px">
+            <div>
+              <div class="cw-time" id="demo-clock">--:--</div>
+              <div class="cw-date" id="demo-date">Loading...</div>
+            </div>
+            <div class="cw-wx">
+              <div class="cw-temp">19°</div>
+              <div style="font-size:1.5rem">⛅</div>
+              <div class="cw-desc">Partly cloudy</div>
+            </div>
+          </div>
+
+          <!-- Scenes -->
+          <div class="sc-row" id="demo-scenes">
+            <div class="sc-chip act" data-sc="abend"><span>🌅</span>Evening</div>
+            <div class="sc-chip" data-sc="hell"><span>☀️</span>Bright</div>
+            <div class="sc-chip" data-sc="film"><span>🎬</span>Movie</div>
+            <div class="sc-chip" data-sc="nacht"><span>🌙</span>Night</div>
+            <div class="sc-chip" data-sc="off"><span>💤</span>Off</div>
+          </div>
+
+          <!-- Presence -->
+          <div class="presence-row">
+            <div class="prs-pill"><div class="prs-dot"></div>Alex home</div>
+            <div class="prs-pill"><div class="prs-dot away"></div>Sam away</div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stat-row">
+            <div class="stat-card"><div class="stat-ico">💡</div><div><div class="stat-val" id="st-lights">4 on</div><div class="stat-lbl">Lights active</div></div></div>
+            <div class="stat-card"><div class="stat-ico">🌡️</div><div><div class="stat-val">21°C</div><div class="stat-lbl">Living room</div></div></div>
+          </div>
+
+          <!-- Light tiles -->
+          <div class="lt-grid">
+            <div class="lt on" data-lt="wand">
+              <div><div class="lt-ico">🔆</div></div>
+              <div><div class="lt-name">Wall LEDs</div><div class="lt-state">On · 70%</div></div>
+              <div class="lt-glow"></div>
+            </div>
+            <div class="lt on blue" data-lt="sofa">
+              <div><div class="lt-ico">🛋️</div></div>
+              <div><div class="lt-name">Sofa Strip</div><div class="lt-state">On · Blue</div></div>
+              <div class="lt-glow"></div>
+            </div>
+            <div class="lt" data-lt="kuche">
+              <div><div class="lt-ico">🍳</div></div>
+              <div><div class="lt-name">Kitchen</div><div class="lt-state">Off</div></div>
+              <div class="lt-glow"></div>
+            </div>
+            <div class="lt on grn" data-lt="buro">
+              <div><div class="lt-ico">🖥️</div></div>
+              <div><div class="lt-name">Office</div><div class="lt-state">On · Desk</div></div>
+              <div class="lt-glow"></div>
+            </div>
+          </div>
+
+          <!-- Quick actions -->
+          <div class="qa-row">
+            <div class="qa" data-qa="film"><div class="qa-ico">🎬</div><div class="qa-lbl">Movie Mode</div></div>
+            <div class="qa" data-qa="alloff"><div class="qa-ico">💤</div><div class="qa-lbl">All Off</div></div>
+            <div class="qa" data-qa="allon"><div class="qa-ico">✨</div><div class="qa-lbl">All On</div></div>
+            <div class="qa" data-qa="abend"><div class="qa-ico">🌅</div><div class="qa-lbl">Evening</div></div>
+          </div>
+        </div>
+
+        <!-- MUSIK PANEL -->
+        <div class="demo-panel" id="panel-musik">
+          <div class="music-card" style="margin-top:16px">
+            <div class="disc-wrap">
+              <div class="disc spin" id="demo-disc">
+                <div class="disc-hole"></div>
+              </div>
+            </div>
+            <div class="np-t" id="np-title">Midnight City</div>
+            <div class="np-s" id="np-sub">M83 · Hurry Up, We're Dreaming</div>
+            <div class="prog-bar">
+              <div class="prog-fill" id="prog-fill"></div>
+            </div>
+            <div class="prog-times"><span>1:42</span><span>4:03</span></div>
+            <div class="controls">
+              <button class="ctrl-btn" id="btn-prev">⏮</button>
+              <button class="ctrl-btn play" id="btn-play">⏸</button>
+              <button class="ctrl-btn" id="btn-next">⏭</button>
+            </div>
+            <div class="vol-row">
+              <span class="vol-ico">🔈</span>
+              <div class="vol-track" id="vol-track">
+                <div class="vol-fill" id="vol-fill"></div>
+              </div>
+              <span class="vol-ico">🔊</span>
+            </div>
+          </div>
+          <!-- Radio -->
+          <div style="font-size:.72rem;font-weight:600;color:var(--dim2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Radio Stations</div>
+          <div class="radio-grid">
+            <div class="radio-card act" data-r="srf1"><div class="radio-logo" style="background:#e30613;color:#fff">SRF</div><div><div class="radio-name">SRF 1</div><div class="radio-genre">Swiss Info</div></div></div>
+            <div class="radio-card" data-r="srf3"><div class="radio-logo" style="background:#009fe3;color:#fff">SRF</div><div><div class="radio-name">SRF 3</div><div class="radio-genre">Swiss Pop</div></div></div>
+            <div class="radio-card" data-r="kiss"><div class="radio-logo" style="background:#ff2d55;color:#fff">💋</div><div><div class="radio-name">Kiss FM</div><div class="radio-genre">Pop / Hits</div></div></div>
+            <div class="radio-card" data-r="tirol"><div class="radio-logo" style="background:#1a6b3c;color:#fff">🏔</div><div><div class="radio-name">U1 Tirol</div><div class="radio-genre">Austrian</div></div></div>
+          </div>
+          <!-- EQ -->
+          <div style="display:flex;justify-content:center;margin-top:12px">
+            <div class="eq" id="demo-eq"></div>
+          </div>
+        </div>
+
+        <!-- LICHT PANEL -->
+        <div class="demo-panel" id="panel-licht">
+          <div style="margin-top:16px">
+            <div class="room-section">
+              <div class="room-title">Living Room</div>
+              <div class="lt-grid">
+                <div class="lt on" data-lt="wand2"><div><div class="lt-ico">🔆</div></div><div><div class="lt-name">Wall LEDs</div><div class="lt-state">On · 70%</div></div><div class="lt-glow"></div></div>
+                <div class="lt on blue" data-lt="sofa2"><div><div class="lt-ico">🛋️</div></div><div><div class="lt-name">Sofa Strip</div><div class="lt-state">On · Blue</div></div><div class="lt-glow"></div></div>
+              </div>
+              <div class="bri-row">
+                <span style="font-size:.8rem">🔅</span>
+                <div class="bri-track" id="bri-wz"><div class="bri-fill" id="bri-wz-fill" style="width:70%"></div></div>
+                <span style="font-size:.8rem">🔆</span>
+              </div>
+              <div class="color-row">
+                <div class="color-dot" style="background:#ff9f0a" data-c="warm"></div>
+                <div class="color-dot act" style="background:#fff5e0" data-c="natural"></div>
+                <div class="color-dot" style="background:#0a84ff" data-c="blue"></div>
+                <div class="color-dot" style="background:#30d158" data-c="green"></div>
+                <div class="color-dot" style="background:#ff2d55" data-c="red"></div>
+                <div class="color-dot" style="background:#bf5af2" data-c="purple"></div>
+                <div class="color-dot" style="background:#fff" data-c="white"></div>
+              </div>
+            </div>
+            <div class="room-section">
+              <div class="room-title">Kitchen</div>
+              <div class="lt-grid">
+                <div class="lt" data-lt="kuche2"><div><div class="lt-ico">🍳</div></div><div><div class="lt-name">Counter Strip</div><div class="lt-state">Off</div></div><div class="lt-glow"></div></div>
+                <div class="lt" data-lt="island"><div><div class="lt-ico">🪔</div></div><div><div class="lt-name">Island Lamp</div><div class="lt-state">Off</div></div><div class="lt-glow"></div></div>
+              </div>
+            </div>
+            <div class="room-section">
+              <div class="room-title">Bedroom</div>
+              <div class="lt-grid">
+                <div class="lt on grn" data-lt="bed1"><div><div class="lt-ico">🌙</div></div><div><div class="lt-name">Ambient</div><div class="lt-state">On · Soft</div></div><div class="lt-glow"></div></div>
+                <div class="lt" data-lt="bed2"><div><div class="lt-ico">📖</div></div><div><div class="lt-name">Reading</div><div class="lt-state">Off</div></div><div class="lt-glow"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WETTER PANEL -->
+        <div class="demo-panel" id="panel-wetter">
+          <div style="margin-top:16px">
+            <div class="wx-hero">
+              <div class="wx-main">
+                <div>
+                  <div class="wx-temp">19°C</div>
+                  <div class="wx-desc">Partly cloudy</div>
+                  <div class="wx-hl">High 22° · Low 11°</div>
+                </div>
+                <div class="wx-ico">⛅</div>
+              </div>
+              <div class="wx-stats">
+                <div class="wx-stat"><div class="wx-stat-val">64%</div><div class="wx-stat-lbl">Humidity</div></div>
+                <div class="wx-stat"><div class="wx-stat-val">12 km/h</div><div class="wx-stat-lbl">Wind</div></div>
+                <div class="wx-stat"><div class="wx-stat-val">UV 4</div><div class="wx-stat-lbl">Index</div></div>
+              </div>
+            </div>
+            <div style="font-size:.72rem;font-weight:600;color:var(--dim2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Today Hourly</div>
+            <div class="wx-hourly">
+              <div class="wx-hr"><div class="wx-hr-t">Now</div><div class="wx-hr-ico">⛅</div><div class="wx-hr-deg">19°</div></div>
+              <div class="wx-hr"><div class="wx-hr-t">15:00</div><div class="wx-hr-ico">🌤</div><div class="wx-hr-deg">21°</div></div>
+              <div class="wx-hr"><div class="wx-hr-t">16:00</div><div class="wx-hr-ico">☀️</div><div class="wx-hr-deg">22°</div></div>
+              <div class="wx-hr"><div class="wx-hr-t">17:00</div><div class="wx-hr-ico">🌤</div><div class="wx-hr-deg">21°</div></div>
+              <div class="wx-hr"><div class="wx-hr-t">18:00</div><div class="wx-hr-ico">⛅</div><div class="wx-hr-deg">19°</div></div>
+              <div class="wx-hr"><div class="wx-hr-t">19:00</div><div class="wx-hr-ico">🌦</div><div class="wx-hr-deg">17°</div></div>
+              <div class="wx-hr"><div class="wx-hr-t">20:00</div><div class="wx-hr-ico">🌧</div><div class="wx-hr-deg">15°</div></div>
+              <div class="wx-hr"><div class="wx-hr-t">21:00</div><div class="wx-hr-ico">🌙</div><div class="wx-hr-deg">13°</div></div>
+            </div>
+            <div style="font-size:.72rem;font-weight:600;color:var(--dim2);text-transform:uppercase;letter-spacing:.5px;margin:12px 0 8px">7-Day Forecast</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--c1);padding:10px 14px;border-radius:12px"><span style="font-size:.8rem;min-width:40px">Mon</span><span style="font-size:1.1rem">🌤</span><span style="font-size:.8rem;color:var(--dim)">11°</span><span style="font-size:.8rem;font-weight:600">22°</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--c1);padding:10px 14px;border-radius:12px"><span style="font-size:.8rem;min-width:40px">Tue</span><span style="font-size:1.1rem">☀️</span><span style="font-size:.8rem;color:var(--dim)">13°</span><span style="font-size:.8rem;font-weight:600">25°</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--c1);padding:10px 14px;border-radius:12px"><span style="font-size:.8rem;min-width:40px">Wed</span><span style="font-size:1.1rem">⛅</span><span style="font-size:.8rem;color:var(--dim)">12°</span><span style="font-size:.8rem;font-weight:600">21°</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--c1);padding:10px 14px;border-radius:12px"><span style="font-size:.8rem;min-width:40px">Thu</span><span style="font-size:1.1rem">🌧</span><span style="font-size:.8rem;color:var(--dim)">9°</span><span style="font-size:.8rem;font-weight:600">16°</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--c1);padding:10px 14px;border-radius:12px"><span style="font-size:.8rem;min-width:40px">Fri</span><span style="font-size:1.1rem">☀️</span><span style="font-size:.8rem;color:var(--dim)">14°</span><span style="font-size:.8rem;font-weight:600">27°</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILM OVERLAY -->
+        <div class="film-ov" id="film-ov">
+          <div class="film-sheet">
+            <div class="film-title">🎬 Movie Mode — Choose Mood</div>
+            <div class="film-moods">
+              <div class="film-mood act" data-m="kino"><div class="film-mood-ico">🎬</div><div class="film-mood-lbl">Cinema</div></div>
+              <div class="film-mood" data-m="warm"><div class="film-mood-ico">🕯</div><div class="film-mood-lbl">Warm</div></div>
+              <div class="film-mood" data-m="kuehl"><div class="film-mood-ico">🔵</div><div class="film-mood-lbl">Cool</div></div>
+              <div class="film-mood" data-m="gruen"><div class="film-mood-ico">🌿</div><div class="film-mood-lbl">Nature</div></div>
+              <div class="film-mood" data-m="romantik"><div class="film-mood-ico">💗</div><div class="film-mood-lbl">Romantic</div></div>
+              <div class="film-mood" data-m="neutral"><div class="film-mood-ico">💡</div><div class="film-mood-lbl">Neutral</div></div>
+            </div>
+            <button class="film-close" id="film-close">Cancel</button>
+          </div>
+        </div>
+
+        <!-- LIGHT SHEET -->
+        <div class="ls-ov" id="ls-ov"></div>
+
+        <!-- DEMO NAV -->
+        <div class="demo-nav">
+          <div class="dn-item act" data-p="home"><div class="ico">🏠</div><div class="lbl">Home</div></div>
+          <div class="dn-item" data-p="musik"><div class="ico">🎵</div><div class="lbl">Music</div></div>
+          <div class="dn-item" data-p="licht"><div class="ico">💡</div><div class="lbl">Lights</div></div>
+          <div class="dn-item" data-p="wetter"><div class="ico">🌤</div><div class="lbl">Weather</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section reveal">
+  <h2 class="section-title">What's inside every dashboard</h2>
+  <p class="section-sub">Every component you see above is fully functional in the real dashboard — connected live to Home Assistant.</p>
+  <div class="features-grid">
+    <div class="feat-card reveal"><div class="feat-ico">💡</div><div class="feat-title">Smart Light Control</div><div class="feat-desc">Toggle, dim, and color-shift all your lights with a tap. Group controls, brightness bars, and 12-swatch color presets per room.</div></div>
+    <div class="feat-card reveal"><div class="feat-ico">🎬</div><div class="feat-title">Scene Automation</div><div class="feat-desc">One-tap scenes like Evening, Movie, Night. The Film Mode adjusts all Govee LEDs to match the mood — Warm, Cinema, Romantic, and more.</div></div>
+    <div class="feat-card reveal"><div class="feat-ico">🎵</div><div class="feat-title">Music & Radio</div><div class="feat-desc">Full media player with now-playing, progress bar, volume, and history. Built-in radio player with 6+ stations. Spotify playlist launch buttons.</div></div>
+    <div class="feat-card reveal"><div class="feat-ico">🌤</div><div class="feat-title">Live Weather</div><div class="feat-desc">Real-time weather via Open-Meteo — current conditions, hourly forecast, 7-day view, moon phase, and golden hour. Rain alerts with banner notification.</div></div>
+    <div class="feat-card reveal"><div class="feat-ico">🔐</div><div class="feat-title">Secure OAuth Login</div><div class="feat-desc">Full Home Assistant OAuth PKCE authentication. No tokens stored in code. Works locally and via Cloudflare tunnel from anywhere in the world.</div></div>
+    <div class="feat-card reveal"><div class="feat-ico">📱</div><div class="feat-title">Mobile-First Design</div><div class="feat-desc">Built for iPad and iPhone. iOS-native dark design, smooth animations, haptic feedback, auto dark/light mode. Installable as PWA.</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h2 class="section-title" style="margin-bottom:12px">Want this in your home?</h2>
+  <p style="color:rgba(255,255,255,.5);margin-bottom:32px;font-size:.95rem">I build custom Home Assistant dashboards — mobile-ready, premium design, delivered in 48h.</p>
+  <a href="https://www.fiverr.com/autoflow_lab" target="_blank" class="cta-btn">🚀 Order on Fiverr</a>
+</section>
+
+<footer>
+  <p>© 2025 autoflow-lab &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="https://www.fiverr.com/autoflow_lab" target="_blank">Fiverr</a></p>
+</footer>
+</main>
+
+<script>
+// Clock
+function updateClock(){
+  const n=new Date();
+  document.getElementById('demo-clock').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
+  document.getElementById('demo-date').textContent=n.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+}
+updateClock();
+setInterval(updateClock,10000);
+
+// EQ bars
+const eq=document.getElementById('demo-eq');
+for(let i=0;i<10;i++){
+  const b=document.createElement('div');
+  b.className='eq-b';
+  b.style.animationDelay=(i*0.08)+'s';
+  b.style.animationDuration=(0.6+Math.random()*0.5)+'s';
+  eq.appendChild(b);
+}
+
+// Tab switching (outer tabs)
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('act'));
+    btn.classList.add('act');
+    const p=btn.dataset.panel;
+    document.querySelectorAll('.demo-panel').forEach(pp=>pp.classList.remove('cur'));
+    document.getElementById('panel-'+p)?.classList.add('cur');
+    document.querySelectorAll('.dn-item').forEach(d=>d.classList.toggle('act',d.dataset.p===p));
+  });
+});
+
+// Demo nav (inner nav)
+document.querySelectorAll('.dn-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    const p=item.dataset.p;
+    document.querySelectorAll('.dn-item').forEach(d=>d.classList.remove('act'));
+    item.classList.add('act');
+    document.querySelectorAll('.demo-panel').forEach(pp=>pp.classList.remove('cur'));
+    document.getElementById('panel-'+p)?.classList.add('cur');
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('act',b.dataset.panel===p));
+  });
+});
+
+// Light state tracker
+const _on={wand:true,sofa:true,kuche:false,buro:true,wand2:true,sofa2:true,kuche2:false,island:false,bed1:true,bed2:false};
+function countOn(){return Object.values(_on).filter(Boolean).length;}
+function updateStatsBar(){document.getElementById('st-lights').textContent=countOn()+' on';}
+
+document.querySelectorAll('.lt').forEach(lt=>{
+  lt.addEventListener('click',()=>{
+    const id=lt.dataset.lt;
+    _on[id]=!_on[id];
+    lt.classList.toggle('on',_on[id]);
+    const st=lt.querySelector('.lt-state');
+    if(st){
+      if(id==='sofa'||id==='sofa2') st.textContent=_on[id]?'On · Blue':'Off';
+      else if(id==='buro') st.textContent=_on[id]?'On · Desk':'Off';
+      else if(id==='bed1') st.textContent=_on[id]?'On · Soft':'Off';
+      else st.textContent=_on[id]?'On · 70%':'Off';
+    }
+    updateStatsBar();
+  });
+});
+
+// Scenes
+const sceneColors={
+  abend:{'wand':'on','sofa':'on blue','kuche':'','buro':''},
+  hell:{'wand':'on','sofa':'on','kuche':'on','buro':'on'},
+  film:null, nacht:{}, off:{}
+};
+document.querySelectorAll('.sc-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.sc-chip').forEach(c=>c.classList.remove('act'));
+    chip.classList.add('act');
+    const sc=chip.dataset.sc;
+    if(sc==='film'){document.getElementById('film-ov').classList.add('show');return;}
+    // Apply scene
+    const lights=document.querySelectorAll('#panel-home .lt');
+    if(sc==='off'){lights.forEach(l=>{l.className='lt';_on[l.dataset.lt]=false;const st=l.querySelector('.lt-state');if(st)st.textContent='Off';});}
+    else if(sc==='hell'){lights.forEach(l=>{l.className='lt on';_on[l.dataset.lt]=true;const st=l.querySelector('.lt-state');if(st)st.textContent='On · 100%';l.querySelector('.lt-glow')?.style;});}
+    else if(sc==='nacht'){lights.forEach(l=>{const nm=l.querySelector('.lt-name')?.textContent;const keep=nm==='Wall LEDs';l.className=keep?'lt on':'lt';_on[l.dataset.lt]=keep;const st=l.querySelector('.lt-state');if(st)st.textContent=keep?'On · 20%':'Off';});}
+    else if(sc==='abend'){lights.forEach(l=>{l.className='lt on';_on[l.dataset.lt]=true;const st=l.querySelector('.lt-state');if(st)st.textContent='On · 70%';});}
+    updateStatsBar();
+  });
+});
+
+// QA
+document.querySelectorAll('.qa').forEach(qa=>{
+  qa.addEventListener('click',()=>{
+    const a=qa.dataset.qa;
+    if(a==='film'){document.getElementById('film-ov').classList.add('show');}
+    else if(a==='alloff'){document.querySelectorAll('.lt').forEach(l=>{l.className='lt';_on[l.dataset.lt]=false;const st=l.querySelector('.lt-state');if(st)st.textContent='Off';});updateStatsBar();}
+    else if(a==='allon'){document.querySelectorAll('.lt').forEach(l=>{l.className='lt on';_on[l.dataset.lt]=true;const st=l.querySelector('.lt-state');if(st)st.textContent='On · 80%';});updateStatsBar();}
+    else if(a==='abend'){document.querySelectorAll('#panel-home .sc-chip').forEach(c=>c.classList.toggle('act',c.dataset.sc==='abend'));}
+    qa.style.transform='scale(.95)';setTimeout(()=>qa.style.transform='',200);
+  });
+});
+
+// Film overlay
+document.getElementById('film-close').addEventListener('click',()=>{
+  document.getElementById('film-ov').classList.remove('show');
+});
+document.querySelectorAll('.film-mood').forEach(m=>{
+  m.addEventListener('click',()=>{
+    document.querySelectorAll('.film-mood').forEach(mm=>mm.classList.remove('act'));
+    m.classList.add('act');
+    setTimeout(()=>document.getElementById('film-ov').classList.remove('show'),400);
+  });
+});
+
+// Music player
+let _playing=true;let _prog=38;
+const progFill=document.getElementById('prog-fill');
+function tickProg(){if(_playing){_prog=Math.min(100,_prog+0.05);progFill.style.width=_prog+'%';if(_prog>=100)_prog=0;}}
+setInterval(tickProg,1000);
+document.getElementById('btn-play').addEventListener('click',()=>{
+  _playing=!_playing;
+  document.getElementById('btn-play').textContent=_playing?'⏸':'▶';
+  document.getElementById('demo-disc').classList.toggle('spin',_playing);
+});
+const tracks=[
+  {t:'Midnight City',s:'M83 · Hurry Up, We're Dreaming'},
+  {t:'Blinding Lights',s:'The Weeknd · After Hours'},
+  {t:'As It Was',s:'Harry Styles · Harry's House'},
+  {t:'Levitating',s:'Dua Lipa · Future Nostalgia'},
+];
+let _ti=0;
+document.getElementById('btn-next').addEventListener('click',()=>{_ti=(_ti+1)%tracks.length;document.getElementById('np-title').textContent=tracks[_ti].t;document.getElementById('np-sub').textContent=tracks[_ti].s;_prog=0;});
+document.getElementById('btn-prev').addEventListener('click',()=>{_ti=(_ti-1+tracks.length)%tracks.length;document.getElementById('np-title').textContent=tracks[_ti].t;document.getElementById('np-sub').textContent=tracks[_ti].s;_prog=0;});
+
+// Volume slider
+const volTrack=document.getElementById('vol-track');
+const volFill=document.getElementById('vol-fill');
+volTrack.addEventListener('click',e=>{
+  const rect=volTrack.getBoundingClientRect();
+  const pct=Math.max(0,Math.min(100,((e.clientX-rect.left)/rect.width)*100));
+  volFill.style.width=pct+'%';
+});
+
+// Radio
+document.querySelectorAll('.radio-card').forEach(r=>{
+  r.addEventListener('click',()=>{
+    document.querySelectorAll('.radio-card').forEach(rr=>rr.classList.remove('act'));
+    r.classList.add('act');
+  });
+});
+
+// Brightness slider
+const briTrack=document.getElementById('bri-wz');
+const briFill=document.getElementById('bri-wz-fill');
+briTrack.addEventListener('click',e=>{
+  const rect=briTrack.getBoundingClientRect();
+  const pct=Math.max(5,Math.min(100,((e.clientX-rect.left)/rect.width)*100));
+  briFill.style.width=pct+'%';
+});
+
+// Color dots
+document.querySelectorAll('.color-dot').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.color-dot').forEach(dd=>dd.classList.remove('act'));
+    d.classList.add('act');
+  });
+});
+
+// Reveal on scroll
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

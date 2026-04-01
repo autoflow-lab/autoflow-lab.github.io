@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Smart Home Dashboard — Premium Template</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#000;--c1:#1c1c1e;--c2:#2c2c2e;--c3:#3a3a3c;
+  --sep:rgba(255,255,255,.08);--txt:#fff;--dim:rgba(255,255,255,.5);
+  --dim2:rgba(255,255,255,.24);--acc:#ff9f0a;--blue:#0a84ff;
+  --grn:#30d158;--red:#ff453a;--r:20px;
+}
+html,body{height:100%;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;overflow:hidden}
+/* NAV */
+#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(28,28,30,.92);backdrop-filter:blur(20px);border-top:1px solid var(--sep);display:flex;padding:8px 0 max(8px,env(safe-area-inset-bottom))}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;border:none;background:none;color:var(--dim);font-size:.58rem;font-weight:600;letter-spacing:.3px;cursor:pointer;transition:color .2s;position:relative}
+.nb svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+.nb.active{color:var(--acc)}
+.nb.active svg{stroke:var(--acc)}
+.nb-glow{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:28px;height:3px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .3s}
+.nb.active .nb-glow{opacity:1}
+/* PAGES */
+#pages{height:calc(100% - 60px);overflow:hidden;position:relative}
+.page{position:absolute;inset:0;overflow-y:auto;padding-bottom:20px;opacity:0;pointer-events:none;transition:opacity .25s;-webkit-overflow-scrolling:touch}
+.page.active{opacity:1;pointer-events:auto}
+/* HERO */
+#hero{padding:52px 20px 24px;background:linear-gradient(180deg,rgba(10,10,20,1) 0%,var(--bg) 100%);position:relative;overflow:hidden}
+#hero-orb{position:absolute;width:280px;height:280px;border-radius:50%;top:-60px;right:-60px;background:radial-gradient(circle,rgba(255,159,10,.18) 0%,transparent 70%);pointer-events:none;transition:background 2s}
+#htime{font-size:3.4rem;font-weight:300;letter-spacing:-2px;line-height:1}
+#hdate{font-size:.82rem;color:var(--dim);margin-top:4px;font-weight:500}
+#hgreet{font-size:.95rem;font-weight:600;margin-top:14px;color:var(--txt)}
+#hwx{display:flex;align-items:center;gap:10px;margin-top:14px;background:rgba(255,255,255,.05);border-radius:14px;padding:10px 14px;width:fit-content}
+#hwx-ico{font-size:1.5rem}
+#hwx-temp{font-size:1.2rem;font-weight:700}
+#hwx-desc{font-size:.72rem;color:var(--dim);line-height:1.3}
+/* CARDS */
+.sec-title{font-size:.65rem;font-weight:700;color:var(--dim2);letter-spacing:1.5px;text-transform:uppercase;padding:20px 20px 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+.grid3{grid-template-columns:1fr 1fr 1fr}
+/* LIGHT TILE */
+.lt{background:var(--c1);border-radius:var(--r);padding:16px;min-height:120px;cursor:pointer;position:relative;overflow:hidden;border:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s;display:flex;flex-direction:column;justify-content:space-between;user-select:none}
+.lt::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);pointer-events:none}
+.lt.on{border-color:rgba(255,159,10,.3);box-shadow:0 0 22px rgba(255,159,10,.12)}
+.lt.on::after{content:'';position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,159,10,.07),rgba(255,159,10,.04),rgba(255,159,10,.11));pointer-events:none}
+.ltico{width:36px;height:36px;border-radius:10px;background:var(--c3);display:flex;align-items:center;justify-content:center;transition:background .3s,box-shadow .3s}
+.lt.on .ltico{background:rgba(255,159,10,.25);box-shadow:0 0 12px rgba(255,159,10,.3)}
+.ltico svg{width:18px;height:18px;stroke:var(--dim);fill:none;stroke-width:1.7;stroke-linecap:round;transition:stroke .3s}
+.lt.on .ltico svg{stroke:var(--acc)}
+.ltname{font-size:.75rem;font-weight:600;color:var(--txt);margin-top:12px}
+.ltst{font-size:.62rem;color:var(--dim);margin-top:2px}
+.bbar{margin-top:10px;height:3px;background:var(--c3);border-radius:3px;overflow:hidden}
+.bfil{height:100%;border-radius:3px;background:var(--acc);transition:width .4s}
+/* SCENE BUTTONS */
+.sg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+.sb2{border-radius:16px;padding:18px 16px;cursor:pointer;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px;background:var(--c1);transition:transform .15s,box-shadow .15s}
+.sb2:active{transform:scale(.96)}
+.sb2-ico{font-size:1.4rem}
+.sb2-txt{font-size:.8rem;font-weight:700;color:var(--txt)}
+.sb2-sub{font-size:.63rem;color:var(--dim);margin-top:2px}
+/* MUSIK */
+.np-card{margin:0 16px;background:var(--c1);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
+.alb{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--c3),var(--c2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.nptitle{font-size:1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.npsub{font-size:.75rem;color:var(--dim);margin-top:3px}
+.eq{display:flex;gap:3px;align-items:flex-end;height:16px;margin-top:8px}
+.eq i{display:block;width:3px;background:var(--blue);border-radius:2px;height:4px;transition:height .3s}
+.eq.on i:nth-child(1){animation:eq1 .7s ease-in-out infinite alternate}
+.eq.on i:nth-child(2){animation:eq1 .5s .1s ease-in-out infinite alternate}
+.eq.on i:nth-child(3){animation:eq1 .8s .2s ease-in-out infinite alternate}
+.eq.on i:nth-child(4){animation:eq1 .6s .05s ease-in-out infinite alternate}
+.eq.on i:nth-child(5){animation:eq1 .9s .15s ease-in-out infinite alternate}
+@keyframes eq1{from{height:4px}to{height:14px}}
+.pctrl{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:16px}
+.pbtn{width:44px;height:44px;border-radius:50%;border:none;background:var(--c3);color:var(--txt);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s,background .2s}
+.pbtn:active{transform:scale(.9)}
+.pbtn.main{width:54px;height:54px;background:var(--blue)}
+.pbtn svg{width:20px;height:20px;fill:var(--txt);stroke:none}
+.pbtn.main svg{width:22px;height:22px}
+/* WETTER */
+.wx-hero{margin:0 16px;background:linear-gradient(135deg,var(--c1),var(--c2));border-radius:var(--r);padding:24px;text-align:center}
+.wx-temp-big{font-size:4rem;font-weight:200;letter-spacing:-3px}
+.wx-desc{font-size:.85rem;color:var(--dim);margin-top:4px}
+.wx-row{display:flex;justify-content:center;gap:24px;margin-top:16px}
+.wx-stat{text-align:center}
+.wx-stat-val{font-size:.95rem;font-weight:700}
+.wx-stat-lbl{font-size:.6rem;color:var(--dim);margin-top:2px}
+.wx-hourly{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.wx-hourly::-webkit-scrollbar{display:none}
+.wx-h-item{flex-shrink:0;text-align:center;background:var(--c1);border-radius:14px;padding:12px 10px;min-width:56px}
+.wx-h-time{font-size:.62rem;color:var(--dim);margin-bottom:6px}
+.wx-h-ico{font-size:1.2rem;margin:4px 0}
+.wx-h-temp{font-size:.82rem;font-weight:700}
+/* STANDBY */
+#standby{position:fixed;inset:0;z-index:500;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .8s}
+#standby.show{opacity:1;pointer-events:auto}
+#sb-time{font-size:5rem;font-weight:200;letter-spacing:-4px}
+#sb-date{font-size:.9rem;color:var(--dim);margin-top:8px}
+#sb-wx{font-size:1.1rem;color:var(--dim2);margin-top:20px}
+/* VOL */
+.vol-row{display:flex;align-items:center;gap:12px;margin-top:16px}
+.vol-row svg{width:18px;height:18px;stroke:var(--dim);fill:none;stroke-width:1.6;stroke-linecap:round}
+input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:4px;outline:none;cursor:pointer;flex:1}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.4)}
+/* RADIO */
+.radio-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.rchip{padding:7px 14px;border-radius:100px;border:1px solid var(--sep);background:var(--c2);font-size:.72rem;font-weight:600;color:var(--dim);cursor:pointer;transition:all .2s}
+.rchip.active{background:rgba(10,132,255,.2);border-color:rgba(10,132,255,.4);color:var(--blue)}
+/* PROG BAR */
+#prog-wrap{margin-top:12px}
+.prog-bar{height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),#38bdf8);border-radius:3px;width:0%;transition:width .8s linear}
+.prog-times{display:flex;justify-content:space-between;margin-top:5px}
+.prog-times span{font-size:.55rem;color:var(--dim2)}
+/* TOAST */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(44,44,46,.96);color:#fff;padding:10px 20px;border-radius:100px;font-size:.8rem;font-weight:600;z-index:999;opacity:0;transition:all .3s;white-space:nowrap;backdrop-filter:blur(10px)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* RESPONSIVE */
+@media(min-width:480px){.grid{grid-template-columns:1fr 1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- STANDBY -->
+<div id="standby">
+  <div id="sb-time">00:00</div>
+  <div id="sb-date"></div>
+  <div id="sb-wx">🌤 —°</div>
+</div>
+
+<!-- PAGES -->
+<div id="pages">
+
+<!-- HOME -->
+<div class="page active" id="pg-home">
+  <div id="hero">
+    <div id="hero-orb"></div>
+    <div id="htime">00:00</div>
+    <div id="hdate">Donnerstag, 19. März</div>
+    <div id="hgreet">Hallo! 👋</div>
+    <div id="hwx">
+      <div id="hwx-ico">🌤</div>
+      <div>
+        <div id="hwx-temp">—°</div>
+        <div id="hwx-desc">Wetter wird geladen…</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec-title">SZENEN</div>
+  <div class="sg2">
+    <div class="sb2" id="sc-abend" style="background:linear-gradient(135deg,rgba(255,159,10,.12),rgba(255,100,0,.08))">
+      <div class="sb2-ico">🌆</div>
+      <div><div class="sb2-txt">Abend</div><div class="sb2-sub">Warm & gemütlich</div></div>
+    </div>
+    <div class="sb2" id="sc-film" style="background:linear-gradient(135deg,rgba(10,132,255,.12),rgba(10,100,200,.08))">
+      <div class="sb2-ico">🎬</div>
+      <div><div class="sb2-txt">Film</div><div class="sb2-sub">Dunkel & fokus</div></div>
+    </div>
+    <div class="sb2" id="sc-hell" style="background:linear-gradient(135deg,rgba(255,255,200,.08),rgba(255,230,100,.06))">
+      <div class="sb2-ico">☀️</div>
+      <div><div class="sb2-txt">Hell</div><div class="sb2-sub">Maximale Helligkeit</div></div>
+    </div>
+    <div class="sb2" id="sc-off" style="background:linear-gradient(135deg,rgba(255,69,58,.1),rgba(200,0,0,.06))">
+      <div class="sb2-ico">🌙</div>
+      <div><div class="sb2-txt">Aus</div><div class="sb2-sub">Alles ausschalten</div></div>
+    </div>
+  </div>
+  <div class="sec-title">LICHTER</div>
+  <div class="grid" id="home-lights"></div>
+</div>
+
+<!-- LICHT -->
+<div class="page" id="pg-licht">
+  <div class="sec-title" style="padding-top:40px">ALLE LICHTER</div>
+  <div class="grid" id="all-lights"></div>
+  <div class="sec-title">SZENEN</div>
+  <div class="sg2">
+    <div class="sb2" id="sc2-abend" style="background:linear-gradient(135deg,rgba(255,159,10,.12),rgba(255,100,0,.08))">
+      <div class="sb2-ico">🌆</div><div><div class="sb2-txt">Abend</div><div class="sb2-sub">Alle warm</div></div>
+    </div>
+    <div class="sb2" id="sc2-hell" style="background:linear-gradient(135deg,rgba(255,255,200,.08),rgba(255,230,100,.06))">
+      <div class="sb2-ico">☀️</div><div><div class="sb2-txt">Hell</div><div class="sb2-sub">Maximum</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MUSIK -->
+<div class="page" id="pg-musik">
+  <div style="padding:44px 0 0"></div>
+  <div class="np-card">
+    <div style="display:flex;gap:16px;align-items:center">
+      <div class="alb" id="alb-art">🎵</div>
+      <div style="flex:1;min-width:0">
+        <div class="nptitle" id="np-t">Keine Wiedergabe</div>
+        <div class="npsub" id="np-s">Wähle eine Radio-Station</div>
+        <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div id="prog-wrap" style="display:none">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-times"><span id="prog-pos">0:00</span><span id="prog-dur">0:00</span></div>
+    </div>
+    <div class="pctrl">
+      <button class="pbtn" id="btn-prev" title="Zurück">
+        <svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16z"/><line x1="5" y1="4" x2="5" y2="20" stroke="white" stroke-width="2"/></svg>
+      </button>
+      <button class="pbtn main" id="btn-play">
+        <svg id="play-ico" viewBox="0 0 24 24"><path d="M8 5.5v13L19 12z" fill="white"/></svg>
+      </button>
+      <button class="pbtn" id="btn-stop" title="Stop">
+        <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="white"/></svg>
+      </button>
+    </div>
+    <div class="vol-row">
+      <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+      <input type="range" id="vol-slider" min="0" max="100" value="40">
+      <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+    </div>
+  </div>
+  <div class="sec-title">RADIO</div>
+  <div class="radio-chips" style="padding:0 16px" id="radio-chips"></div>
+</div>
+
+<!-- WETTER -->
+<div class="page" id="pg-wetter">
+  <div style="padding-top:44px"></div>
+  <div class="wx-hero">
+    <div style="font-size:3rem" id="wxt-ico">🌤</div>
+    <div class="wx-temp-big"><span id="wxt-temp">—</span>°</div>
+    <div class="wx-desc" id="wxt-desc">Wetter wird geladen…</div>
+    <div class="wx-row">
+      <div class="wx-stat"><div class="wx-stat-val" id="wxt-feel">—°</div><div class="wx-stat-lbl">Gefühlt</div></div>
+      <div class="wx-stat"><div class="wx-stat-val" id="wxt-hum">—%</div><div class="wx-stat-lbl">Feuchtigkeit</div></div>
+      <div class="wx-stat"><div class="wx-stat-val" id="wxt-wind">— km/h</div><div class="wx-stat-lbl">Wind</div></div>
+    </div>
+  </div>
+  <div class="sec-title">STÜNDLICH</div>
+  <div class="wx-hourly" id="wx-hourly"></div>
+  <div class="sec-title">7 TAGE</div>
+  <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px" id="wx-7days"></div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- ALLE -->
+<div class="page" id="pg-alle">
+  <div class="sec-title" style="padding-top:40px">SYSTEM</div>
+  <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px">
+    <div style="background:var(--c1);border-radius:16px;padding:18px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-weight:700;font-size:.9rem">Template Version</div>
+        <div style="font-size:.72rem;color:var(--dim);margin-top:2px">v1.0 — AutoFlow Lab</div>
+      </div>
+      <div style="background:rgba(48,209,88,.15);color:var(--grn);padding:5px 12px;border-radius:100px;font-size:.72rem;font-weight:700">LIVE</div>
+    </div>
+    <div style="background:var(--c1);border-radius:16px;padding:18px">
+      <div style="font-weight:700;font-size:.9rem;margin-bottom:10px">Verbinde mit Home Assistant</div>
+      <div style="font-size:.75rem;color:var(--dim);line-height:1.7">
+        1. Öffne diese Seite auf deinem HA-Gerät<br>
+        2. Ersetze <code style="background:var(--c3);padding:2px 6px;border-radius:6px">HA_URL</code> mit deiner HA-Adresse<br>
+        3. Trage deinen Long-Lived Token ein<br>
+        4. Passe <code style="background:var(--c3);padding:2px 6px;border-radius:6px">CFG.lights</code> mit deinen Entities an
+      </div>
+    </div>
+    <div style="background:var(--c1);border-radius:16px;padding:18px">
+      <div style="font-weight:700;font-size:.9rem;margin-bottom:4px">autoflow-lab.github.io</div>
+      <div style="font-size:.72rem;color:var(--dim)">Mehr Dashboards & Automatisierungen</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /pages -->
+
+<!-- NAV -->
+<div id="nav">
+  <button class="nb active" data-page="home">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    <span>Home</span><div class="nb-glow"></div>
+  </button>
+  <button class="nb" data-page="licht">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <span>Licht</span><div class="nb-glow"></div>
+  </button>
+  <button class="nb" data-page="musik">
+    <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    <span>Musik</span><div class="nb-glow"></div>
+  </button>
+  <button class="nb" data-page="wetter">
+    <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+    <span>Wetter</span><div class="nb-glow"></div>
+  </button>
+  <button class="nb" data-page="alle">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+    <span>Alle</span><div class="nb-glow"></div>
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+// Connect to YOUR Home Assistant:
+const HA_URL = '';           // e.g. 'http://192.168.1.123:8123'
+const HA_TOKEN = '';         // Your Long-Lived Access Token
+
+// ─── DEMO DATA (used when HA_URL is empty) ────────────────────────────────────
+const DEMO_LIGHTS = [
+  {id:'light.wohnzimmer',   name:'Wohnzimmer', on:true,  bri:80, rgb:[255,175,60]},
+  {id:'light.kueche',       name:'Küche',      on:true,  bri:60, rgb:[200,218,255]},
+  {id:'light.sofa',         name:'Sofa',       on:false, bri:0,  rgb:[255,40,20]},
+  {id:'light.schlafzimmer', name:'Schlafzimmer',on:false,bri:0,  rgb:[30,210,80]},
+  {id:'light.bad',          name:'Bad',        on:true,  bri:100,rgb:[200,218,255]},
+  {id:'light.flur',         name:'Flur',       on:false, bri:0,  rgb:[160,30,255]},
+];
+const DEMO_MEDIA = {playing:false, title:'Keine Wiedergabe', artist:'', volume:0.4};
+const RADIO_STATIONS = [
+  {name:'SRF 1',   url:'http://stream.srg-ssr.ch/m/drs1/mp3_128',   emoji:'📻'},
+  {name:'SRF 3',   url:'http://stream.srg-ssr.ch/m/drs3/mp3_128',   emoji:'🎵'},
+  {name:'Energy',  url:'https://energyzurich.ice.infomaniak.ch/energyzurich-high.mp3', emoji:'⚡'},
+  {name:'Pop',     url:'http://stream.srg-ssr.ch/m/rsp/mp3_128',    emoji:'🎤'},
+  {name:'Radio 24',url:'https://radio24.ice.infomaniak.ch/radio24-high.mp3', emoji:'🔊'},
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let _S = {};      // HA states cache
+let _lights = DEMO_LIGHTS.map(l=>({...l})); // working copy
+let _media = {...DEMO_MEDIA};
+let _wx = null;
+let _audio = null;
+let _radioActive = null;
+let _standbyTimer = null;
+let _volDrag = false;
+const STANDBY_MS = 3 * 60 * 1000;
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg, dur=2500){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+function navTo(page){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='pg-'+page));
+}
+document.querySelectorAll('.nb').forEach(b=>{
+  b.addEventListener('click',()=>navTo(b.dataset.page));
+});
+
+// ─── STANDBY ──────────────────────────────────────────────────────────────────
+function resetStandby(){
+  clearTimeout(_standbyTimer);
+  document.getElementById('standby').classList.remove('show');
+  _standbyTimer=setTimeout(()=>document.getElementById('standby').classList.add('show'),STANDBY_MS);
+}
+document.addEventListener('touchstart',resetStandby,{passive:true});
+document.addEventListener('click',resetStandby);
+document.getElementById('standby').addEventListener('click',()=>document.getElementById('standby').classList.remove('show'));
+
+// ─── CLOCK ────────────────────────────────────────────────────────────────────
+const DAYS=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const MONTHS=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+function tick(){
+  const now=new Date();
+  const hh=String(now.getHours()).padStart(2,'0');
+  const mm=String(now.getMinutes()).padStart(2,'0');
+  const ts=`${hh}:${mm}`;
+  document.getElementById('htime').textContent=ts;
+  document.getElementById('sb-time').textContent=ts;
+  const ds=`${DAYS[now.getDay()]}, ${now.getDate()}. ${MONTHS[now.getMonth()]}`;
+  document.getElementById('hdate').textContent=ds;
+  document.getElementById('sb-date').textContent=ds;
+  // Greeting
+  const h=now.getHours();
+  const gr=h<5?'Gute Nacht 🌙':h<12?'Guten Morgen ☀️':h<17?'Guten Tag 😊':h<22?'Guten Abend 🌆':'Gute Nacht 🌙';
+  document.getElementById('hgreet').textContent=gr;
+}
+setInterval(tick,10000); tick();
+
+// ─── WEATHER ──────────────────────────────────────────────────────────────────
+const WX_CODES={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'❄️',73:'❄️',75:'❄️',80:'🌦',81:'🌧',82:'⛈',95:'⛈'};
+const WX_DESC={0:'Klar',1:'Überwiegend klar',2:'Teilweise bewölkt',3:'Bewölkt',45:'Neblig',51:'Leichter Niesel',61:'Leichter Regen',63:'Regen',65:'Starker Regen',71:'Leichter Schnee',73:'Schnee',80:'Regenschauer',95:'Gewitter'};
+async function fetchWeather(){
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.170&longitude=8.783&current=temperature_2m,apparent_temperature,weathercode,relative_humidity_2m,wind_speed_10m&hourly=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=7');
+    if(!r.ok)return;
+    const d=await r.json();
+    _wx=d;
+    const c=d.current;
+    const wc=c.weathercode;
+    const ico=WX_CODES[wc]||'🌤';
+    const desc=WX_DESC[wc]||'';
+    const temp=Math.round(c.temperature_2m);
+    const feel=Math.round(c.apparent_temperature);
+    const hum=Math.round(c.relative_humidity_2m);
+    const wind=Math.round(c.wind_speed_10m);
+    // Hero
+    document.getElementById('hwx-ico').textContent=ico;
+    document.getElementById('hwx-temp').textContent=temp+'°';
+    document.getElementById('hwx-desc').textContent=desc;
+    // Hero orb color
+    const orbColor=wc<=1?'rgba(255,200,50,.2)':wc<=3?'rgba(150,150,180,.15)':'rgba(80,120,200,.18)';
+    document.getElementById('hero-orb').style.background=`radial-gradient(circle,${orbColor} 0%,transparent 70%)`;
+    // Wetter tab
+    document.getElementById('wxt-ico').textContent=ico;
+    document.getElementById('wxt-temp').textContent=temp;
+    document.getElementById('wxt-desc').textContent=desc;
+    document.getElementById('wxt-feel').textContent=feel+'°';
+    document.getElementById('wxt-hum').textContent=hum+'%';
+    document.getElementById('wxt-wind').textContent=wind+' km/h';
+    document.getElementById('sb-wx').textContent=ico+' '+temp+'°';
+    // Hourly
+    const hourlyEl=document.getElementById('wx-hourly');
+    hourlyEl.innerHTML='';
+    const now=new Date();
+    let count=0;
+    for(let i=0;i<d.hourly.time.length&&count<12;i++){
+      const t=new Date(d.hourly.time[i]);
+      if(t<now)continue;
+      const item=document.createElement('div');
+      item.className='wx-h-item';
+      item.innerHTML=`<div class="wx-h-time">${String(t.getHours()).padStart(2,'0')}:00</div><div class="wx-h-ico">${WX_CODES[d.hourly.weathercode[i]]||'🌤'}</div><div class="wx-h-temp">${Math.round(d.hourly.temperature_2m[i])}°</div>`;
+      hourlyEl.appendChild(item);
+      count++;
+    }
+    // 7-day
+    const sevenEl=document.getElementById('wx-7days');
+    sevenEl.innerHTML='';
+    const dayNames=['So','Mo','Di','Mi','Do','Fr','Sa'];
+    for(let i=0;i<Math.min(7,d.daily.time.length);i++){
+      const dt=new Date(d.daily.time[i]);
+      const row=document.createElement('div');
+      row.style.cssText='background:var(--c1);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between';
+      row.innerHTML=`<span style="font-size:.82rem;font-weight:600;width:32px">${i===0?'Heute':dayNames[dt.getDay()]}</span><span style="font-size:1.1rem">${WX_CODES[d.daily.weathercode[i]]||'🌤'}</span><span style="font-size:.82rem;color:var(--dim);flex:1;text-align:center">${WX_DESC[d.daily.weathercode[i]]||''}</span><span style="font-size:.82rem;font-weight:700">${Math.round(d.daily.temperature_2m_max[i])}° <span style="color:var(--dim);font-weight:400">${Math.round(d.daily.temperature_2m_min[i])}°</span></span>`;
+      sevenEl.appendChild(row);
+    }
+  }catch(e){console.warn('Weather error:',e);}
+}
+fetchWeather();
+setInterval(fetchWeather, 600000);
+
+// ─── HA FETCH ─────────────────────────────────────────────────────────────────
+async function fetchHA(){
+  if(!HA_URL||!HA_TOKEN)return;
+  try{
+    const r=await fetch(HA_URL+'/api/states',{headers:{Authorization:'Bearer '+HA_TOKEN}});
+    if(!r.ok)return;
+    const arr=await r.json();
+    arr.forEach(s=>{_S[s.entity_id]=s;});
+    // Sync lights
+    _lights.forEach(l=>{
+      const s=_S[l.id];
+      if(!s)return;
+      l.on=s.state==='on';
+      l.bri=Math.round((s.attributes?.brightness??0)/2.55)||0;
+      const rgb=s.attributes?.rgb_color;
+      if(rgb)l.rgb=rgb;
+    });
+    renderLights();
+  }catch(e){}
+}
+if(HA_URL&&HA_TOKEN){fetchHA();setInterval(fetchHA,10000);}
+
+// ─── LIGHT RENDERING ─────────────────────────────────────────────────────────
+function makeLightTile(l, container){
+  const div=document.createElement('div');
+  div.className='lt'+(l.on?' on':'');
+  div.dataset.lid=l.id;
+  const col=l.rgb?`rgb(${l.rgb.join(',')})`: '#ff9f0a';
+  if(l.on){
+    div.style.background=`linear-gradient(145deg,rgba(${l.rgb?l.rgb.join(','):'255,159,10'},.09),rgba(${l.rgb?l.rgb.join(','):'255,159,10'},.07) 40%,rgba(${l.rgb?l.rgb.join(','):'255,159,10'},.14))`;
+    div.style.borderColor=`rgba(${l.rgb?l.rgb.join(','):'255,159,10'},.3)`;
+    div.style.boxShadow=`0 0 22px rgba(${l.rgb?l.rgb.join(','):'255,159,10'},.12)`;
+  }
+  div.innerHTML=`
+    <div class="ltico"><svg viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></div>
+    <div>
+      <div class="ltname">${l.name}</div>
+      <div class="ltst" style="color:${l.on?col:'rgba(255,255,255,.3)'}">${l.on?(l.bri+'% hell'):'Aus'}</div>
+    </div>
+    <div class="bbar"><div class="bfil" style="width:${l.on?Math.max(l.bri,10):0}%;background:${col}"></div></div>`;
+  div.addEventListener('click',()=>toggleLight(l.id));
+  container.appendChild(div);
+}
+
+function renderLights(){
+  const homeEl=document.getElementById('home-lights');
+  const allEl=document.getElementById('all-lights');
+  homeEl.innerHTML=''; allEl.innerHTML='';
+  _lights.forEach(l=>{
+    makeLightTile(l, homeEl);
+    makeLightTile(l, allEl);
+  });
+}
+
+function toggleLight(lid){
+  const l=_lights.find(x=>x.id===lid);
+  if(!l)return;
+  l.on=!l.on;
+  if(!l.on)l.bri=0; else if(!l.bri)l.bri=80;
+  renderLights();
+  toast(l.on?`💡 ${l.name} an`:`🌙 ${l.name} aus`);
+  if(HA_URL&&HA_TOKEN){
+    fetch(HA_URL+'/api/services/light/'+(l.on?'turn_on':'turn_off'),{
+      method:'POST',
+      headers:{Authorization:'Bearer '+HA_TOKEN,'Content-Type':'application/json'},
+      body:JSON.stringify({entity_id:lid})
+    }).catch(()=>{});
+  }
+}
+
+renderLights();
+
+// ─── SCENES ───────────────────────────────────────────────────────────────────
+function doScene(s){
+  if(s==='abend'){
+    _lights.forEach(l=>{l.on=true;l.bri=40;l.rgb=[255,175,60];});
+    toast('🌆 Abend-Stimmung aktiviert');
+  } else if(s==='film'){
+    _lights.forEach(l=>{l.on=true;l.bri=10;l.rgb=[30,100,255];});
+    toast('🎬 Film-Modus aktiviert');
+  } else if(s==='hell'){
+    _lights.forEach(l=>{l.on=true;l.bri=100;l.rgb=[200,218,255];});
+    toast('☀️ Alle Lichter hell');
+  } else if(s==='off'){
+    _lights.forEach(l=>{l.on=false;l.bri=0;});
+    toast('🌙 Alles ausgeschaltet');
+  }
+  renderLights();
+}
+document.getElementById('sc-abend').addEventListener('click',()=>doScene('abend'));
+document.getElementById('sc-film').addEventListener('click',()=>doScene('film'));
+document.getElementById('sc-hell').addEventListener('click',()=>doScene('hell'));
+document.getElementById('sc-off').addEventListener('click',()=>doScene('off'));
+document.getElementById('sc2-abend').addEventListener('click',()=>doScene('abend'));
+document.getElementById('sc2-hell').addEventListener('click',()=>doScene('hell'));
+
+// ─── RADIO ────────────────────────────────────────────────────────────────────
+const chipsEl=document.getElementById('radio-chips');
+RADIO_STATIONS.forEach((st,i)=>{
+  const chip=document.createElement('div');
+  chip.className='rchip';
+  chip.textContent=st.emoji+' '+st.name;
+  chip.addEventListener('click',()=>{
+    if(_radioActive===i){
+      // Stop
+      if(_audio){_audio.pause();_audio=null;}
+      _radioActive=null;
+      document.getElementById('np-t').textContent='Keine Wiedergabe';
+      document.getElementById('np-s').textContent='Wähle eine Radio-Station';
+      document.getElementById('eq').classList.remove('on');
+      document.getElementById('play-ico').innerHTML='<path d="M8 5.5v13L19 12z" fill="white"/>';
+      chipsEl.querySelectorAll('.rchip').forEach(c=>c.classList.remove('active'));
+      return;
+    }
+    if(_audio){_audio.pause();}
+    _audio=new Audio(st.url);
+    _audio.volume=(+document.getElementById('vol-slider').value)/100;
+    _audio.play().catch(()=>toast('⚠️ Playback blocked by browser'));
+    _radioActive=i;
+    document.getElementById('np-t').textContent=st.name;
+    document.getElementById('np-s').textContent='Live Radio';
+    document.getElementById('eq').classList.add('on');
+    document.getElementById('play-ico').innerHTML='<rect x="5.5" y="4" width="4" height="16" rx="1.5" fill="white"/><rect x="14.5" y="4" width="4" height="16" rx="1.5" fill="white"/>';
+    chipsEl.querySelectorAll('.rchip').forEach((c,j)=>c.classList.toggle('active',j===i));
+    toast('📻 '+st.name+' läuft');
+  });
+  chipsEl.appendChild(chip);
+});
+document.getElementById('btn-stop').addEventListener('click',()=>{
+  if(_audio){_audio.pause();_audio=null;}
+  _radioActive=null;
+  document.getElementById('eq').classList.remove('on');
+  document.getElementById('np-t').textContent='Keine Wiedergabe';
+  document.getElementById('play-ico').innerHTML='<path d="M8 5.5v13L19 12z" fill="white"/>';
+  chipsEl.querySelectorAll('.rchip').forEach(c=>c.classList.remove('active'));
+});
+document.getElementById('btn-play').addEventListener('click',()=>{
+  if(_radioActive!==null&&_audio&&_audio.paused){_audio.play();}
+  else if(_radioActive===null&&RADIO_STATIONS.length>0){
+    chipsEl.querySelectorAll('.rchip')[0]?.click();
+  }
+});
+document.getElementById('vol-slider').addEventListener('input',function(){
+  if(_audio)_audio.volume=this.value/100;
+  // style track
+  const pct=(this.value/100)*100;
+  this.style.background=`linear-gradient(90deg,#0a84ff ${pct}%,#3a3a3c ${pct}%)`;
+});
+
+// ─── STANDBY INIT ─────────────────────────────────────────────────────────────
+resetStandby();
+</script>
+</body>
+</html>
