@@ -1,5 +1,30 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-04-01 12:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — Dynamische Wetter-Aura
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Der gesamte Wetter-Tab bekommt ein subtiles, wetter-reaktives Hintergrundleuchten — ein radial-gradient Orb am oberen Rand der Seite, der sich je nach aktuellem WMO-Code in der passenden Farbe zeigt und sanft atmet
+- **`#wx-tab-aura` Div**: `position:absolute; top:0; left:0; right:0; height:340px; z-index:0; pointer-events:none` — liegt hinter allen Karten, zeigt nur in den Lücken zwischen den Cards
+- **7 Farbvarianten** je WMO-Code:
+  - ☀️ Klarer Tag (WMO 0-1): `rgba(255,180,20,.11)` goldgelb — warm sonnige Stimmung
+  - ⛅ Bewölkt (WMO 2-3): `rgba(70,130,215,.08)` weichblau — gedämpftes Tageslicht
+  - 🌫 Nebel (WMO 45-48): `rgba(155,160,175,.07)` grau — diesige Atmosphäre
+  - 🌧 Regen (WMO 51-82): `rgba(10,70,200,.13)` tiefblau — nasses, dunkles Wetter
+  - ❄️ Schnee (WMO 71-86): `rgba(170,225,255,.09)` eisblau — winterliche Kälte
+  - ⚡ Gewitter (WMO ≥95): `rgba(130,40,220,.14)` lila — elektrische Stimmung
+  - 🌙 Klare Nacht (night+klar): `rgba(20,40,150,.13)` dunkelblau — sternenklare Nacht
+- **`radial-gradient(ellipse at 50% 0%, col 0%, transparent 72%)`**: Orb kommt von oben-mitte, fades sanft nach unten weg
+- **CSS Transitions**: `opacity 2.5s ease` (Ein-/Ausblenden) + `background 3.5s ease` (Farbwechsel) → kein harter Sprung beim Wetterwechsel
+- **`@keyframes wxAuraDrift` (22s alternate loop)**: scale(1)→scale(1.06)→scale(1) + translateY(0→-10px→5px) → Orb "atmet" sanft — wirkt lebendig ohne aufdringlich zu sein
+- **Light-Mode**: `opacity:0!important` → Aura bleibt im hellen Modus deaktiviert (würde auf hellem BG nicht gut aussehen)
+- **`drawWxTabAura(code, night)` Funktion**: wird am Ende von `renderWeather()` aufgerufen, setzt `el.style.background` + `classList.add('show')` → Aura erscheint smooth nach erstem Wetter-Load
+- **Graceful**: `if(!el)return` → kein Fehler wenn Element fehlt
+- **Kein extra API-Call** — nutzt bereits vorhandene `code` + `night` Parameter aus `renderWeather()`
+- Effekt: Der Wetter-Tab "fühlt" sich jetzt wie das aktuelle Wetter an — ein goldener Schimmer bei Sonnenschein, ein blauer Hauch bei Regen, ein lila Glühen bei Gewitter — subtil genug um nicht abzulenken, aber prägnant genug um die Stimmung zu setzen
+- JS-Check: OK | Deployed via SSH (paramiko b64-chunk, 882052 bytes, DEPLOY_OK)
+
+
+
 ## 2026-03-31 12:04 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Licht-Tab — "Zufalls-Palette" Shuffle Button (🎲)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2595,3 +2620,15 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Konfetti-Burst aus 18 Emoji-Partikeln bei genau 10 Interaktionen
 - Milestone-Pop via CSS-Animation, DE+EN i18n via langChange-Event
 - JS-Check: OK | GitHub Pages: cc5b325
+
+## 2026-04-01 06:29 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: Scroll-Progress-Indicator — dünner amber→gelb Gradient-Bar (3px) fixiert oben auf der Seite, wächst mit Scroll-Position 0→100%, Glow-Schatten, passive scroll-Listener
+- JS-Check: OK | Deployed → GitHub Pages via API (autoflow-lab.github.io) | demo.html + index.html
+
+## 2026-04-01 10:38 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Musik-Tab — Stimmungs-Empfehlung Chip — kontextsensitiver Glass-Chip (Tageszeit + Wetter → Mood-Preset), amber/grün/blau Accent, MutationObserver Tab-Trigger, 5-min-Refresh
+- JS-Check: OK | Deployed → GitHub Pages via API (autoflow-lab.github.io) | wz.html
+
+## 2026-04-01 14:45 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: "Animation Showcase" Section — 3 Cards (Vinyl-Disc-Spin, SVG-Wellen, Sternschnuppen-Canvas), vor FAQ eingefügt, DE+EN i18n, hover-lift, responsive Grid
+- JS-Check: OK | Deployed → GitHub Pages via API | demo.html + index.html

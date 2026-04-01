@@ -168,10 +168,10 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -359,6 +359,7 @@ html,body{height:100%;background:var(--bg);
 #presence-strip{display:none;flex-wrap:wrap;gap:7px;margin:0 0 10px}
 #presence-strip.show{display:flex}
 @keyframes presChipIn{from{opacity:0;transform:scale(.82) translateY(4px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes moodChipIn{from{opacity:0;transform:scale(.88) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .pres-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px 6px 8px;border-radius:100px;font-size:.72rem;font-weight:600;cursor:default;animation:presChipIn .36s cubic-bezier(.34,1.15,.64,1) both}
 .pres-chip.pres-home{background:rgba(48,209,88,.09);border:1px solid rgba(48,209,88,.26);color:rgba(160,255,190,.9)}
 .pres-chip.pres-away{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.45)}
@@ -434,6 +435,29 @@ html,body{height:100%;background:var(--bg);
 :root.light #bbq-label{color:rgba(160,60,0,.7)}
 :root.light #bbq-verdict{color:rgba(0,0,0,.85)}
 :root.light #bbq-tip{color:rgba(0,0,0,.35)}
+/* ── Camping-Check Card ── */
+#camp-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#camp-card.show{opacity:1;transform:translateY(0)}
+#camp-inner{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(52,199,89,.22);background:rgba(48,209,88,.06);padding:14px 14px 10px;display:flex;align-items:center;gap:12px}
+#camp-bg{position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(48,209,88,.10) 0%,transparent 65%);pointer-events:none}
+#camp-icon-wrap{flex-shrink:0;position:relative}
+#camp-texts{flex:1;min-width:0}
+#camp-label{font-size:.58rem;font-weight:700;letter-spacing:1px;color:rgba(52,199,89,.8);text-transform:uppercase;margin-bottom:3px}
+#camp-verdict{font-size:.88rem;font-weight:600;color:var(--txt);margin-bottom:6px;line-height:1.25}
+#camp-chips{display:flex;flex-wrap:wrap;gap:5px}
+.camp-chip{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:.63rem;font-weight:600}
+.camp-good{background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.28);color:rgba(100,230,140,.95)}
+.camp-ok{background:rgba(255,214,10,.10);border:1px solid rgba(255,214,10,.28);color:rgba(255,220,80,.95)}
+.camp-bad{background:rgba(255,69,58,.10);border:1px solid rgba(255,69,58,.26);color:rgba(255,120,110,.9)}
+#camp-tip{font-size:.67rem;font-style:italic;color:rgba(255,255,255,.35);padding:4px 14px 6px;text-align:center}
+@keyframes campFireFlicker{0%,100%{transform:scaleY(1) skewX(-1deg)}30%{transform:scaleY(1.18) skewX(2.5deg)}65%{transform:scaleY(.88) skewX(-2deg)}}
+@keyframes campStarTwinkle{0%,100%{opacity:.6}50%{opacity:1}}
+#camp-card.show #camp-fire-g{animation:campFireFlicker 1.4s ease-in-out infinite;transform-origin:bottom center}
+#camp-card.show .cst{animation:campStarTwinkle 2s ease-in-out infinite}
+:root.light #camp-inner{background:rgba(20,120,40,.05);border-color:rgba(30,130,50,.18)}
+:root.light #camp-label{color:rgba(0,100,30,.7)}
+:root.light #camp-verdict{color:rgba(0,0,0,.85)}
+:root.light #camp-tip{color:rgba(0,0,0,.35)}
 /* ── Tages-Highlight Card ── */
 #day-highlight-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #day-highlight-card.show{opacity:1;transform:translateY(0)}
@@ -908,6 +932,30 @@ html,body{height:100%;background:var(--bg);
 @keyframes sfApply{0%{background:rgba(191,90,242,.32)}100%{background:rgba(191,90,242,.07)}}
 @keyframes sfIcoSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 :root.light #lt-shuffle{background:transparent}
+/* ── Rainbow Cycle ── */
+#lt-rainbow{margin:0 14px 12px;opacity:0;transition:opacity .5s ease}
+#lt-rainbow.show{opacity:1}
+#lt-rainbow-inner{border-radius:14px;border:1px solid rgba(255,159,10,.22);background:rgba(255,159,10,.05);padding:11px 14px;display:flex;flex-direction:column;gap:8px}
+#lt-rainbow-top{display:flex;align-items:center;gap:10px}
+#lt-rainbow-ico{font-size:1.15rem;flex-shrink:0;display:inline-block;transition:filter .4s}
+#lt-rainbow-inner.rb-active #lt-rainbow-ico{animation:rbIcoSpin 3s linear infinite}
+@keyframes rbIcoSpin{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
+#lt-rainbow-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-rainbow-val{font-size:.67rem;font-weight:700;color:rgba(255,200,60,.9);white-space:nowrap}
+#lt-rainbow-bar{height:5px;border-radius:4px;background:linear-gradient(90deg,hsl(0,90%,55%),hsl(45,90%,55%),hsl(90,90%,50%),hsl(150,90%,50%),hsl(210,90%,55%),hsl(270,90%,55%),hsl(330,90%,55%),hsl(360,90%,55%));opacity:.55;transition:opacity .4s}
+#lt-rainbow-inner.rb-active #lt-rainbow-bar{opacity:1;animation:rbBarShift 3s linear infinite}
+@keyframes rbBarShift{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
+#lt-rainbow-speeds{display:flex;gap:6px}
+.rb-spd-btn{flex:1;padding:5px 0;border-radius:10px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);font-size:.65rem;font-weight:600;color:rgba(255,255,255,.45);cursor:pointer;touch-action:manipulation;transition:background .15s,color .15s,border-color .15s}
+.rb-spd-btn.rb-sel{border-color:rgba(255,159,10,.45);background:rgba(255,159,10,.14);color:rgba(255,200,60,.9)}
+.rb-spd-btn:active{transform:scale(.96)}
+#lt-rainbow-pill{display:none;align-items:center;gap:8px;padding:6px 12px;border-radius:20px;background:rgba(255,159,10,.13);border:1px solid rgba(255,159,10,.28);font-size:.68rem;font-weight:600;color:rgba(255,200,60,.9)}
+#lt-rainbow-pill.show{display:flex;animation:rbPillIn .35s cubic-bezier(.34,1.15,.64,1)}
+@keyframes rbPillIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+#lt-rainbow-dot{width:7px;height:7px;border-radius:50%;background:#ff9f0a;flex-shrink:0;animation:rbDotPulse 1.8s ease-in-out infinite}
+@keyframes rbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,159,10,0)}50%{box-shadow:0 0 0 4px rgba(255,159,10,.32)}}
+#lt-rainbow-cancel{margin-left:auto;font-size:.75rem;cursor:pointer;opacity:.65;touch-action:manipulation}
+:root.light #lt-rainbow{background:transparent}
 /* ── Licht-Snapshot ── */
 /* Farb-Mixer Color Wheel */
 #lt-color-wheel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px 14px;margin:0 14px 12px}
@@ -1059,6 +1107,11 @@ html,body{height:100%;background:var(--bg);
   background:linear-gradient(160deg,#0d0d1a,#12102a,#0a0a14);
   transition:background 8s ease}
 #wx-hero{transition:background 3s ease}
+/* ── Wetter-Tab Aura ── */
+#wx-tab-aura{position:absolute;top:0;left:0;right:0;height:340px;pointer-events:none;z-index:0;opacity:0;transition:opacity 2.5s ease,background 3.5s ease;animation:wxAuraDrift 22s ease-in-out infinite alternate;will-change:transform,opacity}
+#wx-tab-aura.show{opacity:1}
+@keyframes wxAuraDrift{0%{transform:scale(1) translateY(0)}50%{transform:scale(1.06) translateY(-10px)}100%{transform:scale(1) translateY(5px)}}
+:root.light #wx-tab-aura{opacity:0!important}
 /* ── Night Stars Canvas ── */
 #star-cv{
   position:absolute;inset:0;z-index:0;
@@ -3333,6 +3386,18 @@ input[type=range] { touch-action: none; }
           </div>
         </div>
       </div><!-- /spotify -->
+
+      <!-- ── Stimmungs-Empfehlung Chip ── -->
+      <div id="mood-chip" style="display:none;margin:10px 0 4px;padding:0 4px">
+        <div id="mood-chip-inner" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:7px 14px 7px 10px;font-size:.73rem;color:rgba(255,255,255,.75);animation:moodChipIn .4s cubic-bezier(.34,1.56,.64,1) both">
+          <span id="mood-emoji" style="font-size:1rem">🎵</span>
+          <div style="display:flex;flex-direction:column;gap:1px">
+            <span id="mood-label" style="font-weight:600;font-size:.72rem;color:rgba(255,255,255,.9)">Guten Morgen</span>
+            <span id="mood-sub" style="font-size:.65rem;color:rgba(255,255,255,.45)">Empfohlen für jetzt</span>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /pg-musik -->
 
     <div class="page" id="pg-licht">
@@ -3521,6 +3586,27 @@ input[type=range] { touch-action: none; }
           <span id="lt-shuffle-val">Harmonische Farben</span>
         </button>
       </div>
+      <!-- Rainbow Cycle -->
+      <div id="lt-rainbow" aria-label="Regenbogen-Farbzyklus">
+        <div id="lt-rainbow-inner">
+          <div id="lt-rainbow-top">
+            <span id="lt-rainbow-ico">🌈</span>
+            <span id="lt-rainbow-label">Rainbow Cycle</span>
+            <span id="lt-rainbow-val">Alle RGB-Lichter</span>
+          </div>
+          <div id="lt-rainbow-bar"></div>
+          <div id="lt-rainbow-speeds">
+            <button class="rb-spd-btn rb-sel" data-spd="slow">🐢 Langsam</button>
+            <button class="rb-spd-btn" data-spd="mid">🚶 Mittel</button>
+            <button class="rb-spd-btn" data-spd="fast">⚡ Schnell</button>
+          </div>
+          <div id="lt-rainbow-pill">
+            <span id="lt-rainbow-dot"></span>
+            <span id="lt-rainbow-cd">Regenbogen läuft…</span>
+            <span id="lt-rainbow-cancel">✕</span>
+          </div>
+        </div>
+      </div>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
@@ -3562,6 +3648,7 @@ input[type=range] { touch-action: none; }
 
     <!-- ═══ WETTER ═══ -->
     <div class="page" id="pg-wetter" style="padding-bottom:4px">
+      <div id="wx-tab-aura"></div>
       <!-- Aktuell -->
       <div id="wx-hero" style="background:linear-gradient(135deg,#0d1b2e,#1a2840);border-radius:20px;padding:20px;margin-bottom:10px;border:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden">
         <canvas id="wx-precip-cv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.2s ease;z-index:0;border-radius:20px"></canvas>
@@ -3658,6 +3745,71 @@ input[type=range] { touch-action: none; }
           </div>
         </div>
         <div id="bbq-tip"></div>
+      </div>
+
+      <!-- Camping-Check Card -->
+      <div id="camp-card">
+        <div id="camp-inner">
+          <div id="camp-bg"></div>
+          <div id="camp-icon-wrap">
+            <svg viewBox="0 0 72 72" width="72" height="72">
+              <defs>
+                <linearGradient id="campSkyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#0a1428" stop-opacity="1"/>
+                  <stop offset="100%" stop-color="#1a3060" stop-opacity="1"/>
+                </linearGradient>
+                <linearGradient id="campFireGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#ff6b00"/>
+                  <stop offset="60%" stop-color="#ff9f0a" stop-opacity=".8"/>
+                  <stop offset="100%" stop-color="#ffd60a" stop-opacity=".2"/>
+                </linearGradient>
+                <linearGradient id="campArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff453a"/>
+                  <stop offset="35%" stop-color="#ff9f0a"/>
+                  <stop offset="65%" stop-color="#ffd60a"/>
+                  <stop offset="100%" stop-color="#30d158"/>
+                </linearGradient>
+              </defs>
+              <!-- Sky bg -->
+              <rect x="0" y="0" width="72" height="72" rx="10" fill="url(#campSkyGrad)" opacity=".6"/>
+              <!-- Stars -->
+              <circle class="cst" cx="10" cy="8" r="1" fill="white" opacity=".6" style="animation-delay:.3s"/>
+              <circle class="cst" cx="24" cy="5" r=".8" fill="white" opacity=".5" style="animation-delay:.9s"/>
+              <circle class="cst" cx="48" cy="7" r="1.1" fill="white" opacity=".65" style="animation-delay:.1s"/>
+              <circle class="cst" cx="62" cy="10" r=".7" fill="white" opacity=".5" style="animation-delay:1.4s"/>
+              <circle class="cst" cx="57" cy="4" r=".9" fill="white" opacity=".55" style="animation-delay:.6s"/>
+              <circle class="cst" cx="34" cy="9" r=".6" fill="white" opacity=".4" style="animation-delay:1.8s"/>
+              <!-- Ground -->
+              <ellipse cx="36" cy="62" rx="30" ry="4" fill="rgba(48,209,88,.18)"/>
+              <!-- Tent -->
+              <polygon points="20,56 36,28 52,56" fill="rgba(30,200,120,.22)" stroke="rgba(52,199,89,.6)" stroke-width="1.5" stroke-linejoin="round"/>
+              <polygon points="36,28 52,56 44,56" fill="rgba(20,160,90,.28)" stroke="rgba(52,199,89,.45)" stroke-width="1" stroke-linejoin="round"/>
+              <!-- Tent door -->
+              <path d="M31 56 Q36 44 41 56" fill="rgba(0,0,0,.28)" stroke="rgba(52,199,89,.4)" stroke-width=".8"/>
+              <!-- Camp fire -->
+              <g id="camp-fire-g">
+                <ellipse cx="36" cy="62" rx="5" ry="1.5" fill="rgba(100,50,0,.5)"/>
+                <path d="M33 62 C32 57 35 54 33 50 C35 53 36 50 37 50 C36 54 39 56 38 62Z" fill="url(#campFireGrad)" opacity=".9"/>
+                <path d="M35 62 C34 58 37 56 35 53 C37 55 38 53 39 55 C38 58 40 60 38 62Z" fill="url(#campFireGrad)" opacity=".7"/>
+              </g>
+              <!-- Fire glow -->
+              <ellipse cx="36" cy="60" rx="6" ry="2" fill="rgba(255,159,10,.22)"/>
+              <!-- Score Arc Track -->
+              <path d="M12 62 A30 30 0 0 1 60 62" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="3" stroke-linecap="round"/>
+              <!-- Score Arc Fill -->
+              <path id="camp-arc" d="M12 62 A30 30 0 0 1 60 62" fill="none" stroke="url(#campArcGrad)" stroke-width="3" stroke-linecap="round"
+                stroke-dasharray="94.2" stroke-dashoffset="94.2" style="transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)"/>
+              <!-- Score text -->
+              <text id="camp-score-txt" x="36" y="48" text-anchor="middle" font-size="10" font-weight="600" fill="rgba(255,255,255,.85)">–</text>
+            </svg>
+          </div>
+          <div id="camp-texts">
+            <div id="camp-label">⛺ CAMPING-CHECK</div>
+            <div id="camp-verdict">Lädt…</div>
+            <div id="camp-chips"></div>
+          </div>
+        </div>
+        <div id="camp-tip"></div>
       </div>
 
       <!-- Tages-Highlight Card -->
@@ -5967,6 +6119,7 @@ function renderWeather(){
   drawHumidity();
   updateWxScore();
   drawBbqCard();
+  drawCampCard();
   drawSportCard();
   drawClimCard();
   drawDayHighlight();
@@ -5978,6 +6131,23 @@ function renderWeather(){
   drawGoldenHour();
   drawBestHour();
   if(window.updateWxPrecipCanvas) updateWxPrecipCanvas(code, night);
+  drawWxTabAura(code, night);
+}
+
+// ─── Wetter-Tab Ambient Aura ───────────────────
+function drawWxTabAura(code, night){
+  const el=document.getElementById('wx-tab-aura');
+  if(!el)return;
+  let col;
+  if(code>=95)                      col='rgba(130,40,220,.14)';  // Gewitter: Lila
+  else if(code>=71&&code<=86)       col='rgba(170,225,255,.09)'; // Schnee: Eisblau
+  else if(code>=51&&code<=82)       col='rgba(10,70,200,.13)';   // Regen: Tiefblau
+  else if(code>=45&&code<=48)       col='rgba(155,160,175,.07)'; // Nebel: Grau
+  else if(code>=2&&code<=3)         col='rgba(70,130,215,.08)';  // Bewölkt: Weichblau
+  else if(night)                    col='rgba(20,40,150,.13)';   // Klare Nacht: Dunkelblau
+  else                              col='rgba(255,180,20,.11)';  // Klarer Tag: Golden
+  el.style.background='radial-gradient(ellipse at 50% 0%,'+col+' 0%,transparent 72%)';
+  el.classList.add('show');
 }
 
 // ═══════════════════════════════════════════════
@@ -6981,6 +7151,123 @@ function drawBbqCard(){
   }
 
   card.classList.add('show');
+}
+
+// ═══════════════════════════════════════════════
+// CAMPING-CHECK CARD
+// ═══════════════════════════════════════════════
+function drawCampCard(){
+  const card=document.getElementById('camp-card');
+  if(!card)return;
+  const wx=window._wx;
+  if(!wx||!wx.current||!wx.hourly||!wx.hourly.temperature_2m){card.style.display='none';return;}
+  card.style.display='block';
+
+  const h=wx.hourly;
+  const now=new Date();
+  const todayStr=now.toISOString().slice(0,10);
+  // Find current hour index
+  let si=0;
+  for(let i=0;i<h.time.length;i++){if(h.time[i]>=now.toISOString().slice(0,13)){si=i;break;}}
+
+  // Gather tonight's hours: 20:00 - 06:00 (next day)
+  const nightHours=[];
+  for(let i=si;i<Math.min(si+36,h.time.length);i++){
+    const d=new Date(h.time[i]);
+    const hr=d.getHours();
+    if(hr>=20||hr<6) nightHours.push(i);
+    if(nightHours.length>=12) break;
+  }
+  if(nightHours.length<3){card.style.display='none';return;}
+
+  // Calculate score for each night hour, take average
+  let tempScores=[],rainScores=[],windScores=[],wmoScores=[];
+  nightHours.forEach(i=>{
+    const t=h.temperature_2m[i]||0;
+    const rp=(h.precipitation_probability&&h.precipitation_probability[i])||0;
+    const ws=(h.windspeed_10m&&h.windspeed_10m[i])||0;
+    const wmo=(h.weather_code&&h.weather_code[i])||(h.weathercode&&h.weathercode[i])||0;
+    // Temp score: ideal 12-22°C camping range
+    let ts=0;
+    if(t>=15&&t<=22) ts=40;
+    else if(t>=10&&t<15) ts=32;
+    else if(t>=22&&t<=26) ts=28;
+    else if(t>=5&&t<10) ts=18;
+    else if(t>26&&t<=30) ts=14;
+    else if(t>=0&&t<5) ts=8;
+    else ts=2;
+    // Rain score
+    const rs=Math.max(0, 30-(rp*0.4));
+    // Wind score
+    const wns=ws<15?20:ws<25?15:ws<40?8:0;
+    // WMO
+    let wms=0;
+    if(wmo<=1) wms=10;
+    else if(wmo<=3) wms=7;
+    else if(wmo<=45) wms=5;
+    else if(wmo<80) wms=-5;
+    else if(wmo>=95) wms=-20;
+    else wms=2;
+    tempScores.push(ts);
+    rainScores.push(rs);
+    windScores.push(wns);
+    wmoScores.push(wms);
+  });
+  const avg=arr=>arr.reduce((a,b)=>a+b,0)/arr.length;
+  const score=Math.round(Math.min(100,Math.max(0,avg(tempScores)+avg(rainScores)+avg(windScores)+avg(wmoScores))));
+
+  // Verdict
+  let verdict,accent;
+  if(score>=78){verdict='⛺ Perfekte Camping-Nacht!';accent='rgba(48,209,88,.22)';}
+  else if(score>=58){verdict='🌙 Gute Bedingungen zum Übernachten';accent='rgba(52,199,89,.14)';}
+  else if(score>=38){verdict='😐 Mit Einschränkungen möglich';accent='rgba(255,214,10,.14)';}
+  else{verdict='🏠 Lieber drinnen schlafen';accent='rgba(255,69,58,.14)';}
+
+  document.getElementById('camp-verdict').textContent=verdict;
+  document.getElementById('camp-inner').style.background=accent;
+
+  // Chips
+  const avgT=avg(nightHours.map(i=>h.temperature_2m[i]||0));
+  const maxRain=Math.max(...nightHours.map(i=>(h.precipitation_probability&&h.precipitation_probability[i])||0));
+  const maxWind=Math.max(...nightHours.map(i=>(h.windspeed_10m&&h.windspeed_10m[i])||0));
+  const hasThunder=nightHours.some(i=>{const c=(h.weather_code&&h.weather_code[i])||(h.weathercode&&h.weathercode[i])||0;return c>=95;});
+
+  const chips=[];
+  // Temp chip
+  if(avgT>=10&&avgT<=22) chips.push({t:`🌡 ${avgT.toFixed(0)}°C`,c:'camp-good'});
+  else if(avgT>22) chips.push({t:`🥵 ${avgT.toFixed(0)}°C`,c:'camp-ok'});
+  else chips.push({t:`🥶 ${avgT.toFixed(0)}°C`,c:'camp-bad'});
+  // Rain
+  if(maxRain<15) chips.push({t:'☀️ Trocken',c:'camp-good'});
+  else if(maxRain<40) chips.push({t:`🌂 ${maxRain}% Regen`,c:'camp-ok'});
+  else chips.push({t:`🌧 ${maxRain}% Regen`,c:'camp-bad'});
+  // Wind
+  if(maxWind<15) chips.push({t:'🍃 Windstill',c:'camp-good'});
+  else if(maxWind<30) chips.push({t:`💨 ${maxWind.toFixed(0)} km/h`,c:'camp-ok'});
+  else chips.push({t:`💨 ${maxWind.toFixed(0)} km/h`,c:'camp-bad'});
+  // Thunder
+  if(hasThunder) chips.push({t:'⚡ Gewitter!',c:'camp-bad'});
+
+  const chipsEl=document.getElementById('camp-chips');
+  chipsEl.innerHTML=chips.map(c=>`<span class="camp-chip ${c.c}">${c.t}</span>`).join('');
+
+  // Arc
+  const arc=document.getElementById('camp-arc');
+  if(arc){const CIRC=94.2;requestAnimationFrame(()=>requestAnimationFrame(()=>{arc.style.strokeDashoffset=CIRC*(1-score/100);}));}
+  const st=document.getElementById('camp-score-txt');
+  if(st) st.textContent=score;
+
+  // Tip
+  const tips=['💡 Warme Schlafsack-Unterlage empfehlen — Bodentemperatur kühlt nachts ab.',
+    '💡 Leichte Regenjacke trotzdem einpacken — Nächte sind unberechenbar.',
+    '💡 Ideale Camping-Bedingungen — Sternenhimmel genießen!',
+    '💡 Wind kann Zelt belasten — Heringe gut verankern.',
+    '💡 Stirnlampe und Wärme-Schicht nicht vergessen.',
+    '💡 Frühmorgens wird es oft frisch — dicken Pulli mitnehmen.'];
+  const tip=score>=78?tips[2]:score>=58?tips[0]:score>=38?tips[1]:tips[4];
+  document.getElementById('camp-tip').textContent=tip;
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{card.classList.add('show');}));
 }
 
 function drawUmbrellaCard(){
@@ -12454,6 +12741,7 @@ function updateAll(){
   window._updateCandle&&window._updateCandle(on);
   window._updatePresets&&window._updatePresets(on);
   window._updateShuffle&&window._updateShuffle(on);
+  window._updateRainbow&&window._updateRainbow(on);
   window._updateFingerprint&&window._updateFingerprint(on);
   window._updateCtStrip&&window._updateCtStrip(on);
   // ── Wohnstimmung Dial ──
@@ -16303,6 +16591,218 @@ const _origSetWxMode=setWxMode;
     // Show only when lights are on (RGB check happens on click)
     card.classList.toggle('show',onCount>0);
   };
+})();
+
+// ── Licht-Tab: Rainbow Cycle ──
+(function(){
+  var card   = document.getElementById('lt-rainbow');
+  var inner  = document.getElementById('lt-rainbow-inner');
+  var ico    = document.getElementById('lt-rainbow-ico');
+  var valEl  = document.getElementById('lt-rainbow-val');
+  var pill   = document.getElementById('lt-rainbow-pill');
+  var cdEl   = document.getElementById('lt-rainbow-cd');
+  var cancelBtn = document.getElementById('lt-rainbow-cancel');
+  if(!card||!inner||!ico||!pill||!cdEl||!cancelBtn) return;
+
+  var SPD = {slow:{ms:60,label:'Langsam'},mid:{ms:25,label:'Mittel'},fast:{ms:8,label:'Schnell'}};
+  var _curSpd = 'slow';
+  var _rbHue  = 0;
+  var _rbInt  = null;
+  var _active = false;
+  var _startTs= 0;
+
+  function hsl2rgb(h,s,l){
+    s/=100;l/=100;
+    var a=s*Math.min(l,1-l);
+    function f(n){var k=(n+h/30)%12;return l-a*Math.max(Math.min(k-3,9-k,1),-1);}
+    return [Math.round(f(0)*255),Math.round(f(8)*255),Math.round(f(4)*255)];
+  }
+
+  function getRgbLights(){
+    return (CFG.lights||[]).filter(function(l){
+      var s=window._S&&window._S[l.id];
+      return s&&s.state==='on';
+    });
+  }
+
+  function tick(){
+    _rbHue=(_rbHue+1)%360;
+    var rgb=hsl2rgb(_rbHue,90,55);
+    var lights=getRgbLights();
+    if(!lights.length){stopRainbow(false);return;}
+    lights.forEach(function(l){
+      svc('light','turn_on',{entity_id:l.id,rgb_color:rgb,brightness_pct:70,transition:0.6});
+    });
+    // Update pill color hint
+    cdEl.textContent='🌈 '+lights.length+' Lichter · Hue '+_rbHue+'°';
+  }
+
+  function startRainbow(){
+    if(_active) return;
+    var lights=getRgbLights();
+    if(!lights.length){showToast('🌈 Keine aktiven Lichter');return;}
+    _active=true;
+    _startTs=Date.now();
+    _rbHue=0;
+    var ms=SPD[_curSpd].ms*100; // tick interval in ms
+    _rbInt=setInterval(tick, ms);
+    inner.classList.add('rb-active');
+    pill.classList.add('show');
+    cdEl.textContent='🌈 '+lights.length+' Lichter · '+SPD[_curSpd].label;
+    valEl.textContent=SPD[_curSpd].label;
+    hap&&hap();
+    showToast('🌈 Rainbow Cycle gestartet · '+lights.length+' Lichter');
+  }
+
+  function stopRainbow(withToast){
+    if(!_active) return;
+    clearInterval(_rbInt);_rbInt=null;
+    _active=false;
+    inner.classList.remove('rb-active');
+    pill.classList.remove('show');
+    valEl.textContent='Alle RGB-Lichter';
+    if(withToast) showToast('🌈 Rainbow Cycle gestoppt');
+  }
+
+  // Speed buttons
+  card.querySelectorAll('.rb-spd-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var spd=btn.dataset.spd;
+      _curSpd=spd;
+      card.querySelectorAll('.rb-spd-btn').forEach(function(b){b.classList.remove('rb-sel');});
+      btn.classList.add('rb-sel');
+      if(_active){
+        clearInterval(_rbInt);
+        _rbInt=setInterval(tick, SPD[spd].ms*100);
+        cdEl.textContent='🌈 · '+SPD[spd].label;
+        showToast('🌈 Geschwindigkeit: '+SPD[spd].label);
+      }
+    });
+  });
+
+  // Main card tap (not speed buttons)
+  inner.addEventListener('click',function(e){
+    if(e.target.closest('.rb-spd-btn')||e.target===cancelBtn) return;
+    if(_active) stopRainbow(true);
+    else startRainbow();
+  });
+
+  cancelBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    stopRainbow(true);
+  });
+
+  window._updateRainbow=function(onCount){
+    card.classList.toggle('show',onCount>0);
+    if(_active&&onCount===0) stopRainbow(false);
+  };
+})();
+
+// ── Musik-Tab: Stimmungs-Empfehlung Chip ──
+(function(){
+  var chip = document.getElementById('mood-chip');
+  var emoji = document.getElementById('mood-emoji');
+  var label = document.getElementById('mood-label');
+  var sub   = document.getElementById('mood-sub');
+  if(!chip||!emoji||!label||!sub) return;
+
+  var MOODS = [
+    // [fromH, toH, wx_condition, emoji, label_de, sub_de]
+    // Nacht
+    {h0:0,  h1:5,  wx:null,     e:'🌙', l:'Night Chill',        s:'Ruhige Nacht-Stimmung'},
+    // Morgengrauen
+    {h0:5,  h1:8,  wx:null,     e:'🌅', l:'Guten Morgen',       s:'Sanfter Start in den Tag'},
+    // Morgen sonnig
+    {h0:8,  h1:12, wx:'sun',    e:'☀️', l:'Morgen-Energie',     s:'Klarer, sonniger Morgen'},
+    // Morgen Regen
+    {h0:8,  h1:12, wx:'rain',   e:'🌧', l:'Cozy Rainy Morning', s:'Regen draussen, warm drinnen'},
+    // Mittag
+    {h0:12, h1:15, wx:'sun',    e:'🌞', l:'Midday Vibes',       s:'Energie für die Mittagsstunde'},
+    // Nachmittag bewölkt
+    {h0:12, h1:15, wx:'cloud',  e:'☁️', l:'Afternoon Mood',     s:'Entspannte Nachmittagsstunden'},
+    // Nachmittag Regen
+    {h0:12, h1:18, wx:'rain',   e:'🌦', l:'Rainy Day Feels',    s:'Perfekt für einen Regentag'},
+    // Nachmittag/Abend sonnig
+    {h0:15, h1:19, wx:'sun',    e:'🌤', l:'Golden Hour',        s:'Die schönste Stunde des Tages'},
+    // Abend
+    {h0:19, h1:22, wx:null,     e:'🌆', l:'Evening Wind Down',  s:'Entspannen nach dem Tag'},
+    // Spätnacht
+    {h0:22, h1:24, wx:null,     e:'🌃', l:'Late Night Chill',   s:'Ruhige späte Stunden'},
+  ];
+
+  function getWxCat(){
+    try{
+      var wx = window._wx;
+      if(!wx||!wx.current) return null;
+      var wmo = wx.current.weather_code||0;
+      if(wmo>=95) return 'storm';
+      if(wmo>=51&&wmo<70) return 'rain';
+      if(wmo>=71&&wmo<80) return 'snow';
+      if(wmo>=80&&wmo<90) return 'rain';
+      if(wmo>=1&&wmo<=3)  return 'cloud';
+      if(wmo===0)          return 'sun';
+      return 'cloud';
+    }catch(e){ return null; }
+  }
+
+  function update(){
+    var now = new Date();
+    var h   = now.getHours();
+    var wxCat = getWxCat();
+
+    // Find best mood: prioritise wx-specific, fall back to wx:null
+    var best = null;
+    for(var i=0;i<MOODS.length;i++){
+      var m = MOODS[i];
+      if(h>=m.h0 && h<m.h1){
+        if(!best) best=m;
+        if(wxCat && m.wx===wxCat){ best=m; break; }
+        if(!m.wx && !best.wx) best=m;
+      }
+    }
+    if(!best) best = {e:'🎵', l:'Musik', s:'Gute Stimmung'};
+
+    // Accent color by time
+    var accent = h>=5&&h<12 ? '#ff9f0a' : h>=12&&h<19 ? '#30d158' : '#0a84ff';
+
+    emoji.textContent = best.e;
+    label.textContent = best.l;
+    sub.textContent   = best.s;
+    chip.querySelector('#mood-chip-inner').style.borderColor = 'rgba('+
+      (h>=5&&h<12?'255,159,10':h>=12&&h<19?'48,209,88':'10,132,255')+', .25)';
+    chip.querySelector('#mood-chip-inner').style.background =
+      'rgba('+(h>=5&&h<12?'255,159,10':h>=12&&h<19?'48,209,88':'10,132,255')+', .08)';
+
+    // Reset animation
+    var inner = chip.querySelector('#mood-chip-inner');
+    inner.style.animation='none';
+    inner.offsetHeight; // reflow
+    inner.style.animation='moodChipIn .4s cubic-bezier(.34,1.56,.64,1) both';
+
+    chip.style.display='block';
+  }
+
+  // Update when music tab is shown
+  var pagesEl = document.getElementById('pages');
+  if(pagesEl){
+    var mo = new MutationObserver(function(){
+      var cur = pagesEl.querySelector('.page.cur');
+      if(cur && cur.id==='pg-musik') update();
+    });
+    mo.observe(pagesEl,{subtree:true,attributeFilter:['class']});
+  }
+
+  // Also update on wx data load
+  var origFetch = window._onWxLoaded;
+  window._onWxLoaded = function(){
+    if(origFetch) origFetch.apply(this,arguments);
+    var cur = document.querySelector('.page.cur');
+    if(cur && cur.id==='pg-musik') update();
+  };
+
+  // Initial call
+  setTimeout(update, 800);
+  setInterval(update, 5*60*1000); // refresh every 5 min
 })();
 </script>
 

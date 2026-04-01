@@ -417,3 +417,15 @@
 
 ## Neue Ideen (2026-03-31 17:08 UTC)
 - [x] demo.html: "Demo Interaction Counter" Floating Pill (🎯 zählt Klicks/Inputs auf interaktive Demo-Elemente — Szenen, Regler, Tabs, Karten; floating badge links unten zeigt "X Elemente ausprobiert 🎯"; Konfetti-Burst bei genau 10 Interaktionen; Milestone-Pop-Animation; DE+EN i18n via langChange-Event; Light-Mode kompatibel)
+
+## Neue Ideen (2026-04-01 06:29 UTC)
+- [x] demo.html: Scroll-Progress-Indicator (🔄 dünner amber→gelb Gradient-Bar ganz oben auf der Seite, wächst mit Scroll-Position 0→100%, pointer-events:none, 3px hoch, sanfter Glow-Schatten, passive scroll-Listener)
+
+## Neue Ideen (2026-04-01 10:38 UTC)
+- [x] wz.html: Musik-Tab — "Stimmungs-Empfehlung" Chip
+
+## Neue Ideen (2026-04-01 12:10 UTC)
+- [x] wz.html: Wetter-Tab — Dynamische Wetter-Aura (radial-gradient Hintergrundleuchten im Wetter-Tab je WMO-Code: klarer Tag=goldgelb, Regen=tiefblau, Schnee=eisblau, Gewitter=lila, Nebel=grau, Nacht=dunkelblau, 3.5s CSS-Transition, sanfte Drift-Animation 22s alternate, Light-Mode deaktiviert) (🎵 kontextsensitiver Glass-Chip am unteren Ende des Musik-Tabs: wählt Mood-Preset basierend auf Tageszeit + Wetterlage — z.B. "🌅 Guten Morgen / Sanfter Start" morgens, "🌧 Cozy Rainy Morning" bei Regen, "🌙 Night Chill" nachts; Accent-Farbe amber/grün/blau je Tagesphase; MutationObserver aktualisiert beim Tab-Wechsel; 5-min-Refresh)
+
+## Neue Ideen (2026-04-01 14:45 UTC)
+- [x] demo.html: "Animation Showcase" Section (🎬 3 Cards vor FAQ: Vinyl-Disc CSS-Spin-Loop, SVG-Wellen-Animation amber+blau, Sternschnuppen-Canvas mit Live-Demo; hover-lift; CSS @keyframes discSpin/waveMoveA/waveMoveB; ResizeObserver-gestütztes Canvas; DE+EN i18n via applyLang-Extension)

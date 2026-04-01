@@ -1123,7 +1123,18 @@ input[type=range]{touch-action:pan-x}
   .mobile-only{display:none}
   .desktop-only{display:inline}
 }
-
+@keyframes discSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes waveMoveA{
+  0%,100%{d:path("M0,36 C40,16 80,56 120,36 C160,16 180,50 200,36 L200,72 L0,72 Z")}
+  50%{d:path("M0,46 C40,26 80,66 120,46 C160,26 180,60 200,46 L200,72 L0,72 Z")}
+}
+@keyframes waveMoveB{
+  0%,100%{d:path("M0,48 C50,28 100,62 150,42 C170,34 190,54 200,48 L200,72 L0,72 Z")}
+  50%{d:path("M0,38 C50,18 100,52 150,32 C170,24 190,44 200,38 L200,72 L0,72 Z")}
+}
+@media(max-width:640px){
+  .anim-showcase-row{grid-template-columns:1fr!important}
+}
 </style>
 </head>
 <body>
@@ -2100,6 +2111,49 @@ input[type=range]{touch-action:pan-x}
           </div>
           <span class="tech-badge hw" data-i="techHw">Hardware</span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animation Showcase -->
+  <div class="band" style="padding:64px 24px 56px" id="anim-showcase">
+    <div style="max-width:900px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="animTitle">Lebendig. Nicht nur funktional.</h2>
+      <p class="sec-sub sec-center reveal" data-i="animSub">Jedes Detail ist animiert — so fühlt sich dein Smart Home Dashboard an.</p>
+      <div class="anim-showcase-row reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px">
+
+        <!-- Card 1: Vinyl Disc -->
+        <div class="anim-card" style="background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 16px 20px;text-align:center;transition:transform .25s,box-shadow .25s;cursor:default" onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.45)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div style="position:relative;width:72px;height:72px;margin:0 auto 14px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#222 24%,transparent 25%),repeating-radial-gradient(circle at 50% 50%,#1a1a1a 0px,#1a1a1a 2px,#111 3px,#111 5px);box-shadow:0 4px 18px rgba(0,0,0,.6);animation:discSpin 3s linear infinite">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 8px #ff9f0a"></div>
+          </div>
+          <div style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:4px" data-i="anim1title">Vinyl-Teller Animation</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45)" data-i="anim1sub">Dreht sich synchron mit deiner Musik</div>
+        </div>
+
+        <!-- Card 2: Wave -->
+        <div class="anim-card" style="background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 16px 20px;text-align:center;transition:transform .25s,box-shadow .25s;cursor:default;overflow:hidden;position:relative" onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.45)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <svg viewBox="0 0 200 72" style="width:100%;height:72px;display:block;margin-bottom:14px">
+            <defs>
+              <linearGradient id="waveGrad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9f0a" stop-opacity=".7"/><stop offset="1" stop-color="#ff9f0a" stop-opacity="0"/></linearGradient>
+              <linearGradient id="waveGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a84ff" stop-opacity=".5"/><stop offset="1" stop-color="#0a84ff" stop-opacity="0"/></linearGradient>
+            </defs>
+            <path id="wave-path1" fill="url(#waveGrad1)" style="animation:waveMoveA 3s ease-in-out infinite"/>
+            <path id="wave-path2" fill="url(#waveGrad2)" style="animation:waveMoveB 4s ease-in-out infinite reverse"/>
+          </svg>
+          <div style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:4px" data-i="anim2title">Lebendige Wellen</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45)" data-i="anim2sub">Hero-Hintergrund reagiert auf Tageszeit</div>
+        </div>
+
+        <!-- Card 3: Stars / Shooting Star -->
+        <div class="anim-card" style="background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 16px 20px;text-align:center;transition:transform .25s,box-shadow .25s;cursor:default;overflow:hidden;position:relative" onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.45)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div style="position:relative;width:100%;height:72px;margin-bottom:14px">
+            <canvas id="stars-demo-cv" style="position:absolute;inset:0;width:100%;height:100%;border-radius:10px"></canvas>
+          </div>
+          <div style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:4px" data-i="anim3title">Sternschnuppen-Nacht</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45)" data-i="anim3sub">Nachts ziehen Sternschnuppen über den Hero</div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -3237,6 +3291,10 @@ const T={
     tech7d:'Leichtgewichtiges Echtzeit-Messaging zwischen Geräten — der Klebstoff des IoT.',
     tech8d:'Dedizierter Home Server — stromsparend, leise, 24/7 zuverlässig.',
     techLocal:'Lokal',techStd:'Standard',techHw:'Hardware',
+    animTitle:'Lebendig. Nicht nur funktional.',animSub:'Jedes Detail ist animiert — so fühlt sich dein Smart Home Dashboard an.',
+    anim1title:'Vinyl-Teller Animation',anim1sub:'Dreht sich synchron mit deiner Musik',
+    anim2title:'Lebendige Wellen',anim2sub:'Hero-Hintergrund reagiert auf Tageszeit',
+    anim3title:'Sternschnuppen-Nacht',anim3sub:'Nachts ziehen Sternschnuppen über den Hero',
     faqTtl:'Häufige Fragen',faqSub:'Alles was du wissen musst',
     faq1q:'Was ist Home Assistant?',faq1a:'Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla.',
     faq2q:'Brauche ich technisches Vorwissen?',faq2a:'Nein. Du bekommst fertige Lösungen mit Dokumentation und Einrichtungsanleitung.',
@@ -3319,6 +3377,10 @@ const T={
     tech7d:'Lightweight real-time messaging between devices — the glue of IoT.',
     tech8d:'Dedicated home server — energy-efficient, quiet, reliable 24/7.',
     techLocal:'Local',techStd:'Standard',techHw:'Hardware',
+    animTitle:'Alive. Not just functional.',animSub:'Every detail is animated — this is how your smart home dashboard feels.',
+    anim1title:'Vinyl Disc Animation',anim1sub:'Spins in sync with your music',
+    anim2title:'Living Waves',anim2sub:'Hero background reacts to time of day',
+    anim3title:'Shooting Stars Night',anim3sub:'Stars streak across the hero at night',
     faqTtl:'Frequently Asked Questions',faqSub:'Everything you need to know',
     faq1q:'What is Home Assistant?',faq1a:'Home Assistant is an open-source platform connecting 3000+ smart home devices — from Philips Hue to Tesla.',
     faq2q:'Do I need technical knowledge?',faq2a:'No. You get a ready solution with full documentation and setup guide.',
@@ -3495,6 +3557,11 @@ applyLang=function(){
   setText('card-clock-tag',lang==='de'?'🕐 Zeit & Datum':'🕐 Time & Date');
   setText('card-clock-ttl',lang==='de'?'Lokale Uhrzeit':'Local Time');
   updateClock();
+  // Anim showcase i18n
+  const t2=T[lang];
+  ['animTitle','animSub','anim1title','anim1sub','anim2title','anim2sub','anim3title','anim3sub'].forEach(function(k){
+    document.querySelectorAll('[data-i="'+k+'"]').forEach(function(el){el.textContent=t2[k]||el.textContent;});
+  });
 };
 
 // ── SUNRISE/SUNSET from weather data ──
@@ -3705,6 +3772,79 @@ if(_origGetPos){
       }
     }
   }
+})();
+
+// ── Anim Showcase: Stars Canvas ──
+(function(){
+  var cv = document.getElementById('stars-demo-cv');
+  if(!cv) return;
+  var ctx = cv.getContext('2d');
+  var stars = [];
+  var shooting = null;
+  var W, H;
+
+  function resize(){
+    var r = cv.parentElement.getBoundingClientRect();
+    W = cv.width  = r.width  || 200;
+    H = cv.height = r.height || 72;
+    stars = [];
+    for(var i=0;i<40;i++){
+      stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.2+.3, a:Math.random()*.8+.2});
+    }
+  }
+
+  function spawnShoot(){
+    shooting = {
+      x: Math.random()*W*.6 + W*.1,
+      y: Math.random()*H*.4,
+      vx: 2.5 + Math.random()*2,
+      vy: 1.2 + Math.random()*1.2,
+      len: 30 + Math.random()*20,
+      life: 1, speed: 0.018
+    };
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Stars
+    stars.forEach(function(s){
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(255,255,255,'+s.a+')';
+      ctx.fill();
+    });
+    // Shooting star
+    if(shooting){
+      var s = shooting;
+      var grd = ctx.createLinearGradient(s.x,s.y, s.x-s.len*s.vx/3, s.y-s.len*s.vy/3);
+      grd.addColorStop(0,'rgba(255,255,255,'+(s.life*.9)+')');
+      grd.addColorStop(.5,'rgba(255,200,80,'+(s.life*.5)+')');
+      grd.addColorStop(1,'rgba(255,200,80,0)');
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x - s.len*s.vx/3, s.y - s.len*s.vy/3);
+      ctx.strokeStyle = grd;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      // Head glow
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 2, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,240,150,'+s.life+')';
+      ctx.fill();
+      s.x += s.vx; s.y += s.vy;
+      s.life -= s.speed;
+      if(s.life<=0||s.x>W||s.y>H) shooting=null;
+    }
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  draw();
+  setInterval(spawnShoot, 2200 + Math.random()*1800);
+  setTimeout(spawnShoot, 600);
+
+  var ro = new ResizeObserver(resize);
+  ro.observe(cv.parentElement);
 })();
 
 </script>
