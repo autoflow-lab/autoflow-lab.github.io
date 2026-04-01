@@ -168,12 +168,12 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
-.page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip{
+.page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
 }
 /* stagger: nth-child 1–8 */
@@ -329,6 +329,18 @@ html,body{height:100%;background:var(--bg);
 @keyframes wkendDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.75)}}
 :root.light #wkend-chip.wkend-soon{background:rgba(200,120,0,.06);border-color:rgba(200,120,0,.18);color:rgba(100,55,0,.8)}
 :root.light #wkend-chip.wkend-now{background:rgba(30,160,60,.06);border-color:rgba(30,160,60,.18);color:rgba(0,70,25,.8)}
+/* ── Feierabend-Countdown Chip ── */
+#feierabend-chip{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 14px;border-radius:14px;font-size:.75rem;animation:feierabendIn .4s cubic-bezier(.34,1.15,.64,1) both}
+#feierabend-chip.show{display:flex}
+#feierabend-chip.fb-soon{background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.2);color:rgba(255,220,150,.9)}
+#feierabend-chip.fb-now{background:rgba(48,209,88,.07);border:1px solid rgba(48,209,88,.2);color:rgba(160,255,190,.9)}
+#feierabend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;animation:fbDotPulse 2s ease-in-out infinite}
+#feierabend-chip.fb-soon #feierabend-dot{background:#ff9f0a;box-shadow:0 0 6px rgba(255,159,10,.6)}
+#feierabend-chip.fb-now #feierabend-dot{background:#30d158;box-shadow:0 0 6px rgba(48,209,88,.6)}
+@keyframes feierabendIn{from{opacity:0;transform:scale(.92) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes fbDotPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.35);opacity:.5}}
+:root.light #feierabend-chip.fb-soon{background:rgba(200,120,0,.06);border-color:rgba(200,120,0,.18);color:rgba(100,55,0,.8)}
+:root.light #feierabend-chip.fb-now{background:rgba(30,160,60,.06);border-color:rgba(30,160,60,.18);color:rgba(0,70,25,.8)}
 /* ── Wetter-Licht Sync ── */
 #wx-light-sync{display:none;margin:0 0 10px}
 #wx-light-sync.show{display:block}
@@ -654,6 +666,43 @@ html,body{height:100%;background:var(--bg);
 :root.light .sa-btn.sa-active{background:rgba(0,80,200,.08);border-color:rgba(0,80,200,.2);color:rgba(0,80,200,.8)}
 :root.light #sleep-all-pill{background:rgba(0,80,200,.07);border-color:rgba(0,80,200,.2)}
 :root.light #sleep-all-cd{color:rgba(0,80,200,.85)}
+/* Einkaufsliste */
+#shop-list-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
+#shop-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+#shop-list-title{font-size:.7rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+#shop-list-count{font-size:.62rem;color:rgba(255,255,255,.35);font-variant-numeric:tabular-nums}
+#shop-list-clear-done,#shop-list-clear-all{background:none;border:none;color:rgba(255,255,255,.22);font-size:.72rem;cursor:pointer;padding:0 3px;line-height:1;touch-action:manipulation;transition:color .15s}
+#shop-list-clear-done:active{color:#30d158}
+#shop-list-clear-all:active{color:rgba(255,69,58,.8)}
+#shop-list-input-row{display:flex;gap:7px;margin-bottom:8px}
+#shop-list-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:8px 11px;color:rgba(255,255,255,.85);font-size:.8rem;outline:none;transition:border-color .2s}
+#shop-list-input:focus{border-color:rgba(48,209,88,.4);background:rgba(48,209,88,.04)}
+#shop-list-input::placeholder{color:rgba(255,255,255,.2)}
+#shop-list-add-btn{background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.25);color:#30d158;font-size:1.1rem;border-radius:10px;width:36px;flex-shrink:0;cursor:pointer;touch-action:manipulation;transition:background .15s}
+#shop-list-add-btn:active{background:rgba(48,209,88,.25)}
+#shop-list-quick-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.sl-chip{font-size:.68rem;padding:3px 9px;border-radius:100px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55);cursor:pointer;touch-action:manipulation;transition:background .15s,color .15s;white-space:nowrap}
+.sl-chip:active{background:rgba(48,209,88,.12);color:#30d158}
+#shop-list-items{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto}
+#shop-list-items::-webkit-scrollbar{width:3px}
+#shop-list-items::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+.sl-item{display:flex;align-items:center;gap:9px;padding:7px 10px;background:rgba(255,255,255,.04);border-radius:9px;font-size:.82rem;color:rgba(255,255,255,.8);animation:slItemIn .28s cubic-bezier(.34,1.15,.64,1) both;cursor:default}
+.sl-item.done{color:rgba(255,255,255,.3);text-decoration:line-through}
+.sl-check{width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:background .15s,border-color .15s}
+.sl-item.done .sl-check{background:rgba(48,209,88,.2);border-color:#30d158;color:#30d158}
+.sl-del{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.2);font-size:.75rem;cursor:pointer;padding:0 2px;touch-action:manipulation;transition:color .15s}
+.sl-del:active{color:rgba(255,69,58,.7)}
+@keyframes slItemIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+:root.light #shop-list-wrap{background:var(--c1)}
+:root.light #shop-list-input{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1);color:var(--txt)}
+:root.light #shop-list-input::placeholder{color:rgba(0,0,0,.25)}
+:root.light .sl-chip{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.45)}
+:root.light .sl-item{background:rgba(0,0,0,.03);color:rgba(0,0,0,.75)}
+:root.light .sl-check{border-color:rgba(0,0,0,.2)}
+:root.light #shop-list-count{color:rgba(0,0,0,.3)}
+:root.light #shop-list-clear-done,:root.light #shop-list-clear-all{color:rgba(0,0,0,.25)}
+:root.light .sl-del{color:rgba(0,0,0,.2)}
+
 /* Schnell-Notiz */
 #quick-note-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
 @keyframes qnIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -847,6 +896,18 @@ html,body{height:100%;background:var(--bg);
 :root.light .lt-prc-name{color:rgba(0,0,0,.7)}
 :root.light .lt-prc-sub{color:rgba(0,0,0,.32)}
 :root.light #lt-presets-label{color:rgba(0,0,0,.32)}
+/* ── Licht-Shuffle ── */
+#lt-shuffle{margin:0 14px 12px;opacity:0;transition:opacity .5s ease}
+#lt-shuffle.show{opacity:1}
+#lt-shuffle-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid rgba(191,90,242,.28);background:rgba(191,90,242,.07);cursor:pointer;touch-action:manipulation;transition:background .18s,transform .15s;text-align:left}
+#lt-shuffle-btn:active{transform:scale(.97);background:rgba(191,90,242,.18)}
+#lt-shuffle-ico{font-size:1.1rem;flex-shrink:0;display:inline-block}
+#lt-shuffle-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-shuffle-val{font-size:.68rem;font-weight:700;color:rgba(210,130,255,.9);white-space:nowrap}
+#lt-shuffle-btn.sf-flash{animation:sfApply .5s ease forwards}
+@keyframes sfApply{0%{background:rgba(191,90,242,.32)}100%{background:rgba(191,90,242,.07)}}
+@keyframes sfIcoSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+:root.light #lt-shuffle{background:transparent}
 /* ── Licht-Snapshot ── */
 /* Farb-Mixer Color Wheel */
 #lt-color-wheel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px 14px;margin:0 14px 12px}
@@ -1005,6 +1066,13 @@ html,body{height:100%;background:var(--bg);
   opacity:0;transition:opacity 2.5s ease;
 }
 #star-cv.show{opacity:1}
+/* Shooting star canvas */
+#shoot-cv{
+  position:absolute;inset:0;z-index:1;
+  pointer-events:none;border-radius:18px;
+  opacity:0;transition:opacity 2s ease;
+}
+#shoot-cv.show{opacity:1}
 /* Weather particle canvas */
 #wx-particles{
   position:absolute;inset:0;z-index:1;
@@ -1076,6 +1144,8 @@ html,body{height:100%;background:var(--bg);
 }
 .htime-h,.htime-m{
   font-size:clamp(5rem,21vw,7.6rem);font-weight:100;letter-spacing:-4px;color:var(--txt);line-height:1;
+  display:inline-block;transform-origin:center center;will-change:transform;
+  perspective:600px;
 }
 /* Zwei gestapelte Punkte statt Doppelpunkt — Apple-Style */
 .htime-sep{
@@ -1089,6 +1159,11 @@ html,body{height:100%;background:var(--bg);
 }
 .htime-sep i:nth-child(2){animation-delay:.5s}
 @keyframes dotPulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.9;transform:scale(1.15)}}
+/* ── Flip-Clock: Digitaler Ziffern-Wechsel ── */
+@keyframes htimeFlipOut{0%{transform:rotateX(0deg);opacity:1}100%{transform:rotateX(90deg);opacity:0}}
+@keyframes htimeFlipIn{0%{transform:rotateX(-70deg);opacity:0}100%{transform:rotateX(0deg);opacity:1}}
+.htime-h.flip-out,.htime-m.flip-out{animation:htimeFlipOut .14s ease-in forwards}
+.htime-h.flip-in,.htime-m.flip-in{animation:htimeFlipIn .22s cubic-bezier(.34,1.15,.64,1) forwards}
 .hdate-wrap{display:flex;flex-direction:column;gap:2px;margin-top:6px}
 .hdate{
   font-size:.75rem;font-weight:600;letter-spacing:.2px;
@@ -1220,6 +1295,17 @@ html,body{height:100%;background:var(--bg);
 .sb2:nth-child(4) .sb2-ico{animation-delay:2.4s}
 .sb2-n{font-size:.9rem;font-weight:700;color:var(--txt);margin-top:auto;letter-spacing:-.2px}
 .sb2-d{font-size:.62rem;color:var(--on-dim2);margin-top:2px;letter-spacing:.1px}
+/* Aktive Szene — sichtbarer Indikator */
+.sb2.sb2--active{
+  box-shadow:0 0 0 2px rgba(255,159,10,.7),0 6px 24px rgba(255,159,10,.25),0 1px 0 rgba(255,255,255,.06) inset !important;
+  transform:scale(1.03) !important;
+}
+.sb2.sb2--active::before{
+  content:'✓';position:absolute;top:8px;right:10px;
+  font-size:.65rem;font-weight:800;line-height:1;
+  color:#ff9f0a;opacity:.9;
+  text-shadow:0 0 6px rgba(255,159,10,.6);
+}
 /* old .sg/.sb for licht page */
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .sb{
@@ -1800,6 +1886,15 @@ html,body{height:100%;background:var(--bg);
 #track-history{display:none;flex-direction:column;gap:6px;margin:10px 16px 0;position:relative;z-index:1}
 #track-history.show{display:flex}
 #track-history-lbl{font-size:.62rem;font-weight:600;letter-spacing:.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:2px}
+/* Cover Color Palette */
+#cover-palette.show{display:flex!important}
+.cpal-swatch{width:46px;height:46px;border-radius:14px;flex:0 0 auto;cursor:pointer;touch-action:manipulation;border:1.5px solid rgba(255,255,255,.15);transition:transform .15s cubic-bezier(.34,1.28,.64,1),box-shadow .2s ease;position:relative;overflow:hidden}
+.cpal-swatch:active{transform:scale(.85)!important}
+.cpal-swatch:hover{transform:scale(1.06)}
+.cpal-swatch .cpal-check{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;opacity:0;transition:opacity .25s ease;background:rgba(0,0,0,.28);border-radius:inherit}
+.cpal-swatch.applied .cpal-check{opacity:1}
+@keyframes cpalSwatchIn{from{opacity:0;transform:scale(.6) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes cpalApply{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}60%{box-shadow:0 0 0 10px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
 .th-chip{display:flex;align-items:center;gap:8px;padding:7px 11px;background:rgba(255,159,10,.06);border:1px solid rgba(255,159,10,.14);border-radius:11px;cursor:pointer;touch-action:manipulation;opacity:0;transform:translateY(6px);animation:thChipIn .32s cubic-bezier(.34,1.15,.64,1) both}
 .th-chip:active{background:rgba(255,159,10,.14);transform:scale(.97)}
 .th-chip-ico{font-size:.9rem;flex-shrink:0}
@@ -2276,6 +2371,15 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 :root.light #pomo-time { color:var(--txt) !important; }
 /* Light-Mode: Wetterpunkt Score im SVG */
 :root.light #ws-score-val { fill:var(--txt) !important; }
+/* Light-Mode: Restfehler — diverse hardcoded #fff Elemente */
+:root.light #clim-now-val { color:var(--txt) !important; }
+:root.light #umbrella-verdict { color:var(--txt) !important; }
+:root.light #ws-popup-hi { color:var(--txt) !important; }
+:root.light .ws-chip.ws-today .ws-hi { color:var(--txt) !important; }
+:root.light .rem-title { color:var(--txt) !important; }
+:root.light #hum-val { color:var(--txt) !important; }
+:root.light #np-notify-title { color:var(--txt) !important; }
+:root.light .energie-arc-val { color:var(--txt) !important; }
 
 /* Geräte-Tab — Pulse Dot */
 .g-pulse-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;flex-shrink:0;transition:background .4s,box-shadow .4s}
@@ -2426,6 +2530,7 @@ input[type=range] { touch-action: none; }
       <div class="hero">
         <div class="hbg" id="hbg"></div>
         <canvas id="star-cv"></canvas>
+          <canvas id="shoot-cv"></canvas>
           <canvas id="wx-particles"></canvas>
         <div class="hglow"></div>
         <div id="amb-orb"></div>
@@ -2498,6 +2603,9 @@ input[type=range] { touch-action: none; }
                   <g id="ach-sec-g" transform="rotate(0,22,22)">
                     <line x1="22" y1="25" x2="22" y2="4.5" stroke="#ff453a" stroke-width=".9" stroke-linecap="round"/>
                   </g>
+                  <!-- Seconds progress arc (r=21, C≈131.95) -->
+                  <circle id="sec-arc-track" cx="22" cy="22" r="21" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle id="sec-arc-fill" cx="22" cy="22" r="21" fill="none" stroke="#ff9f0a" stroke-width="1.5" stroke-linecap="round" transform="rotate(-90,22,22)" stroke-dasharray="131.95" stroke-dashoffset="131.95" style="transition:stroke-dashoffset .92s cubic-bezier(.4,0,.2,1);opacity:.82"/>
                   <!-- Center pivot -->
                   <circle cx="22" cy="22" r="2" fill="#ff9f0a"/>
                   <circle cx="22" cy="22" r=".8" fill="#1c1c1e"/>
@@ -2990,6 +3098,12 @@ input[type=range] { touch-action: none; }
       <!-- Wochenende-Countdown Chip -->
       <div id="wkend-chip"></div>
 
+      <!-- Feierabend-Countdown Chip -->
+      <div id="feierabend-chip">
+        <div id="feierabend-dot"></div>
+        <span id="feierabend-txt"></span>
+      </div>
+
       <!-- Anwesenheits-Chips (device_tracker.*) -->
       <div id="presence-strip"></div>
 
@@ -3179,6 +3293,12 @@ input[type=range] { touch-action: none; }
       <div id="track-history" style="display:none;flex-direction:column;gap:5px;margin:0 0 10px;position:relative;z-index:1">
         <div id="track-history-lbl" style="font-size:.6rem;font-weight:700;letter-spacing:.7px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:4px">🎵 Zuletzt gespielt</div>
         <div id="track-history-list"></div>
+      </div>
+
+      <!-- Cover Color Palette -->
+      <div id="cover-palette" style="display:none;flex-direction:column;gap:7px;margin:0 0 12px;position:relative;z-index:1">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.7px;color:rgba(255,255,255,.3);text-transform:uppercase">🎨 Farben aus Cover · Lichter anpassen</div>
+        <div id="cover-palette-swatches" style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;scrollbar-width:none"></div>
       </div>
 
       <!-- Mood Scenes -->
@@ -3392,6 +3512,14 @@ input[type=range] { touch-action: none; }
           <button id="lt-snap-save" title="Aktuellen Lichtzustand speichern">+ Speichern</button>
         </div>
         <div id="lt-snap-list"></div>
+      </div>
+      <!-- Zufalls-Farbe Shuffle -->
+      <div id="lt-shuffle" aria-label="Zufalls-Farbe">
+        <button id="lt-shuffle-btn" title="Alle aktiven RGB-Lichter auf harmonische Zufallsfarben setzen">
+          <span id="lt-shuffle-ico">🎲</span>
+          <span id="lt-shuffle-label">Zufalls-Palette</span>
+          <span id="lt-shuffle-val">Harmonische Farben</span>
+        </button>
       </div>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
@@ -4592,6 +4720,31 @@ input[type=range] { touch-action: none; }
       </div>
     </div>
 
+    <!-- Einkaufsliste -->
+    <div id="shop-list-wrap">
+      <div id="shop-list-header">
+        <span id="shop-list-title">🛒 Einkaufsliste</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span id="shop-list-count"></span>
+          <button id="shop-list-clear-done" title="Erledigte löschen">✓ Weg</button>
+          <button id="shop-list-clear-all" title="Alles löschen">🗑</button>
+        </div>
+      </div>
+      <div id="shop-list-input-row">
+        <input id="shop-list-input" type="text" placeholder="Item hinzufügen…" autocomplete="off">
+        <button id="shop-list-add-btn">＋</button>
+      </div>
+      <div id="shop-list-quick-chips">
+        <span class="sl-chip" data-t="🥛 Milch">🥛 Milch</span>
+        <span class="sl-chip" data-t="🍞 Brot">🍞 Brot</span>
+        <span class="sl-chip" data-t="🧻 Klopapier">🧻 Klopapier</span>
+        <span class="sl-chip" data-t="🥚 Eier">🥚 Eier</span>
+        <span class="sl-chip" data-t="☕ Kaffee">☕ Kaffee</span>
+        <span class="sl-chip" data-t="🧴 Spülmittel">🧴 Spülmittel</span>
+      </div>
+      <ul id="shop-list-items"></ul>
+    </div>
+
     <div id="dev-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:8px"></div>
   </div>
 </div>
@@ -5207,6 +5360,133 @@ function _relTime(ts){
   if(s<86400)return Math.floor(s/3600)+'h';
   return Math.floor(s/86400)+'d';
 }
+// ═══ Cover Color Palette ═══
+(function(){
+  'use strict';
+  const SWATCH_COUNT=5;
+  let _lastPalUrl=null;
+  // Sample image on canvas → extract dominant colors
+  function _extractColors(url,cb){
+    try{
+      const img=new Image();
+      img.crossOrigin='anonymous';
+      img.onload=function(){
+        try{
+          const SZ=80;
+          const cv=document.createElement('canvas');
+          cv.width=SZ;cv.height=SZ;
+          const ctx=cv.getContext('2d');
+          ctx.drawImage(img,0,0,SZ,SZ);
+          const data=ctx.getImageData(0,0,SZ,SZ).data;
+          // Sample at 6×6 grid → 36 color candidates
+          const cols=[];
+          const step=Math.floor(SZ/6);
+          for(let y=step/2;y<SZ;y+=step){
+            for(let x=step/2;x<SZ;x+=step){
+              const i=(Math.floor(y)*SZ+Math.floor(x))*4;
+              const r=data[i],g=data[i+1],b=data[i+2],a=data[i+3];
+              if(a<120)continue;
+              // Skip very dark or very light
+              const bright=(r*299+g*587+b*114)/1000;
+              if(bright<22||bright>238)continue;
+              // Calculate saturation
+              const mx=Math.max(r,g,b),mn=Math.min(r,g,b);
+              const sat=mx===0?0:(mx-mn)/mx;
+              if(sat<0.10)continue; // too grey
+              cols.push([r,g,b,bright,sat]);
+            }
+          }
+          if(cols.length<4){cb(null);return;}
+          // Sort by saturation desc
+          cols.sort((a,b)=>b[4]-a[4]);
+          // Pick SWATCH_COUNT colors that are visually distinct
+          const picked=[];
+          for(const c of cols){
+            let ok=true;
+            for(const p of picked){
+              const dr=c[0]-p[0],dg=c[1]-p[1],db=c[2]-p[2];
+              if(Math.sqrt(dr*dr+dg*dg+db*db)<58){ok=false;break;}
+            }
+            if(ok)picked.push(c);
+            if(picked.length>=SWATCH_COUNT)break;
+          }
+          // If not enough distinct colors, fill with remaining
+          if(picked.length<3){cb(null);return;}
+          cb(picked.map(c=>[c[0],c[1],c[2]]));
+        }catch(e){cb(null);}
+      };
+      img.onerror=function(){cb(null);};
+      img.src=url;
+    }catch(e){cb(null);}
+  }
+
+  function _showPalette(colors){
+    const wrap=document.getElementById('cover-palette');
+    const list=document.getElementById('cover-palette-swatches');
+    if(!wrap||!list)return;
+    list.innerHTML='';
+    if(!colors||colors.length<3){wrap.classList.remove('show');return;}
+    colors.forEach(function([r,g,b],i){
+      const sw=document.createElement('div');
+      sw.className='cpal-swatch';
+      sw.style.background='rgb('+r+','+g+','+b+')';
+      sw.style.boxShadow='0 3px 12px rgba('+r+','+g+','+b+',.45)';
+      sw.style.animation='cpalSwatchIn .38s cubic-bezier(.34,1.28,.64,1) '+(i*0.06)+'s both';
+      // tooltip
+      sw.title='Auf RGB-Lichter anwenden';
+      // check overlay
+      const check=document.createElement('span');
+      check.className='cpal-check';
+      check.textContent='✓';
+      sw.appendChild(check);
+      sw.addEventListener('click',function(){
+        try{
+          // Apply to all active RGB-capable lights
+          let cnt=0;
+          if(typeof CFG!=='undefined'&&CFG.lights&&typeof _S!=='undefined'){
+            CFG.lights.forEach(function(l){
+              const s=_S[l.id];
+              if(s&&s.state==='on'){
+                svc('light','turn_on',{entity_id:l.id,rgb_color:[r,g,b],brightness_pct:75,transition:1.2});
+                cnt++;
+              }
+            });
+          }
+          // Flash animation
+          sw.style.animation='cpalApply .6s ease';
+          setTimeout(function(){sw.style.animation='';},650);
+          sw.classList.add('applied');
+          setTimeout(function(){sw.classList.remove('applied');},1800);
+          // Remove applied from siblings
+          list.querySelectorAll('.cpal-swatch').forEach(function(s2){if(s2!==sw)s2.classList.remove('applied');});
+          if(typeof showToast==='function')showToast('🎨 Lichtfarbe angepasst'+(cnt?' · '+cnt+' Lichter':''));
+          if(typeof hap==='function')hap();
+        }catch(e){}
+      });
+      list.appendChild(sw);
+    });
+    wrap.classList.add('show');
+  }
+
+  // Called when album art URL changes (hooked into updateAll / music update cycle)
+  window._updateCoverPalette=function(artUrl){
+    if(!artUrl){
+      const wrap=document.getElementById('cover-palette');
+      if(wrap)wrap.classList.remove('show');
+      _lastPalUrl=null;
+      return;
+    }
+    // Resolve relative URL
+    let fullUrl=artUrl;
+    if(artUrl.startsWith('/')){
+      try{fullUrl=window.location.origin+artUrl;}catch(e){}
+    }
+    if(fullUrl===_lastPalUrl)return;
+    _lastPalUrl=fullUrl;
+    _extractColors(fullUrl,_showPalette);
+  };
+})();
+
 // ═══ Regen-Warnung ═══
 let _rainWarnShown=false;
 function checkRainWarning(){
@@ -7967,6 +8247,80 @@ function drawWeekStrip(){
   document.addEventListener('click',()=>{popup.classList.remove('show');clearTimeout(_wsHideTimer);},{passive:true,once:false});
 }
 
+// ── Einkaufsliste ────────────────────────────────────────────────
+(function(){
+  var KEY='wz_shop_list';
+  var inp=document.getElementById('shop-list-input');
+  var addBtn=document.getElementById('shop-list-add-btn');
+  var listEl=document.getElementById('shop-list-items');
+  var countEl=document.getElementById('shop-list-count');
+  var clearDoneBtn=document.getElementById('shop-list-clear-done');
+  var clearAllBtn=document.getElementById('shop-list-clear-all');
+  if(!inp||!listEl)return;
+
+  var items=JSON.parse(localStorage.getItem(KEY)||'[]'); // [{text,done}]
+
+  function save(){localStorage.setItem(KEY,JSON.stringify(items));}
+  function updateCount(){
+    if(!countEl)return;
+    var done=items.filter(function(i){return i.done;}).length;
+    countEl.textContent=items.length?done+'/'+items.length+' ✓':'';
+  }
+  function render(){
+    listEl.innerHTML='';
+    items.forEach(function(item,idx){
+      var li=document.createElement('li');
+      li.className='sl-item'+(item.done?' done':'');
+      li.style.animationDelay=(idx*0.04)+'s';
+      var chk=document.createElement('div');
+      chk.className='sl-check';
+      chk.textContent=item.done?'✓':'';
+      chk.addEventListener('click',function(){
+        items[idx].done=!items[idx].done;
+        save();render();updateCount();
+      });
+      var lbl=document.createElement('span');
+      lbl.textContent=item.text;
+      lbl.style.flex='1';
+      var del=document.createElement('button');
+      del.className='sl-del';
+      del.textContent='✕';
+      del.setAttribute('aria-label','Löschen');
+      del.addEventListener('click',function(){
+        items.splice(idx,1);
+        save();render();updateCount();
+      });
+      li.appendChild(chk);li.appendChild(lbl);li.appendChild(del);
+      listEl.appendChild(li);
+    });
+    updateCount();
+  }
+
+  function addItem(text){
+    text=text.trim();
+    if(!text)return;
+    items.push({text:text,done:false});
+    save();render();
+    inp.value='';
+    inp.focus();
+  }
+
+  addBtn.addEventListener('click',function(){addItem(inp.value);});
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addItem(inp.value);}});
+  document.querySelectorAll('.sl-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){addItem(chip.getAttribute('data-t')||chip.textContent);});
+  });
+  if(clearDoneBtn)clearDoneBtn.addEventListener('click',function(){
+    items=items.filter(function(i){return !i.done;});
+    save();render();
+  });
+  if(clearAllBtn)clearAllBtn.addEventListener('click',function(){
+    items=[];save();render();
+  });
+
+  render();
+})();
+
 // ── Schnell-Notiz ────────────────────────────────────────────────
 (function(){
   var KEY='wz_quick_note';
@@ -10466,16 +10820,45 @@ function typeGreet(el,text){
   step();
 }
 
+// ── Flip-Clock Helper ──
+(function(){
+  function flipDigit(el,newVal){
+    if(!el||el.textContent===newVal)return;
+    el.classList.remove('flip-out','flip-in');
+    void el.offsetWidth;
+    el.classList.add('flip-out');
+    setTimeout(()=>{
+      el.textContent=newVal;
+      el.classList.remove('flip-out');
+      void el.offsetWidth;
+      el.classList.add('flip-in');
+      el.addEventListener('animationend',()=>el.classList.remove('flip-in'),{once:true});
+    },140);
+  }
+  window._flipDigit=flipDigit;
+  // Ensure htime has persistent spans (fallback init)
+  const ht=document.getElementById('htime');
+  if(ht&&!ht.querySelector('.htime-h')){
+    ht.innerHTML='<span class="htime-h">--</span><span class="htime-sep"><i></i><i></i></span><span class="htime-m">--</span>';
+  }
+})();
+
 function updateClock(){
   const n=new Date();
   const h=String(n.getHours()).padStart(2,'0');
   const m=String(n.getMinutes()).padStart(2,'0');
   const s=n.getSeconds();
-  const tHtml=`<span class="htime-h">${h}</span><span class="htime-sep"><i></i><i></i></span><span class="htime-m">${m}</span>`;
   const tPlain=`${h}:${m}`;
   const d=`${n.getDate()}. ${DM[n.getMonth()]} ${n.getFullYear()}`;
   const dayName=DW[n.getDay()];
-  const htime=document.getElementById('htime');if(htime)htime.innerHTML=tHtml;
+  // ── Flip animation for hour/minute digits ──
+  const htime=document.getElementById('htime');
+  if(htime){
+    const hEl=htime.querySelector('.htime-h');
+    const mEl=htime.querySelector('.htime-m');
+    if(window._flipDigit){window._flipDigit(hEl,h);window._flipDigit(mEl,m);}
+    else{if(hEl)hEl.textContent=h;if(mEl)mEl.textContent=m;}
+  }
   const at=document.getElementById('at');if(at)at.textContent=tPlain;
   // Full date display
   const hdEl=document.getElementById('hdate');if(hdEl)hdEl.textContent=d;
@@ -10502,6 +10885,9 @@ function updateClock(){
     if(hg)hg.setAttribute('transform',`rotate(${hrDeg},22,22)`);
     if(mg)mg.setAttribute('transform',`rotate(${minDeg},22,22)`);
     if(sg)sg.setAttribute('transform',`rotate(${secDeg},22,22)`);
+    // ── Seconds progress arc ──
+    const arcFill=document.getElementById('sec-arc-fill');
+    if(arcFill) arcFill.style.strokeDashoffset=(131.95*(1-sec/60)).toFixed(2);
   })();
 }
 function startClock(){
@@ -10767,8 +11153,9 @@ function setActiveScene(key, fromDetection){
   // .sb2 Buttons updaten
   document.querySelectorAll('.sb2[data-s]').forEach(function(el){
     const on=el.dataset.s===key;
-    el.style.boxShadow=on?'0 0 0 2px rgba(255,159,10,.6)':'';
-    el.style.transform=on?'scale(1.03)':'';
+    el.classList.toggle('sb2--active',on);
+    el.style.boxShadow='';
+    el.style.transform='';
   });
   // home-scenes Zeile (.home-scene-btn falls vorhanden)
   document.querySelectorAll('[data-scene-key]').forEach(function(el){
@@ -12066,6 +12453,7 @@ function updateAll(){
   window._updateBreathe&&window._updateBreathe(on);
   window._updateCandle&&window._updateCandle(on);
   window._updatePresets&&window._updatePresets(on);
+  window._updateShuffle&&window._updateShuffle(on);
   window._updateFingerprint&&window._updateFingerprint(on);
   window._updateCtStrip&&window._updateCtStrip(on);
   // ── Wohnstimmung Dial ──
@@ -12228,6 +12616,60 @@ function updateAll(){
       txt.textContent=label;
     }
   })();
+  // ── Feierabend-Countdown Chip ──
+  (function(){
+    const chip=document.getElementById('feierabend-chip');
+    const dotEl=document.getElementById('feierabend-dot');
+    const txtEl=document.getElementById('feierabend-txt');
+    if(!chip||!txtEl)return;
+    const now=new Date();
+    const day=now.getDay(); // 0=Sun,6=Sat
+    const isWeekend=(day===0||day===6);
+    // Hide on weekends (wkend-chip takes over)
+    if(isWeekend){chip.classList.remove('show');return;}
+    // Get configured Feierabend time (default 17:30)
+    const saved=localStorage.getItem('feierabend_time')||'17:30';
+    const [fbH,fbM]=(saved||'17:30').split(':').map(Number);
+    const h=now.getHours(),m=now.getMinutes();
+    const nowMins=h*60+m;
+    const fbMins=fbH*60+fbM;
+    // Show only during work hours 07:00 – Feierabend+60min
+    const isWorkTime=(nowMins>=7*60)&&(nowMins<=fbMins+60);
+    if(!isWorkTime){chip.classList.remove('show');return;}
+    chip.classList.add('show');
+    if(nowMins>=fbMins){
+      // Feierabend! Show congrats for 60min after
+      chip.className='show fb-now';
+      txtEl.textContent='🎉 Feierabend! Entspann dich.';
+    } else {
+      // Count down to Feierabend
+      chip.className='show fb-soon';
+      const minsLeft=fbMins-nowMins;
+      const hLeft=Math.floor(minsLeft/60);
+      const minLeft=minsLeft%60;
+      let label;
+      if(hLeft>0){label=`💼 Noch ${hLeft}h ${minLeft}min bis Feierabend`;}
+      else if(minLeft>10){label=`💼 Noch ${minLeft}min bis Feierabend`;}
+      else if(minLeft>2){label=`🏃 Fast! Noch ${minLeft}min bis Feierabend`;}
+      else{label='⚡ Gleich Feierabend!';}
+      txtEl.textContent=label;
+    }
+    // Long-press to change Feierabend time
+    if(!chip._fbLong){
+      chip._fbLong=true;
+      let ltimer=null;
+      chip.addEventListener('pointerdown',()=>{ltimer=setTimeout(()=>{
+        const cur=localStorage.getItem('feierabend_time')||'17:30';
+        const t=prompt('Feierabend-Zeit einstellen (HH:MM):',cur);
+        if(t&&/^\d{1,2}:\d{2}$/.test(t)){
+          localStorage.setItem('feierabend_time',t);
+          showToast&&showToast('⏰ Feierabend auf '+t+' Uhr gesetzt');
+        }
+      },700);},{passive:true});
+      chip.addEventListener('pointerup',()=>{clearTimeout(ltimer);},{passive:true});
+      chip.addEventListener('pointerleave',()=>{clearTimeout(ltimer);},{passive:true});
+    }
+  })();
   // ── Wetter-Empfehlung Pill ──
   (function(){
     const pill=document.getElementById('wx-rec-pill');
@@ -12382,6 +12824,7 @@ function updateAll(){
     const imgUrl=almPic.startsWith('http')?almPic:(location.origin+almPic);
     if(imgUrl!==_lastAlbumPic){
       _lastAlbumPic=imgUrl;
+      if(typeof window._updateCoverPalette==='function')window._updateCoverPalette(imgUrl);
       const img=new Image();img.crossOrigin='anonymous';
       img.onload=()=>{
         try{
@@ -12438,6 +12881,7 @@ function updateAll(){
     }
   } else {
     _lastAlbumPic=null;
+    if(typeof window._updateCoverPalette==='function')window._updateCoverPalette(null);
     const al=document.querySelector('.album');
     if(al){al.style.background='';al.classList.remove('mood-active');}
     const bgImg=document.getElementById('album-page-bg-img');
@@ -13392,6 +13836,133 @@ function launchKonfetti(){
   }, {passive: true});
 
   // Resize
+  window.addEventListener('resize', () => { if(active) resize(); });
+})();
+
+// ═══════════════════════════════════════════════
+// SHOOTING STARS — Sternschnuppen auf dem Hero (nachts)
+// ═══════════════════════════════════════════════
+(function initShootingStars(){
+  const cv = document.getElementById('shoot-cv');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  let active = false;
+  let raf3 = null;
+  let nextShot = 0; // timestamp when next shooting star fires
+  let shots = [];   // active shooting stars
+
+  function resize(){
+    const hero = cv.parentElement;
+    cv.width  = hero.offsetWidth  || window.innerWidth;
+    cv.height = hero.offsetHeight || 160;
+  }
+
+  function scheduleNext(){
+    // random interval 4–14 seconds between shooting stars
+    return Date.now() + (4000 + Math.random() * 10000);
+  }
+
+  function spawnShot(){
+    const w = cv.width, h = cv.height;
+    // start from random point in upper 60% of hero
+    const sx = Math.random() * w * 0.9;
+    const sy = Math.random() * h * 0.5;
+    // angle: roughly 20–40° downward from horizontal
+    const angle = (20 + Math.random() * 20) * Math.PI / 180;
+    // speed: traverse ~25-40% of canvas width in ~0.6s
+    const dist = w * (0.22 + Math.random() * 0.18);
+    const duration = 500 + Math.random() * 300; // ms
+    shots.push({
+      sx, sy,
+      dx: Math.cos(angle) * dist,
+      dy: Math.sin(angle) * dist,
+      start: Date.now(),
+      duration,
+      tailLen: dist * 0.65
+    });
+  }
+
+  function draw(){
+    if(!active){ raf3 = null; return; }
+    raf3 = requestAnimationFrame(draw);
+
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    const now = Date.now();
+
+    // Spawn new shooting star
+    if(now >= nextShot){
+      spawnShot();
+      nextShot = scheduleNext();
+    }
+
+    // Draw active shots
+    shots = shots.filter(s => {
+      const t = (now - s.start) / s.duration;
+      if(t > 1) return false; // done
+
+      // Ease-in-out progress
+      const p = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+      const headX = s.sx + s.dx * p;
+      const headY = s.sy + s.dy * p;
+
+      // Tail length shrinks as star decelerates
+      const tailFrac = Math.min(p, 1 - p * 0.4);
+      const tailX = headX - s.dx * tailFrac * (s.tailLen / Math.sqrt(s.dx*s.dx + s.dy*s.dy)) * Math.cos(Math.atan2(s.dy, s.dx));
+      const tailY = headY - s.dy * tailFrac * (s.tailLen / Math.sqrt(s.dx*s.dx + s.dy*s.dy)) * Math.sin(Math.atan2(s.dy, s.dx));
+
+      // Opacity: fade in first 15%, fade out last 25%
+      let alpha = 1;
+      if(t < 0.15) alpha = t / 0.15;
+      else if(t > 0.75) alpha = (1 - t) / 0.25;
+
+      const grad = ctx.createLinearGradient(tailX, tailY, headX, headY);
+      grad.addColorStop(0, `rgba(255,255,255,0)`);
+      grad.addColorStop(0.6, `rgba(255,230,180,${(alpha * 0.55).toFixed(3)})`);
+      grad.addColorStop(1, `rgba(255,255,255,${(alpha * 0.92).toFixed(3)})`);
+
+      ctx.beginPath();
+      ctx.moveTo(tailX, tailY);
+      ctx.lineTo(headX, headY);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.shadowBlur = 4;
+      ctx.shadowColor = `rgba(255,220,160,${(alpha * 0.5).toFixed(3)})`;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Head glow dot
+      ctx.beginPath();
+      ctx.arc(headX, headY, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${(alpha * 0.95).toFixed(3)})`;
+      ctx.fill();
+
+      return true;
+    });
+  }
+
+  function start(){
+    if(active) return;
+    resize();
+    active = true;
+    cv.classList.add('show');
+    nextShot = scheduleNext();
+    if(!raf3) draw();
+  }
+
+  function stop(){
+    if(!active) return;
+    active = false;
+    shots = [];
+    cv.classList.remove('show');
+  }
+
+  // Hook into updateStarParallax — shooting stars follow night mode
+  const _origUpdateStar = window.updateStarParallax;
+  window.updateStarParallax = function(isNight){
+    if(_origUpdateStar) _origUpdateStar(isNight);
+    if(isNight) start(); else stop();
+  };
+
   window.addEventListener('resize', () => { if(active) resize(); });
 })();
 
@@ -15673,6 +16244,64 @@ const _origSetWxMode=setWxMode;
 
   window._updatePresets=function(onCount){
     wrap.classList.toggle('show',onCount>0);
+  };
+})();
+
+// ── Zufalls-Palette Shuffle ──
+(function(){
+  const card=document.getElementById('lt-shuffle');
+  const btn=document.getElementById('lt-shuffle-btn');
+  const ico=document.getElementById('lt-shuffle-ico');
+  const val=document.getElementById('lt-shuffle-val');
+  if(!card||!btn)return;
+
+  // HSL→RGB helper
+  function hsl2rgb(h,s,l){
+    s/=100;l/=100;
+    const k=n=>(n+h/30)%12;
+    const a=s*Math.min(l,1-l);
+    const f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
+    return [Math.round(f(0)*255),Math.round(f(8)*255),Math.round(f(4)*255)];
+  }
+
+  btn.addEventListener('click',function(){
+    // find active RGB lights
+    const rgbLights=(CFG.lights||[]).filter(l=>{
+      const s=window._S&&window._S[l.id];
+      return s&&s.state==='on';
+    });
+    if(!rgbLights.length){showToast('🎲 Keine Lichter aktiv');return;}
+
+    // spin icon
+    ico.style.animation='sfIcoSpin .5s ease forwards';
+    setTimeout(()=>{ico.style.animation='';},520);
+
+    // flash btn
+    btn.classList.remove('sf-flash');
+    void btn.offsetWidth;
+    btn.classList.add('sf-flash');
+
+    // generate harmonious palette
+    const baseHue=Math.floor(Math.random()*360);
+    const spread=360/Math.max(rgbLights.length,3);
+    const saturation=Math.floor(Math.random()*12)+83; // 83-95%
+    const lightness=Math.floor(Math.random()*12)+50;  // 50-62%
+
+    rgbLights.forEach((l,i)=>{
+      const jitter=(Math.random()-0.5)*18; // ±9° jitter per light
+      const hue=(baseHue + i*spread + jitter + 360)%360;
+      const [r,g,b]=hsl2rgb(hue,saturation,lightness);
+      svc('light','turn_on',{entity_id:l.id,rgb_color:[r,g,b],brightness_pct:65,transition:0.8});
+    });
+
+    val.textContent=`${rgbLights.length} Licht${rgbLights.length===1?'':'er'} · Hue ${baseHue}°`;
+    showToast(`🎲 Palette auf ${rgbLights.length} Licht${rgbLights.length===1?'':'er'} · ${baseHue}° Basisfarbton`);
+    hap&&hap();
+  },{passive:true});
+
+  window._updateShuffle=function(onCount){
+    // Show only when lights are on (RGB check happens on click)
+    card.classList.toggle('show',onCount>0);
   };
 })();
 </script>
