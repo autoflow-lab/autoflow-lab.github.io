@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- v4.3 -->
+<!DOCTYPE html><!-- v4.4 -->
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -168,10 +168,10 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -221,6 +221,10 @@ html,body{height:100%;background:var(--bg);
 @keyframes niLichtFlash{0%,100%{transform:scale(1.12);filter:none}40%{transform:scale(1.28);filter:drop-shadow(0 0 8px rgba(255,159,10,.95))}}
 @keyframes niWetterWobble{0%,100%{transform:scale(1.12)}20%{transform:scale(1.12) rotate(-8deg)}50%{transform:scale(1.12) rotate(6deg)}75%{transform:scale(1.12) rotate(-4deg)}}
 @keyframes niGeraeteShake{0%,100%{transform:scale(1.12)}20%{transform:scale(1.12) translateX(-3px)}40%{transform:scale(1.12) translateX(3px)}60%{transform:scale(1.12) translateX(-2px)}80%{transform:scale(1.12) translateX(2px)}}
+/* Wetter Nav Emoji Badge */
+#wx-nav-emoji{position:absolute;top:1px;right:0px;font-size:.72rem;line-height:1;opacity:0;transition:opacity .6s ease;pointer-events:none;z-index:5;filter:drop-shadow(0 0 3px rgba(255,255,255,.4))}
+#wx-nav-emoji.show{opacity:1;animation:wxEmojiIn .5s cubic-bezier(.34,1.28,.64,1) both}
+@keyframes wxEmojiIn{from{transform:scale(.2) rotate(-25deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
 .ni.ni-anim-home svg{animation:niHomePop .5s cubic-bezier(.34,1.56,.64,1) both}
 .ni.ni-anim-musik svg{animation:niMusikSpin .55s cubic-bezier(.4,0,.2,1) both}
 .ni.ni-anim-licht svg{animation:niLichtFlash .5s ease both}
@@ -317,6 +321,30 @@ html,body{height:100%;background:var(--bg);
 #silence-cd{font-weight:700;color:#90caff;margin-left:3px}
 :root.light #silence-chip{background:rgba(10,100,220,.06);border-color:rgba(10,100,220,.15);color:rgba(0,60,140,.8)}
 :root.light #silence-cd{color:rgba(0,80,180,.9)}
+#etipp-chip .etipp-inner{display:flex;align-items:flex-start;gap:9px;padding:10px 14px;border-radius:14px;background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.18);animation:etippIn .45s cubic-bezier(.34,1.15,.64,1) both}
+#etipp-chip .etipp-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+#etipp-chip .etipp-body{display:flex;flex-direction:column;gap:2px}
+#etipp-chip .etipp-title{font-size:.72rem;font-weight:700;color:rgba(255,210,100,.95);letter-spacing:.01em}
+#etipp-chip .etipp-sub{font-size:.67rem;color:rgba(255,255,255,.42);line-height:1.35}
+@keyframes etippIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+#fc3h-row{display:none;grid-template-columns:repeat(3,1fr)}
+#fc3h-row.show{display:grid;animation:fc3hIn .4s cubic-bezier(.34,1.15,.64,1) both}
+.fc3h-cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;font-size:.68rem;color:rgba(255,255,255,.55);text-align:center}
+.fc3h-cell .fc3h-lbl{font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:.02em}
+.fc3h-cell .fc3h-ico{font-size:1.25rem;line-height:1}
+.fc3h-cell .fc3h-tmp{font-size:.85rem;font-weight:700;color:rgba(255,255,255,.88)}
+.fc3h-cell .fc3h-rain{font-size:.6rem;color:#0a84ff;min-height:.75rem}
+.fc3h-cell:first-child{background:rgba(255,159,10,.07);border-color:rgba(255,159,10,.2)}
+.fc3h-cell:first-child .fc3h-tmp{color:#ff9f0a}
+@keyframes fc3hIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+:root.light .fc3h-cell{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08)}
+:root.light .fc3h-cell:first-child{background:rgba(255,159,10,.07)}
+:root.light .fc3h-cell .fc3h-tmp{color:rgba(0,0,0,.8)}
+:root.light .fc3h-cell:first-child .fc3h-tmp{color:#c96f00}
+:root.light .fc3h-cell .fc3h-lbl{color:rgba(0,0,0,.35)}
+:root.light #etipp-chip .etipp-inner{background:rgba(255,159,10,.06);border-color:rgba(255,159,10,.2)}
+:root.light #etipp-chip .etipp-title{color:rgba(180,100,0,.9)}
+:root.light #etipp-chip .etipp-sub{color:rgba(0,0,0,.45)}
 #wkend-chip{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 14px;border-radius:14px;font-size:.75rem;animation:wkendChipIn .4s cubic-bezier(.34,1.15,.64,1) both}
 #wkend-chip.show{display:flex}
 #wkend-chip.wkend-soon{background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.2);color:rgba(255,220,150,.9)}
@@ -590,6 +618,12 @@ html,body{height:100%;background:var(--bg);
 :root.light #lueft-title{color:inherit!important}
 :root.light #lueft-sub,.lueft-stat{color:var(--dim)!important}
 /* ══ GEWITTER-ALARM-CARD ══ */
+#tomorrow-card{opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#tomorrow-card.show{opacity:1;transform:translateY(0)}
+@keyframes tmrEmojiFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.06)}}
+:root.light #tomorrow-card .tmr-chip{background:rgba(0,0,0,.04)!important;border-color:rgba(0,0,0,.1)!important}
+:root.light #tomorrow-card #tmr-cond{color:rgba(0,0,0,.4)}
+:root.light #tomorrow-card #tmr-lo{color:rgba(0,0,0,.38)}
 #stargazing-card{opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #stargazing-card.show{opacity:1;transform:translateY(0)}
 .sgz-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;font-size:.62rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.55)}
@@ -2129,6 +2163,24 @@ html,body{height:100%;background:var(--bg);
   border-color:rgba(var(--lc,255,159,10),.55);
   animation:pulseRing 2.2s ease-in-out infinite;
 }
+/* Swipe-to-Dim hint overlay on light tiles */
+.lt-swipe-hint{
+  position:absolute;inset:0;border-radius:inherit;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;z-index:10;
+  opacity:0;transition:opacity .18s ease;
+  font-size:1.35rem;font-weight:700;
+  background:rgba(0,0,0,.38);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  gap:6px;flex-direction:column;
+  color:#fff;
+}
+.lt-swipe-hint .sdh-arrow{font-size:1.55rem;line-height:1;}
+.lt-swipe-hint .sdh-pct{font-size:.6rem;letter-spacing:.5px;opacity:.8;}
+@keyframes ltSwipeFlash{
+  0%{opacity:0}15%{opacity:1}70%{opacity:.8}100%{opacity:0}
+}
+.lt-swipe-hint.show{animation:ltSwipeFlash .65s ease forwards;}
 /* RGB-color border: thin glowing ring in exact light color when RGB active */
 .ltico.rgb-border{
   box-shadow:0 0 0 1.5px var(--rgb-border-c,transparent), 0 0 8px 1px var(--rgb-border-glow,transparent);
@@ -2191,6 +2243,23 @@ input[type=range].ls-rng::-webkit-slider-runnable-track{height:36px;border-radiu
 input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#c8c8c8 100%);box-shadow:0 2px 10px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.5) inset;margin-top:3px;cursor:grab}
 .ltnm{font-size:.8rem;font-weight:600;color:var(--txt);z-index:1}
 .ltst{font-size:.58rem;color:var(--dim);margin-top:1px;transition:color .35s;z-index:1}
+/* On-Duration badge */
+.lt-dur-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:.51rem;font-weight:600;
+  color:rgba(255,159,10,.88);
+  background:rgba(255,159,10,.08);
+  border:1px solid rgba(255,159,10,.20);
+  border-radius:7px;padding:1px 5px;margin-top:3px;
+  opacity:0;transition:opacity .6s ease;
+  white-space:nowrap;z-index:1;
+}
+.lt-dur-badge.show{opacity:1;animation:durBadgeIn .45s cubic-bezier(.34,1.28,.64,1) both}
+@keyframes durBadgeIn{
+  from{transform:scale(.75);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+:root.light .lt-dur-badge{color:rgba(160,80,0,.85);background:rgba(255,159,10,.10);border-color:rgba(255,159,10,.28)}
 .lt.on .ltst{color:rgba(255,159,10,.8)}
 .bbar{
   width:100%;height:6px;border-radius:6px;background:rgba(255,255,255,.1);
@@ -2433,6 +2502,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 :root.light #hum-val { color:var(--txt) !important; }
 :root.light #np-notify-title { color:var(--txt) !important; }
 :root.light .energie-arc-val { color:var(--txt) !important; }
+/* Tomorrow-Card: tmr-hi fehlte Light-Mode Override */
+:root.light #tomorrow-card #tmr-hi { color:var(--txt) !important; }
+/* Musik-Tab: Stimmungs-Empfehlung Chip — Light-Mode */
+:root.light #mood-chip-inner { background:rgba(0,0,0,.04) !important; border-color:rgba(0,0,0,.09) !important; color:rgba(0,0,0,.7) !important; }
 
 /* Geräte-Tab — Pulse Dot */
 .g-pulse-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;flex-shrink:0;transition:background .4s,box-shadow .4s}
@@ -3082,6 +3155,9 @@ input[type=range] { touch-action: none; }
         <span id="outdoor-chip-score"></span>
       </div>
 
+      <!-- 3h Micro-Forecast -->
+      <div id="fc3h-row" style="display:none;gap:8px;margin:0 0 10px"></div>
+
       <!-- 7-Day Week Strip -->
       <div id="week-strip"></div>
 
@@ -3159,6 +3235,9 @@ input[type=range] { touch-action: none; }
 
       <!-- Anwesenheits-Chips (device_tracker.*) -->
       <div id="presence-strip"></div>
+
+      <!-- Energie-Tipp des Tages -->
+      <div id="etipp-chip" style="display:none;margin:6px 0 2px"></div>
 
       <!-- Wetter-Licht Sync Button -->
       <div id="wx-light-sync">
@@ -4638,6 +4717,48 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- Morgen auf einen Blick -->
+      <div id="tomorrow-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(162,132,255,.6);text-transform:uppercase;margin-bottom:8px">🔮 MORGEN AUF EINEN BLICK</div>
+        <div id="tomorrow-inner" style="background:var(--c1);border-radius:18px;border:1px solid rgba(162,132,255,.18);border-top-color:rgba(162,132,255,.35);padding:16px 18px;position:relative;overflow:hidden">
+          <!-- Orb -->
+          <div id="tmr-orb" style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(162,132,255,.12) 0%,transparent 65%);pointer-events:none;transition:background 2s ease"></div>
+          <!-- Main row -->
+          <div style="display:flex;align-items:center;gap:14px;position:relative;z-index:1">
+            <!-- Left: emoji + cond -->
+            <div style="flex-shrink:0;text-align:center;width:60px">
+              <div id="tmr-emoji" style="font-size:2.6rem;line-height:1;display:block;animation:tmrEmojiFloat 4s ease-in-out infinite">–</div>
+              <div id="tmr-cond" style="font-size:.6rem;color:rgba(255,255,255,.42);margin-top:4px;font-weight:500">–</div>
+            </div>
+            <!-- Center: hi/lo -->
+            <div style="flex:1">
+              <div style="display:flex;align-items:baseline;gap:6px">
+                <span id="tmr-hi" style="font-size:1.8rem;font-weight:800;color:#fff">–</span>
+                <span style="font-size:.95rem;color:rgba(255,255,255,.35);font-weight:400">/</span>
+                <span id="tmr-lo" style="font-size:1.1rem;font-weight:500;color:rgba(255,255,255,.45)">–</span>
+              </div>
+              <div style="font-size:.62rem;color:rgba(255,255,255,.3);margin-top:1px">Höchst / Tiefstwert</div>
+            </div>
+            <!-- Right: stats -->
+            <div style="flex-shrink:0;display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+              <div id="tmr-prec-chip" style="display:none;font-size:.66rem;font-weight:600;padding:3px 8px;border-radius:12px;background:rgba(10,132,255,.12);border:1px solid rgba(10,132,255,.22);color:rgba(120,190,255,.9)"></div>
+              <div id="tmr-wind-chip" style="display:none;font-size:.66rem;font-weight:600;padding:3px 8px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55)"></div>
+              <div id="tmr-uv-chip" style="display:none;font-size:.66rem;font-weight:600;padding:3px 8px;border-radius:12px"></div>
+            </div>
+          </div>
+          <!-- Best hour row -->
+          <div id="tmr-best-row" style="display:none;margin-top:11px;padding-top:9px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:8px;position:relative;z-index:1">
+            <div style="font-size:.62rem;color:rgba(255,255,255,.32);flex:1">Beste Außenzeit morgen:</div>
+            <div id="tmr-best-pill" style="font-size:.66rem;font-weight:700;padding:3px 10px;border-radius:12px;background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.25);color:rgba(100,230,130,.9)">–</div>
+          </div>
+          <!-- Forecast summary bar -->
+          <div id="tmr-hourly-strip" style="margin-top:11px;padding-top:9px;border-top:1px solid rgba(255,255,255,.06);display:none;position:relative;z-index:1">
+            <div id="tmr-strip-cells" style="display:flex;gap:4px;align-items:flex-end;height:24px"></div>
+            <div id="tmr-strip-labels" style="display:flex;gap:4px;margin-top:3px"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Wöchentlicher Niederschlag -->
       <div id="weekly-rain-card" style="display:none;margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(10,132,255,.65);text-transform:uppercase;margin-bottom:8px">🌧 NIEDERSCHLAG DIESE WOCHE</div>
@@ -4786,8 +4907,9 @@ input[type=range] { touch-action: none; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.3 4.7-3 6.1V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-1.9C7.3 13.7 6 11.5 6 9a6 6 0 0 1 6-6z"/></svg>
       <span>Licht</span>
     </button>
-    <button class="ni" data-p="wetter">
+    <button class="ni" data-p="wetter" style="position:relative">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+      <span id="wx-nav-emoji"></span>
       <span>Wetter</span>
     </button>
     <button class="ni" data-p="geraete">
@@ -6099,6 +6221,7 @@ function renderWeather(){
     document.getElementById('hourly').innerHTML=items.join('');
   }
   checkRainWarning();
+  drawTomorrowCard();
   drawWeeklyRain();
   drawBiowetter();
   drawSunshine();
@@ -6132,6 +6255,31 @@ function renderWeather(){
   drawBestHour();
   if(window.updateWxPrecipCanvas) updateWxPrecipCanvas(code, night);
   drawWxTabAura(code, night);
+  // Live Wetter-Emoji im Nav-Badge
+  (function(){
+    const em=document.getElementById('wx-nav-emoji');
+    if(!em)return;
+    // Night-aware emoji
+    function wxNavEmoji(c,n){
+      if(c===0){return n?'🌙':'☀️';}
+      if(c<=1){return n?'🌙':'🌤';}
+      if(c<=3)return'⛅';
+      if(c<=49)return'🌫';
+      if(c<=57)return'🌧';
+      if(c<=67)return'🌧';
+      if(c<=77)return'❄️';
+      if(c<=82)return'🌦';
+      if(c<=86)return'🌨';
+      if(c>=95)return'⛈';
+      return'🌥';
+    }
+    const emoji=wxNavEmoji(code,night);
+    if(em.textContent===emoji)return; // no flicker if same
+    em.classList.remove('show');
+    void em.offsetWidth;
+    em.textContent=emoji;
+    em.classList.add('show');
+  })();
 }
 
 // ─── Wetter-Tab Ambient Aura ───────────────────
@@ -7974,6 +8122,128 @@ function drawBestHour(){
 // ═══════════════════════════════════════════════
 // ═══════════════════════════════════════════════
 // WÖCHENTLICHER NIEDERSCHLAG
+function drawTomorrowCard(){
+  const card=document.getElementById('tomorrow-card');
+  if(!card) return;
+  const d=window._wx&&window._wx.daily;
+  const h=window._wx&&window._wx.hourly;
+  if(!d||!d.time||d.time.length<2){card.style.display='none';return;}
+  card.style.display='block';
+  // Tomorrow = index 1
+  const code=d.weather_code?d.weather_code[1]:0;
+  const hi=(d.temperature_2m_max&&d.temperature_2m_max[1]!=null)?Math.round(d.temperature_2m_max[1]):null;
+  const lo=(d.temperature_2m_min&&d.temperature_2m_min[1]!=null)?Math.round(d.temperature_2m_min[1]):null;
+  const prec=(d.precipitation_sum&&d.precipitation_sum[1]!=null)?d.precipitation_sum[1]:null;
+  const wind=(d.wind_speed_10m_max&&d.wind_speed_10m_max[1]!=null)?Math.round(d.wind_speed_10m_max[1]):(d.windspeed_10m_max&&d.windspeed_10m_max[1]!=null)?Math.round(d.windspeed_10m_max[1]):null;
+  const uv=(d.uv_index_max&&d.uv_index_max[1]!=null)?Math.round(d.uv_index_max[1]*10)/10:null;
+  const tmrDateStr=d.time[1]; // "YYYY-MM-DD"
+
+  // emoji + cond
+  function tmrEmoji(c){if(c<=1)return'☀️';if(c<=3)return'⛅';if(c<=49)return'🌫️';if(c<=67)return'🌧';if(c<=77)return'❄️';if(c<=82)return'🌦';if(c<=86)return'🌨';return'⛈';}
+  function tmrTxt(c){if(c<=1)return'Klarer Himmel';if(c<=3)return'Bewölkt';if(c<=49)return'Nebelig';if(c<=67)return'Regen';if(c<=77)return'Schnee';if(c<=82)return'Regenschauer';if(c<=86)return'Schneeschauer';return'Gewitter';}
+
+  const emojiEl=document.getElementById('tmr-emoji');
+  const condEl=document.getElementById('tmr-cond');
+  const hiEl=document.getElementById('tmr-hi');
+  const loEl=document.getElementById('tmr-lo');
+  if(emojiEl) emojiEl.textContent=tmrEmoji(code||0);
+  if(condEl) condEl.textContent=tmrTxt(code||0);
+  if(hiEl) hiEl.textContent=hi!=null?hi+'°':'–';
+  if(loEl) loEl.textContent=lo!=null?lo+'°':'–';
+
+  // Chips
+  const precChip=document.getElementById('tmr-prec-chip');
+  if(precChip){
+    if(prec!=null&&prec>0.1){
+      precChip.style.display='block';
+      precChip.textContent='🌧 '+prec.toFixed(1)+' mm';
+    } else if(prec===0||prec<=0.1){
+      precChip.style.display='block';
+      precChip.textContent='☀️ Trocken';
+      precChip.style.background='rgba(48,209,88,.1)';
+      precChip.style.borderColor='rgba(48,209,88,.2)';
+      precChip.style.color='rgba(100,230,130,.9)';
+    }
+  }
+  const windChip=document.getElementById('tmr-wind-chip');
+  if(windChip&&wind!=null){
+    windChip.style.display='block';
+    windChip.textContent='💨 '+wind+' km/h';
+  }
+  const uvChip=document.getElementById('tmr-uv-chip');
+  if(uvChip&&uv!=null){
+    uvChip.style.display='block';
+    var uvColor=uv<3?'rgba(48,209,88,.9)':uv<6?'rgba(255,214,10,.9)':uv<8?'rgba(255,159,10,.9)':'rgba(255,69,58,.9)';
+    var uvBg=uv<3?'rgba(48,209,88,.1)':uv<6?'rgba(255,214,10,.1)':uv<8?'rgba(255,159,10,.1)':'rgba(255,69,58,.1)';
+    var uvBorder=uv<3?'rgba(48,209,88,.22)':uv<6?'rgba(255,214,10,.22)':uv<8?'rgba(255,159,10,.22)':'rgba(255,69,58,.22)';
+    uvChip.textContent='☀️ UV '+uv;
+    uvChip.style.color=uvColor;uvChip.style.background=uvBg;uvChip.style.borderColor=uvBorder;
+    uvChip.style.border='1px solid '+uvBorder;
+  }
+
+  // Orb color by weather
+  const orb=document.getElementById('tmr-orb');
+  if(orb){
+    var oc=(code||0)<=1?'rgba(255,200,50,.12)':(code||0)<=3?'rgba(100,160,255,.1)':(code||0)>=95?'rgba(200,80,255,.12)':(code||0)>=61?'rgba(10,100,255,.13)':'rgba(162,132,255,.12)';
+    orb.style.background='radial-gradient(circle,'+oc+' 0%,transparent 65%)';
+  }
+
+  // Best hour tomorrow from hourly data
+  const bestRow=document.getElementById('tmr-best-row');
+  const bestPill=document.getElementById('tmr-best-pill');
+  if(bestRow&&bestPill&&h&&h.time){
+    var bestScore=-1, bestHour=null;
+    var ht=h.time||[], htemp=h.temperature_2m||[], hprec=h.precipitation_probability||[], hwind=h.wind_speed_10m||[], hcode=h.weather_code||[];
+    for(var i=0;i<ht.length;i++){
+      if(!ht[i]||!ht[i].startsWith(tmrDateStr)) continue;
+      var hr=parseInt(ht[i].substring(11,13));
+      if(hr<7||hr>21) continue; // daylight only
+      var sc=0;
+      var tmp=htemp[i]||15, pr=hprec[i]||0, wn=hwind[i]||0, wc=hcode[i]||0;
+      if(tmp>=16&&tmp<=24)sc+=40; else if(tmp>=10&&tmp<=28)sc+=28; else sc+=10;
+      sc+=Math.round((100-Math.min(pr,100))*0.30);
+      if(wn<15)sc+=20; else if(wn<30)sc+=12; else sc+=5;
+      if(wc>=95)sc-=30; else if(wc>=80)sc-=15; else if(wc>=61)sc-=10;
+      if(sc>bestScore){bestScore=sc;bestHour=hr;}
+    }
+    if(bestHour!=null){
+      bestPill.textContent=(bestScore>60?'🌟 ':'🕐 ')+bestHour+':00 Uhr';
+      bestRow.style.display='flex';
+    } else {
+      bestRow.style.display='none';
+    }
+  }
+
+  // Mini hourly precipitation bar strip for tomorrow (0-23h, showing every 3h)
+  const strip=document.getElementById('tmr-hourly-strip');
+  const stripCells=document.getElementById('tmr-strip-cells');
+  const stripLabels=document.getElementById('tmr-strip-labels');
+  if(strip&&stripCells&&stripLabels&&h&&h.time){
+    var cells=[],labels=[];
+    var hprob=h.precipitation_probability||[];
+    for(var i=0;i<h.time.length;i++){
+      if(!h.time[i]||!h.time[i].startsWith(tmrDateStr)) continue;
+      var hr2=parseInt(h.time[i].substring(11,13));
+      if(hr2%3!==0) continue;
+      var prob=hprob[i]||0;
+      // color: green→amber→blue
+      var col=prob<20?'rgba(48,209,88,.6)':prob<50?'rgba(255,159,10,.7)':'rgba(10,132,255,.8)';
+      var barH=Math.max(4,Math.round(prob/100*20));
+      cells.push('<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end"><div style="width:100%;border-radius:2px 2px 0 0;height:'+barH+'px;background:'+col+';transition:height .8s ease"></div></div>');
+      labels.push('<div style="flex:1;text-align:center;font-size:.56rem;color:rgba(255,255,255,.28)">'+hr2+'h</div>');
+    }
+    if(cells.length>=4){
+      stripCells.innerHTML=cells.join('');
+      stripLabels.innerHTML=labels.join('');
+      strip.style.display='block';
+    } else {
+      strip.style.display='none';
+    }
+  }
+
+  requestAnimationFrame(()=>{ card.classList.add('show'); });
+}
+
 function drawWeeklyRain(){
   const card=document.getElementById('weekly-rain-card');
   if(!card||!_wx?.daily?.precipitation_sum) return;
@@ -9346,6 +9616,7 @@ function buildUI(){try{
         <div style="z-index:1">
           <div class="ltnm">${l.name}</div>
           <div class="ltst" data-lst="${l.id}">Aus</div>
+          <div class="lt-dur-badge" data-dur="${l.id}"></div>
         </div>
       </div>
       ${l.nodim?'':`<div class="bbar" data-bri="${l.id}" style="z-index:2">
@@ -13333,6 +13604,37 @@ function updateAll(){
       bfill2.style.opacity='1'; // immer sichtbar — width 0 versteckt effektiv
       if(lc) bfill2.style.background=`linear-gradient(90deg,rgba(${lc},.6),rgb(${lc}))`;
     }
+    // ── On-Duration badge ──
+    (function(){
+      const STORE='lt_on_since_v1';
+      if(!window._ltOnSince){
+        try{window._ltOnSince=JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){window._ltOnSince={}}
+      }
+      const durEl=tile.querySelector(`[data-dur="${l.id}"]`);
+      if(!durEl)return;
+      if(on&&!window._ltOnSince[l.id]){
+        window._ltOnSince[l.id]=Date.now();
+        try{localStorage.setItem(STORE,JSON.stringify(window._ltOnSince))}catch(e){}
+      }else if(!on&&window._ltOnSince[l.id]){
+        delete window._ltOnSince[l.id];
+        try{localStorage.setItem(STORE,JSON.stringify(window._ltOnSince))}catch(e){}
+      }
+      if(on&&window._ltOnSince[l.id]){
+        const mins=Math.round((Date.now()-window._ltOnSince[l.id])/60000);
+        if(mins>=2){
+          const hrs=Math.floor(mins/60);
+          const rem=mins%60;
+          const txt=mins<60?`🕐 ${mins} Min`:hrs<24?`🕐 ${hrs}h${rem?` ${rem}m`:''}`:
+            `🕐 ${Math.floor(hrs/24)}d ${hrs%24}h`;
+          durEl.textContent=txt;
+          if(!durEl.classList.contains('show')){durEl.classList.add('show');}
+        }else{
+          durEl.classList.remove('show');
+        }
+      }else{
+        durEl.classList.remove('show');
+      }
+    })();
   });
   // Devs
   CFG.devs.forEach(d=>{
@@ -15714,6 +16016,74 @@ const _origSetWxMode=setWxMode;
     tile.addEventListener('touchcancel',function(){tile.classList.remove('pressing');},{passive:true});
   });
 
+  // ── Swipe-to-Dim auf Licht-Tiles ──
+  // Swipe links = -15% / Swipe rechts = +15% Helligkeit
+  (function(){
+    var SWIPE_DX=45, MAX_DY=32, MAX_MS=500, STEP=15;
+    var DIM_STR='← Dimmen';
+    var BRI_STR='Heller →';
+    // Inject hint overlays into every tile
+    document.querySelectorAll('.lt').forEach(function(tile){
+      var hint=document.createElement('div');
+      hint.className='lt-swipe-hint';
+      hint.innerHTML='<div class="sdh-arrow"></div><div class="sdh-pct"></div>';
+      tile.style.position='relative';
+      tile.style.overflow='hidden';
+      tile.appendChild(hint);
+    });
+    // Add swipe handlers
+    document.getElementById('pg-licht').addEventListener('touchstart',function(e){
+      var tile=e.target.closest('.lt');
+      if(!tile) return;
+      tile._sdSx=e.touches[0].clientX;
+      tile._sdSy=e.touches[0].clientY;
+      tile._sdSt=Date.now();
+      tile._sdMoved=false;
+    },{passive:true});
+    document.getElementById('pg-licht').addEventListener('touchmove',function(e){
+      var tile=e.target.closest('.lt');
+      if(!tile||!tile._sdSx) return;
+      var dx=e.touches[0].clientX-tile._sdSx;
+      var dy=Math.abs(e.touches[0].clientY-tile._sdSy);
+      if(Math.abs(dx)>18&&dy<MAX_DY) tile._sdMoved=true;
+    },{passive:true});
+    document.getElementById('pg-licht').addEventListener('touchend',function(e){
+      var tile=e.target.closest('.lt');
+      if(!tile||!tile._sdSx) return;
+      var dx=e.changedTouches[0].clientX-tile._sdSx;
+      var dy=Math.abs(e.changedTouches[0].clientY-tile._sdSy);
+      var dt=Date.now()-tile._sdSt;
+      tile._sdSx=null;
+      if(!tile._sdMoved) return;
+      if(Math.abs(dx)<SWIPE_DX||dy>MAX_DY||dt>MAX_MS) return;
+      // Only on active tiles with brightness
+      var lid=tile.querySelector('[data-id]')?tile.dataset.id:null;
+      if(!lid) lid=tile.getAttribute('data-id');
+      if(!lid) return;
+      var s=_S[lid];
+      if(!s||s.state!=='on') return;
+      var curBri=Math.round((s.attributes&&s.attributes.brightness||0)/2.55);
+      if(!curBri&&curBri!==0) return; // no brightness attribute → skip
+      var isDim=dx<0;
+      var newBri=Math.max(5,Math.min(100,curBri+(isDim?-STEP:+STEP)));
+      // Optimistic UI: update brightness bar immediately
+      var fill=tile.querySelector('[data-fill]');
+      if(fill) fill.style.width=newBri+'%';
+      // Show hint overlay
+      var hint=tile.querySelector('.lt-swipe-hint');
+      if(hint){
+        hint.querySelector('.sdh-arrow').textContent=isDim?'←':'→';
+        hint.querySelector('.sdh-pct').textContent=(isDim?'−':'+')+STEP+'%  →  '+newBri+'%';
+        hint.classList.remove('show');
+        void hint.offsetWidth;
+        hint.classList.add('show');
+        hint.addEventListener('animationend',function(){hint.classList.remove('show');},{once:true});
+      }
+      svc('light','turn_on',{entity_id:lid,brightness_pct:newBri,transition:0.5});
+      hap();
+    },{passive:true});
+  })();
+
 
   // ── Album Art 3D Holographic Tilt Effect ──
   (function(){
@@ -16803,6 +17173,156 @@ const _origSetWxMode=setWxMode;
   // Initial call
   setTimeout(update, 800);
   setInterval(update, 5*60*1000); // refresh every 5 min
+})();
+
+// ── Home-Tab: 3h Micro-Forecast ──
+(function(){
+  var row = document.getElementById('fc3h-row');
+  if(!row) return;
+
+  // WMO → emoji helper (simplified)
+  function wmoEmoji(c){
+    if(c===0) return '☀️';
+    if(c<=2)  return '🌤';
+    if(c<=3)  return '☁️';
+    if(c<=48) return '🌫';
+    if(c<=57) return '🌦';
+    if(c<=67) return '🌧';
+    if(c<=77) return '🌨';
+    if(c<=82) return '🌧';
+    if(c<=84) return '🌨';
+    if(c<=94) return '🌩';
+    return '⛈';
+  }
+
+  function render(){
+    var wx = window._wx;
+    if(!wx||!wx.hourly) return;
+    var now   = new Date();
+    var nowH  = now.getHours();
+    // Find current hour index in hourly data
+    var times = wx.hourly.time||[];
+    var temps = wx.hourly.temperature_2m||[];
+    var codes = wx.hourly.weather_code||[];
+    var probs = wx.hourly.precipitation_probability||[];
+
+    // Find offset for current hour
+    var idx = -1;
+    for(var i=0;i<times.length;i++){
+      var t = new Date(times[i]);
+      if(t.getHours()===nowH && t.getDate()===now.getDate()){idx=i;break;}
+    }
+    if(idx<0) return;
+
+    var slots = [];
+    for(var s=0;s<3;s++){
+      var si = idx+s;
+      if(si>=times.length) break;
+      var d = new Date(times[si]);
+      slots.push({
+        lbl: s===0 ? 'Jetzt' : d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}),
+        ico: wmoEmoji(codes[si]||0),
+        tmp: Math.round(temps[si]||0),
+        rain: probs[si]||0
+      });
+    }
+    if(slots.length<2) return;
+
+    row.innerHTML = slots.map(function(sl,i){
+      return '<div class="fc3h-cell">'
+        +'<span class="fc3h-lbl">'+sl.lbl+'</span>'
+        +'<span class="fc3h-ico">'+sl.ico+'</span>'
+        +'<span class="fc3h-tmp">'+sl.tmp+'°</span>'
+        +'<span class="fc3h-rain">'+(sl.rain>10?'💧'+sl.rain+'%':'')+'</span>'
+        +'</div>';
+    }).join('');
+
+    row.classList.add('show');
+    row.style.display='grid';
+  }
+
+  // Hook into wx load
+  var orig = window._onWxLoaded;
+  window._onWxLoaded = function(){
+    if(orig) orig.apply(this,arguments);
+    render();
+  };
+
+  // Also try on tab switch
+  var pagesEl = document.getElementById('pages');
+  if(pagesEl){
+    new MutationObserver(function(){
+      var cur = pagesEl.querySelector('.page.cur');
+      if(cur && cur.id==='pg-home') render();
+    }).observe(pagesEl,{subtree:true,attributeFilter:['class']});
+  }
+
+  setTimeout(render, 1200);
+})();
+
+// ── Home-Tab: Energie-Tipp des Tages ──
+(function(){
+  var chip = document.getElementById('etipp-chip');
+  if(!chip) return;
+
+  var TIPPS = [
+    {e:'☀️', t:'Solar-Peak nutzen',        s:'Jetzt Waschmaschine & Geschirrspüler an — Solarstrom ist am günstigsten.'},
+    {e:'🌙', t:'Nacht-Tarif aktiv',         s:'Zwischen 22–06 Uhr läuft der günstige Nachtstrom — ideal für Boiler & E-Auto.'},
+    {e:'❄️', t:'Heizung optimieren',        s:'1°C weniger spart ~6% Heizkosten. Räume unter 17°C nachts empfohlen.'},
+    {e:'💡', t:'Stand-by vermeiden',        s:'Stand-by Geräte verbrauchen bis zu 10% des Jahresstroms. Steckerleiste ausschalten.'},
+    {e:'🌡', t:'Stoß-Lüften statt Kippen', s:'3× täglich 5 Min quer-lüften spart bis zu 20% Heizenergie.'},
+    {e:'🫙', t:'Kühlschrank-Tipp',          s:'Kühlschrank nie neben Herd oder in direkter Sonne stellen — spart 30% Kühlstrom.'},
+    {e:'🧺', t:'Wäsche bei 30°C waschen',   s:'30°C statt 60°C spart ~50% Strom pro Waschgang — reicht für normale Wäsche.'},
+    {e:'🌿', t:'Grüner Strom-Moment',       s:'Windkraft liefert gerade viel Strom ins Netz — guter Zeitpunkt für energieintensive Geräte.'},
+    {e:'🔋', t:'Akku-Pflege',               s:'Smartphones und Akkus zwischen 20–80% halten verlängert die Lebensdauer deutlich.'},
+    {e:'🏠', t:'Tür & Fenster checken',     s:'Undichte Fenster und Türen verursachen bis zu 25% der Wärmeverluste im Winter.'},
+    {e:'💧', t:'Warmwasser sparen',         s:'Dusche statt Bad spart ~80L Wasser und bis zu 70% Heizenergie pro Nutzung.'},
+    {e:'📺', t:'TV-Helligkeit anpassen',    s:'Display-Helligkeit auf 50% senkt den TV-Stromverbrauch um bis zu 40%.'},
+    {e:'🌬', t:'Nacht-Kühlung nutzen',      s:'Nachts Fenster öffnen kühlt das Haus natürlich — Klimaanlage tagsüber sparen.'},
+    {e:'♻️', t:'Graustrom-Alarm',           s:'Zwischen 17–20 Uhr ist Strom besonders kohlenstoffintensiv — Großgeräte jetzt pausieren.'},
+    {e:'🔌', t:'Smarte Steckdosen-Regel',   s:'Automatisierung: Geräte nach 22 Uhr ausschalten spart durchschnittlich 15€/Monat.'},
+    {e:'🌤', t:'Bewölkt = Heizung check',   s:'Trübe Tage ohne Solargewinn: Thermostat lieber 1° höher für Komfort ohne Mehrkosten.'},
+    {e:'🧊', t:'Gefrierfach abtauen',       s:'Mehr als 5mm Eis im Gefriergerät erhöht den Stromverbrauch um bis zu 30%.'},
+    {e:'🍳', t:'Restwärme nutzen',          s:'Herd 5 Min früher ausschalten — die Restwärme reicht für die letzten Minuten.'},
+    {e:'🛁', t:'Warmwasser-Timing',         s:'Warmwasser-Boiler nachts aufheizen lassen — günstigerer Strom, gleich warm am Morgen.'},
+    {e:'📊', t:'Verbrauch im Blick',        s:'Wer seinen Stromverbrauch regelmäßig prüft, spart im Schnitt 10% pro Jahr.'},
+  ];
+
+  function getContextTipp(){
+    var h   = new Date().getHours();
+    var day = new Date().getDay(); // 0=So, 6=Sa
+    // Time-context overrides
+    if(h>=22||h<6)  return TIPPS[1]; // Nacht-Tarif
+    if(h>=10&&h<=14){
+      // Check for solar condition
+      try{ var wmo=(window._wx&&window._wx.current)?window._wx.current.weather_code:99;
+        if(wmo<=1) return TIPPS[0]; // solar peak + sunny
+      }catch(e){}
+    }
+    if(h>=17&&h<20) return TIPPS[13]; // Graustrom-Alarm
+    if(h>=6&&h<9)   return TIPPS[7];  // Morgen: grüner Strom
+    // Fallback: rotate daily + weekday offset
+    var idx = (Math.floor(Date.now()/86400000) + (day*3)) % TIPPS.length;
+    return TIPPS[idx];
+  }
+
+  function render(){
+    var t = getContextTipp();
+    chip.innerHTML = '<div class="etipp-inner"><span class="etipp-ico">'+t.e+'</span><div class="etipp-body"><span class="etipp-title">'+t.t+'</span><span class="etipp-sub">'+t.s+'</span></div></div>';
+    chip.style.display = 'block';
+  }
+
+  // Show when on Home tab
+  var pagesEl = document.getElementById('pages');
+  if(pagesEl){
+    new MutationObserver(function(){
+      var cur = pagesEl.querySelector('.page.cur');
+      if(cur && cur.id==='pg-home') render();
+    }).observe(pagesEl,{subtree:true,attributeFilter:['class']});
+  }
+
+  setTimeout(render, 900);
+  setInterval(render, 30*60*1000);
 })();
 </script>
 
