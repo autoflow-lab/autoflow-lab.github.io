@@ -752,6 +752,31 @@ audio{display:none}
 /* ═══════════════════════════════════════════
    FAQ
 ═══════════════════════════════════════════ */
+/* Comparison Table */
+.cmp-table{border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--card)}
+.cmp-head{display:grid;grid-template-columns:2fr 2fr 2fr;background:rgba(255,159,10,.08);border-bottom:1px solid var(--border)}
+.cmp-head .cmp-col{padding:14px 18px;font-size:.78rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.cmp-head .cmp-pro{color:#ff9f0a;background:rgba(255,159,10,.10);font-size:.82rem}
+.cmp-row{display:grid;grid-template-columns:2fr 2fr 2fr;border-bottom:1px solid var(--border);transition:background .15s}
+.cmp-row:last-of-type{border-bottom:none}
+.cmp-row:hover{background:rgba(255,255,255,.03)}
+.cmp-row>div{padding:13px 18px;font-size:.84rem;line-height:1.45;display:flex;align-items:center;gap:7px}
+.cmp-feat{font-weight:600;color:var(--text)}
+.cmp-std{color:var(--text2)}
+.cmp-pro{color:var(--text);background:rgba(255,159,10,.04)}
+.cmp-yes{color:#30d158;font-size:1rem}
+.cmp-no{color:#ff453a;font-size:1rem}
+.cmp-meh{color:#ffd60a;font-size:1rem}
+.cmp-cta{padding:22px 18px;display:flex;justify-content:center;background:rgba(255,159,10,.06);border-top:1px solid var(--border)}
+@media(max-width:600px){
+  .cmp-head,.cmp-row{grid-template-columns:1fr;gap:0}
+  .cmp-head .cmp-col:first-child{display:none}
+  .cmp-row>div:first-child{font-size:.75rem;color:var(--text2);padding-bottom:2px}
+  .cmp-head .cmp-std,.cmp-head .cmp-feat{display:none}
+}
+[data-theme="light"] .cmp-row:hover{background:rgba(0,0,0,.025)}
+[data-theme="light"] .cmp-pro{background:rgba(255,159,10,.06)}
+[data-theme="light"] .cmp-cta{background:rgba(255,159,10,.08)}
 .faq-list{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:7px}
 .faq-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);transition:border-color .2s}
 .faq-item:hover{border-color:var(--border2)}
@@ -2158,6 +2183,32 @@ input[type=range]{touch-action:pan-x}
     </div>
   </div>
 
+  <!-- COMPARISON TABLE -->
+  <div style="padding:72px 24px" id="comparison-sec">
+    <div style="max-width:900px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="cmpTitle">Standard HA vs. autoflow-lab</h2>
+      <p class="sec-sub sec-center reveal" data-i="cmpSub">Was der Unterschied wirklich bedeutet</p>
+      <div class="cmp-table reveal" id="cmp-table">
+        <div class="cmp-head">
+          <div class="cmp-col cmp-feat" data-i="cmpFeature">Feature</div>
+          <div class="cmp-col cmp-std" data-i="cmpStd">Standard HA</div>
+          <div class="cmp-col cmp-pro">autoflow-lab ✨</div>
+        </div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR1">Design & Ästhetik</div><div class="cmp-std"><span class="cmp-no">✗</span> <span data-i="cmpR1std">Generisch, kaum anpassbar</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR1pro">iOS Dark UI, Glassmorphism, animiert</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR2">Mobile Optimierung</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR2std">Responsiv, aber klobig</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR2pro">Touch-first, Swipe-Gesten, Haptic</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR3">Live Wetterdaten</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR3std">Nur wenn manuell konfiguriert</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR3pro">Integriert, animierte Charts & Score</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR4">Musik-Steuerung</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR4std">Simples Play/Pause Widget</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR4pro">Vinyl-Animation, Swipe-Skip, Visualizer</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR5">Licht-Steuerung</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR5std">Basis On/Off Slider</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR5pro">Farb-Mixer, Szenen, Circadian, Party Mode</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR6">Einrichtungszeit</div><div class="cmp-std"><span class="cmp-no">✗</span> <span data-i="cmpR6std">Stunden bis Tage selbst konfigurieren</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR6pro">Fertig in 24–48h, einfach importieren</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR7">KI-Integration</div><div class="cmp-std"><span class="cmp-no">✗</span> <span data-i="cmpR7std">Nicht vorhanden</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR7pro">Automatisierungen, Sprachsteuerung, N8N</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR8">Support</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR8std">Community Forum</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR8pro">Direkter Chat, Revisionen inklusive</span></div></div>
+        <div class="cmp-cta">
+          <button class="btn-p" onclick="openFiverr()" data-i="cmpCta">Jetzt upgraden →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FAQ -->
   <div class="band" style="padding:72px 24px">
     <div style="max-width:800px;margin:0 auto">
@@ -3295,6 +3346,17 @@ const T={
     anim1title:'Vinyl-Teller Animation',anim1sub:'Dreht sich synchron mit deiner Musik',
     anim2title:'Lebendige Wellen',anim2sub:'Hero-Hintergrund reagiert auf Tageszeit',
     anim3title:'Sternschnuppen-Nacht',anim3sub:'Nachts ziehen Sternschnuppen über den Hero',
+    cmpTitle:'Standard HA vs. autoflow-lab',cmpSub:'Was der Unterschied wirklich bedeutet',
+    cmpFeature:'Feature',cmpStd:'Standard HA',
+    cmpR1:'Design & Ästhetik',cmpR1std:'Generisch, kaum anpassbar',cmpR1pro:'iOS Dark UI, Glassmorphism, animiert',
+    cmpR2:'Mobile Optimierung',cmpR2std:'Responsiv, aber klobig',cmpR2pro:'Touch-first, Swipe-Gesten, Haptic',
+    cmpR3:'Live Wetterdaten',cmpR3std:'Nur wenn manuell konfiguriert',cmpR3pro:'Integriert, animierte Charts & Score',
+    cmpR4:'Musik-Steuerung',cmpR4std:'Simples Play/Pause Widget',cmpR4pro:'Vinyl-Animation, Swipe-Skip, Visualizer',
+    cmpR5:'Licht-Steuerung',cmpR5std:'Basis On/Off Slider',cmpR5pro:'Farb-Mixer, Szenen, Circadian, Party Mode',
+    cmpR6:'Einrichtungszeit',cmpR6std:'Stunden bis Tage selbst konfigurieren',cmpR6pro:'Fertig in 24–48h, einfach importieren',
+    cmpR7:'KI-Integration',cmpR7std:'Nicht vorhanden',cmpR7pro:'Automatisierungen, Sprachsteuerung, N8N',
+    cmpR8:'Support',cmpR8std:'Community Forum',cmpR8pro:'Direkter Chat, Revisionen inklusive',
+    cmpCta:'Jetzt upgraden →',
     faqTtl:'Häufige Fragen',faqSub:'Alles was du wissen musst',
     faq1q:'Was ist Home Assistant?',faq1a:'Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla.',
     faq2q:'Brauche ich technisches Vorwissen?',faq2a:'Nein. Du bekommst fertige Lösungen mit Dokumentation und Einrichtungsanleitung.',
@@ -3381,6 +3443,17 @@ const T={
     anim1title:'Vinyl Disc Animation',anim1sub:'Spins in sync with your music',
     anim2title:'Living Waves',anim2sub:'Hero background reacts to time of day',
     anim3title:'Shooting Stars Night',anim3sub:'Stars streak across the hero at night',
+    cmpTitle:'Standard HA vs. autoflow-lab',cmpSub:'What the difference really means',
+    cmpFeature:'Feature',cmpStd:'Standard HA',
+    cmpR1:'Design & Aesthetics',cmpR1std:'Generic, barely customizable',cmpR1pro:'iOS Dark UI, Glassmorphism, animated',
+    cmpR2:'Mobile Optimization',cmpR2std:'Responsive, but clunky',cmpR2pro:'Touch-first, swipe gestures, haptic',
+    cmpR3:'Live Weather Data',cmpR3std:'Only if manually configured',cmpR3pro:'Built-in, animated charts & score',
+    cmpR4:'Music Control',cmpR4std:'Simple Play/Pause widget',cmpR4pro:'Vinyl animation, swipe-skip, visualizer',
+    cmpR5:'Light Control',cmpR5std:'Basic On/Off slider',cmpR5pro:'Color mixer, scenes, Circadian, Party mode',
+    cmpR6:'Setup Time',cmpR6std:'Hours to days of self-config',cmpR6pro:'Ready in 24–48h, just import',
+    cmpR7:'AI Integration',cmpR7std:'Not included',cmpR7pro:'Automations, voice control, N8N',
+    cmpR8:'Support',cmpR8std:'Community forum',cmpR8pro:'Direct chat, revisions included',
+    cmpCta:'Upgrade now →',
     faqTtl:'Frequently Asked Questions',faqSub:'Everything you need to know',
     faq1q:'What is Home Assistant?',faq1a:'Home Assistant is an open-source platform connecting 3000+ smart home devices — from Philips Hue to Tesla.',
     faq2q:'Do I need technical knowledge?',faq2a:'No. You get a ready solution with full documentation and setup guide.',
