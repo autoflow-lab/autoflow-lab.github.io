@@ -1008,6 +1008,27 @@ html,body{height:100%;background:var(--bg);
 :root.light #quick-note-input::placeholder{color:rgba(0,0,0,.25)}
 :root.light #quick-note-input:focus{border-color:rgba(180,90,0,.35);background:rgba(180,90,0,.04)}
 /* ── Automations Quick-Toggle ── */
+/* Input Helper Quick-Edit */
+#inp-helper-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;display:none;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
+#inp-helper-wrap.show{display:block}
+#inp-helper-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+#inp-helper-title{font-size:.7rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+#inp-helper-count{font-size:.65rem;color:var(--dim2);font-weight:500}
+.inh-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.inh-row:last-child{border-bottom:none;padding-bottom:2px}
+.inh-name{flex:1;min-width:0;font-size:.8rem;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inh-bool{padding:5px 14px;border-radius:20px;font-size:.75rem;font-weight:600;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--dim);cursor:pointer;transition:background .2s,color .2s,border-color .2s;touch-action:manipulation;white-space:nowrap}
+.inh-bool.on{background:rgba(48,209,88,.18);border-color:rgba(48,209,88,.35);color:#30d158}
+.inh-bool.off{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--dim)}
+.inh-select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:5px 10px;color:var(--txt);font-size:.78rem;outline:none;cursor:pointer;max-width:160px;touch-action:manipulation}
+.inh-select:focus{border-color:rgba(10,132,255,.45)}
+.inh-num-wrap{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.inh-slider{flex:1;accent-color:#0a84ff;height:4px;cursor:pointer;touch-action:manipulation}
+.inh-numval{font-size:.75rem;font-weight:600;color:#0a84ff;min-width:32px;text-align:right}
+:root.light .inh-bool{color:rgba(0,0,0,.5);border-color:rgba(0,0,0,.12);background:rgba(0,0,0,.05)}
+:root.light .inh-bool.on{background:rgba(10,120,50,.1);border-color:rgba(10,120,50,.3);color:#1a7a3a}
+:root.light .inh-select{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.8)}
+:root.light .inh-name{color:rgba(0,0,0,.75)}
 #auto-toggle-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;display:none;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
 #auto-toggle-wrap.show{display:block}
 #auto-toggle-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
@@ -5702,6 +5723,15 @@ input[type=range] { touch-action: none; }
         <span id="auto-toggle-count"></span>
       </div>
       <div id="auto-toggle-chips"></div>
+    </div>
+
+    <!-- Input Helper Quick-Edit -->
+    <div id="inp-helper-wrap">
+      <div id="inp-helper-header">
+        <span id="inp-helper-title">🎛 Helfer</span>
+        <span id="inp-helper-count"></span>
+      </div>
+      <div id="inp-helper-list"></div>
     </div>
 
     <div id="dev-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:8px"></div>
@@ -12102,9 +12132,120 @@ function patchDevRecent(){
     </div>
   `).join('');
 }
+// ── Input Helper Quick-Edit ──────────────────────────────────────────────────
+(function(){
+  const wrap=document.getElementById('inp-helper-wrap');
+  const list=document.getElementById('inp-helper-list');
+  const cnt=document.getElementById('inp-helper-count');
+  if(!wrap||!list)return;
+
+  const DOMAINS=['input_boolean','input_select','input_number'];
+
+  function getHelpers(){
+    if(!window._S)return[];
+    return Object.keys(window._S)
+      .filter(id=>DOMAINS.some(d=>id.startsWith(d+'.')))
+      .map(id=>({id,domain:id.split('.')[0],s:window._S[id]}))
+      .filter(h=>h.s)
+      .sort((a,b)=>(a.s.attributes?.friendly_name||a.id).localeCompare(b.s.attributes?.friendly_name||b.id));
+  }
+
+  function friendlyName(h){
+    return h.s.attributes?.friendly_name||h.id.split('.').slice(1).join('_').replace(/_/g,' ');
+  }
+
+  function callSvc(domain,service,entity,extra){
+    if(typeof svc==='function'){svc(domain,service,{entity_id:entity,...extra});return;}
+    const token=localStorage.getItem('ha_token')||window.HA_TOKEN||'';
+    const base=localStorage.getItem('ha_url')||window.HA_URL||'';
+    if(!token||!base)return;
+    fetch(`${base}/api/services/${domain}/${service}`,{
+      method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({entity_id:entity,...extra})
+    }).catch(()=>{});
+  }
+
+  function render(){
+    const helpers=getHelpers();
+    if(!helpers.length){wrap.classList.remove('show');return;}
+    wrap.classList.add('show');
+    cnt.textContent=helpers.length+' Helfer';
+    list.innerHTML='';
+    helpers.forEach(h=>{
+      const row=document.createElement('div');
+      row.className='inh-row';
+      const name=document.createElement('span');
+      name.className='inh-name';
+      name.textContent=friendlyName(h);
+      row.appendChild(name);
+
+      if(h.domain==='input_boolean'){
+        const on=h.s.state==='on';
+        const btn=document.createElement('button');
+        btn.className='inh-bool '+(on?'on':'off');
+        btn.textContent=on?'Ein':'Aus';
+        btn.addEventListener('click',()=>{
+          const nowOn=btn.classList.contains('on');
+          callSvc('input_boolean',nowOn?'turn_off':'turn_on',h.id,{});
+          btn.classList.toggle('on',!nowOn);
+          btn.classList.toggle('off',nowOn);
+          btn.textContent=!nowOn?'Ein':'Aus';
+        });
+        row.appendChild(btn);
+
+      }else if(h.domain==='input_select'){
+        const opts=h.s.attributes?.options||[];
+        const sel=document.createElement('select');
+        sel.className='inh-select';
+        opts.forEach(o=>{
+          const op=document.createElement('option');
+          op.value=o;op.textContent=o;
+          if(o===h.s.state)op.selected=true;
+          sel.appendChild(op);
+        });
+        sel.addEventListener('change',()=>{
+          callSvc('input_select','select_option',h.id,{option:sel.value});
+        });
+        row.appendChild(sel);
+
+      }else if(h.domain==='input_number'){
+        const min=h.s.attributes?.min??0;
+        const max=h.s.attributes?.max??100;
+        const step=h.s.attributes?.step??1;
+        const val=parseFloat(h.s.state)||min;
+        const numWrap=document.createElement('div');
+        numWrap.className='inh-num-wrap';
+        const slider=document.createElement('input');
+        slider.type='range';slider.className='inh-slider';
+        slider.min=min;slider.max=max;slider.step=step;slider.value=val;
+        const valLbl=document.createElement('span');
+        valLbl.className='inh-numval';
+        valLbl.textContent=val+(h.s.attributes?.unit_of_measurement||'');
+        let debounce=null;
+        slider.addEventListener('input',()=>{
+          valLbl.textContent=slider.value+(h.s.attributes?.unit_of_measurement||'');
+          clearTimeout(debounce);
+          debounce=setTimeout(()=>{
+            callSvc('input_number','set_value',h.id,{value:parseFloat(slider.value)});
+          },350);
+        });
+        numWrap.appendChild(slider);numWrap.appendChild(valLbl);
+        row.appendChild(numWrap);
+      }
+
+      list.appendChild(row);
+    });
+  }
+
+  // Re-render on state updates (hook into patchDevCards cycle)
+  window._renderInputHelpers=render;
+  // Initial render after states loaded
+  setTimeout(render,1200);
+})();
+
 // Hook in patchDevCards-Cycle
 const _origPatchDevCards=patchDevCards;
-patchDevCards=function(){_origPatchDevCards();patchDevRecent();window._updateDevGauge&&window._updateDevGauge();};
+patchDevCards=function(){_origPatchDevCards();patchDevRecent();window._updateDevGauge&&window._updateDevGauge();window._renderInputHelpers&&window._renderInputHelpers();};
 
 // ── Geräte-Tab: Ping-Monitor ──
 (function(){

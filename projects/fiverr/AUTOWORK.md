@@ -444,3 +444,9 @@
 
 ## Neue Ideen (2026-04-04 10:15 UTC)
 - [x] demo.html: Floating Share Button (📤 unten links, Web Share API + Clipboard Fallback, "✅ Link kopiert!" Toast 2.8s, sichtbar ab 120px Scroll, i18n DE/EN)
+
+## Neue Ideen (2026-04-04 14:10 UTC)
+- [x] wz.html: Home-Tab — Tages-Streak Counter (🔥 zählt wie viele Tage in Folge die App geöffnet wurde, Flammen-Animation ab 3 Tagen, Milestone-Badges "Neu!/Im Lauf!/On Fire!/Mega-Streak!", localStorage Persistenz, motivierendes Sub-Label)
+
+## Neue Ideen (2026-04-04 14:15 UTC)
+- [x] wz.html: Geräte-Tab — "Input Helper Quick-Edit" (🎛 input_boolean als Toggle-Chip, input_select als Dropdown, input_number als Range-Slider — direkt im Geräte-Tab ohne HA-UI öffnen, patchDevCards-Hook, graceful wenn keine Helfer)

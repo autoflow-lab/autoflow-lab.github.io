@@ -1,5 +1,28 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-04-04 14:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Tab — Tages-Streak Counter (🔥)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Gamification für den Smart-Home-Alltag — zeigt wie viele Tage in Folge das Dashboard geöffnet wurde, mit steigender Motivation und Animation
+- **HTML**: `#streak-chip` direkt nach `#wkend-chip` im Home-Tab
+- **localStorage Key `streak_v1`**: speichert `{lastDay:"YYYY-MM-DD", streak:N}` — kompakt und ausfallsicher
+- **Streak-Logik** (einmalig pro Tag beim updateAll()-Aufruf):
+  - `lastDay === yesterday` → Streak erhöhen
+  - `lastDay === ""` (erster Aufruf) → Streak = 1
+  - `lastDay !== yesterday && lastDay !== today` → Streak gebrochen → Reset auf 1
+  - `lastDay === today` → bereits gezählt, Wert unverändert
+- **4 Emoji-Varianten** je Streak-Länge: ✨ (1-2 Tage) / 🔆 (3-6 Tage) / 🔥 (7+ Tage)
+- **4 Badge-Stufen**: "Neu!" (1-2, gedimmtes Weiß) / "Im Lauf!" (3-6, amber) / "On Fire!" (7-13, orange-rot) / "Mega-Streak!" (14+, glühendes Rot)
+- **Motivations-Sub-Labels** je Länge (7 Varianten): "Erster Tag — mach weiter!" / "2 Tage — du kommst!" / "X Tage am Stück — weiter so!" / "X Tage in Folge — fantastisch!" / "X Tage Streak — unaufhaltbar! 💪"
+- **`@keyframes streakFireBounce`**: Flammen/Glow-Emoji bounced leicht auf-ab wenn Streak ≥ 3 (`.streak-fire-anim` Klasse auf Chip)
+- **`@keyframes streakChipIn`**: scale(.9)+translateY(6px) → scale(1)+translateY(0), cubic-bezier(.34,1.28,.64,1)
+- **CSS-Klassen**: `.s-hot` (Rot-Akzent für On Fire), `.s-cold` (Grau für Tag 1), Standard (Amber für 2-6)
+- Chip verschwindet nicht — auch Tag 1 wird gezeigt als Einladung zum nächsten Besuch
+- Kein extra API-Call — 100% localStorage, funktioniert offline
+- **Light-Mode Overrides**: dunkleres Amber für alle Text- und Border-Farben
+- `#streak-chip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- JS-Check: OK | SSH nicht verfügbar (Auth-Fehler) — lokal committed (f9efdfb)
+
 ## 2026-04-04 08:10 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Hero — "Sci-Fi Scan-Line" Shimmer Effekt (🔦)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2713,4 +2736,12 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - **Konzept**: Kleiner Share-Button unten links (Glassmorphism, 44px Kreis), erscheint ab 120px Scroll, nutzt Web Share API auf Mobile und Clipboard API als Desktop-Fallback, zeigt "✅ Link kopiert!" Toast für 2.8s, i18n DE/EN über langChange-Event
 - **CSS**: `#shareBtn` analog zu `#scrollTop`, aber links + `rgba(30,30,32,.85)` statt Accent; `#shareToast` glass-style Badge über dem Button
 - **JS**: navigator.share() wenn verfügbar + canShare() Check; Clipboard API Fallback; scroll-Listener für visibility; langChange-Event für i18n
+- **Deploy**: deploy-branch → origin/main ✅
+
+## 2026-04-04 14:15 UTC — Heartbeat Auto-Improve
+- ✅ wz.html: Geräte-Tab — Input Helper Quick-Edit (🎛)
+- **Konzept**: Scannt `_S` nach `input_boolean.*`, `input_select.*`, `input_number.*` — rendert interaktive Controls direkt im Geräte-Tab: Toggle-Chips für booleans, native `<select>` für Options-Listen, Range-Slider für Zahlen
+- **CSS**: `.inh-row` mit `.inh-bool`, `.inh-select`, `.inh-num-wrap/.inh-slider/.inh-numval` — konsistentes iOS-Dark-Design, Light-Mode Overrides
+- **JS IIFE**: `getHelpers()` filtert/sortiert by friendly_name; `callSvc()` mit `svc()` Wrapper-Fallback; 350ms Debounce auf Slider; `window._renderInputHelpers` hook in `patchDevCards`-Cycle eingehängt
+- **Graceful**: Section bleibt `display:none` wenn keine Helfer-Entities vorhanden
 - **Deploy**: deploy-branch → origin/main ✅
