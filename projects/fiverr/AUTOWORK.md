@@ -450,3 +450,12 @@
 
 ## Neue Ideen (2026-04-04 14:15 UTC)
 - [x] wz.html: Geräte-Tab — "Input Helper Quick-Edit" (🎛 input_boolean als Toggle-Chip, input_select als Dropdown, input_number als Range-Slider — direkt im Geräte-Tab ohne HA-UI öffnen, patchDevCards-Hook, graceful wenn keine Helfer)
+
+## Neue Ideen (2026-04-04 16:10 UTC)
+- [x] wz.html: Home-Hero — "Finger Trail Orbs" (✨ touchmove/pointermove auf dem Hero spawnt kleine amber+weiße Glow-Orbs die 0.68s leuchten und sanft verblassen — magischer Touch-Trail, dynamisch erstelltes Canvas #hero-trail-cv, rAF-Loop, pointer-events:none, Light-Mode deaktiviert)
+
+## Neue Ideen (2026-04-04 18:10 UTC)
+- [x] wz.html: Wetter-Tab — "Temperatur-Uhr" 24h Radial Clock Heatmap (🕐 Canvas-Visualisierung: 24 Kreissegmente wie eine Uhr, je Segment ein Stundenwert, Farbskala blau→cyan→grün→amber→rot je Temperatur, aktuelle Stunde hervorgehoben mit Glow + größerem Radius, Zentrum zeigt aktuelle Temp + "Jetzt", Farbskalen-Legende, Peak/Min-Stunde)
+
+## Neue Ideen (2026-04-04 18:14 UTC)
+- [x] demo.html: Integrations Ticker (🔗 20 Brand-Chips — Philips Hue/IKEA/Shelly/Zigbee/Sonos/Spotify/Alexa/Google Home/HomeKit/ESPHome/Tasmota/Xiaomi/MQTT/Node-RED/Tuya/Telegram/Grafana/Frigate/InfluxDB — endlos-scrollender CSS-Ticker, hover-pause, mask-fade, farbige Dots je Brand)

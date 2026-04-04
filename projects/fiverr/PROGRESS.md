@@ -1,5 +1,25 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-04-04 16:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — "Finger Trail Orbs" (✨)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Touchmove/pointermove auf dem Home-Hero spawnt kleine leuchtende Glow-Orbs an der Finger/Maus-Position — wie ein magischer Berührungs-Trail der die Geste nachleuchten lässt
+- **`#hero-trail-cv` Canvas**: per JS dynamisch erstellt und in `.hero` eingefügt (vor `#hero-tap-layer`), `position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:4`
+- **Orb-Typen**: 58% Chance amber `rgba(255,159,10)` (r=18px), 42% soft-weiß `rgba(255,240,220)` (r=11px) — wechselt zufällig für natürlichen Mix
+- **Fade-Logik**: `Math.pow(1-age,1.8)*0.38` — sanfter polynomialer Alpha-Abfall, keine harten Kanten; Radius wächst leicht mit dem Alter (`r*(1+age*0.6)`) → Orb "explodiert" sanft
+- **Radial-Gradient** per Orb: Mitte voller Kern → Mitte halbe Sättigung → Rand transparent; `ctx.createRadialGradient` pro Frame (kein Cache-Problem durch Canvas-Clearing)
+- **Throttle 38ms**: verhindert Overload bei schnellen Touch-Moves, entspricht ~26fps Spawn-Rate — reicht für weiche Trailing-Optik
+- **rAF-Loop**: startet beim ersten Punkt, stoppt wenn keine Punkte mehr aktiv → `opacity:'0'` via CSS-Transition `.4s` → kein dauerhafter Canvas-Loop im Idle-Zustand
+- **Events**:
+  - `touchmove` (passive) → alle simultaneen Finger werden verarbeitet (Multi-Touch)
+  - `pointermove` → nur `pointerType==='mouse'` → Desktop-Support ohne Touch-Emulation doppeln
+- **Light-Mode Guard**: Check auf `document.documentElement.classList.contains('light')` beim Init + pro Punkt — weißes Glow auf hellem Hintergrund wäre unsichtbar/irritierend
+- **`ResizeObserver`**: passt Canvas-Größe bei Hero-Resize an (z.B. Keyboard-Erscheinen auf Mobile)
+- **Kein Konflikt** mit `#hero-tap-layer` (pointer-events:none), `#shoot-cv` Sternschnuppen (anderer Canvas), `#hero-orbit-cv` (z-index:1, darunter), `heroScanLine` (separates CSS-Element)
+- **Kein extra API-Call** — rein lokal, 100% Frontend
+- Effekt: Beim Wischen über den Home-Hero hinterlässt der Finger eine Spur aus glühenden amber/weißen Licht-Punkten die sanft verblassen — wie eine magische Handschrift auf dem Bildschirm
+- JS-Check: OK | SSH nicht verfügbar (Auth-Fehler) — lokal committed (910f35f)
+
 ## 2026-04-04 14:10 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Tab — Tages-Streak Counter (🔥)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2744,4 +2764,10 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - **CSS**: `.inh-row` mit `.inh-bool`, `.inh-select`, `.inh-num-wrap/.inh-slider/.inh-numval` — konsistentes iOS-Dark-Design, Light-Mode Overrides
 - **JS IIFE**: `getHelpers()` filtert/sortiert by friendly_name; `callSvc()` mit `svc()` Wrapper-Fallback; 350ms Debounce auf Slider; `window._renderInputHelpers` hook in `patchDevCards`-Cycle eingehängt
 - **Graceful**: Section bleibt `display:none` wenn keine Helfer-Entities vorhanden
+- **Deploy**: deploy-branch → origin/main ✅
+
+## 2026-04-04 18:14 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: Integrations Ticker (🔗)
+- **Konzept**: Horizontaler endlos-scrollender Brand-Chip-Ticker mit 20 Smart-Home Integrationen; CSS `@keyframes intgScroll` 32s linear; dupliziertes HTML für nahtlosen Loop; Edge-Fade via `mask-image`; hover pausiert Animation; farbiger Dot je Brand
+- **Conversion**: zeigt auf einen Blick Expertise und Kompatibilität — key für Vertrauen neuer Besucher
 - **Deploy**: deploy-branch → origin/main ✅
