@@ -435,3 +435,6 @@
 
 ## Neue Ideen (2026-04-04 06:08 UTC)
 - [x] demo.html: Konami Code Easter Egg (🎮 ↑↑↓↓←→←→BA → Konfetti-Burst + Toast "10% Rabatt bei Bestellung wenn KONAMI erwähnt")
+
+## Neue Ideen (2026-04-04 08:10 UTC)
+- [x] wz.html: Home-Hero — "Sci-Fi Scan-Line" Shimmer Effekt (🔦 subtile helle 2px Linie gleitet alle 11s von oben nach unten über den Hero, weißer Gradient-Schimmer mit Blur, pure CSS animation heroScanLine, z-index:7 über Wellen aber unter hcont, opacity 0→1→0.55→0, Light-Mode deaktiviert)

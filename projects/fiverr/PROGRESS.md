@@ -1,5 +1,21 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-04-04 08:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — "Sci-Fi Scan-Line" Shimmer Effekt (🔦)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Eine ultradünne, helle Linie gleitet alle 11 Sekunden sanft von oben nach unten über den Home-Hero — wie ein Scanner-Strahl der das Dashboard "liest". Reine CSS-Animation, null Performance-Impact.
+- **`#hero-scan-line` Div**: als vorletztes Element im `.hero` Container (vor `#hero-tap-layer`), `position:absolute; left:-10%; right:-10%; height:2px; top:-2px; z-index:7; pointer-events:none`
+- **Gradient**: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,.18) 20%, rgba(255,255,255,.7) 50%, rgba(255,255,255,.18) 80%, transparent 100%)` — sanfter Leucht-Übergang, Mitte hell, Ränder auslaufend
+- **`filter:blur(1.5px)`**: macht den Strahl leicht unscharf → weiches Glühen statt harter Linie
+- **`@keyframes heroScanLine`**: `top:-2px opacity:0` → `4%: opacity:1` → `94%: opacity:.55` → `top:100%+2px opacity:0` — erscheint kurz oben, gleitet durch, verschwindet unten
+- **11s Loop + 4s Delay**: erster Scan beginnt 4s nach Seitenload — kein sofortiger visueller Einbruch, natürliches Timing
+- **`left:-10%; right:-10%`**: Linie ist etwas breiter als der Hero → Ränder werden durch `overflow:hidden` der `.hero` sauber abgeschnitten, kein Edge-Glitch
+- **Light-Mode**: `display:none!important` — weißer Scan-Strahl auf hellem Hintergrund wäre unsichtbar/störend
+- Kein JS, kein Extra-DOM-Overhead, kein Konflikt mit anderen Animationen (eigenständige CSS-Keyframes, separate z-index Layer zwischen Wellen z:1 und hcont z:2 — `z-index:7` liegt über allen Hero-Elementen außer dem Tap-Layer z:6... wait, tatsächlich über Tap-Layer, aber pointer-events:none → kein Blockieren)
+- JS-Check: OK | SSH nicht verfügbar (Auth-Fehler) — lokal committed
+
+
+
 ## 2026-04-01 12:10 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — Dynamische Wetter-Aura
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
@@ -2638,3 +2654,35 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - Alle AUTOWORK.md Tasks [x] → neue Idee generiert und implementiert
 - **Konzept**: ↑↑↓↓←→←→BA Tastenfolge löst Konfetti-Burst (80 Partikel, 6 Farben) + glassmorphism Toast aus: "Erwähne KONAMI bei deiner Bestellung — 10% Rabatt 🎁"; 6s sichtbar dann fade-out; einmalig pro Seite (fired-Flag); kein API-Call, rein keyboard-basiert
 - **Deploy**: deploy-branch → origin/main (GitHub Pages) ✅
+
+## 2026-04-04 06:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Wetter-Tab — "Wetter-Komfort Spider Chart" 🕸️
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: 6-Achsen SVG Radar/Spider-Chart der visuell zeigt wie komfortabel das aktuelle Wetter in 6 Dimensionen ist — auf einen Blick sieht man wo Stärken und Schwächen der aktuellen Wetterlage liegen (z.B. schöne Temperatur, aber hohe Luftfeuchtigkeit)
+- **6 Dimensionen**:
+  1. 🌡 Temperatur-Komfort: ideal 18–24°C (1.0) → sinkt zu beiden Extremen
+  2. 🌂 Trockenheit: 100% bei 0% Regenwahrscheinlichkeit → 0% bei 100% Regen
+  3. 💨 Windruhe: 0 km/h=1.0, ab 55 km/h=0.0 (linear)
+  4. 🕶 UV-Komfort: UV 3–5 optimal (1.0), sehr niedrig oder sehr hoch reduziert Score
+  5. 💧 Luftfeuchtigkeit: 40–60% ideal (1.0), Extremwerte → 0.2
+  6. ☁️ Klarheit: 0% Bewölkung=1.0, 100% Bewölkung=0.3
+- **Gesamt-Komfort-Index**: Durchschnitt aller 6 Werte × 100 → 5 Bewertungsstufen
+- **HTML**: `#wx-spider-card` vor `#weekly-rain-card`, SVG 140×140px mit viewBox -10 -10 160 160
+  - `#wxsp-ring3/2/1`: 3 Grid-Polygone (100%/67%/33%) in rgba(255,255,255,.07/.05/.04)
+  - `#wxsp-axes`: 6 Achsenlinien vom Zentrum (rgba .09)
+  - `#wxsp-data`: gefülltes Daten-Polygon mit `linearGradient #wxspFillGrad` amber (55%→25% opacity), amber Stroke 1.8px
+  - `#wxsp-dots`: 6 farbige Dots an den Achsenendpunkten, je mit `drop-shadow` Glow
+  - `#wxsp-labels`: Emoji + Kurzname je Achse (font-size 8.5)
+- **CSS**: `#wxsp-data{opacity:0;transition:opacity 1.5s ease}` + `.show{opacity:1}` → verzögertes Einblenden; ebenso für Dots mit staggered `setTimeout(80ms + i*80ms)`; Light-Mode Overrides für Grid-Linien, Labels, Text
+- **JS `drawWxSpider()`**: 
+  - Liest `_wx.current` + optional `_wx.daily.uv_index_max` + `_wx.hourly.precipitation_probability`
+  - Berechnet alle 6 Scores mathematisch ohne extra API-Calls
+  - Baut SVG via `setAttribute('points', ...)` direkt (kein innerHTML → XSS-sicher)
+  - `requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('show')))` → CSS-Transition sauber
+  - Legende: 6 `.wxsp-leg` Rows mit farbigem Dot + Label + %-Wert
+- **Aufgerufen** in `renderWeather()` nach `drawWeeklyRain()` — nur wenn `c.temperature_2m != null`
+- **page-entering**: `#wx-spider-card` zur Stagger-Liste hinzugefügt → Tab-Wechsel Animation
+- **Graceful**: `card.style.display='none'` wenn keine Current-Daten vorhanden
+- **Kein extra API-Call** — nutzt ausschließlich vorhandene `_wx` Daten
+- **Effekt**: Im Wetter-Tab erscheint ein eleganter Radar-Chart der zeigt wie das aktuelle Wetter in 6 Dimensionen abschneidet — wie ein Spinnennetz das sich zur Mitte zieht wenn Bedingungen schlecht sind, und zur vollen Raute aufspannt wenn alles optimal ist. Jede Achse hat eine individuelle Farbe, animierter Einblend-Effekt macht das Entstehen des Charts visuell ansprechend.
+- JS-Check: OK | Deploy via SSH gescheitert (Auth-Fehler) — wz.html lokal aktuell
