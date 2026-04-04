@@ -173,12 +173,12 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#fokus-wrap,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#etariff-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,.page-entering>#lt-farbseq,.page-entering>#lt-room-aura,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
-.page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette{
+.page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette,.page-entering>#ping-monitor{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
 }
 /* stagger: nth-child 1–8 */
@@ -379,6 +379,29 @@ html,body{height:100%;background:var(--bg);
 :root.light #etipp-chip .etipp-inner{background:rgba(255,159,10,.06);border-color:rgba(255,159,10,.2)}
 :root.light #etipp-chip .etipp-title{color:rgba(180,100,0,.9)}
 :root.light #etipp-chip .etipp-sub{color:rgba(0,0,0,.45)}
+/* ── Stromtarif-Countdown Chip ── */
+#etariff-chip{display:none;margin:6px 0 8px}
+#etariff-chip.show{display:block}
+#etariff-inner{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:14px;font-size:.72rem;background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.18);transition:background .8s ease,border-color .8s ease;animation:etariffIn .42s cubic-bezier(.34,1.15,.64,1) both}
+#etariff-inner.nt-mode{background:rgba(10,132,255,.07);border-color:rgba(10,132,255,.22)}
+#etariff-dot{width:7px;height:7px;border-radius:50%;background:#ff9f0a;flex-shrink:0;animation:etariffDot 2s ease-in-out infinite;transition:background .8s ease}
+#etariff-inner.nt-mode #etariff-dot{background:#64d2ff;animation:etariffDotBlue 2s ease-in-out infinite}
+#etariff-body{flex:1;display:flex;flex-direction:column;gap:1px}
+#etariff-title{font-weight:700;color:rgba(255,210,100,.95);font-size:.72rem;letter-spacing:.01em;transition:color .8s ease}
+#etariff-inner.nt-mode #etariff-title{color:rgba(100,210,255,.95)}
+#etariff-sub{font-size:.65rem;color:rgba(255,255,255,.42);line-height:1.3}
+#etariff-price{flex-shrink:0;font-size:.78rem;font-weight:700;color:#ff9f0a;letter-spacing:-.3px;transition:color .8s ease}
+#etariff-inner.nt-mode #etariff-price{color:#64d2ff}
+@keyframes etariffIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes etariffDot{0%,100%{box-shadow:0 0 0 0 rgba(255,159,10,0)}50%{box-shadow:0 0 0 4px rgba(255,159,10,.22)}}
+@keyframes etariffDotBlue{0%,100%{box-shadow:0 0 0 0 rgba(100,210,255,0)}50%{box-shadow:0 0 0 4px rgba(100,210,255,.22)}}
+:root.light #etariff-inner{background:rgba(255,159,10,.06);border-color:rgba(255,159,10,.2)}
+:root.light #etariff-inner.nt-mode{background:rgba(10,132,255,.05);border-color:rgba(10,132,255,.18)}
+:root.light #etariff-title{color:rgba(180,100,0,.9)}
+:root.light #etariff-inner.nt-mode #etariff-title{color:rgba(0,80,160,.85)}
+:root.light #etariff-sub{color:rgba(0,0,0,.42)}
+:root.light #etariff-price{color:rgba(180,100,0,.9)}
+:root.light #etariff-inner.nt-mode #etariff-price{color:rgba(0,80,160,.85)}
 #wkend-chip{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 14px;border-radius:14px;font-size:.75rem;animation:wkendChipIn .4s cubic-bezier(.34,1.15,.64,1) both}
 #wkend-chip.show{display:flex}
 #wkend-chip.wkend-soon{background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.2);color:rgba(255,220,150,.9)}
@@ -417,6 +440,31 @@ html,body{height:100%;background:var(--bg);
 :root.light #wls-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}
 :root.light #wls-label{color:rgba(0,0,0,.65)}
 :root.light #wls-val{color:rgba(0,0,0,.35)}
+/* ── Fokus-Modus ── */
+#fokus-wrap{display:none;margin:0 0 10px}
+#fokus-wrap.show{display:block}
+#fokus-btn{width:100%;display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.2);border-radius:14px;cursor:pointer;touch-action:manipulation;text-align:left;transition:background .18s,transform .15s;animation:fokusIn .45s cubic-bezier(.34,1.15,.64,1) both}
+#fokus-btn:active{transform:scale(.97)}
+#fokus-btn.fok-active{background:rgba(48,209,88,.13);border-color:rgba(48,209,88,.45)}
+#fokus-ico{font-size:1.2rem;flex-shrink:0;line-height:1}
+#fokus-btn.fok-active #fokus-ico{animation:fokusIcoPulse 2.5s ease-in-out infinite}
+@keyframes fokusIcoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+#fokus-label{flex:1;font-size:.75rem;color:rgba(255,255,255,.75);font-weight:500}
+#fokus-val{font-size:.67rem;color:rgba(160,255,190,.75);font-weight:600;white-space:nowrap}
+#fokus-durations{display:flex;gap:6px;margin-top:8px}
+.fok-dur-btn{font-size:.63rem;font-weight:600;padding:5px 10px;border-radius:10px;border:1px solid rgba(48,209,88,.25);background:rgba(48,209,88,.06);color:rgba(160,255,190,.8);cursor:pointer;touch-action:manipulation;transition:background .15s,border-color .15s}
+.fok-dur-btn:active{transform:scale(.95)}
+.fok-dur-btn.fok-sel{border-color:rgba(48,209,88,.6);background:rgba(48,209,88,.18);color:rgba(200,255,220,.95)}
+#fokus-pill{display:none;align-items:center;gap:8px;padding:6px 12px;margin-top:7px;border-radius:20px;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.25);font-size:.68rem;font-weight:600;color:rgba(160,255,190,.9)}
+#fokus-pill.show{display:flex;animation:rbPillIn .35s cubic-bezier(.34,1.15,.64,1)}
+#fokus-dot{width:7px;height:7px;border-radius:50%;background:#30d158;flex-shrink:0;animation:rbDotPulse 1.8s ease-in-out infinite}
+#fokus-cd{flex:1}
+#fokus-cancel{margin-left:auto;font-size:.75rem;cursor:pointer;opacity:.65;touch-action:manipulation}
+@keyframes fokusIn{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+:root.light #fokus-btn{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1)}
+:root.light #fokus-label{color:rgba(0,0,0,.65)}
+:root.light #fokus-val{color:rgba(30,120,60,.75)}
+:root.light #fokus-pill{background:rgba(48,209,88,.06)}
 /* ── Anwesenheits-Chips ── */
 #presence-strip{display:none;flex-wrap:wrap;gap:7px;margin:0 0 10px}
 #presence-strip.show{display:flex}
@@ -678,6 +726,12 @@ html,body{height:100%;background:var(--bg);
 /* 12h Wetter-Timeline */
 #wx-tl12-card{opacity:0;transform:translateY(8px);transition:opacity .45s cubic-bezier(.34,1.15,.64,1),transform .45s cubic-bezier(.34,1.15,.64,1)}
 #wx-tl12-card.show{opacity:1;transform:translateY(0)}
+/* ── 7-Tage Temperatur-Band Chart ── */
+#wx-7band-card{opacity:0;transform:translateY(8px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#wx-7band-card.show{opacity:1;transform:translateY(0)}
+#wx-7band-svg text{font-family:inherit}
+:root.light #wx-7band-card .wx7b-card-inner{background:var(--c1)!important;border-color:rgba(180,80,0,.15)!important}
+:root.light #wx-7band-card .wx7b-label{color:rgba(180,80,0,.7)!important}
 .tl12-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 .tl12-row:last-child{border-bottom:none}
 .tl12-time{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.45);min-width:36px;font-variant-numeric:tabular-nums}
@@ -803,6 +857,23 @@ html,body{height:100%;background:var(--bg);
 #sleep-all-cancel:active{color:rgba(255,69,58,.8)}
 /* Stromverbrauchs-Monitor */
 /* Entity-Suchleiste */
+/* ── Ping Monitor ── */
+#ping-monitor{display:none;align-items:center;gap:10px;background:var(--c1);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:10px 14px;margin-bottom:12px;animation:pingCardIn .4s cubic-bezier(.34,1.15,.64,1) both}
+#ping-monitor.show{display:flex}
+@keyframes pingCardIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.ping-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#30d158;box-shadow:0 0 0 0 rgba(48,209,88,.6);animation:pingDotPulse 2.2s ease-in-out infinite}
+@keyframes pingDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,.5)}50%{box-shadow:0 0 0 5px rgba(48,209,88,0)}}
+#ping-monitor.ping-slow .ping-dot{background:#ff9f0a;box-shadow:0 0 0 0 rgba(255,159,10,.6);animation:pingDotAmber 2.2s ease-in-out infinite}
+@keyframes pingDotAmber{0%,100%{box-shadow:0 0 0 0 rgba(255,159,10,.5)}50%{box-shadow:0 0 0 5px rgba(255,159,10,0)}}
+#ping-monitor.ping-err .ping-dot{background:#ff453a;box-shadow:0 0 0 0 rgba(255,69,58,.6);animation:pingDotRed 1.4s ease-in-out infinite}
+@keyframes pingDotRed{0%,100%{box-shadow:0 0 0 0 rgba(255,69,58,.5)}50%{box-shadow:0 0 0 5px rgba(255,69,58,0)}}
+#ping-lbl{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);flex-shrink:0}
+#ping-ms{font-size:.78rem;font-weight:600;color:var(--txt);min-width:42px}
+#ping-bars{display:flex;align-items:flex-end;gap:2px;height:18px;margin-left:auto;flex-shrink:0}
+.pb-bar{width:4px;border-radius:2px;background:rgba(48,209,88,.6);transition:height .5s ease,background .5s ease;min-height:2px}
+#ping-monitor.ping-slow .pb-bar{background:rgba(255,159,10,.6)}
+#ping-monitor.ping-err .pb-bar{background:rgba(255,69,58,.6)}
+:root.light #ping-monitor{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08)}
 #dev-filter-tabs{display:flex;gap:6px;margin-bottom:10px;padding:2px 0}
 .dft-btn{flex:1;padding:7px 0;border:1px solid rgba(255,255,255,.09);border-radius:20px;background:rgba(255,255,255,.04);color:var(--dim);font-size:.72rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:all .22s cubic-bezier(.34,1.15,.64,1);letter-spacing:.3px}
 .dft-btn.active{background:rgba(255,159,10,.12);border-color:rgba(255,159,10,.35);color:#ff9f0a;box-shadow:0 0 10px rgba(255,159,10,.12)}
@@ -903,6 +974,29 @@ html,body{height:100%;background:var(--bg);
 :root.light #quick-note-input{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.78)}
 :root.light #quick-note-input::placeholder{color:rgba(0,0,0,.25)}
 :root.light #quick-note-input:focus{border-color:rgba(180,90,0,.35);background:rgba(180,90,0,.04)}
+/* ── Automations Quick-Toggle ── */
+#auto-toggle-wrap{background:var(--c1);border-radius:14px;padding:12px 14px;margin-bottom:14px;display:none;animation:qnIn .35s cubic-bezier(.34,1.15,.64,1) both}
+#auto-toggle-wrap.show{display:block}
+#auto-toggle-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+#auto-toggle-title{font-size:.7rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+#auto-toggle-count{font-size:.65rem;color:var(--dim2);font-weight:500}
+#auto-toggle-chips{display:flex;flex-direction:column;gap:6px}
+.auto-chip{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);cursor:pointer;touch-action:manipulation;transition:background .15s,border-color .15s}
+.auto-chip:active{transform:scale(.98)}
+.auto-chip.aut-on{background:rgba(48,209,88,.07);border-color:rgba(48,209,88,.22)}
+.auto-chip.aut-off{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.06)}
+.auto-chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background .3s,box-shadow .3s}
+.aut-on .auto-chip-dot{background:#30d158;box-shadow:0 0 6px rgba(48,209,88,.6)}
+.aut-off .auto-chip-dot{background:rgba(255,255,255,.22)}
+.auto-chip-name{flex:1;font-size:.75rem;font-weight:500;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.auto-chip.aut-off .auto-chip-name{color:rgba(255,255,255,.35)}
+.auto-chip-state{font-size:.63rem;font-weight:600;white-space:nowrap;flex-shrink:0}
+.aut-on .auto-chip-state{color:rgba(160,255,190,.8)}
+.aut-off .auto-chip-state{color:rgba(255,255,255,.22)}
+:root.light .auto-chip{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08)}
+:root.light .auto-chip.aut-on{background:rgba(48,209,88,.08);border-color:rgba(48,209,88,.2)}
+:root.light .auto-chip-name{color:rgba(0,0,0,.65)}
+:root.light .auto-chip.aut-off .auto-chip-name{color:rgba(0,0,0,.3)}
 :root.light .qn-chip{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.45)}
 #lt-global-dimmer.show{opacity:1}
 /* ── CT-Spektrum Visualizer ── */
@@ -1116,6 +1210,32 @@ html,body{height:100%;background:var(--bg);
 @keyframes rbDotPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,159,10,0)}50%{box-shadow:0 0 0 4px rgba(255,159,10,.32)}}
 #lt-rainbow-cancel{margin-left:auto;font-size:.75rem;cursor:pointer;opacity:.65;touch-action:manipulation}
 :root.light #lt-rainbow{background:transparent}
+/* ── Farb-Sequenz Autoplay ── */
+#lt-farbseq{margin:0 14px 12px;opacity:0;transition:opacity .5s ease}
+#lt-farbseq.show{opacity:1}
+#lt-farbseq-inner{border-radius:14px;border:1px solid rgba(255,159,10,.22);background:rgba(255,159,10,.05);padding:11px 14px;display:flex;flex-direction:column;gap:8px}
+#lt-farbseq-top{display:flex;align-items:center;gap:10px}
+#lt-farbseq-ico{font-size:1.15rem;flex-shrink:0;display:inline-block;transition:transform .4s}
+#lt-farbseq-inner.fsq-active #lt-farbseq-ico{animation:fsqIcoPulse 3s ease-in-out infinite}
+@keyframes fsqIcoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+#lt-farbseq-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
+#lt-farbseq-val{font-size:.67rem;font-weight:700;color:rgba(255,200,60,.9);white-space:nowrap}
+#lt-farbseq-presets{display:flex;gap:6px;flex-wrap:wrap}
+.fsq-btn{font-size:.63rem;font-weight:600;padding:5px 9px;border-radius:10px;border:1px solid rgba(255,159,10,.25);background:rgba(255,159,10,.06);color:rgba(255,255,255,.7);cursor:pointer;touch-action:manipulation;transition:background .15s,border-color .15s,color .15s}
+.fsq-btn:active{transform:scale(.96)}
+.fsq-btn.fsq-sel{border-color:rgba(255,159,10,.6);background:rgba(255,159,10,.18);color:rgba(255,200,60,.95)}
+#lt-farbseq-pill{display:none;align-items:center;gap:8px;padding:6px 12px;border-radius:20px;background:rgba(255,159,10,.13);border:1px solid rgba(255,159,10,.28);font-size:.68rem;font-weight:600;color:rgba(255,200,60,.9)}
+#lt-farbseq-pill.show{display:flex;animation:rbPillIn .35s cubic-bezier(.34,1.15,.64,1)}
+#lt-farbseq-dot{width:7px;height:7px;border-radius:50%;background:#ff9f0a;flex-shrink:0;animation:rbDotPulse 1.8s ease-in-out infinite}
+#lt-farbseq-cancel{margin-left:auto;font-size:.75rem;cursor:pointer;opacity:.65;touch-action:manipulation}
+:root.light #lt-farbseq{background:transparent}
+:root.light #lt-farbseq-pill{background:rgba(255,149,30,.05)}
+/* ── Raum-Aura Ambient Orbs ── */
+#lt-room-aura{position:relative;width:100%;height:100px;overflow:hidden;pointer-events:none;margin:0 0 -100px;z-index:0;opacity:0;transition:opacity 1.8s ease}
+#lt-room-aura.show{opacity:1}
+.lt-aura-orb{position:absolute;border-radius:50%;filter:blur(52px);opacity:.18;animation:ltAuraFloat var(--ao-dur,22s) ease-in-out infinite alternate}
+@keyframes ltAuraFloat{0%{transform:translate(var(--ao-tx0),var(--ao-ty0)) scale(1)}50%{transform:translate(var(--ao-tx1),var(--ao-ty1)) scale(1.12)}100%{transform:translate(var(--ao-tx2),var(--ao-ty2)) scale(.94)}}
+:root.light #lt-room-aura{display:none}
 /* ── Licht-Snapshot ── */
 /* Farb-Mixer Color Wheel */
 #lt-color-wheel{display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px 14px;margin:0 14px 12px}
@@ -1310,6 +1430,9 @@ html,body{height:100%;background:var(--bg);
 }
 #star-cv.show{opacity:1}
 /* Shooting star canvas */
+/* wx cloud canvas — drifting clouds in weather hero */
+#wx-cloud-cv.show{opacity:1!important}
+:root.light #wx-cloud-cv{opacity:0!important}
 #shoot-cv{
   position:absolute;inset:0;z-index:1;
   pointer-events:none;border-radius:18px;
@@ -1346,6 +1469,9 @@ html,body{height:100%;background:var(--bg);
 @keyframes ghOrbDrift{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-18px,14px) scale(1.12)}70%{transform:translate(10px,-10px) scale(.95)}}
 @keyframes ghSunPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(255,159,10,.5));transform:scale(1)}50%{filter:drop-shadow(0 0 14px rgba(255,204,2,.7));transform:scale(1.08)}}
 /* ── Hero Wave ── */
+#hero-orbit-cv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0;transition:opacity 2.2s ease}
+#hero-orbit-cv.show{opacity:1}
+:root.light #hero-orbit-cv{display:none!important}
 #hero-wave-svg{position:absolute;bottom:0;left:0;width:100%;height:72px;z-index:1;pointer-events:none;overflow:hidden}
 @keyframes heroWave1{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes heroWave2{0%{transform:translateX(0)}100%{transform:translateX(50%)}}
@@ -1607,6 +1733,20 @@ html,body{height:100%;background:var(--bg);
 .rqb.on .rqb-ico{background:rgba(10,132,255,.3)}
 .rqb-n{font-size:.72rem;font-weight:600;color:var(--on-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rqb.on .rqb-n{color:var(--blue)}
+/* Radio chip: animated wave bars when playing */
+.rqb-wave{display:none;align-items:flex-end;gap:2px;height:14px;margin-left:auto;flex-shrink:0}
+.rqb.on .rqb-wave{display:flex}
+.rqb-wave span{display:block;width:3px;min-height:3px;border-radius:2px;background:var(--blue);transform-origin:bottom}
+.rqb.on .rqb-wave span:nth-child(1){animation:rqbBar .9s .0s ease-in-out infinite alternate}
+.rqb.on .rqb-wave span:nth-child(2){animation:rqbBar .9s .18s ease-in-out infinite alternate}
+.rqb.on .rqb-wave span:nth-child(3){animation:rqbBar .9s .36s ease-in-out infinite alternate}
+@keyframes rqbBar{from{height:3px;opacity:.5}to{height:12px;opacity:1}}
+/* Radio station name pill in fallback card */
+#rfc-station{display:none;font-size:.72rem;font-weight:700;color:#ff9f0a;letter-spacing:.3px;
+  background:rgba(255,159,10,.12);border:1px solid rgba(255,159,10,.25);border-radius:20px;
+  padding:3px 10px;margin-bottom:6px;width:fit-content}
+#rfc-station.show{display:block}
+:root.light #rfc-station{color:#c07a00;background:rgba(180,110,0,.1);border-color:rgba(180,110,0,.2)}
 
 /* ───────────── STATUS PILLS ROW ───────────── */
 .pills-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
@@ -2091,6 +2231,14 @@ html,body{height:100%;background:var(--bg);
 .spk-ring:nth-child(4){width:76px;height:76px}
 .spk-wrap.playing .spk-ring:nth-child(2){animation:spkWave 2s .0s ease-out infinite}
 .spk-wrap.playing .spk-ring:nth-child(3){animation:spkWave 2s .5s ease-out infinite}
+/* Beat Pulse Ambient Edge Glow */
+#musik-beat-ring{position:absolute;inset:0;border-radius:var(--r);pointer-events:none;z-index:1;opacity:0;transition:opacity .9s ease}
+#musik-beat-ring.playing{opacity:1;animation:musikBeat 500ms ease-in-out infinite alternate}
+@keyframes musikBeat{
+  from{box-shadow:inset 0 0 0px rgba(var(--mbr-c),0),inset 0 0 0px rgba(var(--mbr-c),0)}
+  to{box-shadow:inset 0 0 55px rgba(var(--mbr-c),.26),inset 0 0 22px rgba(var(--mbr-c),.14)}
+}
+:root.light #musik-beat-ring{display:none}
 .spk-wrap.playing .spk-ring:nth-child(4){animation:spkWave 2s 1.0s ease-out infinite}
 @keyframes spkWave{
   0%{transform:scale(.5);opacity:.7}
@@ -2300,6 +2448,7 @@ html,body{height:100%;background:var(--bg);
   background:linear-gradient(160deg,rgba(255,255,255,.07) 0%,transparent 45%);
   z-index:1;
 }
+.lt{will-change:transform}
 .lt:active{transform:scale(.93) !important;transition:transform .08s !important}
 .lt-inner{position:absolute;inset:0;border-radius:18px;pointer-events:none;z-index:0}
 .ltgl{position:absolute;inset:-120%;border-radius:50%;z-index:0;
@@ -2688,6 +2837,10 @@ input[type=range].ls-rng::-webkit-slider-thumb{-webkit-appearance:none;width:30p
 :root.light .g-last-changed { color:var(--dim2); }
 /* Musik-Tab: Now-Playing & RFC Titel */
 :root.light .nptitle, :root.light #np-t { color:var(--txt) !important; }
+/* Album Gradient Track Title */
+#np-t.alb-grad-text{background:linear-gradient(90deg,rgb(var(--npt-c1,255,159,10)),rgb(var(--npt-c2,255,214,10)),rgb(var(--npt-c1,255,159,10)));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:nptGradFlow 3.5s linear infinite}
+@keyframes nptGradFlow{from{background-position:0% 50%}to{background-position:200% 50%}}
+:root.light #np-t.alb-grad-text{color:transparent!important;background:linear-gradient(90deg,rgb(var(--npt-c1,180,80,0)),rgb(var(--npt-c2,220,140,0)),rgb(var(--npt-c1,180,80,0)));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;animation:nptGradFlow 3.5s linear infinite}
 :root.light #rfc-title { color:var(--txt) !important; }
 /* Übersicht-Tab: Außen-Temp */
 :root.light #ov-temp { color:var(--txt) !important; }
@@ -2785,6 +2938,10 @@ input[type=range] { touch-action: none; }
 #alb-full-close:active{background:rgba(255,255,255,.22)}
 #alb-full-swipe-hint{font-size:.62rem;color:rgba(255,255,255,.22);margin-top:14px;letter-spacing:.3px}
 :root.light #alb-full-bg-dim{background:rgba(0,0,0,.75)}
+/* ── Tab Scroll Progress Bar ── */
+#tab-scroll-bar{position:absolute;top:0;left:0;height:2px;width:0%;z-index:200;pointer-events:none;background:linear-gradient(90deg,#ff9f0a,#ffd60a,rgba(255,249,160,.7));border-radius:0 2px 2px 0;box-shadow:0 0 6px rgba(255,159,10,.5);opacity:0;transition:opacity .4s ease,width .08s linear}
+#tab-scroll-bar.active{opacity:1}
+:root.light #tab-scroll-bar{background:linear-gradient(90deg,rgba(180,80,0,.8),rgba(220,120,0,.6),rgba(255,180,50,.4))}
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
@@ -2877,6 +3034,7 @@ input[type=range] { touch-action: none; }
 <!-- APP -->
 <div id="app" class="hidden">
   <div class="pages" id="pages">
+  <div id="tab-scroll-bar"></div>
 
     <!-- ═══ HOME ═══ -->
     <div class="page cur" id="pg-home">
@@ -2895,6 +3053,8 @@ input[type=range] { touch-action: none; }
           <canvas id="wx-particles"></canvas>
         <div class="hglow"></div>
         <div id="amb-orb"></div>
+        <!-- Orbiting Light Dots Canvas -->
+        <canvas id="hero-orbit-cv" aria-hidden="true"></canvas>
         <!-- Hero Wave Background -->
         <svg id="hero-wave-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 72" preserveAspectRatio="none">
           <defs>
@@ -3474,6 +3634,18 @@ input[type=range] { touch-action: none; }
       <!-- Energie-Tipp des Tages -->
       <div id="etipp-chip" style="display:none;margin:6px 0 2px"></div>
 
+      <!-- Stromtarif-Countdown Chip -->
+      <div id="etariff-chip" aria-live="polite">
+        <div id="etariff-inner">
+          <div id="etariff-dot"></div>
+          <div id="etariff-body">
+            <span id="etariff-title">⚡ Haupttarif aktiv</span>
+            <span id="etariff-sub">Günstiger Strom ab 22:00 Uhr</span>
+          </div>
+          <span id="etariff-price">0.32 €</span>
+        </div>
+      </div>
+
       <!-- Wetter-Licht Sync Button -->
       <div id="wx-light-sync">
         <button id="wls-btn" aria-label="Licht an Wetter anpassen">
@@ -3481,6 +3653,25 @@ input[type=range] { touch-action: none; }
           <span id="wls-label">Licht ans Wetter anpassen</span>
           <span id="wls-val">–</span>
         </button>
+      </div>
+
+      <!-- Fokus-Modus -->
+      <div id="fokus-wrap">
+        <button id="fokus-btn" aria-label="Fokus-Modus aktivieren">
+          <span id="fokus-ico">🎯</span>
+          <span id="fokus-label">Fokus-Modus</span>
+          <span id="fokus-val">5000K · 70%</span>
+        </button>
+        <div id="fokus-durations">
+          <button class="fok-dur-btn fok-sel" data-min="25">25 min</button>
+          <button class="fok-dur-btn" data-min="50">50 min</button>
+          <button class="fok-dur-btn" data-min="90">90 min</button>
+        </div>
+        <div id="fokus-pill">
+          <span id="fokus-dot"></span>
+          <span id="fokus-cd">Fokus läuft…</span>
+          <span id="fokus-cancel">✕</span>
+        </div>
       </div>
 
       <!-- Scenes 2x2 -->
@@ -3511,6 +3702,8 @@ input[type=range] { touch-action: none; }
 
     <!-- ═══ MUSIK ═══ -->
     <div class="page" id="pg-musik">
+      <!-- Beat Pulse Ambient Edge Glow (--mbr-c defaults to amber) -->
+      <div id="musik-beat-ring" style="--mbr-c:255,159,10"></div>
       <!-- Floating Music Note Particles Layer -->
       <div id="music-note-layer"></div>
       <!-- Blurred album-art background layer -->
@@ -3654,6 +3847,7 @@ input[type=range] { touch-action: none; }
           </div>
           <div style="flex:1;min-width:0">
             <div id="rfc-type-badge" style="font-size:.58rem;font-weight:700;letter-spacing:.6px;color:rgba(255,255,255,.4)">📻 RADIO</div>
+            <div id="rfc-station">–</div>
             <div id="rfc-title" style="font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">–</div>
             <div id="rfc-sub" style="font-size:.65rem;color:rgba(255,255,255,.4)">Almando Wohnzimmer</div>
           </div>
@@ -3966,6 +4160,27 @@ input[type=range] { touch-action: none; }
           </div>
         </div>
       </div>
+      <div id="lt-farbseq" aria-label="Farb-Sequenz Autoplay">
+        <div id="lt-farbseq-inner">
+          <div id="lt-farbseq-top">
+            <span id="lt-farbseq-ico">🌅</span>
+            <span id="lt-farbseq-label">Farb-Sequenz</span>
+            <span id="lt-farbseq-val">Sequenz wählen</span>
+          </div>
+          <div id="lt-farbseq-presets">
+            <button class="fsq-btn fsq-sel" data-seq="sunset">🌅 Sonnenuntergang</button>
+            <button class="fsq-btn" data-seq="nordsee">🌊 Nordsee</button>
+            <button class="fsq-btn" data-seq="karibik">🌴 Karibik</button>
+            <button class="fsq-btn" data-seq="nordlicht">🌌 Nordlicht</button>
+          </div>
+          <div id="lt-farbseq-pill">
+            <span id="lt-farbseq-dot"></span>
+            <span id="lt-farbseq-cd">Läuft…</span>
+            <span id="lt-farbseq-cancel">✕</span>
+          </div>
+        </div>
+      </div>
+      <div id="lt-room-aura" aria-hidden="true"></div>
       <div class="lg" id="lg"></div>
     <div id="lights-summary" style="text-align:center;font-size:.58rem;color:var(--dim2);margin:8px 0 4px;transition:opacity .3s;opacity:0"></div>
       <span class="lbl" style="margin-top:8px">Szenen</span>
@@ -4011,6 +4226,7 @@ input[type=range] { touch-action: none; }
       <!-- Aktuell -->
       <div id="wx-hero" style="background:linear-gradient(135deg,#0d1b2e,#1a2840);border-radius:20px;padding:20px;margin-bottom:10px;border:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden">
         <canvas id="wx-precip-cv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.2s ease;z-index:0;border-radius:20px"></canvas>
+        <canvas id="wx-cloud-cv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 2.5s ease;z-index:2;border-radius:20px"></canvas>
         <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(10,132,255,.12),transparent 65%);pointer-events:none;z-index:0"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div>
@@ -5100,6 +5316,15 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- 7-Tage Temperatur-Band Chart -->
+      <div id="wx-7band-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,159,10,.65);text-transform:uppercase;margin-bottom:8px">📈 TEMPERATUR-BAND 7 TAGE</div>
+        <div class="wx7b-card-inner" style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,159,10,.18);border-top-color:rgba(255,159,10,.35);padding:14px 18px">
+          <svg id="wx-7band-svg" viewBox="0 0 300 80" preserveAspectRatio="none" style="width:100%;height:80px;overflow:visible;display:block"></svg>
+          <div id="wx-7band-labels" style="display:flex;justify-content:space-between;margin-top:2px"></div>
+        </div>
+      </div>
+
       <!-- Sternbeobachtungs-Score -->
       <div id="stargazing-card" style="display:none;margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">🔭 STERNBEOBACHTUNG</div>
@@ -5260,6 +5485,14 @@ input[type=range] { touch-action: none; }
   <div class="page" id="pg-geraete">
     <span class="lbl">Geräte</span>
 
+    <!-- Latenz-Monitor -->
+    <div id="ping-monitor">
+      <span class="ping-dot"></span>
+      <span id="ping-lbl">HA Latenz</span>
+      <span id="ping-ms">—</span>
+      <div id="ping-bars"></div>
+    </div>
+
     <!-- Status-Filter Tabs -->
     <div id="dev-filter-tabs">
       <button class="dft-btn active" data-filter="all">Alle</button>
@@ -5379,6 +5612,15 @@ input[type=range] { touch-action: none; }
         <span class="sl-chip" data-t="🧴 Spülmittel">🧴 Spülmittel</span>
       </div>
       <ul id="shop-list-items"></ul>
+    </div>
+
+    <!-- Automations Quick-Toggle -->
+    <div id="auto-toggle-wrap" aria-label="Automationen">
+      <div id="auto-toggle-header">
+        <span id="auto-toggle-title">⚡ Automationen</span>
+        <span id="auto-toggle-count"></span>
+      </div>
+      <div id="auto-toggle-chips"></div>
     </div>
 
     <div id="dev-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:8px"></div>
@@ -5913,9 +6155,15 @@ async function fetchStates(){
   if(!tok){console.warn('fetchStates: no token');return;}
   const at=tok?.access_token||tok;  // handle both string and object
   try{
+    const _t0=Date.now();
     const r=await fetch('/api/states',{headers:{'Authorization':'Bearer '+at}});
     if(r.ok){
       const arr=await r.json();
+      const _pingMs=Date.now()-_t0;
+      window._lastPingMs=_pingMs;
+      if(!window._pingHistory)window._pingHistory=[];
+      window._pingHistory.push(_pingMs);
+      if(window._pingHistory.length>8)window._pingHistory.shift();
       arr.forEach(s=>{_S[s.entity_id]=s});
       const h618=_S['light.h618a']?.state||'?';
       const alm=_S[CFG.alm]?.state||'?';
@@ -6620,6 +6868,7 @@ function renderWeather(){
   drawGoldenHour();
   drawBestHour();
   if(window.updateWxPrecipCanvas) updateWxPrecipCanvas(code, night);
+  if(window._updateCloudCanvas) _updateCloudCanvas(c.cloud_cover != null ? c.cloud_cover : 0);
   drawWxTabAura(code, night);
   // Live Wetter-Emoji im Nav-Badge
   (function(){
@@ -7002,6 +7251,109 @@ function drawRainHeatmap(){
   summaryEl.textContent=summary;
 
   card.style.display='';
+}
+
+// ═══════════════════════════════════════════════
+// 7-TAGE TEMPERATUR-BAND CHART
+// ═══════════════════════════════════════════════
+function drawSevenDayBand(){
+  try{
+    var card=document.getElementById('wx-7band-card');
+    var svg=document.getElementById('wx-7band-svg');
+    var labelsDiv=document.getElementById('wx-7band-labels');
+    if(!card||!svg||!labelsDiv)return;
+    var d=window._wx&&window._wx.daily;
+    if(!d||!d.temperature_2m_max||!d.temperature_2m_min||d.temperature_2m_max.length<4){
+      card.style.display='none';return;
+    }
+    var N=Math.min(7,d.temperature_2m_max.length,d.temperature_2m_min.length);
+    var maxTs=d.temperature_2m_max.slice(0,N);
+    var minTs=d.temperature_2m_min.slice(0,N);
+    var times=d.time?d.time.slice(0,N):[];
+    var W=300,H=80,PAD_X=16,PAD_TOP=14,PAD_BOT=16;
+    var gMin=Math.min.apply(null,minTs)-1.5;
+    var gMax=Math.max.apply(null,maxTs)+1.5;
+    var range=gMax-gMin||1;
+    function ty(t){return PAD_TOP+(1-(t-gMin)/range)*(H-PAD_TOP-PAD_BOT);}
+    function tx(i){return PAD_X+(i/(N-1))*(W-2*PAD_X);}
+    function smooth(pts){
+      if(pts.length<2)return '';
+      var s='M'+pts[0][0].toFixed(1)+' '+pts[0][1].toFixed(1);
+      for(var i=1;i<pts.length;i++){
+        var p=pts[i-1],c=pts[i];
+        var cpx=((p[0]+c[0])/2).toFixed(1);
+        s+=' C'+cpx+' '+p[1].toFixed(1)+' '+cpx+' '+c[1].toFixed(1)+' '+c[0].toFixed(1)+' '+c[1].toFixed(1);
+      }
+      return s;
+    }
+    var maxPts=maxTs.map(function(t,i){return[tx(i),ty(t)];});
+    var minPts=minTs.map(function(t,i){return[tx(i),ty(t)];});
+    var minRev=minPts.slice().reverse();
+    // Band polygon path
+    var bandPath=smooth(maxPts)
+      +' L'+minRev[0][0].toFixed(1)+' '+minRev[0][1].toFixed(1)
+      +smooth(minRev).replace(/^M[^ ]+ [^ ]+/,'')
+      +' Z';
+    var DAYS=['So','Mo','Di','Mi','Do','Fr','Sa'];
+    function dayName(iso){if(!iso)return'';var dt=new Date(iso+'T12:00:00');return DAYS[dt.getDay()];}
+    var uid='wx7b'+Math.floor(Date.now()%1e6);
+    var out='<defs>'
+      +'<linearGradient id="'+uid+'g" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0%" stop-color="rgba(255,159,10,.22)"/>'
+      +'<stop offset="100%" stop-color="rgba(255,159,10,.04)"/>'
+      +'</linearGradient>'
+      +'<filter id="'+uid+'f"><feGaussianBlur stdDeviation="2.5" result="b"/>'
+      +'<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      +'</defs>';
+    // Today highlight column
+    var todayX=tx(0);
+    out+='<rect x="'+(todayX-10).toFixed(1)+'" y="'+(PAD_TOP-4)+'" width="20" height="'+(H-PAD_TOP-PAD_BOT+8)+'" rx="6" fill="rgba(255,159,10,.08)"/>';
+    // Band fill
+    out+='<path d="'+bandPath+'" fill="url(#'+uid+'g)"/>';
+    // Min line dashed blue
+    out+='<path d="'+smooth(minPts)+'" fill="none" stroke="rgba(100,210,255,.45)" stroke-width="1.2" stroke-dasharray="3 3" stroke-linecap="round"/>';
+    // Max line solid amber
+    out+='<path d="'+smooth(maxPts)+'" fill="none" stroke="rgba(255,159,10,.82)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+    // Dots and labels
+    for(var i=0;i<N;i++){
+      var x=tx(i).toFixed(1);
+      var yMax=ty(maxTs[i]).toFixed(1);
+      var yMin=ty(minTs[i]).toFixed(1);
+      var today=(i===0);
+      // today max dot (glow)
+      if(today){
+        out+='<circle cx="'+x+'" cy="'+yMax+'" r="5" fill="rgba(255,159,10,.18)" filter="url(#'+uid+'f)"/>';
+      }
+      out+='<circle cx="'+x+'" cy="'+yMax+'" r="'+(today?3.5:2)+'" fill="'+(today?'#ff9f0a':'rgba(255,159,10,.65)')+'"/>';
+      out+='<circle cx="'+x+'" cy="'+yMin+'" r="'+(today?2.5:1.5)+'" fill="'+(today?'#64d2ff':'rgba(100,210,255,.45)')+'"/>';
+      // Max temp label
+      var labelY=(parseFloat(yMax)-6);
+      if(labelY<6)labelY=parseFloat(yMax)+10;
+      out+='<text x="'+x+'" y="'+labelY.toFixed(1)+'" text-anchor="middle"'
+        +' font-size="'+(today?8:7)+'" font-weight="'+(today?800:600)+'"'
+        +' fill="'+(today?'#ff9f0a':'rgba(255,255,255,.6)')+'">'
+        +Math.round(maxTs[i])+'°</text>';
+      // Min temp label
+      var minLabelY=(parseFloat(yMin)+10);
+      if(minLabelY>H-2)minLabelY=parseFloat(yMin)-3;
+      out+='<text x="'+x+'" y="'+minLabelY.toFixed(1)+'" text-anchor="middle"'
+        +' font-size="6.5" fill="'+(today?'rgba(100,210,255,.85)':'rgba(255,255,255,.3)')+'">'
+        +Math.round(minTs[i])+'°</text>';
+    }
+    svg.innerHTML=out;
+    // Weekday label row
+    var labHtml='';
+    for(var i=0;i<N;i++){
+      var today=(i===0);
+      var name=times[i]?dayName(times[i]):'–';
+      labHtml+='<span style="flex:1;text-align:center;font-size:.58rem;font-weight:'+(today?800:500)
+        +';color:'+(today?'rgba(255,159,10,.9)':'rgba(255,255,255,.32)')+';letter-spacing:.4px">'
+        +(today?'Heute':name)+'</span>';
+    }
+    labelsDiv.innerHTML=labHtml;
+    card.style.display='block';
+    requestAnimationFrame(function(){requestAnimationFrame(function(){card.classList.add('show');});});
+  }catch(e){console.warn('[wx-7band]',e);}
 }
 
 // ═══════════════════════════════════════════════
@@ -9461,6 +9813,69 @@ function drawWeekStrip(){
   });
 })();
 
+// ── Automations Quick-Toggle ──────────────────────────────────────
+(function(){
+  var wrap=document.getElementById('auto-toggle-wrap');
+  var chipsEl=document.getElementById('auto-toggle-chips');
+  var countEl=document.getElementById('auto-toggle-count');
+  if(!wrap||!chipsEl)return;
+
+  var _chips={};// entityId → chip element
+  var _lastIds='';
+
+  function friendlyName(id){
+    var s=window._S&&window._S[id];
+    if(s&&s.attributes&&s.attributes.friendly_name) return s.attributes.friendly_name;
+    return id.replace('automation.','').replace(/_/g,' ');
+  }
+
+  function renderChips(ids){
+    chipsEl.innerHTML='';
+    _chips={};
+    ids.forEach(function(id){
+      var chip=document.createElement('div');
+      chip.className='auto-chip';
+      chip.innerHTML='<span class="auto-chip-dot"></span>'
+        +'<span class="auto-chip-name"></span>'
+        +'<span class="auto-chip-state"></span>';
+      chip.addEventListener('click',function(){
+        var st=window._S&&window._S[id];
+        var isOn=st&&st.state!=='off';
+        svc('automation',isOn?'turn_off':'turn_on',{entity_id:id});
+        hap&&hap();
+        // Optimistic UI
+        chip.classList.toggle('aut-on',!isOn);
+        chip.classList.toggle('aut-off',isOn);
+        chip.querySelector('.auto-chip-state').textContent=isOn?'Aus':'An';
+      });
+      _chips[id]=chip;
+      chipsEl.appendChild(chip);
+    });
+  }
+
+  window._updateAutoToggle=function(){
+    if(!window._S)return;
+    var ids=Object.keys(window._S).filter(function(k){return k.startsWith('automation.');}).sort();
+    if(!ids.length){wrap.classList.remove('show');return;}
+    var sig=ids.join(',');
+    if(sig!==_lastIds){_lastIds=sig;renderChips(ids);}
+    var onCount=0;
+    ids.forEach(function(id){
+      var chip=_chips[id];
+      if(!chip)return;
+      var st=window._S[id];
+      var isOn=st&&st.state!=='off'&&st.state!=='unavailable';
+      if(isOn)onCount++;
+      chip.classList.toggle('aut-on',isOn);
+      chip.classList.toggle('aut-off',!isOn);
+      chip.querySelector('.auto-chip-name').textContent=friendlyName(id);
+      chip.querySelector('.auto-chip-state').textContent=isOn?'An':'Aus';
+    });
+    if(countEl)countEl.textContent=onCount+' / '+ids.length+' aktiv';
+    wrap.classList.toggle('show',ids.length>0);
+  };
+})();
+
 // ── Mood Scenes ──────────────────────────────────
 (function(){
   var MOODS=[
@@ -10981,6 +11396,7 @@ function buildUI(){try{
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${r.c}" stroke-width="2.5" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="${r.c}"/></svg>
         </div>
         <div class="rqb-n">${r.n}</div>
+        <div class="rqb-wave" aria-hidden="true"><span></span><span></span><span></span></div>
       </div>`).join('');
     rqEl.querySelectorAll('.rqb').forEach(b=>b.addEventListener('click',()=>{
       hap();
@@ -11578,6 +11994,36 @@ function patchDevRecent(){
 // Hook in patchDevCards-Cycle
 const _origPatchDevCards=patchDevCards;
 patchDevCards=function(){_origPatchDevCards();patchDevRecent();window._updateDevGauge&&window._updateDevGauge();};
+
+// ── Geräte-Tab: Ping-Monitor ──
+(function(){
+  const pm=document.getElementById('ping-monitor');
+  const msEl=document.getElementById('ping-ms');
+  const barsEl=document.getElementById('ping-bars');
+  if(!pm||!msEl||!barsEl)return;
+  // Build 8 bar elements once
+  for(let i=0;i<8;i++){const b=document.createElement('div');b.className='pb-bar';b.style.height='2px';barsEl.appendChild(b);}
+  window._updatePingMonitor=function(){
+    const hist=window._pingHistory||[];
+    const ms=window._lastPingMs;
+    if(ms==null)return;
+    pm.classList.add('show');
+    // Color class
+    pm.classList.remove('ping-slow','ping-err');
+    if(ms>800)pm.classList.add('ping-err');
+    else if(ms>300)pm.classList.add('ping-slow');
+    // Label
+    msEl.textContent=ms<1000?ms+'ms':(ms/1000).toFixed(1)+'s';
+    // Bars sparkline
+    const bars=barsEl.querySelectorAll('.pb-bar');
+    const maxMs=Math.max(...hist,1);
+    bars.forEach((b,i)=>{
+      const val=hist[hist.length-8+i]||0;
+      if(val===0){b.style.height='2px';b.style.opacity='.2';}
+      else{const pct=Math.min(val/Math.max(maxMs,50),1);b.style.height=Math.round(2+pct*16)+'px';b.style.opacity='1';}
+    });
+  };
+})();
 
 // ── Geräte-Tab: Status-Übersicht Donut-Gauge ──
 window._updateDevGauge=(function(){
@@ -13283,6 +13729,7 @@ function updatePwrCard(){
 function updateAll(){
   updateGeraeteCards();
   updatePwrCard();
+  if(window._updatePingMonitor)window._updatePingMonitor();
   // ── Radio-Erkennung am Anfang, damit alle nachfolgenden Stellen _radActive korrekt haben ──
   const playing=st(CFG.alm)==='playing';
   if(!_radActive&&playing){
@@ -13323,6 +13770,12 @@ function updateAll(){
     } else if(icon){
       icon.setAttribute('stroke','#ff9f0a');
       const c=icon.querySelector('circle');c&&c.setAttribute('fill','#ff9f0a');
+    }
+    const stationEl=document.getElementById('rfc-station');
+    if(stationEl){
+      const sName=_radActive||matched?.n||'';
+      stationEl.textContent=sName;
+      stationEl.classList.toggle('show',!!sName&&!isPodcast);
     }
     const titleEl=document.getElementById('rfc-title');
     if(titleEl)titleEl.textContent=title;
@@ -13731,8 +14184,11 @@ function updateAll(){
   window._updatePresets&&window._updatePresets(on);
   window._updateShuffle&&window._updateShuffle(on);
   window._updateRainbow&&window._updateRainbow(on);
+  window._updateFarbseq&&window._updateFarbseq(on);
+  window._updateRoomAura&&window._updateRoomAura(on);
   window._updateFingerprint&&window._updateFingerprint(on);
   window._updateCtStrip&&window._updateCtStrip(on);
+  window._updateAutoToggle&&window._updateAutoToggle();
   // ── Wohnstimmung Dial ──
   window._updateWohnstimmung&&window._updateWohnstimmung(on, playing);
   // ── Anwesenheits-Chips ──
@@ -13843,6 +14299,120 @@ function updateAll(){
         btn.addEventListener('animationend',()=>btn.classList.remove('wls-tap'),{once:true});
       });
     }
+  })();
+  // ── Fokus-Modus ──
+  (function(){
+    var wrap=document.getElementById('fokus-wrap');
+    var btn=document.getElementById('fokus-btn');
+    var icoEl=document.getElementById('fokus-ico');
+    var valEl=document.getElementById('fokus-val');
+    var pill=document.getElementById('fokus-pill');
+    var cdEl=document.getElementById('fokus-cd');
+    var cancelBtn=document.getElementById('fokus-cancel');
+    if(!wrap||!btn)return;
+    var DURS={25:25*60000,50:50*60000,90:90*60000};
+    var _curMin=25;
+    var _active=false;
+    var _timer=null;
+    var _tickInt=null;
+    var _startTs=0;
+
+    // Restore lights state on stop
+    var _snapshot=[];
+
+    function getActiveLights(){
+      return (CFG.lights||[]).filter(function(l){
+        var s=window._S&&window._S[l.id];
+        return s&&s.state==='on';
+      });
+    }
+
+    function tick(){
+      var rem=Math.max(0,DURS[_curMin]-(Date.now()-_startTs));
+      var m=Math.floor(rem/60000),s=Math.floor((rem%60000)/1000);
+      cdEl.textContent='🎯 Fokus · '+m+'min '+s+'s';
+      if(rem<=0)stop(true,'done');
+    }
+
+    function start(){
+      var lights=getActiveLights();
+      if(!lights.length){showToast('🎯 Keine aktiven Lichter');return;}
+      // Snapshot current state
+      _snapshot=lights.map(function(l){
+        var a=(window._S[l.id]||{}).attributes||{};
+        return {id:l.id,ct:a.color_temp_kelvin,bri:Math.round((a.brightness||255)/2.55)};
+      });
+      // Apply focus lighting
+      lights.forEach(function(l){
+        svc('light','turn_on',{entity_id:l.id,color_temp_kelvin:5000,brightness_pct:70,transition:2});
+      });
+      // Pause media if playing
+      if(CFG.alm){
+        var ms=window._S&&window._S[CFG.alm];
+        if(ms&&ms.state==='playing') svc('media_player','media_pause',{entity_id:CFG.alm});
+      }
+      _active=true;
+      _startTs=Date.now();
+      btn.classList.add('fok-active');
+      pill.classList.add('show');
+      icoEl.textContent='🎯';
+      valEl.textContent=_curMin+'min · aktiv';
+      tick();
+      _tickInt=setInterval(tick,1000);
+      _timer=setTimeout(function(){stop(true,'done');},DURS[_curMin]);
+      hap&&hap();
+      showToast('🎯 Fokus-Modus gestartet · '+_curMin+' Minuten');
+    }
+
+    function stop(withToast,reason){
+      if(!_active)return;
+      clearInterval(_tickInt);_tickInt=null;
+      clearTimeout(_timer);_timer=null;
+      _active=false;
+      btn.classList.remove('fok-active');
+      pill.classList.remove('show');
+      valEl.textContent='5000K · 70%';
+      icoEl.textContent='🎯';
+      // Restore lights
+      _snapshot.forEach(function(s){
+        var params={entity_id:s.id,transition:2};
+        if(s.ct)params.color_temp_kelvin=s.ct;
+        if(s.bri)params.brightness_pct=s.bri;
+        svc('light','turn_on',params);
+      });
+      _snapshot=[];
+      if(withToast)showToast(reason==='done'?'🎯 Fokus abgeschlossen – gut gemacht! 🌟':'🎯 Fokus-Modus beendet');
+    }
+
+    // Duration buttons
+    wrap.querySelectorAll('.fok-dur-btn').forEach(function(b){
+      b.addEventListener('click',function(e){
+        e.stopPropagation();
+        _curMin=parseInt(b.dataset.min);
+        wrap.querySelectorAll('.fok-dur-btn').forEach(function(x){x.classList.remove('fok-sel');});
+        b.classList.add('fok-sel');
+        if(_active){
+          clearTimeout(_timer);
+          _timer=setTimeout(function(){stop(true,'done');},DURS[_curMin]);
+          _startTs=Date.now();
+          showToast('🎯 Fokus: '+_curMin+' Minuten');
+        }
+      });
+    });
+
+    btn.addEventListener('click',function(e){
+      if(e.target.closest('.fok-dur-btn')||e.target===cancelBtn)return;
+      if(_active)stop(true);else start();
+    });
+
+    cancelBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      stop(true);
+    });
+
+    // Show when lights are on
+    wrap.classList.toggle('show',on>0);
+    if(_active&&on===0)stop(false);
   })();
   // ── Stunde der Stille Chip ──
   (function(){
@@ -14100,6 +14670,9 @@ function updateAll(){
   if(holoRing)holoRing.classList.toggle('show',playing);
   const albArm=document.getElementById('alb-tonearm-wrap');
   if(albArm){albArm.classList.toggle('lifted',!playing);albArm.classList.toggle('on-disc',playing);}
+  // Beat Pulse Edge Glow
+  const beatRing=document.getElementById('musik-beat-ring');
+  if(beatRing)beatRing.classList.toggle('playing',playing);
   const almPic=at(CFG.alm,'entity_picture')||at(CFG.spot,'entity_picture');
   if(almPic){
     const imgUrl=almPic.startsWith('http')?almPic:(location.origin+almPic);
@@ -14142,6 +14715,18 @@ function updateAll(){
             al.style.setProperty('--mood-glow',`rgba(${glowC[0]},${glowC[1]},${glowC[2]},.35)`);
             al.classList.add('mood-active');
           }
+          // Beat Pulse color from album art dominant
+          const pgMusik=document.getElementById('pg-musik');
+          if(pgMusik)pgMusik.style.setProperty('--mbr-c',`${glowC[0]},${glowC[1]},${glowC[2]}`);
+          // Album Gradient Track Title — animate title text with album dominant colors
+          {const npTitle=document.getElementById('np-t');
+          if(npTitle){
+            // Use glowC (brightest region) + c3 (bottom-right corner) as gradient pair
+            const c2r=c3[0]+c3[1]+c3[2]>60?c3:c2;
+            npTitle.style.setProperty('--npt-c1',`${glowC[0]},${glowC[1]},${glowC[2]}`);
+            npTitle.style.setProperty('--npt-c2',`${c2r[0]},${c2r[1]},${c2r[2]}`);
+            npTitle.classList.add('alb-grad-text');
+          }}
         }catch(e){console.warn('mood-gradient:',e);}
       };
       // Set blurred bg immediately (browser will load in parallel)
@@ -14165,6 +14750,8 @@ function updateAll(){
     if(typeof window._updateCoverPalette==='function')window._updateCoverPalette(null);
     const al=document.querySelector('.album');
     if(al){al.style.background='';al.classList.remove('mood-active');}
+    // Remove gradient from track title when no album art
+    document.getElementById('np-t')?.classList.remove('alb-grad-text');
     const bgImg=document.getElementById('album-page-bg-img');
     if(bgImg){bgImg.style.opacity='0';}
     // Reset disc
@@ -15390,6 +15977,116 @@ function launchKonfetti(){
   };
 
   window.addEventListener('resize', () => { if(active) resize(); });
+})();
+
+// ═══════════════════════════════════════════════
+// WX-HERO: Drifting Cloud Canvas
+// Semi-transparent cloud shapes drift across the weather hero
+// Density based on cloud_cover (0-100), hidden in clear weather
+// ═══════════════════════════════════════════════
+(function initCloudCanvas(){
+  const cv = document.getElementById('wx-cloud-cv');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  let clouds = [];
+  let raf4 = null;
+  let active = false;
+  let _cover = 0; // 0-100
+
+  function resize(){
+    const p = cv.parentElement;
+    cv.width  = p ? (p.offsetWidth  || 300) : 300;
+    cv.height = p ? (p.offsetHeight || 120) : 120;
+  }
+
+  // Build a fresh cloud list based on coverage
+  function buildClouds(){
+    clouds = [];
+    const w = cv.width, h = cv.height;
+    const pct = Math.max(0, (_cover - 10) / 90); // 0 at 10%, 1 at 100%
+    const n = Math.round(2 + pct * 4); // 2-6 clouds
+    for(let i = 0; i < n; i++){
+      clouds.push({
+        x:     Math.random() * w * 1.3 - w * 0.15,
+        y:     8 + Math.random() * h * 0.55,
+        r:     22 + Math.random() * 30,        // 22-52px
+        vx:    0.06 + Math.random() * 0.10,   // slow rightward drift
+        alpha: (0.045 + Math.random() * 0.055) * pct, // scale with coverage
+        blobs: 3 + Math.floor(Math.random() * 3),     // 3-5 blobs
+        phase: Math.random() * Math.PI * 2,
+        delay: i * 3.8                         // stagger phase
+      });
+    }
+  }
+
+  // Draw one cloud at (cx, cy) with radius r, alpha, and blob count
+  function drawCloud(cx, cy, r, alpha, blobs){
+    if(alpha < 0.004) return;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    // Soft white fill with a slight radial gradient for depth
+    const g = ctx.createRadialGradient(cx, cy - r * 0.1, r * 0.1, cx, cy, r * 1.4);
+    g.addColorStop(0,   'rgba(255,255,255,0.9)');
+    g.addColorStop(0.6, 'rgba(220,230,245,0.6)');
+    g.addColorStop(1,   'rgba(180,200,230,0.0)');
+    ctx.fillStyle = g;
+    // Blob offsets: center + surrounding humps
+    const blob_defs = [
+      [0,        0,        1.0],
+      [-r*0.52,  r*0.22,   0.72],
+      [ r*0.52,  r*0.18,   0.70],
+      [-r*0.28, -r*0.28,   0.60],
+      [ r*0.32, -r*0.24,   0.58],
+      [ r*0.80,  r*0.28,   0.50]
+    ].slice(0, blobs + 1);
+    ctx.beginPath();
+    blob_defs.forEach(([ox, oy, s]) => {
+      ctx.moveTo(cx + ox + r * s, cy + oy);
+      ctx.arc(cx + ox, cy + oy, r * s, 0, Math.PI * 2);
+    });
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function draw(){
+    if(!active){ raf4 = null; return; }
+    raf4 = requestAnimationFrame(draw);
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    const now = Date.now() * 0.001;
+    const w = cv.width;
+    clouds.forEach(c => {
+      // Gentle vertical sine-bob
+      const bob = Math.sin(now * 0.25 + c.phase + c.delay) * 2.5;
+      drawCloud(c.x, c.y + bob, c.r, c.alpha, c.blobs);
+      // Drift right, wrap around
+      c.x += c.vx;
+      if(c.x > w + c.r * 2.2) c.x = -c.r * 2.2;
+    });
+  }
+
+  // Called from renderWeather with cloud_cover 0-100
+  function update(cover){
+    _cover = (cover != null ? cover : 0);
+    const pct = Math.max(0, (_cover - 10) / 90);
+    if(pct < 0.01){
+      cv.classList.remove('show');
+      active = false;
+      return;
+    }
+    resize();
+    buildClouds();
+    if(!active){
+      active = true;
+      cv.classList.add('show');
+      if(!raf4) draw();
+    } else {
+      // Already running — just rebuild cloud list (new coverage)
+      cv.classList.add('show');
+    }
+  }
+
+  window._updateCloudCanvas = update;
+  window.addEventListener('resize', () => { if(active){ resize(); buildClouds(); } });
 })();
 
 // ═══════════════════════════════════════════════
@@ -18156,6 +18853,178 @@ const _origSetWxMode=setWxMode;
   };
 })();
 
+// ── Farb-Sequenz Autoplay ──────────────────────────────
+(function(){
+  var card=document.getElementById('lt-farbseq');
+  var inner=document.getElementById('lt-farbseq-inner');
+  var icoEl=document.getElementById('lt-farbseq-ico');
+  var valEl=document.getElementById('lt-farbseq-val');
+  var pill=document.getElementById('lt-farbseq-pill');
+  var cdEl=document.getElementById('lt-farbseq-cd');
+  var cancelBtn=document.getElementById('lt-farbseq-cancel');
+  if(!card)return;
+
+  var SEQS={
+    sunset:{label:'Sonnenuntergang',ico:'🌅',stops:[[255,80,10],[240,50,30],[200,30,80],[130,20,130],[60,10,160],[20,5,80]]},
+    nordsee:{label:'Nordsee',ico:'🌊',stops:[[0,80,200],[10,140,220],[20,200,210],[40,220,180],[10,160,200],[0,100,180]]},
+    karibik:{label:'Karibik',ico:'🌴',stops:[[0,220,160],[0,240,100],[30,230,60],[255,210,0],[255,140,0],[200,80,0]]},
+    nordlicht:{label:'Nordlicht',ico:'🌌',stops:[[0,200,80],[0,120,220],[60,0,200],[150,0,180],[0,180,120],[20,240,140]]}
+  };
+
+  var AUTO_STOP_MS=30*60*1000;
+  var STEP_MS=8000;
+  var _active=false;
+  var _curSeq='sunset';
+  var _stepIdx=0;
+  var _int=null;
+  var _stopTimer=null;
+  var _startTs=0;
+
+  function getRgbLights(){
+    return (CFG.lights||[]).filter(function(l){
+      var s=window._S&&window._S[l.id];
+      return s&&s.state==='on';
+    });
+  }
+
+  function applyStop(){
+    var seq=SEQS[_curSeq];
+    var lights=getRgbLights();
+    if(!lights.length){stop(false);return;}
+    var c=seq.stops[_stepIdx%seq.stops.length];
+    _stepIdx++;
+    lights.forEach(function(l){
+      svc('light','turn_on',{entity_id:l.id,rgb_color:c,brightness_pct:65,transition:3.5});
+    });
+    var rem=Math.max(0,AUTO_STOP_MS-(Date.now()-_startTs));
+    var m=Math.floor(rem/60000),s2=Math.floor((rem%60000)/1000);
+    cdEl.textContent=seq.ico+' '+seq.label+' · '+m+'min '+s2+'s';
+  }
+
+  function start(){
+    var lights=getRgbLights();
+    if(!lights.length){showToast('🌅 Keine aktiven Lichter');return;}
+    _active=true;
+    _stepIdx=0;
+    _startTs=Date.now();
+    inner.classList.add('fsq-active');
+    pill.classList.add('show');
+    valEl.textContent=SEQS[_curSeq].label;
+    icoEl.textContent=SEQS[_curSeq].ico;
+    applyStop();
+    _int=setInterval(applyStop,STEP_MS);
+    _stopTimer=setTimeout(function(){stop(true,'auto');},AUTO_STOP_MS);
+    hap&&hap();
+    showToast(SEQS[_curSeq].ico+' '+SEQS[_curSeq].label+' gestartet');
+  }
+
+  function stop(withToast,reason){
+    if(!_active)return;
+    clearInterval(_int);_int=null;
+    clearTimeout(_stopTimer);_stopTimer=null;
+    _active=false;
+    inner.classList.remove('fsq-active');
+    pill.classList.remove('show');
+    valEl.textContent='Sequenz wählen';
+    icoEl.textContent='🌅';
+    if(withToast)showToast(reason==='auto'?'🌅 Sequenz Auto-Stop nach 30 min':'🌅 Farb-Sequenz gestoppt');
+  }
+
+  card.querySelectorAll('.fsq-btn').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      _curSeq=btn.dataset.seq;
+      card.querySelectorAll('.fsq-btn').forEach(function(b){b.classList.remove('fsq-sel');});
+      btn.classList.add('fsq-sel');
+      if(_active){_stepIdx=0;applyStop();showToast(SEQS[_curSeq].ico+' Sequenz: '+SEQS[_curSeq].label);}
+    });
+  });
+
+  inner.addEventListener('click',function(e){
+    if(e.target.closest('.fsq-btn')||e.target===cancelBtn)return;
+    if(_active)stop(true);else start();
+  });
+
+  cancelBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    stop(true);
+  });
+
+  window._updateFarbseq=function(onCount){
+    card.classList.toggle('show',onCount>0);
+    if(_active&&onCount===0)stop(false);
+  };
+})();
+
+// ── Licht-Tab: Raum-Aura Ambient Orbs ──
+(function(){
+  var aura = document.getElementById('lt-room-aura');
+  if(!aura) return;
+  var _lastSig = '';
+  // Returns RGB array for a light entity
+  function lightColor(id){
+    var st = window._S && window._S[id];
+    if(!st) return null;
+    var attr = st.attributes || {};
+    if(attr.rgb_color) return attr.rgb_color;
+    // Derive color from color_temp_kelvin
+    var ct = attr.color_temp_kelvin;
+    if(ct){
+      if(ct<=2200) return [255,140,40];
+      if(ct<=2700) return [255,180,80];
+      if(ct<=3500) return [255,210,130];
+      if(ct<=4500) return [255,240,200];
+      if(ct<=5500) return [220,235,255];
+      return [180,210,255];
+    }
+    return [255,159,10]; // amber fallback
+  }
+  // Positions for up to 6 orbs (relative %, pairs [x,y])
+  var POSITIONS = [[18,60],[72,30],[45,80],[82,65],[28,25],[60,50]];
+  var DURS = [22,28,19,25,31,20];
+  window._updateRoomAura = function(onCount){
+    if(!window.CFG || !window._S) return;
+    var lights = (window.CFG.lights||[]).filter(function(l){
+      return window._S[l] && window._S[l].state==='on';
+    });
+    var sig = lights.map(function(l){
+      var c = lightColor(l); return l+(c?c.join(','):'');
+    }).join('|');
+    if(sig === _lastSig) return;
+    _lastSig = sig;
+    if(!lights.length){ aura.classList.remove('show'); return; }
+    // Build orbs
+    var html = '';
+    var n = Math.min(lights.length, 6);
+    for(var i=0;i<n;i++){
+      var rgb = lightColor(lights[i]) || [255,159,10];
+      var pos = POSITIONS[i % POSITIONS.length];
+      var dur = DURS[i % DURS.length];
+      // Random drift offsets for animation keyframes
+      var tx0 = (Math.random()*14-7).toFixed(1)+'px';
+      var ty0 = (Math.random()*12-6).toFixed(1)+'px';
+      var tx1 = (Math.random()*20-10).toFixed(1)+'px';
+      var ty1 = (Math.random()*16-8).toFixed(1)+'px';
+      var tx2 = (Math.random()*14-7).toFixed(1)+'px';
+      var ty2 = (Math.random()*12-6).toFixed(1)+'px';
+      var color = 'rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',.55)';
+      var size = (110 + i*22) + 'px';
+      html += '<div class="lt-aura-orb" style="'
+        +'width:'+size+';height:'+size+';'
+        +'left:'+pos[0]+'%;top:'+pos[1]+'%;transform:translate(-50%,-50%);'
+        +'background:'+color+';'
+        +'--ao-dur:'+dur+'s;'
+        +'--ao-tx0:'+tx0+';--ao-ty0:'+ty0+';'
+        +'--ao-tx1:'+tx1+';--ao-ty1:'+ty1+';'
+        +'--ao-tx2:'+tx2+';--ao-ty2:'+ty2+';'
+        +'animation-delay:'+(i*-4.2)+'s'
+        +'"></div>';
+    }
+    aura.innerHTML = html;
+    aura.classList.add('show');
+  };
+})();
+
 // ── Musik-Tab: Stimmungs-Empfehlung Chip ──
 (function(){
   var chip = document.getElementById('mood-chip');
@@ -18412,6 +19281,65 @@ const _origSetWxMode=setWxMode;
   setTimeout(render, 900);
   setInterval(render, 30*60*1000);
 })();
+
+// ── Home-Tab: Stromtarif-Countdown Chip ──
+(function(){
+  var chip = document.getElementById('etariff-chip');
+  var inner = document.getElementById('etariff-inner');
+  var title = document.getElementById('etariff-title');
+  var sub   = document.getElementById('etariff-sub');
+  var price = document.getElementById('etariff-price');
+  if(!chip||!inner||!title||!sub||!price) return;
+
+  // Deutsche Haushaltstarife (vereinfacht)
+  // HT = Haupttarif: 06:00–22:00 (0.32 €/kWh)
+  // NT = Niedertarif: 22:00–06:00 (0.20 €/kWh)
+  var HT_START=6, HT_END=22;
+  var HT_PRICE='0.32 €', NT_PRICE='0.20 €';
+
+  function fmtCountdown(ms){
+    var total=Math.floor(ms/1000);
+    var h=Math.floor(total/3600);
+    var m=Math.floor((total%3600)/60);
+    if(h>0) return h+'h '+m+'min';
+    if(m>0) return m+' min';
+    return 'gleich';
+  }
+
+  function update(){
+    var now=new Date();
+    var h=now.getHours(), m=now.getMinutes();
+    var isHT=(h>=HT_START && h<HT_END);
+
+    var msUntilNext;
+    if(isHT){
+      // next NT starts at HT_END:00
+      var nextNT=new Date(now);
+      nextNT.setHours(HT_END,0,0,0);
+      if(nextNT<=now) nextNT.setDate(nextNT.getDate()+1);
+      msUntilNext=nextNT-now;
+      inner.classList.remove('nt-mode');
+      title.textContent='⚡ Haupttarif aktiv';
+      sub.textContent='💰 Günstigerer Strom in '+fmtCountdown(msUntilNext)+' (22:00 Uhr)';
+      price.textContent=HT_PRICE+'/kWh';
+    } else {
+      // next HT starts at HT_START:00
+      var nextHT=new Date(now);
+      nextHT.setHours(HT_START,0,0,0);
+      if(nextHT<=now) nextHT.setDate(nextHT.getDate()+1);
+      msUntilNext=nextHT-now;
+      inner.classList.add('nt-mode');
+      title.textContent='🌙 Niedertarif aktiv';
+      sub.textContent='💡 Großgeräte jetzt nutzen! Endet in '+fmtCountdown(msUntilNext)+' (06:00 Uhr)';
+      price.textContent=NT_PRICE+'/kWh';
+    }
+    chip.classList.add('show');
+  }
+
+  window._updateEtariff = update;
+  update();
+  setInterval(update, 60*1000);
+})();
 </script>
 
 <!-- Color Wheel Overlay -->
@@ -18561,6 +19489,223 @@ const _origSetWxMode=setWxMode;
     var sig=t?t.textContent:'';
     if(sig!==_lastSig){_lastSig=sig;openFullscreen();}
   },2000);
+})();
+
+// ═══════════════════════════════════════════════
+// TAB SCROLL PROGRESS BAR
+// ═══════════════════════════════════════════════
+(function(){
+  var bar = document.getElementById('tab-scroll-bar');
+  if(!bar) return;
+  var _hideTimer = null;
+  var PAGES = ['pg-home','pg-musik','pg-licht','pg-wetter','pg-geraete'];
+
+  function getActivePage(){
+    for(var i=0;i<PAGES.length;i++){
+      var el=document.getElementById(PAGES[i]);
+      if(el&&el.classList.contains('cur')) return el;
+    }
+    return null;
+  }
+
+  function updateBar(el){
+    var sh=el.scrollHeight, ch=el.clientHeight, st=el.scrollTop;
+    var max=sh-ch;
+    if(max<=10){ bar.style.width='0%'; bar.classList.remove('active'); return; }
+    var pct=Math.min(100,Math.round(st/max*1000)/10);
+    bar.style.width=pct+'%';
+    bar.classList.add('active');
+    clearTimeout(_hideTimer);
+    _hideTimer=setTimeout(function(){ bar.classList.remove('active'); },1800);
+  }
+
+  function attachScroll(el){
+    if(!el||el._scrollProgBound) return;
+    el._scrollProgBound=true;
+    el.addEventListener('scroll',function(){ updateBar(el); },{passive:true});
+  }
+
+  // Attach to all pages
+  PAGES.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) attachScroll(el);
+  });
+
+  // Reset bar on tab switch (navTo calls happen before tab is cur)
+  var _origNavTo=window.navTo;
+  if(typeof _origNavTo==='function'){
+    window.navTo=function(page){
+      bar.style.width='0%';
+      bar.classList.remove('active');
+      clearTimeout(_hideTimer);
+      _origNavTo(page);
+    };
+  }
+})();
+
+// ── Home-Hero: Ring of Lights Orbit Canvas ───────────────────────────────────
+(function(){
+  const cv=document.getElementById('hero-orbit-cv');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  let dots=[],raf=null,lastSig='',_t=performance.now();
+
+  function ctColor(k){
+    if(k<=2200)return[255,120,30];
+    if(k<=2700)return[255,170,70];
+    if(k<=3500)return[255,208,120];
+    if(k<=4500)return[255,232,185];
+    if(k<=5500)return[215,232,255];
+    return[175,205,255];
+  }
+
+  function resize(){
+    const hero=cv.parentElement;
+    if(!hero)return;
+    cv.width=hero.offsetWidth||360;
+    cv.height=hero.offsetHeight||185;
+  }
+
+  function buildDots(){
+    if(!window._S||!window.CFG||!window.CFG.lights)return;
+    const actives=window.CFG.lights.filter(id=>window._S[id]&&window._S[id].state==='on');
+    dots=actives.map((id,i)=>{
+      const a=(window._S[id].attributes)||{};
+      const rgb=a.rgb_color?[...a.rgb_color]:ctColor(a.color_temp_kelvin||3000);
+      const n=Math.max(actives.length,1);
+      // Alternating orbit directions for visual variety
+      const dir=(i%2===0)?1:-1;
+      // Orbit size scales with index: innermost first, outward
+      const orbitFrac=0.18+i*0.10;
+      const speed=(0.00028+i*0.00009)*dir;
+      const startAngle=(i/n)*Math.PI*2;
+      const size=3.2+(i%3)*0.7;
+      return{rgb,orbitFrac,speed,size,id,angle:startAngle};
+    });
+    cv.classList.toggle('show',dots.length>0);
+  }
+
+  function draw(ts){
+    raf=requestAnimationFrame(draw);
+    const W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    if(!dots.length)return;
+    const dt=Math.min(ts-_t,50);_t=ts;
+    // Orbit center: horizontally centred, ~38% down hero
+    const cx=W*0.5, cy=H*0.40;
+    dots.forEach(d=>{
+      d.angle+=d.speed*dt;
+      const rx=W*d.orbitFrac;
+      const ry=rx*0.30; // flat ellipse fits the hero proportions
+      const x=cx+Math.cos(d.angle)*rx;
+      const y=cy+Math.sin(d.angle)*ry;
+      const [r,g,b]=d.rgb;
+      // Faint orbit track
+      ctx.beginPath();
+      ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(${r},${g},${b},0.05)`;
+      ctx.lineWidth=1;
+      ctx.stroke();
+      // Outer glow halo
+      const grd=ctx.createRadialGradient(x,y,0,x,y,d.size*4.5);
+      grd.addColorStop(0,`rgba(${r},${g},${b},0.24)`);
+      grd.addColorStop(0.6,`rgba(${r},${g},${b},0.08)`);
+      grd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+      ctx.beginPath();
+      ctx.arc(x,y,d.size*4.5,0,Math.PI*2);
+      ctx.fillStyle=grd;
+      ctx.fill();
+      // Core bright dot
+      ctx.beginPath();
+      ctx.arc(x,y,d.size,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${r},${g},${b},0.88)`;
+      ctx.fill();
+    });
+  }
+
+  function check(){
+    if(!window._S||!window.CFG||!window.CFG.lights)return;
+    const sig=window.CFG.lights
+      .filter(id=>window._S[id]&&window._S[id].state==='on')
+      .map(id=>{const a=(window._S[id].attributes||{});return id+'|'+(a.rgb_color||[]).join(',')+'|'+(a.color_temp_kelvin||0);})
+      .join('~');
+    if(sig!==lastSig){lastSig=sig;resize();buildDots();}
+  }
+
+  resize();
+  window.addEventListener('resize',()=>{resize();buildDots();},{passive:true});
+  raf=requestAnimationFrame(draw);
+  setTimeout(()=>{resize();check();},1200);
+
+  // Hook into updateAll for live updates
+  const _oUA=window.updateAll;
+  if(typeof _oUA==='function'){
+    window.updateAll=function(){_oUA.apply(this,arguments);check();};
+  } else {
+    setInterval(check,4000);
+  }
+})();
+
+// ── Licht-Tile 3D Tilt Micro-Interaction ──────────────────────────────────────
+(function(){
+  const lg=document.getElementById('lg');
+  if(!lg)return;
+  const MAX=8,
+        T_FAST='transform .08s ease',
+        T_SPRING='transform .44s cubic-bezier(.34,1.15,.64,1)';
+  let _at=null,_cleanup=null,_mdown=false;
+
+  function tilt(tile,cx,cy){
+    const r=tile.getBoundingClientRect();
+    const mx=r.left+r.width/2,my=r.top+r.height/2;
+    const dx=(cx-mx)/(r.width/2),dy=(cy-my)/(r.height/2);
+    const rx=(-dy*MAX).toFixed(2),ry=(dx*MAX).toFixed(2);
+    tile.style.setProperty('transition',T_FAST,'important');
+    tile.style.setProperty('transform',
+      `perspective(320px) rotateX(${rx}deg) rotateY(${ry}deg) scale(.95)`,
+      'important');
+  }
+
+  function spring(tile){
+    if(!tile)return;
+    clearTimeout(_cleanup);
+    tile.style.setProperty('transition',T_SPRING,'important');
+    tile.style.removeProperty('transform');
+    _cleanup=setTimeout(()=>{tile.style.removeProperty('transition');},480);
+  }
+
+  // Touch
+  lg.addEventListener('touchstart',e=>{
+    const t=e.target.closest('.lt');
+    if(!t)return;
+    _at=t;
+    const tc=e.touches[0];
+    tilt(t,tc.clientX,tc.clientY);
+  },{passive:true});
+
+  lg.addEventListener('touchmove',e=>{
+    if(!_at)return;
+    tilt(_at,e.touches[0].clientX,e.touches[0].clientY);
+  },{passive:true});
+
+  const endTouch=()=>{if(_at){spring(_at);_at=null;}};
+  lg.addEventListener('touchend',endTouch,{passive:true});
+  lg.addEventListener('touchcancel',endTouch,{passive:true});
+
+  // Mouse (desktop)
+  lg.addEventListener('mousedown',e=>{
+    const t=e.target.closest('.lt');
+    if(!t)return;
+    _at=t;_mdown=true;
+    tilt(t,e.clientX,e.clientY);
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!_mdown||!_at)return;
+    tilt(_at,e.clientX,e.clientY);
+  });
+  document.addEventListener('mouseup',()=>{
+    if(_mdown){_mdown=false;if(_at){spring(_at);_at=null;}}
+  });
 })();
 </script>
 </body>
