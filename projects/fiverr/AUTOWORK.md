@@ -429,3 +429,9 @@
 
 ## Neue Ideen (2026-04-01 14:45 UTC)
 - [x] demo.html: "Animation Showcase" Section (🎬 3 Cards vor FAQ: Vinyl-Disc CSS-Spin-Loop, SVG-Wellen-Animation amber+blau, Sternschnuppen-Canvas mit Live-Demo; hover-lift; CSS @keyframes discSpin/waveMoveA/waveMoveB; ResizeObserver-gestütztes Canvas; DE+EN i18n via applyLang-Extension)
+
+## Neue Ideen (2026-04-04 06:10 UTC)
+- [x] wz.html: Wetter-Tab — "Wetter-Komfort Spider Chart" (🕸️ 6-Achsen SVG Radar-Chart: Temperatur-Komfort / Trockenheit / Windruhe / UV-Komfort / Luftfeuchtigkeit / Klarheit — amber fill mit linearGradient, animiertes Einblenden 1.5s, Komfort-Index 0-100 oben links, Farbdot-Legende mit %-Werten, 6 farbige Achsen-Dots mit Glow, 3 Grid-Ringe, Light-Mode Overrides)
+
+## Neue Ideen (2026-04-04 06:08 UTC)
+- [x] demo.html: Konami Code Easter Egg (🎮 ↑↑↓↓←→←→BA → Konfetti-Burst + Toast "10% Rabatt bei Bestellung wenn KONAMI erwähnt")

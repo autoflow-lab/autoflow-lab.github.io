@@ -2632,3 +2632,9 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 ## 2026-04-01 14:45 UTC — Heartbeat Auto-Improve
 - ✅ demo.html: "Animation Showcase" Section — 3 Cards (Vinyl-Disc-Spin, SVG-Wellen, Sternschnuppen-Canvas), vor FAQ eingefügt, DE+EN i18n, hover-lift, responsive Grid
 - JS-Check: OK | Deployed → GitHub Pages via API | demo.html + index.html
+
+## 2026-04-04 06:08 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: Konami Code Easter Egg (🎮)
+- Alle AUTOWORK.md Tasks [x] → neue Idee generiert und implementiert
+- **Konzept**: ↑↑↓↓←→←→BA Tastenfolge löst Konfetti-Burst (80 Partikel, 6 Farben) + glassmorphism Toast aus: "Erwähne KONAMI bei deiner Bestellung — 10% Rabatt 🎁"; 6s sichtbar dann fade-out; einmalig pro Seite (fired-Flag); kein API-Call, rein keyboard-basiert
+- **Deploy**: deploy-branch → origin/main (GitHub Pages) ✅
