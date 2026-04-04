@@ -2686,3 +2686,31 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - **Kein extra API-Call** — nutzt ausschließlich vorhandene `_wx` Daten
 - **Effekt**: Im Wetter-Tab erscheint ein eleganter Radar-Chart der zeigt wie das aktuelle Wetter in 6 Dimensionen abschneidet — wie ein Spinnennetz das sich zur Mitte zieht wenn Bedingungen schlecht sind, und zur vollen Raute aufspannt wenn alles optimal ist. Jede Achse hat eine individuelle Farbe, animierter Einblend-Effekt macht das Entstehen des Charts visuell ansprechend.
 - JS-Check: OK | Deploy via SSH gescheitert (Auth-Fehler) — wz.html lokal aktuell
+
+## 2026-04-04 10:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Home-Hero — "Wetter-Emoji Floater" (🌤)
+- Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
+- **Konzept**: Ein großes (80px) semi-transparentes Wetter-Emoji schwebt oben-rechts im Home-Hero — rein dekorativ, aber gibt dem Hero sofort einen visuellen Charakter der das aktuelle Wetter widerspiegelt
+- **`#hero-wx-float` Div**: `position:absolute; top:10px; right:12px; font-size:80px; z-index:3; pointer-events:none` — liegt über den Wellen (z-index:1) aber unter hcont (z-index:2, kein Konflikt da non-overlapping)
+- **5 WMO-reaktive CSS-Animations-Klassen**:
+  - `.wxf-sun` (☀️ WMO 0-1): `@keyframes wxfSunSpin` → rotiert 360° in 32s linear infinite — sehr langsame, meditative Rotation
+  - `.wxf-cloud` (⛅/🌫/🌙 WMO 2-48 + Nacht): `@keyframes wxfCloudDrift` → schwebt ±8px/4px hin und her, 9s alternate — wie eine Wolke die im Wind treibt
+  - `.wxf-rain` (🌧 WMO 51-82): `@keyframes wxfRainBounce` → translateY 0→6px→0, 2.4s loop — leichtes Auf/Ab wie fallende Tropfen
+  - `.wxf-snow` (❄️ WMO 71-86): `@keyframes wxfSnowDrift` → translateX + rotate 15°, 7s alternate — sanftes Wieseln wie Schneeflocken
+  - `.wxf-storm` (⛈ WMO ≥95): `@keyframes wxfStormFlash` → opacity 0.10→0.16→0.07→0.15, 1.8s loop — subtiles Flackern wie Blitze
+- **Emoji-Auswahl** je WMO + `is_day`:
+  - Nacht klar: 🌙, Nacht bewölkt: ☁️, Nacht Regen: 🌧
+  - Tag klar: ☀️, bewölkt: ⛅, Nebel: 🌫, Niesel: 🌦, Regen: 🌧, Schnee: ❄️, Gewitter: ⛈
+- **Smooth Emoji-Wechsel**: bei Weather-Code-Änderung → opacity:0 (600ms) → dann neues Emoji + `show`-Klasse — kein hartes Pop
+- **`opacity:0.10`**: extrem dezent — gerade erkennbar genug um Charakter zu geben, nicht aufdringlich
+- **Light-Mode**: `opacity:0!important` — auf hellem Hintergrund wäre das Emoji deplatziert
+- **`aria-hidden="true"`**: kein Screenreader-Noise
+- **Kein extra API-Call** — nutzt bereits vorhandene `code` + `night` Variablen in `renderWeather()`
+- JS-Check: OK | SSH nicht verfügbar (Auth-Fehler) — lokal committed
+
+## 2026-04-04 10:15 UTC — Heartbeat Auto-Improve
+- ✅ demo.html: Floating Share Button (📤)
+- **Konzept**: Kleiner Share-Button unten links (Glassmorphism, 44px Kreis), erscheint ab 120px Scroll, nutzt Web Share API auf Mobile und Clipboard API als Desktop-Fallback, zeigt "✅ Link kopiert!" Toast für 2.8s, i18n DE/EN über langChange-Event
+- **CSS**: `#shareBtn` analog zu `#scrollTop`, aber links + `rgba(30,30,32,.85)` statt Accent; `#shareToast` glass-style Badge über dem Button
+- **JS**: navigator.share() wenn verfügbar + canShare() Check; Clipboard API Fallback; scroll-Listener für visibility; langChange-Event für i18n
+- **Deploy**: deploy-branch → origin/main ✅
