@@ -173,10 +173,10 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#fokus-wrap,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#etariff-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,.page-entering>#lt-farbseq,.page-entering>#lt-room-aura,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#streak-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#fokus-wrap,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#etariff-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,.page-entering>#lt-farbseq,.page-entering>#lt-room-aura,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,.page-entering>#wx-persona-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette,.page-entering>#ping-monitor{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -414,6 +414,23 @@ html,body{height:100%;background:var(--bg);
 @keyframes wkendDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.75)}}
 :root.light #wkend-chip.wkend-soon{background:rgba(200,120,0,.06);border-color:rgba(200,120,0,.18);color:rgba(100,55,0,.8)}
 :root.light #wkend-chip.wkend-now{background:rgba(30,160,60,.06);border-color:rgba(30,160,60,.18);color:rgba(0,70,25,.8)}
+/* ── Tages-Streak Counter ── */
+#streak-chip{align-items:center;gap:10px;margin:0 0 10px;padding:10px 14px;border-radius:14px;font-size:.75rem;border:1px solid rgba(255,159,10,.22);background:rgba(255,159,10,.07);animation:streakChipIn .45s cubic-bezier(.34,1.28,.64,1) both}
+#streak-chip.show{display:flex}
+#streak-fire{font-size:1.25rem;flex-shrink:0;display:inline-block}
+#streak-chip.streak-fire-anim #streak-fire{animation:streakFireBounce 1.4s ease-in-out infinite}
+#streak-body{flex:1;display:flex;flex-direction:column;gap:1px}
+#streak-title{font-size:.74rem;font-weight:700;color:rgba(255,210,100,.95);letter-spacing:.01em}
+#streak-sub{font-size:.63rem;color:rgba(255,255,255,.42);line-height:1.3}
+#streak-badge{flex-shrink:0;padding:3px 9px;border-radius:20px;font-size:.66rem;font-weight:700;letter-spacing:.04em;background:rgba(255,159,10,.18);color:#ff9f0a;border:1px solid rgba(255,159,10,.3)}
+#streak-badge.s-hot{background:rgba(255,60,10,.18);color:#ff6232;border-color:rgba(255,60,10,.35)}
+#streak-badge.s-cold{background:rgba(150,150,160,.12);color:rgba(255,255,255,.45);border-color:rgba(255,255,255,.12)}
+@keyframes streakChipIn{from{opacity:0;transform:scale(.9) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes streakFireBounce{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-4px) scale(1.15)}70%{transform:translateY(-1px) scale(1.05)}}
+:root.light #streak-chip{background:rgba(200,120,0,.05);border-color:rgba(200,120,0,.18)}
+:root.light #streak-title{color:rgba(140,70,0,.9)}
+:root.light #streak-sub{color:rgba(0,0,0,.42)}
+:root.light #streak-badge{background:rgba(200,100,0,.12);color:rgba(150,70,0,.9);border-color:rgba(200,100,0,.25)}
 /* ── Feierabend-Countdown Chip ── */
 #feierabend-chip{display:none;align-items:center;gap:9px;margin:0 0 10px;padding:9px 14px;border-radius:14px;font-size:.75rem;animation:feierabendIn .4s cubic-bezier(.34,1.15,.64,1) both}
 #feierabend-chip.show{display:flex}
@@ -502,6 +519,22 @@ html,body{height:100%;background:var(--bg);
 /* Emoji-Wetter-Band */
 #emoji-band-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(8px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #emoji-band-card.show{opacity:1;transform:translateY(0)}
+/* Wetter-Persönlichkeit Card */
+#wx-persona-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#wx-persona-card.show{opacity:1;transform:translateY(0)}
+#wx-persona-inner{background:var(--c1);border-radius:18px;border:1px solid rgba(255,255,255,.08);padding:16px;position:relative;overflow:hidden;display:flex;align-items:center;gap:14px}
+#wx-persona-bg{position:absolute;top:-20px;right:-20px;width:110px;height:110px;border-radius:50%;filter:blur(40px);pointer-events:none;opacity:.22;transition:background 2s ease}
+#wx-persona-texts{flex:1;min-width:0}
+#wx-persona-label{font-size:.56rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:5px}
+#wx-persona-name{font-size:1.0rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:5px;transition:color .8s ease}
+#wx-persona-desc{font-size:.7rem;color:rgba(255,255,255,.5);line-height:1.45;font-style:italic}
+#wx-persona-mascot{font-size:3.0rem;flex-shrink:0;line-height:1;text-align:center;width:60px;will-change:transform}
+#wx-persona-card.show #wx-persona-mascot{animation:wxPersonaMascotBob 4s ease-in-out infinite}
+@keyframes wxPersonaMascotBob{0%,100%{transform:translateY(0) rotate(-3deg) scale(1)}50%{transform:translateY(-5px) rotate(3deg) scale(1.07)}}
+:root.light #wx-persona-card #wx-persona-desc{color:rgba(0,0,0,.42)}
+:root.light #wx-persona-card #wx-persona-name{color:var(--txt)}
+:root.light #wx-persona-card #wx-persona-label{color:rgba(0,0,0,.32)}
+:root.light #wx-persona-card #wx-persona-inner{border-color:rgba(0,0,0,.07)}
 #emoji-band-scroll{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #emoji-band-scroll::-webkit-scrollbar{display:none}
 .eb-cell{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 7px 7px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:var(--c1);min-width:46px;cursor:default;transition:transform .2s cubic-bezier(.34,1.28,.64,1)}
@@ -1467,6 +1500,21 @@ html,body{height:100%;background:var(--bg);
 @keyframes ambOrbDrift{0%,100%{transform:translate(0,0)}30%{transform:translate(-20px,22px)}65%{transform:translate(10px,-15px)}}
 @keyframes bestHourOrb{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-12px,10px) scale(1.1)}70%{transform:translate(8px,-8px) scale(.93)}}
 @keyframes ghOrbDrift{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(-18px,14px) scale(1.12)}70%{transform:translate(10px,-10px) scale(.95)}}
+/* ── Hero Wetter-Emoji Floater ── */
+#hero-wx-float{position:absolute;top:10px;right:12px;font-size:80px;line-height:1;pointer-events:none;z-index:3;opacity:0;transition:opacity 2.2s ease,font-size .5s ease;user-select:none;filter:blur(0px)}
+#hero-wx-float.show{opacity:.10}
+:root.light #hero-wx-float{opacity:0!important}
+/* WMO animation variants */
+#hero-wx-float.wxf-sun{animation:wxfSunSpin 32s linear infinite}
+#hero-wx-float.wxf-cloud{animation:wxfCloudDrift 9s ease-in-out infinite alternate}
+#hero-wx-float.wxf-rain{animation:wxfRainBounce 2.4s ease-in-out infinite}
+#hero-wx-float.wxf-snow{animation:wxfSnowDrift 7s ease-in-out infinite alternate}
+#hero-wx-float.wxf-storm{animation:wxfStormFlash 1.8s ease-in-out infinite}
+@keyframes wxfSunSpin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.06)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes wxfCloudDrift{0%{transform:translateX(0) translateY(0)}100%{transform:translateX(-8px) translateY(4px)}}
+@keyframes wxfRainBounce{0%,100%{transform:translateY(0)}45%{transform:translateY(6px)}}
+@keyframes wxfSnowDrift{0%{transform:translateX(0) rotate(0deg)}100%{transform:translateX(-10px) rotate(15deg)}}
+@keyframes wxfStormFlash{0%,100%{opacity:.10}40%{opacity:.16}50%{opacity:.07}60%{opacity:.15}}
 /* ── Hero Scan-Line ── */
 #hero-scan-line{position:absolute;left:-10%;right:-10%;height:2px;top:-2px;pointer-events:none;z-index:7;
   background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.18) 20%,rgba(255,255,255,.7) 50%,rgba(255,255,255,.18) 80%,transparent 100%);
@@ -3068,6 +3116,7 @@ input[type=range] { touch-action: none; }
           <canvas id="wx-particles"></canvas>
         <div class="hglow"></div>
         <div id="amb-orb"></div>
+        <div id="hero-wx-float" aria-hidden="true"></div>
         <!-- Orbiting Light Dots Canvas -->
         <canvas id="hero-orbit-cv" aria-hidden="true"></canvas>
         <!-- Hero Wave Background -->
@@ -3638,6 +3687,9 @@ input[type=range] { touch-action: none; }
 
       <!-- Wochenende-Countdown Chip -->
       <div id="wkend-chip"></div>
+
+      <!-- Tages-Streak Counter -->
+      <div id="streak-chip" style="display:none"></div>
 
       <!-- Feierabend-Countdown Chip -->
       <div id="feierabend-chip">
@@ -4811,6 +4863,18 @@ input[type=range] { touch-action: none; }
       <div id="emoji-band-card">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:8px">🌈 NÄCHSTE 12 STUNDEN</div>
         <div id="emoji-band-scroll"></div>
+      </div>
+      <!-- Wetter-Persönlichkeit -->
+      <div id="wx-persona-card">
+        <div id="wx-persona-inner">
+          <div id="wx-persona-bg"></div>
+          <div id="wx-persona-texts">
+            <div id="wx-persona-label">✨ WETTER-CHARAKTER</div>
+            <div id="wx-persona-name">–</div>
+            <div id="wx-persona-desc">–</div>
+          </div>
+          <div id="wx-persona-mascot">–</div>
+        </div>
       </div>
       <!-- Regen-Wahrscheinlichkeit 24h Heatmap -->
       <div id="rain-hm-card" style="display:none;margin-bottom:12px">
@@ -6887,6 +6951,36 @@ function renderWeather(){
   if(window.updateWxPrecipCanvas) updateWxPrecipCanvas(code, night);
   if(window._updateCloudCanvas) _updateCloudCanvas(c.cloud_cover != null ? c.cloud_cover : 0);
   drawWxTabAura(code, night);
+  drawWxPersona();
+  // ── Hero Wetter-Emoji Floater ──
+  (function(){
+    const fl=document.getElementById('hero-wx-float');
+    if(!fl)return;
+    // Pick emoji + animation class from WMO code
+    let emoji='', animCls='';
+    if(night){
+      if(code<=1){emoji='🌙';animCls='wxf-cloud';}
+      else if(code<=3){emoji='☁️';animCls='wxf-cloud';}
+      else{emoji='🌧';animCls='wxf-rain';}
+    } else if(code===0||code===1){emoji='☀️';animCls='wxf-sun';}
+    else if(code<=3){emoji='⛅';animCls='wxf-cloud';}
+    else if(code<=48){emoji='🌫';animCls='wxf-cloud';}
+    else if(code<=57){emoji='🌦';animCls='wxf-rain';}
+    else if(code<=67||code<=82){emoji='🌧';animCls='wxf-rain';}
+    else if(code<=77||code<=86){emoji='❄️';animCls='wxf-snow';}
+    else{emoji='⛈';animCls='wxf-storm';}
+    if(fl.textContent!==emoji){
+      fl.style.opacity='0';
+      setTimeout(()=>{
+        fl.textContent=emoji;
+        fl.className='show '+animCls;
+      },600);
+    } else {
+      fl.classList.remove('wxf-sun','wxf-cloud','wxf-rain','wxf-snow','wxf-storm');
+      void fl.offsetWidth;
+      fl.classList.add('show',animCls);
+    }
+  })();
   // Live Wetter-Emoji im Nav-Badge
   (function(){
     const em=document.getElementById('wx-nav-emoji');
@@ -14479,6 +14573,42 @@ function updateAll(){
       else{label=`🥳 Heute Nacht: Wochenende! noch ${hLeft}h`;}
       txt.textContent=label;
     }
+  })();
+  // ── Tages-Streak Counter ──
+  (function(){
+    const chip=document.getElementById('streak-chip');
+    if(!chip)return;
+    // Get today's date string YYYY-MM-DD
+    const todayStr=(function(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})();
+    // Read/update streak data from localStorage
+    let sd={};
+    try{sd=JSON.parse(localStorage.getItem('streak_v1')||'{}');}catch(e){}
+    const lastDay=sd.lastDay||'';
+    const streak=Number(sd.streak||0);
+    // Compute yesterday
+    const yesterday=(function(){const d=new Date();d.setDate(d.getDate()-1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})();
+    let newStreak=streak;
+    if(lastDay!==todayStr){
+      // New day: extend or reset
+      if(lastDay===yesterday){newStreak=streak+1;}
+      else if(lastDay===''){newStreak=1;}
+      else{newStreak=1;} // streak broken
+      sd={lastDay:todayStr,streak:newStreak};
+      try{localStorage.setItem('streak_v1',JSON.stringify(sd));}catch(e){}
+    }
+    if(newStreak<1){chip.classList.remove('show');return;}
+    // Build chip HTML
+    const fire=newStreak>=7?'🔥':newStreak>=3?'🔆':'✨';
+    const badgeClass=newStreak>=7?'s-hot':newStreak<=1?'s-cold':'';
+    const badgeTxt=newStreak>=14?'Mega-Streak!':newStreak>=7?'On Fire!':newStreak>=3?'Im Lauf!':'Neu!';
+    const sub=newStreak===1?'Erster Tag — mach weiter!':newStreak===2?'2 Tage — du kommst!':
+      newStreak<7?`${newStreak} Tage am Stück — weiter so!`:
+      newStreak<14?`${newStreak} Tage in Folge — fantastisch!`:
+      `${newStreak} Tage Streak — unaufhaltbar! 💪`;
+    chip.innerHTML=`<span id="streak-fire">${fire}</span><div id="streak-body"><div id="streak-title">${newStreak} ${newStreak===1?'Tag':'Tage'} genutzt</div><div id="streak-sub">${sub}</div></div><div id="streak-badge" class="${badgeClass}">${badgeTxt}</div>`;
+    chip.classList.add('show');
+    if(newStreak>=3)chip.classList.add('streak-fire-anim');
+    else chip.classList.remove('streak-fire-anim');
   })();
   // ── Feierabend-Countdown Chip ──
   (function(){
