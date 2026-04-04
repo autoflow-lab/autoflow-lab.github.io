@@ -752,6 +752,31 @@ audio{display:none}
 /* ═══════════════════════════════════════════
    FAQ
 ═══════════════════════════════════════════ */
+/* Comparison Table */
+.cmp-table{border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--card)}
+.cmp-head{display:grid;grid-template-columns:2fr 2fr 2fr;background:rgba(255,159,10,.08);border-bottom:1px solid var(--border)}
+.cmp-head .cmp-col{padding:14px 18px;font-size:.78rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.cmp-head .cmp-pro{color:#ff9f0a;background:rgba(255,159,10,.10);font-size:.82rem}
+.cmp-row{display:grid;grid-template-columns:2fr 2fr 2fr;border-bottom:1px solid var(--border);transition:background .15s}
+.cmp-row:last-of-type{border-bottom:none}
+.cmp-row:hover{background:rgba(255,255,255,.03)}
+.cmp-row>div{padding:13px 18px;font-size:.84rem;line-height:1.45;display:flex;align-items:center;gap:7px}
+.cmp-feat{font-weight:600;color:var(--text)}
+.cmp-std{color:var(--text2)}
+.cmp-pro{color:var(--text);background:rgba(255,159,10,.04)}
+.cmp-yes{color:#30d158;font-size:1rem}
+.cmp-no{color:#ff453a;font-size:1rem}
+.cmp-meh{color:#ffd60a;font-size:1rem}
+.cmp-cta{padding:22px 18px;display:flex;justify-content:center;background:rgba(255,159,10,.06);border-top:1px solid var(--border)}
+@media(max-width:600px){
+  .cmp-head,.cmp-row{grid-template-columns:1fr;gap:0}
+  .cmp-head .cmp-col:first-child{display:none}
+  .cmp-row>div:first-child{font-size:.75rem;color:var(--text2);padding-bottom:2px}
+  .cmp-head .cmp-std,.cmp-head .cmp-feat{display:none}
+}
+[data-theme="light"] .cmp-row:hover{background:rgba(0,0,0,.025)}
+[data-theme="light"] .cmp-pro{background:rgba(255,159,10,.06)}
+[data-theme="light"] .cmp-cta{background:rgba(255,159,10,.08)}
 .faq-list{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:7px}
 .faq-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);transition:border-color .2s}
 .faq-item:hover{border-color:var(--border2)}
@@ -1123,7 +1148,47 @@ input[type=range]{touch-action:pan-x}
   .mobile-only{display:none}
   .desktop-only{display:inline}
 }
-
+@keyframes discSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes waveMoveA{
+  0%,100%{d:path("M0,36 C40,16 80,56 120,36 C160,16 180,50 200,36 L200,72 L0,72 Z")}
+  50%{d:path("M0,46 C40,26 80,66 120,46 C160,26 180,60 200,46 L200,72 L0,72 Z")}
+}
+@keyframes waveMoveB{
+  0%,100%{d:path("M0,48 C50,28 100,62 150,42 C170,34 190,54 200,48 L200,72 L0,72 Z")}
+  50%{d:path("M0,38 C50,18 100,52 150,32 C170,24 190,44 200,38 L200,72 L0,72 Z")}
+}
+@media(max-width:640px){
+  .anim-showcase-row{grid-template-columns:1fr!important}
+}
+/* ── Licht-Simulator ── */
+.lsim-card{display:grid;grid-template-columns:1fr 1fr;gap:28px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px;margin-top:36px}
+@media(max-width:640px){.lsim-card{grid-template-columns:1fr}}
+#lsim-room{position:relative;border-radius:14px;overflow:hidden;min-height:220px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transition:background 1.2s ease}
+#lsim-glow{position:absolute;inset:0;border-radius:14px;pointer-events:none;transition:background 1.2s ease,opacity 1.2s ease}
+#lsim-bulb{position:relative;z-index:2;color:#fff;opacity:.9;filter:drop-shadow(0 0 12px currentColor);transition:color 1.2s ease,filter 1.2s ease}
+#lsim-label-ct{position:relative;z-index:2;font-size:.75rem;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.04em;transition:color 1.2s ease}
+#lsim-label-bri{position:relative;z-index:2;font-size:.65rem;color:rgba(255,255,255,.45);transition:color 1.2s ease}
+#lsim-scene-badge{position:absolute;top:10px;right:10px;z-index:3;font-size:.62rem;font-weight:700;padding:4px 9px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);backdrop-filter:blur(8px);transition:all .4s ease}
+#lsim-controls{display:flex;flex-direction:column;gap:16px;justify-content:center}
+.lsim-row{display:flex;flex-direction:column;gap:6px}
+.lsim-lbl{font-size:.72rem;color:rgba(255,255,255,.6);font-weight:500}
+.lsim-lbl strong{color:rgba(255,255,255,.9)}
+.lsim-slider{-webkit-appearance:none;width:100%;height:5px;border-radius:4px;background:rgba(255,255,255,.12);outline:none;cursor:pointer;transition:background .3s}
+.lsim-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 8px rgba(255,159,10,.6);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.lsim-slider::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 14px rgba(255,159,10,.8)}
+.lsim-ct-bar{display:flex;justify-content:space-between;font-size:.58rem;color:rgba(255,255,255,.3);margin-top:2px;padding:0 2px}
+.lsim-presets{display:flex;flex-wrap:wrap;gap:6px}
+.lsim-preset{font-size:.63rem;font-weight:600;padding:5px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.65);cursor:pointer;touch-action:manipulation;transition:background .15s,border-color .15s,color .15s}
+.lsim-preset:hover{background:rgba(255,255,255,.1)}
+.lsim-preset.lsim-sel{border-color:rgba(255,159,10,.6);background:rgba(255,159,10,.15);color:rgba(255,210,100,.95)}
+.lsim-cta{display:block;text-align:center;padding:13px 18px;border-radius:14px;background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;font-size:.78rem;font-weight:700;text-decoration:none;letter-spacing:.02em;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 18px rgba(255,120,0,.35)}
+.lsim-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,120,0,.5)}
+:root.light .lsim-card{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08)}
+:root.light .lsim-lbl{color:rgba(0,0,0,.55)}
+:root.light .lsim-lbl strong{color:rgba(0,0,0,.85)}
+:root.light .lsim-preset{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.6)}
+:root.light .lsim-ct-bar{color:rgba(0,0,0,.3)}
+:root.light .lsim-slider{background:rgba(0,0,0,.1)}
 </style>
 </head>
 <body>
@@ -2099,6 +2164,116 @@ input[type=range]{touch-action:pan-x}
             <div class="tech-desc" data-i="tech8d">Dedizierter Home Server — stromsparend, leise, 24/7 zuverlässig.</div>
           </div>
           <span class="tech-badge hw" data-i="techHw">Hardware</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animation Showcase -->
+  <div class="band" style="padding:64px 24px 56px" id="anim-showcase">
+    <div style="max-width:900px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="animTitle">Lebendig. Nicht nur funktional.</h2>
+      <p class="sec-sub sec-center reveal" data-i="animSub">Jedes Detail ist animiert — so fühlt sich dein Smart Home Dashboard an.</p>
+      <div class="anim-showcase-row reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px">
+
+        <!-- Card 1: Vinyl Disc -->
+        <div class="anim-card" style="background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 16px 20px;text-align:center;transition:transform .25s,box-shadow .25s;cursor:default" onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.45)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div style="position:relative;width:72px;height:72px;margin:0 auto 14px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#222 24%,transparent 25%),repeating-radial-gradient(circle at 50% 50%,#1a1a1a 0px,#1a1a1a 2px,#111 3px,#111 5px);box-shadow:0 4px 18px rgba(0,0,0,.6);animation:discSpin 3s linear infinite">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 8px #ff9f0a"></div>
+          </div>
+          <div style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:4px" data-i="anim1title">Vinyl-Teller Animation</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45)" data-i="anim1sub">Dreht sich synchron mit deiner Musik</div>
+        </div>
+
+        <!-- Card 2: Wave -->
+        <div class="anim-card" style="background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 16px 20px;text-align:center;transition:transform .25s,box-shadow .25s;cursor:default;overflow:hidden;position:relative" onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.45)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <svg viewBox="0 0 200 72" style="width:100%;height:72px;display:block;margin-bottom:14px">
+            <defs>
+              <linearGradient id="waveGrad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9f0a" stop-opacity=".7"/><stop offset="1" stop-color="#ff9f0a" stop-opacity="0"/></linearGradient>
+              <linearGradient id="waveGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a84ff" stop-opacity=".5"/><stop offset="1" stop-color="#0a84ff" stop-opacity="0"/></linearGradient>
+            </defs>
+            <path id="wave-path1" fill="url(#waveGrad1)" style="animation:waveMoveA 3s ease-in-out infinite"/>
+            <path id="wave-path2" fill="url(#waveGrad2)" style="animation:waveMoveB 4s ease-in-out infinite reverse"/>
+          </svg>
+          <div style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:4px" data-i="anim2title">Lebendige Wellen</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45)" data-i="anim2sub">Hero-Hintergrund reagiert auf Tageszeit</div>
+        </div>
+
+        <!-- Card 3: Stars / Shooting Star -->
+        <div class="anim-card" style="background:var(--bg2);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 16px 20px;text-align:center;transition:transform .25s,box-shadow .25s;cursor:default;overflow:hidden;position:relative" onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.45)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div style="position:relative;width:100%;height:72px;margin-bottom:14px">
+            <canvas id="stars-demo-cv" style="position:absolute;inset:0;width:100%;height:100%;border-radius:10px"></canvas>
+          </div>
+          <div style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:4px" data-i="anim3title">Sternschnuppen-Nacht</div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.45)" data-i="anim3sub">Nachts ziehen Sternschnuppen über den Hero</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div style="padding:72px 24px" id="comparison-sec">
+    <div style="max-width:900px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="cmpTitle">Standard HA vs. autoflow-lab</h2>
+      <p class="sec-sub sec-center reveal" data-i="cmpSub">Was der Unterschied wirklich bedeutet</p>
+      <div class="cmp-table reveal" id="cmp-table">
+        <div class="cmp-head">
+          <div class="cmp-col cmp-feat" data-i="cmpFeature">Feature</div>
+          <div class="cmp-col cmp-std" data-i="cmpStd">Standard HA</div>
+          <div class="cmp-col cmp-pro">autoflow-lab ✨</div>
+        </div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR1">Design & Ästhetik</div><div class="cmp-std"><span class="cmp-no">✗</span> <span data-i="cmpR1std">Generisch, kaum anpassbar</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR1pro">iOS Dark UI, Glassmorphism, animiert</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR2">Mobile Optimierung</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR2std">Responsiv, aber klobig</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR2pro">Touch-first, Swipe-Gesten, Haptic</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR3">Live Wetterdaten</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR3std">Nur wenn manuell konfiguriert</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR3pro">Integriert, animierte Charts & Score</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR4">Musik-Steuerung</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR4std">Simples Play/Pause Widget</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR4pro">Vinyl-Animation, Swipe-Skip, Visualizer</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR5">Licht-Steuerung</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR5std">Basis On/Off Slider</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR5pro">Farb-Mixer, Szenen, Circadian, Party Mode</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR6">Einrichtungszeit</div><div class="cmp-std"><span class="cmp-no">✗</span> <span data-i="cmpR6std">Stunden bis Tage selbst konfigurieren</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR6pro">Fertig in 24–48h, einfach importieren</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR7">KI-Integration</div><div class="cmp-std"><span class="cmp-no">✗</span> <span data-i="cmpR7std">Nicht vorhanden</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR7pro">Automatisierungen, Sprachsteuerung, N8N</span></div></div>
+        <div class="cmp-row"><div class="cmp-feat" data-i="cmpR8">Support</div><div class="cmp-std"><span class="cmp-meh">~</span> <span data-i="cmpR8std">Community Forum</span></div><div class="cmp-pro"><span class="cmp-yes">✓</span> <span data-i="cmpR8pro">Direkter Chat, Revisionen inklusive</span></div></div>
+        <div class="cmp-cta">
+          <button class="btn-p" onclick="openFiverr()" data-i="cmpCta">Jetzt upgraden →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LICHT-SIMULATOR -->
+  <div class="band" style="padding:72px 24px;background:rgba(255,255,255,.02)" id="licht-sim-section">
+    <div style="max-width:860px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" id="lsim-title">Erlebe dein Licht — live im Browser</h2>
+      <p class="sec-sub sec-center reveal" id="lsim-sub">Stell Farbtemperatur & Helligkeit ein und sieh wie sich die Atmosphäre verändert</p>
+      <div class="lsim-card reveal">
+        <!-- Room Preview -->
+        <div id="lsim-room">
+          <div id="lsim-glow"></div>
+          <div id="lsim-bulb">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 0 1 4.24 10.24L15 15H9l-1.24-1.76A6 6 0 0 1 12 3z"/><path d="M9.5 15a2.5 2.5 0 0 0 5 0"/></svg>
+          </div>
+          <div id="lsim-label-ct">2700K</div>
+          <div id="lsim-label-bri">70%</div>
+          <div id="lsim-scene-badge">Abend</div>
+        </div>
+        <!-- Controls -->
+        <div id="lsim-controls">
+          <div class="lsim-row">
+            <span class="lsim-lbl" id="lsim-ct-lbl">🌡 Farbtemperatur: <strong id="lsim-ct-val">2700</strong>K</span>
+            <input type="range" id="lsim-ct" min="1800" max="6500" value="2700" class="lsim-slider">
+            <div class="lsim-ct-bar"><span>1800K</span><span style="color:#fff9f0">4000K</span><span style="color:#cce8ff">6500K</span></div>
+          </div>
+          <div class="lsim-row">
+            <span class="lsim-lbl">💡 Helligkeit: <strong id="lsim-bri-val">70</strong>%</span>
+            <input type="range" id="lsim-bri" min="1" max="100" value="70" class="lsim-slider">
+          </div>
+          <div class="lsim-presets">
+            <button class="lsim-preset" data-ct="2700" data-bri="45" data-name="Abend">🌅 Abend</button>
+            <button class="lsim-preset" data-ct="5000" data-bri="70" data-name="Fokus">🎯 Fokus</button>
+            <button class="lsim-preset" data-ct="4200" data-bri="95" data-name="Hell">☀️ Hell</button>
+            <button class="lsim-preset" data-ct="1900" data-bri="12" data-name="Nacht">🌙 Nacht</button>
+            <button class="lsim-preset" data-ct="3000" data-bri="80" data-name="Film">🎬 Film</button>
+            <button class="lsim-preset lsim-sel" data-ct="4800" data-bri="60" data-name="Neutral">⚪ Neutral</button>
+          </div>
+          <a href="https://www.fiverr.com/autoflow-lab" target="_blank" rel="noopener" class="lsim-cta" id="lsim-cta-btn">🚀 So wird dein echtes Dashboard — Jetzt anfragen</a>
         </div>
       </div>
     </div>
@@ -3237,6 +3412,21 @@ const T={
     tech7d:'Leichtgewichtiges Echtzeit-Messaging zwischen Geräten — der Klebstoff des IoT.',
     tech8d:'Dedizierter Home Server — stromsparend, leise, 24/7 zuverlässig.',
     techLocal:'Lokal',techStd:'Standard',techHw:'Hardware',
+    animTitle:'Lebendig. Nicht nur funktional.',animSub:'Jedes Detail ist animiert — so fühlt sich dein Smart Home Dashboard an.',
+    anim1title:'Vinyl-Teller Animation',anim1sub:'Dreht sich synchron mit deiner Musik',
+    anim2title:'Lebendige Wellen',anim2sub:'Hero-Hintergrund reagiert auf Tageszeit',
+    anim3title:'Sternschnuppen-Nacht',anim3sub:'Nachts ziehen Sternschnuppen über den Hero',
+    cmpTitle:'Standard HA vs. autoflow-lab',cmpSub:'Was der Unterschied wirklich bedeutet',
+    cmpFeature:'Feature',cmpStd:'Standard HA',
+    cmpR1:'Design & Ästhetik',cmpR1std:'Generisch, kaum anpassbar',cmpR1pro:'iOS Dark UI, Glassmorphism, animiert',
+    cmpR2:'Mobile Optimierung',cmpR2std:'Responsiv, aber klobig',cmpR2pro:'Touch-first, Swipe-Gesten, Haptic',
+    cmpR3:'Live Wetterdaten',cmpR3std:'Nur wenn manuell konfiguriert',cmpR3pro:'Integriert, animierte Charts & Score',
+    cmpR4:'Musik-Steuerung',cmpR4std:'Simples Play/Pause Widget',cmpR4pro:'Vinyl-Animation, Swipe-Skip, Visualizer',
+    cmpR5:'Licht-Steuerung',cmpR5std:'Basis On/Off Slider',cmpR5pro:'Farb-Mixer, Szenen, Circadian, Party Mode',
+    cmpR6:'Einrichtungszeit',cmpR6std:'Stunden bis Tage selbst konfigurieren',cmpR6pro:'Fertig in 24–48h, einfach importieren',
+    cmpR7:'KI-Integration',cmpR7std:'Nicht vorhanden',cmpR7pro:'Automatisierungen, Sprachsteuerung, N8N',
+    cmpR8:'Support',cmpR8std:'Community Forum',cmpR8pro:'Direkter Chat, Revisionen inklusive',
+    cmpCta:'Jetzt upgraden →',
     faqTtl:'Häufige Fragen',faqSub:'Alles was du wissen musst',
     faq1q:'Was ist Home Assistant?',faq1a:'Home Assistant ist eine Open-Source Plattform die 3000+ Smart Home Geräte verbindet — von Philips Hue bis Tesla.',
     faq2q:'Brauche ich technisches Vorwissen?',faq2a:'Nein. Du bekommst fertige Lösungen mit Dokumentation und Einrichtungsanleitung.',
@@ -3319,6 +3509,21 @@ const T={
     tech7d:'Lightweight real-time messaging between devices — the glue of IoT.',
     tech8d:'Dedicated home server — energy-efficient, quiet, reliable 24/7.',
     techLocal:'Local',techStd:'Standard',techHw:'Hardware',
+    animTitle:'Alive. Not just functional.',animSub:'Every detail is animated — this is how your smart home dashboard feels.',
+    anim1title:'Vinyl Disc Animation',anim1sub:'Spins in sync with your music',
+    anim2title:'Living Waves',anim2sub:'Hero background reacts to time of day',
+    anim3title:'Shooting Stars Night',anim3sub:'Stars streak across the hero at night',
+    cmpTitle:'Standard HA vs. autoflow-lab',cmpSub:'What the difference really means',
+    cmpFeature:'Feature',cmpStd:'Standard HA',
+    cmpR1:'Design & Aesthetics',cmpR1std:'Generic, barely customizable',cmpR1pro:'iOS Dark UI, Glassmorphism, animated',
+    cmpR2:'Mobile Optimization',cmpR2std:'Responsive, but clunky',cmpR2pro:'Touch-first, swipe gestures, haptic',
+    cmpR3:'Live Weather Data',cmpR3std:'Only if manually configured',cmpR3pro:'Built-in, animated charts & score',
+    cmpR4:'Music Control',cmpR4std:'Simple Play/Pause widget',cmpR4pro:'Vinyl animation, swipe-skip, visualizer',
+    cmpR5:'Light Control',cmpR5std:'Basic On/Off slider',cmpR5pro:'Color mixer, scenes, Circadian, Party mode',
+    cmpR6:'Setup Time',cmpR6std:'Hours to days of self-config',cmpR6pro:'Ready in 24–48h, just import',
+    cmpR7:'AI Integration',cmpR7std:'Not included',cmpR7pro:'Automations, voice control, N8N',
+    cmpR8:'Support',cmpR8std:'Community forum',cmpR8pro:'Direct chat, revisions included',
+    cmpCta:'Upgrade now →',
     faqTtl:'Frequently Asked Questions',faqSub:'Everything you need to know',
     faq1q:'What is Home Assistant?',faq1a:'Home Assistant is an open-source platform connecting 3000+ smart home devices — from Philips Hue to Tesla.',
     faq2q:'Do I need technical knowledge?',faq2a:'No. You get a ready solution with full documentation and setup guide.',
@@ -3495,6 +3700,11 @@ applyLang=function(){
   setText('card-clock-tag',lang==='de'?'🕐 Zeit & Datum':'🕐 Time & Date');
   setText('card-clock-ttl',lang==='de'?'Lokale Uhrzeit':'Local Time');
   updateClock();
+  // Anim showcase i18n
+  const t2=T[lang];
+  ['animTitle','animSub','anim1title','anim1sub','anim2title','anim2sub','anim3title','anim3sub'].forEach(function(k){
+    document.querySelectorAll('[data-i="'+k+'"]').forEach(function(el){el.textContent=t2[k]||el.textContent;});
+  });
 };
 
 // ── SUNRISE/SUNSET from weather data ──
@@ -3704,6 +3914,219 @@ if(_origGetPos){
         fpSvg.parentElement.classList.add('fp-svg-wrap');
       }
     }
+  }
+})();
+
+// ── Anim Showcase: Stars Canvas ──
+(function(){
+  var cv = document.getElementById('stars-demo-cv');
+  if(!cv) return;
+  var ctx = cv.getContext('2d');
+  var stars = [];
+  var shooting = null;
+  var W, H;
+
+  function resize(){
+    var r = cv.parentElement.getBoundingClientRect();
+    W = cv.width  = r.width  || 200;
+    H = cv.height = r.height || 72;
+    stars = [];
+    for(var i=0;i<40;i++){
+      stars.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.2+.3, a:Math.random()*.8+.2});
+    }
+  }
+
+  function spawnShoot(){
+    shooting = {
+      x: Math.random()*W*.6 + W*.1,
+      y: Math.random()*H*.4,
+      vx: 2.5 + Math.random()*2,
+      vy: 1.2 + Math.random()*1.2,
+      len: 30 + Math.random()*20,
+      life: 1, speed: 0.018
+    };
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Stars
+    stars.forEach(function(s){
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(255,255,255,'+s.a+')';
+      ctx.fill();
+    });
+    // Shooting star
+    if(shooting){
+      var s = shooting;
+      var grd = ctx.createLinearGradient(s.x,s.y, s.x-s.len*s.vx/3, s.y-s.len*s.vy/3);
+      grd.addColorStop(0,'rgba(255,255,255,'+(s.life*.9)+')');
+      grd.addColorStop(.5,'rgba(255,200,80,'+(s.life*.5)+')');
+      grd.addColorStop(1,'rgba(255,200,80,0)');
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x - s.len*s.vx/3, s.y - s.len*s.vy/3);
+      ctx.strokeStyle = grd;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      // Head glow
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 2, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,240,150,'+s.life+')';
+      ctx.fill();
+      s.x += s.vx; s.y += s.vy;
+      s.life -= s.speed;
+      if(s.life<=0||s.x>W||s.y>H) shooting=null;
+    }
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  draw();
+  setInterval(spawnShoot, 2200 + Math.random()*1800);
+  setTimeout(spawnShoot, 600);
+
+  var ro = new ResizeObserver(resize);
+  ro.observe(cv.parentElement);
+})();
+
+// ── Licht-Simulator ──────────────────────────────────
+(function(){
+  var room=document.getElementById('lsim-room');
+  var glow=document.getElementById('lsim-glow');
+  var bulb=document.getElementById('lsim-bulb');
+  var ctSlider=document.getElementById('lsim-ct');
+  var briSlider=document.getElementById('lsim-bri');
+  var ctVal=document.getElementById('lsim-ct-val');
+  var briVal=document.getElementById('lsim-bri-val');
+  var badge=document.getElementById('lsim-scene-badge');
+  var ctLbl=document.getElementById('lsim-label-ct');
+  var briLbl=document.getElementById('lsim-label-bri');
+  if(!room||!ctSlider)return;
+
+  // Convert Kelvin to approximate RGB
+  function kelvinToRgb(k){
+    k=Math.max(1000,Math.min(40000,k))/100;
+    var r,g,b;
+    if(k<=66){
+      r=255;
+      g=Math.max(0,Math.min(255,99.4708025861*Math.log(k)-161.1195681661));
+      b=k<=19?0:Math.max(0,Math.min(255,138.5177312231*Math.log(k-10)-305.0447927307));
+    } else {
+      r=Math.max(0,Math.min(255,329.698727446*Math.pow(k-60,-0.1332047592)));
+      g=Math.max(0,Math.min(255,288.1221695283*Math.pow(k-60,-0.0755148492)));
+      b=255;
+    }
+    return [Math.round(r),Math.round(g),Math.round(b)];
+  }
+
+  function update(){
+    var ct=parseInt(ctSlider.value);
+    var bri=parseInt(briSlider.value)/100;
+    var rgb=kelvinToRgb(ct);
+    var r=Math.round(rgb[0]*bri),g=Math.round(rgb[1]*bri),b=Math.round(rgb[2]*bri);
+    var col='rgb('+r+','+g+','+b+')';
+    // Room bg: very dark tinted by light color
+    room.style.background='rgb('+Math.round(r*.12)+','+Math.round(g*.12)+','+Math.round(b*.12)+')';
+    // Glow: radial from center
+    glow.style.background='radial-gradient(ellipse 70% 60% at 50% 35%,rgba('+r+','+g+','+b+','+(bri*.65)+') 0%,transparent 75%)';
+    // Bulb icon color
+    bulb.style.color=col;
+    bulb.style.filter='drop-shadow(0 0 '+Math.round(8+bri*18)+'px '+col+')';
+    // Labels
+    ctLbl.textContent=ct+'K';
+    briLbl.textContent=Math.round(bri*100)+'%';
+    ctVal.textContent=ct;
+    briVal.textContent=Math.round(bri*100);
+    // Slider track color hint
+    ctSlider.style.accentColor=col;
+    briSlider.style.accentColor=col;
+  }
+
+  ctSlider.addEventListener('input',function(){badge.textContent='Custom';update();});
+  briSlider.addEventListener('input',function(){badge.textContent='Custom';update();});
+
+  document.querySelectorAll('.lsim-preset').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      ctSlider.value=btn.dataset.ct;
+      briSlider.value=btn.dataset.bri;
+      badge.textContent=btn.dataset.name;
+      document.querySelectorAll('.lsim-preset').forEach(function(b){b.classList.remove('lsim-sel');});
+      btn.classList.add('lsim-sel');
+      update();
+    });
+  });
+
+  // IntersectionObserver to animate in
+  var sec=document.getElementById('licht-sim-section');
+  if(sec&&'IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting)update();});
+    },{threshold:.2}).observe(sec);
+  } else { update(); }
+
+  // Apply initial preset (Neutral)
+  ctSlider.value=4800;briSlider.value=60;
+  update();
+})();
+
+// ── Konami Code Easter Egg ───────────────────────────────────────────────────
+(function(){
+  var SEQ=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  var idx=0;
+  var fired=false;
+  document.addEventListener('keydown',function(e){
+    if(fired)return;
+    if(e.key===SEQ[idx]){
+      idx++;
+      if(idx===SEQ.length){
+        fired=true;
+        showKonami();
+      }
+    } else {
+      idx=e.key===SEQ[0]?1:0;
+    }
+  });
+
+  function showKonami(){
+    // Confetti burst
+    var colors=['#ff9f0a','#ffd60a','#30d158','#0a84ff','#ff375f','#bf5af2'];
+    for(var i=0;i<80;i++){
+      spawnConfetti(colors[Math.floor(Math.random()*colors.length)]);
+    }
+    // Toast
+    var t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%) scale(.8);background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border:1px solid rgba(255,159,10,.45);border-radius:18px;padding:18px 26px;z-index:99999;text-align:center;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 24px rgba(255,159,10,.25);transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .45s ease;opacity:0;';
+    t.innerHTML='<div style="font-size:2rem;margin-bottom:6px">🎉</div>'
+      +'<div style="color:#fff;font-weight:700;font-size:1.05rem;margin-bottom:4px" data-i="konami_title">Geheimcode gefunden!</div>'
+      +'<div style="color:rgba(255,255,255,.7);font-size:.88rem" data-i="konami_body">Erwähne "KONAMI" bei deiner Bestellung und erhalte <strong style="color:#ff9f0a">10% Rabatt</strong> 🎁</div>';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        t.style.transform='translateX(-50%) scale(1)';
+        t.style.opacity='1';
+      });
+    });
+    setTimeout(function(){
+      t.style.opacity='0';
+      t.style.transform='translateX(-50%) scale(.85)';
+      setTimeout(function(){t.remove();},500);
+    },6000);
+  }
+
+  function spawnConfetti(color){
+    var el=document.createElement('div');
+    var size=Math.random()*8+5;
+    var x=Math.random()*window.innerWidth;
+    var dur=Math.random()*1800+1200;
+    var delay=Math.random()*600;
+    var drift=(Math.random()-0.5)*200;
+    el.style.cssText='position:fixed;top:-12px;left:'+x+'px;width:'+size+'px;height:'+size+'px;background:'+color+';border-radius:'+(Math.random()>.5?'50%':'2px')+';pointer-events:none;z-index:99998;opacity:1;';
+    document.body.appendChild(el);
+    el.animate([
+      {transform:'translateY(0) rotate(0deg) translateX(0)',opacity:1},
+      {transform:'translateY('+window.innerHeight+'px) rotate('+(Math.random()*720-360)+'deg) translateX('+drift+'px)',opacity:0}
+    ],{duration:dur,delay:delay,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'}).onfinish=function(){el.remove();};
   }
 })();
 
