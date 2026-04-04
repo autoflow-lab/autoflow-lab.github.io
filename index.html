@@ -862,6 +862,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 #scrollTop.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
 #scrollTop:hover{transform:translateY(-3px) scale(1.08)!important;box-shadow:0 8px 28px var(--glow)}
 #scrollTop svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+/* Share Button */
+#shareBtn{position:fixed;bottom:24px;left:24px;z-index:9999;width:44px;height:44px;border-radius:50%;background:rgba(30,30,32,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.4);opacity:0;transform:translateY(20px) scale(.85);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none;cursor:pointer}
+#shareBtn.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+#shareBtn:hover{transform:translateY(-3px) scale(1.08)!important;background:rgba(50,50,55,.95)}
+#shareBtn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#shareToast{position:fixed;bottom:78px;left:24px;z-index:9999;background:rgba(30,30,32,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,159,10,.3);border-radius:12px;padding:10px 16px;color:#fff;font-size:.82rem;font-weight:600;white-space:nowrap;opacity:0;transform:translateY(8px) scale(.92);transition:opacity .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+#shareToast.show{opacity:1;transform:translateY(0) scale(1)}
 .footer-social{display:flex;gap:12px;justify-content:center;margin-bottom:18px}
 .social-btn{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s}
 .social-btn:hover{transform:translateY(-2px);background:var(--accent);border-color:var(--accent)}
@@ -3881,6 +3888,10 @@ if(_origGetPos){
 </script>
 
 <!-- Scroll-to-top button -->
+<button id="shareBtn" aria-label="Seite teilen / Share page">
+  <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+</button>
+<div id="shareToast">✅ <span id="shareToastTxt">Link kopiert!</span></div>
 <button id="scrollTop" aria-label="Zurück nach oben / Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
@@ -4068,6 +4079,45 @@ if(_origGetPos){
   // Apply initial preset (Neutral)
   ctSlider.value=4800;briSlider.value=60;
   update();
+})();
+
+// ── Floating Share Button ────────────────────────────────────────────────────
+(function(){
+  var btn=document.getElementById('shareBtn');
+  var toast=document.getElementById('shareToast');
+  var toastTxt=document.getElementById('shareToastTxt');
+  if(!btn||!toast)return;
+  var shareUrl='https://autoflow-lab.github.io/';
+  var shareTitle='autoflow-lab – Professionelle Smart Home Dashboards';
+  var shareText='Schau dir diese beeindruckenden Smart Home Dashboards an – individuell gestaltet für Home Assistant!';
+  var toastTimer=null;
+  function showToast(msg){
+    toastTxt.textContent=msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){toast.classList.remove('show');},2800);
+  }
+  btn.addEventListener('click',function(){
+    if(navigator.share&&navigator.canShare&&navigator.canShare({url:shareUrl})){
+      navigator.share({title:shareTitle,text:shareText,url:shareUrl}).catch(function(){});
+    } else {
+      try{
+        navigator.clipboard.writeText(shareUrl).then(function(){
+          var isEn=(document.documentElement.lang||'').startsWith('en');
+          showToast(isEn?'✅ Link copied!':'✅ Link kopiert!');
+        }).catch(function(){showToast('📋 '+shareUrl);});
+      } catch(e){showToast('📋 '+shareUrl);}
+    }
+  });
+  // Show after scroll
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('visible',window.scrollY>120);
+  },{passive:true});
+  // i18n
+  document.addEventListener('langChange',function(e){
+    var isEn=e.detail&&e.detail.lang==='en';
+    btn.setAttribute('aria-label',isEn?'Share page':'Seite teilen');
+  });
 })();
 
 // ── Konami Code Easter Egg ───────────────────────────────────────────────────
