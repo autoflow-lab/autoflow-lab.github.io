@@ -176,7 +176,7 @@ html,body{height:100%;background:var(--bg);
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#streak-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#fokus-wrap,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#etariff-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,.page-entering>#lt-farbseq,.page-entering>#lt-room-aura,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,.page-entering>#wx-persona-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#temp-clock-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,.page-entering>#wx-persona-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette,.page-entering>#ping-monitor{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -844,6 +844,10 @@ html,body{height:100%;background:var(--bg);
 :root.light #uvp-status{color:rgba(0,0,0,.75)}
 :root.light #uvp-cd{color:rgba(0,0,0,.45)}
 #sunshine-card{display:none;margin-bottom:12px}
+#temp-clock-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#temp-clock-card.show{opacity:1;transform:translateY(0)}
+#tclock-cv{border-radius:50%;display:block}
+:root.light #temp-clock-card .tclock-lbl{color:rgba(0,0,0,.38)}
 @keyframes sunRayGrow{0%{r:0;opacity:0}60%{opacity:1}100%{opacity:.6}}
 @keyframes sunCorePulse{0%,100%{filter:drop-shadow(0 0 6px rgba(255,214,10,.5))}50%{filter:drop-shadow(0 0 14px rgba(255,214,10,.9))}}
 #biowetter-bg{position:absolute;inset:0;pointer-events:none;border-radius:18px;transition:background 1.5s ease}
@@ -5201,6 +5205,32 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- Temperatur-Uhr 24h -->
+      <div id="temp-clock-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,159,10,.65);text-transform:uppercase;margin-bottom:8px">🕐 TAGES-TEMPERATURUHR</div>
+        <div style="background:var(--c1);border-radius:18px;border:1px solid rgba(255,159,10,.18);border-top-color:rgba(255,159,10,.3);padding:16px 18px;display:flex;align-items:center;gap:16px">
+          <div style="flex-shrink:0;position:relative">
+            <canvas id="tclock-cv" width="148" height="148" style="display:block"></canvas>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:3px">
+              <span id="tclock-hi" style="font-size:1.45rem;font-weight:700;color:var(--txt)">–</span>
+              <span style="font-size:.68rem;color:rgba(255,100,50,.8)">↑</span>
+              <span id="tclock-lo" style="font-size:1.1rem;font-weight:300;color:rgba(255,255,255,.45)">–</span>
+              <span style="font-size:.68rem;color:rgba(100,180,255,.7)">↓</span>
+            </div>
+            <div id="tclock-now-lbl" class="tclock-lbl" style="font-size:.68rem;color:rgba(255,255,255,.5);margin-bottom:10px">Jetzt: –</div>
+            <div style="height:5px;border-radius:3px;background:linear-gradient(90deg,#0a84ff 0%,#5ac8fa 20%,#30d158 45%,#ff9f0a 72%,#ff453a 100%);margin-bottom:4px"></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+              <span id="tclock-scale-lo" class="tclock-lbl" style="font-size:.56rem;color:rgba(255,255,255,.28)">–</span>
+              <span class="tclock-lbl" style="font-size:.56rem;color:rgba(255,255,255,.2)">°C</span>
+              <span id="tclock-scale-hi" class="tclock-lbl" style="font-size:.56rem;color:rgba(255,255,255,.28)">–</span>
+            </div>
+            <div id="tclock-peak" class="tclock-lbl" style="font-size:.63rem;color:rgba(255,255,255,.35);line-height:1.6">–</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Frostwarnung -->
       <div id="frost-card" style="display:none;margin-bottom:12px">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(50,200,255,.65);text-transform:uppercase;margin-bottom:8px">❄️ FROSTWARNUNG</div>
@@ -6948,6 +6978,7 @@ function renderWeather(){
   drawWxHighlight();
   drawWeeklyRain();
   drawBiowetter();
+  drawTempClock();
   drawSunshine();
   drawUvProtect();
   drawFrostWarning();
@@ -9562,6 +9593,144 @@ function drawUvProtect(){
 
   card.style.display='block';
   requestAnimationFrame(function(){card.classList.add('show');});
+}
+
+// ═══════════════════════════════════════════════
+// TAGES-TEMPERATURUHR (24h Radial Clock Heatmap)
+// ═══════════════════════════════════════════════
+function drawTempClock(){
+  const card=document.getElementById('temp-clock-card');
+  const cv=document.getElementById('tclock-cv');
+  if(!card||!cv) return;
+  const h=window._wx&&window._wx.hourly;
+  if(!h||!h.temperature_2m||h.temperature_2m.length<18){card.style.display='none';return;}
+
+  // Gather up to 24 hourly temps starting from hour 0 of today
+  const now=new Date();
+  const todayStr=now.toISOString().slice(0,10);
+  let si=0;
+  if(h.time){
+    for(let i=0;i<h.time.length;i++){
+      if(h.time[i]&&h.time[i].startsWith(todayStr+'T00')){si=i;break;}
+    }
+  }
+  const temps=[];
+  for(let i=0;i<24;i++) temps.push(h.temperature_2m[si+i]??null);
+  const validTemps=temps.filter(t=>t!=null);
+  if(validTemps.length<6){card.style.display='none';return;}
+
+  const minT=Math.min(...validTemps);
+  const maxT=Math.max(...validTemps);
+  const range=Math.max(maxT-minT,1);
+
+  function tempRgb(t){
+    const p=Math.max(0,Math.min(1,(t-minT)/range));
+    // cold blue → cyan → green → amber → hot red
+    const stops=[
+      [10,132,255],[90,200,250],[48,209,88],[255,159,10],[255,69,58]
+    ];
+    const si2=p*(stops.length-1);
+    const lo=Math.floor(si2), hi=Math.min(lo+1,stops.length-1);
+    const f=si2-lo;
+    const r=Math.round(stops[lo][0]+(stops[hi][0]-stops[lo][0])*f);
+    const g=Math.round(stops[lo][1]+(stops[hi][1]-stops[lo][1])*f);
+    const b=Math.round(stops[lo][2]+(stops[hi][2]-stops[lo][2])*f);
+    return [r,g,b];
+  }
+
+  const ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  const cx=W/2,cy=H/2;
+  const IR=36,OR=56,CUR_OR=63;
+  const GAP=0.028;
+  const curHour=now.getHours();
+
+  ctx.clearRect(0,0,W,H);
+
+  // Draw subtle background circle
+  ctx.beginPath();
+  ctx.arc(cx,cy,OR+8,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,.03)';
+  ctx.fill();
+
+  // Draw 24 segments
+  for(let i=0;i<24;i++){
+    const sA=(i/24)*Math.PI*2-Math.PI/2;
+    const eA=((i+1)/24)*Math.PI*2-Math.PI/2;
+    const t=temps[i]??minT;
+    const isCur=i===curHour;
+    const outerR=isCur?CUR_OR:OR;
+    const [r,g,b]=tempRgb(t);
+    const alpha=isCur?1.0:0.72;
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,outerR,sA+GAP,eA-GAP);
+    ctx.arc(cx,cy,IR,eA-GAP,sA+GAP,true);
+    ctx.closePath();
+
+    if(isCur){
+      ctx.shadowColor=`rgba(${r},${g},${b},.9)`;
+      ctx.shadowBlur=14;
+    }
+    ctx.fillStyle=`rgba(${r},${g},${b},${alpha})`;
+    ctx.fill();
+    if(isCur) ctx.shadowBlur=0;
+  }
+
+  // Hour tick marks at 0,6,12,18
+  [[0,'0'],[6,'6'],[12,'12'],[18,'18']].forEach(([hh,lbl])=>{
+    const angle=(hh/24)*Math.PI*2-Math.PI/2;
+    const lx=cx+(OR+12)*Math.cos(angle);
+    const ly=cy+(OR+12)*Math.sin(angle);
+    ctx.font='bold 8px -apple-system,sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(255,255,255,.38)';
+    ctx.fillText(lbl,lx,ly);
+  });
+
+  // Inner circle background
+  ctx.beginPath();
+  ctx.arc(cx,cy,IR-2,0,Math.PI*2);
+  ctx.fillStyle='rgba(0,0,0,.55)';
+  ctx.fill();
+
+  // Center: current temp
+  const curT=temps[curHour]??validTemps[0];
+  const [cr,cg,cb]=tempRgb(curT);
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.font='bold 14px -apple-system,sans-serif';
+  ctx.fillStyle=`rgb(${cr},${cg},${cb})`;
+  ctx.fillText(Math.round(curT)+'°',cx,cy-5);
+  ctx.font='7px -apple-system,sans-serif';
+  ctx.fillStyle='rgba(255,255,255,.32)';
+  ctx.fillText('Jetzt',cx,cy+7);
+
+  // Update right-side labels
+  const hiEl=document.getElementById('tclock-hi');
+  const loEl=document.getElementById('tclock-lo');
+  const nowEl=document.getElementById('tclock-now-lbl');
+  const peakEl=document.getElementById('tclock-peak');
+  const scLoEl=document.getElementById('tclock-scale-lo');
+  const scHiEl=document.getElementById('tclock-scale-hi');
+
+  if(hiEl) hiEl.textContent=Math.round(maxT)+'°';
+  if(loEl) loEl.textContent=Math.round(minT)+'°';
+  if(nowEl) nowEl.textContent=curT!=null?`Jetzt: ${Math.round(curT)}° · ${curHour}:00 Uhr`:'Jetzt: –';
+  if(scLoEl) scLoEl.textContent=Math.round(minT)+'°';
+  if(scHiEl) scHiEl.textContent=Math.round(maxT)+'°';
+
+  // Peak/min hour
+  let maxIdx=0,minIdx=0;
+  for(let i=0;i<temps.length;i++){
+    if(temps[i]!=null&&temps[i]>=(temps[maxIdx]??-99)) maxIdx=i;
+    if(temps[i]!=null&&temps[i]<=(temps[minIdx]??99)) minIdx=i;
+  }
+  if(peakEl) peakEl.textContent=`🌡 Wärmstes: ${maxIdx}:00 Uhr (${Math.round(temps[maxIdx]??maxT)}°)  ·  ❄️ Kältestes: ${minIdx}:00 Uhr (${Math.round(temps[minIdx]??minT)}°)`;
+
+  card.style.display='';
+  requestAnimationFrame(()=>card.classList.add('show'));
 }
 
 // ═══════════════════════════════════════════════
