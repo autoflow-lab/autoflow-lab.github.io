@@ -19831,6 +19831,84 @@ const _origSetWxMode=setWxMode;
   }
 })();
 
+// ── Home-Hero: Finger Trail Orbs (Touch/Mouse magic trail) ──────────────────
+(function(){
+  'use strict';
+  const hero=document.querySelector('.hero');
+  if(!hero)return;
+
+  // Create canvas overlay
+  const cv=document.createElement('canvas');
+  cv.id='hero-trail-cv';
+  cv.setAttribute('aria-hidden','true');
+  cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4;opacity:0;transition:opacity .4s ease';
+  // Insert before hero-tap-layer if present, else append
+  const tapLayer=document.getElementById('hero-tap-layer');
+  if(tapLayer) hero.insertBefore(cv,tapLayer);
+  else hero.appendChild(cv);
+
+  // Light-mode: disable
+  if(document.documentElement.classList.contains('light')) return;
+
+  const ctx=cv.getContext('2d');
+  let pts=[];
+  let raf=null;
+
+  function resize(){
+    cv.width=hero.offsetWidth||window.innerWidth||360;
+    cv.height=hero.offsetHeight||160;
+  }
+  resize();
+  try{new ResizeObserver(resize).observe(hero);}catch(e){}
+
+  function addPt(x,y){
+    if(document.documentElement.classList.contains('light'))return;
+    const isAmber=Math.random()>.42;
+    pts.push({x,y,t:performance.now(),life:680,
+      r:isAmber?18:11,
+      c:isAmber?'255,159,10':'255,240,220'});
+    if(!raf)raf=requestAnimationFrame(draw);
+    cv.style.opacity='1';
+  }
+
+  function draw(now){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    pts=pts.filter(p=>(now-p.t)<p.life);
+    if(!pts.length){raf=null;cv.style.opacity='0';return;}
+    raf=requestAnimationFrame(draw);
+    pts.forEach(p=>{
+      const age=(now-p.t)/p.life;
+      // Eased alpha: peaks early, fades smoothly
+      const a=Math.max(0,Math.pow(1-age,1.8)*0.38);
+      const r=p.r*(1+age*0.6);
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r);
+      g.addColorStop(0,`rgba(${p.c},${Math.min(1,a*3.2).toFixed(3)})`);
+      g.addColorStop(0.45,`rgba(${p.c},${a.toFixed(3)})`);
+      g.addColorStop(1,`rgba(${p.c},0)`);
+      ctx.beginPath();
+      ctx.fillStyle=g;
+      ctx.arc(p.x,p.y,r,0,Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  let _lt=0;
+  function onMove(cx,cy){
+    const now=Date.now();
+    if(now-_lt<38)return;
+    _lt=now;
+    const rect=hero.getBoundingClientRect();
+    addPt(cx-rect.left,cy-rect.top);
+  }
+
+  hero.addEventListener('touchmove',e=>{
+    for(let i=0;i<e.touches.length;i++)onMove(e.touches[i].clientX,e.touches[i].clientY);
+  },{passive:true});
+  hero.addEventListener('pointermove',e=>{
+    if(e.pointerType==='mouse')onMove(e.clientX,e.clientY);
+  },{passive:true});
+})();
+
 // ── Home-Hero: Ring of Lights Orbit Canvas ───────────────────────────────────
 (function(){
   const cv=document.getElementById('hero-orbit-cv');
