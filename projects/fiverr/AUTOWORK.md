@@ -357,7 +357,7 @@
 - [x] wz.html: Licht-Tab — "Licht-Snapshot" Feature (📸 Lichtzustand speichern & wiederherstellen, bis zu 3 Schnappschüsse in localStorage, Farbdot-Vorschau, Apply/Delete)
 
 ## Neue Ideen (2026-03-29 16:03 UTC)
-- [x] wz.html: App — "Lebendiger Hintergrund" Tageszeit-reaktive Ambient-Orbs (2 große, sehr sanft driftende radial-gradient Orbs hinter dem App-Inhalt, Orb1 oben-links/Orb2 unten-rechts, Farbe wechselt je Tageszeit: nachts blau/lila → morgens rose/amber → tags neutral → abends orange/lila, Orb2 reagiert zusätzlich 30% auf aktive RGB-Lichtfarben via lerp, filter:blur(90px), opacity 0→1 beim Initialisieren, CSS drift-Animationen 26s/34s alternate, Light-Mode: opacity:0!important)
+- [x] wz.html: App — "Lebendiger Hintergrund" Tageszeit-reaktive Ambient-Orbs (2 große, sehr sanft driftende radial-gradient Orbs hinter dem App-Inhalt, Orb1 oben-links/Orb2 unten-rechts, Farbe wechselt je Tageszeit: nachts blau/lila → morgens rose/amber → tags neutral → abends orange/lila, Orb2 reagiert zusätzlich 30% auf aktive RGB-Lichtfarben via lerp, filter:blur(90px), opacity 0→1 beim Initialisieren, CSS drift-animationen 26s/34s alternate, Light-Mode: opacity:0!important)
 
 ## Neue Ideen (2026-03-29 22:03 UTC)
 - [x] wz.html: Home-Tab — Anwesenheits-Chips (device_tracker.* Entities: Person-Chips mit Initialen-Avatar + Name + Zuhause/Unterwegs/Zone Status, grün/gedimmt/blau Farbschema, pulsierender Dot bei "Zuhause", staggered presChipIn Animation)
@@ -459,3 +459,6 @@
 
 ## Neue Ideen (2026-04-04 18:14 UTC)
 - [x] demo.html: Integrations Ticker (🔗 20 Brand-Chips — Philips Hue/IKEA/Shelly/Zigbee/Sonos/Spotify/Alexa/Google Home/HomeKit/ESPHome/Tasmota/Xiaomi/MQTT/Node-RED/Tuya/Telegram/Grafana/Frigate/InfluxDB — endlos-scrollender CSS-Ticker, hover-pause, mask-fade, farbige Dots je Brand)
+
+## Neue Ideen (2026-04-09)
+- [x] wz.html: Home-Tab — "Offene Fenster / Türen" Status-Chip (🪟 scans `binary_sensor.*` entities with `device_class: window` or `device_class: door` for `on` state; if any open, shows compact amber chip with pulsating dot, text "Fenster offen" or "Tür offen" (+count), spring-in animation; tap reveals quick list of open sensors; Light-Mode compatible)

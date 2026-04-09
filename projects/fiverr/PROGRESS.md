@@ -1,5 +1,24 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-04-09 21:12 UTC — Heartbeat (Auto-Improve)
+- ✅ wz.html: Home-Tab — "Offene Fenster / Türen" Status-Chip (🪟)
+- **Konzept**: Zeigt kompakt an ob Fenster oder Türen offen sind — scannt `binary_sensor.*` mit `device_class: window|door` auf `state=on`
+- **HTML**: `#open-sensors-chip` Pill-Flex mit pulsierendem amber Dot + dynamisch aktualisiertem Text
+- **CSS**: amber Farbschema `rgba(255,159,10)`, pulsierendes Dot (`@keyframes oscDotPulse` 2s), spring-in Animation `oscChipIn` (.42s cubic-bezier), Light-Mode Overrides
+- **JavaScript**: IIFE in `updateAll()` nach `presence-strip`-Block
+  - Scannt alle `binary_sensor.*` Entities nach `device_class` window/door
+  - Filtert auf `state==='on'` (offen)
+  - Zeigt Fenster-Zahl / Tür-Zahl oder gemischte Anzeige je nach Kombination
+  - Tap-Handler via `alert()` zeigt Liste der offenen Sensoren (Namen)
+  - Chip verschwindet automatisch wenn alle geschlossen
+- **Animationen**: Chip erscheint mit spring-in Animation beim Eintritt des Fensters/Türen
+- **Light-Mode**: Dunkleres amber für Lesbarkeit auf hellem Hintergrund
+- `#open-sensors-chip` zur `.page-entering>` Stagger-CSS-Liste hinzugefügt → animiert beim Tab-Wechsel ein
+- **Kein extra API-Call** — nutzt bereits vorhandene `_S` (fetchStates) Daten aus HA binary_sensor Entities
+- Graceful: Chip bleibt versteckt wenn keine Fenster/Türen-Sensoren in HA konfiguriert
+- **Einsatz**: Auf einen Blick sehen ob noch Fenster/Türen offen sind — praktisches Sicherheits-Feature für den Alltag
+- JS-Check: OK | Git: a79b4e5 | Deploy: lokal committed, manuelle SSH-Übertragung erforderlich (kein Passwort gespeichert)
+
 ## 2026-04-04 16:10 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Home-Hero — "Finger Trail Orbs" (✨)
 - Alle AUTOWORK.md Tasks waren [x] → neue Idee generiert und implementiert
