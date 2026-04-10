@@ -1,5 +1,33 @@
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-04-09 22:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Licht-Tab — "Floating All-Lights Toggle FAB" (💡)
+- **Konzept**: Ein schwebendes, grünes Action-Button (Floating Action Button) unten rechts im Licht-Tab, das nur erscheint wenn mindestens ein Licht eingeschaltet ist. Mit One-Tap-Sicherheitsbestätigung um alle aktiven Lichter gleichzeitig auszuschalten.
+- **HTML**: `#light-fbl-fab` Div mit `.fbl-inner` Container und 💡 Emoji
+- **CSS**: 
+  - FAB Position: `position:fixed; bottom:calc(max(env(safe-area-inset-bottom),8px) + 80px); right:16px;` — schwebt über Nav-Bar z-index:150
+  - FAB Gradient: `linear-gradient(135deg,rgba(48,209,88,.9),rgba(52,211,153,.85))` — grüner Verlauf mit Glow-Schatten
+  - Animation: `@keyframes fabPulse` 2.4s ease-in-out — pulsierender Ring-Effekt
+  - Confirmation Modal: `#light-fbl-confirm` mit Glass-Morphism `backdrop-filter:blur(6px)`, dark Overlay rgba(0,0,0,.5), z-index:140
+  - Card Design: `.lfc-card` mit Glasmorphism, `border-radius:20px`, Shadow 20px, zentriert
+  - Buttons: `.lfc-cancel` (neutral grau) + `.lfc-confirm` (grün) mit scale(.94) Active-State
+  - Light-Mode: dunkleres Grün rgba(30,150,60) für bessere Sichtbarkeit auf hellem Hintergrund
+- **JavaScript**:
+  - `showLightFABConfirm(count, lights)` Funktion erzeugt Modal on-demand
+  - `updateAll()` Hook: wraps Original-Funktion und fügt FAB-Update-Logik hinzu
+  - FAB zeigt sich nur wenn `activeLights.length > 0`
+  - Per Tap auf FAB wird Modal angezeigt mit korrekter Lichter-Zahl
+  - Cancel-Button schließt Modal, Confirm-Button ruft `svc('light','turn_off')` für jedes Licht auf, dann `fetchStates()` zur Echtzeit-Aktualisierung
+- **Design Details**:
+  - Scale-Animation: `cubic-bezier(.34,1.28,.64,1)` für spring-in Effekt (smooth Bounce)
+  - Pulsing Dot: `box-shadow` Animation mit glow effect 2.4s cycle
+  - Confirmation ohne History: Modal erscheint on-demand, keine vorherige Speicherung
+  - Echtzeit-Sync: updateAll() stellt sicher FAB ist always in Sync mit tatsächlichem Lichtzustand
+- **Kein extra API-Call** — nutzt bereits vorhandene _S (fetchStates) Daten
+- **Graceful Degradation**: wenn kein DOM-Element vorhanden → early return, kein Error
+- Effekt: Schneller, visuell ansprechender One-Tap "Alle aus" Button mit 2-Step-Bestätigung für Sicherheit
+- JS-Check: ✅ Valid | Deployment: ready (manuell SSH zu HA erforderlich) | v3.2
+
 ## 2026-04-09 21:12 UTC — Heartbeat (Auto-Improve)
 - ✅ wz.html: Home-Tab — "Offene Fenster / Türen" Status-Chip (🪟)
 - **Konzept**: Zeigt kompakt an ob Fenster oder Türen offen sind — scannt `binary_sensor.*` mit `device_class: window|door` auf `state=on`
@@ -2790,3 +2818,24 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 - **Konzept**: Horizontaler endlos-scrollender Brand-Chip-Ticker mit 20 Smart-Home Integrationen; CSS `@keyframes intgScroll` 32s linear; dupliziertes HTML für nahtlosen Loop; Edge-Fade via `mask-image`; hover pausiert Animation; farbiger Dot je Brand
 - **Conversion**: zeigt auf einen Blick Expertise und Kompatibilität — key für Vertrauen neuer Besucher
 - **Deploy**: deploy-branch → origin/main ✅
+
+## 2026-04-10 00:01 UTC — Cron (Nacht-Improvements HA Dashboards)
+- ✅ wz.html: Light-Mode Fixes (💡)
+- **Task #4 aus NIGHTPLAN_2.md**: Hardcoded #fff → var(--txt) für kritische Text-Elemente
+- **Elemente gefixed** (13 Stellen):
+  1. `.at` — App-Header großer Text (Zeit)
+  2. `.ws-chip.ws-today .ws-hi` — Wetter-Chip Heute High-Temp
+  3. `#ws-popup-hi` — Wetter-Popup High-Temp
+  4. `#wx-persona-name` — Wetter-Persona Name
+  5. `#umbrella-verdict` — Regen-Urteil
+  6. `#clim-now-val` — Klima aktueller Wert
+  7. `.tl12-temp` — 12h Temperatur-Anzeige
+  8. `#pwr-arc-watts` — Power Watt-Anzeige
+  9. `#pomo-time` — Pomodoro Zeit
+  10. `#ws-score-val` — Wetter-Score Wert
+  11. `#rfc-title` — Reminder/Fokus-Titel
+  12. `#alb-full-title` — Album Titel
+  13. `.rem-title` + `.rem-btn` — Reminder Buttons
+- **Effekt**: Light-Mode zeigt jetzt alle Haupt-Text-Elemente in lesbarer Farbe (var(--txt) passt sich automatisch an) — keine mehr unlesbaren weißen Texte auf hellem Hintergrund
+- **Git**: Commit 691d1a5 | Deploy SSH nicht möglich (Sandbox-Limitation, /dev/tty nicht verfügbar)
+- **Status**: Lokal verifiziert ✓ | Wartet auf manuelles Deploy oder Gateway SSH-Zugang
