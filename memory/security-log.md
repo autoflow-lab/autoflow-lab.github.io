@@ -1,107 +1,55 @@
-# HA Security Log
+# Security Audit Log
 
-## 2026-04-01 16:00 UTC — Check OK (API)
+## 2026-04-10 06:04 — Daily Audit
 
-Log via HA REST API abgerufen. Keine neuen Login-Versuche seit letztem Check (15:00 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
+**Status:** ⚠️ WARNUNG (3 warnings, no critical findings)
 
----
+### Findings
 
+#### OpenClaw Gateway
+- **gateway.trusted_proxies_missing**: Reverse proxy headers are not trusted
+  - Issue: `gateway.bind` is loopback; `gateway.trustedProxies` is empty
+  - Impact: Potential IP spoofing if exposed through a reverse proxy
+  - Recommendation: Set `gateway.trustedProxies` to your proxy IPs OR keep Control UI local-only
 
-## 2026-04-01 15:00 UTC — Check OK (API)
+- **gateway.nodes.denyCommands_ineffective**: Command filtering uses exact name matching only
+  - Issue: Unknown command names detected (camera.snap, camera.clip, screen.record, calendar.add, contacts.add, reminders.add)
+  - Impact: These commands not properly blocked if listed in denyCommands
+  - Recommendation: Use exact command names; remove risky IDs from allowCommands if broader restrictions needed
 
-Log via HA REST API abgerufen. Keine neuen Login-Versuche seit letztem Check (14:30 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
+- **models.weak_tier**: `anthropic/claude-haiku-4-5` below recommended tier
+  - Issue: Smaller models more susceptible to prompt injection
+  - Recommendation: Use top-tier models (GPT-5+, Claude 4.5+) for any bot with tools/untrusted inboxes
 
----
+### Home Assistant Access
+- **HA API accessible**: ✅ Token-based auth working
+- **Logbook accessible**: ✅ Recent 24h logs retrieved successfully
+- **Recent activity (last 2h)**:
+  - Normal state transitions (lights, media players, automations)
+  - Gäste WC automation triggering normally
+  - Spotify playback, device presence tracking
+  - Hue dimmer interactions
+  - Garage door operations (normal)
+  - iPhone charging status updates
+  - Backup system: automatic backup completed successfully at 03:00 UTC
+  
+- **Security observations**:
+  - No suspicious login attempts in recent logs
+  - No unauthorized automations triggered
+  - No exposed tokens in visible logs
+  - Expected device activity patterns
 
+### Recommendations
+1. **Configure reverse proxy security**: If HA is behind a proxy, update `trustedProxies`
+2. **Review command allowlist**: Clarify camera/screen/calendar command names in OpenClaw config
+3. **Consider model upgrade**: For production deployments with external inputs
 
-## 2026-04-01 14:30 UTC — Check OK (API)
-
-Log via HA REST API abgerufen. Keine neuen Login-Versuche seit letztem Check (14:00 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
-
----
-
-
-## 2026-04-01 14:00 UTC — Check OK (API)
-
-Log via HA REST API abgerufen. Keine neuen Login-Versuche seit letztem Check (13:30 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
-
----
-
-
-## 2026-04-01 13:30 UTC — Check OK (API)
-
-Log via HA REST API abgerufen (SSH/sshpass weiterhin nicht verfügbar).
-Keine neuen Login-Versuche seit letztem Check (13:00 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
-
----
-
-
-## 2026-04-01 13:00 UTC — Check OK (API)
-
-Log via HA REST API abgerufen (SSH/sshpass weiterhin nicht verfügbar).
-Keine neuen Login-Versuche seit letztem Check (12:30 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
-
----
-
-
-## 2026-04-01 12:30 UTC — Check OK (API)
-
-Log via HA REST API abgerufen (SSH/sshpass weiterhin nicht verfügbar).
-Keine neuen Login-Versuche seit letztem Check (12:00 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
-
----
-
-
-## 2026-04-01 12:00 UTC — Check OK (API)
-
-Log via HA REST API abgerufen (SSH/sshpass weiterhin nicht verfügbar).
-Keine neuen Login-Versuche seit letztem Check (11:30 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
+### Actions Taken
+- Ran `openclaw security audit` successfully
+- Verified HA API connectivity
+- Reviewed logbook for anomalies
+- No critical issues detected
 
 ---
 
-
-## 2026-04-01 11:30 UTC — Check OK (API)
-
-Log via HA REST API abgerufen (SSH/sshpass weiterhin nicht verfügbar).
-Keine neuen Login-Versuche seit letztem Check (11:00 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
-
----
-
-
-## 2026-04-01 11:00 UTC — Check OK (API)
-
-Log via HA REST API abgerufen (SSH/sshpass weiterhin nicht verfügbar).
-Keine neuen Login-Versuche seit letztem Check (10:30 UTC). Bekannter Eintrag 192.168.1.237 unverändert. → Kein Alert.
-
----
-
-
-## 2026-04-01 10:30 UTC — Check (SSH nicht erreichbar)
-
-SSH-Verbindung zu hassio@192.168.1.123 fehlgeschlagen (`sshpass` nicht verfügbar).
-Log konnte nicht abgerufen werden. Kein neues Ereignis bestätigt → kein Alert.
-
----
-
-
-## 2026-04-01 08:00 UTC — Login-Versuch (lokal, niedrig)
-
-**IP:** `192.168.1.237` (lokales Netz)
-**Zeit:** 2026-03-31 17:43:58
-**URL:** `/api/websocket`
-**User-Agent:** Safari/605.1.15 (macOS)
-**Bewertung:** Lokale IP → kein KRITISCH. Möglicherweise ein Gerät im Heimnetz (Mac mit Safari).
-Keine Bans, keine externen IPs. Chromecast-Fehler weiterhin bekannt (normal).
-
----
-
-
-## 2026-03-29 08:09 UTC — Security OK
-
-Log-Check durchgeführt. Ein Login-Versuch gefunden:
-
-- `84.72.122.4` (84-72-122-4.dclient.hispeed.ch) — hispeed.ch = wahrscheinlich Janis selbst (mobiler Browser, Chrome Android, 20:50 Uhr)
-
-Keine fremden/verdächtigen externen IPs. Keine Bans. Alles normal.
-
-Sonstige Fehler: LG TV Chromecast-Verbindungsabbrüche (normal), light.buro fehlt (bekannt), TTS-Fehler (einmalig).
+**Next audit**: 2026-04-11 06:04 UTC (24h from now)

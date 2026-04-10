@@ -173,7 +173,7 @@ html,body{height:100%;background:var(--bg);
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
 .page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
-.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#streak-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#fokus-wrap,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#etariff-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-ambient-btn,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,.page-entering>#lt-farbseq,.page-entering>#lt-room-aura,
+.page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#streak-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#fokus-wrap,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#etariff-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,.page-entering>#lt-farbseq,.page-entering>#lt-room-aura,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
 .page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#temp-clock-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,.page-entering>#wx-persona-card,
@@ -1161,15 +1161,6 @@ html,body{height:100%;background:var(--bg);
 #lt-nl-btn.nl-flash{animation:nlApply .55s ease forwards}
 :root.light #lt-night{background:transparent}
 :root.light #lt-nl-pill{background:rgba(60,100,255,.06)}
-/* ── Ambient Comfort ── */
-#lt-ambient-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;margin:0 14px 10px;border-radius:14px;border:1px solid rgba(255,200,100,.28);background:rgba(255,180,30,.07);cursor:pointer;touch-action:manipulation;transition:background .18s,transform .15s;opacity:0;color:rgba(255,255,255,.8)}
-#lt-ambient-btn.show{opacity:1}
-#lt-ambient-btn:active{transform:scale(.97);background:rgba(255,180,30,.18)}
-#lt-amb-ico{font-size:1.15rem;flex-shrink:0}
-@keyframes ambSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-#lt-amb-ico.anim-spin{animation:ambSpin .6s cubic-bezier(.4,0,.2,1)}
-#lt-amb-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
-:root.light #lt-ambient-btn{background:rgba(200,120,0,.06);border-color:rgba(200,120,0,.18);color:rgba(80,40,0,.8)}
 /* ── Breathing Light ── */
 #lt-breathe{margin:0 14px 10px;opacity:0;transition:opacity .5s ease}
 #lt-breathe.show{opacity:1}
@@ -1263,8 +1254,7 @@ html,body{height:100%;background:var(--bg);
 @keyframes rbIcoSpin{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
 #lt-rainbow-label{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.72);flex:1}
 #lt-rainbow-val{font-size:.67rem;font-weight:700;color:rgba(255,200,60,.9);white-space:nowrap}
-#lt-rainbow-bar{position:relative;height:5px;border-radius:4px;background:linear-gradient(90deg,hsl(0,90%,55%),hsl(45,90%,55%),hsl(90,90%,50%),hsl(150,90%,50%),hsl(210,90%,55%),hsl(270,90%,55%),hsl(330,90%,55%),hsl(360,90%,55%));opacity:.55;transition:opacity .4s;overflow:hidden;margin-bottom:4px}
-#lt-rainbow-marker{position:absolute;top:-3px;left:0%;width:3px;height:11px;background:#fff;border-radius:1.5px;box-shadow:0 0 4px rgba(255,255,255,.8);transition:left .12s ease;pointer-events:none;z-index:2}
+#lt-rainbow-bar{height:5px;border-radius:4px;background:linear-gradient(90deg,hsl(0,90%,55%),hsl(45,90%,55%),hsl(90,90%,50%),hsl(150,90%,50%),hsl(210,90%,55%),hsl(270,90%,55%),hsl(330,90%,55%),hsl(360,90%,55%));opacity:.55;transition:opacity .4s}
 #lt-rainbow-inner.rb-active #lt-rainbow-bar{opacity:1;animation:rbBarShift 3s linear infinite}
 @keyframes rbBarShift{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
 #lt-rainbow-speeds{display:flex;gap:6px}
@@ -3083,10 +3073,6 @@ input[type=range] { touch-action: none; }
 :root.light .lfc-card{background:var(--c1);border-color:rgba(0,0,0,.08)}
 :root.light .lfc-cancel{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.1)}
 :root.light .lfc-confirm{background:rgba(30,150,60,.08);color:rgba(20,120,50,.9);border-color:rgba(30,150,60,.25)}
-/* ── Licht-Pulse Feedback Animation ── */
-@keyframes ltPulse{0%{box-shadow:0 0 0 2px rgba(255,159,10,.8)}100%{box-shadow:0 0 0 10px rgba(255,159,10,0)}}
-.ltico.ltpulse{animation:ltPulse .5s ease-out}
-:root.light .ltico.ltpulse{box-shadow:0 0 0 2px rgba(180,90,0,.7) !important}
 </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnM=" crossorigin=""></script>
@@ -4195,11 +4181,6 @@ input[type=range] { touch-action: none; }
           <button id="lt-nl-cancel">✕</button>
         </div>
       </div>
-      <!-- Ambient Comfort Button -->
-      <button id="lt-ambient-btn" class="show" aria-label="Ambient Comfort Modus — 3200K / 65%">
-        <span id="lt-amb-ico">☀️</span>
-        <span id="lt-amb-label">Ambient Comfort</span>
-      </button>
       <!-- Breathing Light -->
       <div id="lt-breathe" aria-label="Atemübungs-Licht">
         <button id="lt-br-btn" title="Lichter pulsieren im 4-7-8 Atem-Rhythmus für Entspannung/Meditation">
@@ -4313,7 +4294,7 @@ input[type=range] { touch-action: none; }
             <span id="lt-rainbow-label">Rainbow Cycle</span>
             <span id="lt-rainbow-val">Alle RGB-Lichter</span>
           </div>
-          <div id="lt-rainbow-bar"><div id="lt-rainbow-marker"></div></div>
+          <div id="lt-rainbow-bar"></div>
           <div id="lt-rainbow-speeds">
             <button class="rb-spd-btn rb-sel" data-spd="slow">🐢 Langsam</button>
             <button class="rb-spd-btn" data-spd="mid">🚶 Mittel</button>
@@ -19344,7 +19325,6 @@ const _origSetWxMode=setWxMode;
   var pill   = document.getElementById('lt-rainbow-pill');
   var cdEl   = document.getElementById('lt-rainbow-cd');
   var cancelBtn = document.getElementById('lt-rainbow-cancel');
-  var marker = document.getElementById('lt-rainbow-marker');
   if(!card||!inner||!ico||!pill||!cdEl||!cancelBtn) return;
 
   var SPD = {slow:{ms:60,label:'Langsam'},mid:{ms:25,label:'Mittel'},fast:{ms:8,label:'Schnell'}};
@@ -19376,10 +19356,6 @@ const _origSetWxMode=setWxMode;
     lights.forEach(function(l){
       svc('light','turn_on',{entity_id:l.id,rgb_color:rgb,brightness_pct:70,transition:0.6});
     });
-    // Update marker position on spectrum bar
-    if(marker){
-      marker.style.left=((_rbHue/360)*100)+'%';
-    }
     // Update pill color hint
     cdEl.textContent='🌈 '+lights.length+' Lichter · Hue '+_rbHue+'°';
   }
@@ -20420,83 +20396,6 @@ window.updateAll=function(...args){
     }
   })();
 };
-
-// ═════════════════════════════════════════════════
-// Ambient Comfort Button (Licht-Tab) — One-Tap 3200K/65%
-// ═════════════════════════════════════════════════
-(function(){
-  const btn=document.getElementById('lt-ambient-btn');
-  if(!btn)return;
-  
-  btn.addEventListener('click',async()=>{
-    const lights=Object.values(_S).filter(e=>
-      e.entity_id?.startsWith('light.')&&
-      !LOCK_LIST.includes(e.entity_id)&&
-      e.state==='on'
-    );
-    if(lights.length===0){
-      showToast('🌙 Keine Lichter aktiv');
-      return;
-    }
-    
-    for(const light of lights){
-      if(light.attributes?.color_temp_kelvin!==undefined||light.attributes?.brightness!==undefined){
-        await svc('light','turn_on',{
-          entity_id:light.entity_id,
-          color_temp_kelvin:3200,
-          brightness_pct:65,
-          transition:1.2
-        });
-      }
-    }
-    
-    const icon=btn.querySelector('#lt-amb-ico');
-    if(icon)icon.classList.add('anim-spin');
-    setTimeout(()=>icon?.classList.remove('anim-spin'),600);
-    
-    showToast(`🌙 Ambient auf ${lights.length} Lichter · 3200K / 65%`);
-    hap();
-    setTimeout(()=>fetchStates(),200);
-  });
-})();
-
-// ──────────────── LICHT-PULSE FEEDBACK ──────────────
-(function(){
-  var _ltPulseState={};
-  
-  // Hook bei updateLights um State-Änderungen zu erkennen
-  var orgUpdateLights=window.updateLights;
-  window.updateLights=function(){
-    if(orgUpdateLights)orgUpdateLights.apply(this,arguments);
-    
-    // Nach Update prüfen welche Lichter ihren State geändert haben
-    (CFG.lights||[]).forEach(function(light){
-      var id=light.entity_id;
-      var cur=_S[id];
-      if(!cur)return;
-      
-      var curOn=cur.state==='on';
-      var wasOn=_ltPulseState[id];
-      
-      if(curOn!==wasOn){
-        // State hat sich geändert → Pulse
-        var tco=document.querySelector('.ltico[data-lt-id="'+id+'"]');
-        if(!tco)tco=document.querySelector('.ltico[data-id="'+id+'"]');
-        if(tco){
-          tco.classList.remove('ltpulse');
-          void tco.offsetWidth; // Reflow trigger
-          tco.classList.add('ltpulse');
-          
-          setTimeout(function(){
-            tco.classList.remove('ltpulse');
-          },520);
-        }
-      }
-      
-      _ltPulseState[id]=curOn;
-    });
-  };
-})();
 </script>
 </body>
 </html>

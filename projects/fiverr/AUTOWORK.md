@@ -462,3 +462,15 @@
 
 ## Neue Ideen (2026-04-09)
 - [x] wz.html: Home-Tab — "Offene Fenster / Türen" Status-Chip (🪟 scans `binary_sensor.*` entities with `device_class: window` or `device_class: door` for `on` state; if any open, shows compact amber chip with pulsating dot, text "Fenster offen" or "Tür offen" (+count), spring-in animation; tap reveals quick list of open sensors; Light-Mode compatible)
+
+## Neue Ideen (2026-04-09 Abend)
+- [x] wz.html: Licht-Tab — "Floating All-Lights Toggle FAB" (💡 schwebendes grünes Schaltflächen-Widget unten rechts im Licht-Tab, erscheint nur wenn Lichter an sind, pulsierendes Glow-Animation, Tap öffnet Bestätigungs-Modal "Alle X Lichter ausschalten?", 2-Button-Dialog Abbrechen/Ausschalten, alle Lichter werden per svc('light','turn_off') abgeschaltet, Modal mit Glass-Morphism dark Background, Gradient grün#30d158, Light-Mode Overrides mit dunklererem Grün, Integration in updateAll() zur Echtzeit-Synchronisierung, positionen über Nav-Bar z-index:150, smooth scale-in Animation cubic-bezier)
+
+## Neue Ideen (2026-04-10 02:10 UTC)
+- [x] wz.html: Licht-Tab — "Ambient Comfort" One-Tap Button (☀️)
+
+## Neue Ideen (2026-04-10 00:12 UTC)
+- [x] wz.html: Home-Tab — Energie-Verbrauch Gauge Widget (⚡ Mini SVG-Arc-Gauge neben Batterie-Chip zeigt Stromverbrauch in Watt, farbcodiert: grün <500W, amber 500–1500W, rot >1500W, animierter stroke-dashoffset Arc auf SVG-Kreis, echtzeit-Update aus sensor.stromverbrauch Entity, Watt-Label mit Kürzel (W/kW), spring-in Animation beim Einblenden, Light-Mode Overrides, Graceful degradation wenn Sensor nicht vorhanden, inline-flex Pill-Layout 28px SVG + Label)
+
+## Neue Ideen (2026-04-10 04:10 UTC)
+- [x] wz.html: Licht-Tab — "Rainbow Farb-Zyklus Button mit Live-Spektrum-Visualizer" (🌈 Bestehende lt-rainbow Funktion erweitert: Spektrum-Bar mit animiertem Hue-Positionsmarker, weißer Markierungs-Punkt gleitet von links (0°/Rot) bis rechts (360°/Rot) synchron mit dem Farb-Zyklus, stroke-dashoffset Transition auf Marker-Position, visual Feedback des aktuellen Hue-Wertes im Spektrum, updateMarker() in tick()-Funktion integriert, Light-Mode kompatibel)
