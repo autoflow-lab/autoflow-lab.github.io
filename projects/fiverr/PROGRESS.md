@@ -41,6 +41,22 @@
 
 # PROGRESS.md — Auto-Improve Log
 
+## 2026-04-11 02:12 UTC — Heartbeat (Auto-Improve)
+- ✅ demo.html: "Live Automation Demo" Section (🎬)
+- **Konzept**: 3 interaktive Szenen-Cards (Guten Morgen / Kino-Modus / Gute Nacht) — Tap auf "▶ Demo starten" zeigt eine animierte Schritt-für-Schritt Ausführung der Automation live im Browser
+- **HTML**: `#automation-demo-section` mit 3 `.aut-card` divs, je mit Emoji + Titel + Beschreibung + `.aut-steps` Container + `.aut-btn`
+- **Szenen-Schritte** (je 5 Steps):
+  - 🌅 **Guten Morgen**: Lichter einschalten → Heizung → Benachrichtigung → Musik → Rollläden
+  - 🎬 **Kino-Modus**: Lichter dimmen → TV an → Soundbar → Klimaanlage → Klingel stumm
+  - 🌙 **Gute Nacht**: Lichter aus → Standby-Geräte → Alarm → Heizung Nachtprogramm → Sicherheits-Summary
+- **Animation**: `.aut-step-row` mit `autStepIn` cubic-bezier spring-Animation, gestaffelte `delay`-Berechnung (180ms + step.ms + 100ms pro Step), Spinner während Ausführung → ✓ grün bei Abschluss
+- **CSS**: `.aut-spinner` (@keyframes rotation), `.aut-done-badge` (grüner Glass-Badge nach letztem Schritt), `.aut-step-row.done/running/pending` Farbklassen, Mobile @media 1-Spalte
+- **Hintergrund-Orb** je Card: amber/blau/grün radial-gradient oben-rechts — Farbakzent ohne Ablenkung
+- **Schutz**: `running[scene]` Flag verhindert Doppel-Klick während Ausführung
+- **i18n**: DE+EN vollständig (autoDemoTitle/Sub, autMorningTitle/Desc, autCinemaTitle/Desc, autNightTitle/Desc, autRun, autDemoHint), langChange-Event für Button-Text
+- **Position**: zwischen Animation-Showcase und Licht-Simulator Sections
+- **Git**: d2d6d07 | Deploy: GitHub Pages autoflow-lab.github.io ✅ DEPLOY_OK
+
 ## 2026-04-10 20:10 UTC — Cron (Design-Ideen Agent) — COLOR PALETTE FEATURE
 - ✅ wz.html: Licht-Tab — "Farbpaletten-Schnellzugriff mit animiertem Swatch-Grid" (🎨)
 - **Konzept**: Vorgefertigte Farbpaletten (8 Presets) für schnellen Farb-Zugriff auf aktive RGB-Lichter
