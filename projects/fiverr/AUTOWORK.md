@@ -474,3 +474,44 @@
 
 ## Neue Ideen (2026-04-10 04:10 UTC)
 - [x] wz.html: Licht-Tab — "Rainbow Farb-Zyklus Button mit Live-Spektrum-Visualizer" (🌈 Bestehende lt-rainbow Funktion erweitert: Spektrum-Bar mit animiertem Hue-Positionsmarker, weißer Markierungs-Punkt gleitet von links (0°/Rot) bis rechts (360°/Rot) synchron mit dem Farb-Zyklus, stroke-dashoffset Transition auf Marker-Position, visual Feedback des aktuellen Hue-Wertes im Spektrum, updateMarker() in tick()-Funktion integriert, Light-Mode kompatibel)
+
+## Neue Ideen (2026-04-10 06:10 UTC)
+- [x] wz.html: Licht-Tab — "Licht-Pulse Feedback Animation beim Schalten" (💫 Subtile visuelle Bestätigung wenn Lichter an/aus gehen: beim Wechsel eines Lichtzustandes pulsiert kurz ein amber-farbener Glow um das Light-Tile Icon, zeigt dass HA die Änderung registriert hat und gibt haptisches Feedback, @keyframes ltPulse mit box-shadow Expansion 0→10px über 500ms, Pulse wird bei updateLights() Hook triggert wenn State-Change erkannt wird via _ltPulseState Tracking, smooth Reflow-Trick für Re-Animation, Light-Mode kompatibel mit dunkleren Farben)
+
+## Neue Ideen (2026-04-10 14:10 UTC)
+- [x] wz.html: Home-Hero — "Greeting Parallax Tiefeneffekt + Brightness Ring Glow" (🎯) 
+- **Konzept**: Zwei subtile Design-Enhancements für visuelles Tiefengefühl:
+  1. **Home-Hero Greeting Parallax**: Greeting-Text scrollt 15% langsamer als die Seite (parallax effect) und verblasst sanft bis opacity:0.65 bei 400px Scroll — erzeugt Tiefeneindruck beim Scrollen
+  2. **Brightness Ring Glow**: Subtile pulsierendes Glow-Effekt um Brightness-Ring-Kreise bei aktiven Lichtern — drop-shadow animiert 2px→4px über 3.5s, macht das Brightness-Feedback visueller und eleganter
+- **CSS**: `@keyframes briRingGlow` mit drop-shadow Pulsation, angewendet auf `.lt.on [data-bri-arc] circle.bri-fill`
+- **JavaScript**: Parallax-Scroll-Listener auf #pg-home mit `passive:true`, `translateY(-scrollTop*0.15)` und `opacity = max(1 - scrollTop/400, 0.65)`
+- **Integration**: 100% non-invasiv, ergänzt bestehende Brightness-Ring-Logik, kein Konflikt
+- **Effekt**: Subtile aber wahrnehmbare Verbesserungen der visuellen Hierarchie und des Feedbacks beim Scrollen und Lichtsteuern
+- **Version**: v3.7 | File: /tmp/wz.html (20580 Zeilen) | Deploy: SSH erforderlich | node --check: ⚠️ HTML mixed mit JS
+
+## Neue Ideen (2026-04-10 10:10 UTC)
+- [x] wz.html: Licht-Tab — "3D Flip-Rotation bei Farbwechsel" (🎯 Elegante 3D-Flip-Animation wenn RGB/Farbtemperatur eines Lichts wechselt: das Licht-Tile rotiert mit rotateY(90deg) Transform, Scale-Zoom-Effekt in der Mitte der Animation, cubic-bezier spring-Animation 0.55s, vergleicht hs_color und color_temp_kelvin in updateLights() Hook, speichert Farbe in _ltColorState Dictionary, triggert .ltflip Klasse nur bei echtem Farbwechsel (nicht bei On/Off), smooth Reflow-Trick für Re-Animation, gibt intuitives visuelles Feedback dass Farbe geändert wurde — komplementär zur ltPulse On/Off Animation, Light-Mode kompatibel)
+
+## Neue Ideen (2026-04-10 20:10 UTC)
+- [x] wz.html: Licht-Tab — "Farbpaletten-Schnellzugriff mit animiertem Swatch-Grid" (🎨 8 vorgefertigte Farb-Presets: Warmweiß/Kaltweiß/Rot/Grün/Blau/Magenta/Gelb/Regenbogen; Tap setzt alle aktiven RGB-Lichter auf Farbe mit smooth 1s Transition; staggered scale-in Animation ltCpChipIn 0.04–0.32s; Ripple-Tap-Effekt cpChipTap; Palette nur sichtbar wenn Licht-Tab aktiv; RGB→HSV Konvertierung mit Math.atan2; Warmweiß 2700K / Kaltweiß 5500K via color_temp_kelvin; Regenbogen triggert startRainbow(); Graceful Fallback wenn kein RGB; 100% non-invasiv)
+
+## Neue Ideen (2026-04-10 22:10 UTC)
+- [x] wz.html: Wetter-Tab — "Wetter-Haiku Generator" (🎋 täglich wechselndes dreizeiliges Haiku passend zu WMO-Code + Temperatur + Tageszeit, 10 Wetter-Kategorien mit je 3 Haiku-Varianten, lila Farbschema, staggered Einblend-Animation pro Zeile, ↺ Shuffle-Button mit Rotation, localStorage-Persistenz für Tages-Index, Light-Mode Overrides)
+
+## Neue Ideen (2026-04-10 16:10 UTC)
+- [x] wz.html: Licht-Tab — "Ambient RGB Farbglühen um aktive Icons" (✨)
+- **Konzept**: RGB-Lichter zeigen subtiles pulsierendes Farbglühen in ihrer aktuellen Farbe um das Icon herum — gibt visuelles Feedback über tatsächliche Lichtfarbe auf einen Blick
+- **CSS**: `@keyframes ltAmbientGlow` mit box-shadow Pulsation 0→5px, Farbe aus `--rgb-glow-c` CSS-Variable
+- **JavaScript**: IIFE hookt `window.updateLights()`, scannt aktive Lichter nach `rgb_color` Attribut (HA [r,g,b] Array)
+- **Umsetzung**: 
+  - Wenn Licht an + RGB-Farbe vorhanden → setzt `.lt-rgb-glow` Klasse + `--rgb-glow-c: rgba(r,g,b,.55)`
+  - Wenn Licht aus oder kein RGB → entfernt Klasse + CSS-Variable
+  - Graceful: kein Fehler wenn `rgb_color` nicht vorhanden
+- **Design**: subtiler pulsierender Glow in der exakten RGB-Farbe, harmoniert mit bestehender brightness-ring Animation
+- **Integration**: 100% non-invasiv, nutzt existierende `.ltico` Element-Struktur
+- **Effekt**: Hue Play Bar (rot-orange) zeigt Rot-Glow, Govee Lampe (grün) zeigt Grün-Glow — visuell intuitiv welche Farben gerade aktiv sind
+- **Version**: v3.8 | File: /tmp/wz.html (20624 Zeilen) | Deploy: SSH nicht verfügbar in Sandbox | node --check: HTML-Mixed kompliziert, aber CSS+JS visual inspiziert ✅
+
+## Neue Ideen (2026-04-11 00:01 UTC)
+- [x] wz.html: Home-Tab — Wasser-Tracker Widget (💧 tägliche Hydrations-Zählung, 8 Gläser Tagesziel, animierter SVG-Becher mit Wave-Fill, +/- Buttons, Fortschrittsbalken, Statustext, localStorage Persistenz, Splash-Partikel, Light-Mode)
+- [x] wz.html: Musik-Tab — Track-Countdown Chip (⏱ erscheint wenn <60s Restzeit, pulsierender roter Dot, Sekunden-Countdown, animierter Fortschrittsbalken, spring-in Animation, updateAll() Hook)
