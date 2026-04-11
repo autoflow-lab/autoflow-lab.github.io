@@ -518,3 +518,9 @@
 ## Neue Ideen (2026-04-11 00:01 UTC)
 - [x] wz.html: Home-Tab — Wasser-Tracker Widget (💧 tägliche Hydrations-Zählung, 8 Gläser Tagesziel, animierter SVG-Becher mit Wave-Fill, +/- Buttons, Fortschrittsbalken, Statustext, localStorage Persistenz, Splash-Partikel, Light-Mode)
 - [x] wz.html: Musik-Tab — Track-Countdown Chip (⏱ erscheint wenn <60s Restzeit, pulsierender roter Dot, Sekunden-Countdown, animierter Fortschrittsbalken, spring-in Animation, updateAll() Hook)
+
+## Neue Ideen (2026-04-11 04:10 UTC)
+- [x] wz.html: Musik-Tab — "Beat-Sync Ambient Heartbeat Glow"
+
+## Neue Ideen (2026-04-11 04:16 UTC)
+- [x] demo.html: "Live HA Events Ticker" (🏠 endlos-scrollende Ticker-Leiste vor dem Footer zeigt simulierte HA-Ereignisse: Lichter an/aus, Temperatur, Musik, Sperren, Szenen — 20 Events DE+EN, Farbcodierung grün/amber/blau je Typ, hover-pause, mask-fade, Puls-Dot Indikator) (🥁 subtiler amber Glow-Puls um Album-Disc bei 120 BPM wenn Musik spielt, MutationObserver auf spk-wrap.playing, 2 alternierende CSS @keyframes beatGlowA/B, updateAll() Hook, Light-Mode deaktiviert)

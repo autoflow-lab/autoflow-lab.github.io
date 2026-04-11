@@ -2581,6 +2581,110 @@ input[type=range]{touch-action:pan-x}
   </div>
 </div><!-- /page-ai -->
 
+<!-- LIVE HA EVENTS TICKER -->
+<section class="ha-ticker-section" id="ha-ticker-section">
+  <div class="ha-ticker-header">
+    <span class="ha-ticker-pulse"></span>
+    <span class="ha-ticker-label" id="ha-ticker-label">🏠 Live Smart Home Events</span>
+  </div>
+  <div class="ha-ticker-wrap" id="ha-ticker-wrap">
+    <div class="ha-ticker-track" id="ha-ticker-track"></div>
+  </div>
+</section>
+<style>
+.ha-ticker-section{background:#111;border-top:1px solid #2c2c2e;border-bottom:1px solid #2c2c2e;padding:14px 0 12px;overflow:hidden;position:relative}
+.ha-ticker-header{display:flex;align-items:center;gap:8px;padding:0 20px 10px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#888}
+.ha-ticker-pulse{width:7px;height:7px;border-radius:50%;background:#30d158;box-shadow:0 0 6px #30d158;animation:tkPulse 1.6s ease-in-out infinite}
+@keyframes tkPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.35)}}
+.ha-ticker-wrap{overflow:hidden;width:100%;mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 60px,#000 calc(100% - 60px),transparent 100%)}
+.ha-ticker-wrap:hover .ha-ticker-track{animation-play-state:paused}
+.ha-ticker-track{display:flex;gap:0;width:max-content;animation:tkScroll 42s linear infinite}
+@keyframes tkScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ha-tk-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;margin:0 6px;border-radius:20px;font-size:12.5px;white-space:nowrap;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#e5e5ea;transition:background .2s}
+.ha-tk-chip .tk-icon{font-size:15px;line-height:1}
+.ha-tk-chip .tk-entity{color:#888;font-size:11px;margin-left:2px}
+.ha-tk-chip.tk-on .tk-dot{background:#30d158;box-shadow:0 0 5px #30d158aa}
+.ha-tk-chip.tk-off .tk-dot{background:#48484a}
+.ha-tk-chip.tk-alert .tk-dot{background:#ff9f0a;box-shadow:0 0 5px #ff9f0aaa}
+.ha-tk-chip.tk-media .tk-dot{background:#0a84ff;box-shadow:0 0 5px #0a84ffaa}
+.tk-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+body.light-mode .ha-ticker-section{background:#f2f2f7;border-color:#d1d1d6}
+body.light-mode .ha-tk-chip{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.09);color:#1c1c1e}
+body.light-mode .ha-tk-chip .tk-entity{color:#6e6e73}
+body.light-mode .ha-ticker-header{color:#6e6e73}
+</style>
+<script>
+(function(){
+  const DE_EVENTS=[
+    {icon:'💡',label:'Wohnzimmer Licht',entity:'light.wohnzimmer',state:'eingeschaltet',type:'on'},
+    {icon:'🌡️',label:'Temperatur',entity:'sensor.temp_wohnzimmer',state:'22.4 °C',type:'alert'},
+    {icon:'🎵',label:'Spotify',entity:'media_player.wohnzimmer',state:'spielt: Chill Lofi Mix',type:'media'},
+    {icon:'🔒',label:'Haustür',entity:'lock.haustuer',state:'automatisch gesperrt',type:'on'},
+    {icon:'🌅',label:'Guten Morgen',entity:'automation.morning_routine',state:'ausgeführt',type:'on'},
+    {icon:'💡',label:'Büro Licht',entity:'light.buro',state:'ausgeschaltet',type:'off'},
+    {icon:'🌡️',label:'Luftfeuchtigkeit',entity:'sensor.hum_bad',state:'61 %',type:'alert'},
+    {icon:'🎬',label:'Kino Modus',entity:'scene.kino',state:'aktiviert',type:'on'},
+    {icon:'🌤',label:'Außen Temp',entity:'sensor.outdoor_temp',state:'14.8 °C',type:'alert'},
+    {icon:'💡',label:'Hue Play Bar',entity:'light.hue_play_l',state:'Farbe: Sonnenuntergang',type:'on'},
+    {icon:'🔔',label:'Bewegungsmelder',entity:'binary_sensor.flur_motion',state:'ausgelöst',type:'alert'},
+    {icon:'🎵',label:'Almando Speaker',entity:'media_player.almando',state:'Lautstärke: 42 %',type:'media'},
+    {icon:'⚡',label:'Stromverbrauch',entity:'sensor.stromverbrauch',state:'347 W',type:'alert'},
+    {icon:'🌙',label:'Gute Nacht',entity:'automation.night_routine',state:'ausgeführt',type:'on'},
+    {icon:'💡',label:'Alle Lichter',entity:'scene.alle_aus',state:'ausgeschaltet',type:'off'},
+    {icon:'🌦️',label:'Wetteralarm',entity:'sensor.weather',state:'Regen ab 16:00 Uhr',type:'alert'},
+    {icon:'📱',label:'Janis Handy',entity:'device_tracker.janis',state:'zu Hause',type:'on'},
+    {icon:'🎭',label:'Abend Szene',entity:'scene.abend',state:'aktiviert',type:'on'},
+    {icon:'🌡️',label:'Thermostat',entity:'climate.wohnzimmer',state:'heizt auf 21.5 °C',type:'alert'},
+    {icon:'🔋',label:'Zigbee Sensor',entity:'sensor.button_battery',state:'Batterie: 12 %',type:'alert'},
+  ];
+  const EN_EVENTS=[
+    {icon:'💡',label:'Living Room Light',entity:'light.living_room',state:'turned on',type:'on'},
+    {icon:'🌡️',label:'Temperature',entity:'sensor.temp_living',state:'22.4 °C',type:'alert'},
+    {icon:'🎵',label:'Spotify',entity:'media_player.living_room',state:'playing: Chill Lofi Mix',type:'media'},
+    {icon:'🔒',label:'Front Door',entity:'lock.front_door',state:'auto-locked',type:'on'},
+    {icon:'🌅',label:'Good Morning',entity:'automation.morning_routine',state:'triggered',type:'on'},
+    {icon:'💡',label:'Office Light',entity:'light.office',state:'turned off',type:'off'},
+    {icon:'🌡️',label:'Humidity',entity:'sensor.hum_bathroom',state:'61 %',type:'alert'},
+    {icon:'🎬',label:'Cinema Mode',entity:'scene.cinema',state:'activated',type:'on'},
+    {icon:'🌤',label:'Outdoor Temp',entity:'sensor.outdoor_temp',state:'14.8 °C',type:'alert'},
+    {icon:'💡',label:'Hue Play Bar',entity:'light.hue_play',state:'Color: Sunset',type:'on'},
+    {icon:'🔔',label:'Motion Sensor',entity:'binary_sensor.hallway_motion',state:'triggered',type:'alert'},
+    {icon:'🎵',label:'Speaker',entity:'media_player.speaker',state:'Volume: 42 %',type:'media'},
+    {icon:'⚡',label:'Power Usage',entity:'sensor.power',state:'347 W',type:'alert'},
+    {icon:'🌙',label:'Good Night',entity:'automation.night_routine',state:'triggered',type:'on'},
+    {icon:'💡',label:'All Lights',entity:'scene.all_off',state:'turned off',type:'off'},
+    {icon:'🌦️',label:'Weather Alert',entity:'sensor.weather',state:'Rain at 4:00 PM',type:'alert'},
+    {icon:'📱',label:'Janis Phone',entity:'device_tracker.janis',state:'home',type:'on'},
+    {icon:'🎭',label:'Evening Scene',entity:'scene.evening',state:'activated',type:'on'},
+    {icon:'🌡️',label:'Thermostat',entity:'climate.living',state:'heating to 21.5 °C',type:'alert'},
+    {icon:'🔋',label:'Zigbee Sensor',entity:'sensor.button_battery',state:'Battery: 12 %',type:'alert'},
+  ];
+  function buildTicker(events){
+    var track=document.getElementById('ha-ticker-track');
+    if(!track)return;
+    var doubled=events.concat(events);
+    track.innerHTML=doubled.map(function(e){
+      return '<span class="ha-tk-chip tk-'+e.type+'">'+
+        '<span class="tk-dot"></span>'+
+        '<span class="tk-icon">'+e.icon+'</span>'+
+        '<span><strong>'+e.label+'</strong> — '+e.state+'</span>'+
+        '<span class="tk-entity">'+e.entity+'</span>'+
+        '</span>';
+    }).join('');
+  }
+  function updateTickerLang(){
+    var isEN=document.documentElement.lang==='en'||document.body.classList.contains('lang-en');
+    var lbl=document.getElementById('ha-ticker-label');
+    if(lbl)lbl.textContent=isEN?'🏠 Live Smart Home Events':'🏠 Live Smart Home Events';
+    buildTicker(isEN?EN_EVENTS:DE_EVENTS);
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    updateTickerLang();
+    document.addEventListener('langChange',updateTickerLang);
+  });
+})();
+</script>
+
 <footer>
   <!-- Social Icons -->
   <div class="ft-social">
