@@ -1,3 +1,14 @@
+## 2026-04-11 04:16 UTC — Heartbeat (Auto-Improve)
+- ✅ demo.html: "Live HA Events Ticker" (🏠)
+- **Konzept**: Endlos-scrollende Ticker-Leiste vor dem Footer zeigt simulierte HA-Ereignisse
+- **Events**: 20 Events in DE+EN — Lichter an/aus, Temperaturen, Spotify, Türschloss, Szenen, Sensoren, Energie, Gerätestatus
+- **Farbcodierung**: tk-on (grün), tk-off (grau), tk-alert (amber), tk-media (blau) — sofort erkennbare Event-Typen
+- **Animation**: `@keyframes tkScroll 42s linear infinite`, hover-pause, mask-fade an beiden Seiten
+- **Pulse-Dot**: grüner blinkender Dot im Header signalisiert "Live"-Charakter
+- **i18n**: DE/EN Events via langChange-Event; EN-Label Fallback
+- **Light-Mode**: vollständig kompatibel mit `body.light-mode` Overrides
+- **Deploy**: GitHub Pages autoflow-lab.github.io ✅ DEPLOY_OK (176fad6)
+
 ## 2026-04-10 22:10 UTC — Cron (Design-Ideen Agent)
 - ✅ wz.html: Wetter-Tab — "Wetter-Haiku Generator" (🎋)
 - **Konzept**: Täglich wechselndes japanisches Haiku (3 Zeilen), thematisch passend zu aktuellem WMO-Wettercode + Temperatur + Tageszeit — poetische, einzigartige Persönlichkeit für den Wetter-Tab
@@ -3121,3 +3132,19 @@ wz.html v4.1 → v4.2, deploye nach /config/www/wz.html auf 192.168.1.123, git c
 ### Deploy: ✅ SSH via paramiko + base64 transfer → /config/www/wz.html
 ### JS-Check: ✅ node --check clean
 ### Git: commit 763bada
+
+## 2026-04-11 04:10 UTC — Cron (Design-Ideen Agent)
+- ✅ wz.html: Musik-Tab — "Beat-Sync Ambient Heartbeat Glow" (🥁)
+- **Konzept**: Wenn Musik spielt, pulsiert ein subtiler amber Glow-Ring um die Album-Disc im 120-BPM-Rhythmus (alle 500ms) — gibt dem Dashboard ein "Herzschlag" Gefühl passend zur Musik
+- **CSS**: `@keyframes beatGlowA/B` — 2 alternierend leicht unterschiedliche Glow-Pulse (rgba(255,159,10,.28) / rgba(255,199,60,.22)), max box-shadow 18–22px, 0.45s ease-out forwards
+- **Animationslogik**: `#alb-disc.beat-pulse-a/b` überschreibt Animation mit `discSpin + beatGlowA/B !important` → Disc rotiert weiter, gleichzeitig pulsiert der Glow
+- **Phase-Toggle**: `_beatPhase % 2` wechselt zwischen Klasse A und B bei jedem Tick — verhindert dass dieselbe Animation neu startet (nicht wahrnehmbar, aber technisch sauber)
+- **Reflow-Trick**: `void disc.offsetWidth` zwischen class-remove und class-add → sicheres Re-Triggern der CSS-Animation
+- **MutationObserver** auf `#spk-wrap` → `classList.contains('playing')` → `startBeat()` / `stopBeat()` — sofortige Reaktion ohne Polling-Lag
+- **updateAll() Hook**: zusätzliche Sicherheits-Prüfung bei jedem State-Update (deckt Edge-Cases ab wenn MutationObserver späte Attribute bekommt)
+- **Light-Mode**: `box-shadow:none!important` auf `.beat-pulse-a/b` — weißer Glow auf hellem BG wäre unschön
+- **Graceful**: IIFE prüft `document.getElementById('spk-wrap')` — kein Fehler wenn Element fehlt
+- **Kein Konflikt**: Disc-Rotation (discSpin) bleibt aktiv durch kombinierte Animation-Property; eq-ring Pulse unberührt (andere CSS-Klassen)
+- **node --check**: ✅ OK
+- **Deploy**: SSH Auth-Fehler — manuell erforderlich (`sudo cp /tmp/wz.html /config/www/wz.html` auf HA-Host)
+- **Datei lokal**: `/home/node/.openclaw/workspace/projects/fiverr/wz.html` (21129 Zeilen)
