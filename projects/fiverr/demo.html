@@ -371,6 +371,10 @@ body.thermo-hot .dash-card{border-color:rgba(255,80,0,.2)!important;animation:he
 @keyframes glowPulse{0%,100%{box-shadow:0 0 20px var(--glow)}50%{box-shadow:0 0 40px var(--glow),0 0 80px var(--glow)}}
 @keyframes particleDrift{0%{transform:translateY(0) translateX(0) scale(1);opacity:.7}100%{transform:translateY(-100vh) translateX(var(--dx,30px)) scale(.3);opacity:0}}
 @keyframes heroGrad{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+@keyframes intgScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.intg-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;margin:0 8px;border-radius:40px;background:var(--card);border:1px solid var(--border);white-space:nowrap;font-size:.8rem;font-weight:600;color:var(--text2)}
+.intg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+#intg-track-wrap:hover #intg-track{animation-play-state:paused}
 @keyframes borderGlow{0%,100%{border-color:rgba(0,113,227,.3)}50%{border-color:rgba(0,113,227,.8)}}
 @keyframes newsSlide{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
 @keyframes counterUp{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
@@ -862,6 +866,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 24p
 #scrollTop.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
 #scrollTop:hover{transform:translateY(-3px) scale(1.08)!important;box-shadow:0 8px 28px var(--glow)}
 #scrollTop svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+/* Share Button */
+#shareBtn{position:fixed;bottom:24px;left:24px;z-index:9999;width:44px;height:44px;border-radius:50%;background:rgba(30,30,32,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.4);opacity:0;transform:translateY(20px) scale(.85);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none;cursor:pointer}
+#shareBtn.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+#shareBtn:hover{transform:translateY(-3px) scale(1.08)!important;background:rgba(50,50,55,.95)}
+#shareBtn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#shareToast{position:fixed;bottom:78px;left:24px;z-index:9999;background:rgba(30,30,32,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,159,10,.3);border-radius:12px;padding:10px 16px;color:#fff;font-size:.82rem;font-weight:600;white-space:nowrap;opacity:0;transform:translateY(8px) scale(.92);transition:opacity .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+#shareToast.show{opacity:1;transform:translateY(0) scale(1)}
 .footer-social{display:flex;gap:12px;justify-content:center;margin-bottom:18px}
 .social-btn{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s}
 .social-btn:hover{transform:translateY(-2px);background:var(--accent);border-color:var(--accent)}
@@ -1826,7 +1837,16 @@ input[type=range]{touch-action:pan-x}
     </div>
   </div>
 
-  <!-- PORTFOLIO -->
+  <!-- INTEGRATIONS TICKER -->
+  <div id="integrations-band" style="padding:36px 0;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2)">
+    <p class="sec-center reveal" style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-bottom:20px" data-i="intTitle">Kompatibel mit · Compatible with</p>
+    <div id="intg-track-wrap" style="position:relative;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)">
+      <div id="intg-track" style="display:flex;gap:0;width:max-content;animation:intgScroll 32s linear infinite">
+      </div>
+    </div>
+  </div>
+
+<!-- PORTFOLIO -->
   <div style="padding:72px 24px">
     <div style="max-width:1100px;margin:0 auto">
       <h2 class="sec-title sec-center reveal" data-i="pfTitle">Kundenprojekte</h2>
@@ -2237,6 +2257,171 @@ input[type=range]{touch-action:pan-x}
       </div>
     </div>
   </div>
+
+
+  <!-- LIVE AUTOMATION DEMO -->
+  <div class="band" style="padding:72px 24px" id="automation-demo-section">
+    <div style="max-width:900px;margin:0 auto">
+      <h2 class="sec-title sec-center reveal" data-i="autoDemoTitle">Automationen — live erleben</h2>
+      <p class="sec-sub sec-center reveal" data-i="autoDemoSub">Klick auf eine Szene und sieh wie dein Smart Home in Sekunden reagiert.</p>
+      <div id="aut-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px">
+
+        <!-- Morning -->
+        <div class="aut-card reveal" data-scene="morning" style="background:var(--bg2);border:1.5px solid rgba(255,159,10,.18);border-radius:20px;padding:24px 18px;cursor:pointer;transition:transform .22s,box-shadow .22s;position:relative;overflow:hidden" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(255,159,10,.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,159,10,.12) 0%,transparent 70%);pointer-events:none"></div>
+          <div style="font-size:2.2rem;margin-bottom:10px">🌅</div>
+          <div style="font-weight:700;font-size:1rem;margin-bottom:4px" data-i="autMorningTitle">Guten Morgen</div>
+          <div style="font-size:.75rem;color:var(--text2);margin-bottom:16px" data-i="autMorningDesc">Sanft aufwachen — Lichter, Heizung & Musik in einer Szene</div>
+          <div class="aut-steps" id="aut-steps-morning" style="display:none;margin-bottom:14px"></div>
+          <button class="aut-btn" data-scene="morning" style="width:100%;padding:9px 0;border-radius:12px;border:none;background:linear-gradient(135deg,rgba(255,159,10,.16),rgba(255,159,10,.08));color:#ff9f0a;font-weight:600;font-size:.82rem;cursor:pointer;transition:background .2s" data-i="autRun">▶ Demo starten</button>
+        </div>
+
+        <!-- Cinema -->
+        <div class="aut-card reveal" data-scene="cinema" style="background:var(--bg2);border:1.5px solid rgba(10,132,255,.18);border-radius:20px;padding:24px 18px;cursor:pointer;transition:transform .22s,box-shadow .22s;position:relative;overflow:hidden" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(10,132,255,.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(10,132,255,.12) 0%,transparent 70%);pointer-events:none"></div>
+          <div style="font-size:2.2rem;margin-bottom:10px">🎬</div>
+          <div style="font-weight:700;font-size:1rem;margin-bottom:4px" data-i="autCinemaTitle">Kino-Modus</div>
+          <div style="font-size:.75rem;color:var(--text2);margin-bottom:16px" data-i="autCinemaDesc">Perfekte Film-Atmosphäre: Lichter dimmen, TV an, Soundbar aktiv</div>
+          <div class="aut-steps" id="aut-steps-cinema" style="display:none;margin-bottom:14px"></div>
+          <button class="aut-btn" data-scene="cinema" style="width:100%;padding:9px 0;border-radius:12px;border:none;background:linear-gradient(135deg,rgba(10,132,255,.16),rgba(10,132,255,.08));color:#0a84ff;font-weight:600;font-size:.82rem;cursor:pointer;transition:background .2s" data-i="autRun">▶ Demo starten</button>
+        </div>
+
+        <!-- Night -->
+        <div class="aut-card reveal" data-scene="night" style="background:var(--bg2);border:1.5px solid rgba(48,209,88,.18);border-radius:20px;padding:24px 18px;cursor:pointer;transition:transform .22s,box-shadow .22s;position:relative;overflow:hidden" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(48,209,88,.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(48,209,88,.12) 0%,transparent 70%);pointer-events:none"></div>
+          <div style="font-size:2.2rem;margin-bottom:10px">🌙</div>
+          <div style="font-weight:700;font-size:1rem;margin-bottom:4px" data-i="autNightTitle">Gute Nacht</div>
+          <div style="font-size:.75rem;color:var(--text2);margin-bottom:16px" data-i="autNightDesc">Alles abschalten mit einem Tap: Lichter, Geräte & Sicherheit</div>
+          <div class="aut-steps" id="aut-steps-night" style="display:none;margin-bottom:14px"></div>
+          <button class="aut-btn" data-scene="night" style="width:100%;padding:9px 0;border-radius:12px;border:none;background:linear-gradient(135deg,rgba(48,209,88,.16),rgba(48,209,88,.08));color:#30d158;font-weight:600;font-size:.82rem;cursor:pointer;transition:background .2s" data-i="autRun">▶ Demo starten</button>
+        </div>
+
+      </div>
+      <p style="text-align:center;margin-top:28px;font-size:.78rem;color:var(--text3)" data-i="autDemoHint">💡 Diese Automationen laufen in deinem echten Smart Home vollautomatisch — auf Knopfdruck, per Zeit, oder per Sensor.</p>
+    </div>
+  </div>
+  <style>
+    @media(max-width:640px){#aut-cards{grid-template-columns:1fr!important}}
+    [data-theme="light"] .aut-card{border-color:rgba(0,0,0,.1)!important}
+    .aut-step-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);animation:autStepIn .35s cubic-bezier(.34,1.28,.64,1) both}
+    [data-theme="light"] .aut-step-row{border-bottom:1px solid rgba(0,0,0,.07)}
+    @keyframes autStepIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+    .aut-step-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .aut-step-text{font-size:.76rem;color:var(--text2);flex:1}
+    .aut-step-status{font-size:.7rem;font-weight:600;min-width:48px;text-align:right}
+    .aut-step-row.done .aut-step-status{color:#30d158}
+    .aut-step-row.running .aut-step-status{color:#ff9f0a}
+    .aut-step-row.pending .aut-step-status{color:var(--text3)}
+    @keyframes autSpinner{to{transform:rotate(360deg)}}
+    .aut-spinner{display:inline-block;width:10px;height:10px;border:2px solid rgba(255,159,10,.3);border-top-color:#ff9f0a;border-radius:50%;animation:autSpinner .7s linear infinite;vertical-align:middle}
+    .aut-done-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.25);border-radius:20px;font-size:.75rem;color:#30d158;font-weight:600;animation:autStepIn .4s cubic-bezier(.34,1.28,.64,1) both}
+  </style>
+  <script>
+  (function(){
+    var SCENES={
+      morning:{
+        color:'#ff9f0a',
+        steps:[
+          {icon:'💡',de:'Lichter sanft einschalten (3000K / 40%)',en:'Lights on gently (3000K / 40%)',ms:600},
+          {icon:'🌡',de:'Heizung auf 21°C stellen',en:'Set heating to 21°C',ms:500},
+          {icon:'📱',de:'Benachrichtigung: Guten Morgen, Janis!',en:'Notification: Good morning, Janis!',ms:400},
+          {icon:'🎵',de:'Morgen-Playlist starten',en:'Start morning playlist',ms:500},
+          {icon:'☀️',de:'Rollläden öffnen',en:'Open roller shutters',ms:400}
+        ]
+      },
+      cinema:{
+        color:'#0a84ff',
+        steps:[
+          {icon:'🔆',de:'Lichter auf 15% dimmen (warm)',en:'Dim lights to 15% (warm)',ms:550},
+          {icon:'📺',de:'TV einschalten + HDMI 1',en:'Turn on TV + HDMI 1',ms:500},
+          {icon:'🔊',de:'Soundbar aktivieren',en:'Activate soundbar',ms:450},
+          {icon:'❄️',de:'Klimaanlage auf 20°C',en:'Air conditioning to 20°C',ms:400},
+          {icon:'🚫',de:'Türklingel stumm schalten',en:'Mute doorbell',ms:350}
+        ]
+      },
+      night:{
+        color:'#30d158',
+        steps:[
+          {icon:'💡',de:'Alle Lichter ausschalten',en:'Turn off all lights',ms:500},
+          {icon:'🔌',de:'Standby-Geräte deaktivieren',en:'Disable standby devices',ms:450},
+          {icon:'🔒',de:'Alarmanlage aktivieren',en:'Activate alarm system',ms:400},
+          {icon:'🌡',de:'Heizung auf Nachtprogramm',en:'Heating to night mode',ms:400},
+          {icon:'📱',de:'Zusammenfassung: Alles gesichert ✓',en:'Summary: Everything secured ✓',ms:350}
+        ]
+      }
+    };
+
+    var running={};
+
+    document.querySelectorAll('.aut-btn').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var scene=btn.getAttribute('data-scene');
+        if(running[scene])return;
+        runScene(scene);
+      });
+    });
+
+    function runScene(scene){
+      running[scene]=true;
+      var cfg=SCENES[scene];
+      var stepsEl=document.getElementById('aut-steps-'+scene);
+      var btn=document.querySelector('.aut-btn[data-scene="'+scene+'"]');
+      var isEN=document.documentElement.lang==='en';
+      stepsEl.innerHTML='';
+      stepsEl.style.display='block';
+      btn.disabled=true;
+      btn.style.opacity='.5';
+
+      var delay=0;
+      cfg.steps.forEach(function(step,i){
+        delay+=180;
+        (function(s,d,idx){
+          setTimeout(function(){
+            var row=document.createElement('div');
+            row.className='aut-step-row running';
+            row.style.animationDelay='0ms';
+            row.innerHTML='<div class="aut-step-icon" style="background:'+cfg.color+'22">'+s.icon+'</div>'
+              +'<div class="aut-step-text">'+(isEN?s.en:s.de)+'</div>'
+              +'<div class="aut-step-status"><span class="aut-spinner"></span></div>';
+            stepsEl.appendChild(row);
+
+            setTimeout(function(){
+              row.classList.remove('running');
+              row.classList.add('done');
+              row.querySelector('.aut-step-status').textContent='✓';
+              row.querySelector('.aut-step-status').style.color='#30d158';
+
+              if(idx===cfg.steps.length-1){
+                // Last step done
+                var badge=document.createElement('div');
+                badge.className='aut-done-badge';
+                badge.innerHTML='✅ '+(isEN?'Automation complete!':'Automation abgeschlossen!');
+                stepsEl.appendChild(badge);
+                setTimeout(function(){
+                  running[scene]=false;
+                  btn.disabled=false;
+                  btn.style.opacity='1';
+                },1200);
+              }
+            },s.ms);
+          },d);
+        })(step,delay,i);
+        delay+=step.ms+100;
+      });
+    }
+
+    // i18n extension
+    document.addEventListener('langChange',function(e){
+      var isEN=e.detail==='en';
+      // Re-run nothing, but update button text
+      document.querySelectorAll('.aut-btn').forEach(function(b){
+        b.textContent=isEN?'▶ Run Demo':'▶ Demo starten';
+      });
+    });
+  })();
+  </script>
+
 
   <!-- LICHT-SIMULATOR -->
   <div class="band" style="padding:72px 24px;background:rgba(255,255,255,.02)" id="licht-sim-section">
@@ -3458,6 +3643,7 @@ const T={
     wfTtl:'Beispiel: Automatische E-Mail-Zusammenfassung',wf1:'E-Mail eingeht',wf2:'KI analysiert',wf3:'Zusammenfassung',wf4:'Telegram Push',
     aiCtaH2:'KI-Integration anfragen',aiCtaP:'Von Sprachsteuerung bis N8N — ich baue was du brauchst.',aiCta3:'🤖 Projekt starten',
     navSH:'🏠 Smart Home',navAI:'⚡ KI & Automation',navContact:'Kontakt',navOrder:'Bestellen →',
+    autoDemoTitle:'Automationen — live erleben',autoDemoSub:'Klick auf eine Szene und sieh wie dein Smart Home in Sekunden reagiert.',autMorningTitle:'Guten Morgen',autMorningDesc:'Sanft aufwachen — Lichter, Heizung & Musik in einer Szene',autCinemaTitle:'Kino-Modus',autCinemaDesc:'Perfekte Film-Atmosphäre: Lichter dimmen, TV an, Soundbar aktiv',autNightTitle:'Gute Nacht',autNightDesc:'Alles abschalten mit einem Tap: Lichter, Geräte & Sicherheit',autRun:'▶ Demo starten',autDemoHint:'💡 Diese Automationen laufen in deinem echten Smart Home vollautomatisch — auf Knopfdruck, per Zeit, oder per Sensor.',
     roomNames:{bed1:'Schlafzimmer 1',bed2:'Zimmer 2',living:'Küche / Wohnen',dining:'Esszimmer',bath:'Bad',office:'Büro'},
   },
   en:{
@@ -3492,6 +3678,7 @@ const T={
     rev7:'"6 meeting rooms automated: CO2 sensor, presence dimming, calendar room display. Our team saves time daily. Professional work!"',
     rev8:'"Matter + Zigbee in one dashboard, all local on NUC. No subscription, no cloud. Best Fiverr gig I ever ordered!"',
     priceTtl:'Pricing & Packages',priceSub:'Transparent pricing — no hidden costs.',
+    autoDemoTitle:'Automations — live demo',autoDemoSub:'Click a scene and watch your smart home react in seconds.',autMorningTitle:'Good Morning',autMorningDesc:'Wake up gently — lights, heating & music in one scene',autCinemaTitle:'Cinema Mode',autCinemaDesc:'Perfect movie atmosphere: lights dim, TV on, soundbar active',autNightTitle:'Good Night',autNightDesc:'Turn everything off with one tap: lights, devices & security',autRun:'▶ Run Demo',autDemoHint:'💡 These automations run in your real smart home — triggered by button, time, or sensor.',
     lblOnetime:'One-time',lblMonthly:'Monthly',saveBadge:'–40%',
     tier1:'Basic',tier2:'Standard',tier3:'Premium',perProject:'/ project',popularLbl:'Popular',
     t1Desc:'Perfect for getting started',t2Desc:'The full experience',t3Desc:'With AI & full automation',
@@ -3881,6 +4068,10 @@ if(_origGetPos){
 </script>
 
 <!-- Scroll-to-top button -->
+<button id="shareBtn" aria-label="Seite teilen / Share page">
+  <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+</button>
+<div id="shareToast">✅ <span id="shareToastTxt">Link kopiert!</span></div>
 <button id="scrollTop" aria-label="Zurück nach oben / Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
@@ -4068,6 +4259,80 @@ if(_origGetPos){
   // Apply initial preset (Neutral)
   ctSlider.value=4800;briSlider.value=60;
   update();
+})();
+
+// ── Integrations Ticker ──────────────────────────────────────────────────────
+(function(){
+  var track=document.getElementById('intg-track');
+  if(!track)return;
+  var brands=[
+    {name:'Philips Hue',dot:'#ffd60a'},
+    {name:'IKEA Tradfri',dot:'#0058a3'},
+    {name:'Shelly',dot:'#ff6600'},
+    {name:'Zigbee',dot:'#5d9cec'},
+    {name:'Z-Wave',dot:'#1a7fd4'},
+    {name:'Sonos',dot:'#000'},
+    {name:'Spotify',dot:'#1db954'},
+    {name:'Alexa',dot:'#00caff'},
+    {name:'Google Home',dot:'#4285f4'},
+    {name:'Apple HomeKit',dot:'#ff3b30'},
+    {name:'ESPHome',dot:'#ff7043'},
+    {name:'Tasmota',drop:'#29b6f6',dot:'#29b6f6'},
+    {name:'Xiaomi',dot:'#ff6900'},
+    {name:'MQTT',dot:'#660066'},
+    {name:'Node-RED',dot:'#8f0000'},
+    {name:'Tuya',dot:'#ff6a00'},
+    {name:'Telegram',dot:'#2ca5e0'},
+    {name:'Grafana',dot:'#f46800'},
+    {name:'Frigate',dot:'#1565c0'},
+    {name:'InfluxDB',dot:'#22adf6'},
+  ];
+  // build HTML for one pass, then duplicate for seamless loop
+  function makeChips(){
+    return brands.map(function(b){
+      return '<span class="intg-chip"><span class="intg-dot" style="background:'+b.dot+'"></span>'+b.name+'</span>';
+    }).join('');
+  }
+  track.innerHTML=makeChips()+makeChips();
+})();
+
+// ── Floating Share Button ────────────────────────────────────────────────────
+(function(){
+  var btn=document.getElementById('shareBtn');
+  var toast=document.getElementById('shareToast');
+  var toastTxt=document.getElementById('shareToastTxt');
+  if(!btn||!toast)return;
+  var shareUrl='https://autoflow-lab.github.io/';
+  var shareTitle='autoflow-lab – Professionelle Smart Home Dashboards';
+  var shareText='Schau dir diese beeindruckenden Smart Home Dashboards an – individuell gestaltet für Home Assistant!';
+  var toastTimer=null;
+  function showToast(msg){
+    toastTxt.textContent=msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){toast.classList.remove('show');},2800);
+  }
+  btn.addEventListener('click',function(){
+    if(navigator.share&&navigator.canShare&&navigator.canShare({url:shareUrl})){
+      navigator.share({title:shareTitle,text:shareText,url:shareUrl}).catch(function(){});
+    } else {
+      try{
+        navigator.clipboard.writeText(shareUrl).then(function(){
+          var isEn=(document.documentElement.lang||'').startsWith('en');
+          showToast(isEn?'✅ Link copied!':'✅ Link kopiert!');
+        }).catch(function(){showToast('📋 '+shareUrl);});
+      } catch(e){showToast('📋 '+shareUrl);}
+    }
+  });
+  // Show after scroll
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('visible',window.scrollY>120);
+  },{passive:true});
+  // i18n
+  document.addEventListener('langChange',function(e){
+    var isEn=e.detail&&e.detail.lang==='en';
+    btn.setAttribute('aria-label',isEn?'Share page':'Seite teilen');
+  });
 })();
 
 // ── Konami Code Easter Egg ───────────────────────────────────────────────────
