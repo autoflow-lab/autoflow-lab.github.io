@@ -172,11 +172,11 @@ html,body{height:100%;background:var(--bg);
 #dev-status-gauge.pop #dsg-svg{animation:dsgPop .42s cubic-bezier(.34,1.28,.64,1)}
 :root.light #dev-status-gauge{background:var(--c1)}
 :root.light #dsg-num,:root.light #dsg-label{color:var(--txt)}
-.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
+.page-entering>.hero,.page-entering>.cal-card,.page-entering>.tagsum,.page-entering>#act-rings,.page-entering>#quote-card,.page-entering>#tip-card,.page-entering>#pomo-card,.page-entering>#h2o-card,.page-entering>#wohnstimmung-card,.page-entering>#lheat-card,
 .page-entering>.energie-card,.page-entering>.pills-row,.page-entering>#qa-bar,.page-entering>.sg2,.page-entering>#scene-chip,.page-entering>#batt-chip,.page-entering>#hvac-chip,.page-entering>#esave-chip,.page-entering>#wx-warn-banner,.page-entering>#ctx-suggest,.page-entering>#wx-rec-pill,.page-entering>#indoor-climate-card,.page-entering>#silence-chip,.page-entering>#wkend-chip,.page-entering>#streak-chip,.page-entering>#feierabend-chip,.page-entering>#wx-light-sync,.page-entering>#fokus-wrap,.page-entering>#presence-strip,.page-entering>#etipp-chip,.page-entering>#etariff-chip,.page-entering>#lt-ct-strip,.page-entering>#lt-fingerprint,.page-entering>#lt-presets,.page-entering>#lt-color-palette,.page-entering>#lt-circadian,.page-entering>#lt-sunrise-sim,.page-entering>#lt-sunset-sim,.page-entering>#lt-night,.page-entering>#lt-ambient-btn,.page-entering>#lt-breathe,.page-entering>#lt-candle,.page-entering>#lt-color-wheel,.page-entering>#lt-alarm,.page-entering>#lt-snapshot,.page-entering>#lt-shuffle,.page-entering>#lt-rainbow,.page-entering>#lt-farbseq,.page-entering>#lt-room-aura,
 .page-entering>.lt-grid,.page-entering>.sec-head,.page-entering>.sun-arc-card,
 .page-entering>.wx-hero-wrap,.page-entering>#wx-hero,.page-entering>.wx-stats-row,
-.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#temp-clock-card,.page-entering>#sunshine-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,.page-entering>#wx-persona-card,
+.page-entering>.tc-card,.page-entering>.rain-card,.page-entering>#wind-curve-card,.page-entering>#windrose-card,.page-entering>#rain-hm-card,.page-entering>.pollen-card,.page-entering>#stargazing-card,.page-entering>#moon-card,.page-entering>#baro-card,.page-entering>#hum-card,.page-entering>#bbq-card,.page-entering>#camp-card,.page-entering>#sport-card,.page-entering>#clim-card,.page-entering>#day-highlight-card,.page-entering>#umbrella-card,.page-entering>#plant-card,.page-entering>#lueft-card,.page-entering>#wc-card,.page-entering>#vis-cloud-card,.page-entering>#golden-hour-card,.page-entering>#best-hour-card,.page-entering>#wx-score-card,.page-entering>#biowetter-card,.page-entering>#uv-protect-card,.page-entering>#temp-clock-card,.page-entering>#sunshine-card,.page-entering>#haiku-card,.page-entering>#frost-card,.page-entering>#outfit-card,.page-entering>#laundry-card,.page-entering>#daylight-card,.page-entering>#weekly-rain-card,.page-entering>#tomorrow-card,.page-entering>#wx-tl12-card,.page-entering>#wx-highlight-card,.page-entering>#emoji-band-card,.page-entering>#wx-persona-card,
 .page-entering>.wx-hourly-card,.page-entering>.wx-7day,.page-entering>.album-wrap,
 .page-entering>#radio-fallback-card,.page-entering>.pctrl,.page-entering>.vrow,.page-entering>#dev-status-gauge,.page-entering>#week-strip,.page-entering>#cover-palette,.page-entering>#ping-monitor{
   animation:pgCardIn .45s cubic-bezier(.32,0,.15,1) both
@@ -844,6 +844,20 @@ html,body{height:100%;background:var(--bg);
 :root.light #uvp-status{color:rgba(0,0,0,.75)}
 :root.light #uvp-cd{color:rgba(0,0,0,.45)}
 #sunshine-card{display:none;margin-bottom:12px}
+/* Wetter-Haiku Card */
+#haiku-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
+#haiku-card.show{opacity:1;transform:translateY(0)}
+#haiku-card .haiku-inner{background:var(--c1);border-radius:18px;border:1px solid rgba(175,130,255,.18);border-top-color:rgba(175,130,255,.32);padding:18px 20px;position:relative;overflow:hidden}
+#haiku-bg-orb{position:absolute;top:-20px;right:-20px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(175,130,255,.10) 0%,transparent 70%);pointer-events:none}
+.haiku-line{font-size:.88rem;font-style:italic;line-height:1.9;color:var(--txt);letter-spacing:.3px;opacity:0;transform:translateX(-6px);transition:opacity .5s ease,transform .5s ease}
+.haiku-line.hk-vis{opacity:1;transform:translateX(0)}
+#haiku-author{font-size:.58rem;font-weight:600;letter-spacing:1px;color:rgba(175,130,255,.55);margin-top:10px;text-transform:uppercase}
+#haiku-refresh{position:absolute;top:12px;right:14px;background:transparent;border:1px solid rgba(175,130,255,.22);border-radius:20px;padding:3px 9px;font-size:.62rem;color:rgba(175,130,255,.7);cursor:pointer;touch-action:manipulation;transition:opacity .2s}
+#haiku-refresh:active{opacity:.5}
+@keyframes haikuCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+:root.light #haiku-card .haiku-line{color:rgba(0,0,0,.75)}
+:root.light #haiku-card #haiku-author{color:rgba(100,50,180,.55)}
+:root.light #haiku-card #haiku-refresh{border-color:rgba(100,50,180,.25);color:rgba(100,50,180,.65)}
 #temp-clock-card{display:none;margin-bottom:12px;opacity:0;transform:translateY(-6px);transition:opacity .5s cubic-bezier(.34,1.15,.64,1),transform .5s cubic-bezier(.34,1.15,.64,1)}
 #temp-clock-card.show{opacity:1;transform:translateY(0)}
 #tclock-cv{border-radius:50%;display:block}
@@ -2132,6 +2146,34 @@ html,body{height:100%;background:var(--bg);
 :root.light #pomo-count-badge{background:rgba(30,160,60,.08);border-color:rgba(30,160,60,.18);color:rgba(0,100,30,.7)}
 
 /* ───────────── WOHNSTIMMUNG DIAL ───────────── */
+/* ── WASSER-TRACKER ── */
+#h2o-card{display:none;margin:0 0 12px;padding:14px 16px 13px;background:rgba(10,132,255,.04);border:1px solid rgba(10,132,255,.12);border-radius:16px;position:relative;overflow:hidden}
+#h2o-card.show{display:block;animation:h2oCardIn .45s cubic-bezier(.32,0,.15,1) both}
+@keyframes h2oCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#h2o-label{font-size:.56rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(10,132,255,.7);margin-bottom:8px}
+#h2o-body{display:flex;align-items:center;gap:16px}
+#h2o-cup-wrap{flex-shrink:0;position:relative;width:44px;height:56px}
+#h2o-cup-svg{overflow:visible}
+#h2o-fill{transition:y .7s cubic-bezier(.4,0,.2,1),height .7s cubic-bezier(.4,0,.2,1)}
+#h2o-right{flex:1;min-width:0}
+#h2o-count{font-size:1.5rem;font-weight:700;color:var(--txt);line-height:1}
+#h2o-goal{font-size:.65rem;color:rgba(255,255,255,.38);margin-top:2px}
+#h2o-bar-track{width:100%;height:5px;border-radius:3px;background:rgba(10,132,255,.12);margin-top:8px;overflow:hidden}
+#h2o-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#0a84ff,#5ac8fa);transition:width .7s cubic-bezier(.4,0,.2,1)}
+#h2o-btns{display:flex;gap:8px;margin-top:10px}
+.h2o-btn{flex:1;padding:6px 0;border:none;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform .12s,opacity .12s}
+.h2o-btn:active{transform:scale(.9)}
+#h2o-plus{background:rgba(10,132,255,.18);color:#5ac8fa}
+#h2o-minus{background:rgba(255,255,255,.07);color:rgba(255,255,255,.45);font-size:.9rem}
+#h2o-msg{font-size:.67rem;color:rgba(255,255,255,.35);margin-top:8px;min-height:1em;font-style:italic;transition:color .4s}
+@keyframes h2oSplash{0%{opacity:0;transform:scale(.6)}40%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(.9) translateY(-8px)}}
+.h2o-splash{position:absolute;font-size:1.1rem;pointer-events:none;top:0;left:50%;transform:translateX(-50%)}
+.h2o-splash.go{animation:h2oSplash .65s ease-out forwards}
+:root.light #h2o-card{background:rgba(0,80,200,.04);border-color:rgba(0,80,200,.12)}
+:root.light #h2o-label{color:rgba(0,80,200,.65)}
+:root.light #h2o-goal{color:rgba(0,0,0,.38)}
+:root.light #h2o-msg{color:rgba(0,0,0,.32)}
+:root.light #h2o-minus{background:rgba(0,0,0,.05);color:rgba(0,0,0,.4)}
 #wohnstimmung-card{display:none;margin:0 0 12px;padding:13px 16px 12px;border-radius:16px;position:relative;overflow:hidden;transition:background .8s ease,border-color .8s ease}
 #wohnstimmung-card.show{display:block;animation:wsCardIn .5s cubic-bezier(.32,0,.15,1) both}
 @keyframes wsCardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -2411,6 +2453,13 @@ html,body{height:100%;background:var(--bg);
 #sleep-cancel{background:none;border:none;color:rgba(255,255,255,.3);font-size:.9rem;cursor:pointer;padding:2px 4px;line-height:1;touch-action:manipulation}
 #sleep-cancel:active{color:rgba(255,255,255,.7)}
 /* Track History */
+/* Track Countdown Chip */
+#tcd-chip.show{display:flex;animation:tcdChipIn .4s cubic-bezier(.34,1.2,.64,1) both}
+@keyframes tcdChipIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes tcdDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+:root.light #tcd-chip{background:rgba(220,30,20,.05);border-color:rgba(220,30,20,.18)}
+:root.light #tcd-txt{color:rgba(0,0,0,.7)}
+:root.light #tcd-num{color:#d00a05}
 #track-history{display:none;flex-direction:column;gap:6px;margin:10px 16px 0;position:relative;z-index:1}
 #track-history.show{display:flex}
 #track-history-lbl{font-size:.62rem;font-weight:600;letter-spacing:.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:2px}
@@ -3085,6 +3134,8 @@ input[type=range] { touch-action: none; }
 :root.light .lfc-confirm{background:rgba(30,150,60,.08);color:rgba(20,120,50,.9);border-color:rgba(30,150,60,.25)}
 /* ── Licht-Pulse Feedback Animation ── */
 @keyframes ltPulse{0%{box-shadow:0 0 0 2px rgba(255,159,10,.8)}100%{box-shadow:0 0 0 10px rgba(255,159,10,0)}}
+@keyframes ltFlipRotate{0%{transform:rotateY(0deg) scale(1)}50%{transform:rotateY(90deg) scale(.95)}100%{transform:rotateY(0deg) scale(1)}}
+.ltico.ltflip{animation:ltFlipRotate .55s cubic-bezier(.34,1.15,.64,1) both}
 .ltico.ltpulse{animation:ltPulse .5s ease-out}
 :root.light .ltico.ltpulse{box-shadow:0 0 0 2px rgba(180,90,0,.7) !important}
 </style>
@@ -3141,6 +3192,19 @@ input[type=range] { touch-action: none; }
 .rem-dpad-arrow{background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.15)!important}
 .rem-dpad-arrow svg{width:20px!important;height:20px!important}
 .rem-dpad-ok{grid-column:2;grid-row:2;border-radius:50%!important;background:rgba(255,159,10,.22)!important;border-color:rgba(255,159,10,.45)!important;color:#ff9f0a!important;aspect-ratio:1;font-size:.88rem!important;font-weight:800!important}
+/* ── Farbpaletten-Schnellzugriff ── */
+#lt-color-palette{margin:0 14px 12px;opacity:0;transition:opacity .5s ease;pointer-events:none}
+#lt-color-palette.show{opacity:1;pointer-events:auto}
+#lt-cp-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28);margin-bottom:7px;display:block}
+#lt-cp-chips{display:flex;gap:8px;flex-wrap:wrap}
+.lt-cp-chip{width:42px;height:42px;border-radius:12px;border:1.5px solid rgba(255,255,255,.09);cursor:pointer;touch-action:manipulation;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;box-shadow:0 0 0 0 transparent;position:relative;overflow:hidden;animation:ltCpChipIn .35s cubic-bezier(.32,0,.15,1) both}
+.lt-cp-chip:active{transform:scale(.86)!important}
+.lt-cp-chip.lt-cp-active{transform:scale(1.15);box-shadow:0 0 0 2px rgba(255,255,255,.4),0 0 12px 3px rgba(255,255,255,.12)}
+@keyframes ltCpChipIn{from{opacity:0;transform:scale(.65) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.lt-cp-chip:nth-child(1){animation-delay:.04s}.lt-cp-chip:nth-child(2){animation-delay:.08s}.lt-cp-chip:nth-child(3){animation-delay:.12s}.lt-cp-chip:nth-child(4){animation-delay:.16s}.lt-cp-chip:nth-child(5){animation-delay:.20s}.lt-cp-chip:nth-child(6){animation-delay:.24s}.lt-cp-chip:nth-child(7){animation-delay:.28s}.lt-cp-chip:nth-child(8){animation-delay:.32s}
+@keyframes cpChipTap{0%{box-shadow:0 0 0 0 var(--cp-tap,rgba(255,255,255,.3))}100%{box-shadow:0 0 0 8px transparent}}
+.lt-cp-chip.cp-tap{animation:cpChipTap .6s ease-out}
+:root.light #lt-cp-label{color:rgba(0,0,0,.32)}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Oxanium:wght@200;300;400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -3608,6 +3672,42 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- Wasser-Tracker -->
+      <div id="h2o-card">
+        <div id="h2o-label">💧 WASSER-TRACKER</div>
+        <div id="h2o-body">
+          <div id="h2o-cup-wrap">
+            <svg id="h2o-cup-svg" width="44" height="56" viewBox="0 0 44 56">
+              <defs>
+                <linearGradient id="h2oFillGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#5ac8fa" stop-opacity=".9"/>
+                  <stop offset="100%" stop-color="#0a84ff" stop-opacity=".95"/>
+                </linearGradient>
+                <clipPath id="h2oCupClip">
+                  <path d="M5 4 L8 52 L36 52 L39 4 Z"/>
+                </clipPath>
+              </defs>
+              <!-- Cup outline -->
+              <path d="M5 4 L8 52 L36 52 L39 4 Z" fill="none" stroke="rgba(10,132,255,.3)" stroke-width="1.5" stroke-linejoin="round"/>
+              <!-- Fill rect clipped to cup shape -->
+              <rect id="h2o-fill" x="5" y="52" width="34" height="0" fill="url(#h2oFillGrad)" clip-path="url(#h2oCupClip)" rx="1"/>
+              <!-- Shimmer line -->
+              <path id="h2o-wave" d="M8 52 Q22 50 36 52" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1" opacity="0"/>
+            </svg>
+          </div>
+          <div id="h2o-right">
+            <div id="h2o-count">0 / 8 🥛</div>
+            <div id="h2o-goal">Tagesziel: 8 Gläser (~2 Liter)</div>
+            <div id="h2o-bar-track"><div id="h2o-bar-fill" style="width:0%"></div></div>
+            <div id="h2o-btns">
+              <button class="h2o-btn" id="h2o-plus">+ Glas trinken</button>
+              <button class="h2o-btn" id="h2o-minus">−</button>
+            </div>
+            <div id="h2o-msg">Los geht's — trink das erste Glas! 💪</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Wohnstimmung Energie-Dial -->
       <div id="wohnstimmung-card" aria-label="Wohnstimmung">
         <div id="ws-bg-orb"></div>
@@ -4025,6 +4125,18 @@ input[type=range] { touch-action: none; }
         </div>
       </div>
 
+      <!-- Track Countdown Chip (< 60s remaining) -->
+      <div id="tcd-chip" style="display:none;align-items:center;gap:8px;margin:0 0 10px;padding:9px 14px;border-radius:14px;border:1px solid rgba(255,69,58,.28);background:rgba(255,69,58,.07);position:relative;z-index:1">
+        <div id="tcd-dot" style="width:7px;height:7px;border-radius:50%;background:#ff453a;flex-shrink:0;animation:tcdDotPulse 1s ease-in-out infinite"></div>
+        <div style="flex:1;min-width:0">
+          <div id="tcd-txt" style="font-size:.72rem;font-weight:700;color:rgba(255,255,255,.85)">Track endet gleich…</div>
+          <div id="tcd-bar-track" style="width:100%;height:3px;border-radius:2px;background:rgba(255,69,58,.15);margin-top:5px;overflow:hidden">
+            <div id="tcd-bar" style="height:100%;border-radius:2px;background:linear-gradient(90deg,#ff9f0a,#ff453a);transition:width 1s linear"></div>
+          </div>
+        </div>
+        <div id="tcd-num" style="font-size:1.1rem;font-weight:700;color:#ff453a;min-width:32px;text-align:right;flex-shrink:0">0s</div>
+      </div>
+
       <!-- Track History (shown when tracks available) -->
       <div id="track-history" style="display:none;flex-direction:column;gap:5px;margin:0 0 10px;position:relative;z-index:1">
         <div id="track-history-lbl" style="font-size:.6rem;font-weight:700;letter-spacing:.7px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:4px">🎵 Zuletzt gespielt</div>
@@ -4147,6 +4259,20 @@ input[type=range] { touch-action: none; }
           <g id="lt-fp-dots"></g>
           <circle cx="65" cy="65" r="3" fill="rgba(255,159,10,.7)"/>
         </svg>
+      </div>
+      <!-- Farbpaletten-Schnellzugriff -->
+      <div id="lt-color-palette" aria-label="Vorgefertigte Farbpaletten">
+        <span id="lt-cp-label">Schnellfarben</span>
+        <div id="lt-cp-chips">
+          <div class="lt-cp-chip" data-cp-color="warmweiß" title="Warmweiß 2700K" style="background:linear-gradient(135deg,#ffb366,#ff9900);"></div>
+          <div class="lt-cp-chip" data-cp-color="kaltweiß" title="Kaltweiß 5500K" style="background:linear-gradient(135deg,#e8f4ff,#b3d9ff);"></div>
+          <div class="lt-cp-chip" data-cp-color="rot" title="Rot" style="background:linear-gradient(135deg,#ff6b6b,#ff0000);"></div>
+          <div class="lt-cp-chip" data-cp-color="grün" title="Grün" style="background:linear-gradient(135deg,#66ff66,#00ff00);"></div>
+          <div class="lt-cp-chip" data-cp-color="blau" title="Blau" style="background:linear-gradient(135deg,#6ba3ff,#0066ff);"></div>
+          <div class="lt-cp-chip" data-cp-color="magenta" title="Magenta" style="background:linear-gradient(135deg,#ff66ff,#ff00ff);"></div>
+          <div class="lt-cp-chip" data-cp-color="gelb" title="Gelb" style="background:linear-gradient(135deg,#ffff66,#ffff00);"></div>
+          <div class="lt-cp-chip" data-cp-color="rainbow" title="Regenbogen Zyklus" style="background:linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3);"></div>
+        </div>
       </div>
       <!-- Circadian Lighting -->
       <div id="lt-circadian" aria-label="Circadian Beleuchtung">
@@ -5275,6 +5401,19 @@ input[type=range] { touch-action: none; }
               <div id="sun-cond-badge" style="padding:2px 8px;border-radius:10px;font-size:.6rem;font-weight:700;background:rgba(255,214,10,.12);border:1px solid rgba(255,214,10,.25);color:#ffd60a">–</div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Wetter-Haiku -->
+      <div id="haiku-card" style="display:none;margin-bottom:12px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(175,130,255,.65);text-transform:uppercase;margin-bottom:8px">🎋 WETTER-HAIKU</div>
+        <div class="haiku-inner">
+          <div id="haiku-bg-orb"></div>
+          <button id="haiku-refresh" aria-label="Neues Haiku">↺</button>
+          <div id="haiku-l1" class="haiku-line">—</div>
+          <div id="haiku-l2" class="haiku-line">—</div>
+          <div id="haiku-l3" class="haiku-line">—</div>
+          <div id="haiku-author"></div>
         </div>
       </div>
 
@@ -7053,6 +7192,7 @@ function renderWeather(){
   drawBiowetter();
   drawTempClock();
   drawSunshine();
+  drawHaikuCard();
   drawUvProtect();
   drawFrostWarning();
   drawOutdoorChip();
@@ -9888,6 +10028,125 @@ function drawSunshine(){
       rayGrp.style.transform=`scale(${scl})`;
       rayGrp.querySelectorAll('line').forEach(l=>{l.style.opacity=String(0.2+pct*0.7);});
     });});
+  }
+}
+
+function drawHaikuCard(){
+  const card=document.getElementById('haiku-card');
+  if(!card) return;
+  const code=_wx?.current?.weather_code??_wx?.current?.weathercode??-1;
+  const temp=_wx?.current?.temperature_2m??null;
+  const hr=new Date().getHours();
+  const night=hr>=22||hr<5;
+  const eve=hr>=18&&hr<22;
+  const morn=hr>=5&&hr<10;
+
+  // Haiku collections: [line1, line2, line3, mood]
+  // Weather-aware selection
+  const pools={
+    clear_day:[
+      ['Goldenes Licht fließt','durch stilles Blau am Mittag —','Wärme ohne Maß'],
+      ['Keine Wolke stört','den endlosen Himmelsraum —','Nur die Sonne atmet'],
+      ['Klarer Tag erstrahlt','Schatten tanzen auf dem Gras —','Jetzt ist vollkommen'],
+    ],
+    clear_night:[
+      ['Sterne flüstern leise','im samtschwarzen Himmelszelt —','Nacht hält uns im Arm'],
+      ['Mondlicht auf den Dächern','die Welt schläft in Stille ein —','Atem wird zu Traum'],
+      ['Klare Winternacht','jeder Stern ein Herzschlag fern —','Kälte macht uns klein'],
+    ],
+    morning:[
+      ['Morgentau glänzt still','bevor die Sonne erwacht —','Welt hält noch den Atem'],
+      ['Erste Strahlen kommen','der Tag faltet sich langsam —','Frisch beginnt die Zeit'],
+      ['Nebel hebt sich sacht','die Vögel singen ihr Lied —','Morgen ist ein Geschenk'],
+    ],
+    evening:[
+      ['Abendrot verblasst','der Tag legt sich schlafen ein —','Stille kehrt nach Hause'],
+      ['Letzte Sonnenstrahlen','malen Gold auf graue Wände —','Vergänglichkeit blüht'],
+      ['Dämmerung bricht an','zwischen Licht und Dunkelheit —','atmet die Erde auf'],
+    ],
+    cloudy:[
+      ['Wolken wandern träge','wie Gedanken ohne Ziel —','der Wind kennt den Weg'],
+      ['Grauer Himmel denkt','über seine Farbe nach —','Bald fällt ein Entschluss'],
+      ['Weiches diffuses Licht','keine Schatten, kein Kontrast —','alles ist in Ruh'],
+    ],
+    rain:[
+      ['Regen trommelt sanft','auf Dächer und Pflastersteine —','Stadt wird zur Musik'],
+      ['Tropfen auf dem Glas','zeichnen krumme Rennbahnen —','niemand kommt ans Ziel'],
+      ['Nasser Asphalt glänzt','Spiegelbilder zittern kurz —','dann fließt alles fort'],
+    ],
+    snow:[
+      ['Stille legt sich weiß','über Gärten und Gedanken —','Winter schweigt zufrieden'],
+      ['Flocken fallen leis','jede findet ihren Platz —','Welt wird Postkarte'],
+      ['Erster Schnee berührt','die Erde wie ein Versprechen —','morgen alles neu'],
+    ],
+    storm:[
+      ['Donner rollt und grollt','Blitze schreiben ihre Wut —','Himmel muss sich leer'],
+      ['Sturm reißt Blätter fort','was nicht wurzelt wird verloren —','Bäume wissen das'],
+      ['Gewitter zieht auf','Welt hält für einen Moment —','dann bricht der Regen los'],
+    ],
+    cold:[
+      ['Atem wird zu Rauch','Finger suchen Wärme in','den Taschen des Mantels'],
+      ['Frost malt Muster an','die Scheibe meines Zimmers —','Winter schreibt in Eis'],
+      ['Kälte macht uns still','Gedanken werden langsamer —','Zeit tropft zäher hin'],
+    ],
+    warm:[
+      ['Hitze steht im Raum','die Luft flirrt über dem Weg —','Sommer denkt nicht nach'],
+      ['Schweiß auf der Stirn trocknet','Zikaden schweigen mittags —','Zeit ist Bernstein jetzt'],
+      ['Warmer Wind kommt an','trägt den Duft von gestern mit —','heute wird wie Traum'],
+    ],
+  };
+
+  // Choose category
+  let cat='cloudy';
+  if(code<=1&&!night) cat='clear_day';
+  else if(code<=1&&night) cat='clear_night';
+  else if(code>=95) cat='storm';
+  else if(code>=71&&code<=86) cat='snow';
+  else if(code>=51) cat='rain';
+  else if(temp!=null&&temp<2) cat='cold';
+  else if(temp!=null&&temp>=27) cat='warm';
+  else if(night) cat='clear_night';
+  else if(morn) cat='morning';
+  else if(eve) cat='evening';
+  else cat='cloudy';
+
+  const list=pools[cat]||pools.cloudy;
+  // Daily rotation + manual override via localStorage
+  const today=new Date().toISOString().slice(0,10);
+  const lsKey='haiku_'+today+'_'+cat;
+  let idx=Number(localStorage.getItem(lsKey)||0);
+  idx=Math.abs(idx)%list.length;
+
+  function renderHaiku(i){
+    const h=list[i];
+    card.style.display='block';
+    setTimeout(()=>card.classList.add('show'),10);
+    ['haiku-l1','haiku-l2','haiku-l3'].forEach((id,j)=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.textContent=h[j];
+      el.classList.remove('hk-vis');
+      setTimeout(()=>el.classList.add('hk-vis'), j*120+40);
+    });
+    const moodLabels={clear_day:'☀️ klarer Tag',clear_night:'🌙 sternenklare Nacht',morning:'🌅 Morgen',evening:'🌆 Abend',cloudy:'⛅ bewölkt',rain:'🌧 Regen',snow:'❄️ Schnee',storm:'⚡ Gewitter',cold:'🥶 Kälte',warm:'☀️ Wärme'};
+    const auth=document.getElementById('haiku-author');
+    if(auth) auth.textContent=moodLabels[cat]||cat;
+  }
+
+  renderHaiku(idx);
+
+  // Refresh button
+  const btn=document.getElementById('haiku-refresh');
+  if(btn&&!btn._haikuBound){
+    btn._haikuBound=true;
+    btn.addEventListener('click',function(){
+      idx=(idx+1)%list.length;
+      localStorage.setItem(lsKey,String(idx));
+      renderHaiku(idx);
+      btn.style.transform='rotate(360deg)';
+      btn.style.transition='transform .4s ease';
+      setTimeout(()=>{btn.style.transform='';btn.style.transition='';},450);
+    });
   }
 }
 
@@ -13847,6 +14106,147 @@ function updateOverview(){
       setTimeout(()=>{btn.style.transform='rotate(360deg)';setTimeout(()=>{btn.style.transform='';btn.style.transition=''},200);},200);
     });
   }
+})();
+
+// ───────────── WASSER-TRACKER ─────────────
+(function(){
+  var GOAL = 8;
+  var card = document.getElementById('h2o-card');
+  var countEl = document.getElementById('h2o-count');
+  var barFill = document.getElementById('h2o-bar-fill');
+  var fillRect = document.getElementById('h2o-fill');
+  var waveEl  = document.getElementById('h2o-wave');
+  var msgEl   = document.getElementById('h2o-msg');
+  var plusBtn = document.getElementById('h2o-plus');
+  var minusBtn= document.getElementById('h2o-minus');
+  var cupWrap = document.getElementById('h2o-cup-wrap');
+  if(!card||!countEl||!fillRect) return;
+
+  function todayKey(){ var d=new Date(); return 'h2o_'+d.getFullYear()+'_'+(d.getMonth()+1)+'_'+d.getDate(); }
+
+  function getGlasses(){
+    try{ return parseInt(localStorage.getItem(todayKey())||'0',10); }catch(e){ return 0; }
+  }
+  function setGlasses(n){
+    try{ localStorage.setItem(todayKey(), String(Math.max(0,n))); }catch(e){}
+  }
+
+  function render(g){
+    g = Math.max(0, Math.min(g, 12));
+    var pct = Math.min(g / GOAL, 1);
+    // Cup fill: cup is 48px tall (y=4 to y=52), fill from bottom
+    var fillH = Math.round(pct * 48);
+    var fillY = 52 - fillH;
+    fillRect.setAttribute('y', fillY);
+    fillRect.setAttribute('height', fillH);
+    // Wave line at top of fill
+    if(fillH > 4){
+      waveEl.setAttribute('d','M8 '+fillY+' Q22 '+(fillY-2)+' 36 '+fillY);
+      waveEl.setAttribute('opacity','0.5');
+    } else {
+      waveEl.setAttribute('opacity','0');
+    }
+    // Bar
+    barFill.style.width = (pct*100)+'%';
+    // Count text
+    var emoji = g===0?'🥛': g<GOAL?'💧': g===GOAL?'🎉':'⭐';
+    countEl.textContent = g + ' / ' + GOAL + ' ' + emoji;
+    // Message
+    var msgs = [
+      'Los geht\'s — trink das erste Glas! 💪',  // 0
+      'Gut! Noch '+( GOAL-1)+' Gläser bis zum Ziel.',  // 1
+      'Super! '+(GOAL-2)+' Gläser fehlen noch.',  // 2
+      'Halbzeit fast! Weiter so 💧',  // 3
+      'Hälfte erreicht! Noch 4 Gläser. 🌊',  // 4
+      'Fast da! Nur noch 3 Gläser.',  // 5
+      'Noch 2 Gläser — du schaffst das!',  // 6
+      'Letztes Glas! Fast am Ziel 🏁',  // 7
+      '🎉 Tagesziel erreicht! Ausgezeichnet!',  // 8
+      '⭐ Bonus-Glas! Super hydratisiert heute.',  // ≥9
+    ];
+    msgEl.textContent = msgs[Math.min(g, msgs.length-1)];
+    if(g>=GOAL){ msgEl.style.color='rgba(90,200,250,.8)'; } else { msgEl.style.color=''; }
+    // Show/hide minus
+    if(minusBtn) minusBtn.style.opacity = g>0?'1':'0.3';
+  }
+
+  function splash(){
+    var sp = document.createElement('div');
+    sp.className='h2o-splash';
+    sp.textContent='💧';
+    cupWrap.style.position='relative';
+    cupWrap.appendChild(sp);
+    requestAnimationFrame(function(){ sp.classList.add('go'); });
+    setTimeout(function(){ sp.remove(); }, 700);
+  }
+
+  var g = getGlasses();
+  render(g);
+  card.classList.add('show');
+
+  if(plusBtn) plusBtn.addEventListener('click', function(){
+    var g2 = getGlasses()+1;
+    setGlasses(g2);
+    splash();
+    render(g2);
+  });
+  if(minusBtn) minusBtn.addEventListener('click', function(){
+    var g2 = Math.max(0, getGlasses()-1);
+    setGlasses(g2);
+    render(g2);
+  });
+})();
+
+// ───────────── TRACK COUNTDOWN CHIP ─────────────
+(function(){
+  var chip    = document.getElementById('tcd-chip');
+  var txtEl   = document.getElementById('tcd-txt');
+  var numEl   = document.getElementById('tcd-num');
+  var barEl   = document.getElementById('tcd-bar');
+  if(!chip||!txtEl||!numEl||!barEl) return;
+
+  var _wasShowing = false;
+
+  function update(){
+    var s = window._S && window.CFG && window._S[window.CFG.spot];
+    var alm = window._S && window.CFG && window._S[window.CFG.alm];
+    var src = (s&&s.state==='playing')?s : (alm&&alm.state==='playing')?alm : null;
+    if(!src){ hide(); return; }
+    var pos = src.attributes && src.attributes.media_position;
+    var dur = src.attributes && src.attributes.media_duration;
+    if(pos==null||dur==null||dur<=0){ hide(); return; }
+    var remaining = Math.max(0, dur - pos);
+    if(remaining <= 60 && remaining > 0){
+      var secs = Math.round(remaining);
+      var pct  = (remaining / Math.min(dur, 60)) * 100;
+      numEl.textContent = secs + 's';
+      barEl.style.width = pct + '%';
+      if(secs <= 10){
+        txtEl.textContent = '🔚 Track endet in ' + secs + ' Sekunden!';
+      } else {
+        var m = Math.floor(secs/60), s2 = secs%60;
+        txtEl.textContent = '⏱ Noch '+(m>0?m+'m ':'')+(s2>0?s2+'s ':'')+' — nächster Track';
+      }
+      if(!_wasShowing){ chip.classList.add('show'); _wasShowing=true; }
+    } else {
+      hide();
+    }
+  }
+
+  function hide(){
+    if(_wasShowing){ chip.classList.remove('show'); chip.style.display='none'; chip.offsetHeight; chip.style.display=''; _wasShowing=false; }
+  }
+
+  // Hook into updateAll polling
+  var _orig = window.updateAll;
+  if(typeof _orig === 'function'){
+    window.updateAll = function(){
+      _orig.apply(this, arguments);
+      try{ update(); }catch(e){}
+    };
+  }
+  // Also update on interval (fallback)
+  setInterval(function(){ try{ update(); }catch(e){} }, 2000);
 })();
 
 // ───────────── SMART HOME TIPP DES TAGES ─────────────
@@ -20462,6 +20862,7 @@ window.updateAll=function(...args){
 
 // ──────────────── LICHT-PULSE FEEDBACK ──────────────
 (function(){
+  var _ltColorState={}; // Track RGB/color_temp für Flip-Animation
   var _ltPulseState={};
   
   // Hook bei updateLights um State-Änderungen zu erkennen
@@ -20493,9 +20894,169 @@ window.updateAll=function(...args){
         }
       }
       
-      _ltPulseState[id]=curOn;
+      
+      // Flip-Animation bei Farbänderung
+      var hs_color = cur.attributes && cur.attributes.hs_color;
+      var color_temp = cur.attributes && cur.attributes.color_temp_kelvin;
+      var oldColor = _ltColorState[id];
+      var colorChanged = false;
+      
+      if(hs_color && oldColor && (oldColor.hs !== (hs_color[0]+','+hs_color[1]))){
+        colorChanged = true;
+      } else if(color_temp && oldColor && (oldColor.ct !== color_temp)){
+        colorChanged = true;
+      }
+      
+      if(colorChanged && tco){
+        tco.classList.remove('ltflip');
+        void tco.offsetWidth;
+        tco.classList.add('ltflip');
+        setTimeout(function(){ tco.classList.remove('ltflip'); }, 560);
+      }
+      
+      // Speichere aktuelle Farbe
+      if(hs_color || color_temp){
+        _ltColorState[id] = {
+          hs: hs_color ? (hs_color[0]+','+hs_color[1]) : null,
+          ct: color_temp || null
+        };
+      }_ltPulseState[id]=curOn;
     });
   };
+})();
+</script>
+
+<!-- New Feature: Home-Hero Greeting Parallax + Brightness Ring Glow -->
+<script>
+// Home-Hero Greeting Parallax Tiefeneffekt
+(function(){
+  const hero = document.querySelector('.hero');
+  const hgreet = document.getElementById('hgreet');
+  if(!hero || !hgreet) return;
+  
+  const page = document.getElementById('pg-home');
+  if(!page) return;
+  
+  function updateParallax(){
+    const scrollTop = page.scrollTop || 0;
+    // Subtler Parallax: 0.15 = 15% der Scroll-Menge nach oben verschieben
+    const offset = scrollTop * 0.15;
+    const opacity = Math.max(1 - scrollTop / 400, 0.65);
+    
+    hgreet.style.transform = `translateY(-${offset}px)`;
+    hgreet.style.opacity = opacity;
+  }
+  
+  page.addEventListener('scroll', updateParallax, { passive: true });
+  
+  // Initiales Setup
+  updateParallax();
+})();
+
+// Brightness Ring Enhancement - zusätzliche Glow-Animation
+(function(){
+  const rings = document.querySelectorAll('[data-bri-arc]');
+  if(!rings.length) return;
+  
+  // Subtile Pulsations-Animation für Brightness Ring
+  if(!document.getElementById('bri-ring-glow-style')){
+    const style = document.createElement('style');
+    style.id = 'bri-ring-glow-style';
+    style.textContent = `
+      @keyframes briRingGlow {
+        0%, 100% { filter: drop-shadow(0 0 2px rgba(255,159,10,0.3)); }
+        50% { filter: drop-shadow(0 0 4px rgba(255,159,10,0.55)); }
+      }
+      .lt.on [data-bri-arc] circle.bri-fill {
+        animation: briRingGlow 3.5s ease-in-out infinite;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+})();
+
+// Farbpaletten-Schnellzugriff Funktionalität
+(function(){
+  var colorPresets = {
+    warmweiß: { ct: 2700, rgb: null },
+    kaltweiß: { ct: 5500, rgb: null },
+    rot: { ct: null, rgb: [255, 0, 0] },
+    grün: { ct: null, rgb: [0, 255, 0] },
+    blau: { ct: null, rgb: [0, 100, 255] },
+    magenta: { ct: null, rgb: [255, 0, 255] },
+    gelb: { ct: null, rgb: [255, 255, 0] },
+    rainbow: { ct: null, rgb: 'rainbow' }
+  };
+  
+  var palChips = document.querySelectorAll('.lt-cp-chip');
+  var cpPalette = document.getElementById('lt-color-palette');
+  
+  if(!palChips.length || !cpPalette) return;
+  
+  palChips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      var colorType = this.getAttribute('data-cp-color');
+      var preset = colorPresets[colorType];
+      
+      if(!preset) return;
+      
+      // Finde alle aktiven RGB-Lichter
+      var activeLights = Object.keys(CFG.lights || {}).filter(function(id){
+        var light = _ha.states[id];
+        return light && light.state === 'on' && light.attributes && light.attributes.hs_color;
+      });
+      
+      if(!activeLights.length){
+        console.log('Keine RGB-Lichter aktiv');
+        return;
+      }
+      
+      // Tap-Animation
+      chip.classList.remove('cp-tap');
+      void chip.offsetWidth;
+      chip.classList.add('cp-tap');
+      
+      // Setze Farbe auf alle aktiven Lichter
+      if(colorType === 'rainbow'){
+        // Regenbogen-Zyklus starten falls vorhanden
+        if(window.startRainbow){
+          window.startRainbow();
+        }
+      } else {
+        activeLights.forEach(function(id){
+          var light = _ha.states[id];
+          if(!light) return;
+          
+          var attr = light.attributes || {};
+          var payload = { brightness_pct: attr.brightness || 100, transition: 1 };
+          
+          if(preset.ct){
+            payload.color_temp_kelvin = preset.ct;
+          } else if(preset.rgb && Array.isArray(preset.rgb)){
+            var h = Math.atan2(preset.rgb[1], preset.rgb[0]) * 180 / Math.PI;
+            if(h < 0) h += 360;
+            var s = 100;
+            payload.hs_color = [h, s];
+          }
+          
+          svc('light', 'turn_on', id, payload);
+        });
+      }
+    });
+  });
+  
+  // Zeige Palette wenn Lichter-Tab aktiv
+  if(window.patchOnPageShow){
+    var origShow = window.patchOnPageShow;
+    window.patchOnPageShow = function(){
+      origShow();
+      if(document.getElementById('ni-licht') && document.getElementById('ni-licht').classList.contains('on')){
+        cpPalette.classList.add('show');
+      } else {
+        cpPalette.classList.remove('show');
+      }
+    };
+  }
 })();
 </script>
 </body>
